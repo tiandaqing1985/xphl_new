@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('玖富展现列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								日期：<input type="text" name="frontDate"/>
+							</li>
+
+							<li>
+								编码：<input type="text" name="code"/>
+							</li>
+
+							<li>
+								组合：<input type="text" name="groupword"/>
+							</li>
+
+							<li>
+								账户：<input type="text" name="accountname"/>
+							</li>
+
+							<li>
+								计划：<input type="text" name="plan"/>
+							</li>
+
+							<li>
+								单元：<input type="text" name="unit"/>
+							</li>
+
+							<li>
+								关键词：<input type="text" name="keyword"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="createData()" >
+					<i class="fa fa-plus"></i> 生成数据
+				</a>
+<!-- 				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:jfZhanxian:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:jfZhanxian:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a> -->
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" >
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:jfZhanxian:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:jfZhanxian:remove')}]];
+        var prefix = ctx + "system/jfZhanxian";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+				createDataUrl: prefix + "/createJfZhanxianData",
+                modalName: "玖富展现",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : 'ID',
+					visible: false
+				},
+				{
+					field : 'frontDate', 
+					title : '日期',
+					sortable: true
+				},
+				{
+					field : 'code', 
+					title : '编码',
+					sortable: true
+				},
+				{
+					field : 'groupword', 
+					title : '组合',
+					sortable: true
+				},
+				{
+					field : 'show', 
+					title : '展现',
+					sortable: true
+				},
+				{
+					field : 'click', 
+					title : '点击',
+					sortable: true
+				},
+				{
+					field : 'consume', 
+					title : '消费',
+					sortable: true
+				},
+				{
+					field : 'account', 
+					title : '账户数',
+					sortable: true
+				},
+				{
+					field : 'card', 
+					title : '开卡数',
+					sortable: true
+				},
+				{
+					field : 'putin', 
+					title : '提交人数',
+					sortable: true
+				},
+				{
+					field : 'placeOrder', 
+					title : '下单数',
+					sortable: true
+				},
+				{
+					field : 'activate', 
+					title : '激活数',
+					sortable: true
+				},
+				{
+					field : 'channle', 
+					title : '',
+					sortable: true
+				},
+				{
+					field : 'accountname', 
+					title : '账户',
+					sortable: true
+				},
+				{
+					field : 'plan', 
+					title : '计划',
+					sortable: true
+				},
+				{
+					field : 'unit', 
+					title : '单元',
+					sortable: true
+				},
+				{
+					field : 'keyword', 
+					title : '关键词',
+					sortable: true
+				}
+/* 				,
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        } */
+				]
+            };
+            $.table.init(options);
+        });
+        
+        
+        function createData(){
+        	$.modal.loading("数据加载中");
+        	var formData = new FormData();
+			$.ajax({
+				url: $.table._option.createDataUrl,
+				data: formData,
+				cache: false,
+				contentType: false,
+				processData: false,
+				type: 'POST',
+				success: function (result) {
+					$.modal.alertSuccess(result.msg);
+					$.modal.closeLoading();
+				}
+			});
+        }
+    </script>
+</body>
+</html>

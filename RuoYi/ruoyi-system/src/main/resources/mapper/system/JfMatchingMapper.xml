@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JfMatchingMapper">
+    
+    <resultMap type="JfMatching" id="JfMatchingResult">
+        <result property="id"    column="id"    />
+        <result property="code"    column="code"    />
+        <result property="plan"    column="plan"    />
+        <result property="unit"    column="unit"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="account"    column="account"    />
+        <result property="groupword"    column="groupword"    />
+        <result property="flag"    column="flag"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+	
+	<sql id="selectJfMatchingVo">
+        select id, code, plan, unit, keyword, account, groupword, flag, create_time from jf_matching
+    </sql>
+	
+    <select id="selectJfMatchingList" parameterType="JfMatching" resultMap="JfMatchingResult">
+        <include refid="selectJfMatchingVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="code != null  and code != '' "> and code = #{code}</if>
+             <if test="plan != null  and plan != '' "> and plan = #{plan}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>
+             <if test="account != null  and account != '' "> and account = #{account}</if>
+             <if test="groupword != null  and groupword != '' "> and groupword = #{groupword}</if>
+             <if test="flag != null  and flag != '' "> and flag = #{flag}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectJfMatchingById" parameterType="Long" resultMap="JfMatchingResult">
+        <include refid="selectJfMatchingVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertJfMatching" parameterType="JfMatching" useGeneratedKeys="true" keyProperty="id">
+        insert into jf_matching
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="code != null  and code != ''  ">code,</if>
+			<if test="plan != null  and plan != ''  ">plan,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="keyword != null  and keyword != ''  ">keyword,</if>
+			<if test="account != null  and account != ''  ">account,</if>
+			<if test="groupword != null  and groupword != ''  ">groupword,</if>
+			<if test="flag != null  and flag != ''  ">flag,</if>
+			<if test="createTime != null  ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="code != null  and code != ''  ">#{code},</if>
+			<if test="plan != null  and plan != ''  ">#{plan},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="keyword != null  and keyword != ''  ">#{keyword},</if>
+			<if test="account != null  and account != ''  ">#{account},</if>
+			<if test="groupword != null  and groupword != ''  ">#{groupword},</if>
+			<if test="flag != null  and flag != ''  ">#{flag},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateJfMatching" parameterType="JfMatching">
+        update jf_matching
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''  ">code = #{code},</if>
+            <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="keyword != null  and keyword != ''  ">keyword = #{keyword},</if>
+            <if test="account != null  and account != ''  ">account = #{account},</if>
+            <if test="groupword != null  and groupword != ''  ">groupword = #{groupword},</if>
+            <if test="flag != null  and flag != ''  ">flag = #{flag},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteJfMatchingById" parameterType="Long">
+        delete from jf_matching where id = #{id}
+    </delete>
+	
+    <delete id="deleteJfMatchingByIds" parameterType="String">
+        delete from jf_matching where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 批量插入数据 -->
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO jf_matching (code,plan,unit,keyword,account,flag)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.code}, #{item.plan},#{item.unit},#{item.keyword},#{item.account},#{item.flag})
+        </foreach>
+    </insert>
+
+
+    <update id="updateGroupword" parameterType="String">
+        update jf_matching set groupword = CONCAT_WS('@',account,plan,unit,keyword) ,create_time = SYSDATE()
+        where flag = #{flag} and groupword is null 
+    </update>
+</mapper>

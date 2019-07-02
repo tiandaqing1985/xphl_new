@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JfZhanxianMapper">
+    
+    <resultMap type="JfZhanxian" id="JfZhanxianResult">
+        <result property="id"    column="id"    />
+        <result property="frontDate"    column="front_date"    />
+        <result property="code"    column="code"    />
+        <result property="groupword"    column="groupword"    />
+        <result property="showdata"    column="showdata"    />
+        <result property="click"    column="click"    />
+        <result property="consume"    column="consume"    />
+        <result property="account"    column="account"    />
+        <result property="card"    column="card"    />
+        <result property="putin"    column="putin"    />
+        <result property="placeOrder"    column="place_order"    />
+        <result property="activate"    column="activate"    />
+        <result property="channle"    column="channle"    />
+        <result property="accountname"    column="accountname"    />
+        <result property="plan"    column="plan"    />
+        <result property="unit"    column="unit"    />
+        <result property="keyword"    column="keyword"    />
+    </resultMap>
+	
+	<sql id="selectJfZhanxianVo">
+        select id, front_date, code, groupword, showdata, click, consume, account, card, putin, place_order, activate, channle, accountname, plan, unit, keyword from jf_zhanxian
+    </sql>
+	
+    <select id="selectJfZhanxianList" parameterType="JfZhanxian" resultMap="JfZhanxianResult">
+        <include refid="selectJfZhanxianVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="frontDate != null "> and front_date = #{frontDate}</if>
+             <if test="code != null  and code != '' "> and code = #{code}</if>
+             <if test="groupword != null  and groupword != '' "> and groupword = #{groupword}</if>
+             <if test="showdata != null "> and showdata = #{showdata}</if>
+             <if test="click != null "> and click = #{click}</if>
+             <if test="consume != null "> and consume = #{consume}</if>
+             <if test="account != null "> and account = #{account}</if>
+             <if test="card != null "> and card = #{card}</if>
+             <if test="putin != null "> and putin = #{putin}</if>
+             <if test="placeOrder != null "> and place_order = #{placeOrder}</if>
+             <if test="activate != null "> and activate = #{activate}</if>
+             <if test="channle != null  and channle != '' "> and channle = #{channle}</if>
+             <if test="accountname != null  and accountname != '' "> and accountname = #{accountname}</if>
+             <if test="plan != null  and plan != '' "> and plan = #{plan}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>
+         </where>
+    </select>
+    
+    <select id="selectJfZhanxianById" parameterType="Long" resultMap="JfZhanxianResult">
+        <include refid="selectJfZhanxianVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertJfZhanxian" parameterType="JfZhanxian" useGeneratedKeys="true" keyProperty="id">
+        insert into jf_zhanxian
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="frontDate != null  ">front_date,</if>
+			<if test="code != null  and code != ''  ">code,</if>
+			<if test="groupword != null  and groupword != ''  ">groupword,</if>
+			<if test="showdata != null  ">showdata,</if>
+			<if test="click != null  ">click,</if>
+			<if test="consume != null  ">consume,</if>
+			<if test="account != null  ">account,</if>
+			<if test="card != null  ">card,</if>
+			<if test="putin != null  ">putin,</if>
+			<if test="placeOrder != null  ">place_order,</if>
+			<if test="activate != null  ">activate,</if>
+			<if test="channle != null  and channle != ''  ">channle,</if>
+			<if test="accountname != null  and accountname != ''  ">accountname,</if>
+			<if test="plan != null  and plan != ''  ">plan,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="keyword != null  and keyword != ''  ">keyword,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="frontDate != null  ">#{frontDate},</if>
+			<if test="code != null  and code != ''  ">#{code},</if>
+			<if test="groupword != null  and groupword != ''  ">#{groupword},</if>
+			<if test="showdata != null  ">#{showdata},</if>
+			<if test="click != null  ">#{click},</if>
+			<if test="consume != null  ">#{consume},</if>
+			<if test="account != null  ">#{account},</if>
+			<if test="card != null  ">#{card},</if>
+			<if test="putin != null  ">#{putin},</if>
+			<if test="placeOrder != null  ">#{placeOrder},</if>
+			<if test="activate != null  ">#{activate},</if>
+			<if test="channle != null  and channle != ''  ">#{channle},</if>
+			<if test="accountname != null  and accountname != ''  ">#{accountname},</if>
+			<if test="plan != null  and plan != ''  ">#{plan},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="keyword != null  and keyword != ''  ">#{keyword},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateJfZhanxian" parameterType="JfZhanxian">
+        update jf_zhanxian
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="frontDate != null  ">front_date = #{frontDate},</if>
+            <if test="code != null  and code != ''  ">code = #{code},</if>
+            <if test="groupword != null  and groupword != ''  ">groupword = #{groupword},</if>
+            <if test="showdata != null  ">showdata = #{showdata},</if>
+            <if test="click != null  ">click = #{click},</if>
+            <if test="consume != null  ">consume = #{consume},</if>
+            <if test="account != null  ">account = #{account},</if>
+            <if test="card != null  ">card = #{card},</if>
+            <if test="putin != null  ">putin = #{putin},</if>
+            <if test="placeOrder != null  ">place_order = #{placeOrder},</if>
+            <if test="activate != null  ">activate = #{activate},</if>
+            <if test="channle != null  and channle != ''  ">channle = #{channle},</if>
+            <if test="accountname != null  and accountname != ''  ">accountname = #{accountname},</if>
+            <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="keyword != null  and keyword != ''  ">keyword = #{keyword},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteJfZhanxianById" parameterType="Long">
+        delete from jf_zhanxian where id = #{id}
+    </delete>
+	
+    <delete id="deleteJfZhanxianByIds" parameterType="String">
+        delete from jf_zhanxian where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    
+    
+    <insert id="createJfZhanxianData" parameterType="JfZhanxian" useGeneratedKeys="true" keyProperty="id">
+				insert into jf_zhanxian (
+				front_date,
+				`code`,
+				groupword,
+				showdata,
+				click,
+				consume,
+				account,
+				card,
+				putin,
+				place_order,
+				activate,
+				channle,
+				accountname,
+				plan,
+				unit,
+				keyword
+				)
+				
+				
+				
+				select 	c.front_date,
+								c.`code`,
+								c.groupword,
+								c.showdata,
+								c.click,
+								c.consume,
+								d.account,
+								d.card,
+								d.putin,
+								d.place_order,
+								d.activate,
+								d.channle,
+								c.account,
+								c.plan,
+								c.unit,
+								c.keyword  
+				from  (select a.front_date,b.`code`,a.groupword, a.showdata,a.click,a.consume  ,a.account,a.plan,a.unit,a.keyword from jf_front a LEFT JOIN jf_matching b  on a.groupword = b.groupword) c 
+					LEFT JOIN jf_end d on c.`code` = d.advertising and c.front_date = d.jf_date 
+				
+				UNION ALL
+				
+				select 
+								e.jf_date,
+								e.advertising,
+								f.groupword,
+								0 showdata,
+								0 click,
+								0 consume,
+								e.account,
+								e.card,
+								e.putin,
+								e.place_order,
+								e.activate,
+								e.channle,
+								'' account,
+								'' plan,
+								'' unit,
+								'' keyword  
+				
+				from jf_end e LEFT JOIN jf_matching f on e.advertising = f.`code`
+				 where e.id not in 
+					(
+						select d.id from ( select a.front_date,b.`code`  from jf_front a LEFT JOIN jf_matching b on a.groupword = b.groupword ) c LEFT JOIN jf_end d on c.`code` = d.advertising and c.front_date = d.jf_date where d.id is not null
+					) 
+    </insert>
+</mapper>

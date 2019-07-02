@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改商机')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-ywBusiness-edit" th:object="${ywBusiness}">
+            <input id="businessId" name="businessId" th:field="*{businessId}"  type="hidden">
+            <h4 class="form-header h4">客户基本信息<span style="color: red; ">*</span></h4>
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>签约方：</label>
+                        <div class="col-sm-8">
+                            <input name="companyName" id="companyName" th:field="*{companyName}" class="form-control" type="text" maxlength="30" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                </div>
+            </div>
+
+            <div class="row">
+            	<div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>广告主：</label>
+                        <div class="col-sm-8">
+                            <input name="advertiser" id="advertiser"   class="form-control"  th:field="*{advertiser}" type="text" maxlength="30" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>简称：</label>
+                        <div class="col-sm-8">
+                            <input name="shortName" id="shortName"  type="text"  th:field="*{shortName}"  class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="form-header h4">联系人1<span style="color: red; ">*</span></h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>姓名：</label>
+                        <div class="col-sm-8">
+                            <input name="linkname1" id="linkname1" th:field="*{linkname1}"  class="form-control" type="text" maxlength="20" required >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>联系电话：</label>
+                        <div class="col-sm-8">
+                            <input name="linkTel1" id="linkTel1" class="form-control" th:field="*{linkTel1}"  type="text" maxlength="11" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>职位：</label>
+                        <div class="col-sm-8">
+							 <select name="sex" class="form-control m-b" th:with="type=${@dict.getType('business_position')}">
+				                  <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{position1}"></option>
+				             </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>具体职位：</label>
+                        <div class="col-sm-8">
+                            <input name="position1Remark" id="position1Remark" th:field="*{position1Remark}"   class="form-control" type="text"  required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label"><span style="color: red; ">*</span>职责：</label>
+                        <div class="col-xs-10">
+                            <textarea name="responsibility1" id="responsibility1" th:field="*{responsibility1}"  maxlength="500" class="form-control"  rows="2" required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+           <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label"><span style="color: red; ">*</span>名片：</label>
+                        <div class="col-xs-10">
+                            <img class="img-responsive" alt="App Logo1" th:src="*{businessCard1}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+  
+            <h4 class="form-header h4">联系人2</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">姓名：</label>
+                        <div class="col-sm-8">
+                            <input name="linkname2"   class="form-control" th:field="*{linkname2}" type="text" maxlength="20"  >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">联系电话：</label>
+                        <div class="col-sm-8">
+                            <input name="linkTel2" class="form-control" th:field="*{linkTel2}" type="text" maxlength="11">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">职位：</label>
+                        <div class="col-sm-8">
+							 <select name="sex" class="form-control m-b" th:with="type=${@dict.getType('business_position')}">
+				                  <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{position2}"></option>
+				             </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">具体职位：</label>
+                        <div class="col-sm-8">
+                            <input name="position2Remark" th:field="*{position2Remark}"  class="form-control" type="text"  >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">职责：</label>
+                        <div class="col-xs-10">
+                            <textarea name="responsibility2"  maxlength="500" class="form-control" th:field="*{position2Remark}"  rows="2" ></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label"><span style="color: red; ">*</span>名片：</label>
+                        <div class="col-xs-10">
+                            <img class="img-responsive" alt="App Logo2" th:src="*{businessCard2}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <h4 class="form-header h4">联系人3</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">姓名：</label>
+                        <div class="col-sm-8">
+                            <input name="linkname3"   class="form-control" th:field="*{linkname3}" type="text" maxlength="20"  >
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">联系电话：</label>
+                        <div class="col-sm-8">
+                            <input name="linkTel3" class="form-control" th:field="*{linkTel3}" type="text" maxlength="11">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">职位：</label>
+                        <div class="col-sm-8">
+							 <select name="sex" class="form-control m-b" th:with="type=${@dict.getType('business_position')}">
+				                  <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{position3}"></option>
+				             </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">具体职位：</label>
+                        <div class="col-sm-8">
+                            <input name="position3Remark" th:field="*{position3Remark}"  class="form-control" type="text"  >
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">职责：</label>
+                        <div class="col-xs-10">
+                            <textarea name="responsibility3"  maxlength="500" class="form-control" th:field="*{position3Remark}"  rows="2" ></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+           <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label"><span style="color: red; ">*</span>名片：</label>
+                        <div class="col-xs-10">
+                            <img class="img-responsive" alt="App Logo3" th:src="*{businessCard3}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+		<h4 class="form-header h4">补充信息-公司情况</h4>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">公司业务内容：</label>
+                        <div class="col-xs-10">
+                            <textarea name="companyRemark1" id="companyRemark1" th:field="*{companyRemark1}"   maxlength="500" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">财务状况：</label>
+                        <div class="col-xs-10">
+                            <textarea name="companyRemark2" id="companyRemark2" th:field="*{companyRemark2}"   maxlength="500" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">组织架构：</label>
+                        <div class="col-xs-10">
+                            <textarea name="companyRemark3" id="companyRemark3" th:field="*{companyRemark3}"  maxlength="500" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            
+            <h4 class="form-header h4">补充信息-媒体投放现状</h4>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">目前投放预算：</label>
+                        <div class="col-xs-10">
+                            <textarea name="companyRemark4" id="companyRemark4" th:field="*{companyRemark4}" maxlength="500" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">媒体渠道：</label>
+                        <div class="col-xs-10">
+                            <textarea name="companyRemark5" id="companyRemark5"  th:field="*{companyRemark5}"  maxlength="500" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">采购代理商：</label>
+                        <div class="col-xs-10">
+                            <textarea name="companyRemark6" id="companyRemark6" th:field="*{companyRemark6}"  maxlength="500" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h4 class="form-header h4">补充信息-合作方向</h4>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">预计可合作媒体：</label>
+                        <div class="col-xs-10">
+                            <textarea name="companyRemark7" id="companyRemark7" th:field="*{companyRemark7}"  maxlength="500" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">预计下单产品：</label>
+                        <div class="col-xs-10">
+                            <textarea name="companyRemark8" id="companyRemark8" th:field="*{companyRemark8}"  maxlength="500" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label class="col-xs-2 control-label">预计下单时间：</label>
+                        <div class="col-xs-10">
+                            <textarea name="companyRemark9" id="companyRemark9" th:field="*{companyRemark9}" maxlength="500" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/ywBusiness";
+		$("#form-ywBusiness-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-ywBusiness-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>
