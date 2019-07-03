@@ -2,6 +2,9 @@ package com.ruoyi.system.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
 
@@ -17,7 +20,12 @@ public class JfZhanxian extends BaseEntity
 	
 	/** ID */
 	private Long id;
+    /** 备注 */
+	@Excel(name = "备注")
+    private String remark;
 	/** 日期 */
+    @Excel(name = "日期" ,dateFormat = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date frontDate;
 	/** 编码 */
 	private String code;
@@ -26,29 +34,42 @@ public class JfZhanxian extends BaseEntity
 	/** 展现 */
 	private Integer showdata;
 	/** 点击 */
+	@Excel(name = "点击")
 	private Integer click;
 	/** 消费 */
+	@Excel(name = "消费")
 	private Double consume;
 	/** 账户数 */
+	@Excel(name = "新入账户数")
 	private Integer account;
 	/** 开卡数 */
+	@Excel(name = "开卡数")
 	private Integer card;
 	/** 提交人数 */
+	@Excel(name = "提交信审人数  ")
 	private Integer putin;
 	/** 下单数 */
+	@Excel(name = "下单数")
 	private Integer placeOrder;
 	/** 激活数 */
+	@Excel(name = "激活数")
 	private Integer activate;
 	/**  */
 	private String channle;
 	/** 账户 */
+	@Excel(name = "账户")
 	private String accountname;
 	/** 计划 */
+	@Excel(name = "计划")
 	private String plan;
 	/** 单元 */
+	@Excel(name = "单元")
 	private String unit;
 	/** 关键词 */
+	@Excel(name = "关键词 ")
 	private String keyword;
+	
+
 
 	public void setId(Long id) 
 	{
@@ -204,7 +225,15 @@ public class JfZhanxian extends BaseEntity
 		return keyword;
 	}
 
-    public String toString() {
+    public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("frontDate", getFrontDate())

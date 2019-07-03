@@ -3,6 +3,7 @@ package com.ruoyi.system.domain;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
@@ -24,6 +25,7 @@ public class JfFront extends BaseEntity
 	private String account;
 	/** 日期 */
 	@Excel(name = "日期")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date frontDate;
 	/** 计划 */
 	@Excel(name = "推广计划")

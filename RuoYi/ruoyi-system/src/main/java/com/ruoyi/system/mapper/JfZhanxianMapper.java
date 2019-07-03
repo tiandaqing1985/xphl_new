@@ -63,4 +63,16 @@ public interface JfZhanxianMapper
 	public int createJfZhanxianData(JfZhanxian jfZhanxian);
 	
 	
+	public List<JfZhanxian> selectJfZhanxianSumList(JfZhanxian jfZhanxian);
+	
+	public List<JfZhanxian> selectJfZhanxianAccountSumList(JfZhanxian jfZhanxian);
+	
+	public List<JfZhanxian> selectJfZhanxianPlanSumList(JfZhanxian jfZhanxian);
+	
+	public List<JfZhanxian> selectJfZhanxianUnitSumList(JfZhanxian jfZhanxian);
+	
+	public List<JfZhanxian> selectJfZhanxianKeywordSumList(JfZhanxian jfZhanxian);
+	
+	public int deleteAllJfZhanxian();
+	
 }

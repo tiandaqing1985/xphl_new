@@ -106,8 +106,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
     
     
-      <update id="updateGroupword" parameterType="String">
+    <update id="updateGroupword" parameterType="String">
         update jf_front set groupword = CONCAT_WS('@',account,plan,unit,keyword)
     </update>
     
+    
+    <delete id="deleteAllJfFront">
+        delete from jf_front 
+    </delete>
 </mapper>

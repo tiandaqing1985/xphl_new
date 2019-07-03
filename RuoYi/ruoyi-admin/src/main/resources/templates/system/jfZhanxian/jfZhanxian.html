@@ -8,9 +8,10 @@
 		<div class="row">
 			<div class="col-sm-12 search-collapse">
 				<form id="formId">
+				<input id="selectflag" name = "selectflag"  type="hidden"/>
 					<div class="select-list">
 						<ul>
-							<li>
+<!-- 							<li>
 								日期：<input type="text" name="frontDate"/>
 							</li>
 
@@ -36,11 +37,16 @@
 
 							<li>
 								关键词：<input type="text" name="keyword"/>
-							</li>
+							</li> -->
 
 							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+								<!-- <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								 <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a> -->
+								 <a class="btn btn-primary btn-rounded btn-sm" onclick="method1(0);$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索汇总</a>
+								 <a class="btn btn-primary btn-rounded btn-sm" onclick="method1(1);$.table.search()"><i class="fa fa-search"></i>&nbsp;账户维度汇总</a>
+								 <a class="btn btn-primary btn-rounded btn-sm" onclick="method1(2);$.table.search()"><i class="fa fa-search"></i>&nbsp;计划维度汇总</a>
+								 <a class="btn btn-primary btn-rounded btn-sm" onclick="method1(3);$.table.search()"><i class="fa fa-search"></i>&nbsp;单元维度汇总</a>
+								 <a class="btn btn-primary btn-rounded btn-sm" onclick="method1(4);$.table.search()"><i class="fa fa-search"></i>&nbsp;关键词维度汇总</a>
 							</li>
 						</ul>
 					</div>
@@ -48,6 +54,9 @@
 			</div>
 			
 	        <div class="btn-group-sm" id="toolbar" role="group">
+	        	<a class="btn btn-danger" onclick="deleteAll()" >
+					<i class="fa fa-remove"></i> 清除数据
+				</a>
 				<a class="btn btn-success" onclick="createData()" >
 					<i class="fa fa-plus"></i> 生成数据
 				</a>
@@ -57,9 +66,21 @@
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:jfZhanxian:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a> -->
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" >
-						<i class="fa fa-download"></i> 导出
-				 </a>
+				<a class="btn btn-warning" onclick="method1(0);$.table.exportExcel()" >
+						<i class="fa fa-download"></i> 导出汇总
+				</a>
+				<a class="btn btn-warning" onclick="method1(1);$.table.exportExcel()" >
+						<i class="fa fa-download"></i> 导出账户维度
+				</a>
+				<a class="btn btn-warning" onclick="method1(2);$.table.exportExcel()" >
+						<i class="fa fa-download"></i> 导出计划维度
+				</a>
+				<a class="btn btn-warning" onclick="method1(3);$.table.exportExcel()" >
+						<i class="fa fa-download"></i> 导出单元维度
+				</a>
+				<a class="btn btn-warning" onclick="method1(4);$.table.exportExcel()" >
+						<i class="fa fa-download"></i> 导出关键词维度
+				</a>
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -71,13 +92,13 @@
         var editFlag = [[${@permission.hasPermi('system:jfZhanxian:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:jfZhanxian:remove')}]];
         var prefix = ctx + "system/jfZhanxian";
-
+		var flag = $("#selectflag").val();
         $(function() {
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
+                removeUrl: prefix + "/deleteAllJfZhanxian",
 				exportUrl: prefix + "/export",
 				createDataUrl: prefix + "/createJfZhanxianData",
                 modalName: "玖富展现",
@@ -91,11 +112,16 @@
 					visible: false
 				},
 				{
-					field : 'frontDate', 
-					title : '日期',
-					sortable: true
+					field : 'remark', 
+					title : '备注',
+					sortable: false
 				},
 				{
+					field : 'frontDate', 
+					title : '日期',
+					sortable: false
+				},
+				/* {
 					field : 'code', 
 					title : '编码',
 					sortable: true
@@ -109,66 +135,66 @@
 					field : 'show', 
 					title : '展现',
 					sortable: true
-				},
+				}, */
 				{
 					field : 'click', 
 					title : '点击',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'consume', 
 					title : '消费',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'account', 
 					title : '账户数',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'card', 
 					title : '开卡数',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'putin', 
 					title : '提交人数',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'placeOrder', 
 					title : '下单数',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'activate', 
 					title : '激活数',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'channle', 
 					title : '',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'accountname', 
 					title : '账户',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'plan', 
 					title : '计划',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'unit', 
 					title : '单元',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'keyword', 
 					title : '关键词',
-					sortable: true
+					sortable: false
 				}
 /* 				,
 		        {
@@ -203,6 +229,19 @@
 				}
 			});
         }
+        
+       function  method1(f){
+    	   $("#selectflag").val(f);
+       }
+       
+       function deleteAll(){
+       	
+       	$.modal.confirm("确定清除玖富展示数据吗？", function() {
+               var url = $.table._option.removeUrl ;
+               $.operate.submit(url, "post", "json", null);
+       	});
+       	
+       }
     </script>
 </body>
 </html>

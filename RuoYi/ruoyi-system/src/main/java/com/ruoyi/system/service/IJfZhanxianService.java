@@ -54,4 +54,8 @@ public interface IJfZhanxianService
 	
 	public int createJfZhanxianData(JfZhanxian jfZhanxian);
 	
+	public List<JfZhanxian> selectJfZhanxianSumList(JfZhanxian jfZhanxian,String selectflag);
+	
+	public int deleteAllJfZhanxian();
+	
 }

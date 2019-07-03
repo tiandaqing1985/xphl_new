@@ -85,4 +85,26 @@ public class JfZhanxianServiceImpl implements IJfZhanxianService
 	{
 	    return jfZhanxianMapper.createJfZhanxianData(jfZhanxian);
 	}
+	
+	@Override
+	public List<JfZhanxian> selectJfZhanxianSumList(JfZhanxian jfZhanxian ,String selectflag)
+	{
+		if("0".equals(selectflag)){
+			return jfZhanxianMapper.selectJfZhanxianSumList(jfZhanxian);
+		}else if("1".equals(selectflag)){
+			return jfZhanxianMapper.selectJfZhanxianAccountSumList(jfZhanxian);
+		}else if("2".equals(selectflag)){
+			return jfZhanxianMapper.selectJfZhanxianPlanSumList(jfZhanxian);
+		}else if("3".equals(selectflag)){
+			return jfZhanxianMapper.selectJfZhanxianUnitSumList(jfZhanxian);
+		}else if("4".equals(selectflag)){
+			return jfZhanxianMapper.selectJfZhanxianKeywordSumList(jfZhanxian);
+		}else{
+			return jfZhanxianMapper.selectJfZhanxianSumList(jfZhanxian);
+		}
+	}
+	
+	public int deleteAllJfZhanxian(){
+		return jfZhanxianMapper.deleteAllJfZhanxian();
+	}
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('玖富后端列表')" />
+	<th:block th:include="include :: header('马蜂窝原生后端列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -11,24 +11,25 @@
 					<div class="select-list">
 						<ul>
 							<li>
-								日期：<input type="text" name="jfDate"/>
+								系统：<input type="text" name="mfwSystem"/>
 							</li>
 
 							<li>
-								渠道：<input type="text" name="channle"/>
+								渠道包名：<input type="text" name="channelPackage"/>
 							</li>
 
 							<li>
-								渠道名称：<input type="text" name="channleName"/>
+								渠道：<input type="text" name="channel"/>
 							</li>
 
 							<li>
-								结算方式：<input type="text" name="clearing"/>
+								账户id：<input type="text" name="account"/>
 							</li>
 
 							<li>
-								广告位：<input type="text" name="advertising"/>
+								aid：<input type="text" name="aid"/>
 							</li>
+
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -39,22 +40,19 @@
 			</div>
 			
 	        <div class="btn-group-sm" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" >
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:mfwysEnd:add">
 					<i class="fa fa-plus"></i> 添加
 				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" >
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:mfwysEnd:edit">
 					<i class="fa fa-edit"></i> 修改
 				</a>
 				<a class="btn btn-info" onclick="$.table.importExcel()">
 		            <i class="fa fa-upload"></i> 导入
 		        </a>
-		        <a class="btn btn-danger" onclick="deleteAll()" >
-					<i class="fa fa-remove"></i> 清除数据
-				</a>
-<!-- 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:jfEnd:remove">
+<!-- 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:mfwysEnd:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:jfEnd:export">
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:mfwysEnd:export">
 						<i class="fa fa-download"></i> 导出
 				 </a> -->
 			</div>
@@ -65,20 +63,20 @@
 	</div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:jfEnd:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:jfEnd:remove')}]];
-        var prefix = ctx + "system/jfEnd";
+        var editFlag = [[${@permission.hasPermi('system:mfwysEnd:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:mfwysEnd:remove')}]];
+        var prefix = ctx + "system/mfwysEnd";
 
         $(function() {
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/deleteAllJfEnd",
+                removeUrl: prefix + "/remove",
 				exportUrl: prefix + "/export",
 				importTemplateUrl: prefix + "/importTemplate",
 				importUrl: prefix + "/importData",
-                modalName: "玖富后端",
+                modalName: "马蜂窝原生后端",
 		        showExport: true,
                 columns: [{
 		            checkbox: true
@@ -89,56 +87,45 @@
 					visible: false
 				},
 				{
-					field : 'jfDate', 
-					title : '日期',
-					sortable: false
+					field : 'newtime', 
+					title : '新增时间',
+					sortable: true
 				},
 				{
-					field : 'channle', 
+					field : 'mfwSystem', 
+					title : '系统',
+					sortable: true
+				},
+				{
+					field : 'channelPackage', 
+					title : '渠道包名',
+					sortable: true
+				},
+				{
+					field : 'channel', 
 					title : '渠道',
-					sortable: false
+					sortable: true
 				},
 				{
-					field : 'channleName', 
-					title : '渠道名称',
-					sortable: false
-				},
-				{
-					field : 'clearing', 
-					title : '结算方式',
-					sortable: false
-				},
-				{
-					field : 'advertising', 
-					title : '广告位',
-					sortable: false
+					field : 'newFacility', 
+					title : '新增设备数',
+					sortable: true
 				},
 				{
 					field : 'account', 
-					title : '账户数',
-					sortable: false
+					title : '账户id',
+					sortable: true
 				},
 				{
-					field : 'card', 
-					title : '开卡数',
-					sortable: false
+					field : 'aid', 
+					title : 'aid',
+					sortable: true
 				},
 				{
-					field : 'putin', 
-					title : '提交人数',
-					sortable: false
+					field : 'keep', 
+					title : '次日留存',
+					sortable: true
 				},
-				{
-					field : 'placeOrder', 
-					title : '下单数',
-					sortable: false
-				},
-				{
-					field : 'activate', 
-					title : '激活数',
-					sortable: false
-				}
-/* 				,
 		        {
 		            title: '操作',
 		            align: 'center',
@@ -148,21 +135,10 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 						return actions.join('');
 		            }
-		        } */
-				]
+		        }]
             };
             $.table.init(options);
         });
-        
-        
-        function deleteAll(){
-        	
-        	$.modal.confirm("确定清除玖富后端数据吗？", function() {
-                var url = $.table._option.removeUrl ;
-                $.operate.submit(url, "post", "json", null);
-        	});
-        	
-        }
     </script>
 </body>
 <form id="importForm" enctype="multipart/form-data" class="mt20 mb10" style="display: none;">

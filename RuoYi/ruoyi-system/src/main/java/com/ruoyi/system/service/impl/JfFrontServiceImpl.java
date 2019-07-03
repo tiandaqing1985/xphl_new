@@ -124,5 +124,7 @@ public class JfFrontServiceImpl implements IJfFrontService
     
 	}
 
-	
+	public int deleteAllJfFront(){
+		return jfFrontMapper.deleteAllJfFront();
+	}
 }

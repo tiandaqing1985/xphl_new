@@ -44,24 +44,37 @@ public class JfZhanxianController extends BaseController
 	/**
 	 * 查询玖富展现列表
 	 */
-	@PostMapping("/list")
+/*	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(JfZhanxian jfZhanxian)
 	{
 		startPage();
         List<JfZhanxian> list = jfZhanxianService.selectJfZhanxianList(jfZhanxian);
 		return getDataTable(list);
-	}
+	}*/
 	
+	
+	
+	/**
+	 * 查询玖富展现列表
+	 */
+	@PostMapping("/list")
+	@ResponseBody
+	public TableDataInfo list(JfZhanxian jfZhanxian,String selectflag)
+	{
+		startPage();
+        List<JfZhanxian> list = jfZhanxianService.selectJfZhanxianSumList(jfZhanxian,selectflag);
+		return getDataTable(list);
+	}
 	
 	/**
 	 * 导出玖富展现列表
 	 */
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(JfZhanxian jfZhanxian)
+    public AjaxResult export(JfZhanxian jfZhanxian ,String selectflag)
     {
-    	List<JfZhanxian> list = jfZhanxianService.selectJfZhanxianList(jfZhanxian);
+    	List<JfZhanxian> list = jfZhanxianService.selectJfZhanxianSumList(jfZhanxian,selectflag);
         ExcelUtil<JfZhanxian> util = new ExcelUtil<JfZhanxian>(JfZhanxian.class);
         return util.exportExcel(list, "jfZhanxian");
     }
@@ -126,4 +139,14 @@ public class JfZhanxianController extends BaseController
 	{		
 		return toAjax(jfZhanxianService.createJfZhanxianData(jfZhanxian));
 	}
+	
+	
+	@PostMapping( "/deleteAllJfZhanxian")
+	@ResponseBody
+	public AjaxResult deleteAllJfZhanxian()
+	{		
+		return toAjax(jfZhanxianService.deleteAllJfZhanxian());
+	}
+	
+	
 }

@@ -53,4 +53,6 @@ public interface IJfEndService
 	public int deleteJfEndByIds(String ids);
 	
 	public String importEnd(List<JfEnd> jfList, Boolean isUpdateSupport, String operName);
+	
+	public int deleteAllJfEnd();
 }

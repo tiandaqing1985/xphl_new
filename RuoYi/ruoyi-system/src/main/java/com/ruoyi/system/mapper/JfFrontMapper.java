@@ -65,4 +65,6 @@ public interface JfFrontMapper
 	public  void batchInsert(@Param("list") List<JfFront> list);
 	
 	public int updateGroupword(String  str);
+	
+	public int deleteAllJfFront();
 }

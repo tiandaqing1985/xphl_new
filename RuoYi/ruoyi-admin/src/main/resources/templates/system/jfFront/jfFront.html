@@ -48,6 +48,9 @@
 				<a class="btn btn-info" onclick="$.table.importExcel()">
 		            <i class="fa fa-upload"></i> 导入
 		        </a>
+		        <a class="btn btn-danger" onclick="deleteAll()" >
+					<i class="fa fa-remove"></i> 清除数据
+				</a>
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -65,7 +68,7 @@
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
+                removeUrl: prefix + "/deleteAllJfFront",
 				exportUrl: prefix + "/export",
 				importTemplateUrl: prefix + "/importTemplate",
 				importUrl: prefix + "/importData",
@@ -82,47 +85,47 @@
 				{
 					field : 'frontDate', 
 					title : '日期',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'account', 
 					title : '账户',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'plan', 
 					title : '计划',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'unit', 
 					title : '单元',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'keyword', 
 					title : '关键词',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'show', 
 					title : '展示',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'click', 
 					title : '点击',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'consume', 
 					title : '消费',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'groupword', 
 					title : '组合',
-					sortable: true
+					sortable: false
 				}
 /* 				,
 		        {
@@ -139,6 +142,15 @@
             };
             $.table.init(options);
         });
+        
+        function deleteAll(){
+        	
+        	$.modal.confirm("确定清除玖富前端数据吗？", function() {
+                var url = $.table._option.removeUrl ;
+                $.operate.submit(url, "post", "json", null);
+        	});
+        	
+        }
     </script>
 </body>
 <form id="importForm" enctype="multipart/form-data" class="mt20 mb10" style="display: none;">

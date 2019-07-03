@@ -63,4 +63,6 @@ public interface JfEndMapper
 	public int deleteJfEndByIds(String[] ids);
 	
 	public  void batchInsert(@Param("list") List<JfEnd> list);
+	
+	public int deleteAllJfEnd();
 }

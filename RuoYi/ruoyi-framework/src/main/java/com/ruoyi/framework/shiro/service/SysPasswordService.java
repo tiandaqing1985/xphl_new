@@ -80,7 +80,8 @@ public class SysPasswordService
 
     public String encryptPassword(String username, String password, String salt)
     {
-        return new Md5Hash(username + password + salt).toHex().toString();
+    	System.out.println(new Md5Hash(password).toHex().toString()+"-----------------------------------------");
+        return new Md5Hash(password).toHex().toString();
     }
 
 }

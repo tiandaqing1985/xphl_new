@@ -114,7 +114,6 @@ public class JfFrontController extends BaseController
 	/**
 	 * 删除玖富前端
 	 */
-	@RequiresPermissions("system:jfFront:remove")
 	@Log(title = "玖富前端", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody
@@ -143,4 +142,12 @@ public class JfFrontController extends BaseController
         String message = jfFrontService.importJfFront(jffList, false, operName);
         return AjaxResult.success(message);
     }
+    
+    
+	@PostMapping( "/deleteAllJfFront")
+	@ResponseBody
+	public AjaxResult deleteAllJfFront()
+	{		
+		return toAjax(jfFrontService.deleteAllJfFront());
+	}
 }

@@ -128,7 +128,7 @@ public class JfEndController extends BaseController
     public AjaxResult importTemplate()
     {
         ExcelUtil<JfEnd> util = new ExcelUtil<JfEnd>(JfEnd.class);
-        return util.importTemplateExcel("玖富匹配数据");
+        return util.importTemplateExcel("玖富后端数据");
     }
     
     
@@ -143,4 +143,11 @@ public class JfEndController extends BaseController
         String message = jfEndService.importEnd(jeList, false, operName);
         return AjaxResult.success(message);
     }
+    
+	@PostMapping("/deleteAllJfEnd")
+	@ResponseBody
+	public AjaxResult deleteAllJfEnd()
+	{		
+		return toAjax(jfEndService.deleteAllJfEnd());
+	}
 }

@@ -54,4 +54,6 @@ public interface IJfFrontService
 	
 	public String importJfFront(List<JfFront> jfList, Boolean isUpdateSupport, String operName);
 	
+	public int deleteAllJfFront();
+	
 }

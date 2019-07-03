@@ -122,4 +122,9 @@ public class JfEndServiceImpl implements IJfEndService
         }
     
 	}
+	
+	@Override
+	public int deleteAllJfEnd(){
+		return jfEndMapper.deleteAllJfEnd();
+	}
 }
