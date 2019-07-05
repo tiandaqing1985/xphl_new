@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.RxZhanxianMapper">
+    
+    <resultMap type="RxZhanxian" id="RxZhanxianResult">
+        <result property="id"    column="id"    />
+        <result property="rxMonth"    column="rx_month"    />
+        <result property="rxDate"    column="rx_date"    />
+        <result property="pcShowdata"    column="pc_showdata"    />
+        <result property="pcClick"    column="pc_click"    />
+        <result property="pcConsume"    column="pc_consume"    />
+        <result property="pcCtr"    column="pc_CTR"    />
+        <result property="pcCpc"    column="pc_CPC"    />
+        <result property="mdShowdata"    column="md_showdata"    />
+        <result property="mdClick"    column="md_click"    />
+        <result property="mdConsume"    column="md_consume"    />
+        <result property="mdCtr"    column="md_CTR"    />
+        <result property="mdCpc"    column="md_CPC"    />
+        <result property="allShowdata"    column="all_showdata"    />
+        <result property="allClick"    column="all_click"    />
+        <result property="allConsume"    column="all_consume"    />
+        <result property="allCtr"    column="all_CTR"    />
+        <result property="allCpc"    column="all_CPC"    />
+        <result property="account"    column="account"    />
+        <result property="plan"    column="plan"    />
+        <result property="unit"    column="unit"    />
+        <result property="keyword"    column="keyword"    />
+    </resultMap>
+	
+	<sql id="selectRxZhanxianVo">
+        select id, rx_month, rx_date, pc_showdata, pc_click, pc_consume, pc_CTR, pc_CPC, md_showdata, md_click, md_consume, md_CTR, md_CPC, all_showdata, all_click, all_consume, all_CTR, all_CPC, account, plan, unit, keyword from rx_zhanxian
+    </sql>
+	
+    <select id="selectRxZhanxianList" parameterType="RxZhanxian" resultMap="RxZhanxianResult">
+        <include refid="selectRxZhanxianVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="rxMonth != null  and rxMonth != '' "> and rx_month = #{rxMonth}</if>
+             <if test="rxDate != null "> and rx_date = #{rxDate}</if>
+             <if test="pcShowdata != null "> and pc_showdata = #{pcShowdata}</if>
+             <if test="pcClick != null "> and pc_click = #{pcClick}</if>
+             <if test="pcConsume != null "> and pc_consume = #{pcConsume}</if>
+             <if test="pcCtr != null  and pcCtr != '' "> and pc_CTR = #{pcCtr}</if>
+             <if test="pcCpc != null  and pcCpc != '' "> and pc_CPC = #{pcCpc}</if>
+             <if test="mdShowdata != null "> and md_showdata = #{mdShowdata}</if>
+             <if test="mdClick != null "> and md_click = #{mdClick}</if>
+             <if test="mdConsume != null "> and md_consume = #{mdConsume}</if>
+             <if test="mdCtr != null  and mdCtr != '' "> and md_CTR = #{mdCtr}</if>
+             <if test="mdCpc != null  and mdCpc != '' "> and md_CPC = #{mdCpc}</if>
+             <if test="allShowdata != null "> and all_showdata = #{allShowdata}</if>
+             <if test="allClick != null "> and all_click = #{allClick}</if>
+             <if test="allConsume != null "> and all_consume = #{allConsume}</if>
+             <if test="allCtr != null  and allCtr != '' "> and all_CTR = #{allCtr}</if>
+             <if test="allCpc != null  and allCpc != '' "> and all_CPC = #{allCpc}</if>
+             <if test="account != null  and account != '' "> and account = #{account}</if>
+             <if test="plan != null  and plan != '' "> and plan = #{plan}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>
+         </where>
+    </select>
+    
+    <select id="selectRxZhanxianById" parameterType="Integer" resultMap="RxZhanxianResult">
+        <include refid="selectRxZhanxianVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertRxZhanxian" parameterType="RxZhanxian" useGeneratedKeys="true" keyProperty="id">
+        insert into rx_zhanxian
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="rxMonth != null  and rxMonth != ''  ">rx_month,</if>
+			<if test="rxDate != null  ">rx_date,</if>
+			<if test="pcShowdata != null  ">pc_showdata,</if>
+			<if test="pcClick != null  ">pc_click,</if>
+			<if test="pcConsume != null  ">pc_consume,</if>
+			<if test="pcCtr != null  and pcCtr != ''  ">pc_CTR,</if>
+			<if test="pcCpc != null  and pcCpc != ''  ">pc_CPC,</if>
+			<if test="mdShowdata != null  ">md_showdata,</if>
+			<if test="mdClick != null  ">md_click,</if>
+			<if test="mdConsume != null  ">md_consume,</if>
+			<if test="mdCtr != null  and mdCtr != ''  ">md_CTR,</if>
+			<if test="mdCpc != null  and mdCpc != ''  ">md_CPC,</if>
+			<if test="allShowdata != null  ">all_showdata,</if>
+			<if test="allClick != null  ">all_click,</if>
+			<if test="allConsume != null  ">all_consume,</if>
+			<if test="allCtr != null  and allCtr != ''  ">all_CTR,</if>
+			<if test="allCpc != null  and allCpc != ''  ">all_CPC,</if>
+			<if test="account != null  and account != ''  ">account,</if>
+			<if test="plan != null  and plan != ''  ">plan,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="keyword != null  and keyword != ''  ">keyword,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="rxMonth != null  and rxMonth != ''  ">#{rxMonth},</if>
+			<if test="rxDate != null  ">#{rxDate},</if>
+			<if test="pcShowdata != null  ">#{pcShowdata},</if>
+			<if test="pcClick != null  ">#{pcClick},</if>
+			<if test="pcConsume != null  ">#{pcConsume},</if>
+			<if test="pcCtr != null  and pcCtr != ''  ">#{pcCtr},</if>
+			<if test="pcCpc != null  and pcCpc != ''  ">#{pcCpc},</if>
+			<if test="mdShowdata != null  ">#{mdShowdata},</if>
+			<if test="mdClick != null  ">#{mdClick},</if>
+			<if test="mdConsume != null  ">#{mdConsume},</if>
+			<if test="mdCtr != null  and mdCtr != ''  ">#{mdCtr},</if>
+			<if test="mdCpc != null  and mdCpc != ''  ">#{mdCpc},</if>
+			<if test="allShowdata != null  ">#{allShowdata},</if>
+			<if test="allClick != null  ">#{allClick},</if>
+			<if test="allConsume != null  ">#{allConsume},</if>
+			<if test="allCtr != null  and allCtr != ''  ">#{allCtr},</if>
+			<if test="allCpc != null  and allCpc != ''  ">#{allCpc},</if>
+			<if test="account != null  and account != ''  ">#{account},</if>
+			<if test="plan != null  and plan != ''  ">#{plan},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="keyword != null  and keyword != ''  ">#{keyword},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateRxZhanxian" parameterType="RxZhanxian">
+        update rx_zhanxian
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="rxMonth != null  and rxMonth != ''  ">rx_month = #{rxMonth},</if>
+            <if test="rxDate != null  ">rx_date = #{rxDate},</if>
+            <if test="pcShowdata != null  ">pc_showdata = #{pcShowdata},</if>
+            <if test="pcClick != null  ">pc_click = #{pcClick},</if>
+            <if test="pcConsume != null  ">pc_consume = #{pcConsume},</if>
+            <if test="pcCtr != null  and pcCtr != ''  ">pc_CTR = #{pcCtr},</if>
+            <if test="pcCpc != null  and pcCpc != ''  ">pc_CPC = #{pcCpc},</if>
+            <if test="mdShowdata != null  ">md_showdata = #{mdShowdata},</if>
+            <if test="mdClick != null  ">md_click = #{mdClick},</if>
+            <if test="mdConsume != null  ">md_consume = #{mdConsume},</if>
+            <if test="mdCtr != null  and mdCtr != ''  ">md_CTR = #{mdCtr},</if>
+            <if test="mdCpc != null  and mdCpc != ''  ">md_CPC = #{mdCpc},</if>
+            <if test="allShowdata != null  ">all_showdata = #{allShowdata},</if>
+            <if test="allClick != null  ">all_click = #{allClick},</if>
+            <if test="allConsume != null  ">all_consume = #{allConsume},</if>
+            <if test="allCtr != null  and allCtr != ''  ">all_CTR = #{allCtr},</if>
+            <if test="allCpc != null  and allCpc != ''  ">all_CPC = #{allCpc},</if>
+            <if test="account != null  and account != ''  ">account = #{account},</if>
+            <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="keyword != null  and keyword != ''  ">keyword = #{keyword},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteRxZhanxianById" parameterType="Integer">
+        delete from rx_zhanxian where id = #{id}
+    </delete>
+	
+    <delete id="deleteRxZhanxianByIds" parameterType="String">
+        delete from rx_zhanxian where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="selectRxZhanxian" resultMap="RxZhanxianResult">
+    SELECT al.rx_date,
+
+        (m.showdata)md_showdata,
+        (m.click)md_click,
+        (m.consume)md_consume,
+        (CASE
+		 WHEN m.plan LIKE '%智达%' THEN
+		  m.consume
+		 ELSE 
+		  0.00
+		 END)md_pxcost,
+			
+		(pc.showdata)pc_showdata,
+		(pc.click)pc_click,
+		(pc.consume)pc_consume,
+		(CASE
+		  WHEN pc.plan LIKE '%智达%' THEN
+		   pc.consume
+		  ELSE 
+		   0.00
+		 END)pc_pxcost,
+		
+		(al.showdata)all_showdata,
+		(al.click)all_click,
+		(al.consume)all_consume,
+		(CASE
+		  WHEN al.plan LIKE '%智达%' THEN
+		   al.consume
+		  ELSE 
+		   0.00
+		 END)all_pxcost,
+		
+		al.account,
+		al.plan,
+		al.unit,
+		al.keyword
+		
+		FROM `rx_front`al
+		LEFT JOIN 
+		(SELECT * FROM `rx_front` WHERE plan LIKE '%PC%')pc
+		ON al.`id`= pc.id
+		LEFT JOIN
+		(SELECT * FROM `rx_front`WHERE plan NOT IN (SELECT n.`plan` FROM `rx_front`n WHERE n.`plan` LIKE '%PC%'))m
+		ON al.`id`= m.id
+    </select>
+    <delete id="deleteAllRxZhanxian" >
+    	delete from rx_zhanxian 
+    </delete>
+</mapper>

@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BqEndMapper">
+    
+    <resultMap type="BqEnd" id="BqEndResult">
+        <result property="id"    column="id"    />
+        <result property="bqDate"    column="bq_date"    />
+        <result property="account"    column="account"    />
+        <result property="plan"    column="plan"    />
+        <result property="unit"    column="unit"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="click"    column="click"    />
+        <result property="orderCount"    column="order_count"    />
+        <result property="groupword"    column="groupword"    />
+    </resultMap>
+	
+	<sql id="selectBqEndVo">
+        select id, bq_date, account, plan, unit, keyword, click, order_count, groupword from bq_end
+    </sql>
+	
+    <select id="selectBqEndList" parameterType="BqEnd" resultMap="BqEndResult">
+        <include refid="selectBqEndVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="bqDate != null and bqDate != '' "> and bq_date = #{bqDate}</if>
+             <if test="account != null  and account != '' "> and account = #{account}</if>
+             <if test="plan != null  and plan != '' "> and plan = #{plan}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>
+             <if test="click != null "> and click = #{click}</if>
+             <if test="orderCount != null "> and order_count = #{orderCount}</if>
+             <if test="groupword != null  and groupword != '' "> and groupword = #{groupword}</if>
+         </where>
+    </select>
+    
+    <select id="selectBqEndById" parameterType="Long" resultMap="BqEndResult">
+        <include refid="selectBqEndVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBqEnd" parameterType="BqEnd" useGeneratedKeys="true" keyProperty="id">
+        insert into bq_end
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="bqDate != null and bqDate != '' ">bq_date,</if>
+			<if test="account != null  and account != ''  ">account,</if>
+			<if test="plan != null  and plan != ''  ">plan,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="keyword != null  and keyword != ''  ">keyword,</if>
+			<if test="click != null  ">click,</if>
+			<if test="orderCount != null  ">order_count,</if>
+			<if test="groupword != null  and groupword != ''  ">groupword,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="bqDate != null and bqDate != ''   ">#{bqDate},</if>
+			<if test="account != null  and account != ''  ">#{account},</if>
+			<if test="plan != null  and plan != ''  ">#{plan},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="keyword != null  and keyword != ''  ">#{keyword},</if>
+			<if test="click != null  ">#{click},</if>
+			<if test="orderCount != null  ">#{orderCount},</if>
+			<if test="groupword != null  and groupword != ''  ">#{groupword},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateBqEnd" parameterType="BqEnd">
+        update bq_end
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bqDate != null and bqDate != ''   ">bq_date = #{bqDate},</if>
+            <if test="account != null  and account != ''  ">account = #{account},</if>
+            <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="keyword != null  and keyword != ''  ">keyword = #{keyword},</if>
+            <if test="click != null  ">click = #{click},</if>
+            <if test="orderCount != null  ">order_count = #{orderCount},</if>
+            <if test="groupword != null  and groupword != ''  ">groupword = #{groupword},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteBqEndById" parameterType="Long">
+        delete from bq_end where id = #{id}
+    </delete>
+	
+    <delete id="deleteBqEndByIds" parameterType="String">
+        delete from bq_end where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 批量插入数据 -->
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bq_end (bq_date, account, plan, unit, keyword, click, order_count) 
+			VALUES
+        <foreach collection="list" item="item" separator=",">
+        	(#{item.bqDate}, #{item.account}, #{item.plan}, #{item.unit}, #{item.keyword}, #{item.click},#{item.orderCount})
+        </foreach>
+    </insert>
+    
+    <update id="updateGroupword" parameterType="String">
+        update bq_end set groupword = CONCAT_WS('@',account,plan,unit,keyword,bq_date)
+    </update>
+    
+    <delete id="deleteAllBqEnd">
+    	delete from bq_end 
+    </delete>
+</mapper>

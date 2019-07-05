@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增北汽前端')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-bqFront-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账户：</label>
+				<div class="col-sm-8">
+					<input id="account" name="account" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">日期：</label>
+				<div class="col-sm-8">
+					<input id="bqDate" name="bqDate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">推广计划：</label>
+				<div class="col-sm-8">
+					<input id="plan" name="plan" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">推广单元：</label>
+				<div class="col-sm-8">
+					<input id="unit" name="unit" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">关键词：</label>
+				<div class="col-sm-8">
+					<input id="keyword" name="keyword" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">展现：</label>
+				<div class="col-sm-8">
+					<input id="show" name="show" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">点击：</label>
+				<div class="col-sm-8">
+					<input id="click" name="click" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">消费：</label>
+				<div class="col-sm-8">
+					<input id="cost" name="cost" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">点击率  点/展/100：</label>
+				<div class="col-sm-8">
+					<input id="clickRate" name="clickRate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">平均点击价格：</label>
+				<div class="col-sm-8">
+					<input id="avgClickCost" name="avgClickCost" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/bqFront"
+		$("#form-bqFront-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-bqFront-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

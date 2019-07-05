@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BqFrontMapper">
+    
+    <resultMap type="BqFront" id="BqFrontResult">
+        <result property="id"    column="id"    />
+        <result property="account"    column="account"    />
+        <result property="bqDate"    column="bq_date"    />
+        <result property="plan"    column="plan"    />
+        <result property="unit"    column="unit"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="showdata"    column="showdata"    />
+        <result property="click"    column="click"    />
+        <result property="cost"    column="cost"    />
+        <result property="groupword"    column="groupword"    />
+    </resultMap>
+	
+	<sql id="selectBqFrontVo">
+        select id, account, bq_date, plan, unit, keyword, showdata, click, cost, groupword from bq_front
+    </sql>
+	
+    <select id="selectBqFrontList" parameterType="BqFront" resultMap="BqFrontResult">
+        <include refid="selectBqFrontVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="account != null  and account != '' "> and account = #{account}</if>
+             <if test="bqDate != null "> and bq_date = #{bqDate}</if>
+             <if test="plan != null  and plan != '' "> and plan = #{plan}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>
+             <if test="showdata != null "> and showdata = #{showdata}</if>
+             <if test="click != null "> and click = #{click}</if>
+             <if test="cost != null "> and cost = #{cost}</if>
+             <if test="groupword != null  and groupword != '' "> and groupword = #{groupword}</if>
+         </where>
+    </select>
+    
+    <select id="selectBqFrontById" parameterType="Long" resultMap="BqFrontResult">
+        <include refid="selectBqFrontVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBqFront" parameterType="BqFront" useGeneratedKeys="true" keyProperty="id">
+        insert into bq_front
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="account != null  and account != ''  ">account,</if>
+			<if test="bqDate != null  ">bq_date,</if>
+			<if test="plan != null  and plan != ''  ">plan,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="keyword != null  and keyword != ''  ">keyword,</if>
+			<if test="showdata != null  ">showdata,</if>
+			<if test="click != null  ">click,</if>
+			<if test="cost != null  ">cost,</if>
+			<if test="groupword != null  and groupword != ''  ">groupword,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="account != null  and account != ''  ">#{account},</if>
+			<if test="bqDate != null  ">#{bqDate},</if>
+			<if test="plan != null  and plan != ''  ">#{plan},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="keyword != null  and keyword != ''  ">#{keyword},</if>
+			<if test="showdata != null  ">#{showdata},</if>
+			<if test="click != null  ">#{click},</if>
+			<if test="cost != null  ">#{cost},</if>
+			<if test="groupword != null  and groupword != ''  ">#{groupword},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateBqFront" parameterType="BqFront">
+        update bq_front
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="account != null  and account != ''  ">account = #{account},</if>
+            <if test="bqDate != null  ">bq_date = #{bqDate},</if>
+            <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="keyword != null  and keyword != ''  ">keyword = #{keyword},</if>
+            <if test="showdata != null  ">showdata = #{showdata},</if>
+            <if test="click != null  ">click = #{click},</if>
+            <if test="cost != null  ">cost = #{cost},</if>
+            <if test="groupword != null  and groupword != ''  ">groupword = #{groupword},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteBqFrontById" parameterType="Long">
+        delete from bq_front where id = #{id}
+    </delete>
+	
+    <delete id="deleteBqFrontByIds" parameterType="String">
+        delete from bq_front where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <!-- 批量插入数据 -->
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bq_front (account, bq_date, plan, unit, keyword, showdata, click, cost) 
+			VALUES
+        <foreach collection="list" item="item" separator=",">
+        	(#{item.account}, #{item.bqDate}, #{item.plan}, #{item.unit}, #{item.keyword}, #{item.showdata}, #{item.click},#{item.cost})
+        </foreach>
+    </insert>
+    
+    <update id="updateGroupword" parameterType="String">
+        update bq_front set groupword = CONCAT_WS('@',account,plan,unit,keyword,bq_date)
+    </update>
+    
+    <delete id="deleteAllBqFront">
+    	delete from bq_front
+    </delete>
+</mapper>
