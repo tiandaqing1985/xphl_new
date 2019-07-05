@@ -46,10 +46,11 @@ public class RxZhanxianController extends BaseController
 	 */
 	@PostMapping("/list")
 	@ResponseBody
-	public TableDataInfo list(RxZhanxian rxZhanxian)
+	public TableDataInfo list(RxZhanxian rxZhanxian,String selectflag)
 	{
 		startPage();
-        List<RxZhanxian> list = rxZhanxianService.selectRxZhanxianList(rxZhanxian);
+        //List<RxZhanxian> list = rxZhanxianService.selectRxZhanxianList(rxZhanxian);
+		List<RxZhanxian> list = rxZhanxianService.selectRxZhanxianSumList(selectflag);
 		return getDataTable(list);
 	}
 	
@@ -59,9 +60,9 @@ public class RxZhanxianController extends BaseController
 	 */
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(RxZhanxian rxZhanxian)
+    public AjaxResult export(RxZhanxian rxZhanxian,String selectflag)
     {
-    	List<RxZhanxian> list = rxZhanxianService.selectRxZhanxianList(rxZhanxian);
+    	List<RxZhanxian> list = rxZhanxianService.selectRxZhanxianSumList(selectflag);
         ExcelUtil<RxZhanxian> util = new ExcelUtil<RxZhanxian>(RxZhanxian.class);
         return util.exportExcel(list, "rxZhanxian");
     }
@@ -137,5 +138,16 @@ public class RxZhanxianController extends BaseController
 		}
 		
 		return toAjax(1);
+	}
+	
+	/**
+	 * 清除数据
+	 * @return
+	 */
+	@PostMapping( "/deleteAllRxZhanxian")
+	@ResponseBody
+	public AjaxResult deleteAllRxZhanxian()
+	{		
+		return toAjax(rxZhanxianService.deleteAllRxZhanxian());
 	}
 }

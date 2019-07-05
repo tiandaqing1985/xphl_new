@@ -322,9 +322,9 @@ SELECT al.bq_date,
     
      <select id="selectBqZhanxianSumList" parameterType="BqZhanxian" resultMap="BqZhanxianResult">
      SELECT r.remark,DATE_FORMAT(r.bq_date, '%Y-%m')bq_month,r.bq_date,
-		r.pc_showdata,r.pc_click,CONCAT('￥',r.pc_cost)pc_cost,CONCAT('￥',r.pc_pxcost)pc_pxcost,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_cost/r.pc_click,2))pc_CPC,r.pc_order_count,(CONCAT('￥',ROUND((r.pc_cost-r.pc_pxcost)/r.pc_order_count,2)))pc_costof,
-		r.md_showdata,r.md_click,CONCAT('￥',r.md_cost)md_cost,CONCAT('￥',r.md_pxcost)md_pxcost,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_cost/r.md_click,2))md_CPC,r.md_order_count,(CONCAT('￥',ROUND((r.md_cost-r.md_pxcost)/r.md_order_count)))md_costof,
-		r.all_showdata,r.all_click,CONCAT('￥',r.all_cost)all_cost,CONCAT('￥',r.all_pxcost)all_pxcost,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_cost/r.all_click,2))all_CPC,r.all_order_count,(CONCAT('￥',ROUND((r.all_cost-r.all_pxcost)/r.all_order_count,2)))all_costof
+		r.pc_showdata,r.pc_click,r.pc_cost,r.pc_pxcost,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_cost/r.pc_click,2))pc_CPC,r.pc_order_count,(ROUND((r.pc_cost-r.pc_pxcost)/r.pc_order_count,2))pc_costof,
+		r.md_showdata,r.md_click,r.md_cost,r.md_pxcost,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_cost/r.md_click,2))md_CPC,r.md_order_count,(ROUND((r.md_cost-r.md_pxcost)/r.md_order_count))md_costof,
+		r.all_showdata,r.all_click,r.all_cost,r.all_pxcost,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_cost/r.all_click,2))all_CPC,r.all_order_count,(ROUND((r.all_cost-r.all_pxcost)/r.all_order_count,2))all_costof
 		FROM
 	
 	(SELECT "汇总" remark,bq_date,
@@ -336,9 +336,9 @@ SELECT al.bq_date,
      </select>
     <select id="selectBqZhanxianAccountSumList" parameterType="BqZhanxian" resultMap="BqZhanxianResult">
     	SELECT r.remark,DATE_FORMAT(r.bq_date, '%Y-%m')bq_month,r.bq_date,account,
-			r.pc_showdata,r.pc_click,CONCAT('￥',r.pc_cost)pc_cost,CONCAT('￥',r.pc_pxcost)pc_pxcost,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_cost/r.pc_click,2))pc_CPC,r.pc_order_count,(CONCAT('￥',ROUND((r.pc_cost-r.pc_pxcost)/r.pc_order_count,2)))pc_costof,
-			r.md_showdata,r.md_click,CONCAT('￥',r.md_cost)md_cost,CONCAT('￥',r.md_pxcost)md_pxcost,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_cost/r.md_click,2))md_CPC,r.md_order_count,(CONCAT('￥',ROUND((r.md_cost-r.md_pxcost)/r.md_order_count)))md_costof,
-			r.all_showdata,r.all_click,CONCAT('￥',r.all_cost)all_cost,CONCAT('￥',r.all_pxcost)all_pxcost,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_cost/r.all_click,2))all_CPC,r.all_order_count,(CONCAT('￥',ROUND((r.all_cost-r.all_pxcost)/r.all_order_count,2)))all_costof
+			r.pc_showdata,r.pc_click,r.pc_cost,r.pc_pxcost,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_cost/r.pc_click,2))pc_CPC,r.pc_order_count,(ROUND((r.pc_cost-r.pc_pxcost)/r.pc_order_count,2))pc_costof,
+			r.md_showdata,r.md_click,r.md_cost,r.md_pxcost,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_cost/r.md_click,2))md_CPC,r.md_order_count,(ROUND((r.md_cost-r.md_pxcost)/r.md_order_count))md_costof,
+			r.all_showdata,r.all_click,r.all_cost,r.all_pxcost,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_cost/r.all_click,2))all_CPC,r.all_order_count,(ROUND((r.all_cost-r.all_pxcost)/r.all_order_count,2))all_costof
 			FROM
 		
 		(SELECT "账户层级" remark,bq_date,account,
@@ -352,9 +352,9 @@ SELECT al.bq_date,
     
     <select id="selectBqZhanxianPlanSumList" parameterType="BqZhanxian" resultMap="BqZhanxianResult">
     	 SELECT r.remark,DATE_FORMAT(r.bq_date, '%Y-%m')bq_month,r.bq_date,account,plan,
-			r.pc_showdata,r.pc_click,CONCAT('￥',r.pc_cost)pc_cost,CONCAT('￥',r.pc_pxcost)pc_pxcost,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_cost/r.pc_click,2))pc_CPC,r.pc_order_count,(CONCAT('￥',ROUND((r.pc_cost-r.pc_pxcost)/r.pc_order_count,2)))pc_costof,
-			r.md_showdata,r.md_click,CONCAT('￥',r.md_cost)md_cost,CONCAT('￥',r.md_pxcost)md_pxcost,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_cost/r.md_click,2))md_CPC,r.md_order_count,(CONCAT('￥',ROUND((r.md_cost-r.md_pxcost)/r.md_order_count)))md_costof,
-			r.all_showdata,r.all_click,CONCAT('￥',r.all_cost)all_cost,CONCAT('￥',r.all_pxcost)all_pxcost,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_cost/r.all_click,2))all_CPC,r.all_order_count,(CONCAT('￥',ROUND((r.all_cost-r.all_pxcost)/r.all_order_count,2)))all_costof
+			r.pc_showdata,r.pc_click,r.pc_cost,r.pc_pxcost,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_cost/r.pc_click,2))pc_CPC,r.pc_order_count,(ROUND((r.pc_cost-r.pc_pxcost)/r.pc_order_count,2))pc_costof,
+			r.md_showdata,r.md_click,r.md_cost,r.md_pxcost,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_cost/r.md_click,2))md_CPC,r.md_order_count,(ROUND((r.md_cost-r.md_pxcost)/r.md_order_count))md_costof,
+			r.all_showdata,r.all_click,r.all_cost,r.all_pxcost,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_cost/r.all_click,2))all_CPC,r.all_order_count,(ROUND((r.all_cost-r.all_pxcost)/r.all_order_count,2))all_costof
 			FROM
 		
 		(SELECT "计划层级" remark,bq_date,account,plan,
@@ -367,11 +367,11 @@ SELECT al.bq_date,
     
     <select id="selectBqZhanxianUnitSumList" parameterType="BqZhanxian" resultMap="BqZhanxianResult">
     	 SELECT r.remark,DATE_FORMAT(r.bq_date, '%Y-%m')bq_month,r.bq_date,account,plan,unit,
-			r.pc_showdata,r.pc_click,CONCAT('￥',r.pc_cost)pc_cost,CONCAT('￥',r.pc_pxcost)pc_pxcost,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_cost/r.pc_click,2))pc_CPC,r.pc_order_count,(CONCAT('￥',ROUND((r.pc_cost-r.pc_pxcost)/r.pc_order_count,2)))pc_costof,
-			r.md_showdata,r.md_click,CONCAT('￥',r.md_cost)md_cost,CONCAT('￥',r.md_pxcost)md_pxcost,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_cost/r.md_click,2))md_CPC,r.md_order_count,(CONCAT('￥',ROUND((r.md_cost-r.md_pxcost)/r.md_order_count)))md_costof,
-			r.all_showdata,r.all_click,CONCAT('￥',r.all_cost)all_cost,CONCAT('￥',r.all_pxcost)all_pxcost,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_cost/r.all_click,2))all_CPC,r.all_order_count,(CONCAT('￥',ROUND((r.all_cost-r.all_pxcost)/r.all_order_count,2)))all_costof
+			r.pc_showdata,r.pc_click,r.pc_cost,r.pc_pxcost,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_cost/r.pc_click,2))pc_CPC,r.pc_order_count,(ROUND((r.pc_cost-r.pc_pxcost)/r.pc_order_count,2))pc_costof,
+			r.md_showdata,r.md_click,r.md_cost,r.md_pxcost,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_cost/r.md_click,2))md_CPC,r.md_order_count,(ROUND((r.md_cost-r.md_pxcost)/r.md_order_count))md_costof,
+			r.all_showdata,r.all_click,r.all_cost,r.all_pxcost,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_cost/r.all_click,2))all_CPC,r.all_order_count,(ROUND((r.all_cost-r.all_pxcost)/r.all_order_count,2))all_costof
 			FROM
-			
+				
 		(SELECT "单元层级" remark,bq_date,account,plan,unit,
 			SUM(pc_showdata)pc_showdata,SUM(pc_click)pc_click,SUM(pc_cost)pc_cost,SUM(pc_pxcost)pc_pxcost,SUM(pc_order_count)pc_order_count,
 			SUM(md_showdata)md_showdata,SUM(md_click)md_click,SUM(md_cost)md_cost,SUM(md_pxcost)md_pxcost,SUM(md_order_count)md_order_count,
@@ -383,9 +383,9 @@ SELECT al.bq_date,
     
     <select id="selectBqZhanxianKeywordSumList" parameterType="BqZhanxian" resultMap="BqZhanxianResult">
         SELECT r.remark,DATE_FORMAT(r.bq_date, '%Y-%m')bq_month,r.bq_date,account,plan,unit,keyword,
-			r.pc_showdata,r.pc_click,CONCAT('￥',r.pc_cost)pc_cost,CONCAT('￥',r.pc_pxcost)pc_pxcost,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_cost/r.pc_click,2))pc_CPC,r.pc_order_count,(CONCAT('￥',ROUND((r.pc_cost-r.pc_pxcost)/r.pc_order_count,2)))pc_costof,
-			r.md_showdata,r.md_click,CONCAT('￥',r.md_cost)md_cost,CONCAT('￥',r.md_pxcost)md_pxcost,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_cost/r.md_click,2))md_CPC,r.md_order_count,(CONCAT('￥',ROUND((r.md_cost-r.md_pxcost)/r.md_order_count)))md_costof,
-			r.all_showdata,r.all_click,CONCAT('￥',r.all_cost)all_cost,CONCAT('￥',r.all_pxcost)all_pxcost,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_cost/r.all_click,2))all_CPC,r.all_order_count,(CONCAT('￥',ROUND((r.all_cost-r.all_pxcost)/r.all_order_count,2)))all_costof
+			r.pc_showdata,r.pc_click,r.pc_cost,r.pc_pxcost,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_cost/r.pc_click,2))pc_CPC,r.pc_order_count,(ROUND((r.pc_cost-r.pc_pxcost)/r.pc_order_count,2))pc_costof,
+			r.md_showdata,r.md_click,r.md_cost,r.md_pxcost,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_cost/r.md_click,2))md_CPC,r.md_order_count,(ROUND((r.md_cost-r.md_pxcost)/r.md_order_count))md_costof,
+			r.all_showdata,r.all_click,r.all_cost,r.all_pxcost,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_cost/r.all_click,2))all_CPC,r.all_order_count,(ROUND((r.all_cost-r.all_pxcost)/r.all_order_count,2))all_costof
 			FROM
 		
 		(SELECT "关键词层级" remark,bq_date,account,plan,unit,keyword,

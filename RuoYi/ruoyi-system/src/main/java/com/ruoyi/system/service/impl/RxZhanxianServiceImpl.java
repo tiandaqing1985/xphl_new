@@ -88,5 +88,28 @@ public class RxZhanxianServiceImpl implements IRxZhanxianService
 		
 		return rxZhanxianMapper.selectRxZhanxian();
 	}
+
+	@Override
+	public int deleteAllRxZhanxian() {
+		
+		return rxZhanxianMapper.deleteAllRxZhanxian();
+	}
+
+	@Override
+	public List<RxZhanxian> selectRxZhanxianSumList(String selectflag) {
+		if("0".equals(selectflag)){
+			return rxZhanxianMapper.selectRxZhanxianSumList();
+		}else if("1".equals(selectflag)){
+			return rxZhanxianMapper.selectRxZhanxianAccountSumList();
+		}else if("2".equals(selectflag)){
+			return rxZhanxianMapper.selectRxZhanxianPlanSumList();
+		}else if("3".equals(selectflag)){
+			return rxZhanxianMapper.selectRxZhanxianUnitSumList();
+		}else if("4".equals(selectflag)){
+			return rxZhanxianMapper.selectRxZhanxianKeywordSumList();
+		}else{
+			return rxZhanxianMapper.selectRxZhanxianSumList();
+		}
+	}
 	
 }

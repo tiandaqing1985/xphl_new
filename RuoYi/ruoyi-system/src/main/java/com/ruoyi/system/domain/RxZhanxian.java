@@ -86,6 +86,7 @@ public class RxZhanxian extends BaseEntity
 	@Excel(name = "PC+M-CPC")
 	private String allCpc;
 	
+	private String remark;
 
 	public void setId(Integer id) 
 	{
@@ -286,7 +287,15 @@ public class RxZhanxian extends BaseEntity
 		return keyword;
 	}
 
-    public String toString() {
+    public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("rxMonth", getRxMonth())

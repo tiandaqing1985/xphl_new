@@ -27,10 +27,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="plan"    column="plan"    />
         <result property="unit"    column="unit"    />
         <result property="keyword"    column="keyword"    />
+        <result property="remark"    column="remark"    />
     </resultMap>
 	
 	<sql id="selectRxZhanxianVo">
-        select id, rx_month, rx_date, pc_showdata, pc_click, pc_consume, pc_CTR, pc_CPC, md_showdata, md_click, md_consume, md_CTR, md_CPC, all_showdata, all_click, all_consume, all_CTR, all_CPC, account, plan, unit, keyword from rx_zhanxian
+        select id, rx_month, rx_date, pc_showdata, pc_click, pc_consume, pc_CTR, pc_CPC, md_showdata, md_click, md_consume, md_CTR, md_CPC, all_showdata, all_click, all_consume, all_CTR, all_CPC, account, plan, unit, keyword, remark from rx_zhanxian
     </sql>
 	
     <select id="selectRxZhanxianList" parameterType="RxZhanxian" resultMap="RxZhanxianResult">
@@ -58,6 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="plan != null  and plan != '' "> and plan = #{plan}</if>
              <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
              <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
          </where>
     </select>
     
@@ -90,6 +92,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="plan != null  and plan != ''  ">plan,</if>
 			<if test="unit != null  and unit != ''  ">unit,</if>
 			<if test="keyword != null  and keyword != ''  ">keyword,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="rxMonth != null  and rxMonth != ''  ">#{rxMonth},</if>
@@ -113,6 +116,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="plan != null  and plan != ''  ">#{plan},</if>
 			<if test="unit != null  and unit != ''  ">#{unit},</if>
 			<if test="keyword != null  and keyword != ''  ">#{keyword},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
          </trim>
     </insert>
 	 
@@ -140,6 +144,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
             <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
             <if test="keyword != null  and keyword != ''  ">keyword = #{keyword},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
         </trim>
         where id = #{id}
     </update>
@@ -203,4 +208,80 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <delete id="deleteAllRxZhanxian" >
     	delete from rx_zhanxian 
     </delete>
+    
+    <select id="selectRxZhanxianSumList" parameterType="RxZhanxian" resultMap="RxZhanxianResult">
+    SELECT r.remark,DATE_FORMAT(r.rx_date, '%Y-%m')rx_month,r.rx_date,
+		r.pc_showdata,r.pc_click,r.pc_consume,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_consume/r.pc_click,2))pc_CPC,
+		r.md_showdata,r.md_click,r.md_consume,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_consume/r.md_click,2))md_CPC,
+		r.all_showdata,r.all_click,r.all_consume,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_consume/r.all_click,2))all_CPC
+		FROM
+	
+		(SELECT "汇总" remark,rx_date,
+			SUM(pc_showdata)pc_showdata,SUM(pc_click)pc_click,SUM(pc_consume)pc_consume,
+			SUM(md_showdata)md_showdata,SUM(md_click)md_click,SUM(md_consume)md_consume,
+			SUM(all_showdata)all_showdata,SUM(all_click)all_click,SUM(all_consume)all_consume
+					FROM rx_zhanxian  
+						GROUP BY rx_date)r
+    </select>
+    
+    <select id="selectRxZhanxianAccountSumList" parameterType="RxZhanxian" resultMap="RxZhanxianResult">
+    SELECT r.remark,DATE_FORMAT(r.rx_date, '%Y-%m')rx_month,r.rx_date,account,
+		r.pc_showdata,r.pc_click,r.pc_consume,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_consume/r.pc_click,2))pc_CPC,
+		r.md_showdata,r.md_click,r.md_consume,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_consume/r.md_click,2))md_CPC,
+		r.all_showdata,r.all_click,r.all_consume,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_consume/r.all_click,2))all_CPC
+		FROM
+	
+	(SELECT "汇总" remark,rx_date,account,
+		SUM(pc_showdata)pc_showdata,SUM(pc_click)pc_click,SUM(pc_consume)pc_consume,
+		SUM(md_showdata)md_showdata,SUM(md_click)md_click,SUM(md_consume)md_consume,
+		SUM(all_showdata)all_showdata,SUM(all_click)all_click,SUM(all_consume)all_consume
+				FROM rx_zhanxian  
+					GROUP BY rx_date,account)r
+    </select>
+    
+    <select id="selectRxZhanxianPlanSumList" parameterType="RxZhanxian" resultMap="RxZhanxianResult">
+    SELECT r.remark,DATE_FORMAT(r.rx_date, '%Y-%m')rx_month,r.rx_date,account,plan,
+		r.pc_showdata,r.pc_click,r.pc_consume,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_consume/r.pc_click,2))pc_CPC,
+		r.md_showdata,r.md_click,r.md_consume,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_consume/r.md_click,2))md_CPC,
+		r.all_showdata,r.all_click,r.all_consume,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_consume/r.all_click,2))all_CPC
+		FROM
+	
+	(SELECT "汇总" remark,rx_date,account,plan,
+		SUM(pc_showdata)pc_showdata,SUM(pc_click)pc_click,SUM(pc_consume)pc_consume,
+		SUM(md_showdata)md_showdata,SUM(md_click)md_click,SUM(md_consume)md_consume,
+		SUM(all_showdata)all_showdata,SUM(all_click)all_click,SUM(all_consume)all_consume
+				FROM rx_zhanxian  
+					GROUP BY rx_date,account,plan)r
+    </select>
+    
+    <select id="selectRxZhanxianUnitSumList" parameterType="RxZhanxian" resultMap="RxZhanxianResult">
+    SELECT r.remark,DATE_FORMAT(r.rx_date, '%Y-%m')rx_month,r.rx_date,account,plan,unit,
+		r.pc_showdata,r.pc_click,r.pc_consume,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_consume/r.pc_click,2))pc_CPC,
+		r.md_showdata,r.md_click,r.md_consume,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_consume/r.md_click,2))md_CPC,
+		r.all_showdata,r.all_click,r.all_consume,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_consume/r.all_click,2))all_CPC
+		FROM
+	
+	(SELECT "汇总" remark,rx_date,account,plan,unit,
+		SUM(pc_showdata)pc_showdata,SUM(pc_click)pc_click,SUM(pc_consume)pc_consume,
+		SUM(md_showdata)md_showdata,SUM(md_click)md_click,SUM(md_consume)md_consume,
+		SUM(all_showdata)all_showdata,SUM(all_click)all_click,SUM(all_consume)all_consume
+				FROM rx_zhanxian  
+					GROUP BY rx_date,account,plan,unit)r
+    </select>
+    
+     <select id="selectRxZhanxianKeywordSumList" parameterType="RxZhanxian" resultMap="RxZhanxianResult">
+     SELECT r.remark,DATE_FORMAT(r.rx_date, '%Y-%m')rx_month,r.rx_date,account,plan,unit,keyword,
+		r.pc_showdata,r.pc_click,r.pc_consume,(CONCAT( ROUND(r.pc_click/r.pc_showdata*100,2),'%'))pc_CTR,(ROUND(r.pc_consume/r.pc_click,2))pc_CPC,
+		r.md_showdata,r.md_click,r.md_consume,(CONCAT( ROUND(r.md_click/r.md_showdata*100,2),'%'))md_CTR,(ROUND(r.md_consume/r.md_click,2))md_CPC,
+		r.all_showdata,r.all_click,r.all_consume,(CONCAT( ROUND(r.all_click/r.all_showdata*100,2),'%'))all_CTR,(ROUND(r.all_consume/r.all_click,2))all_CPC
+		FROM
+	
+	(SELECT "汇总" remark,rx_date,account,plan,unit,keyword,
+		SUM(pc_showdata)pc_showdata,SUM(pc_click)pc_click,SUM(pc_consume)pc_consume,
+		SUM(md_showdata)md_showdata,SUM(md_click)md_click,SUM(md_consume)md_consume,
+		SUM(all_showdata)all_showdata,SUM(all_click)all_click,SUM(all_consume)all_consume
+				FROM rx_zhanxian  
+					GROUP BY rx_date,account,plan,unit,keyword)r
+     </select>
+    
 </mapper>

@@ -63,4 +63,26 @@ public interface RxZhanxianMapper
 	 * 从瑞幸前端查询到瑞幸展现表所需要的数据
 	 */
 	public List<RxZhanxian> selectRxZhanxian();
+	
+	/**
+	 * 清除瑞幸展现数据
+	 */
+	public int deleteAllRxZhanxian();
+	
+	/**
+	 * 层级搜索
+	 */
+	/*汇总*/
+	public List<RxZhanxian> selectRxZhanxianSumList();
+	/*账户*/
+	public List<RxZhanxian> selectRxZhanxianAccountSumList();
+	/*计划*/
+	public List<RxZhanxian> selectRxZhanxianPlanSumList();
+	/*单元*/
+	public List<RxZhanxian> selectRxZhanxianUnitSumList();
+	/*关键词*/
+	public List<RxZhanxian> selectRxZhanxianKeywordSumList();
+	
+	
+	
 }

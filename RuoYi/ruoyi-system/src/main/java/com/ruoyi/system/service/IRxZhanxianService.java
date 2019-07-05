@@ -55,4 +55,14 @@ public interface IRxZhanxianService
 	 * 从瑞幸前端查询到瑞幸展现表所需要的数据
 	 */
 	public List<RxZhanxian> selectRxZhanxian();
+	
+	/**
+	 * 清除瑞幸展现数据
+	 */
+	public int deleteAllRxZhanxian();
+	
+	/**
+	 * 层级搜索
+	 */
+	public List<RxZhanxian> selectRxZhanxianSumList(String selectflag);
 }
