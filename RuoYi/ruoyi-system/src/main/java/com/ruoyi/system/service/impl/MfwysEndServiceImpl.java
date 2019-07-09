@@ -3,6 +3,8 @@ package com.ruoyi.system.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ruoyi.system.mapper.MfwysEndMapper;
 import com.ruoyi.system.domain.JfEnd;
 import com.ruoyi.system.domain.MfwysEnd;
@@ -84,6 +86,7 @@ public class MfwysEndServiceImpl implements IMfwysEndService
 	}
 	
 	@Override
+	@Transactional
 	public String importMfwysEnd(List<MfwysEnd> mfwysList, Boolean isUpdateSupport, String operName) {
 
         if (StringUtils.isNull(mfwysList) || mfwysList.size() == 0)
@@ -115,6 +118,10 @@ public class MfwysEndServiceImpl implements IMfwysEndService
 	            	mfwysEndMapper.batchInsert(mfwysList);
 	            }
 	        }
+	        
+	        
+	        mfwysEndMapper.insertMfwysEnd(null);
+	        mfwysEndMapper.deleteEnd_1();
 	        
 	        return "导入成功";
         }catch (Exception e){

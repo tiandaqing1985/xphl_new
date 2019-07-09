@@ -41,7 +41,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
         
     <insert id="insertMfwysEnd" parameterType="MfwysEnd" useGeneratedKeys="true" keyProperty="id">
-        insert into mfwys_end
+    
+    insert into  mfwys_end(newtime,mfw_system,channel_package,channel,new_facility,account,aid,keep)
+
+		select newtime,max(mfw_system),max(channel_package),max(channel),sum(new_facility),max(account), aid,sum((new_facility*keep)) from  mfwys_end_1 where  aid is not null GROUP BY newtime ,aid
+		
+		UNION ALL 
+		
+		select newtime,mfw_system,channel_package,channel,new_facility,account,aid,keep from  mfwys_end_1  where  aid is  null
+<!--         insert into mfwys_end
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="newtime != null  ">newtime,</if>
 			<if test="mfwSystem != null  and mfwSystem != ''  ">mfw_system,</if>
@@ -61,7 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="account != null  and account != ''  ">#{account},</if>
 			<if test="aid != null  ">#{aid},</if>
 			<if test="keep != null  ">#{keep},</if>
-         </trim>
+         </trim> -->
     </insert>
 	 
     <update id="updateMfwysEnd" parameterType="MfwysEnd">
@@ -93,14 +101,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
             <!-- 批量插入数据 -->
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO mfwys_end (newtime,mfw_system,channel_package,channel,new_facility,account,aid,keep)
+        INSERT INTO mfwys_end_1 (newtime,mfw_system,channel_package,channel,new_facility,account,aid,keep)
         VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.newtime}, #{item.mfwSystem},#{item.channelPackage},#{item.channel},#{item.newFacility},#{item.account},#{item.aid},#{item.keep})
         </foreach>
     </insert>
     
-
+	<delete id="deleteEnd_1">
+        delete from mfwys_end_1
+    </delete>
 
     
 </mapper>

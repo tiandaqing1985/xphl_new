@@ -166,6 +166,7 @@ public class ExcelUtil<T>
                 {
                     // 设置类的私有字段属性可访问.
                     field.setAccessible(true);
+                    System.out.println(attr.name()+"---------------------------------------------");
                     Integer column = cellMap.get(attr.name());
                     fieldsMap.put(column, field);
                 }

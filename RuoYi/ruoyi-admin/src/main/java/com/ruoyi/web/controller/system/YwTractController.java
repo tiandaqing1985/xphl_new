@@ -59,7 +59,6 @@ public class YwTractController extends BaseController
 	/**
 	 * 查询跟进列表
 	 */
-	@RequiresPermissions("system:ywTract:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(YwTract ywTract)

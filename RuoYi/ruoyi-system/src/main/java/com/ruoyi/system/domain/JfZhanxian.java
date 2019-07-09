@@ -31,6 +31,18 @@ public class JfZhanxian extends BaseEntity
 	private String code;
 	/** 组合 */
 	private String groupword;
+	/** 账户 */
+	@Excel(name = "账户")
+	private String accountname;
+	/** 计划 */
+	@Excel(name = "计划")
+	private String plan;
+	/** 单元 */
+	@Excel(name = "单元")
+	private String unit;
+	/** 关键词 */
+	@Excel(name = "关键词 ")
+	private String keyword;
 	/** 展现 */
 	private Integer showdata;
 	/** 点击 */
@@ -56,19 +68,6 @@ public class JfZhanxian extends BaseEntity
 	private Integer activate;
 	/**  */
 	private String channle;
-	/** 账户 */
-	@Excel(name = "账户")
-	private String accountname;
-	/** 计划 */
-	@Excel(name = "计划")
-	private String plan;
-	/** 单元 */
-	@Excel(name = "单元")
-	private String unit;
-	/** 关键词 */
-	@Excel(name = "关键词 ")
-	private String keyword;
-	
 
 
 	public void setId(Long id) 

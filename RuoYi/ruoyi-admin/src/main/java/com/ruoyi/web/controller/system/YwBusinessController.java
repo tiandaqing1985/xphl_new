@@ -58,7 +58,6 @@ public class YwBusinessController extends BaseController
 	/**
 	 * 查询商机列表
 	 */
-	@RequiresPermissions("system:ywBusiness:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(YwBusiness ywBusiness)
@@ -99,7 +98,6 @@ public class YwBusinessController extends BaseController
 	/**
 	 * 导出商机列表
 	 */
-	@RequiresPermissions("system:ywBusiness:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(YwBusiness ywBusiness)
@@ -121,7 +119,6 @@ public class YwBusinessController extends BaseController
 	/**
 	 * 新增保存商机
 	 */
-	//@RequiresPermissions("system:ywBusiness:add")
 	@Log(title = "商机", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -158,7 +155,6 @@ public class YwBusinessController extends BaseController
 	/**
 	 * 修改保存商机
 	 */
-	@RequiresPermissions("system:ywBusiness:edit")
 	@Log(title = "商机", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -170,7 +166,6 @@ public class YwBusinessController extends BaseController
 	/**
 	 * 删除商机
 	 */
-	@RequiresPermissions("system:ywBusiness:remove")
 	@Log(title = "商机", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody

@@ -63,4 +63,6 @@ public interface MfwysEndMapper
 	
 	public  void batchInsert(@Param("list") List<MfwysEnd> list);
 	
+	public int  deleteEnd_1();
+	
 }

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.MfwysZhanxianMapper">
+    
+    <resultMap type="MfwysZhanxian" id="MfwysZhanxianResult">
+        <result property="id"    column="id"    />
+        <result property="frontDate"    column="front_date"    />
+        <result property="accountname"    column="accountname"    />
+        <result property="plan"    column="plan"    />
+        <result property="planid"    column="planid"    />
+        <result property="unit"    column="unit"    />
+        <result property="unitid"    column="unitid"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="keywordid"    column="keywordid"    />
+        <result property="title"    column="title"    />
+        <result property="showdata"    column="showdata"    />
+        <result property="click"    column="click"    />
+        <result property="consume"    column="consume"    />
+        <result property="clickRate"    column="click_rate"    />
+        <result property="clickAvg"    column="click_avg"    />
+        <result property="thousandConsume"    column="thousand_consume"    />
+        <result property="groupword"    column="groupword"    />
+        <result property="mfwSystem"    column="mfw_system"    />
+        <result property="channelPackage"    column="channel_package"    />
+        <result property="channel"    column="channel"    />
+        <result property="newFacility"    column="new_facility"    />
+        <result property="account"    column="account"    />
+        <result property="aid"    column="aid"    />
+        <result property="keep"    column="keep"    />
+    </resultMap>
+	
+	<sql id="selectMfwysZhanxianVo">
+        select id, front_date, accountname, plan, planid, unit, unitid, keyword, keywordid, title, showdata, click, consume, click_rate, click_avg, thousand_consume, groupword, mfw_system, channel_package, channel, new_facility, account, aid, keep from mfwys_zhanxian
+    </sql>
+	
+    <select id="selectMfwysZhanxianList" parameterType="MfwysZhanxian" resultMap="MfwysZhanxianResult">
+        <include refid="selectMfwysZhanxianVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="frontDate != null "> and front_date = #{frontDate}</if>
+             <if test="accountname != null  and accountname != '' "> and accountname = #{accountname}</if>
+             <if test="plan != null  and plan != '' "> and plan = #{plan}</if>
+             <if test="planid != null "> and planid = #{planid}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="unitid != null "> and unitid = #{unitid}</if>
+             <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>
+             <if test="keywordid != null "> and keywordid = #{keywordid}</if>
+             <if test="title != null  and title != '' "> and title = #{title}</if>
+             <if test="showdata != null "> and showdata = #{showdata}</if>
+             <if test="click != null "> and click = #{click}</if>
+             <if test="consume != null "> and consume = #{consume}</if>
+             <if test="clickRate != null "> and click_rate = #{clickRate}</if>
+             <if test="clickAvg != null "> and click_avg = #{clickAvg}</if>
+             <if test="thousandConsume != null "> and thousand_consume = #{thousandConsume}</if>
+             <if test="groupword != null  and groupword != '' "> and groupword = #{groupword}</if>
+             <if test="mfwSystem != null  and mfwSystem != '' "> and mfw_system = #{mfwSystem}</if>
+             <if test="channelPackage != null  and channelPackage != '' "> and channel_package = #{channelPackage}</if>
+             <if test="channel != null  and channel != '' "> and channel = #{channel}</if>
+             <if test="newFacility != null "> and new_facility = #{newFacility}</if>
+             <if test="account != null  and account != '' "> and account = #{account}</if>
+             <if test="aid != null "> and aid = #{aid}</if>
+             <if test="keep != null "> and keep = #{keep}</if>
+         </where>
+    </select>
+    
+    <select id="selectMfwysZhanxianById" parameterType="Long" resultMap="MfwysZhanxianResult">
+        <include refid="selectMfwysZhanxianVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMfwysZhanxian" parameterType="MfwysZhanxian" useGeneratedKeys="true" keyProperty="id">
+        insert into mfwys_zhanxian
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="frontDate != null  ">front_date,</if>
+			<if test="accountname != null  and accountname != ''  ">accountname,</if>
+			<if test="plan != null  and plan != ''  ">plan,</if>
+			<if test="planid != null  ">planid,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="unitid != null  ">unitid,</if>
+			<if test="keyword != null  and keyword != ''  ">keyword,</if>
+			<if test="keywordid != null  ">keywordid,</if>
+			<if test="title != null  and title != ''  ">title,</if>
+			<if test="showdata != null  ">showdata,</if>
+			<if test="click != null  ">click,</if>
+			<if test="consume != null  ">consume,</if>
+			<if test="clickRate != null  ">click_rate,</if>
+			<if test="clickAvg != null  ">click_avg,</if>
+			<if test="thousandConsume != null  ">thousand_consume,</if>
+			<if test="groupword != null  and groupword != ''  ">groupword,</if>
+			<if test="mfwSystem != null  and mfwSystem != ''  ">mfw_system,</if>
+			<if test="channelPackage != null  and channelPackage != ''  ">channel_package,</if>
+			<if test="channel != null  and channel != ''  ">channel,</if>
+			<if test="newFacility != null  ">new_facility,</if>
+			<if test="account != null  and account != ''  ">account,</if>
+			<if test="aid != null  ">aid,</if>
+			<if test="keep != null  ">keep,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="frontDate != null  ">#{frontDate},</if>
+			<if test="accountname != null  and accountname != ''  ">#{accountname},</if>
+			<if test="plan != null  and plan != ''  ">#{plan},</if>
+			<if test="planid != null  ">#{planid},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="unitid != null  ">#{unitid},</if>
+			<if test="keyword != null  and keyword != ''  ">#{keyword},</if>
+			<if test="keywordid != null  ">#{keywordid},</if>
+			<if test="title != null  and title != ''  ">#{title},</if>
+			<if test="showdata != null  ">#{showdata},</if>
+			<if test="click != null  ">#{click},</if>
+			<if test="consume != null  ">#{consume},</if>
+			<if test="clickRate != null  ">#{clickRate},</if>
+			<if test="clickAvg != null  ">#{clickAvg},</if>
+			<if test="thousandConsume != null  ">#{thousandConsume},</if>
+			<if test="groupword != null  and groupword != ''  ">#{groupword},</if>
+			<if test="mfwSystem != null  and mfwSystem != ''  ">#{mfwSystem},</if>
+			<if test="channelPackage != null  and channelPackage != ''  ">#{channelPackage},</if>
+			<if test="channel != null  and channel != ''  ">#{channel},</if>
+			<if test="newFacility != null  ">#{newFacility},</if>
+			<if test="account != null  and account != ''  ">#{account},</if>
+			<if test="aid != null  ">#{aid},</if>
+			<if test="keep != null  ">#{keep},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateMfwysZhanxian" parameterType="MfwysZhanxian">
+        update mfwys_zhanxian
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="frontDate != null  ">front_date = #{frontDate},</if>
+            <if test="accountname != null  and accountname != ''  ">accountname = #{accountname},</if>
+            <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
+            <if test="planid != null  ">planid = #{planid},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="unitid != null  ">unitid = #{unitid},</if>
+            <if test="keyword != null  and keyword != ''  ">keyword = #{keyword},</if>
+            <if test="keywordid != null  ">keywordid = #{keywordid},</if>
+            <if test="title != null  and title != ''  ">title = #{title},</if>
+            <if test="showdata != null  ">showdata = #{showdata},</if>
+            <if test="click != null  ">click = #{click},</if>
+            <if test="consume != null  ">consume = #{consume},</if>
+            <if test="clickRate != null  ">click_rate = #{clickRate},</if>
+            <if test="clickAvg != null  ">click_avg = #{clickAvg},</if>
+            <if test="thousandConsume != null  ">thousand_consume = #{thousandConsume},</if>
+            <if test="groupword != null  and groupword != ''  ">groupword = #{groupword},</if>
+            <if test="mfwSystem != null  and mfwSystem != ''  ">mfw_system = #{mfwSystem},</if>
+            <if test="channelPackage != null  and channelPackage != ''  ">channel_package = #{channelPackage},</if>
+            <if test="channel != null  and channel != ''  ">channel = #{channel},</if>
+            <if test="newFacility != null  ">new_facility = #{newFacility},</if>
+            <if test="account != null  and account != ''  ">account = #{account},</if>
+            <if test="aid != null  ">aid = #{aid},</if>
+            <if test="keep != null  ">keep = #{keep},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteMfwysZhanxianById" parameterType="Long">
+        delete from mfwys_zhanxian where id = #{id}
+    </delete>
+	
+    <delete id="deleteMfwysZhanxianByIds" parameterType="String">
+        delete from mfwys_zhanxian where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    
+    <delete id="deleteMfwysZhanxianAll" >
+        delete from mfwys_zhanxian 
+    </delete>
+    
+    <select id="selectByChnnelPackage" parameterType="MfwysZhanxian" resultMap="MfwysZhanxianResult">
+        <include refid="selectMfwysZhanxianVo"/>
+        where front_date = #{frontDate} and  plan like concat('%', #{channelPackage}, '%')
+    </select>
+    
+     
+</mapper>

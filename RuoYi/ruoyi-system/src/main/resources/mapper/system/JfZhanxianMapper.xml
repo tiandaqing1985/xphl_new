@@ -233,26 +233,42 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    </select>
    
     <select id="selectJfZhanxianAccountSumList" parameterType="JfZhanxian" resultMap="JfZhanxianResult">
-    	select "账户层级" remark, front_date,accountname,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
-			from jf_zhanxian  
+       	select "搜索-账户层级" remark, front_date,accountname,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+			from jf_zhanxian  where   channle like 'xpbaiduh5%' or accountname like '%搜索%' or accountname is null or channle is null
+				GROUP BY front_date,accountname
+   		UNION ALL
+    	select "原生-账户层级" remark, front_date,accountname,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+			from jf_zhanxian   where channle like 'xpbdxxl%'
 				GROUP BY front_date,accountname
     </select>
     
     <select id="selectJfZhanxianPlanSumList" parameterType="JfZhanxian" resultMap="JfZhanxianResult">
-    	 select "计划层级" remark, front_date,accountname,plan,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
-			from jf_zhanxian  
+    	 select "搜索-计划层级" remark, front_date,accountname,plan,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+			from jf_zhanxian   where   channle like 'xpbaiduh5%' or accountname like '%搜索%' or accountname is null or channle is null
+				GROUP BY front_date,accountname,plan
+		UNION ALL		
+		select "原生-计划层级" remark, front_date,accountname,plan,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+			from jf_zhanxian  where channle like 'xpbdxxl%'
 				GROUP BY front_date,accountname,plan
     </select>
     
     <select id="selectJfZhanxianUnitSumList" parameterType="JfZhanxian" resultMap="JfZhanxianResult">
-    	 select "单元层级" remark, front_date,accountname,plan,unit,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
-			from jf_zhanxian  
+    	 select "搜索-单元层级" remark, front_date,accountname,plan,unit,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+			from jf_zhanxian  where   channle like 'xpbaiduh5%' or accountname like '%搜索%' or accountname is null or channle is null
+				GROUP BY front_date,accountname,plan,unit
+		 UNION ALL		
+		 select "原生-单元层级" remark, front_date,accountname,plan,unit,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+			from jf_zhanxian  where channle like 'xpbdxxl%'
 				GROUP BY front_date,accountname,plan,unit
     </select>
     
     <select id="selectJfZhanxianKeywordSumList" parameterType="JfZhanxian" resultMap="JfZhanxianResult">
-        select "关键词层级" remark, front_date,accountname,plan,unit,keyword,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
-			from jf_zhanxian  
+        select "搜索-关键词层级" remark, front_date,accountname,plan,unit,keyword,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+			from jf_zhanxian  where   channle like 'xpbaiduh5%' or accountname like '%搜索%' or accountname is null or channle is null
+				GROUP BY front_date,accountname,plan,unit,keyword
+    	UNION ALL
+        select "原生-关键词层级" remark, front_date,accountname,plan,unit,keyword,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+			from jf_zhanxian   where channle like 'xpbdxxl%'
 				GROUP BY front_date,accountname,plan,unit,keyword
     </select>
     

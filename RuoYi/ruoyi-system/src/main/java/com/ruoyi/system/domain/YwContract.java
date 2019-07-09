@@ -36,8 +36,11 @@ public class YwContract extends BaseEntity
 	private String companyName;
 	/** 广告主 */
 	private String advertiser; 
-
+	/** 简称 */
+	private String shortName;
 	private String status;
+	
+	private String[] createBy1;
 	
 	public void setId(Long id) 
 	{
@@ -117,6 +120,22 @@ public class YwContract extends BaseEntity
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
+	public String[] getCreateBy1() {
+		return createBy1;
+	}
+
+	public void setCreateBy1(String[] createBy1) {
+		this.createBy1 = createBy1;
 	}
 
 	public String toString() {

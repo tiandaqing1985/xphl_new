@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('马蜂窝原生展现列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+<!-- 							<li>
+								日期：<input type="text" name="frontDate"/>
+							</li>
+
+							<li>
+								账户：<input type="text" name="accountname"/>
+							</li>
+
+							<li>
+								推广计划：<input type="text" name="plan"/>
+							</li>
+
+							<li>
+								推广计划ID：<input type="text" name="planid"/>
+							</li>
+
+							<li>
+								推广单元：<input type="text" name="unit"/>
+							</li>
+
+							<li>
+								推广单元ID：<input type="text" name="unitid"/>
+							</li>
+
+							<li>
+								创意名称：<input type="text" name="keyword"/>
+							</li>
+
+							<li>
+								创意ID：<input type="text" name="keywordid"/>
+							</li>
+
+							<li>
+								标题：<input type="text" name="title"/>
+							</li>
+
+							<li>
+								展现：<input type="text" name="showdata"/>
+							</li>
+
+							<li>
+								点击：<input type="text" name="click"/>
+							</li>
+
+							<li>
+								消费：<input type="text" name="consume"/>
+							</li>
+
+							<li>
+								点击率：<input type="text" name="clickRate"/>
+							</li>
+
+							<li>
+								：<input type="text" name="clickAvg"/>
+							</li>
+
+							<li>
+								千次展现消费：<input type="text" name="thousandConsume"/>
+							</li>
+
+							<li>
+								组合：<input type="text" name="groupword"/>
+							</li>
+
+							<li>
+								系统：<input type="text" name="mfwSystem"/>
+							</li>
+
+							<li>
+								渠道包名：<input type="text" name="channelPackage"/>
+							</li>
+
+							<li>
+								渠道：<input type="text" name="channel"/>
+							</li>
+
+							<li>
+								新增设备数：<input type="text" name="newFacility"/>
+							</li>
+
+							<li>
+								账户id：<input type="text" name="account"/>
+							</li>
+
+							<li>
+								aid：<input type="text" name="aid"/>
+							</li>
+
+							<li>
+								次日留存：<input type="text" name="keep"/>
+							</li> -->
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+<!-- 				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:mfwysZhanxian:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:mfwysZhanxian:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:mfwysZhanxian:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a> -->
+				<a class="btn btn-success" onclick="createData()" >
+					<i class="fa fa-plus"></i> 生成数据
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:mfwysZhanxian:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:mfwysZhanxian:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:mfwysZhanxian:remove')}]];
+        var prefix = ctx + "system/mfwysZhanxian";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+				createDataUrl: prefix + "/createMfwysZhanxianData",
+                modalName: "马蜂窝原生展现",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : 'ID',
+					visible: false
+				},
+				{
+					field : 'frontDate', 
+					title : '日期',
+					sortable: true
+				},
+				{
+					field : 'accountname', 
+					title : '账户',
+					sortable: true
+				},
+				{
+					field : 'plan', 
+					title : '推广计划',
+					sortable: true
+				},
+				{
+					field : 'planid', 
+					title : '推广计划ID',
+					sortable: true
+				},
+				{
+					field : 'unit', 
+					title : '推广单元',
+					sortable: true
+				},
+				{
+					field : 'unitid', 
+					title : '推广单元ID',
+					sortable: true
+				},
+				{
+					field : 'keyword', 
+					title : '创意名称',
+					sortable: true
+				},
+				{
+					field : 'keywordid', 
+					title : '创意ID',
+					sortable: true
+				},
+				{
+					field : 'title', 
+					title : '标题',
+					sortable: true
+				},
+				{
+					field : 'showdata', 
+					title : '展现',
+					sortable: true
+				},
+				{
+					field : 'click', 
+					title : '点击',
+					sortable: true
+				},
+				{
+					field : 'consume', 
+					title : '消费',
+					sortable: true
+				},
+				{
+					field : 'clickRate', 
+					title : '点击率',
+					sortable: true
+				},
+				{
+					field : 'clickAvg', 
+					title : '平均点击价格',
+					sortable: true
+				},
+				{
+					field : 'thousandConsume', 
+					title : '千次展现消费',
+					sortable: true
+				},
+				{
+					field : 'groupword', 
+					title : '组合',
+					sortable: true
+				},
+				{
+					field : 'mfwSystem', 
+					title : '系统',
+					sortable: true
+				},
+				{
+					field : 'channelPackage', 
+					title : '渠道包名',
+					sortable: true
+				},
+				{
+					field : 'channel', 
+					title : '渠道',
+					sortable: true
+				},
+				{
+					field : 'newFacility', 
+					title : '新增设备数',
+					sortable: true
+				},
+				{
+					field : 'account', 
+					title : '账户id',
+					sortable: true
+				},
+				{
+					field : 'aid', 
+					title : 'aid',
+					sortable: true
+				},
+				{
+					field : 'keep', 
+					title : '次日留存',
+					sortable: true
+				}
+/* 				,
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        } */
+				]
+            };
+            $.table.init(options);
+        });
+        
+        function createData(){
+        	$.modal.loading("数据加载中");
+        	var formData = new FormData();
+			$.ajax({
+				url: $.table._option.createDataUrl,
+				data: formData,
+				cache: false,
+				contentType: false,
+				processData: false,
+				type: 'POST',
+				success: function (result) {
+					$.modal.alertSuccess(result.msg);
+					$.modal.closeLoading();
+				}
+			});
+        }
+    </script>
+</body>
+</html>

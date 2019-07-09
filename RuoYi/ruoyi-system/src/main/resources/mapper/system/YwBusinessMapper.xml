@@ -112,6 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="orderStatus != null  and orderStatus != '' "> and order_status = #{orderStatus}</if>
              
          </where>
+         order by business_id desc
     </select>
     
     <select id="selectYwBusinessById" parameterType="Long" resultMap="YwBusinessResult">

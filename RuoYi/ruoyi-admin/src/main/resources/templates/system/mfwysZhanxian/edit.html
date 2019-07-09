@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改马蜂窝原生展现')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-mfwysZhanxian-edit" th:object="${mfwysZhanxian}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">日期：</label>
+				<div class="col-sm-8">
+					<input id="frontDate" name="frontDate" th:field="*{frontDate}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账户：</label>
+				<div class="col-sm-8">
+					<input id="accountname" name="accountname" th:field="*{accountname}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">推广计划：</label>
+				<div class="col-sm-8">
+					<input id="plan" name="plan" th:field="*{plan}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">推广计划ID：</label>
+				<div class="col-sm-8">
+					<input id="planid" name="planid" th:field="*{planid}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">推广单元：</label>
+				<div class="col-sm-8">
+					<input id="unit" name="unit" th:field="*{unit}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">推广单元ID：</label>
+				<div class="col-sm-8">
+					<input id="unitid" name="unitid" th:field="*{unitid}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创意名称：</label>
+				<div class="col-sm-8">
+					<input id="keyword" name="keyword" th:field="*{keyword}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">创意ID：</label>
+				<div class="col-sm-8">
+					<input id="keywordid" name="keywordid" th:field="*{keywordid}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">标题：</label>
+				<div class="col-sm-8">
+					<input id="title" name="title" th:field="*{title}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">展现：</label>
+				<div class="col-sm-8">
+					<input id="showdata" name="showdata" th:field="*{showdata}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">点击：</label>
+				<div class="col-sm-8">
+					<input id="click" name="click" th:field="*{click}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">消费：</label>
+				<div class="col-sm-8">
+					<input id="consume" name="consume" th:field="*{consume}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">点击率：</label>
+				<div class="col-sm-8">
+					<input id="clickRate" name="clickRate" th:field="*{clickRate}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">：</label>
+				<div class="col-sm-8">
+					<input id="clickAvg" name="clickAvg" th:field="*{clickAvg}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">千次展现消费：</label>
+				<div class="col-sm-8">
+					<input id="thousandConsume" name="thousandConsume" th:field="*{thousandConsume}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">组合：</label>
+				<div class="col-sm-8">
+					<input id="groupword" name="groupword" th:field="*{groupword}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">系统：</label>
+				<div class="col-sm-8">
+					<input id="mfwSystem" name="mfwSystem" th:field="*{mfwSystem}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">渠道包名：</label>
+				<div class="col-sm-8">
+					<input id="channelPackage" name="channelPackage" th:field="*{channelPackage}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">渠道：</label>
+				<div class="col-sm-8">
+					<input id="channel" name="channel" th:field="*{channel}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">新增设备数：</label>
+				<div class="col-sm-8">
+					<input id="newFacility" name="newFacility" th:field="*{newFacility}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账户id：</label>
+				<div class="col-sm-8">
+					<input id="account" name="account" th:field="*{account}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">aid：</label>
+				<div class="col-sm-8">
+					<input id="aid" name="aid" th:field="*{aid}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">次日留存：</label>
+				<div class="col-sm-8">
+					<input id="keep" name="keep" th:field="*{keep}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/mfwysZhanxian";
+		$("#form-mfwysZhanxian-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-mfwysZhanxian-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

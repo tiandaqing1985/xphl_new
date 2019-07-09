@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('马蜂窝原生后端列表')" />
+	<th:block th:include="include :: header('马蜂窝原生前端列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -10,24 +10,40 @@
 				<form id="formId">
 					<div class="select-list">
 						<ul>
+<!-- 							<li>
+								日期：<input type="text" name="frontDate"/>
+							</li> -->
+
 							<li>
-								系统：<input type="text" name="mfwSystem"/>
+								账户：<input type="text" name="account"/>
 							</li>
 
 							<li>
-								渠道包名：<input type="text" name="channelPackage"/>
+								推广计划：<input type="text" name="plan"/>
 							</li>
 
 							<li>
-								渠道：<input type="text" name="channel"/>
+								推广计划ID：<input type="text" name="planid"/>
 							</li>
 
 							<li>
-								账户id：<input type="text" name="account"/>
+								推广单元：<input type="text" name="unit"/>
 							</li>
 
 							<li>
-								aid：<input type="text" name="aid"/>
+								推广单元ID：<input type="text" name="unitid"/>
+							</li>
+
+							<li>
+								创意名称：<input type="text" name="keyword"/>
+							</li>
+
+							<li>
+								创意ID：<input type="text" name="keywordid"/>
+							</li>
+
+							<li>
+								标题：<input type="text" name="title"/>
 							</li>
 
 							<li>
@@ -40,7 +56,7 @@
 			</div>
 			
 	        <div class="btn-group-sm" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" >
+				<a class="btn btn-success" onclick="$.operate.add()">
 					<i class="fa fa-plus"></i> 添加
 				</a>
 				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" >
@@ -49,10 +65,10 @@
 				<a class="btn btn-info" onclick="$.table.importExcel()">
 		            <i class="fa fa-upload"></i> 导入
 		        </a>
-<!-- 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:mfwysEnd:remove">
+<!-- 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:mfwysFront:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:mfwysEnd:export">
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:mfwysFront:export">
 						<i class="fa fa-download"></i> 导出
 				 </a> -->
 			</div>
@@ -63,9 +79,9 @@
 	</div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:mfwysEnd:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:mfwysEnd:remove')}]];
-        var prefix = ctx + "system/mfwysEnd";
+        var editFlag = [[${@permission.hasPermi('system:mfwysFront:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:mfwysFront:remove')}]];
+        var prefix = ctx + "system/mfwysFront";
 
         $(function() {
             var options = {
@@ -76,7 +92,7 @@
 				exportUrl: prefix + "/export",
 				importTemplateUrl: prefix + "/importTemplate",
 				importUrl: prefix + "/importData",
-                modalName: "马蜂窝原生后端",
+                modalName: "马蜂窝原生前端",
 		        showExport: true,
                 columns: [{
 		            checkbox: true
@@ -87,43 +103,69 @@
 					visible: false
 				},
 				{
-					field : 'newtime', 
-					title : '新增时间',
-					sortable: true
-				},
-				{
-					field : 'mfwSystem', 
-					title : '系统',
-					sortable: true
-				},
-				{
-					field : 'channelPackage', 
-					title : '渠道包名',
-					sortable: true
-				},
-				{
-					field : 'channel', 
-					title : '渠道',
-					sortable: true
-				},
-				{
-					field : 'newFacility', 
-					title : '新增设备数',
-					sortable: true
+					field : 'frontDate', 
+					title : '日期'
 				},
 				{
 					field : 'account', 
-					title : '账户id',
-					sortable: true
+					title : '账户'
 				},
 				{
-					field : 'aid', 
-					title : 'aid',
-					sortable: true
+					field : 'plan', 
+					title : '推广计划'
 				},
 				{
-					field : 'keep', 
-					title : '次日留存',
+					field : 'planid', 
+					title : '推广计划ID'
+				},
+				{
+					field : 'unit', 
+					title : '推广单元'
+				},
+				{
+					field : 'unitid', 
+					title : '推广单元ID'
+				},
+				{
+					field : 'keyword', 
+					title : '创意名称'
+				},
+				{
+					field : 'keywordid', 
+					title : '创意ID'
+				},
+				{
+					field : 'title', 
+					title : '标题'
+				},
+				{
+					field : 'showdata', 
+					title : '展现'
+				},
+				{
+					field : 'click', 
+					title : '点击'
+				},
+				{
+					field : 'consume', 
+					title : '消费'
+				},
+				{
+					field : 'clickRate', 
+					title : '点击率'
+				},
+				{
+					field : 'clickAvg', 
+					title : ''
+				},
+				{
+					field : 'thousandConsume', 
+					title : '千次展现消费'
+				}
+/* 				,
+				{
+					field : 'groupword', 
+					title : '组合',
 					sortable: true
 				},
 		        {
@@ -135,7 +177,8 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 						return actions.join('');
 		            }
-		        }]
+		        } */
+				]
             };
             $.table.init(options);
         });
