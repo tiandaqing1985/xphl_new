@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DangdangMatchMapper">
+    
+    <resultMap type="DangdangMatch" id="DangdangMatchResult">
+        <result property="id"    column="id"    />
+        <result property="account"    column="account"    />
+        <result property="plan"    column="plan"    />
+        <result property="unit"    column="unit"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="partSpeech"    column="part_speech"    />
+        <result property="secondaryClassification"    column="secondary_classification"    />
+        <result property="threeLevelClassification"    column="three_level_classification"    />
+        <result property="combination"    column="combination"    />
+        <result property="mobileAccessUrl"    column="mobile_access_url"    />
+        <result property="appletUrl"    column="applet_url"    />
+        <result property="appletDone"    column="applet_done"    />
+    </resultMap>
+	
+	<sql id="selectDangdangMatchVo">
+        select id, account, plan, unit, keyword, part_speech, secondary_classification, three_level_classification, combination, mobile_access_url, applet_url, applet_done from dangdang_match
+    </sql>
+	
+    <select id="selectDangdangMatchList" parameterType="DangdangMatch" resultMap="DangdangMatchResult">
+        <include refid="selectDangdangMatchVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="account != null  and account != '' "> and account = #{account}</if>
+             <if test="plan != null  and plan != '' "> and plan = #{plan}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>
+             <if test="partSpeech != null  and partSpeech != '' "> and part_speech = #{partSpeech}</if>
+             <if test="secondaryClassification != null  and secondaryClassification != '' "> and secondary_classification = #{secondaryClassification}</if>
+             <if test="threeLevelClassification != null  and threeLevelClassification != '' "> and three_level_classification = #{threeLevelClassification}</if>
+             <if test="combination != null  and combination != '' "> and combination = #{combination}</if>
+             <if test="mobileAccessUrl != null  and mobileAccessUrl != '' "> and mobile_access_url = #{mobileAccessUrl}</if>
+             <if test="appletUrl != null  and appletUrl != '' "> and applet_url = #{appletUrl}</if>
+             <if test="appletDone != null  and appletDone != '' "> and applet_done = #{appletDone}</if>
+         </where>
+    </select>
+    
+    <select id="selectDangdangMatchById" parameterType="Integer" resultMap="DangdangMatchResult">
+        <include refid="selectDangdangMatchVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDangdangMatch" parameterType="DangdangMatch" useGeneratedKeys="true" keyProperty="id">
+        insert into dangdang_match
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="account != null  and account != ''  ">account,</if>
+			<if test="plan != null  and plan != ''  ">plan,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="keyword != null  and keyword != ''  ">keyword,</if>
+			<if test="partSpeech != null  and partSpeech != ''  ">part_speech,</if>
+			<if test="secondaryClassification != null  and secondaryClassification != ''  ">secondary_classification,</if>
+			<if test="threeLevelClassification != null  and threeLevelClassification != ''  ">three_level_classification,</if>
+			<if test="combination != null  and combination != ''  ">combination,</if>
+			<if test="mobileAccessUrl != null  and mobileAccessUrl != ''  ">mobile_access_url,</if>
+			<if test="appletUrl != null  and appletUrl != ''  ">applet_url,</if>
+			<if test="appletDone != null  and appletDone != ''  ">applet_done,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="account != null  and account != ''  ">#{account},</if>
+			<if test="plan != null  and plan != ''  ">#{plan},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="keyword != null  and keyword != ''  ">#{keyword},</if>
+			<if test="partSpeech != null  and partSpeech != ''  ">#{partSpeech},</if>
+			<if test="secondaryClassification != null  and secondaryClassification != ''  ">#{secondaryClassification},</if>
+			<if test="threeLevelClassification != null  and threeLevelClassification != ''  ">#{threeLevelClassification},</if>
+			<if test="combination != null  and combination != ''  ">#{combination},</if>
+			<if test="mobileAccessUrl != null  and mobileAccessUrl != ''  ">#{mobileAccessUrl},</if>
+			<if test="appletUrl != null  and appletUrl != ''  ">#{appletUrl},</if>
+			<if test="appletDone != null  and appletDone != ''  ">#{appletDone},</if>
+         </trim>
+    </insert>
+    <insert id="batchInsert"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dangdang_match (account,plan,unit,keyword,part_speech,secondary_classification,three_level_classification,mobile_access_url,applet_url,applet_done,remarks,channel_number)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.account}, #{item.plan},#{item.unit},#{item.keyword},#{item.partSpeech},#{item.secondaryClassification},#{item.threeLevelClassification},#{item.mobileAccessUrl}
+            ,#{item.appletUrl},#{item.appletDone},#{item.remarks},#{item.channelNumber})
+        </foreach>
+    </insert>
+
+
+    <update id="updateDangdangMatch" parameterType="DangdangMatch">
+        update dangdang_match
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="account != null  and account != ''  ">account = #{account},</if>
+            <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="keyword != null  and keyword != ''  ">keyword = #{keyword},</if>
+            <if test="partSpeech != null  and partSpeech != ''  ">part_speech = #{partSpeech},</if>
+            <if test="secondaryClassification != null  and secondaryClassification != ''  ">secondary_classification = #{secondaryClassification},</if>
+            <if test="threeLevelClassification != null  and threeLevelClassification != ''  ">three_level_classification = #{threeLevelClassification},</if>
+            <if test="combination != null  and combination != ''  ">combination = #{combination},</if>
+            <if test="mobileAccessUrl != null  and mobileAccessUrl != ''  ">mobile_access_url = #{mobileAccessUrl},</if>
+            <if test="appletUrl != null  and appletUrl != ''  ">applet_url = #{appletUrl},</if>
+            <if test="appletDone != null  and appletDone != ''  ">applet_done = #{appletDone},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updateGroupword">
+          update dangdang_match set combination = CONCAT_WS('@',account,plan,unit,keyword)
+    </update>
+
+    <delete id="deleteDangdangMatchById" parameterType="Integer">
+        delete from dangdang_match where id = #{id}
+    </delete>
+	
+    <delete id="deleteDangdangMatchByIds" parameterType="String">
+        delete from dangdang_match where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

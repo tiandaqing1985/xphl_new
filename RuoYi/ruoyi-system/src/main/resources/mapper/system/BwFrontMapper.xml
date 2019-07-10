@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.BwFrontMapper">
+    
+    <resultMap type="BwFront" id="BwFrontResult">
+        <result property="id"    column="id"    />
+        <result property="account"    column="account"    />
+        <result property="bpDate"    column="bp_date"    />
+        <result property="plan"    column="plan"    />
+        <result property="unit"    column="unit"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="showdata"    column="showdata"    />
+        <result property="click"    column="click"    />
+        <result property="cost"    column="cost"    />
+        <result property="clickRate"    column="click_rate"    />
+        <result property="averageClickPrice"    column="average_click_price"    />
+        <result property="homepageAverageRanking"    column="homepage_average_ranking"    />
+        <result property="bid"    column="bid"    />
+        <result property="matchingMode"    column="matching_mode"    />
+    </resultMap>
+	
+	<sql id="selectBwFrontVo">
+        select id, account, bp_date, plan, unit, keyword, showdata, click, cost, click_rate, average_click_price, homepage_average_ranking, bid, matching_mode from bw_front
+    </sql>
+	
+    <select id="selectBwFrontList" parameterType="BwFront" resultMap="BwFrontResult">
+        <include refid="selectBwFrontVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="account != null  and account != '' "> and account = #{account}</if>
+             <if test="bpDate != null "> and bp_date = #{bpDate}</if>
+             <if test="plan != null  and plan != '' "> and plan = #{plan}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>
+             <if test="showdata != null "> and showdata = #{showdata}</if>
+             <if test="click != null "> and click = #{click}</if>
+             <if test="cost != null "> and cost = #{cost}</if>
+             <if test="clickRate != null "> and click_rate = #{clickRate}</if>
+             <if test="averageClickPrice != null "> and average_click_price = #{averageClickPrice}</if>
+             <if test="homepageAverageRanking != null "> and homepage_average_ranking = #{homepageAverageRanking}</if>
+             <if test="bid != null "> and bid = #{bid}</if>
+             <if test="matchingMode != null  and matchingMode != '' "> and matching_mode = #{matchingMode}</if>
+         </where>
+    </select>
+    
+    <select id="selectBwFrontById" parameterType="Integer" resultMap="BwFrontResult">
+        <include refid="selectBwFrontVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBwFront" parameterType="BwFront">
+        insert into bw_front
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="account != null  and account != ''  ">account,</if>
+			<if test="bpDate != null  ">bp_date,</if>
+			<if test="plan != null  and plan != ''  ">plan,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="keyword != null  and keyword != ''  ">keyword,</if>
+			<if test="showdata != null  ">showdata,</if>
+			<if test="click != null  ">click,</if>
+			<if test="cost != null  ">cost,</if>
+			<if test="clickRate != null  ">click_rate,</if>
+			<if test="averageClickPrice != null  ">average_click_price,</if>
+			<if test="homepageAverageRanking != null  ">homepage_average_ranking,</if>
+			<if test="bid != null  ">bid,</if>
+			<if test="matchingMode != null  and matchingMode != ''  ">matching_mode,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="account != null  and account != ''  ">#{account},</if>
+			<if test="bpDate != null  ">#{bpDate},</if>
+			<if test="plan != null  and plan != ''  ">#{plan},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="keyword != null  and keyword != ''  ">#{keyword},</if>
+			<if test="showdata != null  ">#{showdata},</if>
+			<if test="click != null  ">#{click},</if>
+			<if test="cost != null  ">#{cost},</if>
+			<if test="clickRate != null  ">#{clickRate},</if>
+			<if test="averageClickPrice != null  ">#{averageClickPrice},</if>
+			<if test="homepageAverageRanking != null  ">#{homepageAverageRanking},</if>
+			<if test="bid != null  ">#{bid},</if>
+			<if test="matchingMode != null  and matchingMode != ''  ">#{matchingMode},</if>
+         </trim>
+    </insert>
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bw_front (bp_date,account,plan,unit,keyword,showdata,click,cost,click_rate,average_click_price,homepage_average_ranking,bid,matching_mode)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.bpDate}, #{item.account},#{item.plan},#{item.unit},#{item.keyword},#{item.showdata},#{item.click},#{item.cost}
+            ,#{item.clickRate},#{item.averageClickPrice},#{item.homepageAverageRanking},#{item.bid},#{item.matchingMode})
+        </foreach>
+    </insert>
+
+    <update id="updateBwFront" parameterType="BwFront">
+        update bw_front
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="account != null  and account != ''  ">account = #{account},</if>
+            <if test="bpDate != null  ">bp_date = #{bpDate},</if>
+            <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="keyword != null  and keyword != ''  ">keyword = #{keyword},</if>
+            <if test="showdata != null  ">showdata = #{showdata},</if>
+            <if test="click != null  ">click = #{click},</if>
+            <if test="cost != null  ">cost = #{cost},</if>
+            <if test="clickRate != null  ">click_rate = #{clickRate},</if>
+            <if test="averageClickPrice != null  ">average_click_price = #{averageClickPrice},</if>
+            <if test="homepageAverageRanking != null  ">homepage_average_ranking = #{homepageAverageRanking},</if>
+            <if test="bid != null  ">bid = #{bid},</if>
+            <if test="matchingMode != null  and matchingMode != ''  ">matching_mode = #{matchingMode},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateGroupword">
+                update bw_front set groupword = CONCAT_WS('@',account,plan,unit,keyword)
+    </update>
+
+    <delete id="deleteBwFrontById" parameterType="Integer">
+        delete from bw_front where id = #{id}
+    </delete>
+	
+    <delete id="deleteBwFrontByIds" parameterType="String">
+        delete from bw_front where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <select id="showList" resultType="com.ruoyi.system.domain.BwZhanXian">
+        SELECT
+	DATE_FORMAT( bp_date, '%Y年%m月' ) AS yearMOnth,
+	DATE_FORMAT( bp_date, '%Y%m%d' ) AS date,
+	SUM( showdata ) AS sumShow,
+	SUM( click ) AS sumClick,
+	SUM( cost ) AS sumCost,
+	SUM( click ) / SUM( showdata ) AS ctr,
+	SUM( cost ) / SUM( click ) AS cpc
+FROM
+	bw_front
+GROUP BY
+	bp_date
+ORDER BY
+	bp_date ASC
+    </select>
+</mapper>
