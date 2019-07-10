@@ -23,6 +23,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="unit"    column="unit"    />
         <result property="keyword"    column="keyword"    />
         <result property="remark"    column="remark"    />
+        <result property="cashCost"    column="cashCost"    />
+        <result property="signIn"    column="signIn"    />  
+        <result property="carCost"    column="carCost"    />
+        <result property="putinCost"    column="putinCost"    />
+        <result property="activateCost"    column="activateCost"    />
+        <result property="orderCost"    column="orderCost"    />
     </resultMap>
 	
 	<sql id="selectJfZhanxianVo">
@@ -205,13 +211,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    <select id="selectJfZhanxianSumList" parameterType="JfZhanxian" resultMap="JfZhanxianResult">
 
 			<!--   总汇总 -->
-			select "总汇总"remark, front_date ,sum(showdata) showdata  ,sum(click) click,sum(consume) consume,sum(account) account,sum(card) card,sum(putin) putin,sum(place_order) place_order,sum(activate) activate
+			select "总汇总"remark, front_date ,sum(showdata) showdata  ,sum(click) click,sum(consume) consume,sum(account) account,sum(card) card,sum(putin) putin,sum(place_order) place_order,sum(activate) activate,
+			 sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			 from jf_zhanxian GROUP BY front_date 
 			 
 			UNION ALL
 			
 			 <!-- 搜索汇总 -->
-			select "搜索汇总"remark, front_date ,sum(showdata) showdata ,sum(click) click,sum(consume) consume,sum(account) account,sum(card) card,sum(putin) putin,sum(place_order) place_order,sum(activate) activate
+			select "搜索汇总"remark, front_date ,sum(showdata) showdata ,sum(click) click,sum(consume) consume,sum(account) account,sum(card) card,sum(putin) putin,sum(place_order) place_order,sum(activate) activate,
+			sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			 from jf_zhanxian  where channle like 'xpbaiduh5%' or accountname like '%搜索%' or accountname is null or channle is null GROUP BY front_date 
 			
 			UNION ALL
@@ -221,53 +229,64 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 -->
 			
 			<!-- 新账户 -->
-			select "新账户"remark, front_date ,sum(showdata) showdata ,sum(click) click,sum(consume) consume,sum(account) account,sum(card) card,sum(putin) putin,sum(place_order) place_order,sum(activate) activate
+			select "新账户"remark, front_date ,sum(showdata) showdata ,sum(click) click,sum(consume) consume,sum(account) account,sum(card) card,sum(putin) putin,sum(place_order) place_order,sum(activate) activate,
+			sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			 from jf_zhanxian  where code like 'A%' or accountname like 'baidu-搜索玖富万卡%' GROUP BY front_date  
 			
 			UNION ALL
 			
 			<!-- 老账户 -->
-			select "老账户汇总"remark, front_date ,sum(showdata) showdata  ,sum(click) click,sum(consume) consume,sum(account) account,sum(card) card,sum(putin) putin,sum(place_order) place_order,sum(activate) activate
+			select "老账户汇总"remark, front_date ,sum(showdata) showdata  ,sum(click) click,sum(consume) consume,sum(account) account,sum(card) card,sum(putin) putin,sum(place_order) place_order,sum(activate) activate,
+			sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			 from jf_zhanxian  where accountname  like 'baidu-玖富万卡Mobile%' or code like 'B%'  GROUP BY front_date 
 
    </select>
    
     <select id="selectJfZhanxianAccountSumList" parameterType="JfZhanxian" resultMap="JfZhanxianResult">
-       	select "搜索-账户层级" remark, front_date,accountname,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+       	select "搜索-账户层级" remark, front_date,accountname,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate,
+			sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			from jf_zhanxian  where   channle like 'xpbaiduh5%' or accountname like '%搜索%' or accountname is null or channle is null
 				GROUP BY front_date,accountname
    		UNION ALL
-    	select "原生-账户层级" remark, front_date,accountname,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+    	select "原生-账户层级" remark, front_date,accountname,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate,
+			sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			from jf_zhanxian   where channle like 'xpbdxxl%'
 				GROUP BY front_date,accountname
     </select>
     
+    
     <select id="selectJfZhanxianPlanSumList" parameterType="JfZhanxian" resultMap="JfZhanxianResult">
-    	 select "搜索-计划层级" remark, front_date,accountname,plan,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+    	 select "搜索-计划层级" remark, front_date,accountname,plan,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate,
+    	 		sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			from jf_zhanxian   where   channle like 'xpbaiduh5%' or accountname like '%搜索%' or accountname is null or channle is null
 				GROUP BY front_date,accountname,plan
 		UNION ALL		
-		select "原生-计划层级" remark, front_date,accountname,plan,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+		select "原生-计划层级" remark, front_date,accountname,plan,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate,
+			sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			from jf_zhanxian  where channle like 'xpbdxxl%'
 				GROUP BY front_date,accountname,plan
     </select>
     
     <select id="selectJfZhanxianUnitSumList" parameterType="JfZhanxian" resultMap="JfZhanxianResult">
-    	 select "搜索-单元层级" remark, front_date,accountname,plan,unit,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+    	 select "搜索-单元层级" remark, front_date,accountname,plan,unit,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate,
+			sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			from jf_zhanxian  where   channle like 'xpbaiduh5%' or accountname like '%搜索%' or accountname is null or channle is null
 				GROUP BY front_date,accountname,plan,unit
 		 UNION ALL		
-		 select "原生-单元层级" remark, front_date,accountname,plan,unit,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+		 select "原生-单元层级" remark, front_date,accountname,plan,unit,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate,
+			sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			from jf_zhanxian  where channle like 'xpbdxxl%'
 				GROUP BY front_date,accountname,plan,unit
     </select>
     
     <select id="selectJfZhanxianKeywordSumList" parameterType="JfZhanxian" resultMap="JfZhanxianResult">
-        select "搜索-关键词层级" remark, front_date,accountname,plan,unit,keyword,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+        select "搜索-关键词层级" remark, front_date,accountname,plan,unit,keyword,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate,
+			sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			from jf_zhanxian  where   channle like 'xpbaiduh5%' or accountname like '%搜索%' or accountname is null or channle is null
 				GROUP BY front_date,accountname,plan,unit,keyword
     	UNION ALL
-        select "原生-关键词层级" remark, front_date,accountname,plan,unit,keyword,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate
+        select "原生-关键词层级" remark, front_date,accountname,plan,unit,keyword,sum(showdata)showdata  ,sum(click) click,sum(consume)consume,sum(account)account,sum(card)card,sum(putin)putin,sum(place_order)place_order,sum(activate)activate,
+			sum(consume)/1.209 cashCost, (sum(consume)/1.209)/sum(account)  signIn, (sum(consume)/1.209)/sum(card) carCost, (sum(consume)/1.209)/sum(putin)  putinCost, (sum(consume)/1.209)/sum(activate)  activateCost ,(sum(consume)/1.209)/sum(place_order) orderCost
 			from jf_zhanxian   where channle like 'xpbdxxl%'
 				GROUP BY front_date,accountname,plan,unit,keyword
     </select>

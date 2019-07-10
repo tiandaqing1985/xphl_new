@@ -30,7 +30,7 @@ public class YwContract extends BaseEntity
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date endDate;
 	/** 合同金额 */
-	private Double contractMoney;
+	private String contractMoney;
 	
 	/** 公司名称 */
 	private String companyName;
@@ -87,12 +87,12 @@ public class YwContract extends BaseEntity
 	{
 		return endDate;
 	}
-	public void setContractMoney(Double contractMoney) 
+	public void setContractMoney(String contractMoney) 
 	{
 		this.contractMoney = contractMoney;
 	}
 
-	public Double getContractMoney() 
+	public String getContractMoney() 
 	{
 		return contractMoney;
 	}

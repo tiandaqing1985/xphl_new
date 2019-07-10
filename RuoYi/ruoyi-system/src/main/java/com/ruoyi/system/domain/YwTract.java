@@ -34,6 +34,9 @@ public class YwTract extends BaseEntity
 	/** 广告主 */
 	@Excel(name = "广告主" , width = 30)
 	private String advertiser; 
+	/** 简称 */
+	@Excel(name = "简称" , width = 30)
+	private String shortName;
 	
 	/** 跟进联系人 */
 	@Excel(name = "跟进联系人")
@@ -125,6 +128,14 @@ public class YwTract extends BaseEntity
 
 	public void setCreateBy1(String[] createBy1) {
 		this.createBy1 = createBy1;
+	}
+
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
 	}
 
 	public String toString() {

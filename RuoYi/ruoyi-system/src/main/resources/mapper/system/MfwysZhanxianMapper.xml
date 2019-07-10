@@ -175,5 +175,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where front_date = #{frontDate} and  plan like concat('%', #{channelPackage}, '%')
     </select>
     
+    
+    <select id="selectMfwysEndByKeywordid" parameterType="MfwysZhanxian" resultMap="MfwysZhanxianResult">
+        <include refid="selectMfwysZhanxianVo"/>
+        where keywordid = #{keywordid} and front_date = #{frontDate}
+    </select>
+    
      
 </mapper>

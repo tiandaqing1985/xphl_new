@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="remark"    column="remark"    />
         <result property="companyName"    column="company_name"    />
         <result property="advertiser"    column="advertiser"    />
+        <result property="shortName"    column="short_name"    />
     </resultMap>
 	
 	<sql id="selectYwTractVo">
@@ -25,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 	
     <select id="selectYwTractList" parameterType="YwTract" resultMap="YwTractResult">
-        select id, a.business_id, trace_time, tract_user, tract_message, tract_result, a.create_by, a.create_time, a.update_by, a.update_time, a.remark,company_name,advertiser 
+        select id, a.business_id, trace_time, tract_user, tract_message, tract_result, a.create_by, a.create_time, a.update_by, a.update_time, a.remark,company_name,advertiser,short_name 
         	
         	from yw_tract a
         	LEFT JOIN yw_business b  on a.business_id = b.business_id  

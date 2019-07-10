@@ -5,6 +5,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
+import com.ruoyi.common.annotation.Excel.Type;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
 
@@ -68,7 +69,31 @@ public class JfZhanxian extends BaseEntity
 	private Integer activate;
 	/**  */
 	private String channle;
-
+	
+	/** 现金成本 */
+	@Excel(name = "现金成本", type = Type.EXPORT)
+	private Double cashCost;
+	
+	/** 注册成本 */
+	@Excel(name = "注册成本", type = Type.EXPORT)
+	private Double signIn;
+	
+	/** 开卡成本 */
+	@Excel(name = "开卡成本", type = Type.EXPORT)
+	private Double carCost;
+	
+	/** 信审成本 */
+	@Excel(name = "信审成本", type = Type.EXPORT)
+	private Double putinCost;
+	
+	/** 激活成本 */
+	@Excel(name = "激活成本", type = Type.EXPORT)
+	private Double activateCost;
+	
+	/** 进件成本 */
+	@Excel(name = "进件成本", type = Type.EXPORT)
+	private Double orderCost;
+	
 
 	public void setId(Long id) 
 	{
@@ -230,6 +255,54 @@ public class JfZhanxian extends BaseEntity
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public Double getCashCost() {
+		return cashCost;
+	}
+
+	public void setCashCost(Double cashCost) {
+		this.cashCost = cashCost;
+	}
+
+	public Double getSignIn() {
+		return signIn;
+	}
+
+	public void setSignIn(Double signIn) {
+		this.signIn = signIn;
+	}
+
+	public Double getCarCost() {
+		return carCost;
+	}
+
+	public void setCarCost(Double carCost) {
+		this.carCost = carCost;
+	}
+
+	public Double getPutinCost() {
+		return putinCost;
+	}
+
+	public void setPutinCost(Double putinCost) {
+		this.putinCost = putinCost;
+	}
+
+	public Double getActivateCost() {
+		return activateCost;
+	}
+
+	public void setActivateCost(Double activateCost) {
+		this.activateCost = activateCost;
+	}
+
+	public Double getOrderCost() {
+		return orderCost;
+	}
+
+	public void setOrderCost(Double orderCost) {
+		this.orderCost = orderCost;
 	}
 
 	public String toString() {

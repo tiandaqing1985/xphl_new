@@ -1,5 +1,6 @@
 package com.ruoyi.system.mapper;
 
+import com.ruoyi.system.domain.MfwysEnd;
 import com.ruoyi.system.domain.MfwysZhanxian;
 import java.util.List;	
 
@@ -61,7 +62,7 @@ public interface MfwysZhanxianMapper
 	
 	public int  deleteMfwysZhanxianAll();
 	
-	public MfwysZhanxian selectMfwysEndByKeywordid(Long keywordid);
+	public MfwysZhanxian selectMfwysEndByKeywordid(MfwysZhanxian mfwysZhanxian);
 	
 	public List<MfwysZhanxian>  selectByChnnelPackage(MfwysZhanxian mfwysZhanxian);
 	

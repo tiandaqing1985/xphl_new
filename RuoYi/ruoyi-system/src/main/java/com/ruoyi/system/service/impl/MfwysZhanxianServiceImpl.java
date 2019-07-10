@@ -97,12 +97,17 @@ public class MfwysZhanxianServiceImpl implements IMfwysZhanxianService
 		try{
 		
 				List<MfwysEnd> eList = mfwysEndMapper.selectMfwysEndList(null);
-				
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				for(int i=0;i<eList.size();i++){
 					
 					MfwysEnd mfwysEnd = eList.get(i);
 					
-					MfwysZhanxian zx = mfwysZhanxianMapper.selectMfwysEndByKeywordid(mfwysEnd.getAid());
+					MfwysZhanxian mfwysZhanxian = new MfwysZhanxian();
+					mfwysZhanxian.setKeywordid(mfwysEnd.getAid());
+					
+					mfwysZhanxian.setFrontDate(sdf.parse(mfwysEnd.getNewtime()));
+					
+					MfwysZhanxian zx = mfwysZhanxianMapper.selectMfwysEndByKeywordid(mfwysZhanxian);
 					
 					if(zx!=null){ //能匹配上的
 						zx.setMfwSystem(mfwysEnd.getMfwSystem());
@@ -122,7 +127,7 @@ public class MfwysZhanxianServiceImpl implements IMfwysZhanxianService
 						MfwysZhanxian zx1  = new MfwysZhanxian();
 						
 						zx1.setChannelPackage(s);
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						
 						zx1.setFrontDate(sdf.parse(mfwysEnd.getNewtime()));
 						
 						//能匹配上计划的
