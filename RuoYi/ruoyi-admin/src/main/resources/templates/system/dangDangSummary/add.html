@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增当当前端消费汇总')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-dangdangSummary-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">账户：</label>
+				<div class="col-sm-8">
+					<input id="account" name="account" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">日期：</label>
+				<div class="col-sm-8">
+					<input id="ddDate" name="ddDate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">推广计划：</label>
+				<div class="col-sm-8">
+					<input id="plan" name="plan" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">推广单元：</label>
+				<div class="col-sm-8">
+					<input id="unit" name="unit" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">关键词：</label>
+				<div class="col-sm-8">
+					<input id="keyword" name="keyword" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">展现：</label>
+				<div class="col-sm-8">
+					<input id="showdata" name="showdata" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">点击：</label>
+				<div class="col-sm-8">
+					<input id="click" name="click" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">消费：</label>
+				<div class="col-sm-8">
+					<input id="cost" name="cost" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">点击率：</label>
+				<div class="col-sm-8">
+					<input id="clickRate" name="clickRate" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">平均点击价：</label>
+				<div class="col-sm-8">
+					<input id="averageClickPrice" name="averageClickPrice" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">首页平均排名：</label>
+				<div class="col-sm-8">
+					<input id="homepageAverageRanking" name="homepageAverageRanking" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">出价：</label>
+				<div class="col-sm-8">
+					<input id="bid" name="bid" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">匹配模式：</label>
+				<div class="col-sm-8">
+					<input id="partSpeech" name="partSpeech" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">app点击：</label>
+				<div class="col-sm-8">
+					<input id="appClick" name="appClick" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">app展现：</label>
+				<div class="col-sm-8">
+					<input id="appShowdata" name="appShowdata" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">app消费：</label>
+				<div class="col-sm-8">
+					<input id="appCost" name="appCost" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">小程序点击：</label>
+				<div class="col-sm-8">
+					<input id="letsClick" name="letsClick" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">小程序展现：</label>
+				<div class="col-sm-8">
+					<input id="letsShowdata" name="letsShowdata" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">小程序消费：</label>
+				<div class="col-sm-8">
+					<input id="letsCost" name="letsCost" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/dangdangSummary"
+		$("#form-dangdangSummary-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-dangdangSummary-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

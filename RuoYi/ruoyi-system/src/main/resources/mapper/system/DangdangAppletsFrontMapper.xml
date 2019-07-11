@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DangdangAppletsFrontMapper">
+    
+    <resultMap type="DangdangAppletsFront" id="DangdangAppletsFrontResult">
+        <result property="id"    column="id"    />
+        <result property="date"    column="date"    />
+        <result property="account"    column="account"    />
+        <result property="plan"    column="plan"    />
+        <result property="unit"    column="unit"    />
+        <result property="keyword"    column="keyword"    />
+        <result property="showdata"    column="showdata"    />
+        <result property="click"    column="click"    />
+        <result property="cost"    column="cost"    />
+        <result property="identification"    column="Identification"    />
+        <result property="combination"    column="combination"    />
+    </resultMap>
+	
+	<sql id="selectDangdangAppletsFrontVo">
+        select id, date, account, plan, unit, keyword, showdata, click, cost, Identification, combination from dangdang_applets_front
+    </sql>
+	
+    <select id="selectDangdangAppletsFrontList" parameterType="DangdangAppletsFront" resultMap="DangdangAppletsFrontResult">
+        <include refid="selectDangdangAppletsFrontVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="date != null "> and date = #{date}</if>
+             <if test="account != null  and account != '' "> and account = #{account}</if>
+             <if test="plan != null  and plan != '' "> and plan = #{plan}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>
+             <if test="showdata != null "> and showdata = #{showdata}</if>
+             <if test="click != null "> and click = #{click}</if>
+             <if test="cost != null "> and cost = #{cost}</if>
+             <if test="identification != null  and identification != '' "> and Identification = #{identification}</if>
+             <if test="combination != null  and combination != '' "> and combination = #{combination}</if>
+         </where>
+    </select>
+    
+    <select id="selectDangdangAppletsFrontById" parameterType="Integer" resultMap="DangdangAppletsFrontResult">
+        <include refid="selectDangdangAppletsFrontVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDangdangAppletsFront" parameterType="DangdangAppletsFront" useGeneratedKeys="true" keyProperty="id">
+        insert into dangdang_applets_front
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="date != null  ">date,</if>
+			<if test="account != null  and account != ''  ">account,</if>
+			<if test="plan != null  and plan != ''  ">plan,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="keyword != null  and keyword != ''  ">keyword,</if>
+			<if test="showdata != null  ">showdata,</if>
+			<if test="click != null  ">click,</if>
+			<if test="cost != null  ">cost,</if>
+			<if test="identification != null  and identification != ''  ">Identification,</if>
+			<if test="combination != null  and combination != ''  ">combination,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="date != null  ">#{date},</if>
+			<if test="account != null  and account != ''  ">#{account},</if>
+			<if test="plan != null  and plan != ''  ">#{plan},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="keyword != null  and keyword != ''  ">#{keyword},</if>
+			<if test="showdata != null  ">#{showdata},</if>
+			<if test="click != null  ">#{click},</if>
+			<if test="cost != null  ">#{cost},</if>
+			<if test="identification != null  and identification != ''  ">#{identification},</if>
+			<if test="combination != null  and combination != ''  ">#{combination},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDangdangAppletsFront" parameterType="DangdangAppletsFront">
+        update dangdang_applets_front
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="date != null  ">date = #{date},</if>
+            <if test="account != null  and account != ''  ">account = #{account},</if>
+            <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="keyword != null  and keyword != ''  ">keyword = #{keyword},</if>
+            <if test="showdata != null  ">showdata = #{showdata},</if>
+            <if test="click != null  ">click = #{click},</if>
+            <if test="cost != null  ">cost = #{cost},</if>
+            <if test="identification != null  and identification != ''  ">Identification = #{identification},</if>
+            <if test="combination != null  and combination != ''  ">combination = #{combination},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteDangdangAppletsFrontById" parameterType="Integer">
+        delete from dangdang_applets_front where id = #{id}
+    </delete>
+	
+    <delete id="deleteDangdangAppletsFrontByIds" parameterType="String">
+        delete from dangdang_applets_front where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="batchInsert"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dangdang_applets_front (account,plan,unit,keyword,date,showdata,click,cost)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.account}, #{item.plan},#{item.unit},#{item.keyword},#{item.date},#{item.showdata},#{item.click},#{item.cost})
+        </foreach>
+    </insert>
+    <update id="updateGroupword">
+          update dangdang_applets_front set combination = CONCAT_WS('@',account,plan,unit,keyword)  ,Identification ='2'
+    </update>
+</mapper>
