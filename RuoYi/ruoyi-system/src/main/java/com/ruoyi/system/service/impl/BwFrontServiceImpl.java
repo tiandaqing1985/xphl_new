@@ -144,7 +144,7 @@ public class BwFrontServiceImpl implements IBwFrontService {
             bwZhanXian.setCpc1(cpc.toString());
             StringBuffer ctr = new StringBuffer();
             BigDecimal bigDecimal = new BigDecimal(bwZhanXian.getCtr());
-            BigDecimal multiply =  bigDecimal.setScale(2, BigDecimal.ROUND_FLOOR).multiply(new BigDecimal(100));
+            BigDecimal multiply = bigDecimal.setScale(2, BigDecimal.ROUND_FLOOR).multiply(new BigDecimal(100));
             ctr.append(String.valueOf(multiply));
             ctr.append("%");
             bwZhanXian.setCtr1(ctr.toString());
@@ -155,17 +155,24 @@ public class BwFrontServiceImpl implements IBwFrontService {
             BwZhanXian bwZhanXian = new BwZhanXian();
             bwZhanXian.setYearMonth(entry.getKey());
             bwZhanXian.setDate("合计");
+            //每月总的展现
             int allSumShow = entry.getValue().stream().mapToInt(BwZhanXian::getSumShow).sum();
+            //每月总的点击
             int allSumClick = entry.getValue().stream().mapToInt(BwZhanXian::getSumclick).sum();
+            //每月总的消费
             double allSumCost = entry.getValue().stream().mapToDouble(BwZhanXian::getSumCost).sum();
-            int i = allSumClick /allSumShow ;//ctr
+            BigDecimal aSs = new BigDecimal(allSumShow);
+            BigDecimal aC = new BigDecimal(allSumClick);
+            //每月CTR
+            BigDecimal test = aC.divide(aSs,BigDecimal.ROUND_HALF_DOWN);
+            int i = allSumClick / allSumShow;//ctr
             double v = allSumCost / allSumClick; //cpc
             bwZhanXian.setSumShow(allSumShow);
             bwZhanXian.setSumclick(allSumClick);
             BigDecimal cpc = new BigDecimal(v);
             BigDecimal ctr = new BigDecimal(i);
-            BigDecimal multiply = ctr.multiply(new BigDecimal(1000).setScale(2, BigDecimal.ROUND_UNNECESSARY));
-            bwZhanXian.setCtr1(String.valueOf(multiply)+"%");
+            BigDecimal multiply = test.multiply(new BigDecimal(1000));
+            bwZhanXian.setCtr1(String.valueOf(test) + "%");
             bwZhanXian.setCpc1(String.valueOf(cpc.setScale(2, BigDecimal.ROUND_HALF_DOWN)));
             bwZhanXian.setSumCost(allSumCost);
             showList.add(bwZhanXian);
