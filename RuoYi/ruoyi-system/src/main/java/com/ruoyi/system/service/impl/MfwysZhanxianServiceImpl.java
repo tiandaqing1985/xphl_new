@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ruoyi.system.mapper.MfwysEndMapper;
+import com.ruoyi.system.mapper.MfwysParameterMapper;
 import com.ruoyi.system.mapper.MfwysZhanxianMapper;
 import com.ruoyi.system.domain.MfwysEnd;
+import com.ruoyi.system.domain.MfwysParameter;
 import com.ruoyi.system.domain.MfwysZhanxian;
 import com.ruoyi.system.service.IMfwysZhanxianService;
 import com.ruoyi.common.core.text.Convert;
@@ -29,6 +31,9 @@ public class MfwysZhanxianServiceImpl implements IMfwysZhanxianService
 	
 	@Autowired
 	private MfwysEndMapper mfwysEndMapper;
+	
+	@Autowired
+	private MfwysParameterMapper mfwysParameterMapper;
 
 	/**
      * 查询马蜂窝原生展现信息
@@ -100,6 +105,7 @@ public class MfwysZhanxianServiceImpl implements IMfwysZhanxianService
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				for(int i=0;i<eList.size();i++){
 					
+					//后端数据
 					MfwysEnd mfwysEnd = eList.get(i);
 					
 					MfwysZhanxian mfwysZhanxian = new MfwysZhanxian();
@@ -137,7 +143,7 @@ public class MfwysZhanxianServiceImpl implements IMfwysZhanxianService
 							MfwysZhanxian zx2 = zxList.get(0);
 							MfwysZhanxian zx3 = new MfwysZhanxian();
 							zx3.setFrontDate(zx2.getFrontDate());
-							zx3.setAccount(zx2.getAccount());
+							zx3.setAccountname(zx2.getAccountname());
 							zx3.setPlan(zx2.getPlan());
 							zx3.setPlanid(zx2.getPlanid());
 							zx3.setMfwSystem(mfwysEnd.getMfwSystem());
@@ -150,6 +156,22 @@ public class MfwysZhanxianServiceImpl implements IMfwysZhanxianService
 							
 							//新增
 							mfwysZhanxianMapper.insertMfwysZhanxian(zx3);
+						}else{
+							MfwysParameter mp = mfwysParameterMapper.getMfwysParameterByChannel(mfwysEnd.getChannel());
+							
+							MfwysZhanxian zx4 = new MfwysZhanxian();
+							zx4.setFrontDate(sdf.parse(mfwysEnd.getNewtime()));
+							zx4.setAccountname(mp.getAccount());
+							zx4.setPlan(mp.getPlan());
+							zx4.setMfwSystem(mfwysEnd.getMfwSystem());
+							zx4.setChannelPackage(mfwysEnd.getChannelPackage());
+							zx4.setChannel(mfwysEnd.getChannel());
+							zx4.setNewFacility(mfwysEnd.getNewFacility());
+							zx4.setAccount(mfwysEnd.getAccount());
+							zx4.setAid(mfwysEnd.getAid());
+							zx4.setKeep(mfwysEnd.getKeep());
+							//新增
+							mfwysZhanxianMapper.insertMfwysZhanxian(zx4);
 						}
 					}
 					
