@@ -2,6 +2,7 @@ package com.ruoyi.system.mapper;
 
 import com.ruoyi.system.domain.DangdangBack;
 import com.ruoyi.system.domain.DangdangBaiduAdd;
+import com.ruoyi.system.domain.DangdangSearchAdd;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -71,5 +72,17 @@ public interface DangdangBackMapper
 	 */
 	public int updateGroupword(String str);
 
+	/**
+	 * @return 更改百度5201
+	 */
+	public int updateBaiduIdentification();
 
+	List<DangdangBack> queryUrl(DangdangSearchAdd date);
+
+	/**
+	 * 查询移动端url的匹配
+	 * @param
+	 * @return
+	 */
+	List<DangdangBack> queryMod(DangdangSearchAdd date);
 }

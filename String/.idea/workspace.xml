@@ -2,21 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3f2849e8-4b8c-41fb-87fb-9ab76ebeb852" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/String.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/DangdangAppFrontController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/DangdangAppFrontController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/DangdangMatchController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/java/com/ruoyi/web/controller/system/DangdangMatchController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-common/src/main/java/com/ruoyi/common/utils/poi/ExcelUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-common/src/main/java/com/ruoyi/common/utils/poi/ExcelUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangdangAppFront.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangdangAppFront.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangdangMatch.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangdangMatch.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangdangSummary.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangdangSummary.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/IBqFrontService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/IBqFrontService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/IDangdangAppFrontService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/IDangdangAppFrontService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/BwFrontServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/BwFrontServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/DangdangAppFrontServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/DangdangAppFrontServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/DangdangAppFrontMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/DangdangAppFrontMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/DangdangAppletsFrontMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/DangdangAppletsFrontMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/DangdangSummaryMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/DangdangSummaryMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/resources/templates/system/dangdangBack/dangdangBack.html" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/resources/templates/system/dangdangBack/dangdangBack.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangDangAll.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangDangAll.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/mapper/AllMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/mapper/AllMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/mapper/DangdangBackMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/mapper/DangdangBackMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/DangDangAllImportServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/DangDangAllImportServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/DangdangBackServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/DangdangBackServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/AllMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/AllMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/DangdangBackMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/DangdangBackMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -158,6 +152,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
@@ -241,8 +236,7 @@
     <option name="totallyTimeSpent" value="6737000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13326226" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />

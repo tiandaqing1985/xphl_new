@@ -91,6 +91,9 @@ public class DangDangAll {
      */
     @Excel(name="组合")
     private String fCombination;
+
+    @Excel(name="词性")
+    private  String fPartSpeech;
     /**
      * 移动端url
      */
@@ -107,110 +110,155 @@ public class DangDangAll {
      * 小程序更改后URl
      */
     @Excel(name="小程序更改后URl")
-
     private String appletDone ;
+
+//**********************************************************************************************
+
 
 
    //移动端
     @Excel(name = "移动端uv")
     private Integer modUv;
+    //小程序URL
+    @Excel(name = "小程序URLuv")
+    private Integer letUv;
+    @Excel(name = "小程序更改后uv")
+    private Integer doneUv;
     /**
      * 移动端新增激活用户
      */
     @Excel(name = "移动端新增激活用户数")
     private Integer modAddActiveUser;
     /**
+     * 小程序URL新增激活用户
+     */
+    @Excel(name = "小程序URL新增激活用户数")
+    private Integer letAddActiveUser;
+    @Excel(name = "小程序更改后新增激活用户数")
+    private Integer doneAddActiveUser;
+    /**
      * 移动端收订纯新客
      */
     @Excel(name = "移动端收订纯新客")
     private Integer modCoollectingPureNewCustomers;
     /**
-     * 移动端收订新客（含纯和渗透）
+     * 小程序URL收订纯新客
      */
-    @Excel(name = "移动端收订新客(含纯和渗透)")
-    private Integer modBookingNewCustomersPureInfiltration;
-    /**
-     * 移动端收订订单数
-     */
-    @Excel(name = "移动端收订订单数")
-    private Integer modOrderingOrders;
-    /**
-     * 移动端收订金额
-     */
-    @Excel(name = "移动端收订金额")
-    private Double modReceivingAmount;
-    /**
-     * 移动端出库纯新客
-     */
-    @Excel(name = "移动端出库纯新客")
-    private Integer modPureOutOfTheLibrary;
-    /**
-     * 移动端出库新客(含纯和渗透)
-     */
-    @Excel(name = "移动端出库新客(含纯和渗透)")
-    private Integer modOutboundNewCustomersPureInfiltration;
-    /**
-     * 移动端出库订单数
-     */
-    @Excel(name = "移动端出库订单数")
-    private Integer modOutboundOrderNumber;
-    /**
-     * 移动端出库金额
-     */
-    @Excel(name = "移动端出库金额")
-    private Double modOutboundAmount;
-
-    //小程序更改后
-    /**
-     * uv
-     */
-    @Excel(name = "小程序更改后uv")
-    private Integer doneUv;
-    /**
-     * 小程序更改后新增激活用户
-     */
-    @Excel(name = "小程序更改后新增激活用户数")
-    private Integer doneAddActiveUser;
+    @Excel(name = "小程序URL收订纯新客")
+    private Integer letCoollectingPureNewCustomers;
     /**
      * 小程序更改后收订纯新客
      */
     @Excel(name = "小程序更改后收订纯新客")
     private Integer doneCoollectingPureNewCustomers;
     /**
+     * 移动端收订新客（含纯和渗透）
+     */
+    @Excel(name = "移动端收订新客(含纯和渗透)")
+    private Integer modBookingNewCustomersPureInfiltration;
+    /**
+     * 小程序URL收订新客（含纯和渗透）
+     */
+    @Excel(name = "小程序URL收订新客(含纯和渗透)")
+    private Integer letBookingNewCustomersPureInfiltration;
+    /**
      * 小程序更改后收订新客（含纯和渗透）
      */
     @Excel(name = "小程序更改后收订新客(含纯和渗透)")
     private Integer doneBookingNewCustomersPureInfiltration;
+    /**
+     * 移动端收订订单数
+     */
+    @Excel(name = "移动端收订订单数")
+    private Integer modOrderingOrders;
+    /**
+     * 小程序URL收订订单数
+     */
+    @Excel(name = "小程序URL收订订单数")
+    private Integer letOrderingOrders;
     /**
      * 小程序更改后收订订单数
      */
     @Excel(name = "小程序更改后收订订单数")
     private Integer doneOrderingOrders;
     /**
+     * 移动端收订金额
+     */
+    @Excel(name = "移动端收订金额")
+    private Double modReceivingAmount;
+
+    /**
+     * 小程序URL收订金额
+     */
+    @Excel(name = "小程序URL收订金额")
+    private Double letReceivingAmount;
+    /**
      * 小程序更改后收订金额
      */
     @Excel(name = "小程序更改后收订金额")
     private Double doneReceivingAmount;
+    /**
+     * 移动端出库纯新客
+     */
+    @Excel(name = "移动端出库纯新客")
+    private Integer modPureOutOfTheLibrary;
+    /**
+     * 小程序URL出库纯新客
+     */
+    @Excel(name = "小程序URL出库纯新客")
+    private Integer letPureOutOfTheLibrary;
     /**
      * 小程序更改后出库纯新客
      */
     @Excel(name = "小程序更改后出库纯新客")
     private Integer donePureOutOfTheLibrary;
     /**
+     * 移动端出库新客(含纯和渗透)
+     */
+    @Excel(name = "移动端出库新客(含纯和渗透)")
+    private Integer modOutboundNewCustomersPureInfiltration;
+    /**
+     * 小程序URL出库新客(含纯和渗透)
+     */
+    @Excel(name = "小程序URL出库新客(含纯和渗透)")
+    private Integer letOutboundNewCustomersPureInfiltration;
+    /**
      * 小程序更改后出库新客(含纯和渗透)
      */
     @Excel(name = "小程序更改后出库新客(含纯和渗透)")
     private Integer doneOutboundNewCustomersPureInfiltration;
+    /**
+     * 移动端出库订单数
+     */
+    @Excel(name = "移动端出库订单数")
+    private Integer modOutboundOrderNumber;
+    /**
+     * 小程序URL出库订单数
+     */
+    @Excel(name = "小程序URL出库订单数")
+    private Integer letOutboundOrderNumber;
     /**
      * 小程序更改后出库订单数
      */
     @Excel(name = "小程序更改后出库订单数")
     private Integer doneOutboundOrderNumber;
     /**
+     * 移动端出库金额
+     */
+    @Excel(name = "移动端出库金额")
+    private Double modOutboundAmount;
+    /**
+     * 小程序URL出库金额
+     */
+    @Excel(name = "小程序URL出库金额")
+    private Double letOutboundAmount;
+    /**
      * 小程序更改后出库金额
      */
     @Excel(name = "小程序更改后出库金额")
     private Double doneOutboundAmount;
+
+
     /**
      * 汇总出库纯新客
      */
@@ -221,54 +269,7 @@ public class DangDangAll {
      */
     @Excel(name="汇总出库金额")
     private Double allOutboundAmount;
-    //小程序URL
-    @Excel(name = "小程序URLuv")
-    private Integer letUv;
-    /**
-     * 小程序URL新增激活用户
-     */
-    @Excel(name = "小程序URL新增激活用户数")
-    private Integer letAddActiveUser;
-    /**
-     * 小程序URL收订纯新客
-     */
-    @Excel(name = "小程序URL收订纯新客")
-    private Integer letCoollectingPureNewCustomers;
-    /**
-     * 小程序URL收订新客（含纯和渗透）
-     */
-    @Excel(name = "小程序URL收订新客(含纯和渗透)")
-    private Integer letBookingNewCustomersPureInfiltration;
-    /**
-     * 小程序URL收订订单数
-     */
-    @Excel(name = "小程序URL收订订单数")
-    private Integer letOrderingOrders;
-    /**
-     * 小程序URL收订金额
-     */
-    @Excel(name = "小程序URL收订金额")
-    private Double letReceivingAmount;
-    /**
-     * 小程序URL出库纯新客
-     */
-    @Excel(name = "小程序URL出库纯新客")
-    private Integer letPureOutOfTheLibrary;
-    /**
-     * 小程序URL出库新客(含纯和渗透)
-     */
-    @Excel(name = "小程序URL出库新客(含纯和渗透)")
-    private Integer letOutboundNewCustomersPureInfiltration;
-    /**
-     * 小程序URL出库订单数
-     */
-    @Excel(name = "小程序URL出库订单数")
-    private Integer letOutboundOrderNumber;
-    /**
-     * 小程序URL出库金额
-     */
-    @Excel(name = "小程序URL出库金额")
-    private Double letOutboundAmount;
+
     //针对每条汇总
     @Excel(name = "汇总更改后uv")
     private Integer uv;
@@ -317,6 +318,14 @@ public class DangDangAll {
      */
     @Excel(name = "汇总出库金额")
     private Double outboundAmount;
+
+    public String getfPartSpeech() {
+        return fPartSpeech;
+    }
+
+    public void setfPartSpeech(String fPartSpeech) {
+        this.fPartSpeech = fPartSpeech;
+    }
 
     @Override
     public String toString() {

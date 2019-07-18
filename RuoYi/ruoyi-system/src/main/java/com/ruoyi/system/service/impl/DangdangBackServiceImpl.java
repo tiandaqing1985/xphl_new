@@ -22,8 +22,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
  * @date 2019-07-18
  */
 @Service
-public class DangdangBackServiceImpl implements IDangdangBackService 
-{
+public class DangdangBackServiceImpl implements IDangdangBackService {
 	@Autowired
 	private DangdangBackMapper dangdangBackMapper;
 
@@ -31,66 +30,62 @@ public class DangdangBackServiceImpl implements IDangdangBackService
 	 * 文件后缀
 	 */
 	private final static String FILE_END = ".xls";
+
 	/**
-     * 查询当当后端汇总信息
-     * 
-     * @param id 当当后端汇总ID
-     * @return 当当后端汇总信息
-     */
-    @Override
-	public DangdangBack selectDangdangBackById(Integer id)
-	{
-	    return dangdangBackMapper.selectDangdangBackById(id);
-	}
-	
-	/**
-     * 查询当当后端汇总列表
-     * 
-     * @param dangdangBack 当当后端汇总信息
-     * @return 当当后端汇总集合
-     */
+	 * 查询当当后端汇总信息
+	 *
+	 * @param id 当当后端汇总ID
+	 * @return 当当后端汇总信息
+	 */
 	@Override
-	public List<DangdangBack> selectDangdangBackList(DangdangBack dangdangBack)
-	{
-	    return dangdangBackMapper.selectDangdangBackList(dangdangBack);
-	}
-	
-    /**
-     * 新增当当后端汇总
-     * 
-     * @param dangdangBack 当当后端汇总信息
-     * @return 结果
-     */
-	@Override
-	public int insertDangdangBack(DangdangBack dangdangBack)
-	{
-	    return dangdangBackMapper.insertDangdangBack(dangdangBack);
-	}
-	
-	/**
-     * 修改当当后端汇总
-     * 
-     * @param dangdangBack 当当后端汇总信息
-     * @return 结果
-     */
-	@Override
-	public int updateDangdangBack(DangdangBack dangdangBack)
-	{
-	    return dangdangBackMapper.updateDangdangBack(dangdangBack);
+	public DangdangBack selectDangdangBackById(Integer id) {
+		return dangdangBackMapper.selectDangdangBackById(id);
 	}
 
 	/**
-     * 删除当当后端汇总对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
+	 * 查询当当后端汇总列表
+	 *
+	 * @param dangdangBack 当当后端汇总信息
+	 * @return 当当后端汇总集合
+	 */
 	@Override
-	public int deleteDangdangBackByIds(String ids)
-	{
+	public List<DangdangBack> selectDangdangBackList(DangdangBack dangdangBack) {
+		return dangdangBackMapper.selectDangdangBackList(dangdangBack);
+	}
+
+	/**
+	 * 新增当当后端汇总
+	 *
+	 * @param dangdangBack 当当后端汇总信息
+	 * @return 结果
+	 */
+	@Override
+	public int insertDangdangBack(DangdangBack dangdangBack) {
+		return dangdangBackMapper.insertDangdangBack(dangdangBack);
+	}
+
+	/**
+	 * 修改当当后端汇总
+	 *
+	 * @param dangdangBack 当当后端汇总信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateDangdangBack(DangdangBack dangdangBack) {
+		return dangdangBackMapper.updateDangdangBack(dangdangBack);
+	}
+
+	/**
+	 * 删除当当后端汇总对象
+	 *
+	 * @param ids 需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteDangdangBackByIds(String ids) {
 		return dangdangBackMapper.deleteDangdangBackByIds(Convert.toStrArray(ids));
 	}
-	@Transactional
+
 	@Override
 	public String importBwFront(List<DangdangBack> bwList, Boolean isUpdateSupport, String operName,String fileName) {
 		if (StringUtils.isNull(bwList) || bwList.size() == 0) {
@@ -122,36 +117,13 @@ public class DangdangBackServiceImpl implements IDangdangBackService
 					dangdangBackMapper.batchInsert(bwList);
 				}
 			}
-			//区分各分类
-			String typeName = distinguishEndWith(fileName).toLowerCase();
-			//品专
-			 if (typeName.endsWith(DangDangFileType.SEARCH.getMsg())) {
-				 dangdangBackMapper.updateGroupword(DangDangFileType.SEARCH.getMsg());
-				return "导入成功";
-				//搜索安卓
-			} else if (typeName.endsWith(DangDangFileType.BAIDU.getMsg())) {
-				 dangdangBackMapper.updateGroupword(DangDangFileType.BAIDU.getMsg());
-//				 dangdangBackMapper.updateBaiduIdentification();
-				return "导入成功";
-			} else {
-				throw new BusinessException("导入表名称不符");
-			}
+			dangdangBackMapper.updateGroupword(null);
+			return "导入成功";
 		} catch (Exception e) {
 			e.printStackTrace();
-			// catch块中显示让事务回滚，保证数据完整性
-			TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
 			return "导入失败";
 		}
 
 	}
 
-	/**
-	 * 去掉文件后缀 .xls .xlsx
-	 *
-	 * @param fileName
-	 * @return
-	 */
-	private String distinguishEndWith(String fileName) {
-		return fileName.toLowerCase().endsWith(FILE_END) ? fileName.substring(0, fileName.length() - 4) : fileName.substring(0, fileName.length() - 5);
-	}
 }

@@ -87,8 +87,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="dis != null  and dis != ''  ">#{dis},</if>
          </trim>
     </insert>
+    <update id="updateGroupword" parameterType="String">
+       update dangdang_back set Identification = #{str} where Identification is null
+    </update>
+    <update id="updateBaiduIdentification">
+         update dangdang_back set dis='5201' where channel_id like '%5201' and Identification = '百度'
+    </update>
     <insert id="batchInsert"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO dangdang_baidu_add (dd_date,channel_id,uv,add_active_user,coollecting_pure_new_customers,booking_new_customers_pure_infiltration,
+        INSERT INTO dangdang_back (dd_date,channel_id,uv,add_active_user,coollecting_pure_new_customers,booking_new_customers_pure_infiltration,
         ordering_orders,receiving_amount,pure_out_of_the_library,outbound_new_customers_pure_infiltration,outbound_order_number,outbound_amount)
         VALUES
         <foreach collection="list" item="item" separator=",">
@@ -129,5 +135,233 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
-    
+
+    <select id="queryUrl" resultMap="DangdangBackResult" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
+        SELECT
+        ht.uv,
+        ht.add_active_user,
+        ht.coollecting_pure_new_customers  ,
+        ht.booking_new_customers_pure_infiltration,
+        ht.ordering_orders,
+        ht.receiving_amount,
+        ht.pure_out_of_the_library,
+        ht.outbound_new_customers_pure_infiltration,
+        ht.outbound_order_number,
+        ht.outbound_amount
+        FROM
+        (
+        SELECT
+        f.combination AS fCombination,
+        f.dd_date AS fDate,
+        f.account AS fAccount,
+        f.plan AS fPlan,
+        f.unit AS fUnit,
+        f.keyword AS fKeyword,
+        f.showdata AS fShowDate,
+        f.click AS fClick,
+        f.cost AS fCost,
+        f.app_showData AS fAppShowData,
+        f.app_click AS fAppClick,
+        f.app_cost AS fAppCost,
+        f.lets_showdata AS fLetsShowData,
+        f.lets_click AS fLetsClick,
+        f.lets_cost AS fLetsCost,
+        m.mobile_access_url,
+        m.applet_url,
+        m.applet_done
+        FROM
+        (
+        SELECT
+        s.combination,
+        s.account,
+        s.dd_date,
+        s.plan,
+        s.unit,
+        s.keyword,
+        s.showdata,
+        s.click,
+        s.cost,
+        s.click_rate,
+        s.average_click_price,
+        s.bid,
+        s.homepage_average_ranking,
+        s.part_speech,
+        w.click AS app_click,
+        w.cost AS app_cost,
+        w.showdata AS app_showData,
+        q.click AS lets_click,
+        q.cost AS lets_cost,
+        q.showdata AS lets_showData
+        FROM
+        dangdang_summary AS s
+        LEFT JOIN (
+        SELECT
+        date,
+        combination,
+        sum( click ) AS click,
+        sum( showdata ) AS showdata,
+        SUM( cost ) AS cost
+        FROM
+        dangdang_app_front
+        WHERE
+        app = '当当网'
+        GROUP BY
+        date,
+        combination
+        ) AS w ON s.dd_date = w.date
+        AND s.combination = w.combination
+        LEFT JOIN (
+        SELECT
+        date,
+        combination,
+        sum( click ) AS click,
+        sum( showdata ) AS showdata,
+        SUM( cost ) AS cost
+        FROM
+        dangdang_applets_front
+        GROUP BY
+        date,
+        combination
+        ) AS q ON s.dd_date = q.date
+        AND s.combination = q.combination
+        ) AS f
+        LEFT JOIN dangdang_match AS m ON f.combination = m.combination
+        ) AS fh
+        LEFT JOIN
+        (SELECT
+        dd_date,
+        channel_id,
+        sum( uv ) AS uv,
+        sum( add_active_user ) AS add_active_user,
+        sum( coollecting_pure_new_customers ) AS coollecting_pure_new_customers,
+        sum( booking_new_customers_pure_infiltration ) AS booking_new_customers_pure_infiltration,
+        sum( ordering_orders ) AS ordering_orders,
+        sum( receiving_amount ) AS receiving_amount,
+        sum( pure_out_of_the_library ) AS pure_out_of_the_library,
+        sum( outbound_new_customers_pure_infiltration ) AS outbound_new_customers_pure_infiltration,
+        sum( outbound_order_number ) AS outbound_order_number,
+        sum( outbound_amount ) AS outbound_amount
+        FROM
+        dangdang_back
+        GROUP BY
+        dd_date,
+        channel_id
+        ) as ht ON ht.channel_id = fh.applet_url AND ht.dd_date = fh.fDate
+        where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if> ORDER BY fh.fDate desc
+    </select>
+    <select id="queryMod" resultMap="DangdangBackResult" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
+        SELECT
+        ht.uv  ,
+        ht.add_active_user  ,
+        ht.coollecting_pure_new_customers  ,
+        ht.booking_new_customers_pure_infiltration ,
+        ht.ordering_orders ,
+        ht.receiving_amount ,
+        ht.pure_out_of_the_library ,
+        ht.outbound_new_customers_pure_infiltration ,
+        ht.outbound_order_number ,
+        ht.outbound_amount
+        FROM
+        (
+        SELECT
+        f.combination AS fCombination,
+        f.dd_date AS fDate,
+        f.account AS fAccount,
+        f.plan AS fPlan,
+        f.unit AS fUnit,
+        f.keyword AS fKeyword,
+        f.showdata AS fShowDate,
+        f.click AS fClick,
+        f.cost AS fCost,
+        f.app_showData AS fAppShowData,
+        f.app_click AS fAppClick,
+        f.app_cost AS fAppCost,
+        f.lets_showdata AS fLetsShowData,
+        f.lets_click AS fLetsClick,
+        f.lets_cost AS fLetsCost,
+        m.mobile_access_url,
+        m.applet_url,
+        m.applet_done
+        FROM
+        (
+        SELECT
+        s.combination,
+        s.account,
+        s.dd_date,
+        s.plan,
+        s.unit,
+        s.keyword,
+        s.showdata,
+        s.click,
+        s.cost,
+        s.click_rate,
+        s.average_click_price,
+        s.bid,
+        s.homepage_average_ranking,
+        s.part_speech,
+        w.click AS app_click,
+        w.cost AS app_cost,
+        w.showdata AS app_showData,
+        q.click AS lets_click,
+        q.cost AS lets_cost,
+        q.showdata AS lets_showData
+        FROM
+        dangdang_summary AS s
+        LEFT JOIN (
+        SELECT
+        date,
+        combination,
+        sum( click ) AS click,
+        sum( showdata ) AS showdata,
+        SUM( cost ) AS cost
+        FROM
+        dangdang_app_front
+        WHERE
+        app = '当当网'
+        GROUP BY
+        date,
+        combination
+        ) AS w ON s.dd_date = w.date
+        AND s.combination = w.combination
+        LEFT JOIN (
+        SELECT
+        date,
+        combination,
+        sum( click ) AS click,
+        sum( showdata ) AS showdata,
+        SUM( cost ) AS cost
+        FROM
+        dangdang_applets_front
+        GROUP BY
+        date,
+        combination
+        ) AS q ON s.dd_date = q.date
+        AND s.combination = q.combination
+        ) AS f
+        LEFT JOIN dangdang_match AS m ON f.combination = m.combination
+        ) AS fh
+        LEFT JOIN (
+        SELECT
+        dd_date,
+        channel_id,
+        sum(uv) AS uv,
+        sum(add_active_user) AS add_active_user,
+        sum(coollecting_pure_new_customers) AS coollecting_pure_new_customers,
+        sum(booking_new_customers_pure_infiltration) AS booking_new_customers_pure_infiltration,
+        sum(ordering_orders) AS ordering_orders,
+        sum(receiving_amount) AS receiving_amount,
+        sum(pure_out_of_the_library) AS pure_out_of_the_library,
+        sum(outbound_new_customers_pure_infiltration ) AS outbound_new_customers_pure_infiltration,
+        sum(outbound_order_number) AS outbound_order_number,
+        sum(outbound_amount) AS outbound_amount
+        FROM
+        dangdang_back
+        GROUP BY
+        dd_date,
+        channel_id
+        ) ht ON ht.channel_id = fh.mobile_access_url
+        AND ht.dd_date = fh.fDate
+        where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if>
+        ORDER BY fh.fDate desc
+    </select>
 </mapper>
