@@ -133,7 +133,7 @@ public class ExcelUtil<T>
         }
 
         int rows = sheet.getPhysicalNumberOfRows();
-        System.out.println(rows+"================================================================================");
+//        System.out.println(rows+"================================================================================");
         if (rows > 0)
         {
             // 定义一个map用于存放excel列的序号和field.
@@ -166,7 +166,7 @@ public class ExcelUtil<T>
                 {
                     // 设置类的私有字段属性可访问.
                     field.setAccessible(true);
-                    System.out.println(attr.name()+"---------------------------------------------");
+//                    System.out.println(attr.name()+"---------------------------------------------");
                     Integer column = cellMap.get(attr.name());
                     fieldsMap.put(column, field);
                 }
@@ -183,7 +183,7 @@ public class ExcelUtil<T>
                 T entity = null;
                 for (Map.Entry<Integer, Field> entry : fieldsMap.entrySet())
                 {
-                	System.out.println(entry.getKey().toString().trim()+"------------------------------------------");
+//                	System.out.println(entry.getKey().toString().trim()+"------------------------------------------");
                     Object val = this.getCellValue(row, entry.getKey());
 
                     // 如果不存在实例则新建.

@@ -96,13 +96,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <insert id="batchInsert"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO dangdang_app_front (account,plan,unit,keyword,date,showdata,click,cost)
+        INSERT INTO dangdang_app_front (account,plan,unit,keyword,date,showdata,click,cost,app)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.account}, #{item.plan},#{item.unit},#{item.keyword},#{item.date},#{item.showdata},#{item.click},#{item.cost})
+            (#{item.account}, #{item.plan},#{item.unit},#{item.keyword},#{item.date},#{item.showdata},#{item.click},#{item.cost},#{item.app})
         </foreach>
     </insert>
-    <update id="updateGroupword">
-          update dangdang_app_front set combination = CONCAT_WS('@',account,plan,unit,keyword)  ,Identification ='`1'
+      <update id="updateGroupword">
+          update dangdang_app_front set combination = CONCAT_WS('@',account,plan,unit,keyword)  ,Identification ='app' where Identification is null
     </update>
 </mapper>

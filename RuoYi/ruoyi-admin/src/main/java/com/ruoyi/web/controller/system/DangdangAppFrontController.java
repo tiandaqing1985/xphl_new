@@ -138,7 +138,7 @@ public class DangdangAppFrontController extends BaseController
 		ExcelUtil<DangdangAppFront> util = new ExcelUtil<DangdangAppFront>(DangdangAppFront.class);
 		List<DangdangAppFront> dangdangAppFront = util.importExcel(file.getInputStream(), 0, 1);
 		String operName = ShiroUtils.getSysUser().getLoginName();
-		String message = dangdangAppFrontService.importBwFront(dangdangAppFront, false, operName);
+		String message = dangdangAppFrontService.importBwFront(dangdangAppFront, false, operName,file.getOriginalFilename());
 		return AjaxResult.success(message);
 	}
 }

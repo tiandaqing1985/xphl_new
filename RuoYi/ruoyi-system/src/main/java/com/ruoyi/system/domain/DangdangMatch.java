@@ -49,7 +49,6 @@ public class DangdangMatch extends BaseEntity
 	/** 小程序更改后 */
 	@Excel(name="小程序更改后")
 	private String appletDone;
-
 	/**
 	 * 备注
 	 */

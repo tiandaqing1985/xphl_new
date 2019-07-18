@@ -126,7 +126,6 @@ public class DangdangMatchController extends BaseController {
     @PostMapping("/importData")
     @ResponseBody
     public AjaxResult importData(MultipartFile file) throws Exception {
-        System.out.println(file.getInputStream() == null ? "1" : "2");
         ExcelUtil<DangdangMatch> util = new ExcelUtil<DangdangMatch>(DangdangMatch.class);
         List<DangdangMatch> dangdangMatch = util.importExcel(file.getInputStream(), 0, 1);
         String operName = ShiroUtils.getSysUser().getLoginName();

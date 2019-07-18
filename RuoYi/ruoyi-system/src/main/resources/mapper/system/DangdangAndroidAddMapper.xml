@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DangdangAndroidAddMapper">
+    
+    <resultMap type="DangdangAndroidAdd" id="DangdangAndroidAddResult">
+        <result property="id"    column="id"    />
+        <result property="ddDate"    column="dd_date"    />
+        <result property="channelId"    column="channel_id"    />
+        <result property="uv"    column="uv"    />
+        <result property="addActiveUser"    column="add_active_user"    />
+        <result property="coollectingPureNewCustomers"    column="coollecting_pure_new_customers"    />
+        <result property="bookingNewCustomersPureInfiltration"    column="booking_new_customers_pure_infiltration"    />
+        <result property="orderingOrders"    column="ordering_orders"    />
+        <result property="receivingAmount"    column="receiving_amount"    />
+        <result property="pureOutOfTheLibrary"    column="pure_out_of_the_library"    />
+        <result property="outboundNewCustomersPureInfiltration"    column="outbound_new_customers_pure_infiltration"    />
+        <result property="outboundOrderNumber"    column="outbound_order_number"    />
+        <result property="outboundAmount"    column="outbound_amount"    />
+        <result property="identification"    column="identification"    />
+    </resultMap>
+	
+	<sql id="selectDangdangAndroidAddVo">
+        select id, dd_date, channel_id, uv, add_active_user, coollecting_pure_new_customers, booking_new_customers_pure_infiltration, ordering_orders, receiving_amount, pure_out_of_the_library, outbound_new_customers_pure_infiltration, outbound_order_number, outbound_amount, identification from dangdang_android_add
+    </sql>
+	
+    <select id="selectDangdangAndroidAddList" parameterType="DangdangAndroidAdd" resultMap="DangdangAndroidAddResult">
+        <include refid="selectDangdangAndroidAddVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="ddDate != null "> and dd_date = #{ddDate}</if>
+             <if test="channelId != null  and channelId != '' "> and channel_id = #{channelId}</if>
+             <if test="uv != null "> and uv = #{uv}</if>
+             <if test="addActiveUser != null "> and add_active_user = #{addActiveUser}</if>
+             <if test="coollectingPureNewCustomers != null "> and coollecting_pure_new_customers = #{coollectingPureNewCustomers}</if>
+             <if test="bookingNewCustomersPureInfiltration != null "> and booking_new_customers_pure_infiltration = #{bookingNewCustomersPureInfiltration}</if>
+             <if test="orderingOrders != null "> and ordering_orders = #{orderingOrders}</if>
+             <if test="receivingAmount != null "> and receiving_amount = #{receivingAmount}</if>
+             <if test="pureOutOfTheLibrary != null "> and pure_out_of_the_library = #{pureOutOfTheLibrary}</if>
+             <if test="outboundNewCustomersPureInfiltration != null "> and outbound_new_customers_pure_infiltration = #{outboundNewCustomersPureInfiltration}</if>
+             <if test="outboundOrderNumber != null "> and outbound_order_number = #{outboundOrderNumber}</if>
+             <if test="outboundAmount != null "> and outbound_amount = #{outboundAmount}</if>
+             <if test="identification != null  and identification != '' "> and identification = #{identification}</if>
+         </where>
+    </select>
+    
+    <select id="selectDangdangAndroidAddById" parameterType="Integer" resultMap="DangdangAndroidAddResult">
+        <include refid="selectDangdangAndroidAddVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDangdangAndroidAdd" parameterType="DangdangAndroidAdd" useGeneratedKeys="true" keyProperty="id">
+        insert into dangdang_android_add
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ddDate != null  ">dd_date,</if>
+			<if test="channelId != null  and channelId != ''  ">channel_id,</if>
+			<if test="uv != null  ">uv,</if>
+			<if test="addActiveUser != null  ">add_active_user,</if>
+			<if test="coollectingPureNewCustomers != null  ">coollecting_pure_new_customers,</if>
+			<if test="bookingNewCustomersPureInfiltration != null  ">booking_new_customers_pure_infiltration,</if>
+			<if test="orderingOrders != null  ">ordering_orders,</if>
+			<if test="receivingAmount != null  ">receiving_amount,</if>
+			<if test="pureOutOfTheLibrary != null  ">pure_out_of_the_library,</if>
+			<if test="outboundNewCustomersPureInfiltration != null  ">outbound_new_customers_pure_infiltration,</if>
+			<if test="outboundOrderNumber != null  ">outbound_order_number,</if>
+			<if test="outboundAmount != null  ">outbound_amount,</if>
+			<if test="identification != null  and identification != ''  ">identification,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ddDate != null  ">#{ddDate},</if>
+			<if test="channelId != null  and channelId != ''  ">#{channelId},</if>
+			<if test="uv != null  ">#{uv},</if>
+			<if test="addActiveUser != null  ">#{addActiveUser},</if>
+			<if test="coollectingPureNewCustomers != null  ">#{coollectingPureNewCustomers},</if>
+			<if test="bookingNewCustomersPureInfiltration != null  ">#{bookingNewCustomersPureInfiltration},</if>
+			<if test="orderingOrders != null  ">#{orderingOrders},</if>
+			<if test="receivingAmount != null  ">#{receivingAmount},</if>
+			<if test="pureOutOfTheLibrary != null  ">#{pureOutOfTheLibrary},</if>
+			<if test="outboundNewCustomersPureInfiltration != null  ">#{outboundNewCustomersPureInfiltration},</if>
+			<if test="outboundOrderNumber != null  ">#{outboundOrderNumber},</if>
+			<if test="outboundAmount != null  ">#{outboundAmount},</if>
+			<if test="identification != null  and identification != ''  ">#{identification},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDangdangAndroidAdd" parameterType="DangdangAndroidAdd">
+        update dangdang_android_add
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ddDate != null  ">dd_date = #{ddDate},</if>
+            <if test="channelId != null  and channelId != ''  ">channel_id = #{channelId},</if>
+            <if test="uv != null  ">uv = #{uv},</if>
+            <if test="addActiveUser != null  ">add_active_user = #{addActiveUser},</if>
+            <if test="coollectingPureNewCustomers != null  ">coollecting_pure_new_customers = #{coollectingPureNewCustomers},</if>
+            <if test="bookingNewCustomersPureInfiltration != null  ">booking_new_customers_pure_infiltration = #{bookingNewCustomersPureInfiltration},</if>
+            <if test="orderingOrders != null  ">ordering_orders = #{orderingOrders},</if>
+            <if test="receivingAmount != null  ">receiving_amount = #{receivingAmount},</if>
+            <if test="pureOutOfTheLibrary != null  ">pure_out_of_the_library = #{pureOutOfTheLibrary},</if>
+            <if test="outboundNewCustomersPureInfiltration != null  ">outbound_new_customers_pure_infiltration = #{outboundNewCustomersPureInfiltration},</if>
+            <if test="outboundOrderNumber != null  ">outbound_order_number = #{outboundOrderNumber},</if>
+            <if test="outboundAmount != null  ">outbound_amount = #{outboundAmount},</if>
+            <if test="identification != null  and identification != ''  ">identification = #{identification},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteDangdangAndroidAddById" parameterType="Integer">
+        delete from dangdang_android_add where id = #{id}
+    </delete>
+	
+    <delete id="deleteDangdangAndroidAddByIds" parameterType="String">
+        delete from dangdang_android_add where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="batchInsert"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dangdang_android_add (dd_date,channel_id,uv,add_active_user,coollecting_pure_new_customers,booking_new_customers_pure_infiltration,
+        ordering_orders,receiving_amount,pure_out_of_the_library,outbound_new_customers_pure_infiltration,outbound_order_number,outbound_amount)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.ddDate}, #{item.channelId},#{item.uv},#{item.addActiveUser},#{item.coollectingPureNewCustomers},
+            #{item.bookingNewCustomersPureInfiltration},#{item.orderingOrders},#{item.receivingAmount},
+            #{item.pureOutOfTheLibrary},#{item.outboundNewCustomersPureInfiltration},#{item.outboundOrderNumber},#{item.outboundAmount})
+        </foreach>
+    </insert>
+    <update id="updateGroupword">
+          update dangdang_android_add set Identification ='安卓'
+    </update>
+</mapper>

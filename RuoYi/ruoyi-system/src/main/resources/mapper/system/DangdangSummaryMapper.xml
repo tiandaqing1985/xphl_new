@@ -32,29 +32,80 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 	
     <select id="selectDangdangSummaryList" parameterType="DangdangSummary" resultMap="DangdangSummaryResult">
-        <include refid="selectDangdangSummaryVo"/>
-        <where>  
-            <if test="id != null "> and id = #{id}</if>
-             <if test="account != null  and account != '' "> and account = #{account}</if>
-             <if test="ddDate != null "> and dd_date = #{ddDate}</if>
-             <if test="plan != null  and plan != '' "> and plan = #{plan}</if>
-             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
-             <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>
-             <if test="showdata != null "> and showdata = #{showdata}</if>
-             <if test="click != null "> and click = #{click}</if>
-             <if test="cost != null "> and cost = #{cost}</if>
-             <if test="clickRate != null  and clickRate != '' "> and click_rate = #{clickRate}</if>
-             <if test="averageClickPrice != null  and averageClickPrice != '' "> and average_click_price = #{averageClickPrice}</if>
-             <if test="homepageAverageRanking != null "> and homepage_average_ranking = #{homepageAverageRanking}</if>
-             <if test="bid != null "> and bid = #{bid}</if>
-             <if test="partSpeech != null  and partSpeech != '' "> and part_speech = #{partSpeech}</if>
-             <if test="appClick != null "> and app_click = #{appClick}</if>
-             <if test="appShowdata != null "> and app_showdata = #{appShowdata}</if>
-             <if test="appCost != null "> and app_cost = #{appCost}</if>
-             <if test="letsClick != null "> and lets_click = #{letsClick}</if>
-             <if test="letsShowdata != null "> and lets_showdata = #{letsShowdata}</if>
-             <if test="letsCost != null "> and lets_cost = #{letsCost}</if>
-         </where>
+        SELECT
+        s.id ,
+        s.account,
+        s.dd_date ,
+        s.plan,
+        s.unit ,
+        s.keyword ,
+        s.showdata ,
+        s.click ,
+        s.cost ,
+        s.click_rate ,
+        s.average_click_price ,
+        s.bid,
+        s.homepage_average_ranking ,
+        s.part_speech ,
+        w.click AS app_click,
+        w.cost AS app_cost,
+        w.showdata AS app_showData,
+        q.click AS lets_click,
+        q.cost AS lets_cost,
+        q.showdata AS lets_showData
+        FROM
+        dangdang_summary AS s
+        LEFT JOIN (
+        SELECT
+        date,
+        combination,
+        sum( click ) AS click,
+        sum( showdata ) AS showdata,
+        SUM( cost ) AS cost
+        FROM
+        dangdang_app_front
+        GROUP BY
+        date,
+        combination
+        ) AS w ON s.dd_date = w.date
+        AND s.combination = w.combination
+        LEFT JOIN (
+        SELECT
+        date,
+        combination,
+        sum( click ) AS click,
+        sum( showdata ) AS showdata,
+        SUM( cost ) AS cost
+        FROM
+        dangdang_applets_front
+        GROUP BY
+        date,
+        combination
+        ) AS q ON s.dd_date = q.date
+        AND s.combination = q.combination
+<!--        <include refid="selectDangdangSummaryVo"/>-->
+<!--        <where>  -->
+<!--            <if test="id != null "> and id = #{id}</if>-->
+<!--             <if test="account != null  and account != '' "> and account = #{account}</if>-->
+<!--             <if test="ddDate != null "> and dd_date = #{ddDate}</if>-->
+<!--             <if test="plan != null  and plan != '' "> and plan = #{plan}</if>-->
+<!--             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>-->
+<!--             <if test="keyword != null  and keyword != '' "> and keyword = #{keyword}</if>-->
+<!--             <if test="showdata != null "> and showdata = #{showdata}</if>-->
+<!--             <if test="click != null "> and click = #{click}</if>-->
+<!--             <if test="cost != null "> and cost = #{cost}</if>-->
+<!--             <if test="clickRate != null  and clickRate != '' "> and click_rate = #{clickRate}</if>-->
+<!--             <if test="averageClickPrice != null  and averageClickPrice != '' "> and average_click_price = #{averageClickPrice}</if>-->
+<!--             <if test="homepageAverageRanking != null "> and homepage_average_ranking = #{homepageAverageRanking}</if>-->
+<!--             <if test="bid != null "> and bid = #{bid}</if>-->
+<!--             <if test="partSpeech != null  and partSpeech != '' "> and part_speech = #{partSpeech}</if>-->
+<!--             <if test="appClick != null "> and app_click = #{appClick}</if>-->
+<!--             <if test="appShowdata != null "> and app_showdata = #{appShowdata}</if>-->
+<!--             <if test="appCost != null "> and app_cost = #{appCost}</if>-->
+<!--             <if test="letsClick != null "> and lets_click = #{letsClick}</if>-->
+<!--             <if test="letsShowdata != null "> and lets_showdata = #{letsShowdata}</if>-->
+<!--             <if test="letsCost != null "> and lets_cost = #{letsCost}</if>-->
+<!--         </where>-->
     </select>
     
     <select id="selectDangdangSummaryById" parameterType="Integer" resultMap="DangdangSummaryResult">
@@ -156,4 +207,5 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateGroupword">
           update dangdang_summary set combination = CONCAT_WS('@',account,plan,unit,keyword)
     </update>
+
 </mapper>

@@ -53,6 +53,6 @@ public interface IDangdangAppFrontService
      */
 	public int deleteDangdangAppFrontByIds(String ids);
 
-	public String importBwFront(List<DangdangAppFront> bwList, Boolean isUpdateSupport, String operName);
+	public String importBwFront(List<DangdangAppFront> bwList, Boolean isUpdateSupport, String operName,String fileName);
 
 }

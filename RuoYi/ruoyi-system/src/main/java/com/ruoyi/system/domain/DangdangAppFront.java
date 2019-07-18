@@ -46,7 +46,21 @@ public class DangdangAppFront extends BaseEntity
 	/** 标识 */
 	private String identification;
 
-	public void setId(Integer id) 
+	/**
+	 * app推广
+	 */
+	@Excel(name="App推广")
+	private  String app;
+
+	public String getApp() {
+		return app;
+	}
+
+	public void setApp(String app) {
+		this.app = app;
+	}
+
+	public void setId(Integer id)
 	{
 		this.id = id;
 	}

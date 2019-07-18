@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('当当后端百度小程序数据列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								日期：<input type="text" name="ddDate"/>
+							</li>
+
+							<li>
+								渠道id：<input type="text" name="channelId"/>
+							</li>
+
+							<li>
+								uv：<input type="text" name="uv"/>
+							</li>
+
+							<li>
+								新增激活用户：<input type="text" name="addActiveUser"/>
+							</li>
+
+							<li>
+								收订纯新客：<input type="text" name="coollectingPureNewCustomers"/>
+							</li>
+
+							<li>
+								收订新客（含纯和渗透）：<input type="text" name="bookingNewCustomersPureInfiltration"/>
+							</li>
+
+							<li>
+								收订订单数：<input type="text" name="orderingOrders"/>
+							</li>
+
+							<li>
+								收订金额：<input type="text" name="receivingAmount"/>
+							</li>
+
+							<li>
+								出库纯新客：<input type="text" name="pureOutOfTheLibrary"/>
+							</li>
+
+							<li>
+								出库新客(含纯和渗透)：<input type="text" name="outboundNewCustomersPureInfiltration"/>
+							</li>
+
+							<li>
+								出库订单数：<input type="text" name="outboundOrderNumber"/>
+							</li>
+
+							<li>
+								出库金额：<input type="text" name="outboundAmount"/>
+							</li>
+
+							<li>
+								标识：<input type="text" name="identification"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:dangdangBaiduAdd:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:dangdangBaiduAdd:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:dangdangBaiduAdd:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:dangdangBaiduAdd:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+				<a class="btn btn-info" onclick="$.table.importExcel()">
+					<i class="fa fa-upload"></i> 导入
+				</a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:dangdangBaiduAdd:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:dangdangBaiduAdd:remove')}]];
+        var prefix = ctx + "system/dangdangBaiduAdd";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "当当后端百度小程序数据",
+				importTemplateUrl: prefix + "/importTemplate",
+				importUrl: prefix + "/importData",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : 'ID',
+					visible: false
+				},
+				{
+					field : 'ddDate', 
+					title : '日期',
+					sortable: true
+				},
+				{
+					field : 'channelId', 
+					title : '渠道id',
+					sortable: true
+				},
+				{
+					field : 'uv', 
+					title : 'uv',
+					sortable: true
+				},
+				{
+					field : 'addActiveUser', 
+					title : '新增激活用户',
+					sortable: true
+				},
+				{
+					field : 'coollectingPureNewCustomers', 
+					title : '收订纯新客',
+					sortable: true
+				},
+				{
+					field : 'bookingNewCustomersPureInfiltration', 
+					title : '收订新客（含纯和渗透）',
+					sortable: true
+				},
+				{
+					field : 'orderingOrders', 
+					title : '收订订单数',
+					sortable: true
+				},
+				{
+					field : 'receivingAmount', 
+					title : '收订金额',
+					sortable: true
+				},
+				{
+					field : 'pureOutOfTheLibrary', 
+					title : '出库纯新客',
+					sortable: true
+				},
+				{
+					field : 'outboundNewCustomersPureInfiltration', 
+					title : '出库新客(含纯和渗透)',
+					sortable: true
+				},
+				{
+					field : 'outboundOrderNumber', 
+					title : '出库订单数',
+					sortable: true
+				},
+				{
+					field : 'outboundAmount', 
+					title : '出库金额',
+					sortable: true
+				},
+				{
+					field : 'identification', 
+					title : '标识',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+<form id="importForm" enctype="multipart/form-data" class="mt20 mb10" style="display: none;">
+	<div class="col-xs-offset-1">
+		<input type="file" id="file" name="file"/>
+		<div class="mt10 pt5">
+			&nbsp;	<a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i> 下载模板</a>
+		</div>
+		<font color="red" class="pull-left mt10">
+			提示：仅允许导入“xls”或“xlsx”格式文件！
+		</font>
+	</div>
+</form>
+</html>

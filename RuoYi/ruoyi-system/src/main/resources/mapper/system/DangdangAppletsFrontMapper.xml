@@ -107,6 +107,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </insert>
     <update id="updateGroupword">
-          update dangdang_applets_front set combination = CONCAT_WS('@',account,plan,unit,keyword)  ,Identification ='2'
+          update dangdang_applets_front set combination = CONCAT_WS('@',account,plan,unit,keyword)  ,Identification ='小程序' where Identification is null
     </update>
 </mapper>

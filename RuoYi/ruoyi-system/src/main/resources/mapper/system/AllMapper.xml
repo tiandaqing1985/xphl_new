@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.AllMapper">
+
+
+    <select id="queryDone" resultType="com.ruoyi.system.domain.DangDangAll" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
+      SELECT
+	fh.fDate,
+	fh.fAccount,
+	fh.fPlan,
+	fh.fUnit,
+	fh.fKeyword,
+	fh.fShowDate,
+	fh.fClick,
+	fh.fCost,
+	fh.fAppShowData,
+	fh.fAppClick,
+	fh.fAppCost,
+	fh.fLetsShowData,
+	fh.fLetsClick,
+	fh.fLetsCost,
+	fh.fCombination,
+	fh.applet_url AS appletsUrl,
+	fh.applet_done AS appletDone,
+	fh.mobile_access_url AS MobileAccessUrl,
+	ht.uv AS doneUv,
+	ht.add_active_user AS doneAddActiveUser,
+	ht.coollecting_pure_new_customers AS doneCoollectingPureNewCustomers,
+	ht.booking_new_customers_pure_infiltration AS doneBookingNewCustomersPureInfiltration,
+	ht.ordering_orders AS doneOrderingOrders,
+	ht.receiving_amount AS doneReceivingAmount,
+	ht.pure_out_of_the_library AS donePureOutOfTheLibrary,
+	ht.outbound_new_customers_pure_infiltration AS doneOutboundNewCustomersPureInfiltration,
+	ht.outbound_order_number AS doneOutboundOrderNumber,
+	ht.outbound_amount AS doneOutboundAmount
+FROM
+	(
+	SELECT
+		f.combination AS fCombination,
+		f.dd_date AS fDate,
+		f.account AS fAccount,
+		f.plan AS fPlan,
+		f.unit AS fUnit,
+		f.keyword AS fKeyword,
+		f.showdata AS fShowDate,
+		f.click AS fClick,
+		f.cost AS fCost,
+		f.app_showData AS fAppShowData,
+		f.app_click AS fAppClick,
+		f.app_cost AS fAppCost,
+		f.lets_showdata AS fLetsShowData,
+		f.lets_click AS fLetsClick,
+		f.lets_cost AS fLetsCost,
+		m.mobile_access_url,
+		m.applet_url,
+		m.applet_done
+	FROM
+		(
+		SELECT
+			s.combination,
+			s.account,
+			s.dd_date,
+			s.plan,
+			s.unit,
+			s.keyword,
+			s.showdata,
+			s.click,
+			s.cost,
+			s.click_rate,
+			s.average_click_price,
+			s.bid,
+			s.homepage_average_ranking,
+			s.part_speech,
+			w.click AS app_click,
+			w.cost AS app_cost,
+			w.showdata AS app_showData,
+			q.click AS lets_click,
+			q.cost AS lets_cost,
+			q.showdata AS lets_showData
+		FROM
+			dangdang_summary AS s
+			LEFT JOIN (
+			SELECT
+				date,
+				combination,
+				sum( click ) AS click,
+				sum( showdata ) AS showdata,
+				SUM( cost ) AS cost
+			FROM
+				dangdang_app_front
+			WHERE
+				app = '当当网'
+			GROUP BY
+				date,
+				combination
+			) AS w ON s.dd_date = w.date
+			AND s.combination = w.combination
+			LEFT JOIN (
+			SELECT
+				date,
+				combination,
+				sum( click ) AS click,
+				sum( showdata ) AS showdata,
+				SUM( cost ) AS cost
+			FROM
+				dangdang_applets_front
+			GROUP BY
+				date,
+				combination
+			) AS q ON s.dd_date = q.date
+			AND s.combination = q.combination
+		) AS f
+		LEFT JOIN dangdang_match AS m ON f.combination = m.combination
+	) AS fh
+	LEFT JOIN (
+	SELECT
+		dd_date,
+		channel_id,
+		sum( uv ) AS uv,
+		sum( add_active_user ) AS add_active_user,
+		sum( coollecting_pure_new_customers ) AS coollecting_pure_new_customers,
+		sum( booking_new_customers_pure_infiltration ) AS booking_new_customers_pure_infiltration,
+		sum( ordering_orders ) AS ordering_orders,
+		sum( receiving_amount ) AS receiving_amount,
+		sum( pure_out_of_the_library ) AS pure_out_of_the_library,
+		sum( outbound_new_customers_pure_infiltration ) AS outbound_new_customers_pure_infiltration,
+		sum( outbound_order_number ) AS outbound_order_number,
+		sum( outbound_amount ) AS outbound_amount,
+		identification
+	FROM
+		dangdang_baidu_add
+	WHERE
+		channel_id NOT LIKE '%5201'
+	GROUP BY
+		dd_date,
+		channel_id,
+		identification UNION ALL
+	SELECT
+		dd_date,
+		channel_id,
+		sum( uv ) AS uv,
+		sum( add_active_user ) AS add_active_user,
+		sum( coollecting_pure_new_customers ) AS coollecting_pure_new_customers,
+		sum( booking_new_customers_pure_infiltration ) AS booking_new_customers_pure_infiltration,
+		sum( ordering_orders ) AS ordering_orders,
+		sum( receiving_amount ) AS receiving_amount,
+		sum( pure_out_of_the_library ) AS pure_out_of_the_library,
+		sum( outbound_new_customers_pure_infiltration ) AS outbound_new_customers_pure_infiltration,
+		sum( outbound_order_number ) AS outbound_order_number,
+		sum( outbound_amount ) AS outbound_amount,
+		identification
+	FROM
+		dangdang_search_add
+	GROUP BY
+		dd_date,
+		channel_id,
+		identification
+	) as  ht ON ht.channel_id = fh.mobile_access_url
+	AND ht.dd_date = fh.fDate
+	where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if>
+ORDER BY
+	fh.fDate DESC
+    </select>
+	<select id="queryUrl" resultType="com.ruoyi.system.domain.DangdangAppletsBack" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
+SELECT
+	ht.uv as letUv ,
+	ht.add_active_user as  letAddActiveUser ,
+	ht.coollecting_pure_new_customers as letCoollectingPureNewCustomers ,
+	ht.booking_new_customers_pure_infiltration as letBookingNewCustomersPureInfiltration,
+	ht.ordering_orders as letOrderingOrders ,
+	ht.receiving_amount as letReceivingAmount,
+	ht.pure_out_of_the_library as letPureOutOfTheLibrary,
+	ht.outbound_new_customers_pure_infiltration as letOutboundNewCustomersPureInfiltration,
+	ht.outbound_order_number as letOutboundOrderNumber ,
+	ht.outbound_amount as  letOutboundAmount
+FROM
+	(
+	SELECT
+		f.combination AS fCombination,
+		f.dd_date AS fDate,
+		f.account AS fAccount,
+		f.plan AS fPlan,
+		f.unit AS fUnit,
+		f.keyword AS fKeyword,
+		f.showdata AS fShowDate,
+		f.click AS fClick,
+		f.cost AS fCost,
+		f.app_showData AS fAppShowData,
+		f.app_click AS fAppClick,
+		f.app_cost AS fAppCost,
+		f.lets_showdata AS fLetsShowData,
+		f.lets_click AS fLetsClick,
+		f.lets_cost AS fLetsCost,
+		m.mobile_access_url,
+		m.applet_url,
+		m.applet_done
+	FROM
+		(
+		SELECT
+			s.combination,
+			s.account,
+			s.dd_date,
+			s.plan,
+			s.unit,
+			s.keyword,
+			s.showdata,
+			s.click,
+			s.cost,
+			s.click_rate,
+			s.average_click_price,
+			s.bid,
+			s.homepage_average_ranking,
+			s.part_speech,
+			w.click AS app_click,
+			w.cost AS app_cost,
+			w.showdata AS app_showData,
+			q.click AS lets_click,
+			q.cost AS lets_cost,
+			q.showdata AS lets_showData
+		FROM
+			dangdang_summary AS s
+			LEFT JOIN (
+			SELECT
+				date,
+				combination,
+				sum( click ) AS click,
+				sum( showdata ) AS showdata,
+				SUM( cost ) AS cost
+			FROM
+				dangdang_app_front
+			WHERE
+				app = '当当网'
+			GROUP BY
+				date,
+				combination
+			) AS w ON s.dd_date = w.date
+			AND s.combination = w.combination
+			LEFT JOIN (
+			SELECT
+				date,
+				combination,
+				sum( click ) AS click,
+				sum( showdata ) AS showdata,
+				SUM( cost ) AS cost
+			FROM
+				dangdang_applets_front
+			GROUP BY
+				date,
+				combination
+			) AS q ON s.dd_date = q.date
+			AND s.combination = q.combination
+		) AS f
+		LEFT JOIN dangdang_match AS m ON f.combination = m.combination
+	) AS fh
+	LEFT JOIN (
+		SELECT
+		dd_date,
+		channel_id,
+		sum( uv ) AS uv,
+		sum( add_active_user ) AS add_active_user,
+		sum( coollecting_pure_new_customers ) AS coollecting_pure_new_customers,
+		sum( booking_new_customers_pure_infiltration ) AS booking_new_customers_pure_infiltration,
+		sum( ordering_orders ) AS ordering_orders,
+		sum( receiving_amount ) AS receiving_amount,
+		sum( pure_out_of_the_library ) AS pure_out_of_the_library,
+		sum( outbound_new_customers_pure_infiltration ) AS outbound_new_customers_pure_infiltration,
+		sum( outbound_order_number ) AS outbound_order_number,
+		sum( outbound_amount ) AS outbound_amount,
+		identification
+		FROM
+		dangdang_baidu_add
+		WHERE
+		channel_id NOT LIKE '%5201'
+		GROUP BY
+		dd_date,
+		channel_id,
+		identification UNION ALL
+		SELECT
+		dd_date,
+		channel_id,
+		sum( uv ) AS uv,
+		sum( add_active_user ) AS add_active_user,
+		sum( coollecting_pure_new_customers ) AS coollecting_pure_new_customers,
+		sum( booking_new_customers_pure_infiltration ) AS booking_new_customers_pure_infiltration,
+		sum( ordering_orders ) AS ordering_orders,
+		sum( receiving_amount ) AS receiving_amount,
+		sum( pure_out_of_the_library ) AS pure_out_of_the_library,
+		sum( outbound_new_customers_pure_infiltration ) AS outbound_new_customers_pure_infiltration,
+		sum( outbound_order_number ) AS outbound_order_number,
+		sum( outbound_amount ) AS outbound_amount,
+		identification
+		FROM
+		dangdang_search_add
+		GROUP BY
+		dd_date,
+		channel_id,
+		identification
+		) ht ON ht.channel_id = fh.applet_url
+	AND ht.dd_date = fh.fDate  where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if> ORDER BY fh.fDate desc
+	</select>
+	<select id="queryMod" resultType="com.ruoyi.system.domain.DangDangModBack" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
+		SELECT
+	ht.uv as modUv ,
+	ht.add_active_user as  modAddActiveUser ,
+	ht.coollecting_pure_new_customers as modCoollectingPureNewCustomers ,
+	ht.booking_new_customers_pure_infiltration as modBookingNewCustomersPureInfiltration,
+	ht.ordering_orders as modOrderingOrders ,
+	ht.receiving_amount as modReceivingAmount,
+	ht.pure_out_of_the_library as modPureOutOfTheLibrary,
+	ht.outbound_new_customers_pure_infiltration as modOutboundNewCustomersPureInfiltration,
+	ht.outbound_order_number as modOutboundOrderNumber ,
+		ht.outbound_amount as  modOutboundAmount
+		FROM
+	(
+	SELECT
+		f.combination AS fCombination,
+		f.dd_date AS fDate,
+		f.account AS fAccount,
+		f.plan AS fPlan,
+		f.unit AS fUnit,
+		f.keyword AS fKeyword,
+		f.showdata AS fShowDate,
+		f.click AS fClick,
+		f.cost AS fCost,
+		f.app_showData AS fAppShowData,
+		f.app_click AS fAppClick,
+		f.app_cost AS fAppCost,
+		f.lets_showdata AS fLetsShowData,
+		f.lets_click AS fLetsClick,
+		f.lets_cost AS fLetsCost,
+		m.mobile_access_url,
+		m.applet_url,
+		m.applet_done
+	FROM
+		(
+		SELECT
+			s.combination,
+			s.account,
+			s.dd_date,
+			s.plan,
+			s.unit,
+			s.keyword,
+			s.showdata,
+			s.click,
+			s.cost,
+			s.click_rate,
+			s.average_click_price,
+			s.bid,
+			s.homepage_average_ranking,
+			s.part_speech,
+			w.click AS app_click,
+			w.cost AS app_cost,
+			w.showdata AS app_showData,
+			q.click AS lets_click,
+			q.cost AS lets_cost,
+			q.showdata AS lets_showData
+		FROM
+			dangdang_summary AS s
+			LEFT JOIN (
+			SELECT
+				date,
+				combination,
+				sum( click ) AS click,
+				sum( showdata ) AS showdata,
+				SUM( cost ) AS cost
+			FROM
+				dangdang_app_front
+			WHERE
+				app = '当当网'
+			GROUP BY
+				date,
+				combination
+			) AS w ON s.dd_date = w.date
+			AND s.combination = w.combination
+			LEFT JOIN (
+			SELECT
+				date,
+				combination,
+				sum( click ) AS click,
+				sum( showdata ) AS showdata,
+				SUM( cost ) AS cost
+			FROM
+				dangdang_applets_front
+			GROUP BY
+				date,
+				combination
+			) AS q ON s.dd_date = q.date
+			AND s.combination = q.combination
+		) AS f
+		LEFT JOIN dangdang_match AS m ON f.combination = m.combination
+	) AS fh
+	LEFT JOIN (
+		SELECT
+		dd_date,
+		channel_id,
+		sum( uv ) AS uv,
+		sum( add_active_user ) AS add_active_user,
+		sum( coollecting_pure_new_customers ) AS coollecting_pure_new_customers,
+		sum( booking_new_customers_pure_infiltration ) AS booking_new_customers_pure_infiltration,
+		sum( ordering_orders ) AS ordering_orders,
+		sum( receiving_amount ) AS receiving_amount,
+		sum( pure_out_of_the_library ) AS pure_out_of_the_library,
+		sum( outbound_new_customers_pure_infiltration ) AS outbound_new_customers_pure_infiltration,
+		sum( outbound_order_number ) AS outbound_order_number,
+		sum( outbound_amount ) AS outbound_amount,
+		identification
+		FROM
+		dangdang_baidu_add
+		WHERE
+		channel_id NOT LIKE '%5201'
+		GROUP BY
+		dd_date,
+		channel_id,
+		identification UNION ALL
+		SELECT
+		dd_date,
+		channel_id,
+		sum( uv ) AS uv,
+		sum( add_active_user ) AS add_active_user,
+		sum( coollecting_pure_new_customers ) AS coollecting_pure_new_customers,
+		sum( booking_new_customers_pure_infiltration ) AS booking_new_customers_pure_infiltration,
+		sum( ordering_orders ) AS ordering_orders,
+		sum( receiving_amount ) AS receiving_amount,
+		sum( pure_out_of_the_library ) AS pure_out_of_the_library,
+		sum( outbound_new_customers_pure_infiltration ) AS outbound_new_customers_pure_infiltration,
+		sum( outbound_order_number ) AS outbound_order_number,
+		sum( outbound_amount ) AS outbound_amount,
+		identification
+		FROM
+		dangdang_search_add
+		GROUP BY
+		dd_date,
+		channel_id,
+		identification
+		) ht ON ht.channel_id = fh.mobile_access_url
+	AND ht.dd_date = fh.fDate  where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if>ORDER BY fh.fDate desc
+	</select>
+</mapper>

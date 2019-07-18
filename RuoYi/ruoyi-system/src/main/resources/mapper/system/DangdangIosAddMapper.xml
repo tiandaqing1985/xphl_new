@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DangdangIosAddMapper">
+
+    <resultMap type="DangdangIosAdd" id="DangdangIosAddResult">
+        <result property="id" column="id"/>
+        <result property="newActive" column="new_active"/>
+        <result property="historyReceiveOrderNum" column="history_receive_order_num"/>
+        <result property="ddDate" column="dd_date"/>
+        <result property="historyReceiveNewCusNum" column="history_receive__new_cus_num"/>
+        <result property="historyReceiveAmount" column="history_receive_amount"/>
+        <result property="historyOutLibraryOrders" column="history_out_library_orders"/>
+        <result property="historyOutLibraryCusNum" column="history_out_library_cus_num"/>
+        <result property="historyOutLibraryCusAmount" column="history_out_library_cus_amount"/>
+        <result property="identification" column="identification"/>
+    </resultMap>
+
+    <sql id="selectDangdangIosAddVo">
+        select id, new_active, history_receive_order_num, dd_date, history_receive__new_cus_num, history_receive_amount, history_out_library_orders, history_out_library_cus_num, history_out_library_cus_amount, identification from dangdang_ios_add
+    </sql>
+
+    <select id="selectDangdangIosAddList" parameterType="DangdangIosAdd" resultMap="DangdangIosAddResult">
+        SELECT
+        dd_date,
+        identification,
+        Sum( new_active ) as new_active ,
+        sum( history_receive_order_num ) as history_receive_order_num ,
+        sum( history_receive__new_cus_num ) as history_receive__new_cus_num,
+        sum( history_receive_amount ) as history_receive_amount,
+        sum( history_out_library_orders ) as history_out_library_orders,
+        sum( history_out_library_cus_num ) as history_out_library_cus_num,
+        sum( history_out_library_cus_amount ) as history_out_library_cus_amount
+        FROM
+        dangdang_ios_add
+        GROUP BY
+        dd_date,
+        identification
+        having  1=1
+        <if test="ddDate != null  "> and dd_date = #{ddDate}</if>
+        <if test="identification != null  and identification != '' "> and identification = #{identification}</if>
+    </select>
+
+    <select id="selectDangdangIosAddById" parameterType="Integer" resultMap="DangdangIosAddResult">
+        <include refid="selectDangdangIosAddVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDangdangIosAdd" parameterType="DangdangIosAdd">
+        insert into dangdang_ios_add
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">id,</if>
+            <if test="newActive != null  ">new_active,</if>
+            <if test="historyReceiveOrderNum != null  ">history_receive_order_num,</if>
+            <if test="ddDate != null  ">dd_date,</if>
+            <if test="historyReceiveNewCusNum != null  ">history_receive__new_cus_num,</if>
+            <if test="historyReceiveAmount != null  ">history_receive_amount,</if>
+            <if test="historyOutLibraryOrders != null  ">history_out_library_orders,</if>
+            <if test="historyOutLibraryCusNum != null  ">history_out_library_cus_num,</if>
+            <if test="historyOutLibraryCusAmount != null  ">history_out_library_cus_amount,</if>
+            <if test="identification != null  and identification != ''  ">identification,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  ">#{id},</if>
+            <if test="newActive != null  ">#{newActive},</if>
+            <if test="historyReceiveOrderNum != null  ">#{historyReceiveOrderNum},</if>
+            <if test="ddDate != null  ">#{ddDate},</if>
+            <if test="historyReceiveNewCusNum != null  ">#{historyReceiveNewCusNum},</if>
+            <if test="historyReceiveAmount != null  ">#{historyReceiveAmount},</if>
+            <if test="historyOutLibraryOrders != null  ">#{historyOutLibraryOrders},</if>
+            <if test="historyOutLibraryCusNum != null  ">#{historyOutLibraryCusNum},</if>
+            <if test="historyOutLibraryCusAmount != null  ">#{historyOutLibraryCusAmount},</if>
+            <if test="identification != null  and identification != ''  ">#{identification},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDangdangIosAdd" parameterType="DangdangIosAdd">
+        update dangdang_ios_add
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="newActive != null  ">new_active = #{newActive},</if>
+            <if test="historyReceiveOrderNum != null  ">history_receive_order_num = #{historyReceiveOrderNum},</if>
+            <if test="ddDate != null  ">dd_date = #{ddDate},</if>
+            <if test="historyReceiveNewCusNum != null  ">history_receive__new_cus_num = #{historyReceiveNewCusNum},</if>
+            <if test="historyReceiveAmount != null  ">history_receive_amount = #{historyReceiveAmount},</if>
+            <if test="historyOutLibraryOrders != null  ">history_out_library_orders = #{historyOutLibraryOrders},</if>
+            <if test="historyOutLibraryCusNum != null  ">history_out_library_cus_num = #{historyOutLibraryCusNum},</if>
+            <if test="historyOutLibraryCusAmount != null  ">history_out_library_cus_amount =
+                #{historyOutLibraryCusAmount},
+            </if>
+            <if test="identification != null  and identification != ''  ">identification = #{identification},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDangdangIosAddById" parameterType="Integer">
+        delete from dangdang_ios_add where id = #{id}
+    </delete>
+
+    <delete id="deleteDangdangIosAddByIds" parameterType="String">
+        delete from dangdang_ios_add where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dangdang_ios_add
+        (new_active,history_receive_order_num,dd_date,history_receive__new_cus_num,history_receive_amount,
+        history_out_library_orders,history_out_library_cus_num,history_out_library_cus_amount)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.newActive},
+            #{item.historyReceiveOrderNum},#{item.ddDate},#{item.historyReceiveNewCusNum},#{item.historyReceiveAmount},
+            #{item.historyOutLibraryOrders},#{item.historyOutLibraryCusNum},#{item.historyOutLibraryCusAmount})
+        </foreach>
+    </insert>
+
+    <update id="updateGroupword">
+          update dangdang_ios_add set Identification ='ios'
+    </update>
+
+    <update id="updateIdentification" parameterType="String">
+                  update dangdang_ios_add set Identification =#{str} where Identification is null;
+
+    </update>
+</mapper>

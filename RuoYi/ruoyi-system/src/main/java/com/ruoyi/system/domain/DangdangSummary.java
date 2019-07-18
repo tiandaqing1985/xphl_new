@@ -1,5 +1,6 @@
 package com.ruoyi.system.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -22,6 +23,7 @@ public class DangdangSummary extends BaseEntity
 	@Excel(name="账户")
 	private String account;
 	/** 日期 */
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	@Excel(name="日期")
 	private Date ddDate;
 	/** 推广计划 */
@@ -45,8 +47,8 @@ public class DangdangSummary extends BaseEntity
 	/** 点击率 */
 	@Excel(name="点击率")
 	private String clickRate;
-	/** 平均点击价 */
-	@Excel(name="平均点击价")
+	/** 平均点击价格*/
+	@Excel(name="平均点击价格")
 	private String averageClickPrice;
 	/** 首页平均排名 */
 	@Excel(name="首页平均排名")
