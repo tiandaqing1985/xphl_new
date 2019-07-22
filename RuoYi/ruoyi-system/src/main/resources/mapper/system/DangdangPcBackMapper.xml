@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DangdangPcBackMapper">
+    
+    <resultMap type="DangdangPcBack" id="DangdangPcBackResult">
+        <result property="id"    column="id"    />
+        <result property="ddDate"    column="dd_date"    />
+        <result property="source"    column="source"    />
+        <result property="receiveOrders"    column="receive_orders"    />
+        <result property="receiveAmount"    column="receive_amount"    />
+        <result property="receiveAccount"    column="receive_account"    />
+        <result property="outOrders"    column="out_orders"    />
+        <result property="outAmount"    column="out_amount"    />
+        <result property="outNumber"    column="out_number"    />
+    </resultMap>
+	
+	<sql id="selectDangdangPcBackVo">
+        select id, dd_date, source, receive_orders, receive_amount, receive_account, out_orders, out_amount, out_number from dangdang_pc_back
+    </sql>
+	
+    <select id="selectDangdangPcBackList" parameterType="DangdangPcBack" resultMap="DangdangPcBackResult">
+        <include refid="selectDangdangPcBackVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="ddDate != null "> and dd_date = #{ddDate}</if>
+             <if test="source != null  and source != '' "> and source = #{source}</if>
+             <if test="receiveOrders != null "> and receive_orders = #{receiveOrders}</if>
+             <if test="receiveAmount != null "> and receive_amount = #{receiveAmount}</if>
+             <if test="receiveAccount != null "> and receive_account = #{receiveAccount}</if>
+             <if test="outOrders != null "> and out_orders = #{outOrders}</if>
+             <if test="outAmount != null "> and out_amount = #{outAmount}</if>
+             <if test="outNumber != null "> and out_number = #{outNumber}</if>
+         </where>
+    </select>
+    
+    <select id="selectDangdangPcBackById" parameterType="Integer" resultMap="DangdangPcBackResult">
+        <include refid="selectDangdangPcBackVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDangdangPcBack" parameterType="DangdangPcBack" useGeneratedKeys="true" keyProperty="id">
+        insert into dangdang_pc_back
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="ddDate != null  ">dd_date,</if>
+			<if test="source != null  and source != ''  ">source,</if>
+			<if test="receiveOrders != null  ">receive_orders,</if>
+			<if test="receiveAmount != null  ">receive_amount,</if>
+			<if test="receiveAccount != null  ">receive_account,</if>
+			<if test="outOrders != null  ">out_orders,</if>
+			<if test="outAmount != null  ">out_amount,</if>
+			<if test="outNumber != null  ">out_number,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="ddDate != null  ">#{ddDate},</if>
+			<if test="source != null  and source != ''  ">#{source},</if>
+			<if test="receiveOrders != null  ">#{receiveOrders},</if>
+			<if test="receiveAmount != null  ">#{receiveAmount},</if>
+			<if test="receiveAccount != null  ">#{receiveAccount},</if>
+			<if test="outOrders != null  ">#{outOrders},</if>
+			<if test="outAmount != null  ">#{outAmount},</if>
+			<if test="outNumber != null  ">#{outNumber},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateDangdangPcBack" parameterType="DangdangPcBack">
+        update dangdang_pc_back
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="ddDate != null  ">dd_date = #{ddDate},</if>
+            <if test="source != null  and source != ''  ">source = #{source},</if>
+            <if test="receiveOrders != null  ">receive_orders = #{receiveOrders},</if>
+            <if test="receiveAmount != null  ">receive_amount = #{receiveAmount},</if>
+            <if test="receiveAccount != null  ">receive_account = #{receiveAccount},</if>
+            <if test="outOrders != null  ">out_orders = #{outOrders},</if>
+            <if test="outAmount != null  ">out_amount = #{outAmount},</if>
+            <if test="outNumber != null  ">out_number = #{outNumber},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dangdang_pc_back (dd_date,source,receive_orders,receive_amount,receive_account,out_orders,
+        out_amount,out_number)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.ddDate}, #{item.source},#{item.receiveOrders},#{item.receiveAmount},#{item.receiveAccount},
+            #{item.outOrders},#{item.outAmount},#{item.outNumber})
+        </foreach>
+    </insert>
+	<delete id="deleteDangdangPcBackById" parameterType="Integer">
+        delete from dangdang_pc_back where id = #{id}
+    </delete>
+	
+    <delete id="deleteDangdangPcBackByIds" parameterType="String">
+        delete from dangdang_pc_back where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

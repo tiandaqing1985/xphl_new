@@ -1,6 +1,6 @@
 package com.ruoyi.system.domain;
 
-import com.ruoyi.common.annotation.Excel;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -19,40 +19,28 @@ public class DangdangBack extends BaseEntity
 	/** ID */
 	private Integer id;
 	/** 日期 */
-	@Excel(name="日期")
 	private Date ddDate;
 	/** 渠道id */
-	@Excel(name = "渠道id")
 	private String channelId;
 	/** uv */
-	@Excel(name = "uv")
 	private Integer uv;
 	/** 新增激活用户 */
-	@Excel(name="新增激活用户数")
 	private Integer addActiveUser;
 	/** 收订纯新客 */
-	@Excel(name="收订纯新客")
 	private Integer coollectingPureNewCustomers;
 	/** 收订新客（含纯和渗透） */
-	@Excel(name="收订新客(含纯和渗透)")
 	private Integer bookingNewCustomersPureInfiltration;
 	/** 收订订单数 */
-	@Excel(name="收订订单数")
 	private Integer orderingOrders;
 	/** 收订金额 */
-	@Excel(name="收订金额")
 	private Double receivingAmount;
 	/** 出库纯新客 */
-	@Excel(name="出库纯新客")
 	private Integer pureOutOfTheLibrary;
 	/** 出库新客(含纯和渗透) */
-	@Excel(name="出库新客(含纯和渗透)")
 	private Integer outboundNewCustomersPureInfiltration;
 	/** 出库订单数 */
-	@Excel(name="出库订单数")
 	private Integer outboundOrderNumber;
 	/** 出库金额 */
-	@Excel(name="出库金额")
 	private Double outboundAmount;
 	/** 标识 */
 	private String identification;

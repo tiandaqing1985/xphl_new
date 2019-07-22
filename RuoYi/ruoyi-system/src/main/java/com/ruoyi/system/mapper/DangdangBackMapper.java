@@ -85,4 +85,7 @@ public interface DangdangBackMapper
 	 * @return
 	 */
 	List<DangdangBack> queryMod(DangdangSearchAdd date);
+
+
+
 }

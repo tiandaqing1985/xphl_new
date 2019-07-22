@@ -29,4 +29,7 @@ public interface AllMapper {
      * @return
      */
      List<DangdangBack> queryMod(DangdangSearchAdd date);
+
+    List<DangDangAll> other(DangdangSearchAdd date);
+
 }

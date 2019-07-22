@@ -23,100 +23,124 @@ public class DangDangAll {
     /**
      * 推广计划
      */
-    @Excel(name="推广计划")
+    @Excel(name = "推广计划",defaultValue = "")
     private String fPlan;
 
     /**
      * 推广单元
      */
-    @Excel(name="推广单元")
+    @Excel(name = "推广单元",defaultValue = "")
     private String fUnit;
 
     /**
      * 关键词
      */
-    @Excel(name="关键词")
+    @Excel(name = "关键词",defaultValue = "")
     private String fKeyword;
 
     /**
      * 总展现
      */
-    @Excel(name="总展现")
+    @Excel(name = "总展现")
     private Integer fShowDate;
 
     /**
      * 总点击
      */
-    @Excel(name="总点击")
+    @Excel(name = "总点击")
     private Integer fClick;
 
     /**
      * 总消费
      */
-    @Excel(name="总消费")
+    @Excel(name = "总消费" )
     private Double fCost;
 
     /**
      * app展现
      */
-    @Excel(name="app展现")
+    @Excel(name = "app展现")
     private Integer fAppShowData;
     /**
      * app点击
      */
-    @Excel(name="app点击")
+    @Excel(name = "app点击")
     private Integer fAppClick;
     /**
      * app消费
      */
-    @Excel(name="app消费")
+    @Excel(name = "app消费")
     private Double fAppCost;
     /**
      * 小程序展现
      */
-    @Excel(name="小程序展现")
+    @Excel(name = "小程序展现")
     private Integer fLetsShowData;
     /**
      * 小程序点击
      */
-    @Excel(name="小程序点击")
+    @Excel(name = "小程序点击")
     private Integer fLetsClick;
     /**
      * 小程序消费
      */
-    @Excel(name="小程序消费")
+    @Excel(name = "小程序消费")
     private Double fLetsCost;
     /**
      * 组合
      */
-    @Excel(name="组合")
+    @Excel(name = "组合")
     private String fCombination;
 
-    @Excel(name="词性")
-    private  String fPartSpeech;
+    @Excel(name = "词性")
+    private String fPartSpeech;
     /**
      * 移动端url
      */
-    @Excel(name="移动端URL")
+    @Excel(name = "移动端URL")
 
-    private  String MobileAccessUrl;
+    private String MobileAccessUrl;
     /**
      * 小程序url
      */
-    @Excel(name="小程序URL")
+    @Excel(name = "小程序URL")
 
     private String appletsUrl;
     /**
      * 小程序更改后URl
      */
-    @Excel(name="小程序更改后URl")
-    private String appletDone ;
+    @Excel(name = "小程序更改后URl")
+    private String appletDone;
 
+    /**
+     * 去除app消费
+     */
+    @Excel(name = "去除app消费")
+    private Double removeAppCost;
+    /**
+     * 去除app实际消费
+     */
+    @Excel(name = "去除app实际消费")
+    private Double appActCost;
+    /** 点击率 */
+    @Excel(name="点击率")
+    private String clickRate;
+    /** 平均点击价格*/
+    @Excel(name="平均点击价格")
+    private String averageClickPrice;
+    /** 首页平均排名 */
+    @Excel(name="首页平均排名")
+    private Double homepageAverageRanking;
+    /** 出价 */
+    @Excel(name="出价")
+    private Double bid;
+    /** 匹配模式 */
+    @Excel(name="匹配模式")
+    private String partSpeech;
 //**********************************************************************************************
 
 
-
-   //移动端
+    //移动端
     @Excel(name = "移动端uv")
     private Integer modUv;
     //小程序URL
@@ -258,20 +282,19 @@ public class DangDangAll {
     @Excel(name = "小程序更改后出库金额")
     private Double doneOutboundAmount;
 
-
     /**
      * 汇总出库纯新客
      */
-    @Excel(name="汇总出库纯新客")
+    @Excel(name = "小程序汇总出库纯新客")
     private Integer allPureOutOfTheLibrary;
     /**
      * 汇总出库金额
      */
-    @Excel(name="汇总出库金额")
+    @Excel(name = "小程序汇总出库金额")
     private Double allOutboundAmount;
 
     //针对每条汇总
-    @Excel(name = "汇总更改后uv")
+    @Excel(name = "汇总uv")
     private Integer uv;
     /**
      * 汇总新增激活用户
@@ -318,6 +341,173 @@ public class DangDangAll {
      */
     @Excel(name = "汇总出库金额")
     private Double outboundAmount;
+
+    // *******************************************************************************************************
+    /**
+     * 出库转化率
+     */
+    @Excel(name = "出库转化率")
+    private String outBoundRate;
+    /**
+     * CTR
+     */
+    @Excel(name = "CTR")
+    private String CTR;
+
+    /**
+     * CPC
+     */
+    @Excel(name = "CPC")
+    private String CPC;
+    /**
+     * 出库ROI
+     */
+    @Excel(name = "出库ROI")
+    private String outBoundROI;
+
+    /**
+     * 出库新客成本
+     */
+    @Excel(name = "出库新客成本")
+    private String outBoubdCost;
+
+    /**
+     * 收订订单转化率
+     */
+    @Excel(name = "收订订单转化率")
+    private String orderRate;
+
+    /**
+     * 收订ROI
+     */
+    @Excel(name = "收订ROI")
+    private String orderROI;
+
+    /**
+     * 收订新客成本
+     */
+    @Excel(name = "收订新客成本")
+    private String orderNewCost;
+
+    public String getClickRate() {
+        return clickRate;
+    }
+
+    public void setClickRate(String clickRate) {
+        this.clickRate = clickRate;
+    }
+
+    public String getAverageClickPrice() {
+        return averageClickPrice;
+    }
+
+    public void setAverageClickPrice(String averageClickPrice) {
+        this.averageClickPrice = averageClickPrice;
+    }
+
+    public Double getHomepageAverageRanking() {
+        return homepageAverageRanking;
+    }
+
+    public void setHomepageAverageRanking(Double homepageAverageRanking) {
+        this.homepageAverageRanking = homepageAverageRanking;
+    }
+
+    public Double getBid() {
+        return bid;
+    }
+
+    public void setBid(Double bid) {
+        this.bid = bid;
+    }
+
+    public String getPartSpeech() {
+        return partSpeech;
+    }
+
+    public void setPartSpeech(String partSpeech) {
+        this.partSpeech = partSpeech;
+    }
+
+    public Double getRemoveAppCost() {
+        return removeAppCost;
+    }
+
+    public void setRemoveAppCost(Double removeAppCost) {
+        this.removeAppCost = removeAppCost;
+    }
+
+    public Double getAppActCost() {
+        return appActCost;
+    }
+
+    public void setAppActCost(Double appActCost) {
+        this.appActCost = appActCost;
+    }
+
+    public String getOutBoundRate() {
+        return outBoundRate;
+    }
+
+    public void setOutBoundRate(String outBoundRate) {
+        this.outBoundRate = outBoundRate;
+    }
+
+    public String getCTR() {
+        return CTR;
+    }
+
+    public void setCTR(String CTR) {
+        this.CTR = CTR;
+    }
+
+    public String getCPC() {
+        return CPC;
+    }
+
+    public void setCPC(String CPC) {
+        this.CPC = CPC;
+    }
+
+    public String getOutBoundROI() {
+        return outBoundROI;
+    }
+
+    public void setOutBoundROI(String outBoundROI) {
+        this.outBoundROI = outBoundROI;
+    }
+
+    public String getOutBoubdCost() {
+        return outBoubdCost;
+    }
+
+    public void setOutBoubdCost(String outBoubdCost) {
+        this.outBoubdCost = outBoubdCost;
+    }
+
+    public String getOrderRate() {
+        return orderRate;
+    }
+
+    public void setOrderRate(String orderRate) {
+        this.orderRate = orderRate;
+    }
+
+    public String getOrderROI() {
+        return orderROI;
+    }
+
+    public void setOrderROI(String orderROI) {
+        this.orderROI = orderROI;
+    }
+
+    public String getOrderNewCost() {
+        return orderNewCost;
+    }
+
+    public void setOrderNewCost(String orderNewCost) {
+        this.orderNewCost = orderNewCost;
+    }
 
     public String getfPartSpeech() {
         return fPartSpeech;
@@ -423,7 +613,6 @@ public class DangDangAll {
     }
 
 
-
     public Date getfDate() {
         return fDate;
     }
@@ -527,7 +716,6 @@ public class DangDangAll {
     public void setfLetsCost(Double fLetsCost) {
         this.fLetsCost = fLetsCost;
     }
-
 
 
     public Integer getAllPureOutOfTheLibrary() {

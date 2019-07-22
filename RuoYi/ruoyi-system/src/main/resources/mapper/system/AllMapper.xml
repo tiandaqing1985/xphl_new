@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 
     <select id="queryDone" resultType="com.ruoyi.system.domain.DangDangAll" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
-      SELECT
+     SELECT
 		fh.fDate,
 		fh.fAccount,
 		fh.fPlan,
@@ -39,6 +39,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		fh.fLetsClick,
 		fh.fLetsCost,
 		fh.fCombination,
+		fh.averageClickPrice,
+		fh.homepageAverageRanking,
+		fh.bid,
+		fh.partSpeech,
+		fh.clickRate,
 		fh.part_speech as fPartSpeech,
 		fh.applet_url AS appletsUrl,
 		fh.applet_done AS appletDone,
@@ -56,6 +61,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM
 		(
 		SELECT
+		f.click_rate as clickRate,
+		f.homepage_average_ranking as homepageAverageRanking,
+		f.average_click_price as averageClickPrice,
+		f.bid ,
+		f.part_speech as partSpeech,
 		f.combination AS fCombination,
 		f.dd_date AS fDate,
 		f.account AS fAccount,
@@ -154,8 +164,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		channel_id
 		) as  ht ON ht.channel_id = fh.applet_done
 		AND ht.dd_date = fh.fDate
-	where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if>
-ORDER BY
+		where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if>
+		ORDER BY
 	fh.fDate DESC
     </select>
 	<select id="queryUrl" resultMap="DangdangBackResult" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
@@ -386,4 +396,113 @@ FROM
 	where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if>
 	ORDER BY fh.fDate desc
 	</select>
+	<select id="other" resultType="com.ruoyi.system.domain.DangDangAll" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
+		SELECT  dd_date as fDate ,
+		sum( uv ) AS uv,
+		sum( add_active_user ) AS addActiveUser,
+		sum( coollecting_pure_new_customers ) AS coollectingPureNewCustomers,
+		sum( booking_new_customers_pure_infiltration ) AS bookingNewCustomersPureInfiltration,
+		sum( ordering_orders ) AS orderingOrders,
+		sum( receiving_amount ) AS receivingAmount,
+		sum( pure_out_of_the_library ) AS pureOutOfTheLibrary,
+		sum( outbound_new_customers_pure_infiltration ) AS outboundNewCustomersPureInfiltration,
+		sum( outbound_order_number ) AS outboundOrderNumber,
+		sum( outbound_amount ) AS outboundAmount  from   dangdang_back  where id not in
+		(SELECT
+		ht.id as id
+		FROM
+		(
+		SELECT
+		f.click_rate as clickRate,
+		f.homepage_average_ranking as homepageAverageRanking,
+		f.average_click_price as averageClickPrice,
+		f.bid ,
+		f.part_speech as partSpeech,
+		f.combination AS fCombination,
+		f.dd_date AS fDate,
+		f.account AS fAccount,
+		f.plan AS fPlan,
+		f.unit AS fUnit,
+		f.keyword AS fKeyword,
+		f.showdata AS fShowDate,
+		f.click AS fClick,
+		f.cost AS fCost,
+		f.app_showData AS fAppShowData,
+		f.app_click AS fAppClick,
+		f.app_cost AS fAppCost,
+		f.lets_showdata AS fLetsShowData,
+		f.lets_click AS fLetsClick,
+		f.lets_cost AS fLetsCost,
+		m.mobile_access_url,
+		m.applet_url,
+		m.applet_done,
+		m.part_speech
+		FROM
+		(
+		SELECT
+		s.combination,
+		s.account,
+		s.dd_date,
+		s.plan,
+		s.unit,
+		s.keyword,
+		s.showdata,
+		s.click,
+		s.cost,
+		s.click_rate,
+		s.average_click_price,
+		s.bid,
+		s.homepage_average_ranking,
+		s.part_speech,
+		w.click AS app_click,
+		w.cost AS app_cost,
+		w.showdata AS app_showData,
+		q.click AS lets_click,
+		q.cost AS lets_cost,
+		q.showdata AS lets_showData
+		FROM
+		dangdang_summary AS s
+		LEFT JOIN (
+		SELECT
+		date,
+		combination,
+		sum( click ) AS click,
+		sum( showdata ) AS showdata,
+		SUM( cost ) AS cost
+		FROM
+		dangdang_app_front
+		WHERE
+		app = '当当网'
+		GROUP BY
+		date,
+		combination
+		) AS w ON s.dd_date = w.date
+		AND s.combination = w.combination
+		LEFT JOIN (
+		SELECT
+		date,
+		combination,
+		sum( click ) AS click,
+		sum( showdata ) AS showdata,
+		SUM( cost ) AS cost
+		FROM
+		dangdang_applets_front
+		GROUP BY
+		date,
+		combination
+		) AS q ON s.dd_date = q.date
+		AND s.combination = q.combination
+		) AS f
+		LEFT JOIN dangdang_match AS m ON f.combination = m.combination
+		) AS fh
+		LEFT JOIN
+		dangdang_back
+		as  ht ON ht.channel_id = fh.applet_done
+		AND ht.dd_date = fh.fDate
+		ORDER BY
+		fh.fDate DESC)
+		<if test="ddDate != null  "> and fh.fDate= #{ddDate}</if>
+		group by dd_date,channel_id
+	</select>
+
 </mapper>

@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.DangdangBackMapper">
     
-    <resultMap type="DangdangBack" id="DangdangBackResult">
+    <resultMap type="com.ruoyi.system.domain.DangdangBack" id="DangdangBackResult">
         <result property="id"    column="id"    />
         <result property="ddDate"    column="dd_date"    />
         <result property="channelId"    column="channel_id"    />
@@ -124,8 +124,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where id = #{id}
     </update>
+    <update id="updateJoin">
 
-	<delete id="deleteDangdangBackById" parameterType="Integer">
+    </update>
+
+    <delete id="deleteDangdangBackById" parameterType="Integer">
         delete from dangdang_back where id = #{id}
     </delete>
 	
@@ -136,15 +139,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="queryUrl" resultMap="DangdangBackResult" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
+    <select id="queryUrl" resultType="com.ruoyi.system.domain.DangdangBack" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
         SELECT
         ht.uv,
-        ht.add_active_user,
+        ht.add_active_user ,
         ht.coollecting_pure_new_customers  ,
         ht.booking_new_customers_pure_infiltration,
         ht.ordering_orders,
         ht.receiving_amount,
-        ht.pure_out_of_the_library,
+        ht.pureoutofthelibrary as pureOutOfTheLibrary ,
         ht.outbound_new_customers_pure_infiltration,
         ht.outbound_order_number,
         ht.outbound_amount
@@ -237,7 +240,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         sum( booking_new_customers_pure_infiltration ) AS booking_new_customers_pure_infiltration,
         sum( ordering_orders ) AS ordering_orders,
         sum( receiving_amount ) AS receiving_amount,
-        sum( pure_out_of_the_library ) AS pure_out_of_the_library,
+        sum( pure_out_of_the_library ) AS pureoutofthelibrary,
         sum( outbound_new_customers_pure_infiltration ) AS outbound_new_customers_pure_infiltration,
         sum( outbound_order_number ) AS outbound_order_number,
         sum( outbound_amount ) AS outbound_amount
@@ -249,18 +252,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ) as ht ON ht.channel_id = fh.applet_url AND ht.dd_date = fh.fDate
         where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if> ORDER BY fh.fDate desc
     </select>
-    <select id="queryMod" resultMap="DangdangBackResult" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
+    <select id="queryMod" resultType="com.ruoyi.system.domain.DangdangBack"  parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
         SELECT
-        ht.uv  ,
-        ht.add_active_user  ,
-        ht.coollecting_pure_new_customers  ,
-        ht.booking_new_customers_pure_infiltration ,
-        ht.ordering_orders ,
-        ht.receiving_amount ,
-        ht.pure_out_of_the_library ,
-        ht.outbound_new_customers_pure_infiltration ,
-        ht.outbound_order_number ,
-        ht.outbound_amount
+        ht.uv ,
+        ht.add_active_user as  addActiveUser ,
+        ht.coollecting_pure_new_customers   as coollectingPureNewCustomers,
+        ht.booking_new_customers_pure_infiltration as bookingNewCustomersPureInfiltration ,
+        ht.ordering_orders as orderingOrders  ,
+        ht.receiving_amount as receivingAmount ,
+        ht.pure_out_of_the_library as pureOutOfTheLibrary  ,
+        ht.outbound_new_customers_pure_infiltration  as outboundNewCustomersPureInfiltration ,
+        ht.outbound_order_number  as outboundOrderNumber  ,
+        ht.outbound_amount as outboundAmount
         FROM
         (
         SELECT

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.DangdangBackSearchMapper">
+
+    <resultMap type="DangdangBackSearch" id="DangdangBackSearchResult">
+        <result property="id" column="id"/>
+        <result property="account" column="account"/>
+        <result property="plan" column="plan"/>
+        <result property="unit" column="unit"/>
+        <result property="keyword" column="keyword"/>
+        <result property="uv" column="uv"/>
+        <result property="combination" column="combination"/>
+        <result property="ddDate" column="dd_date"/>
+    </resultMap>
+
+    <sql id="selectDangdangBackSearchVo">
+        select s.id, s.account, s.plan, s.unit, s.keyword, s.uv, s.combination, s.dd_date from dangdang_back_search as s
+    </sql>
+
+    <select id="selectDangdangBackSearchList" parameterType="DangdangBackSearch" resultMap="DangdangBackSearchResult">
+        <include refid="selectDangdangBackSearchVo"/>
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="account != null  and account != '' ">and account = #{account}</if>
+            <if test="plan != null  and plan != '' ">and plan = #{plan}</if>
+            <if test="unit != null  and unit != '' ">and unit = #{unit}</if>
+            <if test="keyword != null  and keyword != '' ">and keyword = #{keyword}</if>
+            <if test="uv != null ">and uv = #{uv}</if>
+            <if test="combination != null  and combination != '' ">and combination = #{join}</if>
+            <if test="ddDate != null ">and dd_date = #{ddDate}</if>
+        </where>
+    </select>
+
+    <select id="selectDangdangBackSearchById" parameterType="Integer" resultMap="DangdangBackSearchResult">
+        <include refid="selectDangdangBackSearchVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertDangdangBackSearch" parameterType="DangdangBackSearch" useGeneratedKeys="true" keyProperty="id">
+        insert into dangdang_back_search
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="account != null  and account != ''  ">account,</if>
+            <if test="plan != null  and plan != ''  ">plan,</if>
+            <if test="unit != null  and unit != ''  ">unit,</if>
+            <if test="keyword != null  and keyword != ''  ">keyword,</if>
+            <if test="uv != null  ">uv,</if>
+            <if test="combination != null  and combination != ''  ">combination,</if>
+            <if test="ddDate != null  ">dd_date,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="account != null  and account != ''  ">#{account},</if>
+            <if test="plan != null  and plan != ''  ">#{plan},</if>
+            <if test="unit != null  and unit != ''  ">#{unit},</if>
+            <if test="keyword != null  and keyword != ''  ">#{keyword},</if>
+            <if test="uv != null  ">#{uv},</if>
+            <if test="combination != null  and combination != ''  ">#{combination},</if>
+            <if test="ddDate != null  ">#{ddDate},</if>
+        </trim>
+    </insert>
+
+    <update id="updateDangdangBackSearch" parameterType="DangdangBackSearch">
+        update dangdang_back_search
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="account != null  and account != ''  ">account = #{account},</if>
+            <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="keyword != null  and keyword != ''  ">keyword = #{keyword},</if>
+            <if test="uv != null  ">uv = #{uv},</if>
+            <if test="combination != null  and combination != ''  ">combination = #{join},</if>
+            <if test="ddDate != null  ">dd_date = #{ddDate},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updateJoin">
+update dangdang_back_search as  s set s.combination = concat(account,plan,unit,keyword) where s.combination is null
+    </update>
+
+    <delete id="deleteDangdangBackSearchById" parameterType="Integer">
+        delete from dangdang_back_search where id = #{id}
+    </delete>
+    <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO dangdang_back_search (dd_date,account,plan,unit,keyword,uv)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.ddDate}, #{item.account},#{item.plan},#{item.unit},#{item.keyword},
+            #{item.uv})
+        </foreach>
+    </insert>
+    <delete id="deleteDangdangBackSearchByIds" parameterType="String">
+        delete from dangdang_back_search where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
