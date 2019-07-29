@@ -61,8 +61,14 @@ public class YwTractServiceImpl implements IYwTractService
 	public int insertYwTract(YwTract ywTract)
 	{
 		YwBusiness yb = ywBusinessMapper.selectYwBusinessById(ywTract.getBusinessId());
+		Integer grade =0;
+		if(yb.getBusinessGrade()!=null){
+			grade = Integer.parseInt(yb.getBusinessGrade())+10;
+		}else{
+			 grade = 10;
+		}
 		
-		Integer grade = Integer.parseInt(yb.getBusinessGrade())+10;
+		
 		
 		yb.setBusinessGrade(grade+"");
 		
