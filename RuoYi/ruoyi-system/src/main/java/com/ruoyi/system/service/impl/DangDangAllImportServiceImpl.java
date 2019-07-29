@@ -41,7 +41,6 @@ public class DangDangAllImportServiceImpl implements DangDangAllImportService {
     public List<DangDangAll> importDangDangAll(DangdangBack date) {
        DecimalFormat bigDecimel = new java.text.DecimalFormat("#.00");
         List<Integer> doneIds = allMapper.otherDone(date);
-
         List<Integer> modIds = allMapper.otherMOd(date);
         List<Integer> same = (List<Integer>) getSame(doneIds, modIds);
         List<Integer> urlIds = allMapper.otherUrl(date);
@@ -63,6 +62,7 @@ public class DangDangAllImportServiceImpl implements DangDangAllImportService {
             doneAlls.get(i).setfLetsShowData(doneAlls.get(i).getfLetsShowData() == null ? 0 : doneAlls.get(i).getfLetsShowData());
             doneAlls.get(i).setfLetsClick(doneAlls.get(i).getfLetsClick() == null ? 0 : doneAlls.get(i).getfLetsClick());
             doneAlls.get(i).setfLetsCost(doneAlls.get(i).getfLetsCost() == null ? 0.0 : doneAlls.get(i).getfLetsCost());
+
             doneAlls.get(i).setDoneUv(doneAlls.get(i).getDoneUv() == null ? 0 : doneAlls.get(i).getDoneUv());
             doneAlls.get(i).setDoneAddActiveUser(doneAlls.get(i).getDoneAddActiveUser() == null ? 0 : doneAlls.get(i).getDoneAddActiveUser());
             doneAlls.get(i).setDoneCoollectingPureNewCustomers(doneAlls.get(i).getDoneCoollectingPureNewCustomers() == null ? 0 : doneAlls.get(i).getDoneCoollectingPureNewCustomers());
@@ -120,9 +120,9 @@ public class DangDangAllImportServiceImpl implements DangDangAllImportService {
                 if (appletsBacks.get(i).getPureOutOfTheLibrary() != null) {
                     doneAlls.get(i).setLetPureOutOfTheLibrary(appletsBacks.get(i).getPureOutOfTheLibrary());
                 }
-                doneAlls.get(i).setLetOutboundNewCustomersPureInfiltration(doneAlls.get(i).getOutboundNewCustomersPureInfiltration() == null ? 0 : doneAlls.get(i).getOutboundNewCustomersPureInfiltration());
-                doneAlls.get(i).setLetOutboundOrderNumber(doneAlls.get(i).getOutboundOrderNumber() == null ? 0 : doneAlls.get(i).getOutboundOrderNumber());
-                doneAlls.get(i).setLetOutboundAmount(doneAlls.get(i).getOutboundAmount() == null ? 0.0 : doneAlls.get(i).getOutboundAmount());
+                doneAlls.get(i).setLetOutboundNewCustomersPureInfiltration(appletsBacks.get(i).getOutboundNewCustomersPureInfiltration() == null ? 0 : appletsBacks.get(i).getOutboundNewCustomersPureInfiltration());
+                doneAlls.get(i).setLetOutboundOrderNumber(appletsBacks.get(i).getOutboundOrderNumber() == null ? 0 : appletsBacks.get(i).getOutboundOrderNumber());
+                doneAlls.get(i).setLetOutboundAmount(appletsBacks.get(i).getOutboundAmount() == null ? 0.0 : appletsBacks.get(i).getOutboundAmount());
             }
             doneAlls.get(i).setUv(doneAlls.get(i).getDoneUv() + doneAlls.get(i).getModUv() + doneAlls.get(i).getLetUv());
             doneAlls.get(i).setAddActiveUser(doneAlls.get(i).getDoneAddActiveUser() + doneAlls.get(i).getModAddActiveUser() + doneAlls.get(i).getLetAddActiveUser());
@@ -134,6 +134,11 @@ public class DangDangAllImportServiceImpl implements DangDangAllImportService {
             doneAlls.get(i).setOutboundNewCustomersPureInfiltration(doneAlls.get(i).getDoneOutboundNewCustomersPureInfiltration() + doneAlls.get(i).getModOutboundNewCustomersPureInfiltration() + doneAlls.get(i).getLetOutboundNewCustomersPureInfiltration());
             doneAlls.get(i).setOutboundOrderNumber(doneAlls.get(i).getDoneOutboundOrderNumber() + doneAlls.get(i).getModOutboundOrderNumber() + doneAlls.get(i).getLetOutboundOrderNumber());
             doneAlls.get(i).setOutboundAmount(doneAlls.get(i).getDoneOutboundAmount() + doneAlls.get(i).getModOutboundAmount() + doneAlls.get(i).getLetOutboundAmount());
+
+            //*************************************************
+
+
+
             //出库纯新客出库金额 小程序url 小程序更改后汇总
             doneAlls.get(i).setAllOutboundAmount(doneAlls.get(i).getDoneOutboundAmount() + doneAlls.get(i).getLetOutboundAmount());
             doneAlls.get(i).setAllPureOutOfTheLibrary(doneAlls.get(i).getDonePureOutOfTheLibrary() + doneAlls.get(i).getLetPureOutOfTheLibrary());
@@ -242,11 +247,11 @@ public class DangDangAllImportServiceImpl implements DangDangAllImportService {
                     doneAlls.get(i).setOrderNewCost("0" + bigDecimel.format(orderNewCost));
                 }
             }
-
-
         }
+        System.out.println("H5总出库金额"+doneAlls.stream().mapToDouble(DangDangAll::getModOutboundAmount).sum());
+        System.out.println("小程序总出库金额"+doneAlls.stream().mapToDouble(DangDangAll::getDoneOutboundAmount).sum());
+        System.out.println("小程序更改后总出库金额"+doneAlls.stream().mapToDouble(DangDangAll::getLetOutboundAmount).sum());
         System.out.println("总出库金额"+doneAlls.stream().mapToDouble(DangDangAll::getOutboundAmount).sum());
-
         doneAlls.addAll(dangDangAlls);
         System.out.println("总出库金额"+doneAlls.stream().mapToDouble(DangDangAll::getOutboundAmount).sum());
         return doneAlls;

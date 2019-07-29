@@ -60,8 +60,21 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 		</dependency>
-
-		<!-- 核心模块-->
+        <dependency>
+            <groupId>ruoyi</groupId>
+            <artifactId>com.ruoyi</artifactId>
+            <version>3.4</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/lib/taobao-sdk-java-auto_1479188381469-20190719-source.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>ruoyi</groupId>
+            <artifactId>com.ruoyi</artifactId>
+            <version>3.4</version>
+            <scope>system</scope>
+            <systemPath>${pom.basedir}/lib/taobao-sdk-java-auto_1479188381469-20190719.jar</systemPath>
+        </dependency>
+        <!-- 核心模块-->
         <dependency>
             <groupId>com.ruoyi</groupId>
             <artifactId>ruoyi-framework</artifactId>
