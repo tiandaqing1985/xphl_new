@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="deptId"       column="dept_id"      />
 		<result property="loginName"    column="login_name"   />
 		<result property="userName"     column="user_name"    />
+		<result property="area"        column="area"        />
 		<result property="email"        column="email"        />
 		<result property="phonenumber"  column="phonenumber"  />
 		<result property="sex"          column="sex"          />
@@ -24,6 +25,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="updateBy"     column="update_by"    />
 		<result property="updateTime"   column="update_time"  />
 		<result property="remark"       column="remark"       />
+		<result property="record"       column="record"       />
+		<result property="intime"       column="intime"       />
+		<result property="firstphase"   column="firstphase"       />
+		<result property="secondphase"  column="secondphase"       />
 		<association property="dept"    column="dept_id" javaType="SysDept" resultMap="deptResult" />
 		<collection  property="roles"   javaType="java.util.List"        resultMap="RoleResult" />
 	</resultMap>
@@ -46,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<sql id="selectUserVo">
-        select  u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,
+        select  u.user_id, u.dept_id, u.login_name, u.user_name,u.area, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
        		    d.dept_id, d.parent_id, d.dept_name, d.order_num, d.status as dept_status,
        		    r.role_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
 		from sys_user u
@@ -56,11 +61,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </sql>
 	
 	<select id="selectUserList" parameterType="SysUser" resultMap="SysUserResult">
-		select u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark, d.dept_name from sys_user u
+		select u.user_id, u.dept_id, u.login_name, u.user_name,u.area, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase, d.dept_name from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id
 		where u.del_flag = '0'
+		<if test="userId != null">
+			AND u.user_id = #{userId}
+		</if>
 		<if test="loginName != null and loginName != ''">
 			AND u.login_name like concat('%', #{loginName}, '%')
+		</if>
+		<if test="userName != null and userName != ''">
+			AND u.user_name like concat('%', #{userName}, '%')
+		</if>
+		<if test="area != null and area != ''">
+			AND u.area = #{area}
 		</if>
 		<if test="status != null and status != ''">
 			AND u.status = #{status}
@@ -77,12 +91,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="deptId != null and deptId != 0">
 			AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET (#{deptId},ancestors) ))
 		</if>
+		<if test="record != null and record != 0">
+			AND u.record = #{record}
+		</if>
+		<if test="intime != null and intime != 0">
+			AND u.intime = #{intime}
+		</if>
+		<if test="firstphase != null and firstphase != 0">
+			AND u.firstphase = #{firstphase}
+		</if>
+		<if test="secondphase != null and secondphase != 0">
+			AND u.secondphase = #{secondphase}
+		</if>
 		<!-- 数据范围过滤 -->
 		${params.dataScope}
 	</select>
 	
 	<select id="selectAllocatedList" parameterType="SysUser" resultMap="SysUserResult">
-	    select distinct u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.status, u.create_time
+	    select distinct u.user_id, u.dept_id, u.login_name, u.user_name, u.area, u.email, u.phonenumber, u.status, u.create_time
 	    from sys_user u
 			 left join sys_dept d on u.dept_id = d.dept_id
 			 left join sys_user_role ur on u.user_id = ur.user_id
@@ -98,8 +124,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		${params.dataScope}
 	</select>
 	
+	<select id="selectUserByDpetList" parameterType="Long" resultMap="SysUserResult">
+		select user_id,user_name  from sys_user  where dept_id = #{deptId}
+	</select>
+	
 	<select id="selectUnallocatedList" parameterType="SysUser" resultMap="SysUserResult">
-	    select distinct u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.status, u.create_time
+	    select distinct u.user_id, u.dept_id, u.login_name, u.user_name, u.area, u.email, u.phonenumber, u.status, u.create_time
 	    from sys_user u
 			 left join sys_dept d on u.dept_id = d.dept_id
 			 left join sys_user_role ur on u.user_id = ur.user_id
@@ -165,6 +195,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="deptId != null and deptId != 0">dept_id = #{deptId},</if>
  			<if test="loginName != null and loginName != ''">login_name = #{loginName},</if>
  			<if test="userName != null and userName != ''">user_name = #{userName},</if>
+ 			<if test="area != null and area != ''">area = #{area},</if>
  			<if test="email != null and email != ''">email = #{email},</if>
  			<if test="phonenumber != null and phonenumber != ''">phonenumber = #{phonenumber},</if>
  			<if test="sex != null and sex != ''">sex = #{sex},</if>
@@ -176,6 +207,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="loginDate != null">login_date = #{loginDate},</if>
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
  			<if test="remark != null and remark != ''">remark = #{remark},</if>
+ 			<if test="record != null and record != ''">record = #{record},</if>
+<!--  			<if test="intime != null and intime != ''">intime = #{intime},</if>
+ 			<if test="firstphase != null and firstphase != ''">firstphase = #{firstphase},</if>
+ 			<if test="secondphase != null and secondphase != ''">secondphase = #{secondphase},</if> -->
  			update_time = sysdate()
  		</set>
  		where user_id = #{userId}
@@ -187,6 +222,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="deptId != null and deptId != 0">dept_id,</if>
  			<if test="loginName != null and loginName != ''">login_name,</if>
  			<if test="userName != null and userName != ''">user_name,</if>
+ 			<if test="area != null and area != ''">area = #{area},</if>
  			<if test="email != null and email != ''">email,</if>
  			<if test="phonenumber != null and phonenumber != ''">phonenumber,</if>
  			<if test="sex != null and sex != ''">sex,</if>
@@ -195,12 +231,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">status,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			<if test="remark != null and remark != ''">remark,</if>
+ 			<if test="record != null and record != ''">record,</if>
+ 			<if test="intime != null ">intime,</if>
+ 			<if test="firstphase != null ">firstphase,</if>
+ 			<if test="secondphase != null ">secondphase,</if>
  			create_time
  		)values(
  			<if test="userId != null and userId != ''">#{userId},</if>
  			<if test="deptId != null and deptId != ''">#{deptId},</if>
  			<if test="loginName != null and loginName != ''">#{loginName},</if>
  			<if test="userName != null and userName != ''">#{userName},</if>
+ 			<if test="area != null and area != ''">area = #{area},</if>
  			<if test="email != null and email != ''">#{email},</if>
  			<if test="phonenumber != null and phonenumber != ''">#{phonenumber},</if>
  			<if test="sex != null and sex != ''">#{sex},</if>
@@ -209,15 +250,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">#{status},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
+ 			<if test="record != null and record != ''">#{record},</if>
+ 			<if test="intime != null">#{intime},</if>
+ 			<if test="firstphase != null">#{firstphase},</if>
+ 			<if test="secondphase != null">#{secondphase},</if>
  			sysdate()
  		)
 	</insert>
-	
-	
-	<select id="selectUserByDpetList" parameterType="Long" resultMap="SysUserResult">
-		select user_id,user_name  from sys_user  where dept_id = #{deptId}
-	</select>
-	
 	<!-- 根据用户id查询所在部门领导id -->
 	<select id="selectApproverIdByApplyerId" parameterType="Long" resultType="Long">
 		SELECT u.user_id FROM `sys_user`u WHERE u.`user_name` = (SELECT d.leader FROM `sys_dept`d, (SELECT * FROM `sys_user`)s WHERE d.`dept_id` = s. dept_id AND s.user_id = #{userId})

@@ -9,7 +9,8 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * 
  * @author ruoyi
  */
-public class SysDept extends BaseEntity
+@SuppressWarnings("rawtypes")
+public class SysDept extends BaseEntity implements  java.lang.Comparable
 {
     private static final long serialVersionUID = 1L;
 
@@ -46,7 +47,29 @@ public class SysDept extends BaseEntity
     /** 父部门名称 */
     private String parentName;
 
-    public Long getDeptId()
+    
+    public SysDept() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	public SysDept(Long deptId, Long parentId, String ancestors, String deptName, String orderNum, String leader,
+			String phone, String email, String status, String delFlag, String parentName) {
+		super();
+		this.deptId = deptId;
+		this.parentId = parentId;
+		this.ancestors = ancestors;
+		this.deptName = deptName;
+		this.orderNum = orderNum;
+		this.leader = leader;
+		this.phone = phone;
+		this.email = email;
+		this.status = status;
+		this.delFlag = delFlag;
+		this.parentName = parentName;
+	}
+
+	public Long getDeptId()
     {
         return deptId;
     }
@@ -175,4 +198,10 @@ public class SysDept extends BaseEntity
             .append("updateTime", getUpdateTime())
             .toString();
     }
+
+	@Override
+	public int compareTo(Object o) {
+		SysDept d = (SysDept)o;
+		return (int) (this.deptId-d.deptId);
+	}
 }
