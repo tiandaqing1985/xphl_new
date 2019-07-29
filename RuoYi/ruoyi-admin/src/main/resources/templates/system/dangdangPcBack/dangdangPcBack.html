@@ -15,34 +15,6 @@
 							</li>
 
 							<li>
-								来源明细：<input type="text" name="source"/>
-							</li>
-
-							<li>
-								收订订单数：<input type="text" name="receiveOrders"/>
-							</li>
-
-							<li>
-								收订金额：<input type="text" name="receiveAmount"/>
-							</li>
-
-							<li>
-								收订新账户数：<input type="text" name="receiveAccount"/>
-							</li>
-
-							<li>
-								出库订单数：<input type="text" name="outOrders"/>
-							</li>
-
-							<li>
-								出库金额：<input type="text" name="outAmount"/>
-							</li>
-
-							<li>
-								出库新客数：<input type="text" name="outNumber"/>
-							</li>
-
-							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
 							</li>
@@ -62,7 +34,7 @@
 					<i class="fa fa-remove"></i> 删除
 				</a>
 				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:dangdangPcBack:export">
-						<i class="fa fa-download"></i> 导出
+						<i class="fa fa-download"></i> 当当pc端日报 导出
 				 </a>
 				<a class="btn btn-info" onclick="$.table.importExcel()">
 					<i class="fa fa-upload"></i> 导入

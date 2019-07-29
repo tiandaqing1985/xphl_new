@@ -49,7 +49,150 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectDangdangPcFrontVo"/>
         where id = #{id}
     </select>
-        
+    <select id="importAll" resultType="com.ruoyi.system.domain.DangDangPcAll" parameterType="com.ruoyi.system.domain.DangdangPcFront" >
+        SELECT
+        a.account,
+        a.dd_date AS ddDate,
+        a.plan,
+        a.unit,
+        a.keyword,
+        IFNULL(a.showdata, 0) AS showdata,
+        IFNULL(a.click, 0) AS click,
+        a.cost,
+        a.click_rate AS clickRate,
+        a.avg_click_price AS avgClickPrice,
+        a.home_avg_rank AS homeAvgRank,
+        a.bid,
+        a.part_speech AS partSpeech,
+        a.remarks,
+        a.channel_id AS channelId,
+        a.word,
+        a.second_kind AS secondKind,
+        a.thired_kind AS thiredkind,
+        a.back,
+        a.join_uv AS joinUv,
+        c.source,
+        IFNULL(c.receiveOrders, 0) AS receiveOrders,
+        IFNULL(c.receiveAmount, 0.00) AS receiveAmount,
+        IFNULL(c.receiveAccount, 0) AS receiveAccount,
+        IFNULL(c.outOrders, 0) AS outOrders,
+        IFNULL(c.outAmount, 0.00) AS outAmount,
+        IFNULL(c.outNumber, 0) AS outNumber,
+        IFNULL(s.uv, 0) AS uv
+        FROM
+        (SELECT
+        f.account,
+        f.dd_date,
+        f.plan,
+        f.unit,
+        f.keyword,
+        f.showdata,
+        f.click,
+        f.cost,
+        f.click_rate,
+        f.avg_click_price,
+        f.home_avg_rank,
+        f.bid,
+        f.part_speech,
+        m.remarks,
+        m.word,
+        m.second_kind,
+        m.thired_kind,
+        m.back,
+        m.join_uv,
+        m.channel_id
+        FROM
+        dangdang_pc_front AS f
+        LEFT JOIN dangdang_pc_match AS m
+        ON f.account = m.account
+        AND f.plan = m.plan
+        AND f.unit = m.unit
+        AND f.keyword = m.keyword) AS a
+        LEFT JOIN
+        (SELECT
+        dd_date,
+        source,
+        SUM(receive_orders) AS receiveOrders,
+        SUM(receive_amount) AS receiveAmount,
+        SUM(receive_account) AS receiveAccount,
+        SUM(out_orders) AS outOrders,
+        SUM(out_amount) AS outAmount,
+        SUM(out_number) AS outNumber
+        FROM
+        dangdang_pc_back
+        GROUP BY dd_date,
+        source) AS c
+        ON a.back = c.source
+        AND a.dd_date = c.dd_date
+        LEFT JOIN
+        (SELECT
+        dd_date,
+        combination,
+        SUM(uv) AS uv
+        FROM
+        dangdang_back_search
+        GROUP BY dd_date,
+        combination) AS s
+        ON s.combination = a.join_uv
+        AND a.dd_date = s.dd_date
+        where 1=1
+        <if test="account != null  and account != ''  "> and a.account = #{account}</if>
+        <if test="ddDate != null  "> and a.dd_date = #{ddDate}</if>
+        <if test="keyword != null  and keyword != ''  "> and a.keyword = #{keyword}</if>
+    ORDER BY  a.dd_date ASC
+    </select>
+    <select id="other" resultType="com.ruoyi.system.domain.DangDangPcAll" parameterType="com.ruoyi.system.domain.DangdangPcFront">
+        SELECT
+       '其他'  AS account,
+       dd_date as ddDate,
+          SUM(receive_orders) AS receiveOrders,
+        SUM(receive_amount) AS receiveAmount,
+        SUM(receive_account) AS receiveAccount,
+        SUM(out_orders) AS outOrders,
+        SUM(out_amount) AS outAmount,
+        SUM(out_number) AS outNumber
+        FROM
+        dangdang_pc_back
+        WHERE id NOT IN
+        (SELECT
+        c.id
+        FROM
+        (SELECT
+        f.account,
+        f.dd_date,
+        f.plan,
+        f.unit,
+        f.keyword,
+        f.showdata,
+        f.click,
+        f.cost,
+        f.click_rate,
+        f.avg_click_price,
+        f.home_avg_rank,
+        f.bid,
+        f.part_speech,
+        m.remarks,
+        m.word,
+        m.second_kind,
+        m.thired_kind,
+        m.back,
+        m.join_uv,
+        m.channel_id
+        FROM
+        dangdang_pc_front AS f
+        LEFT JOIN dangdang_pc_match AS m
+        ON f.account = m.account
+        AND f.plan = m.plan
+        AND f.unit = m.unit
+        AND f.keyword = m.keyword) AS a
+        LEFT JOIN dangdang_pc_back AS c
+        ON a.back = c.source
+        AND a.dd_date = c.dd_date
+        WHERE c.id IS NOT NULL
+        ORDER BY a.dd_date ASC)
+  GROUP  BY dd_date
+    </select>
+
     <insert id="insertDangdangPcFront" parameterType="DangdangPcFront" useGeneratedKeys="true" keyProperty="id">
         insert into dangdang_pc_front
 		<trim prefix="(" suffix=")" suffixOverrides=",">

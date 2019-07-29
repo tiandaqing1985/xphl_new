@@ -3,7 +3,9 @@ package com.ruoyi.web.controller.system;
 import java.util.List;
 
 import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.DangdangBaiduAdd;
+
+import com.ruoyi.system.domain.DangDangAll;
+import com.ruoyi.system.service.DangDangAllImportService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -37,7 +39,11 @@ public class DangdangBackController extends BaseController
 	
 	@Autowired
 	private IDangdangBackService dangdangBackService;
-	
+
+	@Autowired
+	private DangDangAllImportService dangDangAllImportService;
+
+
 	@RequiresPermissions("system:dangdangBack:view")
 	@GetMapping()
 	public String dangdangBack()
@@ -64,10 +70,10 @@ public class DangdangBackController extends BaseController
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(DangdangBack dangdangBack)
-    {
-    	List<DangdangBack> list = dangdangBackService.selectDangdangBackList(dangdangBack);
-        ExcelUtil<DangdangBack> util = new ExcelUtil<DangdangBack>(DangdangBack.class);
-        return util.exportExcel(list, "dangdangBack");
+
+    {	List<DangDangAll> list = dangDangAllImportService.importDangDangAll(dangdangBack);
+		ExcelUtil<DangDangAll> util = new ExcelUtil<DangDangAll>(DangDangAll.class);
+		return util.exportExcel(list, "dangdangAll");
     }
 	
 	/**

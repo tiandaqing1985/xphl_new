@@ -1,5 +1,6 @@
 package com.ruoyi.system.mapper;
 
+import com.ruoyi.system.domain.DangDangPcAll;
 import com.ruoyi.system.domain.DangdangBaiduAdd;
 import com.ruoyi.system.domain.DangdangPcFront;
 import org.apache.ibatis.annotations.Param;
@@ -62,5 +63,10 @@ public interface DangdangPcFrontMapper {
     public int deleteDangdangPcFrontByIds(String[] ids);
 
     void batchInsert(@Param("list") List<DangdangPcFront> listPage);
+
+
+    List<DangDangPcAll> importAll(DangdangPcFront dangdangPcFront);
+
+    List<DangDangPcAll> other(DangdangPcFront dangdangPcFront);
 
 }

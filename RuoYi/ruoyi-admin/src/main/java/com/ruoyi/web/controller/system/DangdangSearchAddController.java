@@ -65,19 +65,19 @@ public class DangdangSearchAddController extends BaseController
 	}
 	
 	
-	/**
-	 * 导出当当后端数据（搜索）列表
-	 */
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(DangdangSearchAdd dangdangSearchAdd)
-    {
-
-		List<DangDangAll> list = dangDangAllImportService.importDangDangAll(dangdangSearchAdd);
-        ExcelUtil<DangDangAll> util = new ExcelUtil<DangDangAll>(DangDangAll.class);
-        return util.exportExcel(list, "dangdangAll");
-    }
-	
+//	/**
+//	 * 导出当当后端数据（搜索）列表
+//	 */
+//    @PostMapping("/export")
+//    @ResponseBody
+//    public AjaxResult export(DangdangSearchAdd dangdangSearchAdd)
+//    {
+//
+//		List<DangDangAll> list = dangDangAllImportService.importDangDangAll(dangdangSearchAdd);
+//        ExcelUtil<DangDangAll> util = new ExcelUtil<DangDangAll>(DangDangAll.class);
+//        return util.exportExcel(list, "dangdangAll");
+//    }
+//
 	/**
 	 * 新增当当后端数据（搜索）
 	 */

@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.system;
 import java.util.List;
 
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.DangDangPcAll;
 import com.ruoyi.system.domain.DangdangIosAdd;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +55,7 @@ public class DangdangPcFrontController extends BaseController
 	public TableDataInfo list(DangdangPcFront dangdangPcFront)
 	{
 		startPage();
-        List<DangdangPcFront> list = dangdangPcFrontService.selectDangdangPcFrontList(dangdangPcFront);
+        List<DangDangPcAll> list = dangdangPcFrontService.selectDangdangPcFrontList(dangdangPcFront);
 		return getDataTable(list);
 	}
 	
@@ -67,9 +68,9 @@ public class DangdangPcFrontController extends BaseController
     @ResponseBody
     public AjaxResult export(DangdangPcFront dangdangPcFront)
     {
-    	List<DangdangPcFront> list = dangdangPcFrontService.selectDangdangPcFrontList(dangdangPcFront);
-        ExcelUtil<DangdangPcFront> util = new ExcelUtil<DangdangPcFront>(DangdangPcFront.class);
-        return util.exportExcel(list, "dangdangPcFront");
+    	List<DangDangPcAll> list = dangdangPcFrontService.selectDangdangPcFrontList(dangdangPcFront);
+        ExcelUtil<DangDangPcAll> util = new ExcelUtil<DangDangPcAll>(DangDangPcAll.class);
+        return util.exportExcel(list, "当当pc端批评人");
     }
 	
 	/**

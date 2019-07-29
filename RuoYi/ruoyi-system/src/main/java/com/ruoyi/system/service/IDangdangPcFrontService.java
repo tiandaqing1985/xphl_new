@@ -1,5 +1,7 @@
 package com.ruoyi.system.service;
 
+import com.ruoyi.system.domain.DangDangAll;
+import com.ruoyi.system.domain.DangDangPcAll;
 import com.ruoyi.system.domain.DangdangBaiduAdd;
 import com.ruoyi.system.domain.DangdangPcFront;
 
@@ -26,7 +28,7 @@ public interface IDangdangPcFrontService {
      * @param dangdangPcFront 当当pc前端信息
      * @return 当当pc前端集合
      */
-    public List<DangdangPcFront> selectDangdangPcFrontList(DangdangPcFront dangdangPcFront);
+    public List<DangDangPcAll> selectDangdangPcFrontList(DangdangPcFront dangdangPcFront);
 
     /**
      * 新增当当pc前端

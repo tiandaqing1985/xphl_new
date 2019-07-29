@@ -23,19 +23,19 @@ public class DangDangAll {
     /**
      * 推广计划
      */
-    @Excel(name = "推广计划",defaultValue = "")
+    @Excel(name = "推广计划", defaultValue = "")
     private String fPlan;
 
     /**
      * 推广单元
      */
-    @Excel(name = "推广单元",defaultValue = "")
+    @Excel(name = "推广单元", defaultValue = "")
     private String fUnit;
 
     /**
      * 关键词
      */
-    @Excel(name = "关键词",defaultValue = "")
+    @Excel(name = "关键词", defaultValue = "")
     private String fKeyword;
 
     /**
@@ -53,7 +53,7 @@ public class DangDangAll {
     /**
      * 总消费
      */
-    @Excel(name = "总消费" )
+    @Excel(name = "总消费")
     private Double fCost;
 
     /**
@@ -94,6 +94,10 @@ public class DangDangAll {
 
     @Excel(name = "词性")
     private String fPartSpeech;
+    @Excel(name = "二级类目")
+    private String sec;
+    @Excel(name = "三级类目")
+    private String tre;
     /**
      * 移动端url
      */
@@ -122,20 +126,35 @@ public class DangDangAll {
      */
     @Excel(name = "去除app实际消费")
     private Double appActCost;
-    /** 点击率 */
-    @Excel(name="点击率")
+    /**
+     *
+     */
+    @Excel(name = "去除app的点击")
+    private  Integer removeAppClick;
+    /**
+     * 点击率
+     */
+    @Excel(name = "点击率")
     private String clickRate;
-    /** 平均点击价格*/
-    @Excel(name="平均点击价格")
+    /**
+     * 平均点击价格
+     */
+    @Excel(name = "平均点击价格")
     private String averageClickPrice;
-    /** 首页平均排名 */
-    @Excel(name="首页平均排名")
+    /**
+     * 首页平均排名
+     */
+    @Excel(name = "首页平均排名")
     private Double homepageAverageRanking;
-    /** 出价 */
-    @Excel(name="出价")
+    /**
+     * 出价
+     */
+    @Excel(name = "出价")
     private Double bid;
-    /** 匹配模式 */
-    @Excel(name="匹配模式")
+    /**
+     * 匹配模式
+     */
+    @Excel(name = "匹配模式")
     private String partSpeech;
 //**********************************************************************************************
 
@@ -388,6 +407,30 @@ public class DangDangAll {
      */
     @Excel(name = "收订新客成本")
     private String orderNewCost;
+
+    public String getSec() {
+        return sec;
+    }
+
+    public void setSec(String sec) {
+        this.sec = sec;
+    }
+
+    public String getTre() {
+        return tre;
+    }
+
+    public void setTre(String tre) {
+        this.tre = tre;
+    }
+
+    public Integer getRemoveAppClick() {
+        return removeAppClick;
+    }
+
+    public void setRemoveAppClick(Integer removeAppClick) {
+        this.removeAppClick = removeAppClick;
+    }
 
     public String getClickRate() {
         return clickRate;

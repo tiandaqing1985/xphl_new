@@ -1,6 +1,6 @@
 package com.ruoyi.system.domain;
 
-import com.ruoyi.common.annotation.Excel;
+
 
 /**
  * 当当移动端匹配后台数据

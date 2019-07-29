@@ -77,14 +77,14 @@ public interface DangdangBackMapper
 	 */
 	public int updateBaiduIdentification();
 
-	List<DangdangBack> queryUrl(DangdangSearchAdd date);
+	List<DangdangBack> queryUrl(DangdangBack date);
 
 	/**
 	 * 查询移动端url的匹配
 	 * @param
 	 * @return
 	 */
-	List<DangdangBack> queryMod(DangdangSearchAdd date);
+	List<DangdangBack> queryMod(DangdangBack date);
 
 
 

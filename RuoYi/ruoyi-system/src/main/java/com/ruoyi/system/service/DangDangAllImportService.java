@@ -1,10 +1,12 @@
 package com.ruoyi.system.service;
 
 
+
 import com.ruoyi.system.domain.DangDangAll;
-import com.ruoyi.system.domain.DangdangSearchAdd;
+import com.ruoyi.system.domain.DangdangBack;
 
 import java.util.List;
+
 
 public interface DangDangAllImportService {
     /**
@@ -13,5 +15,6 @@ public interface DangDangAllImportService {
      * @param date
      * @return
      */
-    public List<DangDangAll> importDangDangAll(DangdangSearchAdd date);
+    public List<DangDangAll> importDangDangAll(DangdangBack date);
+
 }

@@ -139,7 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
-    <select id="queryUrl" resultType="com.ruoyi.system.domain.DangdangBack" parameterType="com.ruoyi.system.domain.DangdangSearchAdd">
+    <select id="queryUrl" resultType="com.ruoyi.system.domain.DangdangBack" parameterType="com.ruoyi.system.domain.DangdangBack">
         SELECT
         ht.uv,
         ht.add_active_user ,
