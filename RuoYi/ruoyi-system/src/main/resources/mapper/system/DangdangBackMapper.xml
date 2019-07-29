@@ -140,17 +140,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <select id="queryUrl" resultType="com.ruoyi.system.domain.DangdangBack" parameterType="com.ruoyi.system.domain.DangdangBack">
-        SELECT
-        ht.uv,
-        ht.add_active_user ,
-        ht.coollecting_pure_new_customers  ,
-        ht.booking_new_customers_pure_infiltration,
-        ht.ordering_orders,
-        ht.receiving_amount,
-        ht.pureoutofthelibrary as pureOutOfTheLibrary ,
-        ht.outbound_new_customers_pure_infiltration,
-        ht.outbound_order_number,
-        ht.outbound_amount
+select
+        ht.uv ,
+        ht.add_active_user as  addActiveUser ,
+        ht.coollecting_pure_new_customers   as  coollectingPureNewCustomers,
+        ht.booking_new_customers_pure_infiltration as bookingNewCustomersPureInfiltration ,
+        ht.ordering_orders as orderingOrders  ,
+        ht.receiving_amount as receivingAmount ,
+        ht.pureoutofthelibrary  ,
+        ht.outbound_new_customers_pure_infiltration  as outboundNewCustomersPureInfiltration ,
+        ht.outbound_order_number  as outboundOrderNumber  ,
+        ht.outbound_amount as outboundAmount
         FROM
         (
         SELECT
