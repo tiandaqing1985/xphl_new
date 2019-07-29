@@ -102,7 +102,7 @@ public class SysIndexController extends BaseController
     	mmap.put("con1", list6.size());
     	
     	
-    	if(ShiroUtils.getUserId()==101 || ShiroUtils.getUserId()==1){
+    	if(ShiroUtils.getUserId()==103 || ShiroUtils.getUserId()==1){
     		mmap.put("admin", true);
     	}
     	

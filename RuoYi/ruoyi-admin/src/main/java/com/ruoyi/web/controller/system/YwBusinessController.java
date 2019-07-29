@@ -66,7 +66,7 @@ public class YwBusinessController extends BaseController
 		
 		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
 		
-		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==101){ //超级管理员 和 任总看所有数据  
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据  
 		
 		
 		}else{
@@ -252,7 +252,7 @@ public class YwBusinessController extends BaseController
 		
 		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
 		
-		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==101){ //超级管理员 和 任总看所有数据  
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据  
 		
 		
 		}else{

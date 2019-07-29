@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('初始多表格')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12">
+                <div class="tabs-container">
+                	<form id="userIdForm">
+	                	<div class="form-group" style=display:none>
+							<input id="userId" name="userId" class="form-control-static" th:value="${userId}"/>
+						</div>
+					</form>
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a data-toggle="tab" href="#tab-1" aria-expanded="true">年假余额</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-2" aria-expanded="false">已使用年假</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-3" aria-expanded="false">调休余额</a>
+                        </li>
+                        <li class=""><a data-toggle="tab" href="#tab-4" aria-expanded="false">已使用调休</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="tab-1" class="tab-pane active">
+                            <div class="panel-body">
+                     			<div class="col-sm-12 select-table table-striped">
+									<table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+								</div>
+                            </div>
+                        </div>
+                        <div id="tab-2" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="col-sm-12 select-table table-striped">
+									<table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+								</div>
+                            </div>
+                        </div>
+                        <div id="tab-3" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="col-sm-12 select-table table-striped">
+									<table id="bootstrap-table-3" data-mobile-responsive="true"></table>
+								</div>
+                            </div>
+                        </div>
+                        <div id="tab-4" class="tab-pane">
+                            <div class="panel-body">
+                                <div class="col-sm-12 select-table table-striped">
+									<table id="bootstrap-table-4" data-mobile-responsive="true"></table>
+								</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
+		</div>
+		<div class="row">
+			
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = ctx + "system/holiday";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+		var userId = $("#userId").val();
+        
+        $(function() {
+            var options = {
+            	id: "bootstrap-table-1",
+                url: prefix + "/list",
+                columns: [{
+		            checkbox: true
+		        },
+		        {
+					field : 'id', 
+					title : '假期ID',
+					visible: false
+				},
+				{
+					field : 'userId', 
+					title : '用户ID',
+					visible: false
+				},
+				{
+					field : 'createdate', 
+					title : '生成日期'
+				},
+				{
+					field : 'overdate', 
+					title : '失效日期'
+				},
+				{
+					field : 'value', 
+					title : '余额（天）'
+				}]
+            };
+            $.table.init(options);
+        });
+        
+        
+        $(function() {
+            var options = {
+            	id: "bootstrap-table-2",
+                url: prefix + "/annualLeaveRecordList",
+                columns: [{
+		            checkbox: true
+		        },
+		        {
+					field : 'id', 
+					title : '假期ID',
+					visible: false
+				},
+				{
+					field : 'holiday.userId', 
+					title : '用户ID',
+					visible: false
+				},
+				
+				{
+					field : 'useApplyId', 
+					title : '假期使用申请ID'
+				},
+				{
+					field : 'useState', 
+					title : '使用状态'
+				},
+				{
+					field : 'value', 
+					title : '使用天数'
+				},
+				{
+					field : 'holiday.createdate', 
+					title : '生效日期'
+				},
+				{
+					field : 'holiday.overdate', 
+					title : '失效日期'
+				}]
+            };
+            $.table.init(options);
+        });
+        
+        $(function() {
+            var options = {
+            	id: "bootstrap-table-3",
+                url: prefix + "/olist",
+                columns: [{
+		            checkbox: true
+		        },
+		        {
+					field : 'id', 
+					title : '假期ID',
+					visible: false
+				},
+				{
+					field : 'userId', 
+					title : '用户ID',
+					visible: false
+				},
+				{
+					field : 'createdate', 
+					title : '生成日期'
+				},
+				{
+					field : 'overdate', 
+					title : '失效日期'
+				},
+				{
+					field : 'value', 
+					title : '余额（小时）'
+				},
+				{
+					field : 'applyId', 
+					title : '调休生成申请ID'
+				}]
+            };
+            $.table.init(options);
+        });
+        
+        $(function() {
+            var options = {
+            	id: "bootstrap-table-4",
+                url: prefix + "/paidLeaveRecordList",
+                columns: [{
+		            checkbox: true
+		        },
+		        {
+					field : 'id', 
+					title : '假期ID',
+					visible: false
+				},
+				{
+					field : 'holiday.userId', 
+					title : '用户ID',
+					visible: false
+				},
+				
+				{
+					field : 'useApplyId', 
+					title : '假期使用申请ID'
+				},
+				{
+					field : 'useState', 
+					title : '使用状态'
+				},
+				{
+					field : 'value', 
+					title : '使用小时数'
+				},
+				{
+					field : 'holiday.createdate', 
+					title : '生效日期'
+				},
+				{
+					field : 'holiday.overdate', 
+					title : '失效日期'
+				}]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

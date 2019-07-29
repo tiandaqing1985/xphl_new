@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OaDingdingMapper">
+    
+    <resultMap type="OaDingding" id="OaDingdingResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="workDate"    column="workDate"    />
+        <result property="checkType"    column="checkType"    />
+        <result property="userCheckTime"    column="userCheckTime"    />
+        <result property="timeResult"    column="timeResult"    />
+    </resultMap>
+    
+    <resultMap type="Dingding" id="DingdingResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="workDate"    column="workDate"    />
+        <result property="checkType"    column="checkType"    />
+        <result property="userCheckTime"    column="userCheckTime"    />
+        <result property="timeResult"    column="timeResult"    />
+    </resultMap>
+	
+	<sql id="selectOaDingdingVo">
+        select user_id, workDate, checkType, userCheckTime, timeResult from oa_dingding
+    </sql>
+	
+    <select id="selectOaDingdingList" parameterType="OaDingding" resultMap="OaDingdingResult">
+        <include refid="selectOaDingdingVo"/>
+        <where>  
+            <if test="userId != null  and userId != '' "> and user_id = #{userId}</if>
+             <if test="workDate != null "> and workDate = #{workDate}</if>
+             <if test="checkType != null  and checkType != '' "> and checkType = #{checkType}</if>
+             <if test="userCheckTime != null "> and userCheckTime = #{userCheckTime}</if>
+             <if test="timeResult != null  and timeResult != '' "> and timeResult = #{timeResult}</if>
+         </where>
+    </select>
+    
+    <select id="selectOaDingdingById" parameterType="String" resultMap="OaDingdingResult">
+        <include refid="selectOaDingdingVo"/>
+        where user_id = #{userId}
+    </select>
+        
+    <insert id="insertOaDingding" parameterType="OaDingding">
+        insert into oa_dingding
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null  and userId != ''  ">user_id,</if>
+			<if test="workDate != null  ">workDate,</if>
+			<if test="checkType != null  and checkType != ''  ">checkType,</if>
+			<if test="userCheckTime != null  ">userCheckTime,</if>
+			<if test="timeResult != null  and timeResult != ''  ">timeResult,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null  and userId != ''  ">#{userId},</if>
+			<if test="workDate != null  ">#{workDate},</if>
+			<if test="checkType != null  and checkType != ''  ">#{checkType},</if>
+			<if test="userCheckTime != null  ">#{userCheckTime},</if>
+			<if test="timeResult != null  and timeResult != ''  ">#{timeResult},</if>
+         </trim>
+    </insert>
+    
+    <insert id="insertForeach" parameterType="List" useGeneratedKeys="false">
+    	insert into oa_dingding 
+    	(user_id, workDate, checkType, userCheckTime, timeResult)
+    	values
+    	<foreach collection="list" item="item" index="index" separator=",">
+    		(
+    		 #{item.userId}, 
+    		 #{item.workDate}, 
+    		 #{item.checkType},
+    		 #{item.userCheckTime},
+    		 #{item.timeResult}
+    		)
+    	</foreach>
+    </insert>
+        	 
+    <update id="updateOaDingding" parameterType="OaDingding">
+        update oa_dingding
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="workDate != null  ">workDate = #{workDate},</if>
+            <if test="checkType != null  and checkType != ''  ">checkType = #{checkType},</if>
+            <if test="userCheckTime != null  ">userCheckTime = #{userCheckTime},</if>
+            <if test="timeResult != null  and timeResult != ''  ">timeResult = #{timeResult},</if>
+        </trim>
+        where user_id = #{userId}
+    </update>
+
+	<delete id="deleteOaDingdingById" parameterType="String">
+        delete from oa_dingding where user_id = #{userId}
+    </delete>
+	
+    <delete id="deleteOaDingdingByIds" parameterType="String">
+        delete from oa_dingding where user_id in 
+        <foreach item="userId" collection="array" open="(" separator="," close=")">
+            #{userId}
+        </foreach>
+    </delete>
+    
+    <select id="selectDingData" parameterType="Dingding" resultMap="DingdingResult">
+    	SELECT
+			ding.* 
+		FROM
+			( SELECT u.dept_id, u.`user_id`, u.`user_name` FROM `sys_user` u ) nu
+			RIGHT JOIN (
+			SELECT
+				ouser.user_id,
+				us.user_name,
+				ding.workDate,
+				(
+				 CASE WHEN ding.checkType='OnDuty' THEN '上班'
+				 ELSE '下班' END 
+				)checkType,
+				ding.userCheckTime,
+				(
+				CASE WHEN ding.timeResult='Normal' THEN '正常'
+					  WHEN ding.timeResult='Late' THEN '迟到'
+					  WHEN ding.timeResult='Early' THEN '早退'
+					  WHEN ding.timeResult='SeriousLate' THEN '严重迟到'
+					  WHEN ding.timeResult='NotSigned' THEN '未打卡'
+					 ELSE '旷工迟到' END 
+				) timeResult
+			FROM
+				`oa_dingding` ding
+				RIGHT JOIN oa_dingding_user us ON ding.user_id = us.user_id
+				LEFT JOIN sys_user ouser ON ouser.user_name = us.user_name 
+			) ding ON ding.user_id = nu.user_id 
+			<where>
+             	<if test="userId != null and userId != 1"> and ding.user_id = #{userId}</if>
+             	<if test="userName != null and userName != '' "> and ding.user_name like concat('%', #{userName}, '%')</if>  
+             	<if test="workDate == 1 "> and ding.workDate = #{workDate}</if>  
+             	<if test="checkType != null and checkType != '' "> and ding.checkType = #{checkType}</if>
+             	<if test="timeResult != null and timeResult != '' "> and ding.timeResult = #{timeResult}</if>
+             	<if test="dSet != null"> 
+             			and nu.dept_id in 
+			          <foreach collection="dSet" index="index" item="item" open="(" separator="," close=")">  
+			            	#{item.deptId}  
+			          </foreach>
+             	</if>
+         	</where>   
+    </select>
+</mapper>

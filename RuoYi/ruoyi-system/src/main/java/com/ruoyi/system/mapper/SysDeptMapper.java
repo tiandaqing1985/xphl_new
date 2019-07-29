@@ -105,4 +105,13 @@ public interface SysDeptMapper
      * @return 部门列表
      */
     public List<SysDept> selectChildrenDeptById(Long deptId);
+    
+    /**
+     * 根据用户id查询上级领导
+     * @param userId
+     * @return
+     */
+    public SysDept selectDeptByUserId(@Param("userId") Long userId);
+    
+    
 }

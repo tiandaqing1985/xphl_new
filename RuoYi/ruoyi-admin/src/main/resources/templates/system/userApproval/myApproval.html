@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<th:block th:include="include :: header('我的审批')" />
+	<script type="text/javascript">
+		function toView(approvalId){
+			var url = $.table._option.toViewUrl.replace("{approvalId}",approvalId);
+			
+			$.modal.open("查看申请", url);
+		}
+		
+		function edit(applyId){
+			$.ajax({
+				type:"post",
+				async:false,
+				url:"/system/userApply/ifMarriage",
+				data:{"applyId":applyId},
+				dataType:"json",
+				success:function(result){
+					if(result == "0"){
+						var url = $.table._option.updateUrl.replace("{applyId}",applyId);
+						$.modal.open("修改申请", url);
+					}else if(result == "1"){
+						$.modal.alertWarning("不是产假，不能修改");
+					}
+				},
+				error:function(){
+					$.modal.alertWarning("请联系管理员");
+				}
+			});
+			
+		}
+	</script>
+</head>
+<body>
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								申请id：<input type="text" name="applyerId"/>
+							</li>
+							<li>
+								审批人：<input type="text" name="approverName"/>
+							</li>
+							
+							<li>
+								申请类型：<select name="applyType" th:with="type=${@dict.getType('sys_user_apply_type')}">
+									<option value="">---------------请选择---------------</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
+							
+							<li>
+								申请状态：<select id="applyState" name="applyState" th:with="type=${@dict.getType('sys_user_apply_state')}">
+	                    			<option value="">---------------请选择---------------</option>
+	                    			<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+	                			</select>
+							</li>
+							
+							<li>
+								审批意见：<select name="approvalState" th:with="type=${@dict.getType('sys_user_approval_state')}">
+									<option value="">---------------请选择---------------</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
+							
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+			<div style="display:none">
+				<input name="showFlag" id="showFlag" />
+			</div>
+			
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+			
+			 
+		</div>
+		
+	</div>
+	<div th:include="include :: footer"></div>
+	<script th:inline="javascript">
+		var editFlag = [[${@permission.hasPermi('system:userApproval:edit')}]];
+    	var removeFlag = [[${@permission.hasPermi('system:userApproval:remove')}]];
+    	var prefix = ctx + "system/userApproval";
+    	
+    	 $(function() {
+             var options = {
+                 url: prefix + "/myApprovalList",
+                 toViewUrl: "/system/userApproval/toView/{approvalId}",
+                 createUrl: prefix + "/add",
+                 updateUrl: "/system/userApply/edit/{applyId}",
+                 removeUrl: prefix + "/remove",
+ 				 exportUrl: prefix + "/export",
+                 modalName: "审批",
+ 		         showExport: true,
+                 columns: [{
+ 		            checkbox: true
+ 		        },
+ 				{
+ 					field : 'approvalId', 
+ 					title : '审批记录ID',
+ 					visible: false
+ 				},
+ 				{
+ 					field : 'applyerId', 
+ 					title : '申请人ID',
+ 					visible: false,
+ 					sortable: false
+ 				},
+ 				{
+ 					field : 'applyId', 
+ 					title : '申请ID',
+ 					visible: true,
+ 					sortable: false
+ 				},
+ 				{
+ 					field : 'applyerName', 
+ 					title : '申请人',
+ 					sortable: false
+ 				},
+ 				{
+ 					field : 'applyType', 
+ 					title : '申请类型',
+ 					sortable: false
+ 				},
+
+ 				{
+ 					field : 'leaveType', 
+ 					title : '请假类型',
+ 					sortable: false
+ 				},
+ 				{
+ 					field : 'applyTime', 
+ 					title : '申请时间',
+ 					sortable: false
+ 				},
+ 				{
+ 					field : 'timelengthPlus', 
+ 					title : '时长',
+ 					sortable: false
+ 				},
+ 				{
+ 					field : 'applyState', 
+ 					title : '状态',
+ 					sortable: false
+ 				},
+				{
+					field : 'approverName', 
+					title : '审批人',
+					visible: true,
+					sortable: false
+				},
+ 				{
+ 					field : 'approvalState', 
+ 					title : '审批意见',
+ 					sortable: false
+ 				},
+ 				{
+ 					field : 'approverId', 
+ 					title : '审批人ID',
+ 					visible: false,
+ 					sortable: false
+ 					
+ 				},
+ 		        {
+ 		            title: '操作',
+ 		            align: 'center',
+ 		            formatter: function(value, row, index) {
+ 		            	var actions = [];
+ 		            	actions.push('<a class="btn btn-success btn-xs " href="#" onclick="toView(\'' + row.approvalId + '\')"><i class="fa fa-edit"></i>查看</a> ');
+ 		            	actions.push('<div id="div1" class="btn btn-danger btn-xs" href="#" onclick="edit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>修改</div> ');
+ 						return actions.join('');
+ 		            }
+ 		        }]
+             };
+             $.table.init(options);
+         });
+    	 
+    	 
+	</script>
+</body>
+</html>

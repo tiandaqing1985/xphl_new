@@ -124,4 +124,32 @@ public interface SysUserMapper
     
     
     public List<SysUser> selectUserByDpetList(Long deptId);
+    
+    /**
+     * 根据用户id查询该部门领导id
+     */
+    public Long selectApproverIdByApplyerId(Long userId);
+    /**
+     * 根据用户id查询该部门上级领导id
+     */
+    public Long selectUpApproverIdByApplyerId(Long userId);
+    
+    /**
+     * 查询所有存在用户
+     */
+    public List<SysUser> selectAllUser();
+    
+    /**
+	 * 根据用户id查询祖级列表
+	 * @param userId
+	 * @return
+	 */
+	public String selectAncestorsByUserId(Long userId);
+	
+	/**
+	 * 根据部门id查询部门负责人id
+	 * @param userId
+	 * @return
+	 */
+	public Long selectUserIdByDeptId(Long deptId);
 }

@@ -17,6 +17,7 @@ import com.ruoyi.common.utils.spring.SpringUtils;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysRoleDept;
 import com.ruoyi.system.domain.SysRoleMenu;
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.SysUserRole;
 import com.ruoyi.system.mapper.SysRoleDeptMapper;
 import com.ruoyi.system.mapper.SysRoleMapper;
@@ -362,4 +363,13 @@ public class SysRoleServiceImpl implements ISysRoleService
         }
         return userRoleMapper.batchUserRole(list);
     }
+    
+
+    /**
+     * 根据角色id查询用户id
+     */
+	@Override
+	public Long selectUserIdByRoleId(SysUser user) {
+		return userRoleMapper.selectUserIdByRoleId(user);
+	}
 }

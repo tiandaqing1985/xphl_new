@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.HolidayMapper">
+    
+    <resultMap type="Holiday" id="HolidayResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="holidayType"    column="holiday_type"    />
+        <result property="availability"    column="availability"    />
+        <result property="createdate"    column="createdate"    />
+        <result property="overdate"    column="overdate"    />
+        <result property="value"    column="value"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="holidayDetail"    column="holiday_detail"   />
+    </resultMap>
+	
+	
+	<sql id="selectHolidayVo">
+        select id, user_id, holiday_type, availability, createdate, overdate, value, apply_id, holiday_detail from sys_holiday
+    </sql>
+	
+    <select id="selectHolidayList" parameterType="Holiday" resultMap="HolidayResult">
+        <include refid="selectHolidayVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="holidayType != null  and holidayType != '' "> and holiday_type = #{holidayType}</if>
+             <if test="availability != null  and availability != '' "> and availability = #{availability}</if>
+             <if test="createdate != null "> and createdate = #{createdate}</if>
+             <if test="overdate != null "> and overdate = #{overdate}</if>
+             <if test="value != null "> and value = #{value}</if>
+             <if test="applyId != null "> and apply_id = #{applyId}</if>
+             <if test="holidayDetail != null  and holidayDetail != '' "> and holiday_detail = #{holidayDetail}</if>
+         </where>
+    </select>
+    
+    <select id="selectHolidayById" parameterType="Integer" resultMap="HolidayResult">
+        <include refid="selectHolidayVo"/>
+        where id = #{id}
+    </select>
+    
+    <select id="selectOverdateByCreatedate" parameterType="String" resultType="String">
+        SELECT overdate FROM `sys_holiday` WHERE createdate = #{createdate}
+    </select>
+        
+    <insert id="insertHoliday" parameterType="Holiday" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_holiday
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">user_id,</if>
+			<if test="holidayType != null  and holidayType != ''  ">holiday_type,</if>
+			<if test="availability != null  and availability != ''  ">availability,</if>
+			<if test="createdate != null  ">createdate,</if>
+			<if test="overdate != null  ">overdate,</if>
+			<if test="value != null  ">value,</if>
+			<if test="applyId != null  ">apply_id,</if>
+			<if test="holidayDetail != null  and holidayDetail != ''  ">holiday_detail,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">#{userId},</if>
+			<if test="holidayType != null  and holidayType != ''  ">#{holidayType},</if>
+			<if test="availability != null  and availability != ''  ">#{availability},</if>
+			<if test="createdate != null  ">#{createdate},</if>
+			<if test="overdate != null  ">#{overdate},</if>
+			<if test="value != null  ">#{value},</if>
+			<if test="applyId != null  ">#{applyId},</if>
+			<if test="holidayDetail != null  and holidayDetail != ''  ">#{holidayDetail},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateHoliday" parameterType="Holiday">
+        update sys_holiday
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="holidayType != null  and holidayType != ''  ">holiday_type = #{holidayType},</if>
+            <if test="availability != null  and availability != ''  ">availability = #{availability},</if>
+            <if test="createdate != null  ">createdate = #{createdate},</if>
+            <if test="overdate != null  ">overdate = #{overdate},</if>
+            <if test="value != null  ">value = #{value},</if>
+            <if test="applyId != null  ">apply_id = #{applyId},</if>
+            <if test="holidayDetail != null  and holidayDetail != ''  ">holiday_detail = #{holidayDetail},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteHolidayById" parameterType="Integer">
+        delete from sys_holiday where id = #{id}
+    </delete>
+	
+    <delete id="deleteHolidayByIds" parameterType="String">
+        delete from sys_holiday where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="selectHolidaySumByUserId" parameterType="Holiday" resultType="Double">
+    	SELECT SUM(VALUE) FROM `sys_holiday` WHERE holiday_type = #{holidayType} AND availability = 1 AND user_id = #{userId} and `value` != 0.0
+    </select>
+    
+    <select id="selectHolidayByDate" parameterType="Holiday" resultMap="HolidayResult">
+    	SELECT * FROM `sys_holiday` 
+    	<where>  
+    		 DATE_FORMAT(createdate, '%Y-%m') = DATE_FORMAT(#{idate}, '%Y-%m')
+             <if test="id != null "> and id = #{id}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="holidayType != null  and holidayType != '' "> and holiday_type = #{holidayType}</if>
+             <if test="availability != null  and availability != '' "> and availability = #{availability}</if>
+             <if test="createdate != null "> and createdate = #{createdate}</if>
+             <if test="overdate != null "> and overdate = #{overdate}</if>
+             <if test="value != null "> and value = #{value}</if>
+             <if test="applyId != null "> and apply_id = #{applyId}</if>
+             <if test="holidayDetail != null  and holidayDetail != '' "> and holiday_detail = #{holidayDetail}</if>
+         </where>
+    </select>
+    <select id="selectCountCreateDate" parameterType="Holiday" resultType="long">
+    	SELECT count(0) FROM sys_holiday
+    	<where>
+    	     <if test="userId != null "> and user_id = #{userId}</if>
+    	     <if test="createdate != null "> and createdate = #{createdate}</if>
+    	</where>
+    </select>
+    
+    <select id="selectCountHoliday" parameterType="Holiday" resultType="long">
+    	SELECT count(0) FROM sys_holiday
+    	<where>
+    	      <if test="overdate != null "> and overdate <![CDATA[< ]]> #{overdate}</if>
+    	</where>   
+    </select>
+    <update id="updateHolidayValue" parameterType="Holiday">
+   		update sys_holiday set value=0
+		<where>
+    	      <if test="overdate != null "> and overdate <![CDATA[< ]]> #{overdate}</if>
+    	</where>   
+    </update>
+    
+    <resultMap type="RestHoliday" id="RestHolidayResult">
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="restAnnualLeave"    column="n_value"    />
+        <result property="usedAnnualLeave"    column="ny_value"    />
+        <result property="restHolidayShift"    column="t_value"    />
+        <result property="usedHolidayShift"    column="ty_value"    />
+    </resultMap>
+    
+    <select id="selectRestByUserId" parameterType="SysUser" resultMap="RestHolidayResult">
+		    SELECT
+			nu.user_id,
+			nu.`user_name`,
+			( CASE WHEN n.VALUE IS NULL THEN 0 ELSE n.VALUE END ) n_value,
+			( CASE WHEN ny.VALUE IS NULL THEN 0 ELSE ny.VALUE END ) ny_value,
+			( CASE WHEN t.VALUE IS NULL THEN 0 ELSE TRUNCATE ( t.VALUE / 2, 0 )/ 4 END ) t_value,
+			( CASE WHEN ty.VALUE IS NULL THEN 0 ELSE TRUNCATE ( ty.VALUE / 2, 0 )/ 4 END ) ty_value 
+		FROM
+			( SELECT u.dept_id,u.`user_id`, u.`user_name` FROM `sys_user` u ) nu
+			LEFT JOIN (
+			SELECT
+				SUM( h.VALUE ) `value`,
+				h.`user_id` 
+			FROM
+				`sys_holiday` h 
+			WHERE
+				h.holiday_type = 1 
+				AND h.availability = 1 
+			GROUP BY
+				h.`user_id` 
+			) n ON nu.user_id = n.user_id
+			LEFT JOIN (
+			SELECT
+				SUM( h.VALUE ) `value`,
+				h.`user_id` 
+			FROM
+				`sys_holiday` h 
+			WHERE
+				h.holiday_type = 2 
+				AND h.availability = 1 
+			GROUP BY
+				h.`user_id` 
+			) t ON nu.user_id = t.user_id
+			LEFT JOIN (
+			SELECT
+				SUM( r.VALUE ) `value`,
+				h.`user_id` 
+			FROM
+				`sys_holiday` h,
+				`sys_holiday_record` r 
+			WHERE
+				h.`id` = r.`holiday_id` 
+				AND r.`use_state` IN ( 1, 2 ) 
+				AND h.`holiday_type` = 1 
+			GROUP BY
+				h.`user_id` 
+			) ny ON nu.user_id = ny.user_id
+			LEFT JOIN (
+			SELECT
+				SUM( r.VALUE ) `value`,
+				h.`user_id` 
+			FROM
+				`sys_holiday` h,
+				`sys_holiday_record` r 
+			WHERE
+				h.`id` = r.`holiday_id` 
+				AND r.`use_state` IN ( 1, 2 ) 
+				AND h.`holiday_type` = 2 
+			GROUP BY
+				h.`user_id` 
+			) ty ON nu.user_id = ty.user_id 
+    		<where>
+             	<if test="userId != null "> and nu.user_id != #{userId}</if>
+             	<if test="userName != null and userName != '' "> and nu.user_name like concat('%', #{userName}, '%')</if>  
+             	<if test="dSet != null"> 
+             			and nu.dept_id in 
+			          <foreach collection="dSet" index="index" item="item" open="(" separator="," close=")">  
+			            	#{item.deptId}  
+			          </foreach>
+             	</if>
+         	</where>
+    </select>
+    
+    <select id="selectMyRestByUserId" parameterType="SysUser" resultMap="RestHolidayResult">
+    	SELECT
+			nu.user_id,
+			nu.`user_name`,
+			( CASE WHEN n.VALUE IS NULL THEN 0 ELSE n.VALUE END ) n_value,
+			( CASE WHEN ny.VALUE IS NULL THEN 0 ELSE ny.VALUE END ) ny_value,
+			( CASE WHEN t.VALUE IS NULL THEN 0 ELSE TRUNCATE ( t.VALUE / 2, 0 )/ 4 END ) t_value,
+			( CASE WHEN ty.VALUE IS NULL THEN 0 ELSE TRUNCATE ( ty.VALUE / 2, 0 )/ 4 END ) ty_value 
+		FROM
+			( SELECT u.`user_id`, u.`user_name` FROM `sys_user` u ) nu
+			LEFT JOIN (
+			SELECT
+				SUM( h.VALUE ) `value`,
+				h.`user_id` 
+			FROM
+				`sys_holiday` h 
+			WHERE
+				h.holiday_type = 1 
+				AND h.availability = 1 
+			GROUP BY
+				h.`user_id` 
+			) n ON nu.user_id = n.user_id
+			LEFT JOIN (
+			SELECT
+				SUM( h.VALUE ) `value`,
+				h.`user_id` 
+			FROM
+				`sys_holiday` h 
+			WHERE
+				h.holiday_type = 2 
+				AND h.availability = 1 
+			GROUP BY
+				h.`user_id` 
+			) t ON nu.user_id = t.user_id
+			LEFT JOIN (
+			SELECT
+				SUM( r.VALUE ) `value`,
+				h.`user_id` 
+			FROM
+				`sys_holiday` h,
+				`sys_holiday_record` r 
+			WHERE
+				h.`id` = r.`holiday_id` 
+				AND r.`use_state` IN ( 1, 2 ) 
+				AND h.`holiday_type` = 1 
+			GROUP BY
+				h.`user_id` 
+			) ny ON nu.user_id = ny.user_id
+			LEFT JOIN (
+			SELECT
+				SUM( r.VALUE ) `value`,
+				h.`user_id` 
+			FROM
+				`sys_holiday` h,
+				`sys_holiday_record` r 
+			WHERE
+				h.`id` = r.`holiday_id` 
+				AND r.`use_state` IN ( 1, 2 ) 
+				AND h.`holiday_type` = 2 
+			GROUP BY
+				h.`user_id` 
+			) ty ON nu.user_id = ty.user_id 
+			<where>
+             	<if test="userId != null "> and nu.user_id = #{userId}</if>
+             	<if test="userName != null and userName != '' "> and nu.user_name like concat('%', #{userName}, '%')</if>
+         	</where>
+    </select>
+    
+   
+</mapper>

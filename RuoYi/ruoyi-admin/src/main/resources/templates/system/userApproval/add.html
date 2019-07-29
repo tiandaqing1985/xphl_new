@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增审批')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-userApproval-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">申请ID：</label>
+				<div class="col-sm-8">
+					<input id="applyId" name="applyId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">审批状态（1通过，2驳回）：</label>
+				<div class="col-sm-8">
+					<input id="approvalState" name="approvalState" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">审批人ID：</label>
+				<div class="col-sm-8">
+					<input id="approverId" name="approverId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">可视性（0不可见，1可见）：</label>
+				<div class="col-sm-8">
+					<input id="
+visible" name="
+visible" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/userApproval"
+		$("#form-userApproval-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-userApproval-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

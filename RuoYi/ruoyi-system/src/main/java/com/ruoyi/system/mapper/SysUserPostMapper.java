@@ -41,4 +41,10 @@ public interface SysUserPostMapper
      * @return 结果
      */
     public int batchUserPost(List<SysUserPost> userPostList);
+    
+    
+    /**
+     * 根据用户id查询岗位id
+     */
+    public long selectPostIdByUserId(long userId);
 }

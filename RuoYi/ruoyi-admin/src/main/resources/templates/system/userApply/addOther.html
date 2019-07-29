@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	 <th:block th:include="include :: header('新增加班shenq')" />
+	<th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-userApply-addOther">
+        	<div class="form-group" style="display: none">	
+				<label class="col-sm-3 control-label">申请类型：</label>
+				<div class="col-sm-8">
+					<div class="input-group" style="width: 100%">
+                        <input id="applyType" name="applyType" class="form-control" type="text" value="2" >
+                    </div>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>开始时间：</label>
+				<div class="col-sm-8">
+                   <div class="input-group date">
+                       <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                       <input type="text" class="form-control" id="starttime" name="starttime" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off">
+                   </div><span id="p01"></span>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>结束时间：</label>
+				<div class="col-sm-8">
+					<div class="input-group date">
+                       <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                       <input type="text" class="form-control" id="endtime" name="endtime" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off">
+                   </div><span id="p02"></span>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>加班原因：</label>
+				<div class="col-sm-8">
+					<textarea id="details" name="details" type="text" class="form-control" maxlength="500" rows="3"></textarea>
+				</div>
+			</div>
+			<input id="timelength" name="timelength" style="display:none"/>
+		</form>
+    <div th:include="include::footer"></div>
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+		var prefix = ctx + "system/userApply"
+		$("#form-userApply-addOther").validate({
+			rules:{
+				starttime:{
+					required:true,
+				},
+				endtime:{
+					required:true,
+				},
+				details:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		$(function(){
+			layui.use('laydate', function(){
+				var laydate = layui.laydate;
+			
+				laydate.render({ 
+       		    	elem: '#starttime',
+       		 		format: 'yyyy-MM-dd HH:mm',
+       		   	    type: 'datetime',
+       		    	trigger: 'click'
+       		 	 });
+				laydate.render({ 
+       		    	elem: '#endtime',
+       		 		format: 'yyyy-MM-dd HH:mm',
+       		   	    type: 'datetime',
+       		    	trigger: 'click'
+       		 	 });
+			});
+		 });
+		
+		function submitHandler() {
+			debugger;
+		   var flag = false;//提交flag 
+		   var repeatFlag = false;
+	       if ($.validate.form()) {
+	    	   var applyType = $("#applyType").val();
+	    	   var starttime = $("#starttime").val();
+			   var endtime = $("#endtime").val();
+			   if(endtime < starttime){
+					p02.innerText="结束时间不能小于开始时间";
+					$("#p02").css("color","red");
+					flag = false;
+					return;
+				}
+			   
+			   var timelength = DateDiff(starttime,endtime);
+			   $("#timelength").val(timelength);
+			   
+			   if($("#timelength").val() < 2){
+				   $.modal.alertWarning("低于2小时的加班请勿提交申请");
+				   flag = false;
+				   return;
+			   }
+			   
+			 //验证所请假期 是否与已有申请时段重复 
+				 $.ajax({
+					type:"post",
+					async:false,
+					url:"/system/userApply/ifRepeat",
+					data:{"applyType":applyType,"starttime":starttime,"endtime":endtime },
+					dataType:"json",
+					success:function(result){
+						 if(result == "0"){
+							 repeatFlag = true;
+						}
+						else{
+							repeatFlag = false;
+							$.modal.alertWarning("申请中部分时段已经申请过，不能再次申请。");
+							return;
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				}); 
+				
+			   $.ajax({
+					type:"post",
+					async:false,
+					url:"/system/userApply/overWorkTimeRight",
+					data:{"starttime":starttime },
+					dataType:"json",
+					success:function(result){
+						 if(result == "0"){
+							 flag = true;
+						}
+						else{
+							flag = false;
+							 $.modal.alertWarning("此加班已超过三个月，不能提交申请");
+							   return;
+							
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				});
+			   if(flag && repeatFlag){
+				   $.operate.save(prefix + "/addOther", $('#form-userApply-addOther').serialize());
+			   }
+	           
+	       }
+	   };
+	 //计算小时差的函数，通用  
+        function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式 
+            var  aDate,  oDate1,  oDate2
+     		var iDays = 0.0;  
+            oDate1  =  new  Date(sDate1)    //转换为12-18-2006格式 
+            oDate2  =  new  Date(sDate2)  
+            iDays  =  Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60    //把相差的毫秒数转换为小时数  
+     		iDay = Math.floor(iDays * 10)/10
+            return  iDay  
+        };
+    
+	</script>
+</body>
+</html>

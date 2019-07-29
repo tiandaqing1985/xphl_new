@@ -1,5 +1,6 @@
 package com.ruoyi.system.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.annotation.Excel.Type;
 import com.ruoyi.common.core.domain.BaseEntity;
@@ -7,6 +8,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 用户对象 sys_user
@@ -31,7 +33,7 @@ public class SysUser extends BaseEntity
     /** 角色ID */
     private Long roleId;
 
-    /** 登录名称 */
+	/** 登录名称 */
     @Excel(name = "登录名称")
     private String loginName;
 
@@ -39,6 +41,10 @@ public class SysUser extends BaseEntity
     @Excel(name = "用户名称")
     private String userName;
 
+    /** 区域 */
+    @Excel(name = "区域")
+    private String area;
+    
     /** 用户邮箱 */
     @Excel(name = "用户邮箱")
     private String email;
@@ -60,7 +66,26 @@ public class SysUser extends BaseEntity
     /** 盐加密 */
     private String salt;
 
-    /** 帐号状态（0正常 1停用） */
+    /** 用户学历*/
+    @Excel(name = "学历信息")
+    private String record;
+    
+    /** 入职时间*/
+    @Excel(name = "入职时间" , dateFormat = "yyyy/MM/dd", type = Type.IMPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date intime;
+    
+    /** 试用一期结束日期*/
+    @Excel(name = "一期" , dateFormat = "yyyy/MM/dd", type = Type.IMPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date firstphase;
+    
+    /** 试用二期结束日期（转正日期）*/
+    @Excel(name = "二期" , dateFormat = "yyyy/MM/dd", type = Type.IMPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date secondphase;
+	
+	/** 帐号状态（0正常 1停用） */
     @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
@@ -87,7 +112,20 @@ public class SysUser extends BaseEntity
     /** 岗位组 */
     private Long[] postIds;
 
-    public Long getUserId()
+    /**
+     * 部门对象集合
+     */
+    private Set<SysDept> dSet;
+    
+    public Set<SysDept> getdSet() {
+		return dSet;
+	}
+
+	public void setdSet(Set<SysDept> dSet) {
+		this.dSet = dSet;
+	}
+
+	public Long getUserId()
     {
         return userId;
     }
@@ -157,7 +195,15 @@ public class SysUser extends BaseEntity
         this.userName = userName;
     }
 
-    public String getEmail()
+    public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
+
+	public String getEmail()
     {
         return email;
     }
@@ -301,6 +347,40 @@ public class SysUser extends BaseEntity
         this.postIds = postIds;
     }
 
+
+    public String getRecord() {
+		return record;
+	}
+
+	public void setRecord(String record) {
+		this.record = record;
+	}
+
+	public Date getIntime() {
+		return intime;
+	}
+
+	public void setIntime(Date intime) {
+		this.intime = intime;
+	}
+
+	public Date getFirstphase() {
+		return firstphase;
+	}
+
+	public void setFirstphase(Date firstphase) {
+		this.firstphase = firstphase;
+	}
+
+	public Date getSecondphase() {
+		return secondphase;
+	}
+
+	public void setSecondphase(Date secondphase) {
+		this.secondphase = secondphase;
+	}
+
+    
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

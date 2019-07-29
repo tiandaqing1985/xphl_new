@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UserApprovalMapper">
+    
+    <resultMap type="UserApproval" id="UserApprovalResult">
+        <result property="approvalId"    column="approval_id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="approvalState"    column="approval_state"    />
+        <result property="approverId"    column="approver_id"    />
+        <result property="approvaTime"    column="approval_time"/>
+        <result property="approvalSight"    column="approval_sight"    />
+        <result property="approvalLevel"    column="approval_level"/>
+        <result property="remark"    column="remark"/>
+        <result property="timelengthPlus"  column="timelengthPlus"/>
+        <association property="userApply" column="apply_id" javaType="UserApply" resultMap="UserApplyResult"/>
+        <association property="sysUser" column="user_id" javaType="SysUser" resultMap="SysUserResult"/>
+        <association property="sysDept" column="dept_id" javaType="SysDept" resultMap="SysDeptResult"/>
+    </resultMap>
+    
+	<resultMap type="UserApply" id="UserApplyResult">
+        <result property="applyId"    column="apply_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="listNum"    column="list_num"    />
+        <result property="starttime"    column="starttime"    />
+        <result property="endtime"    column="endtime"    />
+        <result property="begintime"    column="begintime"    />
+        <result property="timeapart1"    column="timeapart1"    />
+        <result property="overtime"    column="overtime"    />
+        <result property="timeapart2"    column="timeapart2"    />
+        <result property="timelength"    column="timelength"    />
+        <result property="applyType"    column="apply_type"    />
+        <result property="applyState"    column="apply_state"    />
+        <result property="confirmState"    column="confirm_state"    />
+        <result property="details"    column="details"    />
+        <result property="leaveType"    column="leave_type"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="approverName"   column="approver_name"/> 
+        <result property="forApplyId"   column="for_applyid"/>
+    </resultMap>
+    
+    <resultMap type="SysUser" id="SysUserResult">
+		<id     property="userId"       column="user_id"      />
+		<result property="deptId"       column="dept_id"      />
+		<result property="loginName"    column="login_name"   />
+		<result property="userName"     column="user_name"    />
+		<result property="email"        column="email"        />
+		<result property="phonenumber"  column="phonenumber"  />
+		<result property="sex"          column="sex"          />
+		<result property="avatar"       column="avatar"       />
+		<result property="password"     column="password"     />
+		<result property="salt"         column="salt"         />
+		<result property="status"       column="status"       />
+		<result property="delFlag"      column="del_flag"     />
+		<result property="loginIp"      column="login_ip"     />
+		<result property="loginDate"    column="login_date"   />
+		<result property="createBy"     column="create_by"    />
+		<result property="createTime"   column="create_time"  />
+		<result property="updateBy"     column="update_by"    />
+		<result property="updateTime"   column="update_time"  />
+		<result property="remark"       column="remark"       />
+		<result property="record"       column="record"       />
+		<result property="intime"       column="intime"       />
+		<result property="firstphase"   column="firstphase"       />
+		<result property="secondphase"  column="secondphase"       />
+	</resultMap>
+	
+	<resultMap type="SysDept" id="SysDeptResult">
+		<id     property="deptId"     column="dept_id"     />
+		<result property="parentId"   column="parent_id"   />
+		<result property="ancestors"  column="ancestors"   />
+		<result property="deptName"   column="dept_name"   />
+		<result property="orderNum"   column="order_num"   />
+		<result property="leader"     column="leader"      />
+		<result property="phone"      column="phone"       />
+		<result property="email"      column="email"       />
+		<result property="status"     column="status"      />
+		<result property="delFlag"    column="del_flag"    />
+		<result property="parentName" column="parent_name" />
+		<result property="createBy"   column="create_by"   />
+		<result property="createTime" column="create_time" />
+		<result property="updateBy"   column="update_by"   />
+		<result property="updateTime" column="update_time" />
+	</resultMap>
+	
+	<resultMap type="com.ruoyi.system.domain.QueryConditions" id="QueryConditionsResult">
+        		
+        <result property="approvalId"    column="approval_id"    />
+        <result property="approverId"    column="approver_id"    />
+        <result property="applyId"    column="apply_id"     />
+        <result property="applyerId"    column="applyer_id"    />
+        <result property="applyerName"    column="applyer_name"    />
+        <result property="approverName"    column="approver_name"    />
+        <result property="listNum"    column="list_num"    />
+        <result property="applyType"    column="apply_type"    />
+        <result property="leaveType"    column="leave_type"    />
+        <result property="timelength"    column="timelength"    />
+        <result property="applyState"    column="apply_state"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="approvalTime"    column="approval_time"    />
+        <result property="approvalState"    column="approval_state"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="approvalSight"    column="approval_sight"    />
+        <result property="timelengthPlus"  column="timelengthPlus"/>
+    </resultMap>
+	<sql id="selectUserApprovalVo">
+        select p.approval_id, p.apply_id, p.approval_state, p.approver_id, p.approval_sight, p.approval_time, p.approval_level,p.remark,
+        	a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timelength, a.apply_type, a.apply_state, a.confirm_state, a.details, a.leave_type, a.apply_time, a.for_applyid,
+        	u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
+        	d.dept_name
+        from sys_user_approval p
+	    	LEFT JOIN sys_user_apply a  ON p.apply_id = a.`apply_id`
+	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
+	    	LEFT JOIN sys_dept d ON u. dept_id = d.dept_id
+	    
+    </sql>
+	
+    <select id="selectUserApprovalList" parameterType="UserApproval" resultMap="UserApprovalResult">
+        SELECT p.approval_id, p.apply_id, 
+        (CASE
+         WHEN p.approval_state = 1 THEN
+          '同意'
+         WHEN p.approval_state = 2 THEN
+          '驳回'
+         WHEN p.approval_state = 3 THEN
+          '未操作'
+         ELSE 
+            ''
+        END)approval_state, p.approver_id, p.approval_sight, p.approval_time, p.approval_level, p.remark,
+        	a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timelength,  a.for_applyid,
+        	(CASE
+	         WHEN a.apply_type = 1 THEN
+	          '请假'
+	         WHEN a.apply_type = 2 THEN
+	          '加班'
+	         WHEN a.apply_type = 3 THEN
+	          '销假'
+	         ELSE 
+	            ''
+        	END)apply_type,
+        	(CASE
+	         WHEN a.apply_state = 1 THEN
+	          '待审批'
+	         WHEN a.apply_state = 2 THEN
+	          '已撤回'
+	         WHEN a.apply_state = 3 THEN
+	          '申请成功'
+	         WHEN a.apply_state = 4 THEN
+	          '申请失败'
+	         WHEN a.apply_state = 5 THEN
+		      '已销假'
+	         ELSE 
+	            ''
+	        END)apply_state, a.confirm_state, a.details, a.leave_type, a.apply_time,
+	        u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
+        	d.dept_name
+        FROM sys_user_approval p
+	    	LEFT JOIN sys_user_apply a  ON p.apply_id = a.`apply_id`
+	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
+	    	LEFT JOIN sys_dept d ON u. dept_id = d.dept_id
+        <where>  
+            <if test="approvalId != null "> and p.approval_id = #{approvalId}</if>
+             <if test="applyId != null "> and p.apply_id = #{applyId}</if>
+             <if test="approvalState != null  and approvalState != '' "> and p.approval_state = #{approvalState}</if>
+             <if test="approverId != null "> and p.approver_id = #{approverId}</if>
+             and p.approval_sight = 1 and a.apply_state = 1
+             <if test="approvalLevel != null  and approvalLevel != '' ">and p.approval_level = #{approvalLevel}</if>
+             <if test="remark != null  and remark != '' ">and p.remark = #{remark}</if>   
+         </where>
+         ORDER BY a.apply_id DESC
+    </select>
+    
+    <select id="selectQueryConditionsList" parameterType="QueryConditions" resultMap="QueryConditionsResult">
+       select a.list_num, a.timelength, (a.user_id)applyer_id, a.for_applyid,
+      		(CASE
+	         WHEN a.apply_type = 1 THEN
+	          CONCAT(TRUNCATE(a.timelength,1 ), '天')
+	         WHEN a.apply_type = 2 THEN
+	          CONCAT(TRUNCATE(a.timelength,0 ) , '小时')
+	         WHEN a.apply_type = 3 THEN
+	          CONCAT(TRUNCATE(a.timelength,1 ) , '天')
+	         ELSE 
+	            ''
+        	END)timelengthPlus,
+       		(CASE
+	         WHEN a.apply_type = 1 THEN
+	          '请假'
+	         WHEN a.apply_type = 2 THEN
+	          '加班'
+	         WHEN a.apply_type = 3 THEN
+	          '销假'
+	         ELSE 
+	            ''
+        	END)apply_type,
+        	(CASE
+	         WHEN a.apply_state = 1 THEN
+	          '待审批'
+	         WHEN a.apply_state = 2 THEN
+	          '已撤回'
+	         WHEN a.apply_state = 3 THEN
+	          '申请成功'
+	         WHEN a.apply_state = 4 THEN
+	          '申请失败'
+	         WHEN a.apply_state = 5 THEN
+		      '已销假'
+	         ELSE 
+	            ''
+	        END)apply_state,
+	        (CASE
+		         WHEN a.leave_type = 1 THEN
+		          '年假'
+		         WHEN a.leave_type = 2 THEN
+		          '调休'
+		         WHEN a.leave_type = 3 THEN
+		          '事假'
+		         WHEN a.leave_type = 4 THEN
+		          '病假'
+		         WHEN a.leave_type = 5 THEN
+		          '婚假'
+		         WHEN a.leave_type = 6 THEN
+		          '产假'
+		         WHEN a.leave_type = 7 THEN
+		          '陪产假'
+		         WHEN a.leave_type = 8 THEN
+		          '产检假'
+		         WHEN a.leave_type = 9 THEN
+		          '丧假'
+		         ELSE 
+		            ''
+		     END)leave_type, a.apply_time,
+        	(CASE
+	         WHEN p.approval_state = 1 THEN
+	          '同意'
+	         WHEN p.approval_state = 2 THEN
+	          '驳回'
+	         WHEN p.approval_state = 3 THEN
+	          '未审批'
+	         ELSE 
+	            ''
+	        END)approval_state,
+			p.apply_id, p.approval_time, p.approval_sight, p.approval_id, p.approver_id,
+        		(u.user_name)applyer_name,
+        		(s.user_name)approver_name,
+        		d.dept_name
+        from sys_user_approval p
+	    	LEFT JOIN sys_user_apply a  ON p.apply_id = a.`apply_id`
+	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id` 
+	    	LEFT JOIN sys_dept d ON u. dept_id = d.dept_id
+	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
+        <where> 
+        	<if test="approverId != null "> and p.approver_id = #{approverId}</if>
+        	<if test="approvalState != null  and approvalState != '' "> and p.approval_state = #{approvalState,jdbcType=VARCHAR}</if>
+        	<if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState,jdbcType=VARCHAR}</if>
+        	<if test="applyerName != null  and applyerName != '' "> and u.user_name like concat('%', #{applyerName}, '%')</if>
+        	<if test="timelength != null "> and a.timelength = #{timelength}</if>
+        	<if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType,jdbcType=VARCHAR}</if>
+        	<if test="approvalTime != null  and approvalTime != '' "> and p.approval_time = #{approvalTime}</if>
+        	<if test="approverName != null  and approverName != '' "> and s.user_name like concat('%', #{approverName}, '%')</if>
+        	<if test="listNum != null  and listNum != '' "> and a.list_num = #{listNum}</if>
+        	<if test="approvalId != null "> and p.approval_id = #{approvalId}</if>
+        	<if test="applyerId != null "> and a.user_id = #{applyerId}</if>
+        	<if test="deptName != null  and deptName != '' "> and d.dept_name = #{deptName}</if>
+        	<if test="approvalSight != null  and approvalSight != '' "> and p.approval_sight = #{approvalSight,jdbcType=VARCHAR}</if>
+      		<if test="status ==1">and p.approval_state != 3</if>
+         </where>    
+         ORDER BY a.apply_id DESC
+    </select>
+    
+    <select id="selectAllQueryConditionsList" parameterType="QueryConditions" resultMap="QueryConditionsResult">
+    	select a.list_num, a.timelength, (a.user_id)applyer_id, a.for_applyid,
+    		(CASE
+	         WHEN a.apply_type = 1 THEN
+	          CONCAT(TRUNCATE(a.timelength,1 ), '天')
+	         WHEN a.apply_type = 2 THEN
+	          CONCAT(TRUNCATE(a.timelength,0 ) , '小时')
+	         WHEN a.apply_type = 3 THEN
+	          CONCAT(TRUNCATE(a.timelength,1 ) , '天')
+	         ELSE 
+	            ''
+        	END)timelengthPlus,
+       		(CASE
+	         WHEN a.apply_type = 1 THEN
+	          '请假'
+	         WHEN a.apply_type = 2 THEN
+	          '加班'
+	         WHEN a.apply_type = 3 THEN
+	          '销假'
+	         ELSE 
+	            ''
+        	END)apply_type,
+        	(CASE
+	         WHEN a.apply_state = 1 THEN
+	          '待审批'
+	         WHEN a.apply_state = 2 THEN
+	          '已撤回'
+	         WHEN a.apply_state = 3 THEN
+	          '申请成功'
+	         WHEN a.apply_state = 4 THEN
+	          '申请失败'
+	         WHEN a.apply_state = 5 THEN
+		      '已销假'
+	         ELSE 
+	            ''
+	        END)apply_state,
+	        a.leave_type, a.apply_time,
+        	(CASE
+	         WHEN p.approval_state = 1 THEN
+	          '同意'
+	         WHEN p.approval_state = 2 THEN
+	          '驳回'
+	         WHEN p.approval_state = 3 THEN
+	          '未审批'
+	         ELSE 
+	            ''
+	        END)approval_state,
+			p.apply_id, p.approval_time, p.approval_sight, p.approval_id, p.approver_id,
+        		(u.user_name)applyer_name,
+        		(s.user_name)approver_name,
+        		d.dept_name
+        from sys_user_approval p
+	    	LEFT JOIN sys_user_apply a  ON p.apply_id = a.`apply_id`
+	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id` 
+	    	LEFT JOIN sys_dept d ON u. dept_id = d.dept_id
+	    	LEFT JOIN (SELECT * FROM sys_user) s ON s.user_id = p.approver_id
+	    	<where>  
+        	<if test="approverId != null "> and p.approver_id = #{approverId}</if>
+        	<if test="approvalState != null  and approvalState != '' "> and p.approval_state = #{approvalState}</if>
+        	<if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
+        	<if test="applyerName != null  and applyerName != '' "> and u.user_name like concat('%', #{applyerName}, '%')</if>
+        	<if test="timelength != null"> and a.timelength = #{timelength}</if>
+        	<if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
+        	<if test="approvalTime != null  and approvalTime != '' "> and p.approval_time = #{approvalTime}</if>
+        	<if test="approverName != null  and approverName != '' "> and s.user_name like concat('%', #{approverName}, '%')</if>
+        	<if test="listNum != null  and listNum != '' "> and a.list_num = #{listNum}</if>
+        	<if test="approvalId != null "> and p.approval_id = #{approvalId}</if>
+        	<if test="applyerId != null "> and a.user_id = #{applyerId}</if>
+        	<if test="deptName != null  and deptName != '' "> and d.dept_name = #{deptName}</if>
+        	<if test="approvalSight != null  and approvalSight != '' "> and p.approval_sight = #{approvalSight}</if>
+             
+         </where>
+         ORDER BY a.apply_id DESC
+    </select>
+    
+    <select id="selectUserApprovalByUserApproval" parameterType="UserApproval" resultMap="UserApprovalResult">
+        <include refid="selectUserApprovalVo"/>
+        <where>  
+            <if test="approvalId != null and approvalId != '' "> and p.approval_id = #{approvalId}</if>
+             <if test="applyId != null and applyId != '' " > and p.apply_id = #{applyId}</if>
+             <if test="approvalState != null  and approvalState != '' "> and p.approval_state = #{approvalState}</if>
+             <if test="approverId != null and approverId != '' "> and p.approver_id = #{approverId}</if>
+             <if test="approvalSight != null and approvalSight != '' "> and p.approval_sight = #{approvalSight}</if>
+             <if test="approvalLevel != null  and approvalLevel != '' ">and p.approval_level = #{approvalLevel}</if> 
+             <if test="remark != null  and remark != '' ">and p.remark = #{remark}</if>   
+         </where>
+    </select>
+    
+    <select id="selectUserApprovalById" parameterType="Long" resultMap="UserApprovalResult">
+        <include refid="selectUserApprovalVo"/>
+        where approval_id = #{approvalId}
+    </select>
+        
+    <insert id="insertUserApproval" parameterType="UserApproval" useGeneratedKeys="true" keyProperty="approvalId">
+        insert into sys_user_approval
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="applyId != null  ">apply_id,</if>
+			<if test="approvalState != null  and approvalState != ''  ">approval_state,</if>
+			<if test="approverId != null  ">approver_id,</if>
+			<if test="approvalSight != null  and approvalSight != ''  ">approval_sight,</if>
+			<if test="approvalLevel != null  and approvalLevel != ''">approval_level</if>
+			<if test="remark != null  and remark != '' ">remark</if>   
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="applyId != null  ">#{applyId},</if>
+			<if test="approvalState != null  and approvalState != ''  ">#{approvalState},</if>
+			<if test="approverId != null  ">#{approverId},</if>
+			<if test="approvalSight != null  and approvalSight != ''  ">#{approvalSight},</if>
+			<if test="approvalLevel != null  and approvalLevel != ''  ">#{approvalLevel},</if>
+			<if test="remark != null  and remark != '' ">#{remark},</if>   
+         </trim>
+    </insert>
+	 
+    <update id="updateUserApproval" parameterType="UserApproval">
+        update sys_user_approval
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyId != null  ">apply_id = #{applyId},</if>
+            <if test="approvalState != null  and approvalState != ''  ">approval_state = #{approvalState},</if>
+            <if test="approverId != null  ">approver_id = #{approverId},</if>
+            <if test="approvalSight != null  and approvalSight != ''  ">approval_sight = #{approvalSight},</if>
+            <if test="approvalLevel != null  and approvalLevel != ''  ">approval_level = #{approvalLevel},</if>
+            <if test="remark != null  and remark != '' ">remark = #{remark},</if>   
+            approval_time = sysdate()
+        </trim>
+        where approval_id = #{approvalId}
+    </update>
+
+	<delete id="deleteUserApprovalById" parameterType="Long">
+        delete from sys_user_approval where approval_id = #{approvalId}
+    </delete>
+	
+    <delete id="deleteUserApprovalByIds" parameterType="String">
+        delete from sys_user_approval where approval_id in 
+        <foreach item="approvalId" collection="array" open="(" separator="," close=")">
+            #{approvalId}
+        </foreach>
+    </delete>
+    
+    
+    
+    <delete id="deleteChongFuShenHe" parameterType="Long">
+        DELETE from sys_user_approval where approval_id in ( select approval_id From  ( select max(approval_id) approval_id from sys_user_approval where apply_id = #{applyId} GROUP BY approver_id HAVING COUNT(approver_id)>1) a)
+    </delete>
+   
+</mapper>

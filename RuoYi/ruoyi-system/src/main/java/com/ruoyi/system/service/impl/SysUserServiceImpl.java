@@ -1,6 +1,11 @@
 package com.ruoyi.system.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -475,5 +480,146 @@ public class SysUserServiceImpl implements ISysUserService
 	@Override
 	public List<SysUser> selectUserByDpetList(Long deptId) {
 		return userMapper.selectUserByDpetList(deptId);
+	}
+	
+	@Override
+	/**
+	 * 得到第n个月的入职日期
+	 */
+	public Date getDate(String intime, int n) throws ParseException {
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = Calendar.getInstance();
+		Date date = null;
+		try {
+			date = s.parse(intime);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		c.setTime(date);
+		int day = c.get(Calendar.DAY_OF_MONTH);
+		int month = c.get(Calendar.MONTH);
+		int year = c.get(Calendar.YEAR);
+		
+		if(month + n > 12){
+			year = year + 1;
+			month = month + n -12;
+		}
+		else{
+			month = month + n;
+		}
+		
+		c.set(year, month, 1);
+		int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+		
+		if(maxDay < day){
+			c.set(year, month, maxDay);
+		}
+		else{
+			c.set(year, month, day);
+		}
+		String nextDay = s.format(c.getTime());
+		
+		return s.parse(nextDay);
+	}
+	
+	/**
+     * 根据用户id查询该部门领导id
+     */
+	@Override
+	public Long selectApproverIdByApplyerId(Long userId) {
+		return userMapper.selectApproverIdByApplyerId(userId);
+	}
+	/**
+     * 根据用户id查询该部门上级领导id
+     */
+	@Override
+	public Long selectUpApproverIdByApplyerId(Long userId) {
+		
+		return userMapper.selectUpApproverIdByApplyerId(userId);
+	}
+    
+	/**
+	 * 得到当月是入职的第几个月
+	 */
+	@Override
+	public int countMonth(String intime){
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c1 = Calendar.getInstance();
+		Calendar c2 = Calendar.getInstance();
+		
+		Date date = null;
+		
+		try {
+			date = s.parse(intime);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		c1.setTime(date);
+		c2.setTime(new Date());
+		
+		int m1 = c1.get(Calendar.MONTH);
+		int y1 = c1.get(Calendar.YEAR);
+		
+		int m2 = c2.get(Calendar.MONTH);
+		int y2 = c2.get(Calendar.YEAR);
+		int monthCount = 0;
+		
+		if (m1 > m2) {
+			monthCount = 12 - m1 + m2 + (y2 - y1 -1) * 12;
+		}
+		else{
+			monthCount = m2 - m1 + (y2 - y1) * 12;
+		}
+		
+		
+		return monthCount;
+	}
+
+	/**
+     * 查询所有存在用户
+     */
+	@Override
+	public List<SysUser> selectAllUser() {
+		
+		return userMapper.selectAllUser();
+	}
+
+	@Override
+	public List<Long> selectCenterIdByUserId(Long userId) {
+		
+		String ancestors = userMapper.selectAncestorsByUserId(userId);
+		
+		List<Long> list = new LinkedList<Long> ();
+		if(ancestors != null){
+			String[] ancestorsArray = ancestors.split(",");
+			
+			if(ancestorsArray!=null && ancestorsArray.length>0){
+				for(int i=0;i<ancestorsArray.length;i++){
+					if(!"0".equals(ancestorsArray[i])){ //排除总公司的 部门编号
+						Long deptId = Long.parseLong(ancestorsArray[i]);
+						Long id = userMapper.selectUserIdByDeptId(deptId);
+						list.add(id);
+					}
+				}
+			}
+			
+			return list;
+		}
+		else {
+			return null;
+		}
+		
+	}
+
+	 /**
+		 * 根据部门id查询部门负责人id
+		 * @param userId
+		 * @return
+		 */
+	@Override
+	public Long selectUserIdByDeptId(Long deptId) {
+		
+		return userMapper.selectUserIdByDeptId(deptId);
 	}
 }

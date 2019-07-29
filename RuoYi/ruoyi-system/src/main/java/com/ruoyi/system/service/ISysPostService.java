@@ -89,4 +89,10 @@ public interface ISysPostService
      * @return 结果
      */
     public String checkPostCodeUnique(SysPost post);
+    
+    
+    /**
+     * 根据用户id查询岗位id
+     */
+    public long selectPostIdByUserId(long userId);
 }

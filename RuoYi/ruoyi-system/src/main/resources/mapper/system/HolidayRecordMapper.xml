@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.HolidayRecordMapper">
+    
+    <resultMap type="HolidayRecord" id="HolidayRecordResult">
+        <result property="id"    column="id"    />
+        <result property="holidayId"    column="holiday_id"    />
+        <result property="useApplyId"    column="use_apply_id"    />
+        <result property="value"    column="value"    />
+        <result property="useState"    column="use_state"    />
+        <result property="recordHolidayType"    column="holiday_type"    />
+        <association property="holiday" column="id" javaType="Holiday" resultMap="HolidayResult"/>
+    </resultMap>
+    
+    <resultMap type="Holiday" id="HolidayResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="holidayType"    column="holiday_type"    />
+        <result property="availability"    column="availability"    />
+        <result property="createdate"    column="createdate"    />
+        <result property="overdate"    column="overdate"    />
+        <result property="value"    column="value"    />
+        <result property="applyId"    column="apply_id"    />
+    </resultMap>
+    
+    
+	
+	<sql id="selectHolidayRecordVo">
+        SELECT r.id, r.holiday_id, r.use_apply_id, r.value, r.use_state,
+       		   h.`apply_id`, h.`availability`, h.`createdate`, h.`holiday_type`, h.`overdate`,h.`user_id`, h.`value`
+    	FROM sys_holiday_record r
+			LEFT JOIN sys_holiday h ON r.`holiday_id` = h.`id`
+    </sql>
+	
+    <select id="selectHolidayRecordList" parameterType="HolidayRecord" resultMap="HolidayRecordResult">
+        <include refid="selectHolidayRecordVo"/>
+        <where>  
+            <if test="id != null "> and r.id = #{id}</if>
+             <if test="holidayId != null "> and r.holiday_id = #{holidayId}</if>
+             <if test="useApplyId != null "> and r.use_apply_id = #{useApplyId}</if>
+             <if test="value != null "> and r.value = #{value}</if>
+             <if test="useState != null  and useState != '' "> and r.use_state = #{useState}</if>
+             <if test="recordHolidayType != null  and recordHolidayType != '' ">h.holiday_type = #{recordHolidayType}</if>
+         </where>
+    </select>
+    
+    <!-- 查询使用的假期记录 -->
+    <select id="selectUsedHolidayRecordList" parameterType="HolidayRecord" resultMap="HolidayRecordResult">
+        SELECT r.id, r.holiday_id, r.use_apply_id, r.value, 
+        	   (CASE
+		         WHEN r.use_state = 1 THEN
+		          '申请中'
+		         WHEN r.use_state = 2 THEN
+		          '已使用'
+		         ELSE 
+		            ''
+		        END)use_state,
+       		   h.`apply_id`, h.`availability`, h.`createdate`, h.`holiday_type`, h.`overdate`,h.`user_id`, h.`value`
+    	FROM sys_holiday_record r
+			LEFT JOIN sys_holiday h ON r.`holiday_id` = h.`id`
+        <where>  
+             <if test="id != null "> and r.id = #{id}</if>
+             <if test="holidayId != null "> and r.holiday_id = #{holidayId}</if>
+             <if test="useApplyId != null "> and r.use_apply_id = #{useApplyId}</if>
+             <if test="value != null "> and r.value = #{value}</if>
+             and r.use_state in (1, 2)
+             <if test="recordHolidayType != null  and recordHolidayType != '' ">and h.holiday_type = #{recordHolidayType}</if>
+             <if test="userId != null">and h.user_id = #{userId}</if>
+         </where>
+    </select>
+    
+    <select id="selectHolidayRecordById" parameterType="Long" resultMap="HolidayRecordResult">
+        <include refid="selectHolidayRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertHolidayRecord" parameterType="HolidayRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_holiday_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="holidayId != null  ">holiday_id,</if>
+			<if test="useApplyId != null  ">use_apply_id,</if>
+			<if test="value != null  ">value,</if>
+			<if test="useState != null  and useState != ''  ">use_state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="holidayId != null  ">#{holidayId},</if>
+			<if test="useApplyId != null  ">#{useApplyId},</if>
+			<if test="value != null  ">#{value},</if>
+			<if test="useState != null  and useState != ''  ">#{useState},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateHolidayRecord" parameterType="HolidayRecord">
+        update sys_holiday_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="holidayId != null  ">holiday_id = #{holidayId},</if>
+            <if test="useApplyId != null  ">use_apply_id = #{useApplyId},</if>
+            <if test="value != null  ">value = #{value},</if>
+            <if test="useState != null  and useState != ''  ">use_state = #{useState},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    
+    <update id="updateHolidayRecordByApplyId" parameterType="HolidayRecord">
+        update sys_holiday_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="holidayId != null  ">holiday_id = #{holidayId},</if>
+            <if test="value != null  ">value = #{value},</if>
+            <if test="useState != null  and useState != ''  ">use_state = #{useState},</if>
+        </trim>
+        where use_apply_id = #{useApplyId}
+    </update>
+
+	<delete id="deleteHolidayRecordById" parameterType="Long">
+        delete from sys_holiday_record where id = #{id}
+    </delete>
+	
+    <delete id="deleteHolidayRecordByIds" parameterType="String">
+        delete from sys_holiday_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

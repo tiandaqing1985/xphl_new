@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增申请')" />
+	<th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-userApply-add">
+        	<div class="form-group" style="display: none">	
+				<label class="col-sm-3 control-label">申请类型：</label>
+				<div class="col-sm-8">
+					<div class="input-group" style="width: 100%">
+                        <input id="applyType" name="applyType" class="form-control" type="text" value="1" >
+                    </div>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>请假类型：</label>
+				<div class="col-sm-8">
+					<select id="leaveType" name="leaveType" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_leavetype')}">
+	                    	<option value="">-------------------------------------------请选择-----------------------------------------------</option>
+	                    	<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+	                </select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>开始时间：</label>
+				<div class="col-sm-8">
+					<div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input type="text" class="form-control" id="starttime" name="starttime" placeholder="yyyy-MM-dd" autocomplete="off">
+                    </div><span id="p01"></span>
+				</div>
+			</div>
+			<div class="form-group" id="div1" style="display:block">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>时段：</label >
+				<div class="col-sm-8">
+					<select id="timeapart1" name="timeapart1" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_timeapart')}" required>
+	                    	<option value="">-------------------------------------------请选择-----------------------------------------------</option>
+	                    	<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+	                </select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>结束时间：</label>
+				<div class="col-sm-8">
+					<div class="input-group date">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input type="text" class="form-control" id="endtime" name="endtime" placeholder="yyyy-MM-dd" autocomplete="off">
+                    </div><span id="p02"></span>
+				</div>
+			</div>
+			<div class="form-group" id="div2" style="display:block">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>时段：</label>
+				<div class="col-sm-8">
+					<select id="timeapart2" name="timeapart2" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_timeapart')}" required>
+	                    	<option value="">-------------------------------------------请选择-----------------------------------------------</option>
+	                    	<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+	                </select>
+				</div>
+			</div>
+			<div class="form-group" id="div3" style="display:none">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>时段：</label >
+				<div class="col-sm-8">
+					<select id="timeapart3" name="timeapart3" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_timeapart3')}" required>
+	                    	<option value="">-------------------------------------------请选择-----------------------------------------------</option>
+	                    	<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+	                </select>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>请假理由：</label>
+				<div class="col-sm-8">
+					<textarea id="details" name="details" type="text" class="form-control" maxlength="500" rows="3" required></textarea>
+				</div>
+			</div>
+			
+			<div class="form-group">	<span id="p03"></span>
+				<label class="col-sm-3 control-label">证明附件：</label>
+				<div class="col-sm-8">
+                       <div class="file-loading">
+                       		<input name="prove" id="prove"  type="hidden"  >
+                            <input name="provefile" id="provefile"  class="form-control" type="file"  >
+                            <button type="button" class="btn btn-sm btn-primary" onclick="shangchuan1()"><i class="fa fa-check"></i>上传</button>&nbsp;
+			            	
+			           </div>
+				</div>
+			</div>
+			<input id="timelength" name="timelength" style="display:none"/>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <th:block th:include="include :: datetimepicker-js" />
+    <script type="text/javascript">
+		var prefix = ctx + "system/userApply"
+		var ifDate = true;
+		$(function(){
+			layui.use('laydate', function(){
+				var laydate = layui.laydate;
+			
+				laydate.render({ 
+       		    	elem: '#starttime',
+       		 		format: 'yyyy-MM-dd',
+       		   	    type: 'date'
+       		 	 });
+			});
+		 });
+		$(function(){
+			layui.use('laydate', function(){
+				var laydate = layui.laydate;
+			
+				laydate.render({ 
+       		    	elem: '#endtime',
+       		 		format: 'yyyy-MM-dd',
+       		   	    type: 'date'
+       		 	 });
+			});
+		});
+		$("#form-userApply-add").validate({
+			rules:{
+				leaveType:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		$("#starttime").focus(function(){
+			
+            $('#p01').empty();
+
+	    });
+		$(function() {
+			$("#leaveType").blur(function(){
+				if($("#leaveType").val() == "10"){
+					var div3 = document.getElementById("div3");
+			        div3.style.display="block";
+					var div1 = document.getElementById("div1");
+			        div1.style.display="none";
+			        var div2 = document.getElementById("div2");
+			        div2.style.display="none";
+					var timeapart1 = $("#timeapart1").val(0);
+					var timeapart2 = $("#timeapart2").val(0);
+					
+				}
+				else{
+					var div3 = document.getElementById("div3");
+			        div3.style.display="none";
+					var div1 = document.getElementById("div1");
+			        div1.style.display="block";
+			        var div2 = document.getElementById("div2");
+			        div2.style.display="block";
+				}
+			});
+		}); 
+		
+		function shangchuan1(){
+			 var formData = new FormData();
+			 
+			 if ($('#provefile')[0].files[0] == null) {
+			      $.modal.alertWarning("请先选择文件路径");
+			      return false;
+			  }
+			  formData.append('fileName', $("#provefile").val());
+			  formData.append('file', $('#provefile')[0].files[0]);
+			 
+			    $.ajax({
+			        url: "/common/upload1",
+			        type: 'post',
+			        cache: false,
+			        data: formData,
+			        processData: false,
+			        contentType: false,
+			        dataType: "json",
+			        success: function(result) {
+			        	$.modal.alertSuccess("上传成功");
+		        		$("#prove").val(result.url);
+		        		
+			        }
+			    });
+		}
+		
+		function submitHandler() {
+			debugger;
+			if ($.validate.form()) {
+				
+				var leaveType = $("#leaveType").val();
+				var starttime = $("#starttime").val();
+				var endtime = $("#endtime").val();
+				var timeapart1 = $("#timeapart1").val();
+				var timeapart2 = $("#timeapart2").val();
+				var applyType = $("#applyType").val();
+				var datelength = 0.0;
+				if(leaveType == "10"){
+					datelength = 1.0;
+				}else{
+					datelength = Datelength(starttime, endtime, timeapart1, timeapart2);
+				}
+					
+				$("#timelength").val(datelength);
+				
+				var flag = false;//提交flag 
+				var repeatFlag = false;
+				var proveFlag = true;//是否提交附件 flag
+				var confirmFlag = false; // 是否需要确认flag
+				var confirmText = "确认";
+				
+				
+				if ($('#prove').val() == null || $('#prove').val() == '') {
+				      proveFlag = false;
+				}
+				
+				if(DateDiff(getNowFormatDate(),$("#starttime").val()) > 1){
+					alert(DateDiff(getNowFormatDate(),$("#starttime").val()))
+						p01.innerText="补卡时间超时，公司规定补卡时间为一天";
+						$("#p01").css("color","red");
+						flag = false;
+						return;
+				}
+				
+				if(endtime < starttime){
+					p02.innerText="结束日期不能小于开始日期";
+					$("#p02").css("color","red");
+					flag = false;
+					return;
+				}else if(endtime == starttime){
+					if(timeapart1 == "2" && timeapart2 == "1"){
+						p02.innerText="结束日期不能小于开始日期";
+						$("#p02").css("color","red");
+						flag = false;
+						return;
+					}
+				}
+				else{
+					if(leaveType == "1"){  //年假
+						if(datelength >3){
+							if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 2){
+								p01.innerText="超过3天的年假需提前2天提交申请";
+								$("#p01").css("color","red");
+								flag = false;
+								return;
+							}
+						}
+						else if (datelength >1){
+							if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 1){
+								p01.innerText="超过1天的年假需提前提交申请";
+								$("#p01").css("color","red");
+								flag = false;
+								return;
+							}
+						}
+						
+					}
+					else if(leaveType == "4"){//病假
+						if(datelength >= 2){
+							//是否提交证明附件
+							if(proveFlag){
+								
+							}
+							else{
+								p03.innerText="超过一天的病假需提交证明附件";
+								$("#p03").css("color","red");
+								return;
+							}
+						}
+					}
+					else if(leaveType == "5"){ //婚假
+						if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 7){
+							p01.innerText="婚假需提前一周提交申请";
+							$("#p01").css("color","red");
+							flag = false;
+							return;
+						}
+						if(datelength > 10){
+							$.modal.alertWarning("超出婚假可享受休假时长");
+							return;
+						}
+						else if(datelength < 10){
+							confirmFlag = true;
+							confirmText = "婚假可享受10天";
+						}
+						//是否提交证明附件
+						if(proveFlag){
+							
+						}
+						else{
+							p03.innerText="婚假需提交证明附件";
+							$("#p03").css("color","red");
+							return;
+						}
+					}
+					else if(leaveType == "6"){//产假 
+						if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 15){
+							p01.innerText="产假需提前15天提交申请";
+							$("#p01").css("color","red");
+							flag = false;
+							return;
+						}
+					
+						//是否提交证明附件
+						if(proveFlag){
+							
+						}
+						else{
+							p03.innerText="产假需提交证明附件";
+							$("#p03").css("color","red");
+							return;
+						}
+						
+						if(datelength > 98){
+							$.modal.alertWarning("超出产假可享受休假时长");
+							return;
+						}else if(datelength < 98){
+							confirmFlag = true;
+							confirmText = "产假可享受98天";
+						}
+					}
+					else if(leaveType == "7"){
+						//是否提交证明附件
+						if(proveFlag){
+							
+						}
+						else{
+							p03.innerText="陪产假需提交证明附件";
+							$("#p03").css("color","red");
+							return;
+						}
+						
+						if(datelength > 15){
+							$.modal.alertWarning("超出陪产假可享受休假时长");
+							return;
+						}else if(datelength < 15){
+							confirmFlag = true;
+							confirmText = "陪产假可享受15天";
+						}
+					}
+					else if(leaveType == "9"){
+						//是否提交证明附件
+						if(proveFlag){
+							
+						}
+						else{
+							p03.innerText="丧假需提交证明附件";
+							$("#p03").css("color","red");
+							return;
+						}
+						if(datelength > 3){
+							$.modal.alertWarning("超出丧假可请假时长");
+							return;
+						}
+					}
+					else if(leaveType == "10"){
+						if( DateDiff(starttime ,endtime) > 365){
+							$.modal.alertWarning("超出哺乳假可选择日期");
+							return;
+						}else if(DateDiff(starttime ,endtime) < 365){
+							confirmFlag = true;
+							confirmText = "哺乳假可享受365天";
+						}
+						
+					}
+				}
+				
+				//验证所请假期 是否与已有申请时段重复 
+				$.ajax({
+					type:"post",
+					async:false,
+					url:"/system/userApply/ifRepeat",
+					data:{"applyType":applyType,"leaveType":leaveType,"starttime":starttime,"endtime":endtime,"timeapart1":timeapart1, "timeapart2":timeapart2 },
+					dataType:"json",
+					success:function(result){
+						 if(result == "0"){
+							 repeatFlag = true;
+						}
+						else{
+							repeatFlag = false;
+							$.modal.alertWarning("申请中部分时段已经申请过，不能再次申请!");
+							return;
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				}); 
+				//验证所请假期 余额是否足够 
+				$.ajax({
+					type:"post",
+					async:false,
+					url:"/system/userApply/ifHolidayEnough",
+					data:{"leaveType":leaveType,"starttime":starttime, "timelength":$("#timelength").val() },
+					dataType:"json",
+					success:function(result){
+						 if(result == "0"){
+							flag = true;
+						}else{
+							flag = false;
+							if(leaveType == "1"){
+								$.modal.alertWarning("年假余额不足");
+							}
+							else if (leaveType == "2"){
+								$.modal.alertWarning("调休余额不足");
+							}
+							else if (leaveType == "4"){
+								$.modal.alertWarning("每月只能请一次少于一天的病假");
+							}
+							else{
+								$.modal.alertWarning("请联系管理员");
+							}
+							
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				});
+				if(confirmFlag){
+					$.modal.confirm(confirmText + "，该假期只能一次申请一次休完，您选择日期少于可享受假期，确定提交申请吗？", function() {
+						save(prefix + "/add", $('#form-userApply-add').serialize());
+						
+					})
+				}else{
+					if(flag && repeatFlag){
+						save(prefix + "/add", $('#form-userApply-add').serialize());
+					}
+				}
+				
+	            
+	            
+	        }
+	        
+	    };
+	    function save(url, data) {
+        	var config = {
+    	        url: url,
+    	        type: "post",
+    	        dataType: "json",
+    	        data: data,
+    	        beforeSend: function () {
+    	        	$.modal.loading("正在处理中，请稍后...");
+    	        	$.modal.disable();
+    	        },
+    	        success: function(result) {
+    	        	$.operate.successCallback(result);
+    	        	
+    	        }
+    	    };
+    	    $.ajax(config)
+        };
+        function CompareDate(d1,d2) {
+          return ((new Date(d1.replace(/-/g,"\/"))) > (new Date(d2.replace(/-/g,"\/"))));
+        };
+      //获取当前时间，格式YYYY-MM-DD
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            var currentdate = year + seperator1 + month + seperator1 + strDate;
+            return currentdate;
+        };
+      //计算天数差的函数，通用  
+        function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式  
+            var  aDate,  oDate1,  oDate2,  iDays  
+            aDate  =  sDate1.split("-")  
+            oDate1  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])    //转换为12-18-2006格式  
+            aDate  =  sDate2.split("-")  
+            oDate2  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])  
+            iDays  =  parseInt(Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数  
+            return  iDays  
+        };
+     	
+    	function Datelength(sDate1, sDate2, timeapart1, timeapart2){
+debugger;
+			var timep1 = 0;
+			var timep2 = 0;
+			
+			if(timeapart1 == "1"){
+				timep1 = 0;
+			}else{
+				timep1 = 0.5;
+			}
+			
+			if(timeapart2 == "1"){
+				timep2 = 0.5;
+			}else{
+				timep2 = 1;
+			}
+    		days = DateDiff(sDate1,  sDate2) - timep1 + timep2;
+    		return days;
+    	}
+    	
+    	
+	</script>
+</body>
+</html>

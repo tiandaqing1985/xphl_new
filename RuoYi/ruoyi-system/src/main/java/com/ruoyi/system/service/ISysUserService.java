@@ -1,5 +1,7 @@
 package com.ruoyi.system.service;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
 import com.ruoyi.system.domain.SysUser;
 
@@ -174,4 +176,39 @@ public interface ISysUserService
     public int changeStatus(SysUser user);
     
     public List<SysUser> selectUserByDpetList(Long deptId);
+    
+    /**
+     * 得到第n个月的入职日期
+     */
+    public Date getDate(String intime , int n) throws ParseException;
+    
+    /**
+     * 根据用户id查询该部门领导id
+     */
+    public Long selectApproverIdByApplyerId(Long userId);
+    /**
+     * 根据用户id查询该部门上级领导id
+     */
+    public Long selectUpApproverIdByApplyerId(Long userId);
+    /**
+	 * 得到当月是入职的第几个月
+	 */
+	public int countMonth(String intime);
+	
+	 /**
+     * 查询所有存在用户
+     */
+    public List<SysUser> selectAllUser();
+    
+    /**
+     * 根据用户id查询所有三级以上负责人的id
+     */
+    public List<Long> selectCenterIdByUserId(Long userId);
+    
+    /**
+	 * 根据部门id查询部门负责人id
+	 * @param userId
+	 * @return
+	 */
+	public Long selectUserIdByDeptId(Long deptId);
 }

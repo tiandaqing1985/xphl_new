@@ -1,0 +1,615 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.UserApplyMapper">
+    
+    <resultMap type="UserApply" id="UserApplyResult">
+        <result property="applyId"    column="apply_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="listNum"    column="list_num"    />
+        <result property="starttime"    column="starttime"    />
+        <result property="endtime"    column="endtime"    />
+        <result property="timeapart1"    column="timeapart1"    />
+        <result property="timeapart2"    column="timeapart2"    />
+        <result property="timeapart3"    column="timeapart3"    />
+        <result property="timelength"    column="timelength"    />
+        <result property="applyType"    column="apply_type"    />
+        <result property="applyState"    column="apply_state"    />
+        <result property="confirmState"    column="confirm_state"    />
+        <result property="details"    column="details"    />
+        <result property="leaveType"    column="leave_type"    />
+        <result property="applyTime"    column="apply_time"    />
+        <result property="approverName"   column="approver_name"/>
+        <result property="forApplyId"   column="for_applyid"/>
+        <result property="approvalS"  column="approval_s"/>
+        <result property="prove"  column="prove"/>
+        <result property="timelengthPlus"  column="timelengthPlus"/>
+        <result property="remark"  column="remark"/>
+        <association property="userApproval" column="approval_id" javaType="UserApproval" resultMap="UserApprovalResult"/>
+        <association property="sysUser" column="user_id" javaType="SysUser" resultMap="SysUserResult"/>
+        <association property="sysDept" column="dept_id" javaType="SysDept" resultMap="SysDeptResult"/>  
+    </resultMap>
+    
+    <resultMap type="SysUser" id="SysUserResult">
+		<id     property="userId"       column="user_id"      />
+		<result property="deptId"       column="dept_id"      />
+		<result property="loginName"    column="login_name"   />
+		<result property="userName"     column="user_name"    />
+		<result property="email"        column="email"        />
+		<result property="phonenumber"  column="phonenumber"  />
+		<result property="sex"          column="sex"          />
+		<result property="avatar"       column="avatar"       />
+		<result property="password"     column="password"     />
+		<result property="salt"         column="salt"         />
+		<result property="status"       column="status"       />
+		<result property="delFlag"      column="del_flag"     />
+		<result property="loginIp"      column="login_ip"     />
+		<result property="loginDate"    column="login_date"   />
+		<result property="createBy"     column="create_by"    />
+		<result property="createTime"   column="create_time"  />
+		<result property="updateBy"     column="update_by"    />
+		<result property="updateTime"   column="update_time"  />
+		<result property="remark"       column="remark"       />
+		<result property="record"       column="record"       />
+		<result property="intime"       column="intime"       />
+		<result property="firstphase"   column="firstphase"       />
+		<result property="secondphase"  column="secondphase"       />
+	</resultMap>
+	
+	<resultMap type="UserApproval" id="UserApprovalResult">
+        <result property="approvalId"    column="approval_id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="approvalState"    column="approval_state"    />
+        <result property="approverId"    column="approver_id"    />
+        <result property="approvalSight"    column="approval_sight"    />
+        <result property="approvalTime"    column="approval_time"/>
+        <result property="remark"    column="remark"/>
+    </resultMap>
+    
+    <resultMap type="SysDept" id="SysDeptResult">
+		<id     property="deptId"     column="dept_id"     />
+		<result property="parentId"   column="parent_id"   />
+		<result property="ancestors"  column="ancestors"   />
+		<result property="deptName"   column="dept_name"   />
+		<result property="orderNum"   column="order_num"   />
+		<result property="leader"     column="leader"      />
+		<result property="phone"      column="phone"       />
+		<result property="email"      column="email"       />
+		<result property="status"     column="status"      />
+		<result property="delFlag"    column="del_flag"    />
+		<result property="parentName" column="parent_name" />
+		<result property="createBy"   column="create_by"   />
+		<result property="createTime" column="create_time" />
+		<result property="updateBy"   column="update_by"   />
+		<result property="updateTime" column="update_time" />
+	</resultMap>
+	
+	<sql id="selectUserApplyVo">
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.confirm_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove,
+        		p.approval_id, p.apply_id, p.approval_state, p.approver_id,  p.approval_sight,p.approval_time,
+        		u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
+        		s.user_id, s.dept_id, s.login_name, (s.user_name)approver_name, s.email, s.phonenumber, s.sex, s.avatar, s.password, s.salt, s.status, s.del_flag, s.login_ip, s.login_date, s.create_time, s.remark,s.record,s.intime,s.firstphase,s.secondphase
+        from sys_user_apply a 
+	    	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
+	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
+	    	LEFT JOIN (SELECT * FROM sys_user) s ON s.user_id = p.approver_id
+        	
+    </sql>
+	
+    <select id="selectUserApplyList" parameterType="UserApply" resultMap="UserApplyResult">
+        <include refid="selectUserApplyVo"/>
+        <where>  
+            <if test="applyId != null "> and a.apply_id = #{applyId}</if>
+             <if test="userId != null "> and a.user_id = #{userId}</if>
+             <if test="listNum != null  and listNum != '' "> and a.list_num like concat('%', #{listNum}, '%')</if>
+             <if test="starttime != null "> and a.starttime = #{starttime}</if>
+             <if test="endtime != null "> and a.endtime = #{endtime}</if>
+             <if test="timeapart1 != null  and timeapart1 != '' "> and a.timeapart1 = #{timeapart1}</if>
+             <if test="timeapart2 != null  and timeapart2 != '' "> and a.timeapart2 = #{timeapart2}</if>
+             <if test="timeapart3 != null  and timeapart3 != '' "> and a.timeapart3 = #{timeapart3}</if>
+             <if test="timelength != null "> and a.timelength = #{timelength}</if>
+             <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
+             <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
+             <if test="confirmState != null  and confirmState != '' "> and a.confirm_state = #{confirmState}</if>
+             <if test="details != null  and details != '' "> and a.details = #{details}</if>
+             <if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
+             <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>prove
+             <if test="prove != null and prove != '' ">and a.prove = #{prove}</if>
+             <if test="approverName != null and approverName != '' ">and s.user_name = #{approverName}</if>
+             <if test="forApplyId != null and forApplyId != '' ">and a.for_applyid = #{forApplyId}</if>
+         </where>
+    </select>
+    
+    <select id="selectUserApplyAsList"  parameterType="UserApply" resultMap="UserApplyResult">
+    	select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.for_applyid, a.prove,
+    			a.timelength,
+    			(CASE
+		         WHEN a.apply_type = 1 THEN
+		          CONCAT(TRUNCATE(a.timelength,1 ), '天')
+		         WHEN a.apply_type = 2 THEN
+		          CONCAT(TRUNCATE(a.timelength,0 ) , '小时')
+		         WHEN a.apply_type = 3 THEN
+		          CONCAT(TRUNCATE(a.timelength,1 ) , '天')
+		         ELSE 
+		            ''
+	        	END)timelengthPlus,
+    			(CASE
+		         WHEN a.apply_type = 1 THEN
+		          '请假'
+		         WHEN a.apply_type = 2 THEN
+		          '加班'
+		         WHEN a.apply_type = 3 THEN
+		          '销假'
+		         ELSE 
+		            ''
+	        	END)apply_type,  
+		        (CASE
+		         WHEN a.apply_state = 1 THEN
+		          '待审批'
+		         WHEN a.apply_state = 2 THEN
+		          '已撤回'
+		         WHEN a.apply_state = 3 THEN
+		          '申请成功'
+		         WHEN a.apply_state = 4 THEN
+		          '申请失败'
+		         WHEN a.apply_state = 5 THEN
+		      		'已销假'
+		         ELSE 
+		            ''
+		        END)apply_state, 
+		        (CASE
+		         WHEN a.confirm_state = 0 THEN
+		          '未确认'
+		         WHEN a.confirm_state = 1 THEN
+		          '已确认'
+		         ELSE 
+		            ''
+		        END)confirm_state, a.details, 
+		        (CASE
+		         WHEN a.leave_type = 1 THEN
+		          '年假'
+		         WHEN a.leave_type = 2 THEN
+		          '调休'
+		         WHEN a.leave_type = 3 THEN
+		          '事假'
+		         WHEN a.leave_type = 4 THEN
+		          '病假'
+		         WHEN a.leave_type = 5 THEN
+		          '婚假'
+		         WHEN a.leave_type = 6 THEN
+		          '产假'
+		         WHEN a.leave_type = 7 THEN
+		          '陪产假'
+		         WHEN a.leave_type = 8 THEN
+		          '产检假'
+		         WHEN a.leave_type = 9 THEN
+		          '丧假'
+		         ELSE 
+		            ''
+		        END)leave_type, a.apply_time,
+        		p.approval_id, p.apply_id, p.approval_state, p.approver_id,  (p.approval_sight)approval_s ,p.approval_time,
+        		u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
+        		(s.user_name)approver_name
+        from sys_user_apply a 
+	    	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
+	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
+	    	LEFT JOIN (SELECT * FROM sys_user) s ON s.user_id = p.approver_id
+    	<where>  
+             <if test="userId != null "> and a.user_id = #{userId}</if>
+             <if test="listNum != null  and listNum != '' "> and a.list_num like concat('%', #{listNum}, '%')</if>
+             <if test="timelength != null "> and a.timelength = #{timelength}</if>
+             <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
+             <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
+             <if test="confirmState != null  and confirmState != '' "> and a.confirm_state = #{confirmState}</if>
+             <if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
+             <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
+             <if test="prove != null and prove != '' ">and a.prove = #{prove}</if>
+             <if test="approverName != null and approverName != '' ">and s.user_name = #{approverName}</if>
+             <if test="forApplyId != null and forApplyId != '' ">and a.for_applyid = #{forApplyId}</if>
+             <if test="approvalS != null and approvalS != '' ">and p.approval_sight = #{approvalS}</if>
+         </where>
+         ORDER BY a.apply_id DESC
+    </select>
+    
+     <select id="selectUserApplyConfirmAsList"  parameterType="UserApply" resultMap="UserApplyResult">
+    	select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength,a.for_applyid, a.prove,
+    			(CASE
+		         WHEN a.apply_type = 1 THEN
+		          '请假'
+		         WHEN a.apply_type = 2 THEN
+		          '加班'
+		         WHEN a.apply_type = 3 THEN
+		          '销假'
+		         ELSE 
+		            ''
+	        	END)apply_type,  
+		        (CASE
+		         WHEN a.apply_state = 1 THEN
+		          '待审批'
+		         WHEN a.apply_state = 2 THEN
+		          '已撤回'
+		         WHEN a.apply_state = 3 THEN
+		          '申请成功'
+		         WHEN a.apply_state = 4 THEN
+		          '申请失败'
+		         WHEN a.apply_state = 5 THEN
+		      		'已销假'
+		         ELSE 
+		            ''
+		        END)apply_state, 
+		        (CASE
+		         WHEN a.confirm_state = 0 THEN
+		          '未确认'
+		         WHEN a.confirm_state = 1 THEN
+		          '已确认'
+		         ELSE 
+		            ''
+		        END)confirm_state, a.details, 
+		        (CASE
+		         WHEN a.leave_type = 1 THEN
+		          '年假'
+		         WHEN a.leave_type = 2 THEN
+		          '调休'
+		         WHEN a.leave_type = 3 THEN
+		          '事假'
+		         WHEN a.leave_type = 4 THEN
+		          '病假'
+		         WHEN a.leave_type = 5 THEN
+		          '婚假'
+		         WHEN a.leave_type = 6 THEN
+		          '产假'
+		         WHEN a.leave_type = 7 THEN
+		          '陪产假'
+		         WHEN a.leave_type = 8 THEN
+		          '产检假'
+		         WHEN a.leave_type = 9 THEN
+		          '丧假'
+		         ELSE 
+		            ''
+		        END)leave_type, a.apply_time,
+        		p.approval_id, p.apply_id, p.approval_state, p.approver_id,  (p.approval_sight)approval_s ,p.approval_time,
+        		u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
+        		(s.user_name)approver_name
+        from sys_user_apply a 
+	    	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
+	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
+	    	LEFT JOIN (SELECT * FROM sys_user) s ON s.user_id = p.approver_id
+    	<where>  
+             <if test="userId != null "> and a.user_id = #{userId}</if>
+             <if test="listNum != null  and listNum != '' "> and a.list_num like concat('%', #{listNum}, '%')</if>
+             <if test="timelength != null "> and a.timelength = #{timelength}</if>
+             <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
+             and a.apply_state  in(1, 2)
+             <if test="confirmState != null  and confirmState != '' "> and a.confirm_state = #{confirmState}</if>
+             <if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
+             <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
+             <if test="prove != null and prove != '' ">and a.prove = #{prove}</if>
+             <if test="approverName != null and approverName != '' ">and s.user_name = #{approverName}</if>
+             <if test="forApplyId != null and forApplyId != '' ">and a.for_applyid = #{forApplyId}</if>
+             <if test="approvalS != null and approvalS != '' ">and p.approval_sight = #{approvalS}</if>
+         </where>
+    </select>
+    
+    <select id="selectUserApplyById" parameterType="Long" resultMap="UserApplyResult">
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.for_applyid, a.prove,
+        		(CASE
+		         WHEN a.timeapart1 = 1 THEN
+		          '10:00——15:00'
+		         WHEN a.timeapart1 = 2 THEN
+		          '15:00——19:00'
+		         ELSE 
+		            ''
+		        END)timeapart1, 
+		        (CASE
+		         WHEN a.timeapart2 = 1 THEN
+		          '10:00——15:00'
+		         WHEN a.timeapart2 = 2 THEN
+		          '15:00——19:00'
+		         ELSE 
+		            ''
+		        END)timeapart2,
+		        (CASE
+		         WHEN a.timeapart3 = 1 THEN
+		          '早上(10:00——11:00)'
+		         WHEN a.timeapart3 = 2 THEN
+		          '下午(18:00——19:00)'
+		         ELSE 
+		            ''
+		        END)timeapart3, a.timelength, 
+    			(CASE
+		         WHEN a.apply_type = 1 THEN
+		          '请假'
+		         WHEN a.apply_type = 2 THEN
+		          '加班'
+		         WHEN a.apply_type = 3 THEN
+		          '销假'
+		         ELSE 
+		            ''
+		        END)apply_type,  
+		        (CASE
+		         WHEN a.apply_state = 1 THEN
+		          '待审批'
+		         WHEN a.apply_state = 2 THEN
+		          '已撤回'
+		         WHEN a.apply_state = 3 THEN
+		          '申请成功'
+		         WHEN a.apply_state = 4 THEN
+		          '申请失败'
+		        WHEN a.apply_state = 5 THEN
+		      		'已销假'
+		         ELSE 
+		            ''
+		        END)apply_state, 
+		        (CASE
+		         WHEN a.confirm_state = 1 THEN
+		          '未确认'
+		         WHEN a.confirm_state = 2 THEN
+		          '已确认'
+		         ELSE 
+		            ''
+		        END)confirm_state, a.details, 
+		        (CASE
+		         WHEN a.leave_type = 1 THEN
+		          '年假'
+		         WHEN a.leave_type = 2 THEN
+		          '调休'
+		         WHEN a.leave_type = 3 THEN
+		          '事假'
+		         WHEN a.leave_type = 4 THEN
+		          '病假'
+		         WHEN a.leave_type = 5 THEN
+		          '婚假'
+		         WHEN a.leave_type = 6 THEN
+		          '产假'
+		         WHEN a.leave_type = 7 THEN
+		          '陪产假'
+		         WHEN a.leave_type = 8 THEN
+		          '产检假'
+		         WHEN a.leave_type = 9 THEN
+		          '丧假'
+		         ELSE 
+		            ''
+		        END)leave_type, a.apply_time, u.user_name, p.approver_id,p.remark
+		        from sys_user_apply a
+		        	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
+		        	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
+        			where a.apply_id = #{applyId} 
+    </select>
+    
+    <select id="selectUserApplyByIdForUndo" parameterType="Long" resultMap="UserApplyResult">
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.for_applyid, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.prove,
+    			(CASE
+		         WHEN a.apply_type = 1 THEN
+		          '请假'
+		         WHEN a.apply_type = 2 THEN
+		          '加班'
+		         WHEN a.apply_type = 3 THEN
+		          '销假'
+		         ELSE 
+		            ''
+		        END)apply_type,  
+		        (CASE
+		         WHEN a.apply_state = 1 THEN
+		          '待审批'
+		         WHEN a.apply_state = 2 THEN
+		          '已撤回'
+		         WHEN a.apply_state = 3 THEN
+		          '申请成功'
+		         WHEN a.apply_state = 4 THEN
+		          '申请失败'
+		         WHEN a.apply_state = 5 THEN
+		      	   '已销假'
+		         ELSE 
+		            ''
+		        END)apply_state, 
+		        (CASE
+		         WHEN a.confirm_state = 1 THEN
+		          '未确认'
+		         WHEN a.confirm_state = 2 THEN
+		          '已确认'
+		         ELSE 
+		            ''
+		        END)confirm_state, a.details, 
+		        (CASE
+		         WHEN a.leave_type = 1 THEN
+		          '年假'
+		         WHEN a.leave_type = 2 THEN
+		          '调休'
+		         WHEN a.leave_type = 3 THEN
+		          '事假'
+		         WHEN a.leave_type = 4 THEN
+		          '病假'
+		         WHEN a.leave_type = 5 THEN
+		          '婚假'
+		         WHEN a.leave_type = 6 THEN
+		          '产假'
+		         WHEN a.leave_type = 7 THEN
+		          '陪产假'
+		         WHEN a.leave_type = 8 THEN
+		          '产检假'
+		         WHEN a.leave_type = 9 THEN
+		          '丧假'
+		         ELSE 
+		            ''
+		        END)leave_type, a.apply_time
+		        from sys_user_apply a
+        		where a.apply_id = #{applyId}
+    </select>
+
+    <insert id="insertUserApply" parameterType="UserApply" useGeneratedKeys="true" keyProperty="applyId">
+        insert into sys_user_apply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">user_id,</if>
+			<if test="listNum != null  and listNum != ''  ">list_num,</if>
+			<if test="starttime != null  ">starttime,</if>
+			<if test="endtime != null  ">endtime,</if>
+			<if test="timeapart1 != null  and timeapart1 != ''  ">timeapart1,</if>
+			<if test="timeapart2 != null  and timeapart2 != ''  ">timeapart2,</if>
+			<if test="timeapart3 != null  and timeapart3 != ''  ">timeapart3,</if>
+			<if test="timelength != null  ">timelength,</if>
+			<if test="applyType != null  and applyType != ''  ">apply_type,</if>
+			<if test="applyState != null  and applyState != ''  ">apply_state,</if>
+			<if test="confirmState != null  and confirmState != ''  ">confirm_state,</if>
+			<if test="details != null  and details != ''  ">details,</if>
+			<if test="leaveType != null  and leaveType != ''  ">leave_type,</if>
+			<if test="forApplyId != null  and forApplyId != ''  ">for_applyid,</if>
+			<if test="prove != null and prove != '' ">prove,</if>
+			apply_time,
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userId != null  ">#{userId},</if>
+			<if test="listNum != null  and listNum != ''  ">#{listNum},</if>
+			<if test="starttime != null  ">#{starttime},</if>
+			<if test="endtime != null  ">#{endtime},</if>
+			<if test="timeapart1 != null  and timeapart1 != ''  ">#{timeapart1},</if>
+			<if test="timeapart2 != null  and timeapart2 != ''  ">#{timeapart2},</if>
+			<if test="timeapart3 != null  and timeapart3 != ''  ">#{timeapart3},</if>
+			<if test="timelength != null  ">#{timelength},</if>
+			<if test="applyType != null  and applyType != ''  ">#{applyType},</if>
+			<if test="applyState != null  and applyState != ''  ">#{applyState},</if>
+			<if test="confirmState != null  and confirmState != ''  ">#{confirmState},</if>
+			<if test="details != null  and details != ''  ">#{details},</if>
+			<if test="leaveType != null  and leaveType != ''  ">#{leaveType},</if>
+			<if test="forApplyId != null  and forApplyId != ''  ">#{forApplyId},</if>
+			<if test="prove != null and prove != '' ">#{prove},</if>
+			sysdate()
+         </trim>
+    </insert>
+	 
+    <update id="updateUserApply" parameterType="UserApply">
+        update sys_user_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="listNum != null  and listNum != ''  ">list_num = #{listNum},</if>
+            <if test="starttime != null  ">starttime = #{starttime},</if>
+            <if test="endtime != null  ">endtime = #{endtime},</if>
+            <if test="timeapart1 != null  and timeapart1 != ''  ">timeapart1 = #{timeapart1},</if>
+            <if test="timeapart2 != null  and timeapart2 != ''  ">timeapart2 = #{timeapart2},</if>
+            <if test="timeapart3 != null  and timeapart3 != ''  ">timeapart3 = #{timeapart3},</if>
+            <if test="timelength != null  ">timelength = #{timelength},</if>
+            <if test="applyType != null  and applyType != ''  ">apply_type = #{applyType},</if>
+            <if test="applyState != null  and applyState != ''  ">apply_state = #{applyState},</if>
+            <if test="confirmState != null  and confirmState != ''  ">confirm_state = #{confirmState},</if>
+            <if test="details != null  and details != ''  ">details = #{details},</if>
+            <if test="leaveType != null  and leaveType != ''  ">leave_type = #{leaveType},</if>
+            <if test="applyTime != null  ">apply_time = #{applyTime}</if>
+            <if test="prove != null and prove != '' ">and prove = #{prove}</if>
+            <if test="forApplyId != null  and forApplyId != ''  ">for_applyid = #{forApplyId},</if>
+        </trim>
+        where apply_id = #{applyId}
+    </update>
+
+	<delete id="deleteUserApplyById" parameterType="Long">
+        delete from sys_user_apply where apply_id = #{applyId}
+    </delete>
+	
+    <delete id="deleteUserApplyByIds" parameterType="String">
+        delete from sys_user_apply where apply_id in 
+        <foreach item="applyId" collection="array" open="(" separator="," close=")">
+            #{applyId}
+        </foreach>
+    </delete>
+    
+    <update id="updateUserApplyStateById" parameterType="Long">
+    	UPDATE `sys_user_apply` SET apply_state = 2, confirm_state = 0 WHERE apply_id = #{applyId}
+    </update>
+    
+    <update id="updateConfirmMasageById" parameterType="UserApply">
+    	UPDATE `sys_user_apply` SET confirm_state = 1 WHERE apply_id = #{applyId}
+    </update>
+    
+    <select id="selectLeaveUserApplyByuserId" parameterType="UserApply" resultType="Double">
+    	SELECT sum(timelength) FROM sys_user_apply 
+    	<where>
+    	leave_type IN (3 , 4 ) 
+    	<if test="userId != null "> and user_id = #{userId}</if>
+    	<if test="starttime != null  "><![CDATA[ and starttime >= #{starttime} ]]></if>
+    	<if test="endtime != null  "><![CDATA[ and endtime <= #{endtime} ]]></if>
+    	<if test="applyType != null  and applyType != ''  ">and apply_type = #{applyType}</if>
+    	AND apply_state = 3
+    	</where>
+    </select>
+    
+    <select id="selectLeaveUserApplyByuserIdUp" parameterType="UserApply" resultMap="UserApplyResult">
+    	SELECT * FROM sys_user_apply 
+    	<where>
+    	leave_type IN (3 , 4 ) 
+    	<if test="userId != null "> and user_id = #{userId}</if>
+    	<if test="starttime != null  "><![CDATA[ and starttime < #{starttime} ]]></if>
+    	<if test="endtime != null  "><![CDATA[ and endtime <= #{endtime} ]]></if>
+    	<if test="applyType != null  and applyType != ''  ">and apply_type = #{applyType}</if>
+    	AND apply_state = 3
+    	</where>
+    </select>
+    
+    <select id="selectLeaveUserApplyByuserIdDown" parameterType="UserApply" resultMap="UserApplyResult">
+    	SELECT * FROM sys_user_apply 
+    	<where>
+    	leave_type IN (3 , 4 ) 
+    	<if test="userId != null "> and user_id = #{userId}</if>
+    	<if test="starttime != null  "><![CDATA[ and starttime >= #{starttime} ]]></if>
+    	<if test="endtime != null  "><![CDATA[ and endtime > #{endtime} ]]></if>
+    	<if test="applyType != null  and applyType != ''  ">and apply_type = #{applyType}</if>
+    	AND apply_state = 3
+    	</where>
+    </select>
+    <!-- 查询是否在产假月份内 -->
+   	<select id="selcetMaternityLeaveByUserApply" parameterType="UserApply" resultMap="UserApplyResult">
+   		SELECT * FROM sys_user_apply 
+    	<where>
+    	leave_type = 6 AND apply_state = 3 
+    	<if test="userId != null "> and user_id = #{userId}</if>
+    	<if test="starttime != null  "><![CDATA[ and DATE_FORMAT(starttime, '%Y-%m') <= #{timeapart1} ]]></if>
+    	<if test="endtime != null  "><![CDATA[ and DATE_FORMAT(endtime, '%Y-%m') >= #{timeapart1} ]]></if>
+    	</where>
+   	</select>
+   	
+   	<select id="selcetSickLeaveByUserApply" parameterType="UserApply" resultMap="UserApplyResult">
+   		SELECT * FROM sys_user_apply 
+    	<where>
+    	leave_type = 4 
+    	<if test="userId != null "> and user_id = #{userId}</if>
+    	<if test="starttime != null  "><![CDATA[ and DATE_FORMAT(starttime, '%Y-%m') = DATE_FORMAT(#{starttime}, '%Y-%m') ]]></if>
+    	AND apply_state in(1,3)  <![CDATA[ and timelength < 1 ]]> 
+    	</where>
+   	</select>
+   	<!-- 根据条件查询已休时长 -->
+   	<select id="selectTimeLengthSumByUserApply" parameterType="UserApply" resultType="Double">
+   		SELECT SUM(timelength) FROM `sys_user_apply` 
+		<where>
+		user_id = #{userId} AND leave_type = #{leaveType} AND apply_state in (1,3)
+		</where>
+ 
+   	</select>
+   	
+   	<select id="selectUserApplyListByStartTime" parameterType="UserApply" resultMap="UserApplyResult">
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.confirm_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove
+        from sys_user_apply a		
+        <where>
+             <if test="userId != null "> and a.user_id = #{userId}</if>
+             <if test="starttime != null "> <![CDATA[ and starttime <= #{starttime} ]]></if>
+             <if test="endtime != null "><![CDATA[ and a.endtime >= #{starttime} ]]></if>
+             <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
+             and a.apply_state in (1,3)
+             <if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
+             <if test="timeapart1 != null  and timeapart1 != '' "> and a.timeapart1 = #{timeapart1}</if>
+             <if test="timeapart2 != null  and timeapart2 != '' "> and a.timeapart2 = #{timeapart2}</if>
+         </where>
+    </select>
+    
+    
+    <select id="selectUserApplyListByEndTime" parameterType="UserApply" resultMap="UserApplyResult">
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.confirm_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove
+        from sys_user_apply a	
+        <where>
+             <if test="userId != null "> and a.user_id = #{userId}</if>
+             <if test="starttime != null "> <![CDATA[ and starttime <= #{endtime} ]]></if>
+             <if test="endtime != null "> <![CDATA[ and a.endtime >= #{endtime} ]]></if>
+             <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
+             and a.apply_state in (1,3)
+             <if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
+         </where>
+    </select>
+    
+</mapper>

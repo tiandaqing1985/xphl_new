@@ -178,4 +178,10 @@ public class SysPostServiceImpl implements ISysPostService
         }
         return UserConstants.POST_CODE_UNIQUE;
     }
+    
+	@Override
+	public long selectPostIdByUserId(long userId) {
+		//return userPostMapper.selectPostIdByUserId(userId);
+		return 1;
+	}
 }

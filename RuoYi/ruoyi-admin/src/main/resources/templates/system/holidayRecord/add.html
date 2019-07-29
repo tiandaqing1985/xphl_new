@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增假期使用记录')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-holidayRecord-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">假期id：</label>
+				<div class="col-sm-8">
+					<input id="holidayId" name="holidayId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">申请id：</label>
+				<div class="col-sm-8">
+					<input id="useApplyId" name="useApplyId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">使用天数：</label>
+				<div class="col-sm-8">
+					<input id="value" name="value" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">使用状态(1申请中，2已使用，3撤销，4销假，5被销假，6被驳回)：</label>
+				<div class="col-sm-8">
+					<input id="useState" name="useState" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/holidayRecord"
+		$("#form-holidayRecord-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-holidayRecord-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:include="include :: header('撤销申请')" />
+	<th:block th:include="include :: jsonview-css" />
+	
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m-t" id="editForm" th:object="${userApply}">
+		<input id="applyId" name="applyId" th:field="${userApply.applyId}"  type="hidden">
+            
+		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">
+			<label class="col-sm-2 control-label">请假类型：</label>
+			<div class="col-sm-8">
+                <input name="showLeaveType" class="form-control" type="text" maxlength="30" th:field="*{leaveType}" disabled="value">
+            </div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">开始时间：</label>
+			<div class="col-sm-8">
+				<div class="select-time" style="width: 100%">
+                	<input name="starttime" class="form-control" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" disabled="value">
+                </div>
+			</div>
+		</div>
+		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">
+			<label class="col-sm-2 control-label">开始时段：</label>
+			<div class="col-sm-8">
+                <select id="timeapart1" name="timeapart1" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_timeapart')}" disabled="value">
+                    	<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"  th:field="*{timeapart1}"></option>
+                </select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">结束时间：</label>
+			<div class="col-sm-8">
+                <input name="endtime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" >
+			</div>
+		</div>
+		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">
+			<label class="col-sm-2 control-label">结束时段：</label>
+			<div class="col-sm-8">
+                <select id="timeapart2" name="timeapart2" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_timeapart')}" >
+                    	<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"  th:field="*{timeapart2}"></option>
+                </select>
+			</div>
+		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label">修改理由：</label>
+			<div class="col-sm-8">
+                <textarea id="details" name="details" type="text" class="form-control" maxlength="500" rows="3" ></textarea>
+			</div>
+		</div>
+		<div class="form-group">	<span id="p03"></span>
+			<label class="col-sm-2 control-label">证明附件：</label>
+			<div class="col-sm-8">
+               <div class="file-loading">
+               		<input name="prove" id="prove"  type="hidden"  >
+                    <input name="provefile" id="provefile"  class="form-control" type="file"  >
+                    <button type="button" class="btn btn-sm btn-primary" onclick="shangchuan1()"><i class="fa fa-check"></i>上传</button>&nbsp;
+	           </div>
+			</div>
+		</div>
+		<input id="timelength" name="timelength" style="display:none"/>
+	</form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: jsonview-js" />
+   <script type="text/javascript">
+	   var prefix = ctx + "system/userApply"
+		$("#editForm").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	       if ($.validate.form()) {
+	           $.operate.save(prefix + "/edit", $('#editForm').serialize());
+	       }
+	   };
+	   
+	   function shangchuan1(){
+			 var formData = new FormData();
+			 var datelength = Datelength(starttime, endtime, timeapart1, timeapart2);
+			 $("#timelength").val(datelength);
+			 
+			 if ($('#provefile')[0].files[0] == null) {
+			      $.modal.alertWarning("请先选择文件路径");
+			      return false;
+			  }
+			  formData.append('fileName', $("#provefile").val());
+			  formData.append('file', $('#provefile')[0].files[0]);
+			 
+			    $.ajax({
+			        url: "/common/upload1",
+			        type: 'post',
+			        cache: false,
+			        data: formData,
+			        processData: false,
+			        contentType: false,
+			        dataType: "json",
+			        success: function(result) {
+			        	$.modal.alertSuccess("上传成功");
+		        		$("#prove").val(result.url);
+		        		
+			        }
+			    });
+		}
+	   //计算天数差的函数，通用  
+	        function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式  
+	            var  aDate,  oDate1,  oDate2,  iDays  
+	            aDate  =  sDate1.split("-")  
+	            oDate1  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])    //转换为12-18-2006格式  
+	            aDate  =  sDate2.split("-")  
+	            oDate2  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])  
+	            iDays  =  parseInt(Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数  
+	            return  iDays  
+	        };
+	     	
+	    	function Datelength(sDate1, sDate2, timeapart1, timeapart2){
+
+				var timep1 = 0;
+				var timep2 = 0;
+				
+				if(timeapart1 == "1"){
+					timep1 = 0;
+				}else{
+					timep1 = 0.5;
+				}
+				
+				if(timeapart2 == "1"){
+					timep2 = 0.5;
+				}else{
+					timep2 = 1;
+				}
+	    		days = DateDiff(sDate1,  sDate2) - timep1 + timep2;
+	    		return days;
+	    	}
+	    	
+   </script>
+</body>
+</html>

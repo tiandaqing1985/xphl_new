@@ -1,4 +1,4 @@
-package com.ruoyi.system.sendEmail;
+package com.ruoyi.system.email;
 
 
 
@@ -24,8 +24,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 public class EmailSend {
 		
-		 private static String Sender = "xingzhengbu@perfect-cn.cn";
-		 private static String password = "Abcd12341";
+		 private static String Sender = "wugaofang@perfect-cn.cn";
+		 private static String password = "123456";
 		 private static String host = "smtp.mxhichina.com";
 		 
 		 private static JavaMailSenderImpl createMailSender() {
@@ -46,7 +46,7 @@ public class EmailSend {
 			 EmailSend es = new EmailSend();
 			 
 			 try {
-				es.sendMail("tiandaqing@perfect-cn.cn", "标题：测试标题", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+				es.sendMail("daienxian@perfect-cn.cn", "标题：测试标题", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
