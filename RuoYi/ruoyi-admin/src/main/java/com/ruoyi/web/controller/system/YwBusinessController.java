@@ -66,6 +66,8 @@ public class YwBusinessController extends BaseController
 		
 		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
 		
+
+		
 		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据  
 		
 		
@@ -73,7 +75,13 @@ public class YwBusinessController extends BaseController
 			
 			if(ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){  //部门leader看部门所有 销售经理看自己的
 				
-				List<SysUser> list = sysUserService.selectUserByDpetList(ShiroUtils.getSysUser().getDeptId());
+				Long deptId = ShiroUtils.getSysUser().getDeptId();
+				
+				if("王硕".equals(ShiroUtils.getSysUser().getUserName())){
+					deptId = 260L;
+				}
+				
+				List<SysUser> list = sysUserService.selectUserByDpetList(deptId);
 				
 				
 				String str = list.get(0).getUserName();

@@ -74,7 +74,13 @@ public class YwContractController extends BaseController
 			
 			if(ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){  //部门leader看部门所有 销售经理看自己的
 				
-				List<SysUser> list = sysUserService.selectUserByDpetList(ShiroUtils.getSysUser().getDeptId());
+				Long deptId = ShiroUtils.getSysUser().getDeptId();
+				
+				if("王硕".equals(ShiroUtils.getSysUser().getUserName())){
+					deptId = 260L;
+				}
+				
+				List<SysUser> list = sysUserService.selectUserByDpetList(deptId);
 				
 				
 				String str = list.get(0).getUserName();
@@ -103,6 +109,40 @@ public class YwContractController extends BaseController
     @ResponseBody
     public AjaxResult export(YwContract ywContract)
     {
+    	
+    	
+		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
+		
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据  
+		
+		
+		}else{
+			
+			if(ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){  //部门leader看部门所有 销售经理看自己的
+				
+				Long deptId = ShiroUtils.getSysUser().getDeptId();
+				
+				if("王硕".equals(ShiroUtils.getSysUser().getUserName())){
+					deptId = 260L;
+				}
+				
+				List<SysUser> list = sysUserService.selectUserByDpetList(deptId);
+				
+				
+				String str = list.get(0).getUserName();
+				
+				for(int i=1;i<list.size();i++){
+					
+					str += ","+list.get(i).getUserName();
+				}
+				 
+				ywContract.setCreateBy1(Convert.toStrArray(str));
+			}else{ //销售经理看自己的
+				ywContract.setCreateBy(ShiroUtils.getSysUser().getUserName());
+			}
+
+		}
+    	
     	List<YwContract> list = ywContractService.selectYwContractList(ywContract);
         ExcelUtil<YwContract> util = new ExcelUtil<YwContract>(YwContract.class);
         return util.exportExcel(list, "ywContract");

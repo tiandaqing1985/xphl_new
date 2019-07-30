@@ -125,7 +125,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectUserByDpetList" parameterType="Long" resultMap="SysUserResult">
-		select user_id,user_name  from sys_user  where dept_id = #{deptId}
+		select user_id,user_name  from sys_user  where dept_id in (select dept_id  from  sys_dept where dept_id = #{deptId}  or ancestors like  concat('%',#{deptId}, '%')) 
 	</select>
 	
 	<select id="selectUnallocatedList" parameterType="SysUser" resultMap="SysUserResult">
