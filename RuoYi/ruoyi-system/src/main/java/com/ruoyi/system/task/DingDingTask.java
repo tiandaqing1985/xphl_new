@@ -64,7 +64,7 @@ public class DingDingTask{
 	@Autowired
 	IOaDingdingUserService dingdingUserService;
 
-	public void getData() throws Exception
+	public void dingDingTask() throws Exception
 	{		
 		DingTalkClient client = new DefaultDingTalkClient("");
 		
