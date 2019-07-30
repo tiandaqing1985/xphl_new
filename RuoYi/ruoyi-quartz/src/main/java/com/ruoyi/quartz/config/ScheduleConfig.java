@@ -31,10 +31,10 @@ public class ScheduleConfig
         // JobStore配置
         prop.put("org.quartz.jobStore.class", "org.quartz.impl.jdbcjobstore.JobStoreTX");
         // 集群配置
-//        prop.put("org.quartz.jobStore.isClustered", "true");
-//        prop.put("org.quartz.jobStore.clusterCheckinInterval", "15000");
-//        prop.put("org.quartz.jobStore.maxMisfiresToHandleAtATime", "1");
-//        prop.put("org.quartz.jobStore.txIsolationLevelSerializable", "true");
+        prop.put("org.quartz.jobStore.isClustered", "true");
+        prop.put("org.quartz.jobStore.clusterCheckinInterval", "15000");
+        prop.put("org.quartz.jobStore.maxMisfiresToHandleAtATime", "1");
+        prop.put("org.quartz.jobStore.txIsolationLevelSerializable", "true");
 
         // sqlserver 启用
         // prop.put("org.quartz.jobStore.selectWithLockSQL", "SELECT * FROM {0}LOCKS UPDLOCK WHERE LOCK_NAME = ?");
