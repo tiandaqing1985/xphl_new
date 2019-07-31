@@ -211,7 +211,6 @@
 				}
 				
 				if(getNowFormatDate()>$("#starttime").val() && DateDiff(getNowFormatDate(),$("#starttime").val()) > 1){
-					alert(DateDiff(getNowFormatDate(),$("#starttime").val()))
 						p01.innerText="补卡时间超时";
 						$("#p01").css("color","red");
 						flag = false;

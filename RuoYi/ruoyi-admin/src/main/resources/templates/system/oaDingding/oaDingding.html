@@ -13,8 +13,11 @@
 							<li>
 								员工姓名：<input type="text" name="userName"/>
 							</li>
-							<li>
-								打卡日期区间：<input type="text" name="workDate"/>
+							<li class="select-time">
+								<label>打卡时间：</label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
 							</li>
 							<li>
 								时间结果：
@@ -99,7 +102,7 @@
 					field : 'timeResult', 
 					title : '时间结果',
 					sortable: false
-				},
+				}/* ,
 		        {
 		            title: '操作',
 		            align: 'center',
@@ -109,7 +112,7 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.userId + '\')"><i class="fa fa-remove"></i>删除</a>');
 						return actions.join('');
 		            }
-		        }]
+		        } */]
             };
             $.table.init(options);
         });

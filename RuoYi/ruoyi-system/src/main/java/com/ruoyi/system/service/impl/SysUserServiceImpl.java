@@ -141,6 +141,8 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public SysUser selectUserById(Long userId)
     {
+    	SysUser user = userMapper.selectUserById(userId);
+    	System.out.println(user.toString());
         return userMapper.selectUserById(userId);
     }
 
@@ -191,6 +193,15 @@ public class SysUserServiceImpl implements ISysUserService
     public int insertUser(SysUser user)
     {
         // 新增用户信息
+    	
+    	try {
+    		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+			user.setFirstphase(getDate(sd.format(user.getIntime()), user.getN()));
+			user.setSecondphase(getDate(sd.format(user.getIntime()), user.getN()));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         int rows = userMapper.insertUser(user);
         // 新增用户岗位关联
         insertUserPost(user);
@@ -279,7 +290,7 @@ public class SysUserServiceImpl implements ISysUserService
     public void insertUserPost(SysUser user)
     {
         Long[] posts = user.getPostIds();
-        if (StringUtils.isNotNull(posts))
+        if (!"".equals(posts) && posts != null)
         {
             // 新增用户与岗位管理
             List<SysUserPost> list = new ArrayList<SysUserPost>();

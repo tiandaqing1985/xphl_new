@@ -195,7 +195,7 @@ public class DingDingTask{
 	                strber.append(line + "\n");
 	            inStream.close();
 	            result = strber.toString();
-	            System.out.println(result);
+//	            System.out.println(result);
 	            if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 	 
 	                System.out.println("请求服务器成功，做相应处理");

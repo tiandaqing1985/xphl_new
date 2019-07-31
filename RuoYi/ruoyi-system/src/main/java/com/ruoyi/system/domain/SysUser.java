@@ -19,7 +19,10 @@ public class SysUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /** 用户ID */
+    /** 试用一期 */
+    private Integer n;
+
+	/** 用户ID */
     @Excel(name = "用户序号", prompt = "用户编号")
     private Long userId;
 
@@ -32,6 +35,9 @@ public class SysUser extends BaseEntity
     
     /** 角色ID */
     private Long roleId;
+    
+    /** 岗位ID */
+    private Long postId;
 
 	/** 登录名称 */
     @Excel(name = "登录名称")
@@ -117,6 +123,23 @@ public class SysUser extends BaseEntity
      */
     private Set<SysDept> dSet;
     
+    
+    public Long getPostId() {
+		return postId;
+	}
+
+	public void setPostId(Long postId) {
+		this.postId = postId;
+	}
+
+	public Integer getN() {
+		return n;
+	}
+
+	public void setN(Integer n) {
+		this.n = n;
+	}
+
     public Set<SysDept> getdSet() {
 		return dSet;
 	}
@@ -386,8 +409,11 @@ public class SysUser extends BaseEntity
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("userId", getUserId())
             .append("deptId", getDeptId())
+            .append("postId",getPostId())
+            .append("roleId",getRoleId())
             .append("loginName", getLoginName())
             .append("userName", getUserName())
+            .append("area",getArea())
             .append("email", getEmail())
             .append("phonenumber", getPhonenumber())
             .append("sex", getSex())
@@ -404,6 +430,11 @@ public class SysUser extends BaseEntity
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
             .append("dept", getDept())
+            .append("record",getRecord())
+            .append("intime",getIntime())
+            .append("firstphase",getFirstphase())
+            .append("secondphase",getSecondphase())
             .toString();
     }
+    
 }

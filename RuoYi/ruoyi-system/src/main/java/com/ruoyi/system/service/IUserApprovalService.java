@@ -75,4 +75,5 @@ public interface IUserApprovalService
      * @return 审批集合
      */
 	public List<QueryConditions> selectAllQueryConditionsList(QueryConditions queryConditions);
+	
 }

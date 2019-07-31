@@ -100,6 +100,20 @@ public class UserApprovalController extends BaseController
 	}
 	
 	/**
+	 * 查询申请记录
+	 */
+	@PostMapping("/allList")
+	@ResponseBody
+	public TableDataInfo allList(QueryConditions queryConditions)
+	{
+		startPage();
+		queryConditions.setUserId(ShiroUtils.getUserId());
+		queryConditions.setApprovalSight("1");
+		List<QueryConditions> list = userApprovalService.selectAllQueryConditionsList(queryConditions);
+		return getDataTable(list);
+	}
+	
+	/**
 	 * 我的审批
 	 */
 	@GetMapping("/myApproval")
@@ -217,7 +231,7 @@ public class UserApprovalController extends BaseController
 		List<QueryConditions> list = userApprovalService.selectAllQueryConditionsList(queryConditions);
 		return getDataTable(list);
 	}
-	
+		
 	/**
 	 * 导出审批列表
 	 */

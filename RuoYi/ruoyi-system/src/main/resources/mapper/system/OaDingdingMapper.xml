@@ -130,13 +130,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              	<if test="userName != null and userName != '' "> and ding.user_name like concat('%', #{userName}, '%')</if>  
              	<if test="workDate == 1 "> and ding.workDate = #{workDate}</if>  
              	<if test="checkType != null and checkType != '' "> and ding.checkType = #{checkType}</if>
-             	<if test="timeResult != null and timeResult != '' "> and ding.timeResult = #{timeResult}</if>
+             	<if test="timeResult == 1"> and ding.timeResult = '正常'</if>
+             	<if test="timeResult == 2"> and ding.timeResult = '早退'</if>
+             	<if test="timeResult == 3"> and ding.timeResult = '迟到'</if>
+             	<if test="timeResult == 4"> and ding.timeResult = '严重迟到'</if>
+             	<if test="timeResult == 5"> and ding.timeResult = '旷工迟到'</if>
+             	<if test="timeResult == 6"> and ding.timeResult = '未打卡'</if>
              	<if test="dSet != null"> 
              			and nu.dept_id in 
 			          <foreach collection="dSet" index="index" item="item" open="(" separator="," close=")">  
 			            	#{item.deptId}  
 			          </foreach>
              	</if>
+         <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+			AND date_format(ding.workDate,'%y%m%d') &gt;= date_format(#{params.beginTime},'%y%m%d')
+		</if>
+		<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+			AND date_format(ding.workDate,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
+		</if>
          	</where>   
     </select>
 </mapper>

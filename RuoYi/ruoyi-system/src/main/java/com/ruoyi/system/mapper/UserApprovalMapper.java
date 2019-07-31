@@ -85,7 +85,5 @@ public interface UserApprovalMapper
      */
 	public List<QueryConditions> selectAllQueryConditionsList(QueryConditions queryConditions);
 	
-	
-	
 	public int deleteChongFuShenHe(Long applyId);
 }
