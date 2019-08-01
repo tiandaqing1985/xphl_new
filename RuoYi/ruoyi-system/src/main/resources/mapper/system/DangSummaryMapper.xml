@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.system.mapper.DangdangSummaryMapper">
+<mapper namespace="com.ruoyi.system.mapper.DangSummaryMapper">
     
-    <resultMap type="DangdangSummary" id="DangdangSummaryResult">
+    <resultMap type="DangSummary" id="DangdangSummaryResult">
         <result property="id"    column="id"    />
         <result property="account"    column="account"    />
         <result property="ddDate"    column="dd_date"    />
@@ -28,10 +28,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectDangdangSummaryVo">
-        select id, account, dd_date, plan, unit, keyword, showdata, click, cost, click_rate, average_click_price, homepage_average_ranking, bid, part_speech, app_click, app_showdata, app_cost, lets_click, lets_showdata, lets_cost from dangdang_summary
+        select id, account, dd_date, plan, unit, keyword, showdata, click, cost, click_rate, average_click_price, homepage_average_ranking, bid, part_speech, app_click, app_showdata, app_cost, lets_click, lets_showdata, lets_cost from dang_summary
     </sql>
 	
-    <select id="selectDangdangSummaryList" parameterType="DangdangSummary" resultMap="DangdangSummaryResult">
+    <select id="selectDangdangSummaryList" parameterType="DangSummary" resultMap="DangdangSummaryResult">
         SELECT
         s.id ,
         s.account,
@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         q.cost AS lets_cost,
         q.showdata AS lets_showData
         FROM
-        dangdang_summary AS s
+        dang_summary AS s
         LEFT JOIN (
         SELECT
         date,
@@ -113,8 +113,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
-    <insert id="insertDangdangSummary" parameterType="DangdangSummary" useGeneratedKeys="true" keyProperty="id">
-        insert into dangdang_summary
+    <insert id="insertDangdangSummary" parameterType="DangSummary" useGeneratedKeys="true" keyProperty="id">
+        insert into dang_summary
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="account != null  and account != ''  ">account,</if>
 			<if test="ddDate != null  ">dd_date,</if>
@@ -159,8 +159,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 	 
-    <update id="updateDangdangSummary" parameterType="DangdangSummary">
-        update dangdang_summary
+    <update id="updateDangdangSummary" parameterType="DangSummary">
+        update dang_summary
         <trim prefix="SET" suffixOverrides=",">
             <if test="account != null  and account != ''  ">account = #{account},</if>
             <if test="ddDate != null  ">dd_date = #{ddDate},</if>
@@ -186,17 +186,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
 	<delete id="deleteDangdangSummaryById" parameterType="Integer">
-        delete from dangdang_summary where id = #{id}
+        delete from dang_summary where id = #{id}
     </delete>
 	
     <delete id="deleteDangdangSummaryByIds" parameterType="String">
-        delete from dangdang_summary where id in 
+        delete from dang_summary where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
     <insert id="batchInsert"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO dangdang_summary (account,plan,unit,keyword,dd_date,showdata,click,cost,click_rate,average_click_price,
+        INSERT INTO dang_summary (account,plan,unit,keyword,dd_date,showdata,click,cost,click_rate,average_click_price,
         homepage_average_ranking,bid,part_speech)
         VALUES
         <foreach collection="list" item="item" separator=",">
@@ -205,7 +205,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </insert>
     <update id="updateGroupword">
-          update dangdang_summary set combination = CONCAT_WS('@',account,plan,unit,keyword)
+          update dang_summary set combination = CONCAT_WS('@',account,plan,unit,keyword)
     </update>
 
 </mapper>

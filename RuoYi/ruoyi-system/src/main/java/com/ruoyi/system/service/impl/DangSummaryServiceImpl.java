@@ -4,12 +4,15 @@ import java.util.List;
 
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.system.domain.DangdangAppletsFront;
+
+import com.ruoyi.system.domain.DangSummary;
+import com.ruoyi.system.mapper.DangSummaryMapper;
+import com.ruoyi.system.service.IDangSummaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.mapper.DangdangSummaryMapper;
-import com.ruoyi.system.domain.DangdangSummary;
-import com.ruoyi.system.service.IDangdangSummaryService;
+
+
+
 import com.ruoyi.common.core.text.Convert;
 
 /**
@@ -19,10 +22,10 @@ import com.ruoyi.common.core.text.Convert;
  * @date 2019-07-11
  */
 @Service
-public class DangdangSummaryServiceImpl implements IDangdangSummaryService 
+public class DangSummaryServiceImpl implements IDangSummaryService
 {
 	@Autowired
-	private DangdangSummaryMapper dangdangSummaryMapper;
+	private DangSummaryMapper dangdangSummaryMapper;
 
 	/**
      * 查询当当前端消费汇总信息
@@ -31,7 +34,7 @@ public class DangdangSummaryServiceImpl implements IDangdangSummaryService
      * @return 当当前端消费汇总信息
      */
     @Override
-	public DangdangSummary selectDangdangSummaryById(Integer id)
+	public DangSummary selectDangdangSummaryById(Integer id)
 	{
 	    return dangdangSummaryMapper.selectDangdangSummaryById(id);
 	}
@@ -43,7 +46,7 @@ public class DangdangSummaryServiceImpl implements IDangdangSummaryService
      * @return 当当前端消费汇总集合
      */
 	@Override
-	public List<DangdangSummary> selectDangdangSummaryList(DangdangSummary dangdangSummary)
+	public List<DangSummary> selectDangdangSummaryList(DangSummary dangdangSummary)
 	{
 	    return dangdangSummaryMapper.selectDangdangSummaryList(dangdangSummary);
 	}
@@ -55,7 +58,7 @@ public class DangdangSummaryServiceImpl implements IDangdangSummaryService
      * @return 结果
      */
 	@Override
-	public int insertDangdangSummary(DangdangSummary dangdangSummary)
+	public int insertDangdangSummary(DangSummary dangdangSummary)
 	{
 	    return dangdangSummaryMapper.insertDangdangSummary(dangdangSummary);
 	}
@@ -67,7 +70,7 @@ public class DangdangSummaryServiceImpl implements IDangdangSummaryService
      * @return 结果
      */
 	@Override
-	public int updateDangdangSummary(DangdangSummary dangdangSummary)
+	public int updateDangdangSummary(DangSummary dangdangSummary)
 	{
 	    return dangdangSummaryMapper.updateDangdangSummary(dangdangSummary);
 	}
@@ -84,7 +87,7 @@ public class DangdangSummaryServiceImpl implements IDangdangSummaryService
 		return dangdangSummaryMapper.deleteDangdangSummaryByIds(Convert.toStrArray(ids));
 	}
 	@Override
-	public String importBwFront(List<DangdangSummary> bwList, Boolean isUpdateSupport, String operName) {
+	public String importBwFront(List<DangSummary> bwList, Boolean isUpdateSupport, String operName) {
 		if (StringUtils.isNull(bwList) || bwList.size() == 0) {
 			throw new BusinessException("导入用户数据不能为空！");
 		}
@@ -101,7 +104,7 @@ public class DangdangSummaryServiceImpl implements IDangdangSummaryService
 					//
 					for (int i = 0; i < part; i++) {
 						//1000条
-						List<DangdangSummary> listPage = bwList.subList(0, pointsDataLimit);
+						List<DangSummary> listPage = bwList.subList(0, pointsDataLimit);
 						dangdangSummaryMapper.batchInsert(listPage);
 						//剔除
 						bwList.subList(0, pointsDataLimit).clear();

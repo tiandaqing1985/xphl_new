@@ -3,6 +3,8 @@ package com.ruoyi.web.controller.system;
 import java.util.List;
 
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.DangSummary;
+import com.ruoyi.system.service.IDangSummaryService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.system.domain.DangdangSummary;
-import com.ruoyi.system.service.IDangdangSummaryService;
+
+
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -30,12 +32,12 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Controller
 @RequestMapping("/system/dangdangSummary")
-public class DangdangSummaryController extends BaseController
+public class DangSummaryController extends BaseController
 {
     private String prefix = "system/dangdangSummary";
 	
 	@Autowired
-	private IDangdangSummaryService dangdangSummaryService;
+	private IDangSummaryService dangdangSummaryService;
 	
 	@RequiresPermissions("system:dangdangSummary:view")
 	@GetMapping()
@@ -49,10 +51,10 @@ public class DangdangSummaryController extends BaseController
 	 */
 	@PostMapping("/list")
 	@ResponseBody
-	public TableDataInfo list(DangdangSummary dangdangSummary)
+	public TableDataInfo list(DangSummary dangdangSummary)
 	{
 		startPage();
-        List<DangdangSummary> list = dangdangSummaryService.selectDangdangSummaryList(dangdangSummary);
+        List<DangSummary> list = dangdangSummaryService.selectDangdangSummaryList(dangdangSummary);
 		return getDataTable(list);
 	}
 	
@@ -62,10 +64,10 @@ public class DangdangSummaryController extends BaseController
 	 */
     @PostMapping("/export")
     @ResponseBody
-    public AjaxResult export(DangdangSummary dangdangSummary)
+    public AjaxResult export(DangSummary dangdangSummary)
     {
-    	List<DangdangSummary> list = dangdangSummaryService.selectDangdangSummaryList(dangdangSummary);
-        ExcelUtil<DangdangSummary> util = new ExcelUtil<DangdangSummary>(DangdangSummary.class);
+    	List<DangSummary> list = dangdangSummaryService.selectDangdangSummaryList(dangdangSummary);
+        ExcelUtil<DangSummary> util = new ExcelUtil<DangSummary>(DangSummary.class);
         return util.exportExcel(list, "dangdangSummary");
     }
 	
@@ -84,7 +86,7 @@ public class DangdangSummaryController extends BaseController
 	@Log(title = "当当前端消费汇总", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public AjaxResult addSave(DangdangSummary dangdangSummary)
+	public AjaxResult addSave(DangSummary dangdangSummary)
 	{		
 		return toAjax(dangdangSummaryService.insertDangdangSummary(dangdangSummary));
 	}
@@ -95,7 +97,7 @@ public class DangdangSummaryController extends BaseController
 	@GetMapping("/edit/{id}")
 	public String edit(@PathVariable("id") Integer id, ModelMap mmap)
 	{
-		DangdangSummary dangdangSummary = dangdangSummaryService.selectDangdangSummaryById(id);
+		DangSummary dangdangSummary = dangdangSummaryService.selectDangdangSummaryById(id);
 		mmap.put("dangdangSummary", dangdangSummary);
 	    return prefix + "/edit";
 	}
@@ -106,7 +108,7 @@ public class DangdangSummaryController extends BaseController
 	@Log(title = "当当前端消费汇总", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
-	public AjaxResult editSave(DangdangSummary dangdangSummary)
+	public AjaxResult editSave(DangSummary dangdangSummary)
 	{		
 		return toAjax(dangdangSummaryService.updateDangdangSummary(dangdangSummary));
 	}
@@ -124,7 +126,7 @@ public class DangdangSummaryController extends BaseController
 	@GetMapping("/importTemplate")
 	@ResponseBody
 	public AjaxResult importTemplate() {
-		ExcelUtil<DangdangSummary> util = new ExcelUtil<>(DangdangSummary.class);
+		ExcelUtil<DangSummary> util = new ExcelUtil<>(DangSummary.class);
 		return util.importTemplateExcel("当当前端数据");
 	}
 
@@ -133,8 +135,8 @@ public class DangdangSummaryController extends BaseController
 	@PostMapping("/importData")
 	@ResponseBody
 	public AjaxResult importData(MultipartFile file) throws Exception {
-		ExcelUtil<DangdangSummary> util = new ExcelUtil<>(DangdangSummary.class);
-		List<DangdangSummary> dangdangSummary = util.importExcel(file.getInputStream(), 0, 1);
+		ExcelUtil<DangSummary> util = new ExcelUtil<>(DangSummary.class);
+		List<DangSummary> dangdangSummary = util.importExcel(file.getInputStream(), 0, 1);
 		String operName = ShiroUtils.getSysUser().getLoginName();
 		String message = dangdangSummaryService.importBwFront(dangdangSummary, false, operName);
 		return AjaxResult.success(message);

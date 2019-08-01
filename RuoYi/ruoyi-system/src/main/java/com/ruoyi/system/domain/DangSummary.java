@@ -13,7 +13,7 @@ import java.util.Date;
  * @author ruoyi
  * @date 2019-07-11
  */
-public class DangdangSummary extends BaseEntity
+public class DangSummary extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 	
