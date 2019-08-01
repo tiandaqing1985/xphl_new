@@ -49,7 +49,6 @@ public class DangdangPcFrontController extends BaseController
 	/**
 	 * 查询当当pc前端列表
 	 */
-	@RequiresPermissions("system:dangdangPcFront:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(DangdangPcFront dangdangPcFront)
@@ -63,7 +62,6 @@ public class DangdangPcFrontController extends BaseController
 	/**
 	 * 导出当当pc前端列表
 	 */
-	@RequiresPermissions("system:dangdangPcFront:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(DangdangPcFront dangdangPcFront)
@@ -85,7 +83,6 @@ public class DangdangPcFrontController extends BaseController
 	/**
 	 * 新增保存当当pc前端
 	 */
-	@RequiresPermissions("system:dangdangPcFront:add")
 	@Log(title = "当当pc前端", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -108,7 +105,6 @@ public class DangdangPcFrontController extends BaseController
 	/**
 	 * 修改保存当当pc前端
 	 */
-	@RequiresPermissions("system:dangdangPcFront:edit")
 	@Log(title = "当当pc前端", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -120,7 +116,6 @@ public class DangdangPcFrontController extends BaseController
 	/**
 	 * 删除当当pc前端
 	 */
-	@RequiresPermissions("system:dangdangPcFront:remove")
 	@Log(title = "当当pc前端", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody

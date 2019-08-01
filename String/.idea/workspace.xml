@@ -5,17 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3f2849e8-4b8c-41fb-87fb-9ab76ebeb852" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/resources/templates/system/dangdangPcBack/add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/resources/templates/system/dangdangPcBack/dangdangPcBack.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/resources/templates/system/dangdangPcBack/edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-common/src/main/java/com/ruoyi/common/utils/poi/ExcelUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-common/src/main/java/com/ruoyi/common/utils/poi/ExcelUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangDangAll.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangDangAll.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangdangBack.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/domain/DangdangBack.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/mapper/AllMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/mapper/AllMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/mapper/DangdangBackMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/mapper/DangdangBackMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/DangDangAllImportServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/java/com/ruoyi/system/service/impl/DangDangAllImportServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/AllMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/AllMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/DangdangBackMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-system/src/main/resources/mapper/system/DangdangBackMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/markdown-navigator/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/resources/application-druid.yml" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/resources/application-druid.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../RuoYi/ruoyi-admin/src/main/resources/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -48,13 +40,44 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ListTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="306">
               <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/result/StringAppend.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="476">
+              <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/result/DemoString.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="221">
+              <caret line="13" column="51" selection-start-line="13" selection-start-column="51" selection-end-line="13" selection-end-column="51" />
+              <folding>
+                <element signature="e#214#215#0" expanded="true" />
+                <element signature="e#241#242#0" expanded="true" />
+                <element signature="e#281#282#0" expanded="true" />
+                <element signature="e#313#314#0" expanded="true" />
+                <element signature="e#346#347#0" expanded="true" />
+                <element signature="e#375#376#0" expanded="true" />
+                <element signature="e#419#420#0" expanded="true" />
+                <element signature="e#455#456#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -127,6 +150,8 @@
         <option value="$PROJECT_DIR$/src/TimeTest.java" />
         <option value="$PROJECT_DIR$/src/DecimelTest.java" />
         <option value="$PROJECT_DIR$/src/ListTest.java" />
+        <option value="$PROJECT_DIR$/src/result/DemoString.java" />
+        <option value="$PROJECT_DIR$/src/result/StringAppend.java" />
       </list>
     </option>
   </component>
@@ -142,7 +167,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -155,20 +180,29 @@
               <item name="String" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="String" type="b2602c69:ProjectViewProjectNode" />
+              <item name="String" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="result" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="go.gopath.indexing.explicitly.defined" value="true" />
+    <property name="go.import.settings.migrated" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -187,7 +221,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.ListTest">
+  <component name="RunManager" selected="Application.StringAppend">
     <configuration name="DecimelTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="DecimelTest" />
       <module name="String" />
@@ -202,9 +236,15 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Test" />
+    <configuration name="StringAppend" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="result.StringAppend" />
       <module name="String" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="result.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -225,11 +265,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.StringAppend" />
         <item itemvalue="Application.ListTest" />
         <item itemvalue="Application.DecimelTest" />
         <item itemvalue="Application.TimeTest" />
         <item itemvalue="Application.TestD2" />
-        <item itemvalue="Application.Test" />
       </list>
     </recent_temporary>
   </component>
@@ -249,16 +289,18 @@
       <workItem from="1563351046125" duration="861000" />
       <workItem from="1563427419876" duration="1104000" />
       <workItem from="1563701048844" duration="713000" />
+      <workItem from="1564470757567" duration="1901000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="7450000" />
+    <option name="totallyTimeSpent" value="9351000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13432837" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.13539445" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -311,6 +353,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/TestD2.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" selection-start-line="7" selection-end-line="8" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/DecimelTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
@@ -347,17 +396,37 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/TestD2.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" selection-start-line="7" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/ListTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="306">
           <caret line="18" column="38" selection-start-line="18" selection-start-column="38" selection-end-line="18" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/result/DemoString.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="13" column="51" selection-start-line="13" selection-start-column="51" selection-end-line="13" selection-end-column="51" />
+          <folding>
+            <element signature="e#214#215#0" expanded="true" />
+            <element signature="e#241#242#0" expanded="true" />
+            <element signature="e#281#282#0" expanded="true" />
+            <element signature="e#313#314#0" expanded="true" />
+            <element signature="e#346#347#0" expanded="true" />
+            <element signature="e#375#376#0" expanded="true" />
+            <element signature="e#419#420#0" expanded="true" />
+            <element signature="e#455#456#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/result/StringAppend.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="28" lean-forward="true" selection-start-line="28" selection-end-line="28" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

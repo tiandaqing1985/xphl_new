@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.finance.ApprovalProcessMapper">
+    <insert id="insert" parameterType="com.ruoyi.system.domain.finance.FacSysUserApproval">
+        insert into fac_sys_user_approval
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applyId != null  ">apply_id,</if>
+            <if test="approvalState != null  and approvalState != ''  ">approval_state,</if>
+            <if test="approverId != null  ">approver_id,</if>
+            <if test="approvalTime != null  ">approval_time,</if>
+            <if test="approvalSight != null  and approvalSight != ''  ">approval_sight,</if>
+            <if test="approvalLevel != null  ">approval_level,</if>
+            <if test="createTime != null  ">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applyId != null  ">#{applyId},</if>
+            <if test="approvalState != null  and approvalState != ''  ">#{approvalState},</if>
+            <if test="approverId != null  ">#{approverId},</if>
+            <if test="approvalTime != null  ">#{approvalTime},</if>
+            <if test="approvalSight != null  and approvalSight != ''  ">#{approvalSight},</if>
+            <if test="approvalLevel != null  ">#{approvalLevel},</if>
+            <if test="createTime != null  ">#{createTime},</if>
+        </trim>
+    </insert>
+
+
+    <select id="querySecondLevelDept" resultType="com.ruoyi.system.domain.finance.DeptUser">
+       SELECT
+        a.user_name as userName,c.user_id as userId,b.`dept_id` as deptId,
+        b.parent_id as parentId,b.dept_name as deptName
+FROM
+  sys_user AS a
+  LEFT JOIN sys_dept AS b
+    ON a.`dept_id` = b.`dept_id`
+  LEFT JOIN sys_user AS c
+    ON b.`leader` = c.`user_name`
+    AND b.`dept_id` = a.`dept_id`
+WHERE   1=1 and  <if test="userId != null">a.`user_id`= #{userId} </if>;
+    </select>
+    <select id="queryFirstLevelDept" resultType="com.ruoyi.system.domain.finance.DeptUser">
+SELECT
+  b.`user_id`as userId,
+  a.`leader` as userName,
+  a.`dept_name` as deptName
+FROM
+  sys_dept AS a
+  LEFT JOIN sys_user AS b
+    ON a.`dept_id` = b.`dept_id`
+WHERE a.`dept_id` = #{deptId}   </select>
+    <select id="queryRoleName" resultType="java.lang.String">
+               SELECT  c.`role_name` FROM sys_user AS a LEFT JOIN sys_user_role AS b ON a.`user_id` = b.`user_id` LEFT JOIN sys_role AS c ON  c.`role_id` = b.`role_id` WHERE a.`user_id`=#{userId}
+    </select>
+    <select id="queryHighDeptLeaderId" resultType="java.lang.Long">
+        SELECT
+  d.`user_id`
+FROM
+  sys_user AS a
+  LEFT JOIN sys_dept AS b
+    ON a.`dept_id` = b.`dept_id`
+  LEFT JOIN sys_dept AS c
+    ON c.`dept_id` = b.`parent_id`
+  LEFT JOIN sys_user AS d
+    ON c.`leader` = d.user_name
+WHERE a.user_id = #{userId}
+    </select>
+</mapper>

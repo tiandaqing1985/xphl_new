@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('当当pc前端列表')" />
+	<th:block th:include="include :: header('借款申请列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -10,16 +10,47 @@
 				<form id="formId">
 					<div class="select-list">
 						<ul>
-
 							<li>
-								日期：<input type="text" name="ddDate"/>
+								借款编号：<input type="text" name="num"/>
 							</li>
 
-
 							<li>
-								关键词：<input type="text" name="keyword"/>
+								借款名称：<input type="text" name="loanName"/>
 							</li>
 
+							<li>
+								借款金额：<input type="text" name="amount"/>
+							</li>
+
+							<li>
+								借款人：<input type="text" name="loanUser"/>
+							</li>
+
+							<li>
+								创建时间：<input type="text" name="createTime"/>
+							</li>
+
+							<li>
+								借款时间：<input type="text" name="loanTime"/>
+							</li>
+
+							<li>
+								预计还款时间：<input type="text" name="repayTime"/>
+							</li>
+
+							<li>
+								财务操作：<input type="text" name="facOperate"/>
+							</li>
+
+							<li>
+								借款事由：<input type="text" name="reason"/>
+							</li>
+
+							<li>
+								申请人操作：<input type="text" name="applyStatus"/>
+							</li>
+
+							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
 							</li>
@@ -27,23 +58,20 @@
 					</div>
 				</form>
 			</div>
-			
+
 	        <div class="btn-group-sm" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:dangdangPcFront:add">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:facLoanApply:add">
 					<i class="fa fa-plus"></i> 添加
 				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:dangdangPcFront:edit">
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:facLoanApply:edit">
 					<i class="fa fa-edit"></i> 修改
 				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:dangdangPcFront:remove">
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:facLoanApply:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:dangdangPcFront:export">
-						<i class="fa fa-download"></i> 当当pc端数据导出
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:facLoanApply:export">
+						<i class="fa fa-download"></i> 导出
 				 </a>
-				<a class="btn btn-info" onclick="$.table.importExcel()">
-					<i class="fa fa-upload"></i> 导入
-				</a>
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -52,9 +80,9 @@
 	</div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:dangdangPcFront:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:dangdangPcFront:remove')}]];
-        var prefix = ctx + "system/dangdangPcFront";
+        var editFlag = [[${@permission.hasPermi('system:facLoanApply:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:facLoanApply:remove')}]];
+        var prefix = ctx + "/system/facLoanApply";
 
         $(function() {
             var options = {
@@ -63,9 +91,7 @@
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
 				exportUrl: prefix + "/export",
-                modalName: "当当pc前端",
-				importTemplateUrl: prefix + "/importTemplate",
-				importUrl: prefix + "/importData",
+                modalName: "借款申请",
 		        showExport: true,
                 columns: [{
 		            checkbox: true
@@ -76,68 +102,53 @@
 					visible: false
 				},
 				{
-					field : 'account', 
-					title : '账户',
+					field : 'num', 
+					title : '借款编号',
 					sortable: true
 				},
 				{
-					field : 'ddDate', 
-					title : '日期',
+					field : 'loanName', 
+					title : '借款名称',
 					sortable: true
 				},
 				{
-					field : 'plan', 
-					title : '推广计划',
+					field : 'amount', 
+					title : '借款金额',
 					sortable: true
 				},
 				{
-					field : 'unit', 
-					title : '推广单元',
+					field : 'loanUser', 
+					title : '借款人',
 					sortable: true
 				},
 				{
-					field : 'keyword', 
-					title : '关键词',
+					field : 'createTime', 
+					title : '创建时间',
 					sortable: true
 				},
 				{
-					field : 'showdata', 
-					title : '展现',
+					field : 'loanTime', 
+					title : '借款时间',
 					sortable: true
 				},
 				{
-					field : 'click', 
-					title : '点击',
+					field : 'repayTime', 
+					title : '预计还款时间',
 					sortable: true
 				},
 				{
-					field : 'cost', 
-					title : '消费',
+					field : 'facOperate', 
+					title : '财务操作',
 					sortable: true
 				},
 				{
-					field : 'clickRate', 
-					title : '点击率',
+					field : 'reason', 
+					title : '借款事由',
 					sortable: true
 				},
 				{
-					field : 'avgClickPrice', 
-					title : '平均点击价格',
-					sortable: true
-				},
-				{
-					field : 'homeAvgRank', 
-					title : '首页平均排名',
-					sortable: true
-				},
-				{
-					field : 'bid', 
-					title : '出价',
-					sortable: true
-				},
-				{
-					field : 'partSpeech', 
-					title : '匹配模式',
+					field : 'applyStatus', 
+					title : '申请人操作',
 					sortable: true
 				},
 		        {
@@ -155,16 +166,4 @@
         });
     </script>
 </body>
-<form id="importForm" enctype="multipart/form-data" class="mt20 mb10" style="display: none;">
-	<div class="col-xs-offset-1">
-		<input type="file" id="file" name="file"/>
-		<div class="mt10 pt5">
-			&nbsp; <a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i
-				class="fa fa-file-excel-o"></i> 下载模板</a>
-		</div>
-		<font color="red" class="pull-left mt10">
-			提示：仅允许导入“xls”或“xlsx”格式文件！
-		</font>
-	</div>
-</form>
 </html>

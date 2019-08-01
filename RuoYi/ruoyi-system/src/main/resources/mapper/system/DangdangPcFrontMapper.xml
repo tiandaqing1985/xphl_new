@@ -136,7 +136,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ON s.combination = a.join_uv
         AND a.dd_date = s.dd_date
         where 1=1
-        <if test="account != null  and account != ''  "> and a.account = #{account}</if>
         <if test="ddDate != null  "> and a.dd_date = #{ddDate}</if>
         <if test="keyword != null  and keyword != ''  "> and a.keyword = #{keyword}</if>
     ORDER BY  a.dd_date ASC
