@@ -170,7 +170,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		) AS  ht ON ht.channel_id = fh.applet_done
 		AND ht.dd_date = fh.fDate
 		where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if>
-		<if test="keyword != null and keyword ！ =''  "> and fh.fKeyword= #{keyword}</if>
 		ORDER BY
 	fh.fDate DESC
     </select>
@@ -286,7 +285,7 @@ FROM
 		channel_id
 		) as ht ON ht.channel_id = fh.applet_url AND ht.dd_date = fh.fDate
 		where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if>
-		<if test="keyword != null and keyword ！ =''  "> and fh.fKeyword= #{keyword}</if> ORDER BY fh.fDate desc
+		 ORDER BY fh.fDate desc
 	</select>
 	<select id="queryMod" resultMap="DangdangBackResult" parameterType="com.ruoyi.system.domain.DangdangBack">
 		SELECT
@@ -400,7 +399,7 @@ FROM
 		channel_id
 		) ht ON ht.channel_id = fh.mobile_access_url
 	AND ht.dd_date = fh.fDate
-	where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if><if test="keyword != null and keyword ！ =''  "> and fh.fKeyword= #{keyword}</if><if test="keyword != null and keyword ！ =''  "> and fh.fKeyword= #{keyword}</if>
+	where 1=1 <if test="ddDate != null  "> and fh.fDate= #{ddDate}</if>
 	ORDER BY fh.fDate desc
 	</select>
 	<select id="otherDone" resultType="java.lang.Integer" parameterType="com.ruoyi.system.domain.DangdangBack">
