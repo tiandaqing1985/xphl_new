@@ -33,6 +33,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
     private SysUserMapper userMapper;
 	@Autowired
     private SysDeptMapper deptMapper;
+
 	/**
      * 查询钉钉考勤数据信息
      * 
@@ -57,10 +58,16 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		if(ding.getUserId() == 1){//admin用户
 			return oaDingdingMapper.selectDingData(ding);
 		}
+		
 		//人事专员
 		SysDept dept = deptMapper.selectDeptByUserId(ding.getUserId());
 		if(dept != null && "宋彬".equals(dept.getLeader())){
 			ding.setUserId(1L);
+			return oaDingdingMapper.selectDingData(ding);
+		}
+		
+		//普通员工
+		if(dept != null && !"宋彬".equals(dept.getLeader())){
 			return oaDingdingMapper.selectDingData(ding);
 		}
 		
@@ -133,5 +140,5 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		
 		return oaDingdingMapper.insertForeach(dingList);
 	}
-	
+
 }

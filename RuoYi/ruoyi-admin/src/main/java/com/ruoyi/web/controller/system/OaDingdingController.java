@@ -86,7 +86,8 @@ public class OaDingdingController extends BaseController
 	{		
 		return toAjax(oaDingdingService.insertOaDingding(oaDingding));
 	}
-
+	
+	
 	/**
 	 * 修改钉钉考勤数据
 	 */
