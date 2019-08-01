@@ -207,7 +207,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				h.`user_id` 
 			) ty ON nu.user_id = ty.user_id 
     		<where>
-             	<if test="userId != null "> and nu.user_id != #{userId}</if>
+    			<!-- 假期余额里面也要能看见自己的假期余额 -->
+             	<!-- <if test="userId != null "> and nu.user_id != #{userId}</if> -->
              	<if test="userName != null and userName != '' "> and nu.user_name like concat('%', #{userName}, '%')</if>  
              	<if test="dSet != null"> 
              			and nu.dept_id in 

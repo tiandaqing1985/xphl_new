@@ -1,6 +1,13 @@
 package com.ruoyi.system.domain;
 
+import java.util.Date;
+import java.util.Set;
+
 public class QueryConditions {
+	/** 用户id */
+	private long userId;
+	/** 用户名*/
+	private String userName;
 	
 	/** 审批记录ID */
 	private Long approvalId;
@@ -36,10 +43,62 @@ public class QueryConditions {
 	private String approvalSight;
 	/** 有时间后缀的时长*/
 	private String timelengthPlus;
+	/** 开始时间 */
+	private Date starttime;
+	/** 结束时间 */
+	private Date endtime;
+	/** 证明附件 */
+	private String prove;
+	/** 详情 */
+	private String details;
 	
 	private long status;//1我的审批
 	
+	/**部门对象集合*/
+	private Set<SysDept> dSet;
 	
+	public long getUserId() {
+		return userId;
+	}
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public Date getStarttime() {
+		return starttime;
+	}
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
+	}
+	public Date getEndtime() {
+		return endtime;
+	}
+	public void setEndtime(Date endtime) {
+		this.endtime = endtime;
+	}
+	public String getProve() {
+		return prove;
+	}
+	public void setProve(String prove) {
+		this.prove = prove;
+	}
+	public String getDetails() {
+		return details;
+	}
+	public void setDetails(String details) {
+		this.details = details;
+	}
+	public Set<SysDept> getdSet() {
+		return dSet;
+	}
+	public void setdSet(Set<SysDept> dSet) {
+		this.dSet = dSet;
+	}
 	public long getStatus() {
 		return status;
 	}
