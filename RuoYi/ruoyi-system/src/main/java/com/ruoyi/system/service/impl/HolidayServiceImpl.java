@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.HolidayMapper;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
+import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.domain.Holiday;
 import com.ruoyi.system.domain.RestHoliday;
 import com.ruoyi.system.domain.SysDept;
@@ -38,6 +39,9 @@ public class HolidayServiceImpl implements IHolidayService
     private SysDeptMapper deptMapper;
     @Autowired
     private SysUserMapper userMapper;
+    @Autowired
+    private SysUserRoleMapper userRoleMapper;
+    
 	/**
      * 查询假期信息
      * 
@@ -182,20 +186,47 @@ public class HolidayServiceImpl implements IHolidayService
 		if(sysUser.getUserId() == 1){//admin用户
 			return holidayMapper.selectRestByUserId(sysUser);
 		}
-		//人事专员
-		SysDept dept = deptMapper.selectDeptByUserId(sysUser.getUserId());
-		if(dept != null && "宋彬".equals(dept.getLeader())){
+		SysUser user = userMapper.selectUserById(sysUser.getUserId());//查出当前用户
+
+		//人事总监
+		user.setRoleId(6L);//人事总监
+		Long chiefId = userRoleMapper.selectUserIdByRoleId(user);//人事总监id
+		if(chiefId.longValue() == user.getUserId().longValue()){
+			sysUser.setUserId(1L);
 			return holidayMapper.selectRestByUserId(sysUser);
 		}
 		
-		//leader
-		SysUser user = userMapper.selectUserById(sysUser.getUserId());
-		dept = new SysDept();
-		dept.setLeader(user.getUserName());
-		dSet.clear();
-		getDeptList(dept);	
-		sysUser.setdSet(dSet);
-		return holidayMapper.selectRestByUserId(sysUser);
+		Long upLeaderId =userMapper.selectUpApproverIdByApplyerId(sysUser.getUserId());//所在部门负责人的上级leader
+		user.setRoleId(3L);//人事专员
+		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id
+
+			//人事专员
+		if(user.getUserId().longValue()==hrId.longValue()){
+			sysUser.setUserId(1L);
+			return holidayMapper.selectRestByUserId(sysUser);
+			
+		}else if(user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() == upLeaderId.longValue()){
+			//其他人事==普通员工
+			return holidayMapper.selectRestByUserId(sysUser);
+			
+		}
+		//普通员工看不到假期余额菜单
+	/*	else if(user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() != upLeaderId.longValue()){
+			//普通员工
+			return holidayMapper.selectRestByUserId(sysUser);
+			
+		}*/
+		else{
+			//leader
+			SysDept dept = deptMapper.selectDeptByUserId(sysUser.getUserId());
+			dept = new SysDept();
+			dept.setLeader(user.getUserName());
+			dSet.clear();
+			getDeptList(dept);	
+			sysUser.setdSet(dSet);
+			sysUser.setUserId(null);
+			return holidayMapper.selectRestByUserId(sysUser);
+		}
 	}
 		
 	/**

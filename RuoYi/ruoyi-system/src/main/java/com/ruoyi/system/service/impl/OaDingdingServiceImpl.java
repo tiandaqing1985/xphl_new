@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.OaDingdingMapper;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
+import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.domain.Dingding;
 import com.ruoyi.system.domain.OaDingding;
 import com.ruoyi.system.domain.SysDept;
@@ -33,7 +34,9 @@ public class OaDingdingServiceImpl implements IOaDingdingService
     private SysUserMapper userMapper;
 	@Autowired
     private SysDeptMapper deptMapper;
-
+    @Autowired
+    private SysUserRoleMapper userRoleMapper;
+    
 	/**
      * 查询钉钉考勤数据信息
      * 
@@ -59,27 +62,44 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 			return oaDingdingMapper.selectDingData(ding);
 		}
 		
-		//人事专员
-		SysDept dept = deptMapper.selectDeptByUserId(ding.getUserId());
-		if(dept != null && "宋彬".equals(dept.getLeader())){
+		SysUser user = userMapper.selectUserById(ding.getUserId());
+		
+		//人事总监
+		user.setRoleId(6L);//人事总监
+		Long chiefId = userRoleMapper.selectUserIdByRoleId(user);//人事总监id
+		if(chiefId.longValue() == user.getUserId().longValue()){
 			ding.setUserId(1L);
 			return oaDingdingMapper.selectDingData(ding);
 		}
 		
-		//普通员工
-		if(dept != null && !"宋彬".equals(dept.getLeader())){
+		Long upLeaderId =userMapper.selectUpApproverIdByApplyerId(ding.getUserId());//所在部门负责人的上级leader
+		user.setRoleId(3L);//人事专员
+		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id
+		SysDept dept = deptMapper.selectDeptByUserId(ding.getUserId());
+
+			//人事专员
+		if(user.getUserId().longValue()==hrId.longValue()){
+			ding.setUserId(1L);
+			return oaDingdingMapper.selectDingData(ding);
+			
+		}else if(user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() == upLeaderId.longValue()){
+			//其他人事==普通员工
+			return oaDingdingMapper.selectDingData(ding);
+			
+		}else if(dept== null && user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() != upLeaderId.longValue()){
+			//普通员工
+			return oaDingdingMapper.selectDingData(ding);
+			
+		}else{
+			//leader
+			dept = new SysDept();
+			dept.setLeader(user.getUserName());
+			dSet.clear();
+			getDeptList(dept);	
+			ding.setdSet(dSet);
+			ding.setUserId(null);
 			return oaDingdingMapper.selectDingData(ding);
 		}
-		
-		//leader
-		SysUser user = userMapper.selectUserById(ding.getUserId());
-		dept = new SysDept();
-		dept.setLeader(user.getUserName());
-		dSet.clear();
-		getDeptList(dept);	
-		ding.setdSet(dSet);
-		ding.setUserId(null);
-		return oaDingdingMapper.selectDingData(ding);
 	}
 	
 	/**

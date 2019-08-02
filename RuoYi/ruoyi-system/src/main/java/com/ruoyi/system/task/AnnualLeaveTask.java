@@ -44,8 +44,15 @@ public class AnnualLeaveTask {
 			if(n<1){
 				continue;
 			}
+			
 			//本月年假生成（效）时间
 			String creatDate = s.format(userService.getDate(intime, n));
+			
+			//年假生效日期在今天之后的不生成年假
+			String today = s.format(new Date());
+			if(creatDate.compareTo(today) > 0){
+				continue;
+			}
 			
 			//本月生成的年假的失效时间
 			String overDate = s.format(userService.getDate(intime, n+12));
@@ -66,8 +73,6 @@ public class AnnualLeaveTask {
 			userApply.setTimeapart1(createMonth);
 			UserApply isMaternityLeave = userApplyService.selcetMaternityLeaveByUserApply(userApply);//是否在产假
 					
-			String today = s.format(new Date());
-		
 			//如果今天是年假生效日期
 			if (today.equals(creatDate)) {
 				Holiday holiday1 = new Holiday();

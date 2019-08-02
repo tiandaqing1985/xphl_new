@@ -45,18 +45,6 @@ public class OaOutServiceImpl implements IOaOutService
 	    return oaOutMapper.selectOaOutById(outId);
 	}
 	
-	/**
-     * 查询外出报备列表
-     * 
-     * @param oaOut 外出报备信息
-     * @return 外出报备集合
-     */
-	@Override
-	public List<OaOut> selectOaOutList(OaOut oaOut)
-	{
-	    return oaOutMapper.selectOaOutList(oaOut);
-	}
-	
     /**
      * 新增外出报备
      * 
@@ -67,10 +55,21 @@ public class OaOutServiceImpl implements IOaOutService
 	public int insertOaOut(OaOut oaOut)
 	{
 		oaOutMapper.insertOaOut(oaOut);
-		
+		SysUser user = userMapper.selectUserById(oaOut.getUserId());//查出当前用户的area值
+
 		//生成审批记录
-		//leader
-		Long approvalId = userMapper.selectApproverIdByApplyerId(oaOut.getUserId());//所在部门负责人id
+		Long approvalId = 0L;//审批人id
+		//直属上级审批
+		Long leaderId = userMapper.selectApproverIdByApplyerId(user.getUserId());//所在部门负责人id(上级)
+		Long upLeaderId = userMapper.selectUpApproverIdByApplyerId(user.getUserId());//所在部门负责人的上级（上上级）
+		if(leaderId.equals(user.getUserId())){	//判断用户是否部门负责人  
+			approvalId = upLeaderId; //上上级作为一级审批人
+		}
+		else{
+			approvalId = leaderId;//上级作为一级审批人
+		}
+		
+		//生成一级审批记录
 		OaOutApproval oaOutApproval =  new OaOutApproval();
 		oaOutApproval.setOutId(oaOut.getOutId());//外出报备id
 		oaOutApproval.setApprovalId(approvalId);//审批人user_id
@@ -83,20 +82,21 @@ public class OaOutServiceImpl implements IOaOutService
 		    return 1;
 		}
 		
-		//分区域分配人事审批人
-		SysUser user = userMapper.selectUserById(oaOut.getUserId());//查出当前用户的area值
-		user.setRoleId(3L);
-		approvalId = userRoleMapper.selectUserIdByRoleId(user);
+		//人事审批
+					
+//		user.setRoleId(3L);//人事专员（分区域分配人事审批人	）
+		user.setRoleId(6L);//人事总监
+		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事总监id
 		
-		//当前用户是hr时
-		if(user.getUserId().longValue() == approvalId.longValue()){
+		//当前用户是hr时，只需要人事总监审批
+		if(user.getUserId().longValue() == hrId.longValue()){
 		    return 1;
 		}
 		
-		//人事审批
+		//生成二级审批记录
 		OaOutApproval oaOutApproval2 =  new OaOutApproval();
 		oaOutApproval2.setOutId(oaOut.getOutId());//外出报备id
-		oaOutApproval2.setApprovalId(approvalId);//审批人user_id
+		oaOutApproval2.setApprovalId(hrId);//审批人user_id（人事总监）
 		oaOutApproval2.setApprovalState("3");//审批状态（1同意，2驳回 ，3未操作）
 		oaOutApproval2.setApprovalSight("0");//1可见  0不可见
 		oaOutApprovalMapper.insertOaOutApproval(oaOutApproval2);
@@ -127,7 +127,19 @@ public class OaOutServiceImpl implements IOaOutService
 	{
 		return oaOutMapper.deleteOaOutByIds(Convert.toStrArray(ids));
 	}
-
+	
+	/**
+     * 查询外出报备列表
+     * 
+     * @param oaOut 外出报备信息
+     * @return 外出报备集合
+     */
+	@Override
+	public List<OaOut> selectOaOutList(OaOut oaOut)
+	{
+	    return oaOutMapper.selectOaOutList(oaOut);
+	}
+	
 	/**
 	 *  查询外出报备审批结果
 	 * @param oaOut
@@ -135,6 +147,10 @@ public class OaOutServiceImpl implements IOaOutService
 	 */
 	@Override
 	public List<OutApproval> selectOutApprovalList(OaOut oaOut) {
+		//admin查看全部
+		if(oaOut.getUserId().longValue() == 1L){
+			oaOut.setUserId(null);
+		}
 		return oaOutMapper.selectOutApprovalList(oaOut);
 	}
 	

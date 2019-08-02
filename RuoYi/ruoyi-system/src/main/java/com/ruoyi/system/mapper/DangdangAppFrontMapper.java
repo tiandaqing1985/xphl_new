@@ -1,7 +1,6 @@
 package com.ruoyi.system.mapper;
 
 import com.ruoyi.system.domain.DangdangAppFront;
-import com.ruoyi.system.domain.DangdangMatch;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

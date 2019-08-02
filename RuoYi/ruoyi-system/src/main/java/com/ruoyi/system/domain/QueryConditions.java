@@ -212,7 +212,7 @@ public class QueryConditions {
 	}
 	@Override
 	public String toString() {
-		return "QueryConditions [approvalId=" + approvalId + ", approverId=" + approverId + ", applyId=" + applyId
+		return "QueryConditions [userId="+userId+",userName="+userName+",approvalId=" + approvalId + ", approverId=" + approverId + ", applyId=" + applyId
 				+ ", applyerId=" + applyerId + ", listNum=" + listNum + ", applyerName=" + applyerName
 				+ ", approverName=" + approverName + ", applyType=" + applyType + ", leaveType=" + leaveType
 				+ ", timelength=" + timelength + ", applyState=" + applyState + ", applyTime=" + applyTime

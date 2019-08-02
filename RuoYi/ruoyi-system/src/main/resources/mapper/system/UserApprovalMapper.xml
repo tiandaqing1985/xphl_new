@@ -268,7 +268,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         	<if test="approvalSight != null  and approvalSight != '' "> and p.approval_sight = #{approvalSight,jdbcType=VARCHAR}</if>
       		<if test="status ==1">and p.approval_state != 3</if>
       		<if test="dSet != null">
-      				and u.user_name != #{userName}
 					and d.dept_id in
 					<foreach collection="dSet" item="item" index="index" open="(" separator="," close=")">
 							#{item.deptId}

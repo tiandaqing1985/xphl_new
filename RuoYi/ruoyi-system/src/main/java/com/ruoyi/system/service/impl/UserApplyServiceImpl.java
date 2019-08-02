@@ -206,12 +206,15 @@ public class UserApplyServiceImpl implements IUserApplyService
 		userApproval.setApprovalSight("1");
 		userApproval.setApprovalLevel(level);
 		Long leaderId = iSysUserService.selectApproverIdByApplyerId(userId);//所在部门负责人id
-		Long upLeaderId =iSysUserService.selectUpApproverIdByApplyerId(userId);
+		Long upLeaderId =iSysUserService.selectUpApproverIdByApplyerId(userId);//所在部门负责人的上级leader
+		Long approvalId = 0L;
 		if(leaderId.equals(userId)){	//判断用户是否部门负责人  确定一、二级审批人id
 			userApproval.setApproverId(upLeaderId); //一级审批人id	
+			approvalId = upLeaderId;
 		}
 		else{
 			userApproval.setApproverId(leaderId);
+			approvalId = leaderId;
 		}
 		userApprovalMapper.insertUserApproval(userApproval); //插入一级审批记录
 				
@@ -220,11 +223,17 @@ public class UserApplyServiceImpl implements IUserApplyService
 		personnel.setApplyId(userApply.getApplyId());
 		personnel.setApprovalLevel(++level);
 		SysUser user = userMapper.selectUserById(userApply.getUserId());
-		user.setRoleId(3L);
-		//分区域分配人事审批人
-		personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user));
-		userApprovalMapper.insertUserApproval(personnel);
-
+		
+		user.setRoleId(6L);//人事总监
+		user.setArea("1");
+		Long hrId = iSysRoleService.selectUserIdByRoleId(user);//人事总监id
+		
+		//当前用户的上级是人事leader，不进行人事总监审批
+		if(upLeaderId.longValue() != hrId.longValue() && approvalId.longValue() != hrId.longValue()){//审批人是否是人事总监
+			//分区域分配人事审批人
+			personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user));
+			userApprovalMapper.insertUserApproval(personnel);	
+		}
 		
 		if(userApproval.getApproverId()!= null && userApproval.getApproverId()==103){ //如果是审批人是 coo 直接结束
 			return 1;

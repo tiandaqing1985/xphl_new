@@ -95,11 +95,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			LEFT JOIN sys_user us ON us.user_id = app.approval_id 
         <where>  
         	1=1 and app.approval_sight = 1
-            <if test="outId != null "> and ou.out_id = #{outId}</if>
+            <if test="outId != null"> and ou.out_id = #{outId}</if>
              <if test="userId != null "> and ou.user_id = #{userId}</if>
-             <if test="state != null  and state != '' "> and ou.state = #{state}</if>
-             <if test="hrState != null  and hrState != '' "> and ou.hr_state = #{hrState}</if>
-             <if test="createDate != null "> and ou.create_date = #{createDate}</if>
+             <if test="approvalId != null "> and app.approval_id=#{approvalId}</if>
+             <if test="approvalState != null and approvalState != 4"> and app.approval_state=#{approvalState}</if>
+             <if test="approvalState != null and approvalState == 4"> and app.approval_state in(1,2)</if>
+             <if test="state != null and state != ''"> and ou.state = #{state}</if>
+             <if test="hrState != null and hrState != ''"> and ou.hr_state = #{hrState}</if>
+             <if test="createDate != null and  createDate != ''"> and ou.create_date = #{createDate}</if>
              <if test="params.startDate != null and params.startDate != ''"><!-- 开始时间检索 -->
 				AND date_format(ou.start_date,'%y%m%d') &gt;= date_format(#{params.startDate},'%y%m%d')
 			</if>

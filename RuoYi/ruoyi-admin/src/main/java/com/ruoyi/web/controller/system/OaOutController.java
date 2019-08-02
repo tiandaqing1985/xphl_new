@@ -46,7 +46,6 @@ public class OaOutController extends BaseController
 	/**
 	 * 查询外出报备列表
 	 */
-	@RequiresPermissions("system:oaOut:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(OaOut oaOut)
@@ -57,11 +56,46 @@ public class OaOutController extends BaseController
 		return getDataTable(list);
 	}
 	
+	@GetMapping("/toUnApprovalList")
+	public String toUnApprovalList()
+	{
+	    return prefix + "/unApprovalList";
+	}
 	
+	/**
+	 * 查询外出报备待审批列表
+	 */
+	@PostMapping("/unApprovalList")
+	@ResponseBody
+	public TableDataInfo unApprovalList(OaOut oaOut)
+	{
+		startPage();
+		oaOut.setApprovalId(ShiroUtils.getUserId());
+		oaOut.setApprovalState(3L);//审批状态（1同意，2驳回 ，3未操作）
+        List<OaOut> list = oaOutService.selectOaOutList(oaOut);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 查询外出报备我的审批列表
+	 */
+	@PostMapping("/myApprovalList")
+	@ResponseBody
+	public TableDataInfo myApprovalList(OaOut oaOut)
+	{
+		startPage();
+		oaOut.setApprovalId(ShiroUtils.getUserId());
+		if(oaOut.getApprovalState() != null && oaOut.getApprovalState().longValue() != 4L){
+			 List<OaOut> list = oaOutService.selectOaOutList(oaOut);
+				return getDataTable(list);
+		}
+		oaOut.setApprovalState(4L);//审批状态（1同意，2驳回 ，3未操作）
+        List<OaOut> list = oaOutService.selectOaOutList(oaOut);
+		return getDataTable(list);
+	}
 	/**
 	 * 导出外出报备列表
 	 */
-	@RequiresPermissions("system:oaOut:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(OaOut oaOut)
@@ -106,7 +140,6 @@ public class OaOutController extends BaseController
 	/**
 	 * 修改保存外出报备
 	 */
-	@RequiresPermissions("system:oaOut:edit")
 	@Log(title = "外出报备", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -118,7 +151,6 @@ public class OaOutController extends BaseController
 	/**
 	 * 删除外出报备
 	 */
-	@RequiresPermissions("system:oaOut:remove")
 	@Log(title = "外出报备", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody

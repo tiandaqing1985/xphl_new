@@ -31,6 +31,27 @@ public class OaOut extends BaseEntity
 	private Date createDate;
 	/** 理由 */
 	private String reason;
+	
+	/** 审批人id */
+	private Long approvalId;
+	/** 审批状态（1同意，2驳回 ，3未操作）*/
+	private Long approvalState;
+
+	public Long getApprovalState() {
+		return approvalState;
+	}
+
+	public void setApprovalState(Long approvalState) {
+		this.approvalState = approvalState;
+	}
+
+	public Long getApprovalId() {
+		return approvalId;
+	}
+
+	public void setApprovalId(Long approvalId) {
+		this.approvalId = approvalId;
+	}
 
 	public void setOutId(Long outId) 
 	{
