@@ -1,7 +1,8 @@
 package com.ruoyi.system.service;
 
-import com.ruoyi.system.domain.BwFront;
-import com.ruoyi.system.domain.DangdangMatch;
+
+import com.ruoyi.system.domain.DangMatch;
+
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  * @author ruoyi
  * @date 2019-07-10
  */
-public interface IDangdangMatchService 
+public interface IDDangMatchService
 {
 	/**
      * 查询当当词性匹配信息
@@ -18,7 +19,7 @@ public interface IDangdangMatchService
      * @param id 当当词性匹配ID
      * @return 当当词性匹配信息
      */
-	public DangdangMatch selectDangdangMatchById(Integer id);
+	public DangMatch selectDangdangMatchById(Integer id);
 	
 	/**
      * 查询当当词性匹配列表
@@ -26,7 +27,7 @@ public interface IDangdangMatchService
      * @param dangdangMatch 当当词性匹配信息
      * @return 当当词性匹配集合
      */
-	public List<DangdangMatch> selectDangdangMatchList(DangdangMatch dangdangMatch);
+	public List<DangMatch> selectDangdangMatchList(DangMatch dangdangMatch);
 	
 	/**
      * 新增当当词性匹配
@@ -34,7 +35,7 @@ public interface IDangdangMatchService
      * @param dangdangMatch 当当词性匹配信息
      * @return 结果
      */
-	public int insertDangdangMatch(DangdangMatch dangdangMatch);
+	public int insertDangdangMatch(DangMatch dangdangMatch);
 	
 	/**
      * 修改当当词性匹配
@@ -42,7 +43,7 @@ public interface IDangdangMatchService
      * @param dangdangMatch 当当词性匹配信息
      * @return 结果
      */
-	public int updateDangdangMatch(DangdangMatch dangdangMatch);
+	public int updateDangdangMatch(DangMatch dangdangMatch);
 		
 	/**
      * 删除当当词性匹配信息
@@ -52,7 +53,7 @@ public interface IDangdangMatchService
      */
 	public int deleteDangdangMatchByIds(String ids);
 
-	public String importBwFront(List<DangdangMatch> bwList, Boolean isUpdateSupport, String operName);
+	public String importBwFront(List<DangMatch> bwList, Boolean isUpdateSupport, String operName);
 
 
 }

@@ -11,7 +11,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author ruoyi
  * @date 2019-07-10
  */
-public class DangdangMatch extends BaseEntity
+public class DangMatch extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
 	

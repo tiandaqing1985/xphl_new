@@ -64,16 +64,16 @@
 			</div>
 			
 	        <div class="btn-group-sm" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:dangdangMatch:add">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:dangMatch:add">
 					<i class="fa fa-plus"></i> 添加
 				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:dangdangMatch:edit">
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:dangMatch:edit">
 					<i class="fa fa-edit"></i> 修改
 				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:dangdangMatch:remove">
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:dangMatch:remove">
 					<i class="fa fa-remove"></i> 删除
 				</a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:dangdangMatch:export">
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:dangMatch:export">
 						<i class="fa fa-download"></i> 导出
 				 </a>
 				<a class="btn btn-info" onclick="$.table.importExcel()">
@@ -87,9 +87,9 @@
 	</div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:dangdangMatch:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:dangdangMatch:remove')}]];
-        var prefix = ctx + "system/dangdangMatch";
+        var editFlag = [[${@permission.hasPermi('system:dangMatch:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:dangMatch:remove')}]];
+        var prefix = ctx + "system/dangMatch";
 
         $(function() {
             var options = {

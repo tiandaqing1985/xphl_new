@@ -2,9 +2,9 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.system.mapper.DangdangMatchMapper">
+<mapper namespace="com.ruoyi.system.mapper.DangMatchMapper">
     
-    <resultMap type="DangdangMatch" id="DangdangMatchResult">
+    <resultMap type="DangMatch" id="DangdangMatchResult">
         <result property="id"    column="id"    />
         <result property="account"    column="account"    />
         <result property="plan"    column="plan"    />
@@ -20,10 +20,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectDangdangMatchVo">
-        select id, account, plan, unit, keyword, part_speech, secondary_classification, three_level_classification, combination, mobile_access_url, applet_url, applet_done from dangdang_match
+        select id, account, plan, unit, keyword, part_speech, secondary_classification, three_level_classification, combination, mobile_access_url, applet_url, applet_done from dang_match
     </sql>
 	
-    <select id="selectDangdangMatchList" parameterType="DangdangMatch" resultMap="DangdangMatchResult">
+    <select id="selectDangdangMatchList" parameterType="DangMatch" resultMap="DangdangMatchResult">
         <include refid="selectDangdangMatchVo"/>
         <where>  
             <if test="id != null "> and id = #{id}</if>
@@ -46,8 +46,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
         
-    <insert id="insertDangdangMatch" parameterType="DangdangMatch" useGeneratedKeys="true" keyProperty="id">
-        insert into dangdang_match
+    <insert id="insertDangdangMatch" parameterType="DangMatch" useGeneratedKeys="true" keyProperty="id">
+        insert into dang_match
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="account != null  and account != ''  ">account,</if>
 			<if test="plan != null  and plan != ''  ">plan,</if>
@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
     <insert id="batchInsert"  parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO dangdang_match (account,plan,unit,keyword,part_speech,secondary_classification,three_level_classification,mobile_access_url,applet_url,applet_done,remarks,channel_number)
+        INSERT INTO dang_match (account,plan,unit,keyword,part_speech,secondary_classification,three_level_classification,mobile_access_url,applet_url,applet_done,remarks,channel_number)
         VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.account}, #{item.plan},#{item.unit},#{item.keyword},#{item.partSpeech},#{item.secondaryClassification},#{item.threeLevelClassification},#{item.mobileAccessUrl}
@@ -85,8 +85,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
 
-    <update id="updateDangdangMatch" parameterType="DangdangMatch">
-        update dangdang_match
+    <update id="updateDangdangMatch" parameterType="DangMatch">
+        update dang_match
         <trim prefix="SET" suffixOverrides=",">
             <if test="account != null  and account != ''  ">account = #{account},</if>
             <if test="plan != null  and plan != ''  ">plan = #{plan},</if>
@@ -103,15 +103,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </update>
     <update id="updateGroupword">
-          update dangdang_match set combination = CONCAT_WS('@',account,plan,unit,keyword)
+          update dang_match set combination = CONCAT_WS('@',account,plan,unit,keyword)
     </update>
 
     <delete id="deleteDangdangMatchById" parameterType="Integer">
-        delete from dangdang_match where id = #{id}
+        delete from dang_match where id = #{id}
     </delete>
 	
     <delete id="deleteDangdangMatchByIds" parameterType="String">
-        delete from dangdang_match where id in 
+        delete from dang_match where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

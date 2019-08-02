@@ -4,12 +4,15 @@ import java.util.List;
 
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.system.domain.BwFront;
+
+import com.ruoyi.system.domain.DangMatch;
+import com.ruoyi.system.mapper.DangMatchMapper;
+import com.ruoyi.system.service.IDDangMatchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.mapper.DangdangMatchMapper;
-import com.ruoyi.system.domain.DangdangMatch;
-import com.ruoyi.system.service.IDangdangMatchService;
+
+
+
 import com.ruoyi.common.core.text.Convert;
 
 /**
@@ -19,10 +22,10 @@ import com.ruoyi.common.core.text.Convert;
  * @date 2019-07-10
  */
 @Service
-public class DangdangMatchServiceImpl implements IDangdangMatchService 
+public class DangMatchServiceImpl implements IDDangMatchService
 {
 	@Autowired
-	private DangdangMatchMapper dangdangMatchMapper;
+	private DangMatchMapper dangdangMatchMapper;
 
 	/**
      * 查询当当词性匹配信息
@@ -31,7 +34,7 @@ public class DangdangMatchServiceImpl implements IDangdangMatchService
      * @return 当当词性匹配信息
      */
     @Override
-	public DangdangMatch selectDangdangMatchById(Integer id)
+	public DangMatch selectDangdangMatchById(Integer id)
 	{
 	    return dangdangMatchMapper.selectDangdangMatchById(id);
 	}
@@ -43,7 +46,7 @@ public class DangdangMatchServiceImpl implements IDangdangMatchService
      * @return 当当词性匹配集合
      */
 	@Override
-	public List<DangdangMatch> selectDangdangMatchList(DangdangMatch dangdangMatch)
+	public List<DangMatch> selectDangdangMatchList(DangMatch dangdangMatch)
 	{
 	    return dangdangMatchMapper.selectDangdangMatchList(dangdangMatch);
 	}
@@ -55,7 +58,7 @@ public class DangdangMatchServiceImpl implements IDangdangMatchService
      * @return 结果
      */
 	@Override
-	public int insertDangdangMatch(DangdangMatch dangdangMatch)
+	public int insertDangdangMatch(DangMatch dangdangMatch)
 	{
 	    return dangdangMatchMapper.insertDangdangMatch(dangdangMatch);
 	}
@@ -67,7 +70,7 @@ public class DangdangMatchServiceImpl implements IDangdangMatchService
      * @return 结果
      */
 	@Override
-	public int updateDangdangMatch(DangdangMatch dangdangMatch)
+	public int updateDangdangMatch(DangMatch dangdangMatch)
 	{
 	    return dangdangMatchMapper.updateDangdangMatch(dangdangMatch);
 	}
@@ -84,7 +87,7 @@ public class DangdangMatchServiceImpl implements IDangdangMatchService
 		return dangdangMatchMapper.deleteDangdangMatchByIds(Convert.toStrArray(ids));
 	}
 	@Override
-	public String importBwFront(List<DangdangMatch> bwList, Boolean isUpdateSupport, String operName) {
+	public String importBwFront(List<DangMatch> bwList, Boolean isUpdateSupport, String operName) {
 		if (StringUtils.isNull(bwList) || bwList.size() == 0) {
 			throw new BusinessException("导入用户数据不能为空！");
 		}
@@ -101,7 +104,7 @@ public class DangdangMatchServiceImpl implements IDangdangMatchService
 					//
 					for (int i = 0; i < part; i++) {
 						//1000条
-						List<DangdangMatch> listPage = bwList.subList(0, pointsDataLimit);
+						List<DangMatch> listPage = bwList.subList(0, pointsDataLimit);
 						dangdangMatchMapper.batchInsert(listPage);
 						//剔除
 						bwList.subList(0, pointsDataLimit).clear();
