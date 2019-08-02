@@ -196,7 +196,7 @@ select
         q.cost AS lets_cost,
         q.showdata AS lets_showData
         FROM
-        dangdang_summary AS s
+        dang_summary AS s
         LEFT JOIN (
         SELECT
         date,
@@ -228,7 +228,7 @@ select
         ) AS q ON s.dd_date = q.date
         AND s.combination = q.combination
         ) AS f
-        LEFT JOIN dangdang_match AS m ON f.combination = m.combination
+        LEFT JOIN dang_match AS m ON f.combination = m.combination
         ) AS fh
         LEFT JOIN
         (SELECT
@@ -309,7 +309,7 @@ select
         q.cost AS lets_cost,
         q.showdata AS lets_showData
         FROM
-        dangdang_summary AS s
+        dang_summary AS s
         LEFT JOIN (
         SELECT
         date,
@@ -341,7 +341,7 @@ select
         ) AS q ON s.dd_date = q.date
         AND s.combination = q.combination
         ) AS f
-        LEFT JOIN dangdang_match AS m ON f.combination = m.combination
+        LEFT JOIN dang_match AS m ON f.combination = m.combination
         ) AS fh
         LEFT JOIN (
         SELECT
