@@ -31,19 +31,19 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2019-07-11
  */
 @Controller
-@RequestMapping("/system/dangdangSummary")
+@RequestMapping("/system/dangSummary")
 public class DangSummaryController extends BaseController
 {
-    private String prefix = "system/dangdangSummary";
+    private String prefix = "system/dangSummary";
 	
 	@Autowired
 	private IDangSummaryService dangdangSummaryService;
 	
-	@RequiresPermissions("system:dangdangSummary:view")
+	@RequiresPermissions("system:dangSummary:view")
 	@GetMapping()
 	public String dangdangSummary()
 	{
-	    return prefix + "/dangdangSummary";
+	    return prefix + "/dangSummary";
 	}
 	
 	/**
