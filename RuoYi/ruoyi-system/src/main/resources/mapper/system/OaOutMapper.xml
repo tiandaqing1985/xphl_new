@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OaOutMapper">
+    
+    <resultMap type="OaOut" id="OaOutResult">
+        <result property="outId"    column="out_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="state"    column="state"    />
+        <result property="hrState"    column="hr_state"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="reason"    column="reason"    />
+    </resultMap>
+    
+	<sql id="selectOaOutVo">
+        select out_id, user_id, start_date, end_date, state, hr_state, create_date, reason from oa_out
+    </sql>
+	
+    <select id="selectOaOutList" parameterType="OaOut" resultMap="OaOutResult">
+        <include refid="selectOaOutVo"/>
+        <where>  
+            <if test="outId != null "> and out_id = #{outId}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="startDate != null "> and start_date = #{startDate}</if>
+             <if test="endDate != null "> and end_date = #{endDate}</if>
+             <if test="state != null  and state != '' "> and state = #{state}</if>
+             <if test="hrState != null  and hrState != '' "> and hr_state = #{hrState}</if>
+             <if test="createDate != null "> and create_date = #{createDate}</if>
+             <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
+         </where>
+    </select>
+       
+    <resultMap type="OutApproval" id="OutApprovalResult">
+        <result property="outId"    column="out_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="state"    column="state"    />
+        <result property="hrState"    column="hr_state"    />
+        <result property="createDate"    column="create_date"    />
+        <result property="reason"    column="reason"    />
+        <result property="approvalState"    column="approval_state"    />
+        <result property="approvalName"    column="approval_name"    />
+        <result property="approvalDate"    column="approval_date"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+    
+	<select id="selectOutApprovalList" parameterType="OaOut" resultMap="OutApprovalResult">
+        SELECT
+	ou.out_id,
+	ou.user_id,
+	USER.user_name,
+	ou.start_date,
+	ou.end_date,
+	(
+	CASE
+			
+			WHEN ou.state = 1 THEN
+			'待审批' 
+			WHEN ou.state = 2 THEN
+			'已撤回' 
+			WHEN ou.state = 3 THEN
+			'申请成功' 
+			WHEN ou.state = 4 THEN
+			'申请失败' 
+			WHEN ou.state = 5 THEN
+			'已销假' ELSE '' 
+		END 
+		) state,
+		ou.hr_state,
+		ou.create_date,
+		ou.reason,
+		(
+		CASE
+				
+				WHEN app.approval_state = 1 THEN
+				'同意' 
+				WHEN app.approval_state = 2 THEN
+				'驳回' 
+				WHEN app.approval_state = 3 THEN
+				'未操作' ELSE '' 
+			END 
+			) approval_state,
+			us.user_name approval_name,
+			app.approval_date,
+			app.remark 
+		FROM
+			oa_out ou
+			LEFT JOIN oa_out_approval app ON app.out_id = ou.out_id
+			LEFT JOIN sys_user USER ON USER.user_id = ou.user_id
+			LEFT JOIN sys_user us ON us.user_id = app.approval_id 
+        <where>  
+        	1=1 and app.approval_sight = 1
+            <if test="outId != null "> and ou.out_id = #{outId}</if>
+             <if test="userId != null "> and ou.user_id = #{userId}</if>
+             <if test="state != null  and state != '' "> and ou.state = #{state}</if>
+             <if test="hrState != null  and hrState != '' "> and ou.hr_state = #{hrState}</if>
+             <if test="createDate != null "> and ou.create_date = #{createDate}</if>
+             <if test="params.startDate != null and params.startDate != ''"><!-- 开始时间检索 -->
+				AND date_format(ou.start_date,'%y%m%d') &gt;= date_format(#{params.startDate},'%y%m%d')
+			</if>
+			<if test="params.endDate != null and params.endDate != ''"><!-- 结束时间检索 -->
+				AND date_format(ou.end_date,'%y%m%d') &lt;= date_format(#{params.endDate},'%y%m%d')
+			</if>
+         </where>
+         ORDER BY
+				ou.out_id DESC 
+    </select>
+    
+    <select id="selectOaOutById" parameterType="Long" resultMap="OaOutResult">
+        <include refid="selectOaOutVo"/>
+        where out_id = #{outId}
+    </select>
+        
+    <insert id="insertOaOut" parameterType="OaOut" useGeneratedKeys="true" keyProperty="outId">
+        insert into oa_out
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="outId != null  ">out_id,</if>
+			<if test="userId != null  ">user_id,</if>
+			<if test="startDate != null  ">start_date,</if>
+			<if test="endDate != null  ">end_date,</if>
+			<if test="state != null  and state != ''  ">state,</if>
+			<if test="hrState != null  and hrState != ''  ">hr_state,</if>
+			create_date,
+			<if test="reason != null  and reason != ''  ">reason,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="outId != null  ">#{outId},</if>
+			<if test="userId != null  ">#{userId},</if>
+			<if test="startDate != null  ">#{startDate},</if>
+			<if test="endDate != null  ">#{endDate},</if>
+			<if test="state != null  and state != ''  ">#{state},</if>
+			<if test="hrState != null  and hrState != ''  ">#{hrState},</if>
+			sysdate(),
+			<if test="reason != null  and reason != ''  ">#{reason},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateOaOut" parameterType="OaOut">
+        update oa_out
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="startDate != null  ">start_date = #{startDate},</if>
+            <if test="endDate != null  ">end_date = #{endDate},</if>
+            <if test="state != null  and state != ''  ">state = #{state},</if>
+            <if test="hrState != null  and hrState != ''  ">hr_state = #{hrState},</if>
+            <if test="createDate != null  ">create_date = #{createDate},</if>
+            <if test="reason != null  and reason != ''  ">reason = #{reason},</if>
+        </trim>
+        where out_id = #{outId}
+    </update>
+
+	<delete id="deleteOaOutById" parameterType="Long">
+        delete from oa_out where out_id = #{outId}
+    </delete>
+	
+    <delete id="deleteOaOutByIds" parameterType="String">
+        delete from oa_out where out_id in 
+        <foreach item="outId" collection="array" open="(" separator="," close=")">
+            #{outId}
+        </foreach>
+    </delete>
+    
+</mapper>

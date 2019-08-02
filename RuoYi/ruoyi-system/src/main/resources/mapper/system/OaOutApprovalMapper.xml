@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OaOutApprovalMapper">
+    
+    <resultMap type="OaOutApproval" id="OaOutApprovalResult">
+        <result property="id"    column="id"    />
+        <result property="outId"    column="out_id"    />
+        <result property="approvalState"    column="approval_state"    />
+        <result property="approvalId"    column="approval_id"    />
+        <result property="approvalDate"    column="approval_date"    />
+        <result property="approvalSight"    column="approval_sight"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+	
+	<sql id="selectOaOutApprovalVo">
+        select id, out_id, approval_state, approval_id, approval_date, approval_sight, remark from oa_out_approval
+    </sql>
+	
+    <select id="selectOaOutApprovalList" parameterType="OaOutApproval" resultMap="OaOutApprovalResult">
+        <include refid="selectOaOutApprovalVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="outId != null "> and out_id = #{outId}</if>
+             <if test="approvalState != null  and approvalState != '' "> and approval_state = #{approvalState}</if>
+             <if test="approvalId != null "> and approval_id = #{approvalId}</if>
+             <if test="approvalDate != null "> and approval_date = #{approvalDate}</if>
+             <if test="approvalSight != null  and approvalSight != '' "> and approval_sight = #{approvalSight}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+         </where>
+    </select>
+    
+    <select id="selectOaOutApprovalById" parameterType="Long" resultMap="OaOutApprovalResult">
+        <include refid="selectOaOutApprovalVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOaOutApproval" parameterType="OaOutApproval" useGeneratedKeys="true" keyProperty="id">
+        insert into oa_out_approval
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="outId != null  ">out_id,</if>
+			<if test="approvalState != null  and approvalState != ''  ">approval_state,</if>
+			<if test="approvalId != null  ">approval_id,</if>
+			<if test="approvalDate != null  ">approval_date,</if>
+			<if test="approvalSight != null  and approvalSight != ''  ">approval_sight,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="outId != null  ">#{outId},</if>
+			<if test="approvalState != null  and approvalState != ''  ">#{approvalState},</if>
+			<if test="approvalId != null  ">#{approvalId},</if>
+			<if test="approvalDate != null  ">#{approvalDate},</if>
+			<if test="approvalSight != null  and approvalSight != ''  ">#{approvalSight},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateOaOutApproval" parameterType="OaOutApproval">
+        update oa_out_approval
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="outId != null  ">out_id = #{outId},</if>
+            <if test="approvalState != null  and approvalState != ''  ">approval_state = #{approvalState},</if>
+            <if test="approvalId != null  ">approval_id = #{approvalId},</if>
+            <if test="approvalDate != null  ">approval_date = #{approvalDate},</if>
+            <if test="approvalSight != null  and approvalSight != ''  ">approval_sight = #{approvalSight},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteOaOutApprovalById" parameterType="Long">
+        delete from oa_out_approval where id = #{id}
+    </delete>
+	
+    <delete id="deleteOaOutApprovalByIds" parameterType="String">
+        delete from oa_out_approval where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
