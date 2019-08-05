@@ -2,6 +2,10 @@ package com.ruoyi.system.mapper.finance;
 
 
 import com.ruoyi.system.domain.finance.FacReimburseApply;
+import com.ruoyi.system.domain.finance.ReiAdiApply;
+import com.ruoyi.system.domain.finance.ReiHospitalityApply;
+import com.ruoyi.system.domain.finance.ReiTrafficApply;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -11,8 +15,38 @@ import java.util.List;
  * @author ruoyi
  * @date 2019-07-31
  */
-public interface FacReimburseApplyMapper 
+public interface FacReimburseApplyMapper
 {
+
+
+	/**
+	 * 报销详细信息汇总
+	 * @param num
+	 * @return
+	 */
+	FacReimburseApply detail(String num);
+
+	/**
+	 * 行政和其他申请
+	 * @param num
+	 * @return
+	 */
+	List<ReiAdiApply> adiTail(String num);
+
+	/**
+	 * 招待报销申请详情
+	 * @param num
+	 * @return
+	 */
+	List<ReiHospitalityApply> hosTail(String num);
+
+	/**
+	 * 公共交通和加班交通
+	 * @param num
+	 * @return
+	 */
+	List<ReiTrafficApply> traTail(String num);
+
 	/**
      * 查询报销信息
      * 
@@ -60,5 +94,26 @@ public interface FacReimburseApplyMapper
      * @return 结果
      */
 	public int deleteFacReimburseApplyByIds(String[] ids);
-	
+
+
+	/**
+	 * 批量增加公共交通和加班交通申请
+	 * @param reiTrafficApplies
+	 * @return
+	 */
+	int TrafficBatchInsert(@Param("list") List<ReiTrafficApply> reiTrafficApplies);
+
+	/**
+	 * 批量增加招待费报销申请
+	 * @param hospitalityApplies
+	 * @return
+	 */
+	int HospBatchInsert(@Param("list") List<ReiHospitalityApply> hospitalityApplies);
+
+	/**
+	 * 批量增加行政或其他报销费用·1
+	 * @param adiApplies
+	 * @return
+	 */
+	int AdiBatchInsert(@Param("list") List<ReiAdiApply> adiApplies);
 }

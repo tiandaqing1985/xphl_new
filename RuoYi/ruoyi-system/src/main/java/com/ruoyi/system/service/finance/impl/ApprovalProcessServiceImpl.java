@@ -2,7 +2,6 @@ package com.ruoyi.system.service.finance.impl;
 
 import com.ruoyi.common.enums.FacApplyType;
 import com.ruoyi.common.utils.FinanceAddHelper;
-import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.finance.DeptUser;
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
 import com.ruoyi.system.domain.finance.FacReimburseApply;
@@ -16,10 +15,6 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 
 /**
@@ -43,6 +38,16 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
         try {
             //判断用户角色
             String roleName = approvalProcessMapper.queryRoleName(facReimburseApply.getUser());
+            //判断是否是coo
+            if ("COO".equals(roleName)) {
+                FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
+                facSysUserApproval.setApprovalLevel(1);
+                facSysUserApproval.setApprovalSight("0");
+                facSysUserApproval.setApproverId(facReimburseApply.getUser());
+                facReimburseApply.setStatus("");
+                approvalProcessMapper.insert(facSysUserApproval);
+            }
+
             if (("员工").equals(roleName)) {
                 DeptUser sysDept = approvalProcessMapper.querySecondLevelDept(facReimburseApply.getUser());
                 if ((sysDept.getDeptName().contains("财务") || sysDept.getDeptName().contains("人力资源")) && ((new BigDecimal("2000").compareTo(facReimburseApply.getAmount()) < 1))) {
@@ -166,7 +171,7 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
         return null;
 
 
-      }
+    }
 
     @Transactional
     @Override

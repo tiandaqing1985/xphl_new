@@ -2,9 +2,7 @@ package com.ruoyi.system.service.finance;
 
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
 import com.ruoyi.system.domain.finance.FacReimburseApply;
-import com.ruoyi.system.domain.finance.FacSysUserApproval;
 
-import java.util.List;
 
 /**
  * @program: ruoyi->ApprovalProcessService

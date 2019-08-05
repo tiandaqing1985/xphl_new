@@ -52,7 +52,60 @@ and a.name = #{name}
         <include refid="selectFacReimburseApplyVo"/>
         where id = #{id}
     </select>
-        
+    <select id="detail" resultType="com.ruoyi.system.domain.finance.FacReimburseApply">
+        SELECT
+  a.num,
+  a.`name`,
+  a.type,
+  a.`amount`,
+  b.`user_name` AS userName,
+  a.`status` ,
+  a.`reimburse_time` AS reimburesTime,
+  a.`create_time` AS createTime
+FROM
+  fac_reimburse_apply AS a
+  LEFT JOIN sys_user AS b
+    ON a.`loan_user` = b.`user_id`
+ where a.num=#{num}
+    </select>
+    <select id="adiTail" resultType="com.ruoyi.system.domain.finance.ReiAdiApply">
+SELECT
+a.`dd_date` AS ddDate,
+a.amount ,
+a.`project`,
+a.reason,
+a.`document_num` AS documnetNum
+FROM fac_rei_adi_apply  AS a
+ WHERE a.apply_num =#{num}
+
+    </select>
+    <select id="hosTail" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
+SELECT
+  a.`dd_date` AS ddDate,
+  a.`target_unit` AS targetUnit,
+  a.`amount`,
+  a.`add_user` AS addUser,
+  a.`location`,
+  a.`reason`,
+  a.`document_num` AS aocumentNum
+   FROM fac_rei_hospitality_apply AS a
+   WHERE a.`num`=#{num}
+    </select>
+    <select id="traTail" resultType="com.ruoyi.system.domain.finance.ReiTrafficApply">
+SELECT
+a.`dd_date` AS ddDate,
+a.`target_unit` AS targetUnit,
+a.amount,
+a.target,
+a.`departure`,
+a.`type`,
+a.`reason`,
+a.`document_num` AS documentNum,
+a.`apply_user` AS applyUser
+FROM fac_traffic_rei_apply   AS a
+ WHERE a.`num` =#{num}
+    </select>
+
     <insert id="insertFacReimburseApply" parameterType="FacReimburseApply" useGeneratedKeys="true" keyProperty="id">
         insert into fac_reimburse_apply
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -86,7 +139,32 @@ and a.name = #{name}
 			<if test="type != null  and type != ''  ">#{type},</if>
          </trim>
     </insert>
-	 
+
+
+    <insert id="TrafficBatchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO fac_traffic_rei_apply (dd_date, target_unit, amount, user, departure, target, apply_user,
+        document_num,reason,type,num)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.ddDate}, #{item.targetUnit}, #{item.amount}, #{item.user}, #{item.departure}, #{item.target}, #{item.documentNum},#{item.reason},#{item.reason},#{item.reason},#{item.type},#{item.num})
+        </foreach>
+    </insert>
+    <insert id="HospBatchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO fac_rei_hospitality_apply (dd_date, amount, add_user, user, document_num, location, target_unit,
+        reason,num)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.ddDate}, #{item.amount}, #{item.addUser}, #{item.user}, #{item.documentNum}, #{item.location}, #{item.targetUnit},#{item.reason},#{item.num})
+        </foreach>
+    </insert>
+    <insert id="AdiBatchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO fac_rei_adi_apply (dd_date, amount, project, document_num, reason, type, num,user)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.ddDate}, #{item.amount}, #{item.project}, #{item.documentNum}, #{item.reason}, #{item.type}, #{item.user})
+        </foreach>
+    </insert>
+
     <update id="updateFacReimburseApply" parameterType="FacReimburseApply">
         update fac_reimburse_apply
         <trim prefix="SET" suffixOverrides=",">

@@ -1,106 +1,212 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="include :: header('新增报销')" />
+    <th:block th:include="include :: header('日常报销申请')"/>
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-facReimburseApply-add">
-<!--			<div class="form-group">	-->
-<!--				<label class="col-sm-3 control-label">借款编号：</label>-->
-<!--				<div class="col-sm-8">-->
-<!--					<input id="num" name="num" class="form-control" type="text">-->
-<!--				</div>-->
-<!--			</div>-->
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">报销名称：</label>
-				<div class="col-sm-8">
-					<input id="name" name="name" class="form-control" type="text">
-				</div>
-			</div>
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">报销金额：</label>
-				<div class="col-sm-8">
-					<input id="amount" name="amount" class="form-control" type="text">
-				</div>
-			</div>
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-facReimburseApply-add">
+        <!--			<div class="form-group">	-->
+        <!--				<label class="col-sm-3 control-label">借款编号：</label>-->
+        <!--				<div class="col-sm-8">-->
+        <!--					<input id="num" name="num" class="form-control" type="text">-->
+        <!--				</div>-->
+        <!--			</div>-->
+        <div class="form-group">
+            <label class="col-sm-3 control-label">报销名称：</label>
+            <div class="col-sm-8">
+                <input id="name" name="name" class="form-control" type="text">
+            </div>
+        </div>
 
-			<div class="form-group">
-				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>报销时间：</label>
-				<div class="col-sm-8">
-					<div class="input-group date">
-						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-						<input type="text" class="form-control" id="starttime" name="starttime" placeholder="yyyy-MM-dd" autocomplete="off">
-					</div><span id="p01"></span>
-				</div>
-			</div>
-<!--			<div class="form-group">	-->
-<!--				<label class="col-sm-3 control-label">创建时间：</label>-->
-<!--				<div class="col-sm-8">-->
-<!--					<input id="createTime" name="createTime" class="form-control" type="text">-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="form-group">	-->
-<!--				<label class="col-sm-3 control-label">报销时间：</label>-->
-<!--				<div class="col-sm-8">-->
-<!--					<input id="reimburseTime" name="reimburseTime" class="form-control" type="text">-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="form-group">	-->
-<!--				<label class="col-sm-3 control-label">财务操作：</label>-->
-<!--				<div class="col-sm-8">-->
-<!--					<input id="facOperate" name="facOperate" class="form-control" type="text">-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="form-group">	-->
-<!--				<label class="col-sm-3 control-label">借款事由：</label>-->
-<!--				<div class="col-sm-8">-->
-<!--					<input id="reason" name="reason" class="form-control" type="text">-->
-<!--				</div>-->
-<!--			</div>-->
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">申请人操作：</label>
-				<div class="col-sm-8">
-					<input id="applyStatus" name="applyStatus" class="form-control" type="text">
-				</div>
-			</div>
-<!--			<div class="form-group">	-->
-<!--				<label class="col-sm-3 control-label">修改时间：</label>-->
-<!--				<div class="col-sm-8">-->
-<!--					<input id="updateTime" name="updateTime" class="form-control" type="text">-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="form-group">	-->
-<!--				<label class="col-sm-3 control-label">核票通过时间：</label>-->
-<!--				<div class="col-sm-8">-->
-<!--					<input id="passTime" name="passTime" class="form-control" type="text">-->
-<!--				</div>-->
-<!--			</div>-->
-<!--			<div class="form-group">	-->
-<!--				<label class="col-sm-3 control-label">类型：</label>-->
-<!--				<div class="col-sm-8">-->
-<!--					<input id="type" name="type" class="form-control" type="text">-->
-<!--				</div>-->
-<!--			</div>-->
-		</form>
-	</div>
-    <div th:include="include::footer"></div>
-    <script type="text/javascript">
-		var prefix = ctx + "system/facReimburseApply"
-		$("#form-facReimburseApply-add").validate({
-			rules:{
-				xxxx:{
-					required:true,
-				},
-			},
-			focusCleanup: true
-		});
-		
-		function submitHandler() {
-	        if ($.validate.form()) {
-	            $.operate.save(prefix + "/add", $('#form-facReimburseApply-add').serialize());
-	        }
-	    }
-	</script>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>报销时间：</label>
+            <div class="col-sm-8">
+                <div class="input-group date">
+                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    <input type="text" class="form-control" id="starttime" name="starttime" placeholder="yyyy-MM-dd"
+                           autocomplete="off">
+                </div>
+                <span id="p01"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label">申请人操作：</label>
+            <div class="col-sm-8">
+                <input id="applyStatus" name="applyStatus" class="form-control" type="text">
+            </div>
+        </div>
+        <div class="form-group">
+            <p class="added-title">加班交通费报销申请 <a href="javascript:;" data-toggle="modal"
+                                                data-target=".addOvertimeTraffic" class="initOvertimeTraffic"></a></p>
+            <div class="table-responsive tabToggle">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>日期</th>
+                        <th>目标单位简称</th>
+                        <th>金额</th>
+                        <th>人员</th>
+                        <th>起始地点</th>
+                        <th>事由</th>
+                        <th>单据数</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="x in OvertimeTraffic" class="overtimeClass">
+                        <td style="display: none"></td>
+                        <td ng-bind="$index+1"></td>
+                        <td>
+                            <div class="col-sm-8">
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" id="postName" name="postName" placeholder="yyyy-MM-dd"
+                                           autocomplete="off">
+                                </div>
+                                <span id="p20"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <input id="targetUnit" name="targetUnit" class="form-control" type="text">
+                        </td>
+                        <td>{{x.costBillMoney}}</td>
+                        <td title="{{x.costMoneyUserName}}">{{x.costMoneyUserName}}</td>
+                        <td>{{x.fromLocal}}-{{x.toLocal}}</td>
+                        <td ng-bind="x.reason"></td>
+                        <td ng-bind="x.costBillNum"></td>
+                        <td class="dbclickTf">
+                            <a href="javascript:;" data-toggle="modal" data-target=".addOvertimeTraffic"
+                               data-num="{{x.publickWebNum}}" data-parent="OvertimeTraffic"
+                               data-tar="addOvertimeTraffic" data-index="{{$index}}" class="addTJcost-update">修改</a> |
+                            <a href="javascript:;" data-toggle="modal" data-target=".modal-delete" data-id="{{x.id}}"
+                               data-parent="OvertimeTraffic" data-index="{{$index}}" class="addTJcost-delete">删除</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <div class="form-group">
+            <p class="added-title">加班交通费报销申请 <a href="javascript:;" data-toggle="modal"
+                                                data-target=".addOvertimeTraffic" class="initOvertimeTraffic"></a></p>
+            <div class="table-responsive tabToggle">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>日期</th>
+                        <th>目标单位简称</th>
+                        <th>金额</th>
+                        <th>人员</th>
+                        <th>起始地点</th>
+                        <th>事由</th>
+                        <th>单据数</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="x in OvertimeTraffic" class="overtimeClass">
+                        <td style="display: none"></td>
+                        <td ng-bind="$index+1"></td>
+                        <td>
+                            <div class="col-sm-8">
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    <input type="text" class="form-control" id="postName" name="postName" placeholder="yyyy-MM-dd"
+                                           autocomplete="off">
+                                </div>
+                                <span id="p20"></span>
+                            </div>
+                        </td>
+                        <td>
+                            <input id="targetUnit" name="targetUnit" class="form-control" type="text">
+                        </td>
+                        <td>{{x.costBillMoney}}</td>
+                        <td title="{{x.costMoneyUserName}}">{{x.costMoneyUserName}}</td>
+                        <td>{{x.fromLocal}}-{{x.toLocal}}</td>
+                        <td ng-bind="x.reason"></td>
+                        <td ng-bind="x.costBillNum"></td>
+                        <td class="dbclickTf">
+                            <a href="javascript:;" data-toggle="modal" data-target=".addOvertimeTraffic"
+                               data-num="{{x.publickWebNum}}" data-parent="OvertimeTraffic"
+                               data-tar="addOvertimeTraffic" data-index="{{$index}}" class="addTJcost-update">修改</a> |
+                            <a href="javascript:;" data-toggle="modal" data-target=".modal-delete" data-id="{{x.id}}"
+                               data-parent="OvertimeTraffic" data-index="{{$index}}" class="addTJcost-delete">删除</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <!--			<div class="form-group">	-->
+        <!--				<label class="col-sm-3 control-label">创建时间：</label>-->
+        <!--				<div class="col-sm-8">-->
+        <!--					<input id="createTime" name="createTime" class="form-control" type="text">-->
+        <!--				</div>-->
+        <!--			</div>-->
+        <!--			<div class="form-group">	-->
+        <!--				<label class="col-sm-3 control-label">报销时间：</label>-->
+        <!--				<div class="col-sm-8">-->
+        <!--					<input id="reimburseTime" name="reimburseTime" class="form-control" type="text">-->
+        <!--				</div>-->
+        <!--			</div>-->
+        <!--			<div class="form-group">	-->
+        <!--				<label class="col-sm-3 control-label">财务操作：</label>-->
+        <!--				<div class="col-sm-8">-->
+        <!--					<input id="facOperate" name="facOperate" class="form-control" type="text">-->
+        <!--				</div>-->
+        <!--			</div>-->
+        <!--			<div class="form-group">	-->
+        <!--				<label class="col-sm-3 control-label">借款事由：</label>-->
+        <!--				<div class="col-sm-8">-->
+        <!--					<input id="reason" name="reason" class="form-control" type="text">-->
+        <!--				</div>-->
+        <!--			</div>-->
+
+        <!--			<div class="form-group">	-->
+        <!--				<label class="col-sm-3 control-label">修改时间：</label>-->
+        <!--				<div class="col-sm-8">-->
+        <!--					<input id="updateTime" name="updateTime" class="form-control" type="text">-->
+        <!--				</div>-->
+        <!--			</div>-->
+        <!--			<div class="form-group">	-->
+        <!--				<label class="col-sm-3 control-label">核票通过时间：</label>-->
+        <!--				<div class="col-sm-8">-->
+        <!--					<input id="passTime" name="passTime" class="form-control" type="text">-->
+        <!--				</div>-->
+        <!--			</div>-->
+        <!--			<div class="form-group">	-->
+        <!--				<label class="col-sm-3 control-label">类型：</label>-->
+        <!--				<div class="col-sm-8">-->
+        <!--					<input id="type" name="type" class="form-control" type="text">-->
+        <!--				</div>-->
+        <!--			</div>-->
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/facReimburseApply"
+    $("#form-facReimburseApply-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-facReimburseApply-add').serialize());
+        }
+    }
+</script>
 </body>
 </html>

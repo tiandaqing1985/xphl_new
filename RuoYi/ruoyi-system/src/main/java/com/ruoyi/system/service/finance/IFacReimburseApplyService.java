@@ -4,6 +4,7 @@ package com.ruoyi.system.service.finance;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.finance.FacReimburseApply;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -21,6 +22,14 @@ public interface IFacReimburseApplyService
      * @return 报销信息
      */
 	public FacReimburseApply selectFacReimburseApplyById(String id);
+
+
+	/**
+	 * 根据编号查询报销申请详情
+	 * @param num
+	 * @return
+	 */
+	FacReimburseApply deatil(String num);
 	
 	/**
      * 查询报销列表
@@ -53,5 +62,7 @@ public interface IFacReimburseApplyService
      * @return 结果
      */
 	public int deleteFacReimburseApplyByIds(String ids);
+
+	BigDecimal getApplyAmount(FacReimburseApply facReimburseApply);
 	
 }

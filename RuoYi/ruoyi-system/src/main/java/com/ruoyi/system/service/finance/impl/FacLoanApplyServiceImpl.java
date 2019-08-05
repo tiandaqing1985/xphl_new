@@ -2,17 +2,12 @@ package com.ruoyi.system.service.finance.impl;
 
 
 import com.ruoyi.common.core.domain.AjaxResult;
-
-
-
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.system.domain.finance.FacLoanApply;
 import com.ruoyi.system.mapper.finance.FacLoanApplyMapper;
 import com.ruoyi.system.service.finance.IFacLoanApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
-import com.ruoyi.common.core.text.Convert;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -68,6 +63,7 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
 		lock.lock();
         try {
             int i = facLoanApplyMapper.insertFacLoanApply(facLoanApply);
+
             if (("").equals(facLoanApply.getApplyStatus())){
                 //TODO  同步查询表
                 //TODO  初始化审批流程

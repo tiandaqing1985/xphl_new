@@ -50,7 +50,15 @@ FROM
     ON a.`dept_id` = b.`dept_id`
 WHERE a.`dept_id` = #{deptId}   </select>
     <select id="queryRoleName" resultType="java.lang.String">
-               SELECT  c.`role_name` FROM sys_user AS a LEFT JOIN sys_user_role AS b ON a.`user_id` = b.`user_id` LEFT JOIN sys_role AS c ON  c.`role_id` = b.`role_id` WHERE a.`user_id`=#{userId}
+SELECT
+  c.`role_name`
+FROM
+  sys_user AS a
+  LEFT JOIN sys_user_role AS b
+    ON a.`user_id` = b.user_id
+  LEFT JOIN sys_role AS c
+    ON b.`role_id` = c.`role_id`
+WHERE a.user_id = #{userId}
     </select>
     <select id="queryHighDeptLeaderId" resultType="java.lang.Long">
         SELECT
@@ -65,4 +73,6 @@ FROM
     ON c.`leader` = d.user_name
 WHERE a.user_id = #{userId}
     </select>
+
+
 </mapper>

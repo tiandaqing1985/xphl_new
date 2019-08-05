@@ -1,11 +1,11 @@
 package com.ruoyi.system.mapper.finance;
 
 
+
 import com.ruoyi.system.domain.finance.DeptUser;
 import com.ruoyi.system.domain.finance.FacSysUserApproval;
 import org.apache.ibatis.annotations.Param;
 
-import java.util.List;
 
 public interface ApprovalProcessMapper {
 
@@ -15,11 +15,15 @@ public interface ApprovalProcessMapper {
      DeptUser queryFirstLevelDept(long userId);
 
      /**
-      * 查询用户角色名称
+      * 根据登录人角色
       * @param userId
       * @return
       */
      String queryRoleName(@Param("userId") Long userId);
 
      Long queryHighDeptLeaderId(@Param("userId") Long userId);
+
+
+
+
 }

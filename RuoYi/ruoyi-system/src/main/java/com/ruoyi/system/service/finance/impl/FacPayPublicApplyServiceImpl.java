@@ -1,10 +1,7 @@
 package com.ruoyi.system.service.finance.impl;
 
-import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.enums.FacApplyType;
 import com.ruoyi.common.utils.FinanceAddHelper;
 import com.ruoyi.common.utils.ValidResult;
@@ -13,16 +10,15 @@ import com.ruoyi.system.domain.finance.FacPayPublicApply;
 import com.ruoyi.system.mapper.finance.FacPayPublicApplyMapper;
 import com.ruoyi.system.service.finance.ApprovalProcessService;
 import com.ruoyi.system.service.finance.IFacPayPublicApplyService;
-import org.apache.ibatis.javassist.util.proxy.FactoryHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
-import com.ruoyi.common.core.text.Convert;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import javax.xml.bind.ValidationException;
+import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 对公申请 服务层实现
