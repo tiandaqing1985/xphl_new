@@ -16,6 +16,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 报销 信息操作处理
@@ -49,7 +50,6 @@ public class FacReimburseApplyController extends BaseController {
     }
 
 
-
     /**
      * 导出报销列表
      */
@@ -59,6 +59,20 @@ public class FacReimburseApplyController extends BaseController {
         List<FacReimburseApply> list = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
         ExcelUtil<FacReimburseApply> util = new ExcelUtil<FacReimburseApply>(FacReimburseApply.class);
         return util.exportExcel(list, "facReimburseApply");
+    }
+
+    /**
+     *
+     */
+    @RequiresPermissions("system:facReimburseApply:detail")
+    @GetMapping("/detail")
+    public String detail(@RequestParam("id") String id, ModelMap map) {
+        FacReimburseApply facReimburseApply = new FacReimburseApply();
+        facReimburseApply.setId(id);
+        List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
+        map.put("rid", id);
+        map.put("num", facReimburseApplies.get(0).getNum());
+        return prefix + "/reimbuseDetail";
     }
 
     /**
@@ -80,24 +94,25 @@ public class FacReimburseApplyController extends BaseController {
         return facReimburseApplyService.insertFacReimburseApply(facReimburseApply);
     }
 
-    /**
-     * 修改报销
-     */
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") String id, ModelMap mmap) {
-        FacReimburseApply facReimburseApply = facReimburseApplyService.selectFacReimburseApplyById(id);
-        mmap.put("facReimburseApply", facReimburseApply);
-        return prefix + "/edit";
-    }
+//    /**
+//     * 修改报销
+//     */
+//    @GetMapping("/edit/{id}")
+//    public String edit(@PathVariable("id") String id, ModelMap mmap) {
+//        FacReimburseApply facReimburseApply = facReimburseApplyService.selectFacReimburseApplyById(id);
+//        mmap.put("fac", facReimburseApply);
+//        return prefix + "/edit";
+//    }
 
     /**
      * 查看报销详情
      */
-    @GetMapping("/detail/{num}")
-    public String detaill(@PathVariable("num") String num, ModelMap mmap) {
+    @PostMapping("/query")
+    public AjaxResult detail1(Map<String, Object> params) {
+        System.out.println("********************");
+        String num= (String) params.get("num");
         FacReimburseApply facReimburseApply = facReimburseApplyService.deatil(num);
-        mmap.put("facReimburseApply", facReimburseApply);
-        return prefix + "/reimbuseDetail";
+        return AjaxResult.success(facReimburseApply);
     }
 
     /**
