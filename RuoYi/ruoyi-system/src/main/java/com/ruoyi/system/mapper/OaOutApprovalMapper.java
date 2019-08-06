@@ -44,12 +44,19 @@ public interface OaOutApprovalMapper
 	public int updateOaOutApproval(OaOutApproval oaOutApproval);
 	
 	/**
+	 * 根据审批人id修改
+	 * @param oaOutApproval
+	 * @return
+	 */
+	public int updateOaOutApprovalByApprovalId(OaOutApproval oaOutApproval);
+	
+	/**
      * 删除外出报备审批
      * 
-     * @param id 外出报备审批ID
+     * @param id 外出报备审批ID,外出报备outId
      * @return 结果
      */
-	public int deleteOaOutApprovalById(Long id);
+	public int deleteOaOutApproval(OaOutApproval oaOutApproval);
 	
 	/**
      * 批量删除外出报备审批

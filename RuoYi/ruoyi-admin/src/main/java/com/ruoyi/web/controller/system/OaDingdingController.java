@@ -63,7 +63,7 @@ public class OaDingdingController extends BaseController
     @ResponseBody
     public AjaxResult export(Dingding oaDingding)
     {
-    	List<Dingding> list = oaDingdingService.selectOaDingdingList(oaDingding);
+//    	List<Dingding> list = oaDingdingService.selectOaDingdingList(oaDingding);
         return null;
     }
 	

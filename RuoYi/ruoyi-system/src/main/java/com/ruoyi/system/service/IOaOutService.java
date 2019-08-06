@@ -22,6 +22,13 @@ public interface IOaOutService
 	public OaOut selectOaOutById(Long outId);
 	
 	/**
+	 * 查询我的外出报备信息
+	 * @param oaOut
+	 * @return 我的外出报备信息
+	 */
+	public List<OutApproval> selectMyOutApprovalList(OaOut oaOut);
+	
+	/**
 	 *  查询外出报备审批结果
 	 * @param oaOut
 	 * @return 外出报备审批结果
@@ -45,13 +52,20 @@ public interface IOaOutService
 	public int insertOaOut(OaOut oaOut);
 	
 	/**
-     * 修改外出报备
+     * 审批修改外出报备
      * 
      * @param oaOut 外出报备信息
      * @return 结果
      */
+	public int updateOaOut(OaOut oaOut,String remark);
+	
+	/**
+	 * 编辑修改外出报备
+	 * @param oaOut
+	 * @return
+	 */
 	public int updateOaOut(OaOut oaOut);
-		
+	
 	/**
      * 删除外出报备信息
      * 
@@ -59,5 +73,19 @@ public interface IOaOutService
      * @return 结果
      */
 	public int deleteOaOutByIds(String ids);
+	
+	/**
+	 * 撤回外出报备申请
+	 * @param outId
+	 * @return
+	 */
+	public int takeBack(Long outId);
+	
+	/**
+	 * 验证是否能撤回外出报备申请
+	 * @param outId
+	 * @return
+	 */
+	public String ifTakeback(Long outId);
 	
 }

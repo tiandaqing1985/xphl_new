@@ -75,18 +75,22 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		Long upLeaderId =userMapper.selectUpApproverIdByApplyerId(ding.getUserId());//所在部门负责人的上级leader
 		user.setRoleId(3L);//人事专员
 		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id
-		SysDept dept = deptMapper.selectDeptByUserId(ding.getUserId());
+		SysDept dept = deptMapper.selectDeptByUserId(ding.getUserId());//查询用户所在部门
+		Long leaderId = userMapper.selectApproverIdByApplyerId(ding.getUserId());//所在部门负责人
 
 			//人事专员
 		if(user.getUserId().longValue()==hrId.longValue()){
 			ding.setUserId(1L);
 			return oaDingdingMapper.selectDingData(ding);
 			
-		}else if(user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() == upLeaderId.longValue()){
+		}
+		//其他人事和普通员工这里还有考虑？？？
+		else if(user.getUserId().longValue()!=hrId.longValue() && chiefId.longValue() == upLeaderId.longValue()){
 			//其他人事==普通员工
 			return oaDingdingMapper.selectDingData(ding);
 			
-		}else if(dept== null && user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() != upLeaderId.longValue()){
+		}
+		else if(user.getUserId().longValue()!=hrId.longValue() && chiefId.longValue() != upLeaderId.longValue() && leaderId.longValue() != user.getUserId().longValue()){
 			//普通员工
 			return oaDingdingMapper.selectDingData(ding);
 			

@@ -7,8 +7,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="OaOut" id="OaOutResult">
         <result property="outId"    column="out_id"    />
         <result property="userId"    column="user_id"    />
-        <result property="startDate"    column="start_date"    />
-        <result property="endDate"    column="end_date"    />
+        <result property="starttime"    column="starttime"    />
+        <result property="endtime"    column="endtime"    />
         <result property="state"    column="state"    />
         <result property="hrState"    column="hr_state"    />
         <result property="createDate"    column="create_date"    />
@@ -16,7 +16,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
     
 	<sql id="selectOaOutVo">
-        select out_id, user_id, start_date, end_date, state, hr_state, create_date, reason from oa_out
+        SELECT ou.out_id,ou.user_id,ou.starttime,ou.endtime,ou.state,ou.hr_state,ou.create_date,ou.reason,app.remark
+		FROM oa_out ou
+			LEFT JOIN oa_out_approval app on ou.out_id = app.out_id
     </sql>
 	
     <select id="selectOaOutList" parameterType="OaOut" resultMap="OaOutResult">
@@ -24,12 +26,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="outId != null "> and out_id = #{outId}</if>
              <if test="userId != null "> and user_id = #{userId}</if>
-             <if test="startDate != null "> and start_date = #{startDate}</if>
-             <if test="endDate != null "> and end_date = #{endDate}</if>
+             <if test="starttime != null "> and starttime = #{starttime}</if>
+             <if test="endtime != null "> and endtime = #{endtime}</if>
              <if test="state != null  and state != '' "> and state = #{state}</if>
              <if test="hrState != null  and hrState != '' "> and hr_state = #{hrState}</if>
              <if test="createDate != null "> and create_date = #{createDate}</if>
              <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
          </where>
     </select>
        
@@ -37,8 +40,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="outId"    column="out_id"    />
         <result property="userId"    column="user_id"    />
         <result property="userName"    column="user_name"    />
-        <result property="startDate"    column="start_date"    />
-        <result property="endDate"    column="end_date"    />
+        <result property="deptName" column="dept_name"/>
+        <result property="starttime"    column="starttime"    />
+        <result property="endtime"    column="endtime"    />
         <result property="state"    column="state"    />
         <result property="hrState"    column="hr_state"    />
         <result property="createDate"    column="create_date"    />
@@ -54,8 +58,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	ou.out_id,
 	ou.user_id,
 	USER.user_name,
-	ou.start_date,
-	ou.end_date,
+	d.dept_name,
+	ou.starttime,
+	ou.endtime,
 	(
 	CASE
 			
@@ -93,21 +98,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			LEFT JOIN oa_out_approval app ON app.out_id = ou.out_id
 			LEFT JOIN sys_user USER ON USER.user_id = ou.user_id
 			LEFT JOIN sys_user us ON us.user_id = app.approval_id 
+			LEFT JOIN sys_dept d ON USER.dept_id = d.dept_id
         <where>  
-        	1=1 and app.approval_sight = 1
             <if test="outId != null"> and ou.out_id = #{outId}</if>
-             <if test="userId != null "> and ou.user_id = #{userId}</if>
+             <if test="userId != null and userId != 1L"> and ou.user_id = #{userId}</if>
              <if test="approvalId != null "> and app.approval_id=#{approvalId}</if>
+             <if test="approvalSight != null and approvalSight != ''">and app.approval_sight = #{approvalSight}</if>
              <if test="approvalState != null and approvalState != 4"> and app.approval_state=#{approvalState}</if>
              <if test="approvalState != null and approvalState == 4"> and app.approval_state in(1,2)</if>
              <if test="state != null and state != ''"> and ou.state = #{state}</if>
              <if test="hrState != null and hrState != ''"> and ou.hr_state = #{hrState}</if>
              <if test="createDate != null and  createDate != ''"> and ou.create_date = #{createDate}</if>
-             <if test="params.startDate != null and params.startDate != ''"><!-- 开始时间检索 -->
-				AND date_format(ou.start_date,'%y%m%d') &gt;= date_format(#{params.startDate},'%y%m%d')
+             <if test="applyerName != null and applyerName!=''"> and USER.user_name = #{applyerName}</if>
+             <if test="deptName != null and deptName != ''"> and d.dept_name = #{deptName}</if>
+             <if test="params.starttime != null and params.starttime != ''"><!-- 开始时间检索 -->
+				AND date_format(ou.starttime,'%y%m%d') &gt;= date_format(#{params.starttime},'%y%m%d')
 			</if>
-			<if test="params.endDate != null and params.endDate != ''"><!-- 结束时间检索 -->
-				AND date_format(ou.end_date,'%y%m%d') &lt;= date_format(#{params.endDate},'%y%m%d')
+			<if test="params.endtime != null and params.endtime != ''"><!-- 结束时间检索 -->
+				AND date_format(ou.endtime,'%y%m%d') &lt;= date_format(#{params.endtime},'%y%m%d')
+			</if>
+			<if test="dSet != null">
+					and d.dept_id in
+					<foreach collection="dSet" item="item" index="index" open="(" separator="," close=")">
+							#{item.deptId}
+					</foreach>
 			</if>
          </where>
          ORDER BY
@@ -116,7 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectOaOutById" parameterType="Long" resultMap="OaOutResult">
         <include refid="selectOaOutVo"/>
-        where out_id = #{outId}
+        where ou.out_id = #{outId} and app.approval_sight=1
     </select>
         
     <insert id="insertOaOut" parameterType="OaOut" useGeneratedKeys="true" keyProperty="outId">
@@ -124,8 +138,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="outId != null  ">out_id,</if>
 			<if test="userId != null  ">user_id,</if>
-			<if test="startDate != null  ">start_date,</if>
-			<if test="endDate != null  ">end_date,</if>
+			<if test="starttime != null  ">starttime,</if>
+			<if test="endtime != null  ">endtime,</if>
 			<if test="state != null  and state != ''  ">state,</if>
 			<if test="hrState != null  and hrState != ''  ">hr_state,</if>
 			create_date,
@@ -134,8 +148,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="outId != null  ">#{outId},</if>
 			<if test="userId != null  ">#{userId},</if>
-			<if test="startDate != null  ">#{startDate},</if>
-			<if test="endDate != null  ">#{endDate},</if>
+			<if test="starttime != null  ">#{starttime},</if>
+			<if test="endtime != null  ">#{endtime},</if>
 			<if test="state != null  and state != ''  ">#{state},</if>
 			<if test="hrState != null  and hrState != ''  ">#{hrState},</if>
 			sysdate(),
@@ -147,8 +161,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update oa_out
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null  ">user_id = #{userId},</if>
-            <if test="startDate != null  ">start_date = #{startDate},</if>
-            <if test="endDate != null  ">end_date = #{endDate},</if>
+            <if test="starttime != null  ">starttime = #{starttime},</if>
+            <if test="endtime != null  ">endtime = #{endtime},</if>
             <if test="state != null  and state != ''  ">state = #{state},</if>
             <if test="hrState != null  and hrState != ''  ">hr_state = #{hrState},</if>
             <if test="createDate != null  ">create_date = #{createDate},</if>

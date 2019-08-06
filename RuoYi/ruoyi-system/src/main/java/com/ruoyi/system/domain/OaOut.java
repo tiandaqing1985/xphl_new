@@ -1,9 +1,9 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
+import java.util.Set;
 
 /**
  * 外出报备表 oa_out
@@ -13,6 +13,7 @@ import java.util.Date;
  */
 public class OaOut extends BaseEntity
 {
+
 	private static final long serialVersionUID = 1L;
 	
 	/** 唯一标识 */
@@ -20,14 +21,17 @@ public class OaOut extends BaseEntity
 	/** 用户id */
 	private Long userId;
 	/** 开始时间 */
-	private Date startDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date starttime;
 	/** 结束时间 */
-	private Date endDate;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date endtime;
 	/** 申请状态（1 待审批，2已撤回，3申请成功，4申请失败） */
 	private String state;
 	/** 人事确认状态（0未确认，2已确认） */
 	private String hrState;
 	/** 创建时间 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createDate;
 	/** 理由 */
 	private String reason;
@@ -35,107 +39,124 @@ public class OaOut extends BaseEntity
 	/** 审批人id */
 	private Long approvalId;
 	/** 审批状态（1同意，2驳回 ，3未操作）*/
-	private Long approvalState;
-
-	public Long getApprovalState() {
-		return approvalState;
+	private String approvalState;
+	/** 部门集合 */
+	private Set<SysDept> dSet;
+	/** 唯一标识 */
+	private Long id;
+	/** 1可见  0不可见 */
+	private String approvalSight;
+	/** 申请人 */
+	private String applyerName;
+	/** 部门  */
+	private String deptName;
+	/** 审批意见  */
+	private String remark;
+	
+	public String getRemark() {
+		return remark;
 	}
-
-	public void setApprovalState(Long approvalState) {
-		this.approvalState = approvalState;
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
-
+	public String getApplyerName() {
+		return applyerName;
+	}
+	public void setApplyerName(String applyerName) {
+		this.applyerName = applyerName;
+	}
+	public String getDeptName() {
+		return deptName;
+	}
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+	public String getApprovalSight() {
+		return approvalSight;
+	}
+	public void setApprovalSight(String approvalSight) {
+		this.approvalSight = approvalSight;
+	}
+	public Long getOutId() {
+		return outId;
+	}
+	public void setOutId(Long outId) {
+		this.outId = outId;
+	}
+	public Long getUserId() {
+		return userId;
+	}
+	public void setUserId(Long userId) {
+		this.userId = userId;
+	}
+	public Date getStarttime() {
+		return starttime;
+	}
+	public void setStarttime(Date starttime) {
+		this.starttime = starttime;
+	}
+	public Date getEndtime() {
+		return endtime;
+	}
+	public void setEndtime(Date endtime) {
+		this.endtime = endtime;
+	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getHrState() {
+		return hrState;
+	}
+	public void setHrState(String hrState) {
+		this.hrState = hrState;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
+	public String getReason() {
+		return reason;
+	}
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 	public Long getApprovalId() {
 		return approvalId;
 	}
-
 	public void setApprovalId(Long approvalId) {
 		this.approvalId = approvalId;
 	}
-
-	public void setOutId(Long outId) 
-	{
-		this.outId = outId;
+	public String getApprovalState() {
+		return approvalState;
 	}
-
-	public Long getOutId() 
-	{
-		return outId;
+	public void setApprovalState(String approvalState) {
+		this.approvalState = approvalState;
 	}
-	public void setUserId(Long userId) 
-	{
-		this.userId = userId;
+	public Set<SysDept> getdSet() {
+		return dSet;
 	}
-
-	public Long getUserId() 
-	{
-		return userId;
+	public void setdSet(Set<SysDept> dSet) {
+		this.dSet = dSet;
 	}
-	public void setStartDate(Date startDate) 
-	{
-		this.startDate = startDate;
+	public Long getId() {
+		return id;
 	}
-
-	public Date getStartDate() 
-	{
-		return startDate;
+	public void setId(Long id) {
+		this.id = id;
 	}
-	public void setEndDate(Date endDate) 
-	{
-		this.endDate = endDate;
+	@Override
+	public String toString() {
+		return "OaOut [outId=" + outId + ", userId=" + userId + ", starttime=" + starttime + ", endtime=" + endtime
+				+ ", state=" + state + ", hrState=" + hrState + ", createDate=" + createDate + ", reason=" + reason
+				+ ", approvalId=" + approvalId + ", approvalState=" + approvalState + ", dSet=" + dSet + ", id=" + id
+				+ ", approvalSight=" + approvalSight + ", applyerName=" + applyerName + ", deptName=" + deptName
+				+ ", remark=" + remark + "]";
 	}
-
-	public Date getEndDate() 
-	{
-		return endDate;
-	}
-	public void setState(String state) 
-	{
-		this.state = state;
-	}
-
-	public String getState() 
-	{
-		return state;
-	}
-	public void setHrState(String hrState) 
-	{
-		this.hrState = hrState;
-	}
-
-	public String getHrState() 
-	{
-		return hrState;
-	}
-	public void setCreateDate(Date createDate) 
-	{
-		this.createDate = createDate;
-	}
-
-	public Date getCreateDate() 
-	{
-		return createDate;
-	}
-	public void setReason(String reason) 
-	{
-		this.reason = reason;
-	}
-
-	public String getReason() 
-	{
-		return reason;
-	}
-
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("outId", getOutId())
-            .append("userId", getUserId())
-            .append("startDate", getStartDate())
-            .append("endDate", getEndDate())
-            .append("state", getState())
-            .append("hrState", getHrState())
-            .append("createDate", getCreateDate())
-            .append("reason", getReason())
-            .toString();
-    }
+	
+	
 }

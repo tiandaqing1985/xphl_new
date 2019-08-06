@@ -272,7 +272,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					<foreach collection="dSet" item="item" index="index" open="(" separator="," close=")">
 							#{item.deptId}
 					</foreach>
-				</if>
+			</if>
          </where>    
          ORDER BY a.apply_id DESC
     </select>
@@ -350,87 +350,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              
          </where>
          ORDER BY a.apply_id DESC
-    </select>
-    
-     <select id="selectAllQueryConditionsList2" parameterType="QueryConditions" resultMap="QueryConditionsResult">
-	     	SELECT
-		a.apply_id,
-		a.user_id,
-		a.list_num,
-		a.starttime,
-		a.endtime,
-		a.for_applyid,
-		a.prove,
-		( CASE WHEN a.timeapart1 = 1 THEN '10:00——15:00' WHEN a.timeapart1 = 2 THEN '15:00——19:00' ELSE '' END ) timeapart1,
-		( CASE WHEN a.timeapart2 = 1 THEN '10:00——15:00' WHEN a.timeapart2 = 2 THEN '15:00——19:00' ELSE '' END ) timeapart2,
-		( CASE WHEN a.timeapart3 = 1 THEN '早上(10:00——11:00)' WHEN a.timeapart3 = 2 THEN '下午(18:00——19:00)' ELSE '' END ) timeapart3,
-		a.timelength,
-		(
-		CASE
-				
-				WHEN a.apply_type = 1 THEN
-				'请假' 
-				WHEN a.apply_type = 2 THEN
-				'加班' 
-				WHEN a.apply_type = 3 THEN
-				'销假' ELSE '' 
-			END 
-			) apply_type,
-			(
-			CASE
-					
-					WHEN a.apply_state = 1 THEN
-					'待审批' 
-					WHEN a.apply_state = 2 THEN
-					'已撤回' 
-					WHEN a.apply_state = 3 THEN
-					'申请成功' 
-					WHEN a.apply_state = 4 THEN
-					'申请失败' 
-					WHEN a.apply_state = 5 THEN
-					'已销假' ELSE '' 
-				END 
-				) apply_state,
-				( CASE WHEN a.confirm_state = 1 THEN '未确认' WHEN a.confirm_state = 2 THEN '已确认' ELSE '' END ) confirm_state,
-				a.details,
-				(
-				CASE
-					
-					WHEN a.leave_type = 1 THEN
-					'年假' 
-					WHEN a.leave_type = 2 THEN
-					'调休' 
-					WHEN a.leave_type = 3 THEN
-					'事假' 
-					WHEN a.leave_type = 4 THEN
-					'病假' 
-					WHEN a.leave_type = 5 THEN
-					'婚假' 
-					WHEN a.leave_type = 6 THEN
-					'产假' 
-					WHEN a.leave_type = 7 THEN
-					'陪产假' 
-					WHEN a.leave_type = 8 THEN
-					'产检假' 
-					WHEN a.leave_type = 9 THEN
-					'丧假' ELSE '' 
-				END 
-				) leave_type,
-				a.apply_time,
-				u.user_name 
-			FROM
-				sys_user_apply a
-				LEFT JOIN sys_user u ON u.`user_id` = a.`user_id` 
-				LEFT JOIN sys_dept d on u.dept_id=d.dept_id
-			<where>
-				<if test="userId != null">a.user_id=#{userId}</if>
-				<if test="dSet != null">
-					and d.dept_id in
-					<foreach collection="dSet" item="item" index="index" open="(" separator="," close=")">
-							#{item.deptId}
-					</foreach>
-				</if>
-			</where>
     </select>
     
     <select id="selectUserApprovalByUserApproval" parameterType="UserApproval" resultMap="UserApprovalResult">

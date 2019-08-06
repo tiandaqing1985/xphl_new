@@ -1,7 +1,5 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
 
@@ -21,10 +19,12 @@ public class OutApproval extends BaseEntity
 	private Long userId;
 	/** 用户名 */
 	private String userName;
+	/** 部门 */
+	private String deptName;
 	/** 开始时间 */
-	private Date startDate;
+	private Date starttime;
 	/** 结束时间 */
-	private Date endDate;
+	private Date endtime;
 	/** 申请状态（1 待审批，2已撤回，3申请成功，4申请失败） */
 	private String state;
 	/** 人事确认状态（0未确认，2已确认） */
@@ -43,6 +43,14 @@ public class OutApproval extends BaseEntity
     private String remark;
 	
 	
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
 	public String getUserName() {
 		return userName;
 	}
@@ -101,23 +109,23 @@ public class OutApproval extends BaseEntity
 	{
 		return userId;
 	}
-	public void setStartDate(Date startDate) 
+	public void setstarttime(Date starttime) 
 	{
-		this.startDate = startDate;
+		this.starttime = starttime;
 	}
 
-	public Date getStartDate() 
+	public Date getstarttime() 
 	{
-		return startDate;
+		return starttime;
 	}
-	public void setEndDate(Date endDate) 
+	public void setendtime(Date endtime) 
 	{
-		this.endDate = endDate;
+		this.endtime = endtime;
 	}
 
-	public Date getEndDate() 
+	public Date getendtime() 
 	{
-		return endDate;
+		return endtime;
 	}
 	public void setState(String state) 
 	{
@@ -156,16 +164,12 @@ public class OutApproval extends BaseEntity
 		return reason;
 	}
 
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("outId", getOutId())
-            .append("userId", getUserId())
-            .append("startDate", getStartDate())
-            .append("endDate", getEndDate())
-            .append("state", getState())
-            .append("hrState", getHrState())
-            .append("createDate", getCreateDate())
-            .append("reason", getReason())
-            .toString();
-    }
+	@Override
+	public String toString() {
+		return "OutApproval [outId=" + outId + ", userId=" + userId + ", userName=" + userName + ", deptName="
+				+ deptName + ", starttime=" + starttime + ", endtime=" + endtime + ", state=" + state + ", hrState="
+				+ hrState + ", createDate=" + createDate + ", reason=" + reason + ", approvalState=" + approvalState
+				+ ", approvalName=" + approvalName + ", approvalDate=" + approvalDate + ", remark=" + remark + "]";
+	}
+
 }

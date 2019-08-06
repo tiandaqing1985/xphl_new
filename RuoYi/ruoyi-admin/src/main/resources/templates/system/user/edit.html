@@ -127,7 +127,7 @@
                     <div class="form-group">
                         <label class="col-sm-4 control-label">入职日期：</label>
                         <div class="col-sm-8">
-                            <input id="intime" name="intime" class="form-control" type="text" th:field="*{intime}" pattern="yyyy-MM-dd">
+                            <input id="intime" name="intime" class="form-control" type="datetime" th:value="${#dates.format(user.intime, 'yyyy-MM-dd')}">
                         </div>
                     </div>
                 </div>
