@@ -24,18 +24,21 @@ import com.dingtalk.api.request.OapiDepartmentListIdsRequest;
 import com.dingtalk.api.request.OapiDepartmentListRequest;
 import com.dingtalk.api.request.OapiGettokenRequest;
 import com.dingtalk.api.request.OapiUserGetDeptMemberRequest;
+import com.dingtalk.api.request.OapiUserGetRequest;
 import com.dingtalk.api.request.OapiUserSimplelistRequest;
 import com.dingtalk.api.response.OapiDepartmentListIdsResponse;
 import com.dingtalk.api.response.OapiDepartmentListResponse;
 import com.dingtalk.api.response.OapiDepartmentListResponse.Department;
 import com.dingtalk.api.response.OapiGettokenResponse;
 import com.dingtalk.api.response.OapiUserGetDeptMemberResponse;
+import com.dingtalk.api.response.OapiUserGetResponse;
 import com.dingtalk.api.response.OapiUserSimplelistResponse;
 import com.dingtalk.api.response.OapiUserSimplelistResponse.Userlist;
 import com.ruoyi.system.domain.OaDingding;
 import com.ruoyi.system.domain.OaDingdingUser;
 import com.ruoyi.system.service.IOaDingdingService;
 import com.ruoyi.system.service.IOaDingdingUserService;
+import com.taobao.api.ApiException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
@@ -56,12 +59,38 @@ import java.util.*;
 
 @Component("dingding")
 public class DingDingTask{
-
+	
 	@Autowired
 	IOaDingdingService dingdingService;
 	
 	@Autowired
 	IOaDingdingUserService dingdingUserService;
+	
+//	public DingDingTask() {
+//		super();
+//		// TODO Auto-generated constructor stub
+//	}
+//
+//	public static void main(String[] args) throws Exception {
+//		System.out.println("-------------------------------------------");
+//		DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
+//		String accessToken = getAccess_token(client);		
+//
+//		OapiUserGetRequest request = new OapiUserGetRequest();
+//		request.setUserid("231061213824243894");
+//		request.setHttpMethod("GET");
+//		OapiUserGetResponse response = client.execute(request, accessToken);
+//		
+//		System.out.println(response+"==========================");
+//		
+//		DingTalkClient client = new DefaultDingTalkClient("");
+//		
+//		String accessToken = getAccess_token(client);	
+//		List<String> userList = getDeptUser(client, accessToken, "93977150");
+//		System.out.println("---------------------------------------------------------");
+//		DingDingTask ding = new DingDingTask();
+//		ding.dingDingTask();
+//	}
 
 	public void dingDingTask() throws Exception
 	{		
@@ -91,12 +120,12 @@ public class DingDingTask{
 		//获取部门用户
 		//"userlist":[{"name":"牛德源","userid":"213121072228921172"},{"name":"张智伟","userid":"042262656224235781"},{"name":"徐美玲","userid":"150906420524551796"}]}
 		List<OaDingdingUser> dingUserList = new ArrayList<OaDingdingUser>();
-		for(Long deptId : allDeptSet){
+		for(Long deptId : allDeptSet){		
 			List<Userlist> userList = getUser(client, accessToken,deptId);
 			for(Userlist user : userList){
 				OaDingdingUser dingUser = new OaDingdingUser();
 				dingUser.setUserId(user.getUserid());
-				dingUser.setUserName(user.getName());
+				dingUser.setUserName(user.getName());			
 				dingUserList.add(dingUser);
 			}
 		}
@@ -121,7 +150,10 @@ public class DingDingTask{
         List<OaDingding> users = new ArrayList<>();
         List<OaDingding> dataList = getAttendances(allUserIdList,users, workDateFrom,  workDateTo, accessToken);
         dingdingService.insertForeach(dataList);
-        System.out.println("获取从昨天0点到今天0点时间的打卡记录"+ Arrays.asList(users));
+//        System.out.println("获取从昨天0点到今天0点时间的打卡记录"+ Arrays.asList(users));
+        
+        //根据请假、外出报备修改钉钉打卡考勤结果
+        
 
 	}
 	
@@ -288,8 +320,8 @@ public class DingDingTask{
 		client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/simplelist");
 		OapiUserSimplelistRequest request = new OapiUserSimplelistRequest();
 		request.setDepartmentId(deptId);//获取的部门id
-		request.setOffset(0L);//支持分页查询，与size参数同时设置时才生效，此参数代表偏移量
-		request.setSize(10L);//支持分页查询，与offset参数同时设置时才生效，此参数代表分页大小，最大100
+//		request.setOffset(0L);//支持分页查询，与size参数同时设置时才生效，此参数代表偏移量
+//		request.setSize(100L);//支持分页查询，与offset参数同时设置时才生效，此参数代表分页大小，最大100
 		request.setOrder("entry_asc");
 		/*支持分页查询，部门成员的排序规则，默认不传是按自定义排序；
 		entry_asc：代表按照进入部门的时间升序，

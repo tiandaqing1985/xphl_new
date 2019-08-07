@@ -55,6 +55,22 @@ public class OaDingdingController extends BaseController
 		return getDataTable(list);
 	}
 	
+	@GetMapping("/myApprovalList")
+	public String myApprovalList()
+	{
+	    return prefix + "/myApprovalList";
+	}
+	
+	/** 钉钉考勤数据+请假数据+外出报备数据联合展示  */
+	@PostMapping("/workAttendance")
+	@ResponseBody
+	public TableDataInfo workAttendance(Dingding ding)
+	{
+		startPage();
+		ding.setUserId(ShiroUtils.getUserId());
+        List<Dingding> list = oaDingdingService.selectOaDingdingList(ding);
+		return getDataTable(list);
+	}
 	
 	/**
 	 * 导出钉钉考勤数据列表

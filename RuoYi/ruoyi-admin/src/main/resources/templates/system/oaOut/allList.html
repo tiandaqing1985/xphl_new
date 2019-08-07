@@ -3,7 +3,7 @@
 <head>
 	<th:block th:include="include :: header('外出报备-申请记录')" />
 	<script type="text/javascript">
-		function toView(approvalId){
+		function toView(outId){
 			var url = $.table._option.toViewUrl.replace("{outId}",outId);
 			$.modal.open("查看申请", url);
 		}
@@ -67,7 +67,7 @@
         $(function() {
             var options = {
                 url: prefix + "/allList",
-                toViewUrl: "/toView/{outId}",
+                toViewUrl: prefix + "/toView/{outId}",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{outId}",
                 removeUrl: prefix + "/remove",
@@ -141,7 +141,16 @@
 					field : 'remark', 
 					title : '审批意见',
 					visible: false
-				}]
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + '" href="#" onclick="toView(\'' + row.outId + '\')"><i class="fa fa-edit"></i>查看</a> ');
+						return actions.join('');
+		            }
+		        }]
             };
             $.table.init(options);
         });

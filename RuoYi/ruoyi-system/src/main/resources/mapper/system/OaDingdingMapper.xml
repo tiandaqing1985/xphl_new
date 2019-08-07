@@ -122,7 +122,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				) timeResult
 			FROM
 				`oa_dingding` ding
-				RIGHT JOIN oa_dingding_user us ON ding.user_id = us.user_id
+				LEFT JOIN oa_dingding_user us ON ding.user_id = us.user_id
 				LEFT JOIN sys_user ouser ON ouser.user_name = us.user_name 
 			) ding ON ding.user_id = nu.user_id 
 			<where>
