@@ -10,6 +10,7 @@ import java.util.Date;
  * @create: 2019-08-05 11:25
  **/
 public class ReiAdiApply {
+
     private Integer id;
     /**
      * 日期

@@ -1,5 +1,6 @@
 package com.ruoyi.system.domain.finance;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.domain.BaseEntity;
 import com.ruoyi.common.utils.DefaultFiled;
 
@@ -27,6 +28,10 @@ public class FacReimburseApply extends BaseEntity {
      */
     private String name;
     /**
+     * 报销人名称
+     */
+    private  String userName;
+    /**
      * 公司名称
      */
     private String companyName;
@@ -45,7 +50,7 @@ public class FacReimburseApply extends BaseEntity {
     /**
      * 报销时间
      */
-    @DefaultFiled(date = "date")
+    @JsonFormat(pattern = "yyyy-MM-DD")
     private Date reimburseTime;
     /**
      * 财务操作
@@ -93,6 +98,15 @@ public class FacReimburseApply extends BaseEntity {
      * 招待费报销申请
      */
     private List<ReiHospitalityApply> hospitalityApplies;
+
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public List<ReiTrafficApply> getTrafficReiApplyList() {
         return trafficReiApplyList;

@@ -4,6 +4,7 @@ package com.ruoyi.system.service.finance;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.finance.FacReimburseApply;
 
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -64,5 +65,7 @@ public interface IFacReimburseApplyService
 	public int deleteFacReimburseApplyByIds(String ids);
 
 	BigDecimal getApplyAmount(FacReimburseApply facReimburseApply);
-	
+
+
+
 }
