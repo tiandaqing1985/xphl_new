@@ -88,4 +88,10 @@ public interface IOaOutService
 	 */
 	public String ifTakeback(Long outId);
 	
+	/** 验证申请时间是否已经提交
+	 * @param oaOut
+	 * @return 
+	 */
+	public String ifRepeat(OaOut oaOut);
+	
 }

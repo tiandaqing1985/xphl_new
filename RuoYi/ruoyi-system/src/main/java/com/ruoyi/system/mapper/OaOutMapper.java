@@ -68,4 +68,11 @@ public interface OaOutMapper
      */
 	public int deleteOaOutByIds(String[] outIds);
 	
+	/**
+	 * 根据开始时间/结束时间查询外出申请总数
+	 * @param oaOut
+	 * @return
+	 */
+	public Long selectOaOutCountByTime(OaOut oaOut);
+	
 }

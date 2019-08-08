@@ -87,6 +87,13 @@ public interface UserApplyMapper
 	public UserApply updateConfirmMasageById(UserApply userApply);
 	
 	/**
+	 * 根据申请id修改status状态为1（是否更新在钉钉考勤表中：0 未更新  1已更新）
+	 * @param applyId
+	 * @return
+	 */
+	public int updateUserApplyStatusById(Long applyId);
+	
+	/**
 	 * 查出事假病假的请假单
 	 */
 	public Double selectLeaveUserApplyByuserId(UserApply userApply);

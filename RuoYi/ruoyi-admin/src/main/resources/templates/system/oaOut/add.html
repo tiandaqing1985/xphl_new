@@ -5,13 +5,7 @@
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-oaOut-add">
-			<!-- <div class="form-group">	
-				<label class="col-sm-3 control-label">用户id：</label>
-				<div class="col-sm-8">
-					<input id="userId" name="userId" class="form-control" type="text">
-				</div>
-			</div> -->
+        <form class="form-horizontal m" id="form-oaOut-add">			
 			<div class="form-group">	
 				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>开始时间：</label>
 				<div class="col-sm-8">
@@ -27,7 +21,7 @@
 					<div class="input-group date">
                         <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <input type="text" class="form-control" id="endtime" name="endtime" placeholder="yyyy-MM-dd HH:mm:ss" autocomplete="off">
-                    </div><span id="p01"></span>
+                    </div><span id="p02"></span>
 				</div>
 			</div>
 			<div class="form-group">	
@@ -74,8 +68,64 @@
 			});
 		 });
 		function submitHandler() {
+			debugger;
 	        if ($.validate.form()) {
-	            $.operate.save(prefix + "/add", $('#form-oaOut-add').serialize());
+	        	var starttime = $("#starttime").val();
+				var endtime = $("#endtime").val();
+				
+				var flag = false;//提交flag 
+				var repeatFlag = false;
+				
+				if(endtime <= starttime){
+					p02.innerText="结束日期不能小于或等于开始日期";
+					$("#p02").css("color","red");
+					flag = false;
+					return;
+				}
+				
+				//验证所请假期 是否与已有申请时段重复 
+				$.ajax({
+					type:"post",
+					async:false,
+					url:prefix + "/ifRepeat",
+					data:{"starttime":starttime,"endtime":endtime},
+					dataType:"json",
+					success:function(result){
+						 if(result == "0"){
+							 repeatFlag = true;
+							 flag = true;
+						}
+						else{
+							repeatFlag = false;
+							$.modal.alertWarning("申请中部分时段已经申请过，不能再次申请!");
+							return;
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				}); 
+				if(flag && repeatFlag){
+					save(prefix + "/add", $('#form-oaOut-add').serialize());
+				}
+				function save(url, data) {
+		        	var config = {
+		    	        url: url,
+		    	        type: "post",
+		    	        dataType: "json",
+		    	        data: data,
+		    	        beforeSend: function () {
+		    	        	$.modal.loading("正在处理中，请稍后...");
+		    	        	$.modal.disable();
+		    	        },
+		    	        success: function(result) {
+		    	        	$.operate.successCallback(result);
+		    	        	
+		    	        }
+		    	    };
+		    	    $.ajax(config)
+		        };
+	           /*  $.operate.save(prefix + "/add", $('#form-oaOut-add').serialize()); */
 	        }
 	    }
 	</script>

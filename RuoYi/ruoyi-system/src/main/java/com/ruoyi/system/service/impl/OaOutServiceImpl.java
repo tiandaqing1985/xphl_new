@@ -66,7 +66,7 @@ public class OaOutServiceImpl implements IOaOutService
 	{
 		oaOutMapper.insertOaOut(oaOut);
 		SysUser user = userMapper.selectUserById(oaOut.getUserId());//查出当前用户的area值
-
+		
 		//生成审批记录
 		Long approvalId = 0L;//审批人id
 		
@@ -94,35 +94,36 @@ public class OaOutServiceImpl implements IOaOutService
 		    return 1;
 		}
 		
-		//人事审批
-					
-//		user.setRoleId(3L);//人事专员（分区域分配人事审批人	）
 		user.setRoleId(6L);//人事总监
-		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事总监id
+		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事总监id	
 		
-		//当前用户的leader是人事总监时，只需要leader审批
-		if(approvalId.longValue() == hrId.longValue()){
-			return 1;
-		}
 		
-		//当前用户是hr时，只需要人事总监审批
+//		//当前用户的leader是人事总监时，只需要leader审批
+//		if(approvalId.longValue() == hrId.longValue()){
+//			return 1;
+//		}
+//		
+//		//当前用户是hr时，只需要人事总监审批
+//		if(upLeaderId.longValue() == hrId.longValue()){
+//		    return 1;
+//		}
+//		
+//		//当前用户是人事总监时，只需要leader审批
+//		if(user.getUserId().longValue() == hrId.longValue()){
+//		    return 1;
+//		}
+		
+		//人事部门审批是两级审批，其他部门员工只需要leader审批
 		if(upLeaderId.longValue() == hrId.longValue()){
-		    return 1;
+			//生成二级审批记录
+			OaOutApproval oaOutApproval2 =  new OaOutApproval();
+			oaOutApproval2.setOutId(oaOut.getOutId());//外出报备id
+			oaOutApproval2.setApprovalId(hrId);//审批人user_id（人事总监）
+			oaOutApproval2.setApprovalState("3");//审批状态（1同意，2驳回 ，3未操作）
+			oaOutApproval2.setApprovalSight("0");//1可见  0不可见
+			oaOutApproval2.setApprovalLevel(2);
+			oaOutApprovalMapper.insertOaOutApproval(oaOutApproval2);
 		}
-		
-		//当前用户是人事总监时，只需要leader审批
-		if(user.getUserId().longValue() == hrId.longValue()){
-		    return 1;
-		}
-		
-		//生成二级审批记录
-		OaOutApproval oaOutApproval2 =  new OaOutApproval();
-		oaOutApproval2.setOutId(oaOut.getOutId());//外出报备id
-		oaOutApproval2.setApprovalId(hrId);//审批人user_id（人事总监）
-		oaOutApproval2.setApprovalState("3");//审批状态（1同意，2驳回 ，3未操作）
-		oaOutApproval2.setApprovalSight("0");//1可见  0不可见
-		oaOutApproval2.setApprovalLevel(2);
-		oaOutApprovalMapper.insertOaOutApproval(oaOutApproval2);
 		
 	    return 1;
 	}
@@ -137,23 +138,29 @@ public class OaOutServiceImpl implements IOaOutService
 	public int updateOaOut(OaOut oaOut, String remark)
 	{
 		OaOutApproval approval1 = new OaOutApproval();
-		approval1.setApprovalId(oaOut.getApprovalId());
 		approval1.setOutId(oaOut.getOutId());
-		List<OaOutApproval> approvalList1 = oaOutApprovalMapper.selectOaOutApprovalList(approval1);//查出对应的审批记录(结果是一条)
+		List<OaOutApproval> approvalList1 = oaOutApprovalMapper.selectOaOutApprovalList(approval1);//查出对应的审批记录(结果是1或者2条)
+		approval1.setApprovalId(oaOut.getApprovalId());
 		approval1.setApprovalSight("1");
-		List<OaOutApproval> approvalList = oaOutApprovalMapper.selectOaOutApprovalList(approval1);//查出对应的审批记录(结果是一条)
+		List<OaOutApproval> approvalList = oaOutApprovalMapper.selectOaOutApprovalList(approval1);//查出对应的审批记录(结果是1条)
 		OaOutApproval approval = approvalList.get(0);
 		
 		//1同意 2驳回 3未操作
 		if("1".equals(oaOut.getApprovalState())){
-						
-			if(approvalList1.size()==1 || approval.getApprovalLevel() == 2){//人事审批
+			
+			if(approvalList1.size()==1 && approval.getApprovalLevel() == 1){//其他部门员工的一级审批
+				approval.setApprovalState("1");
+				oaOutApprovalMapper.updateOaOutApprovalByApprovalId(approval);
+				oaOut.setState("3");
+				return oaOutMapper.updateOaOut(oaOut);
+			}else if(approvalList1.size()==2 && approval.getApprovalLevel() == 2){//人事部门员工的二级审批
 				approval.setApprovalState("1");
 				oaOutApprovalMapper.updateOaOutApprovalByApprovalId(approval);
 				oaOut.setState("3");
 				return oaOutMapper.updateOaOut(oaOut);
 				
-			}else{//leader审批
+			}else{//人事部门员工的一级审批
+				//leader审批
 				approval.setApprovalSight("0");
 				approval.setApprovalState("1");
 				oaOutApprovalMapper.updateOaOutApprovalByApprovalId(approval);
@@ -219,8 +226,9 @@ public class OaOutServiceImpl implements IOaOutService
 		SysUser user = userMapper.selectUserById(oaOut.getUserId());//查出当前用户
 
 		//人事总监
-		user.setRoleId(6L);//人事总监
-		Long chiefId = userRoleMapper.selectUserIdByRoleId(user);//人事总监id
+		SysUser user2 = new SysUser();
+		user2.setRoleId(6L);//人事总监
+		Long chiefId = userRoleMapper.selectUserIdByRoleId(user2);//人事总监id
 		if(chiefId.longValue() == user.getUserId().longValue()){
 			oaOut.setUserId(1L);
 			return oaOutMapper.selectOutApprovalList(oaOut);
@@ -314,5 +322,20 @@ public class OaOutServiceImpl implements IOaOutService
 	public int updateOaOut(OaOut oaOut) {
 		oaOut.setState("1");
 		return oaOutMapper.updateOaOut(oaOut);
+	}
+
+	@Override
+	public String ifRepeat(OaOut oaOut) {
+		OaOut out1 = new OaOut();
+		out1.setUserId(oaOut.getUserId());
+		out1.setStarttime(oaOut.getStarttime());
+	    long startCount = oaOutMapper.selectOaOutCountByTime(out1);
+	   	OaOut out2 = new OaOut();
+		out2.setUserId(oaOut.getUserId());
+		out2.setEndtime(oaOut.getEndtime());
+	    long endCount = oaOutMapper.selectOaOutCountByTime(out2);
+	    if(startCount != 0 || endCount != 0)
+		   return "1";//已申请
+        return "0";//未申请
 	}
 }

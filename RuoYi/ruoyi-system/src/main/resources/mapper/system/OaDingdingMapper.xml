@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="checkType"    column="checkType"    />
         <result property="userCheckTime"    column="userCheckTime"    />
         <result property="timeResult"    column="timeResult"    />
+        <result property="leaveType"    column="leave_type"    />
     </resultMap>
     
     <resultMap type="Dingding" id="DingdingResult">
@@ -20,10 +21,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="checkType"    column="checkType"    />
         <result property="userCheckTime"    column="userCheckTime"    />
         <result property="timeResult"    column="timeResult"    />
+        <result property="leaveType"    column="leave_type"    />
     </resultMap>
 	
 	<sql id="selectOaDingdingVo">
-        select user_id, workDate, checkType, userCheckTime, timeResult from oa_dingding
+        select user_id, workDate, checkType, userCheckTime, timeResult, leave_type from oa_dingding
     </sql>
 	
     <select id="selectOaDingdingList" parameterType="OaDingding" resultMap="OaDingdingResult">
@@ -34,7 +36,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="checkType != null  and checkType != '' "> and checkType = #{checkType}</if>
              <if test="userCheckTime != null "> and userCheckTime = #{userCheckTime}</if>
              <if test="timeResult != null  and timeResult != '' "> and timeResult = #{timeResult}</if>
+             <if test="leaveType != null  and leaveType != '' "> and leave_type = #{leaveType}</if>
          </where>
+    </select>
+    <select id="selectOaDingdingListByCondition" parameterType="Dingding" resultType="Dingding">
+    	select ding.* from (
+			SELECT du.user_name, di.* FROM oa_dingding di
+			LEFT JOIN oa_dingding_user du on di.user_id = du.user_id
+		) ding
+		<where>
+			<if test="userName != null and userName != ''">and ding.user_name = #{userName}</if>
+			<if test="startTime != null and endTime != null"> and ding.workDate between #{startTime} and #{endTime}</if>
+			<if test="checkType != null and checkType != ''">and ding.checkType= #{checkType}</if>
+		</where> 
     </select>
     
     <select id="selectOaDingdingById" parameterType="String" resultMap="OaDingdingResult">
@@ -50,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="checkType != null  and checkType != ''  ">checkType,</if>
 			<if test="userCheckTime != null  ">userCheckTime,</if>
 			<if test="timeResult != null  and timeResult != ''  ">timeResult,</if>
+			<if test="leaveType != null  and leaveType != ''  ">leave_type,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="userId != null  and userId != ''  ">#{userId},</if>
@@ -57,12 +72,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="checkType != null  and checkType != ''  ">#{checkType},</if>
 			<if test="userCheckTime != null  ">#{userCheckTime},</if>
 			<if test="timeResult != null  and timeResult != ''  ">#{timeResult},</if>
+			<if test="leaveType != null  and leaveType != ''  ">#{leaveType},</if>
          </trim>
     </insert>
     
     <insert id="insertForeach" parameterType="List" useGeneratedKeys="false">
     	insert into oa_dingding 
-    	(user_id, workDate, checkType, userCheckTime, timeResult)
+    	(user_id, workDate, checkType, userCheckTime, timeResult, leaveType)
     	values
     	<foreach collection="list" item="item" index="index" separator=",">
     		(
@@ -70,7 +86,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     		 #{item.workDate}, 
     		 #{item.checkType},
     		 #{item.userCheckTime},
-    		 #{item.timeResult}
+    		 #{item.timeResult},
+    		 #{item.leaveType}
     		)
     	</foreach>
     </insert>
@@ -82,9 +99,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="checkType != null  and checkType != ''  ">checkType = #{checkType},</if>
             <if test="userCheckTime != null  ">userCheckTime = #{userCheckTime},</if>
             <if test="timeResult != null  and timeResult != ''  ">timeResult = #{timeResult},</if>
+            <if test="leaveType != null  and leaveType != ''  ">leave_type = #{leaveType},</if>
         </trim>
         where user_id = #{userId}
     </update>
+
+	<update id="updateOaDingDingByTime" parameterType="Dingding">
+		update oa_dingding set timeResult=#{timeResult},leave_type=#{leaveType} where user_id=#{userId} 
+		and workDate in 
+		(select ding.workDate from (
+				SELECT du.user_name, di.* FROM oa_dingding di
+				LEFT JOIN oa_dingding_user du on di.user_id = du.user_id
+		 ) ding
+		where ding.user_id=#{userId}
+		and ding.workDate BETWEEN #{startTime} AND #{endTime}) 
+		<if test="checkType != null and checkType != ''">
+			and ding.checkType=#{checkType}
+		</if>
+	</update>
 
 	<delete id="deleteOaDingdingById" parameterType="String">
         delete from oa_dingding where user_id = #{userId}
@@ -136,6 +168,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              	<if test="timeResult == 4"> and ding.timeResult = '严重迟到'</if>
              	<if test="timeResult == 5"> and ding.timeResult = '旷工迟到'</if>
              	<if test="timeResult == 6"> and ding.timeResult = '未打卡'</if>
+             	<if test="leaveType != null and leaveType != ''"> and ding.leave_type = #{leaveType}</if>
              	<if test="dSet != null"> 
              			and nu.dept_id in 
 			          <foreach collection="dSet" index="index" item="item" open="(" separator="," close=")">  

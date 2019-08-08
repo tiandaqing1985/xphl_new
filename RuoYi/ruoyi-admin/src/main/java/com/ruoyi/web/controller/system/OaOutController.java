@@ -270,4 +270,14 @@ public class OaOutController extends BaseController
     {
     	return oaOutService.ifTakeback(outId);
     }
+    
+    /**
+   	 * 验证选择的时间是否已经提交了：0 未申请  1已申请
+   	 */
+   @PostMapping("/ifRepeat")
+   @ResponseBody
+   public String ifRepeat(OaOut oaOut){
+	  oaOut.setUserId(ShiroUtils.getUserId());
+      return oaOutService.ifRepeat(oaOut);
+   }
 }

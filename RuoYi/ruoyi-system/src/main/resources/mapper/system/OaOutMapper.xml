@@ -35,7 +35,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
          </where>
     </select>
-       
+    
+    <select id="selectOaOutCountByTime" parameterType="OaOut" resultType="Long">
+        SELECT COUNT( 0 ) FROM oa_out 
+        <where>  
+           	 <if test="outId != null "> and out_id = #{outId}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="starttime != null "> and (#{starttime} BETWEEN starttime AND endtime)</if>
+             <if test="endtime != null "> and (#{endtime} BETWEEN starttime AND endtime)</if>          
+         </where>
+    </select>   
+    
     <resultMap type="OutApproval" id="OutApprovalResult">
         <result property="outId"    column="out_id"    />
         <result property="userId"    column="user_id"    />

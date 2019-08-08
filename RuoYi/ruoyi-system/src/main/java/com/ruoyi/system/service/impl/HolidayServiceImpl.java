@@ -189,8 +189,9 @@ public class HolidayServiceImpl implements IHolidayService
 		SysUser user = userMapper.selectUserById(sysUser.getUserId());//查出当前用户
 
 		//人事总监
-		user.setRoleId(6L);//人事总监
-		Long chiefId = userRoleMapper.selectUserIdByRoleId(user);//人事总监id
+		SysUser user2 = new SysUser();
+		user2.setRoleId(6L);//人事总监
+		Long chiefId = userRoleMapper.selectUserIdByRoleId(user2);//人事总监id
 		if(chiefId.longValue() == user.getUserId().longValue()){
 			sysUser.setUserId(1L);
 			return holidayMapper.selectRestByUserId(sysUser);

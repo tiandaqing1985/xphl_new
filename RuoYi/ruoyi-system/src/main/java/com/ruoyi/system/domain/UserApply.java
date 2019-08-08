@@ -53,6 +53,8 @@ public class UserApply extends BaseEntity
 	private String prove;
 	/** 有时间后缀的时长*/
 	private String timelengthPlus;
+	/** 是否更新在钉钉考勤表中：0 未更新  1已更新 */
+	private String status;
 	
 	private SysUser sysUser;
 	
@@ -63,7 +65,17 @@ public class UserApply extends BaseEntity
 	private String approverName;
 	
 	
-    public Long getApplyId() {
+    public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	public Long getApplyId() {
 		return applyId;
 	}
 

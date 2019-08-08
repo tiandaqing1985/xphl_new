@@ -9,7 +9,7 @@ import java.util.Date;
  * 钉钉考勤数据表 oa_dingding
  * 
  * @author ruoyi
- * @date 2019-07-26
+ * @date 2019-08-08
  */
 public class OaDingding extends BaseEntity
 {
@@ -19,13 +19,25 @@ public class OaDingding extends BaseEntity
 	private String userId;
 	/** 打卡日期 */
 	private Date workDate;
-	/** 考勤类型 */
+	/** 考勤类型 OnDuty：上班；OffDuty：下班 */
 	private String checkType;
 	/** 实际打卡时间 */
 	private Date userCheckTime;
 	/** 时间结果
 Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absenteeism：旷工迟到；NotSigned：未打卡 */
 	private String timeResult;
+	/** 请假类型 */
+	private String leaveType;
+	/** 是否更新在钉钉考勤表中：0 未更新  1已更新 */
+	private String status;
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 
 	public void setUserId(String userId) 
 	{
@@ -72,6 +84,15 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	{
 		return timeResult;
 	}
+	public void setLeaveType(String leaveType) 
+	{
+		this.leaveType = leaveType;
+	}
+
+	public String getLeaveType() 
+	{
+		return leaveType;
+	}
 
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -80,6 +101,7 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
             .append("checkType", getCheckType())
             .append("userCheckTime", getUserCheckTime())
             .append("timeResult", getTimeResult())
+            .append("leaveType", getLeaveType())
             .toString();
     }
 }

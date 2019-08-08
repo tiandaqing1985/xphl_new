@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="prove"  column="prove"/>
         <result property="timelengthPlus"  column="timelengthPlus"/>
         <result property="remark"  column="remark"/>
+        <result property="status"  column="status"/>
         <association property="userApproval" column="approval_id" javaType="UserApproval" resultMap="UserApprovalResult"/>
         <association property="sysUser" column="user_id" javaType="SysUser" resultMap="SysUserResult"/>
         <association property="sysDept" column="dept_id" javaType="SysDept" resultMap="SysDeptResult"/>  
@@ -494,8 +495,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="details != null  and details != ''  ">details = #{details},</if>
             <if test="leaveType != null  and leaveType != ''  ">leave_type = #{leaveType},</if>
             <if test="applyTime != null  ">apply_time = #{applyTime}</if>
-            <if test="prove != null and prove != '' ">and prove = #{prove}</if>
+            <if test="prove != null and prove != '' ">prove = #{prove}</if>
             <if test="forApplyId != null  and forApplyId != ''  ">for_applyid = #{forApplyId},</if>
+            <if test="status != null and status != ''"> status = #{status}</if>
         </trim>
         where apply_id = #{applyId}
     </update>
@@ -513,6 +515,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <update id="updateUserApplyStateById" parameterType="Long">
     	UPDATE `sys_user_apply` SET apply_state = 2, confirm_state = 0 WHERE apply_id = #{applyId}
+    </update>
+    
+    <update id="updateUserApplyStatusById" parameterType="Long">
+    	UPDATE `sys_user_apply` SET status = 2 WHERE apply_id = #{applyId}
     </update>
     
     <update id="updateConfirmMasageById" parameterType="UserApply">
