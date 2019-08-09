@@ -18,7 +18,7 @@ public interface OaDingdingMapper
      * @param userId 钉钉考勤数据ID
      * @return 钉钉考勤数据信息
      */
-	public OaDingding selectOaDingdingById(String userId);
+	public OaDingding selectOaDingdingById(Long userId);
 	
 	/**
      * 查询钉钉考勤数据列表
@@ -57,7 +57,7 @@ public interface OaDingdingMapper
      * @param userId 钉钉考勤数据ID
      * @return 结果
      */
-	public int deleteOaDingdingById(String userId);
+	public int deleteOaDingdingById(Long userId);
 	
 	/**
      * 批量删除钉钉考勤数据
@@ -65,7 +65,7 @@ public interface OaDingdingMapper
      * @param userIds 需要删除的数据ID
      * @return 结果
      */
-	public int deleteOaDingdingByIds(String[] userIds);
+	public int deleteOaDingdingByIds(Long[] userIds);
 	
 	/**
 	 * 查看钉钉考勤数据

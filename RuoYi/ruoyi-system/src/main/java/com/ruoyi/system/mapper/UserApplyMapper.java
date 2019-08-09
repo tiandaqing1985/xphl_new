@@ -35,6 +35,14 @@ public interface UserApplyMapper
      * @return 申请集合
      */
 	public List<UserApply> selectUserApplyList(UserApply userApply);
+	
+	/**
+	 * 查询申请列表
+	 * @param userApply
+	 * @return
+	 */
+	public List<UserApply> selectApplyList(UserApply userApply);
+	
 	/**
 	 * 查询列表
 	 */

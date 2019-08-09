@@ -18,7 +18,7 @@ public interface IOaDingdingService
      * @param userId 钉钉考勤数据ID
      * @return 钉钉考勤数据信息
      */
-	public OaDingding selectOaDingdingById(String userId);
+	public OaDingding selectOaDingdingById(Long userId);
 	
 	/**
      * 查询钉钉考勤数据列表
@@ -64,4 +64,10 @@ public interface IOaDingdingService
 	 * @return
 	 */
 	public int updateOaDingDingByOutAndApply();
+	
+	/**
+	 * 根据外出报备和请假记录更新钉钉考勤状态
+	 * @return
+	 */
+	public int updateOaDingDingByOutAndApply2();
 }

@@ -93,7 +93,7 @@ public class OaDingdingUserController extends BaseController
 	 * 修改钉钉用户
 	 */
 	@GetMapping("/edit/{userId}")
-	public String edit(@PathVariable("userId") Integer userId, ModelMap mmap)
+	public String edit(@PathVariable("userId") Long userId, ModelMap mmap)
 	{
 		OaDingdingUser oaDingdingUser = oaDingdingUserService.selectOaDingdingUserById(userId);
 		mmap.put("oaDingdingUser", oaDingdingUser);
@@ -119,7 +119,7 @@ public class OaDingdingUserController extends BaseController
 	@Log(title = "钉钉用户", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody
-	public AjaxResult remove(String ids)
+	public AjaxResult remove(Long ids)
 	{		
 		return toAjax(oaDingdingUserService.deleteOaDingdingUserByIds(ids));
 	}

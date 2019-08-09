@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="UserApply" id="UserApplyResult">
         <result property="applyId"    column="apply_id"    />
         <result property="userId"    column="user_id"    />
+        <result property="userName" column="user_name"/>
         <result property="listNum"    column="list_num"    />
         <result property="starttime"    column="starttime"    />
         <result property="endtime"    column="endtime"    />
@@ -115,11 +116,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="confirmState != null  and confirmState != '' "> and a.confirm_state = #{confirmState}</if>
              <if test="details != null  and details != '' "> and a.details = #{details}</if>
              <if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
-             <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>prove
-             <if test="prove != null and prove != '' ">and a.prove = #{prove}</if>
+             <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
+             <if test="prove != null and prove != '' "> and a.prove = #{prove}</if>
              <if test="approverName != null and approverName != '' ">and s.user_name = #{approverName}</if>
              <if test="forApplyId != null and forApplyId != '' ">and a.for_applyid = #{forApplyId}</if>
          </where>
+    </select>
+    
+    <select id="selectApplyList" parameterType="UserApply" resultMap="UserApplyResult">
+    	SELECT us.user_name,a.* 
+    		FROM sys_user_apply a
+			LEFT JOIN sys_user us ON us.user_id = a.user_id 
+		<where>
+		     <if test="applyType != null  and applyType != '' "> a.apply_type = #{applyType}</if>
+			 <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
+			 <if test="status != null and status != ''">AND a.STATUS = #{status}</if>	
+		</where>
     </select>
     
     <select id="selectUserApplyAsList"  parameterType="UserApply" resultMap="UserApplyResult">

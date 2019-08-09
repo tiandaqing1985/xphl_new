@@ -16,12 +16,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectOaDingdingUserList" parameterType="OaDingdingUser" resultMap="OaDingdingUserResult">
         <include refid="selectOaDingdingUserVo"/>
         <where>  
-            <if test="userId != null  and userId != '' "> and user_id = #{userId}</if>
+            <if test="userId != null"> and user_id = #{userId}</if>
              <if test="userName != null  and userName != '' "> and user_name = #{userName}</if>
          </where>
     </select>
     
-    <select id="selectOaDingdingUserById" parameterType="String" resultMap="OaDingdingUserResult">
+    <select id="selectOaDingdingUserById" parameterType="Long" resultMap="OaDingdingUserResult">
         <include refid="selectOaDingdingUserVo"/>
         where user_id = #{userId}
     </select>
@@ -29,11 +29,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertOaDingdingUser" parameterType="OaDingdingUser">
         insert into oa_dingding_user
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="userId != null  and userId != ''  ">user_id,</if>
+			<if test="userId != null">user_id,</if>
 			<if test="userName != null  and userName != ''  ">user_name,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="userId != null  and userId != ''  ">#{userId},</if>
+			<if test="userId != null">#{userId},</if>
 			<if test="userName != null  and userName != ''  ">#{userName},</if>
          </trim>
     </insert>
@@ -58,11 +58,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where user_id = #{userId}
     </update>
 
-	<delete id="deleteOaDingdingUserById" parameterType="String">
+	<delete id="deleteOaDingdingUserById" parameterType="Long">
         delete from oa_dingding_user where user_id = #{userId}
     </delete>
 	
-    <delete id="deleteOaDingdingUserByIds" parameterType="String">
+    <delete id="deleteOaDingdingUserByIds" parameterType="Long">
         delete from oa_dingding_user where user_id in 
         <foreach item="userId" collection="array" open="(" separator="," close=")">
             #{userId}

@@ -17,7 +17,7 @@ public interface OaDingdingUserMapper
      * @param userId 钉钉用户ID
      * @return 钉钉用户信息
      */
-	public OaDingdingUser selectOaDingdingUserById(Integer userId);
+	public OaDingdingUser selectOaDingdingUserById(Long userId);
 	
 	/**
      * 查询钉钉用户列表
@@ -55,7 +55,7 @@ public interface OaDingdingUserMapper
      * @param userId 钉钉用户ID
      * @return 结果
      */
-	public int deleteOaDingdingUserById(Integer userId);
+	public int deleteOaDingdingUserById(Long userId);
 	
 	/**
      * 批量删除钉钉用户
@@ -63,7 +63,7 @@ public interface OaDingdingUserMapper
      * @param userIds 需要删除的数据ID
      * @return 结果
      */
-	public int deleteOaDingdingUserByIds(String[] userIds);
+	public int deleteOaDingdingUserByIds(Long[] userIds);
 	
 	/**
 	 * 删除钉钉用户表中所有数据

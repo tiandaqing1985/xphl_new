@@ -1,7 +1,5 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
 
@@ -16,7 +14,7 @@ public class OaDingding extends BaseEntity
 	private static final long serialVersionUID = 1L;
 	
 	/** 用户id */
-	private String userId;
+	private Long userId;
 	/** 打卡日期 */
 	private Date workDate;
 	/** 考勤类型 OnDuty：上班；OffDuty：下班 */
@@ -39,12 +37,12 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 		this.status = status;
 	}
 
-	public void setUserId(String userId) 
+	public void setUserId(Long userId) 
 	{
 		this.userId = userId;
 	}
 
-	public String getUserId() 
+	public Long getUserId() 
 	{
 		return userId;
 	}
@@ -94,14 +92,11 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 		return leaveType;
 	}
 
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("userId", getUserId())
-            .append("workDate", getWorkDate())
-            .append("checkType", getCheckType())
-            .append("userCheckTime", getUserCheckTime())
-            .append("timeResult", getTimeResult())
-            .append("leaveType", getLeaveType())
-            .toString();
-    }
+	@Override
+	public String toString() {
+		return "OaDingding [userId=" + userId + ", workDate=" + workDate + ", checkType=" + checkType
+				+ ", userCheckTime=" + userCheckTime + ", timeResult=" + timeResult + ", leaveType=" + leaveType
+				+ ", status=" + status + "]";
+	}
+
 }

@@ -108,7 +108,7 @@ public class OaDingdingController extends BaseController
 	 * 修改钉钉考勤数据
 	 */
 	@GetMapping("/edit/{userId}")
-	public String edit(@PathVariable("userId") String userId, ModelMap mmap)
+	public String edit(@PathVariable("userId") Long userId, ModelMap mmap)
 	{
 		OaDingding oaDingding = oaDingdingService.selectOaDingdingById(userId);
 		mmap.put("oaDingding", oaDingding);

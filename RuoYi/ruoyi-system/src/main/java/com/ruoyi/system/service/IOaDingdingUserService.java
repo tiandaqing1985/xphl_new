@@ -17,7 +17,7 @@ public interface IOaDingdingUserService
      * @param userId 钉钉用户ID
      * @return 钉钉用户信息
      */
-	public OaDingdingUser selectOaDingdingUserById(Integer userId);
+	public OaDingdingUser selectOaDingdingUserById(Long userId);
 	
 	/**
      * 查询钉钉用户列表
@@ -49,7 +49,7 @@ public interface IOaDingdingUserService
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-	public int deleteOaDingdingUserByIds(String ids);
+	public int deleteOaDingdingUserByIds(Long ids);
 	
 	
 	/**

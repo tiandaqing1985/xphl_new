@@ -27,7 +27,7 @@ public class OaDingdingUserServiceImpl implements IOaDingdingUserService
      * @return 钉钉用户信息
      */
     @Override
-	public OaDingdingUser selectOaDingdingUserById(Integer userId)
+	public OaDingdingUser selectOaDingdingUserById(Long userId)
 	{
 	    return oaDingdingUserMapper.selectOaDingdingUserById(userId);
 	}
@@ -75,9 +75,11 @@ public class OaDingdingUserServiceImpl implements IOaDingdingUserService
      * @return 结果
      */
 	@Override
-	public int deleteOaDingdingUserByIds(String ids)
+	public int deleteOaDingdingUserByIds(Long ids)
 	{
-		return oaDingdingUserMapper.deleteOaDingdingUserByIds(Convert.toStrArray(ids));
+//		return oaDingdingUserMapper.deleteOaDingdingUserByIds(Convert.toStrArray(ids));
+		return oaDingdingUserMapper.deleteOaDingdingUserByIds(null);
+
 	}
 
 	@Override

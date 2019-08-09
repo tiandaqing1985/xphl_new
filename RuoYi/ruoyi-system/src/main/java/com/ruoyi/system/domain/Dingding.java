@@ -1,8 +1,5 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
@@ -141,13 +138,13 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 		return timeResult;
 	}
 
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("userId", getUserId())
-            .append("workDate", getWorkDate())
-            .append("checkType", getCheckType())
-            .append("userCheckTime", getUserCheckTime())
-            .append("timeResult", getTimeResult())
-            .toString();
-    }
+	@Override
+	public String toString() {
+		return "Dingding [userId=" + userId + ", userName=" + userName + ", workDate=" + workDate + ", checkType="
+				+ checkType + ", userCheckTime=" + userCheckTime + ", timeResult=" + timeResult + ", leaveType="
+				+ leaveType + ", status=" + status + ", dSet=" + dSet + ", startTime=" + startTime + ", endTime="
+				+ endTime + "]";
+	}
+
+ 
 }

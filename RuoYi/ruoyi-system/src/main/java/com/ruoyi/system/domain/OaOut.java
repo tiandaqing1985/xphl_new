@@ -20,6 +20,8 @@ public class OaOut extends BaseEntity
 	private Long outId;
 	/** 用户id */
 	private Long userId;
+	/** 用户名 */
+	private String userName;
 	/** 开始时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date starttime;
@@ -35,6 +37,8 @@ public class OaOut extends BaseEntity
 	private Date createDate;
 	/** 理由 */
 	private String reason;
+	/** 联合钉钉考勤：0初始值 1报备记录已更新在钉钉考勤 */
+	private String status;
 	
 	/** 审批人id */
 	private Long approvalId;
@@ -53,6 +57,18 @@ public class OaOut extends BaseEntity
 	/** 审批意见  */
 	private String remark;
 	
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+	public String getStatus() {
+		return status;
+	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
 	public String getRemark() {
 		return remark;
 	}

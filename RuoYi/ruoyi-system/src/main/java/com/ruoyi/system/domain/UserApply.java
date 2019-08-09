@@ -1,7 +1,5 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
 
@@ -19,6 +17,8 @@ public class UserApply extends BaseEntity
 	private Long applyId;
 	/** 用户ID */
 	private Long userId;
+	/** 用户名*/
+	private String userName;
 	/** 申请单号 */
 	private String listNum;
 	/** 加班开始时间 */
@@ -65,7 +65,17 @@ public class UserApply extends BaseEntity
 	private String approverName;
 	
 	
-    public String getStatus() {
+    public String getUserName() {
+		return userName;
+	}
+
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+
+	public String getStatus() {
 		return status;
 	}
 
@@ -306,22 +316,17 @@ public class UserApply extends BaseEntity
 	}
 
 
+	@Override
 	public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("applyId", getApplyId())
-            .append("userId", getUserId())
-            .append("listNum", getListNum())
-            .append("starttime", getStarttime())
-            .append("endtime", getEndtime())
-            .append("timeapart1", getTimeapart1())
-            .append("timeapart2", getTimeapart2())
-            .append("timelength", getTimelength())
-            .append("applyType", getApplyType())
-            .append("applyState", getApplyState())
-            .append("confirmState", getConfirmState())
-            .append("details", getDetails())
-            .append("leaveType", getLeaveType())
-            .append("applyTime", getApplyTime())
-            .toString();
-    }
+		return "UserApply [applyId=" + applyId + ", userId=" + userId + ", userName=" + userName + ", listNum="
+				+ listNum + ", starttime=" + starttime + ", endtime=" + endtime + ", timeapart1=" + timeapart1
+				+ ", timeapart2=" + timeapart2 + ", timeapart3=" + timeapart3 + ", timelength=" + timelength
+				+ ", applyType=" + applyType + ", applyState=" + applyState + ", confirmState=" + confirmState
+				+ ", details=" + details + ", leaveType=" + leaveType + ", approvalS=" + approvalS + ", applyTime="
+				+ applyTime + ", forApplyId=" + forApplyId + ", prove=" + prove + ", timelengthPlus=" + timelengthPlus
+				+ ", status=" + status + ", sysUser=" + sysUser + ", sysDept=" + sysDept + ", userApproval="
+				+ userApproval + ", approverName=" + approverName + "]";
+	}
+
+
 }
