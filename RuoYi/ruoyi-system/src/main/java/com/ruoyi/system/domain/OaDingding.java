@@ -24,8 +24,6 @@ public class OaDingding extends BaseEntity
 	/** 时间结果
 Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absenteeism：旷工迟到；NotSigned：未打卡 */
 	private String timeResult;
-	/** 请假类型 */
-	private String leaveType;
 	/** 是否更新在钉钉考勤表中：0 未更新  1已更新 */
 	private String status;
 	
@@ -82,21 +80,12 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	{
 		return timeResult;
 	}
-	public void setLeaveType(String leaveType) 
-	{
-		this.leaveType = leaveType;
-	}
-
-	public String getLeaveType() 
-	{
-		return leaveType;
-	}
 
 	@Override
 	public String toString() {
 		return "OaDingding [userId=" + userId + ", workDate=" + workDate + ", checkType=" + checkType
-				+ ", userCheckTime=" + userCheckTime + ", timeResult=" + timeResult + ", leaveType=" + leaveType
-				+ ", status=" + status + "]";
+				+ ", userCheckTime=" + userCheckTime + ", timeResult=" + timeResult + ", status=" + status + "]";
 	}
+
 
 }

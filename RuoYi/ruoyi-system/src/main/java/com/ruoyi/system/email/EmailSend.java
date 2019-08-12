@@ -25,7 +25,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 public class EmailSend {
 		
 		 private static String Sender = "wugaofang@perfect-cn.cn";
-		 private static String password = "123456";
+		 private static String password = "18216405536wgf";
 		 private static String host = "smtp.mxhichina.com";
 		 
 		 private static JavaMailSenderImpl createMailSender() {
@@ -120,7 +120,7 @@ public class EmailSend {
 				         InternetAddress[] address=null;
 				         Pattern pattern = Pattern.compile("<([^<>]*)>");
 				         try {
-				             List list = new ArrayList();//不能使用string类型的类型，这样只能发送一个收件人
+				             List<InternetAddress> list = new ArrayList<InternetAddress>();//不能使用string类型的类型，这样只能发送一个收件人
 				             String[] median=str.split(",");//对输入的多个邮件进行逗号分割
 				             for(int i=0;i<median.length;i++){
 				            	 if(median[i].contains("<")){

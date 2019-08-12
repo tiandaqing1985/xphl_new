@@ -94,6 +94,7 @@ public class DingDingTask{
 
 	public void dingDingTask() throws Exception
 	{		
+
 		DingTalkClient client = new DefaultDingTalkClient("");
 		
 		String accessToken = getAccess_token(client);		
@@ -124,7 +125,11 @@ public class DingDingTask{
 			List<Userlist> userList = getUser(client, accessToken,deptId);
 			for(Userlist user : userList){
 				OaDingdingUser dingUser = new OaDingdingUser();
-				dingUser.setUserId(user.getUserid());
+				if(!"manager8676".equals(user.getUserid())){
+					dingUser.setUserId(Long.parseLong(user.getUserid()));
+				}else{
+					dingUser.setUserId(8676L);
+				}
 				dingUser.setUserName(user.getName());			
 				dingUserList.add(dingUser);
 			}
@@ -136,6 +141,7 @@ public class DingDingTask{
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = sdf.format(date);
+        
         String yesterday = getPreDayOrAfterDay(currentDate, -1);//-1是前一天， +1是后一天
         String workDateFrom = yesterday + " " + "00:00:00";
         String workDateTo = yesterday+ " " + "23:59:59";//当前时间
@@ -144,18 +150,19 @@ public class DingDingTask{
 //        String toDate = getPreDayOrAfterDay(currentDate, -1);
 //        String workDateFrom = fromDate + " " + "00:00:00";
 //        String workDateTo = toDate+ " " + "23:59:59";//当前时间
-       
+//       
 
 	    
         List<OaDingding> users = new ArrayList<>();
         List<OaDingding> dataList = getAttendances(allUserIdList,users, workDateFrom,  workDateTo, accessToken);
         dingdingService.insertForeach(dataList);
 //        System.out.println("获取从昨天0点到今天0点时间的打卡记录"+ Arrays.asList(users));
+
         
         //根据请假、外出报备修改钉钉打卡考勤结果
-//        dingdingService.updateOaDingDingByOutAndApply();
-
-	}
+        dingdingService.updateOaDingDingByOutAndApply();
+        
+        }
 	
 	public static List<OaDingding> getAttendances(List<String> list, List<OaDingding> users, String workDateFrom, String workDateTo,String access_Token) {
       int listSize=list.size();
@@ -183,7 +190,11 @@ public class DingDingTask{
                   JSONObject record = recordFirst.getJSONObject(j);
                   OaDingding dingding = new OaDingding();
                   dingding.setCheckType(record.getString("checkType"));
-                  dingding.setUserId(record.getString("userId"));
+                  if(!"manager8676".equals(record.getString("userId"))){
+                	  dingding.setUserId(Long.parseLong(record.getString("userId")));
+	  			  }else{
+	  					dingding.setUserId(8676L);
+	  			  }
                   
                   Date date = new Date();
                   date.setTime(record.getLong("workDate"));
@@ -204,7 +215,7 @@ public class DingDingTask{
       return users;
 	}
 	 public static String doPost(String requestUrl,JSONObject json){
-	        @SuppressWarnings("resource")
+	        @SuppressWarnings({ "resource", "deprecation" })
 			HttpClient client = new DefaultHttpClient();
 	        HttpPost post = new HttpPost(requestUrl);
 	        post.setHeader("Content-Type", "application/json");

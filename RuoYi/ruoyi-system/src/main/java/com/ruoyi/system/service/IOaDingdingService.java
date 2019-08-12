@@ -64,10 +64,4 @@ public interface IOaDingdingService
 	 * @return
 	 */
 	public int updateOaDingDingByOutAndApply();
-	
-	/**
-	 * 根据外出报备和请假记录更新钉钉考勤状态
-	 * @return
-	 */
-	public int updateOaDingDingByOutAndApply2();
 }

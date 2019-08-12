@@ -32,8 +32,6 @@ public class Dingding extends BaseEntity
 	/** 时间结果
 Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absenteeism：旷工迟到；NotSigned：未打卡 */
 	private String timeResult;
-	/** 请假类型 */
-	private String leaveType;
 	/** 是否更新在钉钉考勤表中：0 未更新  1已更新 */
 	private String status;
     /**
@@ -52,14 +50,6 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 
 	public void setStatus(String status) {
 		this.status = status;
-	}
-
-	public String getLeaveType() {
-		return leaveType;
-	}
-
-	public void setLeaveType(String leaveType) {
-		this.leaveType = leaveType;
 	}
 
 	public Date getStartTime() {
@@ -141,10 +131,8 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	@Override
 	public String toString() {
 		return "Dingding [userId=" + userId + ", userName=" + userName + ", workDate=" + workDate + ", checkType="
-				+ checkType + ", userCheckTime=" + userCheckTime + ", timeResult=" + timeResult + ", leaveType="
-				+ leaveType + ", status=" + status + ", dSet=" + dSet + ", startTime=" + startTime + ", endTime="
-				+ endTime + "]";
+				+ checkType + ", userCheckTime=" + userCheckTime + ", timeResult=" + timeResult + ", status=" + status
+				+ ", dSet=" + dSet + ", startTime=" + startTime + ", endTime=" + endTime + "]";
 	}
 
- 
 }

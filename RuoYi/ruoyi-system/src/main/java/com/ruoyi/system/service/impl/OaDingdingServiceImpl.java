@@ -181,6 +181,19 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		return oaDingdingMapper.insertForeach(dingList);
 	}
 
+	/**
+	 * 计算请假后的打卡时间
+	 * @param 请假时间
+	 * @return 标准打卡时间
+	 */
+	private Date getWorkDate(Date d,int n){
+		Date result = new Date();
+		long t = d.getTime();
+		t+=n*60*60*1000;
+		result.setTime(t);
+		return result; 
+	}
+
 	@Override
 	public int updateOaDingDingByOutAndApply() {
 		//（一）根据请假情况更新钉钉考勤表
@@ -201,247 +214,16 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 			if(dingUserList.size() == 0) continue;
 			
 			Date startTime = a.getStarttime();
-			Date endTime = a.getEndtime();
-			String leaveType = a.getLeaveType();
-			Long userId = a.getUserId();
-			
-			Dingding di = new Dingding();
-			di.setUserId(dingUserList.get(0).getUserId());
-			di.setStartTime(startTime);
-			di.setEndTime(endTime);
-			List<Dingding> diList = oaDingdingMapper.selectOaDingdingListByCondition(di);//查询实际打卡时间
-			if(diList.size() == 0) continue;//请假时间区间在oa_dingding表中没有打卡记录
-			
-			//非哺乳假 	上午(10:00——15:00) 下午(15:00——19:00)
-			if(a.getTimelength()%1 == 0 && !leaveType.equals("10")){//1）请n天假(判断是否为整数)
-				
-				if(a.getTimeapart1().equals("1") && a.getTimeapart2().equals("2")){//请全天假
-					Dingding ding2 = new Dingding();
-					ding2.setUserId(userId);
-					ding2.setTimeResult("apply");//apply 请假
-					ding2.setLeaveType(leaveType);//请假类型
-					ding2.setStartTime(startTime);
-					ding2.setEndTime(endTime);
-					ding2.setStatus("1");
-					oaDingdingMapper.updateOaDingDingByTime(ding2);
-					
-				}else{//请当天下午(2)、第n天上午的假 (1) if(a.getTimeapart1().equals("2") && a.getTimeapart1().equals("1"))	
-					//修改下班考勤
-					OaDingding ding = new OaDingding();
-					ding.setUserId(dingUserList.get(0).getUserId());
-					ding.setCheckType("OffDuty");
-					ding.setWorkDate(startTime);
-					List<OaDingding> dingList = oaDingdingMapper.selectOaDingdingList(ding);//查询实际打卡时间
-					if(dingList.size() == 0) continue;
-					
-					Date standardDate = getWorkDate(startTime,15);//打卡标准值：15点前
-					if(dingList.get(0).getUserCheckTime().compareTo(standardDate) > 0){//打卡时间标准值内
-						Dingding ding2 = new Dingding();
-						ding2.setUserId(dingUserList.get(0).getUserId());
-						ding2.setTimeResult("apply");//apply 请假
-						ding2.setLeaveType(leaveType);//请假类型
-						ding2.setStartTime(startTime);
-						ding2.setEndTime(endTime);
-						ding2.setStatus("1");
-						oaDingdingMapper.updateOaDingDingByTime(ding2);
-					}
-					
-					//修改上班考勤
-					OaDingding ding2 = new OaDingding();
-					ding2.setUserId(dingUserList.get(0).getUserId());
-					ding2.setCheckType("OnDuty");
-					ding2.setWorkDate(endTime);
-					List<OaDingding> dingList2 = oaDingdingMapper.selectOaDingdingList(ding2);//查询实际打卡时间
-					if(dingList2.size() == 0) continue;
-					
-					Date standardDate2 = getWorkDate(endTime,15);//打卡标准值：15点前
-					if(dingList2.get(0).getUserCheckTime().compareTo(standardDate) < 0){//打卡时间在标准值内
-						Dingding ding3 = new Dingding();
-						ding3.setUserId(dingUserList.get(0).getUserId());
-						ding3.setTimeResult("apply");//apply 请假
-						ding3.setLeaveType(leaveType);//请假类型
-						ding3.setStartTime(startTime);
-						ding3.setEndTime(standardDate2);
-						ding3.setStatus("1");
-						oaDingdingMapper.updateOaDingDingByTime(ding3);
-					}
-				} 
-				
-			}else if(a.getTimelength() < 1){//2）请半天假
-				if(a.getTimeapart1().equals("1")){//情况一：上午请假时段	
-					OaDingding ding = new OaDingding();
-					ding.setUserId(dingUserList.get(0).getUserId());
-					ding.setCheckType("OnDuty");
-					ding.setWorkDate(startTime);
-					List<OaDingding> dingList = oaDingdingMapper.selectOaDingdingList(ding);//查询实际打卡时间
-					if(dingList.size() == 0) continue;
-					
-					Date standardDate = getWorkDate(a.getStarttime(),15);//打卡标准值：15点前
-					if(dingList.get(0).getUserCheckTime().compareTo(standardDate) < 0){//打卡时间在标准值内
-						Dingding ding2 = new Dingding();
-						ding2.setUserId(dingUserList.get(0).getUserId());
-						ding2.setTimeResult("apply");//apply 请假
-						ding2.setLeaveType(leaveType);//请假类型
-						ding2.setStartTime(startTime);
-						ding2.setEndTime(standardDate);
-						ding2.setStatus("1");
-						ding2.setCheckType("OnDuty");
-						oaDingdingMapper.updateOaDingDingByTime(ding2);
-					}
-				}else{//情况二：下午请假
-					//时段（1上午，2下午）		
-					OaDingding ding = new OaDingding();
-					ding.setUserId(dingUserList.get(0).getUserId());
-					ding.setCheckType("OffDuty");
-					ding.setWorkDate(startTime);
-					List<OaDingding> dingList = oaDingdingMapper.selectOaDingdingList(ding);//查询实际打卡时间
-					if(dingList.size() == 0) continue;
-					
-					Date standardDate = getWorkDate(startTime,15);//打卡标准值：15点前
-					if(dingList.get(0).getUserCheckTime().compareTo(standardDate) > 0){//打卡时间标准值内
-						Dingding ding2 = new Dingding();
-						ding2.setUserId(dingUserList.get(0).getUserId());
-						ding2.setTimeResult("apply");//apply 请假
-						ding2.setLeaveType(leaveType);//请假类型
-						ding2.setStartTime(startTime);
-						ding2.setEndTime(endTime);
-						ding2.setStatus("1");
-						oaDingdingMapper.updateOaDingDingByTime(ding2);
-					}
-				}
-			}else{//3）请n天+半天假
-//				int n = (int) Math.floor(a.getTimelength());//取请假时长的整数部分
-				//11 22
-				Date startDate = getWorkDate(startTime,15);//打卡标准值：15点前
-				Date endDate = getWorkDate(endTime,15);//打卡标准值：15点前					
-				Dingding ding2 = new Dingding();
-				ding2.setUserId(dingUserList.get(0).getUserId());
-				ding2.setTimeResult("apply");//apply 请假
-				ding2.setLeaveType(leaveType);//请假类型
-				ding2.setStartTime(startDate);
-				ding2.setEndTime(endDate);
-				ding2.setStatus("1");
-				oaDingdingMapper.updateOaDingDingByTime(ding2);
-			}
-			
-			//哺乳假 早上(10:00——11:00)	 下午(18:00——19:00)
-			if(leaveType.equals("10")){
-				if(a.getTimeapart3().equals("1")){//上午
-					Dingding ding = new Dingding();
-					ding.setUserId(dingUserList.get(0).getUserId());
-					ding.setCheckType("OnDuty");
-					ding.setStartTime(startTime);
-					ding.setEndTime(endTime);
-					List<Dingding> dingList = oaDingdingMapper.selectOaDingdingListByCondition(ding);//查询实际打卡时间
-					
-					if(dingList != null){
-						Date standardDate = getWorkDate(startTime,11);//打卡标准值：11点前
-						for(Dingding d : dingList){
-							if(d.getUserCheckTime().compareTo(standardDate) < 0){//打卡时间在标准值内
-								Dingding ding2 = new Dingding();
-								ding2.setUserId(dingUserList.get(0).getUserId());
-								ding2.setCheckType("OnDuty");
-								ding2.setTimeResult("apply");//apply 请假
-								ding2.setLeaveType(leaveType);//请假类型
-								ding2.setStartTime(startTime);
-								ding2.setEndTime(endTime);
-								ding2.setStatus("1");
-								oaDingdingMapper.updateOaDingDingByTime(ding2);
-							}
-						}
-					}
-				}else{
-					//下午
-					Dingding ding = new Dingding();
-					ding.setUserId(dingUserList.get(0).getUserId());
-					ding.setCheckType("OffDuty");
-					ding.setStartTime(startTime);
-					ding.setEndTime(endTime);
-					List<Dingding> dingList = oaDingdingMapper.selectOaDingdingListByCondition(ding);//查询实际打卡时间
-					if(dingList != null){
-						Date standardDate = getWorkDate(startTime,11);//打卡标准值：11点前
-						for(Dingding d : dingList){
-							if(d.getUserCheckTime().compareTo(standardDate) > 0){//打卡时间在标准值内
-								Dingding ding2 = new Dingding();
-								ding2.setUserId(dingUserList.get(0).getUserId());
-								ding2.setCheckType("OffDuty");
-								ding2.setTimeResult("apply");//apply 请假
-								ding2.setLeaveType(leaveType);//请假类型
-								ding2.setStartTime(startTime);
-								ding2.setEndTime(endTime);
-								ding2.setStatus("1");
-								oaDingdingMapper.updateOaDingDingByTime(ding2);
-							}
-						}
-					}
-				}
-			}
-			applyMapper.updateUserApplyStatusById(a.getApplyId());//更新在钉钉考勤表中：0 未更新  1已更新
-		}
-		
-		//（一）根据外出报备情况更新钉钉考勤表
-		OaOut out = new OaOut();
-		out.setStatus("0");//是否更新在钉钉考勤表中：0 未更新  1已更新
-		out.setState("3");//申请成功
-		List<OaOut> outList = outMapper.selectOaOutList(out);//查询申请成功且未更新在钉钉考勤记录表中的外出报备数据
-		
-		if(outList != null){
-			for(OaOut o : outList){
-				OaDingdingUser dingUser = new OaDingdingUser();
-				dingUser.setUserName(o.getUserName());			
-				List<OaDingdingUser> dingUserList = oaDingdingUserMapper.selectOaDingdingUserList(dingUser);//根据userName查找钉钉考勤用户表中的userId
-				if(dingUserList.size() == 0) continue;
-
-//				oaDingdingMapper.selectOaDingdingListByCondition(ding);//查询
-				
-				Dingding ding = new Dingding();
-				ding.setUserId(dingUserList.get(0).getUserId());
-				ding.setTimeResult("out");//apply 请假
-				ding.setLeaveType("11");//请假类型：外出报备
-				ding.setStartTime(o.getStarttime());
-				ding.setEndTime(o.getEndtime());
-				ding.setStatus("1");
-				oaDingdingMapper.updateOaDingDingByTime(ding);
-			}
-		}
-		
-		return 1;
-	}
-	
-	/**
-	 * 计算请假后的打卡时间
-	 * @param 请假时间
-	 * @return 标准打卡时间
-	 */
-	private Date getWorkDate(Date d,int n){
-		long t = d.getTime();
-		t+=n*60*60*1000;
-		d.setTime(t);
-		return d ; 
-	}
-
-	@Override
-	public int updateOaDingDingByOutAndApply2() {
-		//（一）根据请假情况更新钉钉考勤表
-		UserApply apply = new UserApply();
-		apply.setApplyState("3");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
-		apply.setApplyType("1");//申请类型（1请假，2加班，销假）
-		apply.setStatus("0");//是否更新在钉钉考勤表中：0 未更新  1已更新
-		List<UserApply> applyList = applyMapper.selectApplyList(apply);//申请成功的请假记录
-		
-		if(applyList == null){
-			return 0;//没有申请成功的请假记录需要更新在钉钉考勤表中
-		}
-		
-		for(UserApply a : applyList){
-			OaDingdingUser dingUser = new OaDingdingUser();
-			dingUser.setUserName(a.getUserName());			
-			List<OaDingdingUser> dingUserList = oaDingdingUserMapper.selectOaDingdingUserList(dingUser);//根据userName查找钉钉考勤用户表中的userId
-			if(dingUserList.size() == 0) continue;
-			
-			Date startTime = a.getStarttime();
-			Date endTime = a.getEndtime();
-
+			Date endTime = getWorkDate(a.getEndtime(), 24);
+			double timeLength = a.getTimelength();
+			String timepart1 = a.getTimeapart1();
+			String timepart2 = a.getTimeapart2();
+			String timepart3 = a.getTimeapart3();
+			System.out.println();
+			System.out.println("startTime: "+startTime+" endTime: "+endTime);
+			System.out.println(" timeLength: "+timeLength+" timepart1: "+timepart1+" timepart2: "+timepart2+" timepart3: "+timepart3);
+			System.out.println(" userId: "+dingUserList.get(0).getUserId()+" userName: "+dingUserList.get(0).getUserName()+" applyId: "+a.getApplyId());
+			System.out.println();
 			
 			Dingding di = new Dingding();
 			di.setUserId(dingUserList.get(0).getUserId());
@@ -458,24 +240,51 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 				if(a.getTimelength()%1 == 0){//整数假期天数
 					Dingding ding = new Dingding();
 					ding.setUserId(userId);
-					ding.setTimeResult("apply");//apply 请假
-					ding.setLeaveType(leaveType);//请假类型
+					ding.setTimeResult(leaveType);
 					ding.setStartTime(startTime);
 					ding.setEndTime(endTime);
 					ding.setStatus("1");
 					oaDingdingMapper.updateOaDingDingByTime(ding);
 				}else{
-					Date startDate15 = getWorkDate(startTime,15);//打卡标准值：15点前
-					Date endDate15 = getWorkDate(endTime,15);
-					
-					Dingding ding = new Dingding();
-					ding.setUserId(userId);
-					ding.setTimeResult("apply");//apply 请假
-					ding.setLeaveType(leaveType);//请假类型
-					ding.setStartTime(startDate15);
-					ding.setEndTime(endDate15);
-					ding.setStatus("1");
-					oaDingdingMapper.updateOaDingDingByTime(ding);
+					if(timepart1.equals("2") && timepart2.equals("1")){//starttime 15:00 ---endtime 15:00
+						Date startDate = getWorkDate(startTime,15);//打卡标准值：15点前
+						Date endDate = getWorkDate(endTime,15);
+						System.out.println("\n 21"+startDate+"  "+endDate+"\n");
+						
+						Dingding ding = new Dingding();
+						ding.setUserId(userId);
+						ding.setTimeResult(leaveType);
+						ding.setStartTime(startDate);
+						ding.setEndTime(endDate);
+						ding.setStatus("1");
+						oaDingdingMapper.updateOaDingDingByTime(ding);	
+					}else if(timepart1.equals("1") && timepart2.equals("1")){//上午 starttime - starttime 15:00
+						Date startDate = startTime;//打卡标准值：15点前
+						Date endDate = getWorkDate(startTime,15);
+						System.out.println("\n 11"+startDate+"  "+endDate+"\n");
+						
+						Dingding ding = new Dingding();
+						ding.setUserId(userId);
+						ding.setTimeResult(leaveType);
+						ding.setStartTime(startDate);
+						ding.setEndTime(endDate);
+						ding.setStatus("1");
+						oaDingdingMapper.updateOaDingDingByTime(ding);	
+					}else if(timepart1.equals("2") && timepart2.equals("2")){//22 下午，第二天下午， starttime 15:00 --- endtime 
+						Date startDate = getWorkDate(startTime,15);//打卡标准值：15点前
+						Date endDate = endTime;
+						if(timeLength < 1)getWorkDate(endTime,15);
+						System.out.println("\n 22"+startDate+"  "+endDate+"\n");
+						
+						Dingding ding = new Dingding();
+						ding.setUserId(userId);
+						ding.setTimeResult(leaveType);
+						ding.setStartTime(startDate);
+						ding.setEndTime(endDate);
+						ding.setStatus("1");
+						if(timeLength < 1) ding.setCheckType("OffDuty");
+						oaDingdingMapper.updateOaDingDingByTime(ding);	
+					}
 				}
 			}
 			
@@ -495,20 +304,18 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 								Dingding ding2 = new Dingding();
 								ding2.setUserId(dingUserList.get(0).getUserId());
 								ding2.setCheckType("OnDuty");
-								ding2.setTimeResult("apply");//apply 请假
-								ding2.setLeaveType(leaveType);//请假类型							
+								ding2.setTimeResult(leaveType);					
 								ding2.setStatus("1");
 								oaDingdingMapper.updateOaDingDingByTime(ding2);
 							}
 						}
 					}else{//下午请假
-						Date endDate = getWorkDate(endTime,18);//打卡标准值：11点前
+						Date endDate = getWorkDate(endTime,18);
 						for(Dingding d : dingList){
 							if(d.getUserCheckTime().compareTo(endDate) > 0){//打卡时间在标准值内
 								Dingding ding1 = new Dingding();
 								ding1.setUserId(dingUserList.get(0).getUserId());
-								ding1.setTimeResult("apply");//apply 请假
-								ding1.setLeaveType(leaveType);//请假类型							
+								ding1.setTimeResult(leaveType);						
 								ding1.setStatus("1");
 								ding1.setCheckType("OffDuty");
 								oaDingdingMapper.updateOaDingDingByTime(ding1);
@@ -518,7 +325,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 					
 				}			
 			}
-			applyMapper.updateUserApplyStatusById(a.getApplyId());//更新在钉钉考勤表中：0 未更新  1已更新
+//			applyMapper.updateUserApplyStatusById(a.getApplyId());//0 未更新  1已更新
 		}
 		
 		//（一）根据外出报备情况更新钉钉考勤表
@@ -526,27 +333,33 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		out.setStatus("0");//是否更新在钉钉考勤表中：0 未更新  1已更新
 		out.setState("3");//申请成功
 		List<OaOut> outList = outMapper.selectOaOutList(out);//查询申请成功且未更新在钉钉考勤记录表中的外出报备数据
+		if(outList.size() == 0) return 1;
 		
-		if(outList != null){
-			for(OaOut o : outList){
-				OaDingdingUser dingUser = new OaDingdingUser();
-				dingUser.setUserName(o.getUserName());			
-				List<OaDingdingUser> dingUserList = oaDingdingUserMapper.selectOaDingdingUserList(dingUser);//根据userName查找钉钉考勤用户表中的userId
-				if(dingUserList.size() == 0) continue;
+		for(OaOut o : outList){
+			OaDingdingUser dingUser = new OaDingdingUser();
+			dingUser.setUserName(o.getUserName());			
+			List<OaDingdingUser> dingUserList = oaDingdingUserMapper.selectOaDingdingUserList(dingUser);//根据userName查找钉钉考勤用户表中的userId
+			if(dingUserList.size() == 0) continue;
 
-//				oaDingdingMapper.selectOaDingdingListByCondition(ding);//查询
-				
-				Dingding ding = new Dingding();
-				ding.setUserId(dingUserList.get(0).getUserId());
-				ding.setTimeResult("out");//apply 请假
-				ding.setLeaveType("11");//请假类型：外出报备
-				ding.setStartTime(o.getStarttime());
-				ding.setEndTime(o.getEndtime());
-				ding.setStatus("1");
-				oaDingdingMapper.updateOaDingDingByTime(ding);
+			Dingding ding = new Dingding();
+			ding.setUserId(dingUserList.get(0).getUserId());
+			ding.setStartTime(o.getStarttime());
+			if(o.getStarttime().equals(o.getEndtime())){
+				ding.setEndTime(getWorkDate(o.getEndtime(), 24));
 			}
+			ding.setEndTime(o.getEndtime());
+			List<Dingding> dingList = oaDingdingMapper.selectOaDingdingListByCondition(ding);//查询
+			if(dingList.size() == 0) continue;
+			
+			ding.setTimeResult("out");
+			ding.setStatus("1");
+			oaDingdingMapper.updateOaDingDingByTime(ding);
+			
+//			OaOut out2 = new OaOut();
+//			out2.setOutId(o.getOutId());
+//			out2.setStatus("1");
+//			outMapper.updateOaOut(out2);
 		}
-		
 		return 1;
 	}
 
