@@ -236,7 +236,8 @@ public class OaOutController extends BaseController
 	@PostMapping("/edit")
 	@ResponseBody
 	public AjaxResult editSave(OaOut out)
-	{		
+	{	
+		out.setUserId(ShiroUtils.getUserId());
 		return toAjax(oaOutService.updateOaOut(out));
 	}
 	

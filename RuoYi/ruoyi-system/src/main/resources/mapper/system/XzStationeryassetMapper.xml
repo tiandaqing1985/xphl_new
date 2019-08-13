@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzStationeryassetMapper">
+    
+    <resultMap type="XzStationeryasset" id="XzStationeryassetResult">
+        <result property="id"    column="id"    />
+        <result property="stationeryAssetName"    column="stationery_asset_name"    />
+        <result property="stationeryAssetId"    column="stationery_asset_id"    />
+        <result property="assetTypeName"    column="asset_type_name"    />
+        <result property="rukuCount"    column="ruku_count"    />
+        <result property="assetTypeId"    column="asset_type_id"    />
+        <result property="fenpeiCount"    column="fenpei_count"    />
+        <result property="brandType"    column="brand_type"    />
+        <result property="kucunCount"    column="kucun_count"    />
+        <result property="shengyuCount"    column="shengyu_count"    />
+        <result property="area"    column="area"    />
+        <result property="brand"    column="brand"    />
+        <result property="model"    column="model"    />
+        <result property="baocunType"    column="baocun_type"    />
+        <result property="assetId"    column="asset_id"    />
+        <result property="time"    column="time"    />
+        <result property="chushiCount"    column="chushi_count"    />
+        <result property="categoryId"    column="category_id"    />
+        <result property="guihaiCount"    column="guihai_count"    />
+        <result property="unit"    column="unit"    />
+    </resultMap>
+	
+	<sql id="selectXzStationeryassetVo">
+        select id, stationery_asset_name, stationery_asset_id, asset_type_name, ruku_count, asset_type_id, fenpei_count, brand_type, kucun_count, shengyu_count, area, brand, model, baocun_type, asset_id, time, chushi_count, category_id, guihai_count, unit from xz_stationeryAsset
+    </sql>
+	
+    <select id="selectXzStationeryassetList" parameterType="XzStationeryasset" resultMap="XzStationeryassetResult">
+        <include refid="selectXzStationeryassetVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="stationeryAssetName != null  and stationeryAssetName != '' "> and stationery_asset_name = #{stationeryAssetName}</if>
+             <if test="stationeryAssetId != null "> and stationery_asset_id = #{stationeryAssetId}</if>
+             <if test="assetTypeName != null  and assetTypeName != '' "> and asset_type_name = #{assetTypeName}</if>
+             <if test="rukuCount != null "> and ruku_count = #{rukuCount}</if>
+             <if test="assetTypeId != null "> and asset_type_id = #{assetTypeId}</if>
+             <if test="fenpeiCount != null "> and fenpei_count = #{fenpeiCount}</if>
+             <if test="brandType != null  and brandType != '' "> and brand_type = #{brandType}</if>
+             <if test="kucunCount != null "> and kucun_count = #{kucunCount}</if>
+             <if test="shengyuCount != null "> and shengyu_count = #{shengyuCount}</if>
+             <if test="area != null "> and area = #{area}</if>
+             <if test="brand != null  and brand != '' "> and brand = #{brand}</if>
+             <if test="model != null  and model != '' "> and model = #{model}</if>
+             <if test="baocunType != null  and baocunType != '' "> and baocun_type = #{baocunType}</if>
+             <if test="assetId != null "> and asset_id = #{assetId}</if>
+             <if test="time != null  and time != '' "> and time = #{time}</if>
+             <if test="chushiCount != null "> and chushi_count = #{chushiCount}</if>
+             <if test="categoryId != null "> and category_id = #{categoryId}</if>
+             <if test="guihaiCount != null "> and guihai_count = #{guihaiCount}</if>
+             <if test="unit != null "> and unit = #{unit}</if>
+         </where>
+    </select>
+    
+    <select id="selectXzStationeryassetById" parameterType="Long" resultMap="XzStationeryassetResult">
+        <include refid="selectXzStationeryassetVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertXzStationeryasset" parameterType="XzStationeryasset" useGeneratedKeys="true" keyProperty="id">
+        insert into xz_stationeryAsset
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="stationeryAssetName != null  and stationeryAssetName != ''  ">stationery_asset_name,</if>
+			<if test="stationeryAssetId != null  ">stationery_asset_id,</if>
+			<if test="assetTypeName != null  and assetTypeName != ''  ">asset_type_name,</if>
+			<if test="rukuCount != null  ">ruku_count,</if>
+			<if test="assetTypeId != null  ">asset_type_id,</if>
+			<if test="fenpeiCount != null  ">fenpei_count,</if>
+			<if test="brandType != null  and brandType != ''  ">brand_type,</if>
+			<if test="kucunCount != null  ">kucun_count,</if>
+			<if test="shengyuCount != null  ">shengyu_count,</if>
+			<if test="area != null  ">area,</if>
+			<if test="brand != null  and brand != ''  ">brand,</if>
+			<if test="model != null  and model != ''  ">model,</if>
+			<if test="baocunType != null  and baocunType != ''  ">baocun_type,</if>
+			<if test="assetId != null  ">asset_id,</if>
+			<if test="time != null  and time != ''  ">time,</if>
+			<if test="chushiCount != null  ">chushi_count,</if>
+			<if test="categoryId != null  ">category_id,</if>
+			<if test="guihaiCount != null  ">guihai_count,</if>
+			<if test="unit != null  ">unit,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="stationeryAssetName != null  and stationeryAssetName != ''  ">#{stationeryAssetName},</if>
+			<if test="stationeryAssetId != null  ">#{stationeryAssetId},</if>
+			<if test="assetTypeName != null  and assetTypeName != ''  ">#{assetTypeName},</if>
+			<if test="rukuCount != null  ">#{rukuCount},</if>
+			<if test="assetTypeId != null  ">#{assetTypeId},</if>
+			<if test="fenpeiCount != null  ">#{fenpeiCount},</if>
+			<if test="brandType != null  and brandType != ''  ">#{brandType},</if>
+			<if test="kucunCount != null  ">#{kucunCount},</if>
+			<if test="shengyuCount != null  ">#{shengyuCount},</if>
+			<if test="area != null  ">#{area},</if>
+			<if test="brand != null  and brand != ''  ">#{brand},</if>
+			<if test="model != null  and model != ''  ">#{model},</if>
+			<if test="baocunType != null  and baocunType != ''  ">#{baocunType},</if>
+			<if test="assetId != null  ">#{assetId},</if>
+			<if test="time != null  and time != ''  ">#{time},</if>
+			<if test="chushiCount != null  ">#{chushiCount},</if>
+			<if test="categoryId != null  ">#{categoryId},</if>
+			<if test="guihaiCount != null  ">#{guihaiCount},</if>
+			<if test="unit != null  ">#{unit},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzStationeryasset" parameterType="XzStationeryasset">
+        update xz_stationeryAsset
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stationeryAssetName != null  and stationeryAssetName != ''  ">stationery_asset_name = #{stationeryAssetName},</if>
+            <if test="stationeryAssetId != null  ">stationery_asset_id = #{stationeryAssetId},</if>
+            <if test="assetTypeName != null  and assetTypeName != ''  ">asset_type_name = #{assetTypeName},</if>
+            <if test="rukuCount != null  ">ruku_count = #{rukuCount},</if>
+            <if test="assetTypeId != null  ">asset_type_id = #{assetTypeId},</if>
+            <if test="fenpeiCount != null  ">fenpei_count = #{fenpeiCount},</if>
+            <if test="brandType != null  and brandType != ''  ">brand_type = #{brandType},</if>
+            <if test="kucunCount != null  ">kucun_count = #{kucunCount},</if>
+            <if test="shengyuCount != null  ">shengyu_count = #{shengyuCount},</if>
+            <if test="area != null  ">area = #{area},</if>
+            <if test="brand != null  and brand != ''  ">brand = #{brand},</if>
+            <if test="model != null  and model != ''  ">model = #{model},</if>
+            <if test="baocunType != null  and baocunType != ''  ">baocun_type = #{baocunType},</if>
+            <if test="assetId != null  ">asset_id = #{assetId},</if>
+            <if test="time != null  and time != ''  ">time = #{time},</if>
+            <if test="chushiCount != null  ">chushi_count = #{chushiCount},</if>
+            <if test="categoryId != null  ">category_id = #{categoryId},</if>
+            <if test="guihaiCount != null  ">guihai_count = #{guihaiCount},</if>
+            <if test="unit != null  ">unit = #{unit},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteXzStationeryassetById" parameterType="Long">
+        delete from xz_stationeryAsset where id = #{id}
+    </delete>
+	
+    <delete id="deleteXzStationeryassetByIds" parameterType="String">
+        delete from xz_stationeryAsset where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

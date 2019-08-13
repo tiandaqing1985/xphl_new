@@ -566,6 +566,7 @@
             },
             // 弹出层指定宽度
             open: function (title, url, width, height, callback) {
+            	debugger;
             	//如果是移动端，就使用自适应大小弹窗
             	if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
             	    width = 'auto';

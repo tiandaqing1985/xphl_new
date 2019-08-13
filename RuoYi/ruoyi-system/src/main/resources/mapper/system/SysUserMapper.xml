@@ -147,6 +147,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		${params.dataScope}
 	</select>
 	
+	<select id="selectLeaderList" resultMap="SysUserResult">
+		select DISTINCT u.user_id,u.user_name 
+		from sys_user u
+		right join sys_dept d on d.leader = u.user_name
+		where u.user_id is not null
+	</select>
+	
 	<select id="selectUserByLoginName" parameterType="String" resultMap="SysUserResult">
 	    <include refid="selectUserVo"/>
 		where u.login_name = #{userName}

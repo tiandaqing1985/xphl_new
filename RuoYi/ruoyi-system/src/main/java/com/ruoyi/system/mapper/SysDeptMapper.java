@@ -113,5 +113,7 @@ public interface SysDeptMapper
      */
     public SysDept selectDeptByUserId(@Param("userId") Long userId);
     
+    public List<SysDept> parentInfo(@Param("parentId") String parentId);
+    
     
 }

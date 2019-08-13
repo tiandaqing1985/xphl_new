@@ -30,8 +30,6 @@ public class OaOut extends BaseEntity
 	private Date endtime;
 	/** 申请状态（1 待审批，2已撤回，3申请成功，4申请失败） */
 	private String state;
-	/** 人事确认状态（0未确认，2已确认） */
-	private String hrState;
 	/** 创建时间 */
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createDate;
@@ -123,12 +121,6 @@ public class OaOut extends BaseEntity
 	public void setState(String state) {
 		this.state = state;
 	}
-	public String getHrState() {
-		return hrState;
-	}
-	public void setHrState(String hrState) {
-		this.hrState = hrState;
-	}
 	public Date getCreateDate() {
 		return createDate;
 	}
@@ -168,7 +160,7 @@ public class OaOut extends BaseEntity
 	@Override
 	public String toString() {
 		return "OaOut [outId=" + outId + ", userId=" + userId + ", starttime=" + starttime + ", endtime=" + endtime
-				+ ", state=" + state + ", hrState=" + hrState + ", createDate=" + createDate + ", reason=" + reason
+				+ ", state=" + state +", createDate=" + createDate + ", reason=" + reason
 				+ ", approvalId=" + approvalId + ", approvalState=" + approvalState + ", dSet=" + dSet + ", id=" + id
 				+ ", approvalSight=" + approvalSight + ", applyerName=" + applyerName + ", deptName=" + deptName
 				+ ", remark=" + remark + "]";
