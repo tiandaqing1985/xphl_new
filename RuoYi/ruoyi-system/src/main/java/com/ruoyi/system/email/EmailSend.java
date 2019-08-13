@@ -25,7 +25,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 public class EmailSend {
 		
 		 private static String Sender = "wugaofang@perfect-cn.cn";
-		 private static String password = "18216405536wgf";
+		 private static String password = "18216405536wgf.";
 		 private static String host = "smtp.mxhichina.com";
 		 
 		 private static JavaMailSenderImpl createMailSender() {
@@ -46,7 +46,7 @@ public class EmailSend {
 			 EmailSend es = new EmailSend();
 			 
 			 try {
-				es.sendMail("daienxian@perfect-cn.cn", "标题：测试标题", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+				es.sendMail("wugaofang@perfect-cn.cn", "标题：测试标题", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
