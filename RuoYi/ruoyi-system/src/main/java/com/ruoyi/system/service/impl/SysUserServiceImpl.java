@@ -18,6 +18,7 @@ import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.security.Md5Utils;
+import com.ruoyi.system.domain.Data;
 import com.ruoyi.system.domain.SysPost;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
@@ -632,5 +633,15 @@ public class SysUserServiceImpl implements ISysUserService
 	public Long selectUserIdByDeptId(Long deptId) {
 		
 		return userMapper.selectUserIdByDeptId(deptId);
+	}
+
+	@Override
+	public List<Data> selectUserCount(String deptName) {
+		return userMapper.selectUserCount(deptName);
+	}
+
+	@Override
+	public List<Data> selectUserRatio(Data data) {
+		return userMapper.selectUserRatio(data);
 	}
 }

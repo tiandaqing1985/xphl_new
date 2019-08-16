@@ -417,7 +417,7 @@ public class UserApplyController extends BaseController
 	    EmailSend emailSend = new EmailSend();
 		if(text != null && to != null){
 			try {
-				emailSend.sendMail(to, "审批提醒", text);
+//				emailSend.sendMail(to, "审批提醒", text);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

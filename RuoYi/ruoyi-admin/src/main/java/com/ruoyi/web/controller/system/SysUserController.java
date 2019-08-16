@@ -21,6 +21,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.shiro.service.SysPasswordService;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.Data;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
@@ -65,7 +66,38 @@ public class SysUserController extends BaseController
         List<SysUser> list = userService.selectUserList(user);
         return getDataTable(list);
     }
+    
+    @GetMapping("/statistics")
+    public String statistics()
+    {
+        return "system/statistics/statistics";
+    }
 
+    //查询各部门过三个月试用期人数
+    @PostMapping("/statistics")
+    @ResponseBody
+    public TableDataInfo selectUserCount(String deptName)
+    {
+        startPage();
+        List<Data> list = userService.selectUserCount(deptName);
+        return getDataTable(list);
+    }
+    
+    @GetMapping("/ratio")
+    public String ratio()
+    {
+        return "system/statistics/ratio";
+    }
+
+    //离职率
+    @PostMapping("/ratio")
+    @ResponseBody
+    public TableDataInfo selectUserRatio(Data data)
+    {
+        startPage();
+        List<Data> list = userService.selectUserRatio(data);
+        return getDataTable(list);
+    }
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:user:export")
     @PostMapping("/export")

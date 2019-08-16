@@ -3,6 +3,8 @@ package com.ruoyi.system.service;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+
+import com.ruoyi.system.domain.Data;
 import com.ruoyi.system.domain.SysUser;
 
 /**
@@ -12,6 +14,19 @@ import com.ruoyi.system.domain.SysUser;
  */
 public interface ISysUserService
 {
+	/**
+	 *  分部门查询离职率
+	 * @param deptName
+	 * @return
+	 */
+	public List<Data> selectUserRatio(Data data);
+	
+	/**
+	 * 查询各部门过三个月试用期人数
+	 * @return
+	 */
+	public List<Data> selectUserCount(String deptName);
+	
     /**
      * 根据条件分页查询用户列表
      * 

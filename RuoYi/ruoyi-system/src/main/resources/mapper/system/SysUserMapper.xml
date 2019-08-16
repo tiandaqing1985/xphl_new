@@ -147,6 +147,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		${params.dataScope}
 	</select>
 	
+	<select id="selectLeaderList" resultMap="SysUserResult">
+		select DISTINCT u.user_id,u.user_name 
+		from sys_user u
+		right join sys_dept d on d.leader = u.user_name
+		where u.user_id is not null
+	</select>
+	
 	<select id="selectUserByLoginName" parameterType="String" resultMap="SysUserResult">
 	    <include refid="selectUserVo"/>
 		where u.login_name = #{userName}
@@ -271,7 +278,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectAllUser" resultMap="SysUserResult">
 		select u.user_id, u.dept_id, u.login_name, u.user_name, u.area, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase, d.dept_name from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id
-		where u.del_flag = '0'
+		where u.del_flag = '0' and u.status = 0
 	</select>
 	
 	<select id="selectUserIdByUserName" parameterType="Long" resultType="String">
@@ -284,5 +291,64 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<select id="selectUserIdByDeptId" parameterType="Long" resultType="Long">
 		SELECT u.`user_id` FROM sys_user u WHERE u.`user_name` = (SELECT d.`leader` FROM `sys_dept`d WHERE d.`dept_id` = #{deptId})
+	</select>
+	
+	<!-- 分部门查询过了三个月试用期的员工人数 -->
+	<select id="selectUserCount" parameterType="String" resultType="Data">
+			SELECT
+				d.dept_name deptName,
+				count( u.user_id ) count
+			FROM
+				sys_user u
+				LEFT JOIN sys_dept d ON u.dept_id = d.dept_id 
+			WHERE
+				u.status = 0 
+				AND u.firstphase  &lt; sysdate() 
+				AND dept_name IS NOT NULL 
+				<if test="_parameter != null and _parameter != ''">and d.dept_name = #{deptName}</if>
+			GROUP BY
+				d.dept_id
+	</select>
+	
+	<!-- 分部门查询离职率 -->
+	<select id="selectUserRatio" parameterType="Data" resultType="Data">
+		select a.dept_name deptName,concat(left(IFNULL(b.count,0)/(a.count+IFNULL(b.count,0))*100,5)) ratio from 
+			(
+						SELECT
+							d.dept_name ,d.dept_id,u.firstphase,
+							count( u.user_id ) count
+						FROM
+							sys_user u
+							LEFT JOIN sys_dept d ON u.dept_id = d.dept_id 
+						WHERE
+							u.status = 0
+							AND u.firstphase &lt; sysdate() 
+							AND dept_name IS NOT NULL 
+						GROUP BY
+							d.dept_id
+				) a
+				LEFT JOIN
+				(		SELECT
+							d.dept_name,d.dept_id,u.firstphase,
+							count( u.user_id ) count
+						FROM
+							sys_user u
+							LEFT JOIN sys_dept d ON u.dept_id = d.dept_id 
+						WHERE
+							u.status = 1
+							AND u.firstphase &lt; sysdate() 
+							AND dept_name IS NOT NULL 
+						GROUP BY
+							d.dept_id
+							)b on a.dept_id = b.dept_id
+			<where>
+				 <if test="deptName != null and deptName != ''">and a.dept_name = #{deptName}</if>
+				<if test="starttime != null"><!-- 开始时间检索 -->
+					AND date_format(a.firstphase,'%y%m%d') &gt;= date_format(#{starttime},'%y%m%d')
+				</if>
+				<if test="endtime != null"><!-- 结束时间检索 -->
+					AND date_format(a.firstphase,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
+				</if>
+			</where>				
 	</select>
 </mapper> 

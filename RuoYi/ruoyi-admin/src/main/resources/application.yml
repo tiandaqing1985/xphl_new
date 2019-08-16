@@ -13,6 +13,10 @@ ruoyi:
   profile: /opt/tomcat_prod/webapps/upload/
   # 获取ip地址开关
   addressEnabled: true
+  #提醒邮箱
+  email: oa@perfect-cn.cn
+  #提醒邮箱密码
+  password: Abcd1234
 
 # 开发环境配置
 server:

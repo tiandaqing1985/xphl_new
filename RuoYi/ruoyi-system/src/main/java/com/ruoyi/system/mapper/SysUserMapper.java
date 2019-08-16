@@ -1,6 +1,8 @@
 package com.ruoyi.system.mapper;
 
 import java.util.List;
+
+import com.ruoyi.system.domain.Data;
 import com.ruoyi.system.domain.SysUser;
 
 /**
@@ -10,6 +12,25 @@ import com.ruoyi.system.domain.SysUser;
  */
 public interface SysUserMapper
 {
+	
+	/**
+	 *  分部门查询离职率
+	 * @param deptName
+	 * @return
+	 */
+	public List<Data> selectUserRatio(Data data);
+	
+	/**
+	 * 查询各部门过三个月试用期人数
+	 * @return
+	 */
+	public List<Data> selectUserCount(String deptName);
+	
+	/**
+	 * @return 所有leader
+	 */
+	public List<SysUser> selectLeaderList();
+	
     /**
      * 根据条件分页查询用户列表
      * 

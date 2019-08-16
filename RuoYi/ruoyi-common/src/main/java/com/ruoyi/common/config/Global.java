@@ -139,4 +139,21 @@ public class Global
     {
         return getConfig("ruoyi.profile") + "upload/";
     }
+    
+    /**
+     * 获取提醒邮箱
+     * */
+    public static String getEmail()
+    {
+        return getConfig("ruoyi.email");
+    }
+    
+    /**
+     * 获取提醒邮箱密码
+     * */
+    public static String getPassword()
+    {
+        return getConfig("ruoyi.password");
+    }
+  
 }

@@ -89,6 +89,7 @@ public class OaOutController extends BaseController
 		oaOut.setApprovalId(ShiroUtils.getUserId());
 		oaOut.setApprovalState("3");//审批状态（1同意，2驳回 ，3未操作）
 		oaOut.setApprovalSight("1");
+		oaOut.setState("1");
         List<OutApproval> list = oaOutService.selectOutApprovalList(oaOut);
 		return getDataTable(list);
 	}
@@ -236,7 +237,8 @@ public class OaOutController extends BaseController
 	@PostMapping("/edit")
 	@ResponseBody
 	public AjaxResult editSave(OaOut out)
-	{		
+	{	
+		out.setUserId(ShiroUtils.getUserId());
 		return toAjax(oaOutService.updateOaOut(out));
 	}
 	

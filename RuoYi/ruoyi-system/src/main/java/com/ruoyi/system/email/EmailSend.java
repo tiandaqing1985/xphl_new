@@ -24,16 +24,30 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 public class EmailSend {
 		
-		 private static String Sender = "wugaofang@perfect-cn.cn";
-		 private static String password = "18216405536wgf";
+//		 private static String Sender = "wugaofang@perfect-cn.cn";
+//		 private static String password = "18216405536wgf.";
 		 private static String host = "smtp.mxhichina.com";
 		 
-		 private static JavaMailSenderImpl createMailSender() {
+//		 private static JavaMailSenderImpl createMailSender() {
+//		        JavaMailSenderImpl sender = new JavaMailSenderImpl();
+//		        sender.setHost(host);
+//		        sender.setPort(25);
+//		        sender.setUsername(Sender);
+//		        sender.setPassword(password);
+//		        sender.setDefaultEncoding("Utf-8");
+//		        Properties p = new Properties();
+//		        p.setProperty("mail.smtp.timeout", "25000");
+//		        p.setProperty("mail.smtp.auth", "true");
+//		        sender.setJavaMailProperties(p);
+//		        return sender;
+//		 }
+		 
+		 private static JavaMailSenderImpl createMailSender(String email, String pwd) {
 		        JavaMailSenderImpl sender = new JavaMailSenderImpl();
 		        sender.setHost(host);
 		        sender.setPort(25);
-		        sender.setUsername(Sender);
-		        sender.setPassword(password);
+		        sender.setUsername(email);
+		        sender.setPassword(pwd);
 		        sender.setDefaultEncoding("Utf-8");
 		        Properties p = new Properties();
 		        p.setProperty("mail.smtp.timeout", "25000");
@@ -41,23 +55,28 @@ public class EmailSend {
 		        sender.setJavaMailProperties(p);
 		        return sender;
 		 }
-		 
-		 public static void main(String[] args) {
-			 EmailSend es = new EmailSend();
-			 
-			 try {
-				es.sendMail("daienxian@perfect-cn.cn", "标题：测试标题", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		 
+//		 public static void main(String[] args) {
+//			 EmailSend es = new EmailSend();
+//			 
+//			 try {
+//				es.sendMail("wugaofang@perfect-cn.cn", "标题：测试标题", "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 		  //发送邮件
-		  public void sendMail(String to,String subject,String text1) throws Exception {
-		   JavaMailSenderImpl mailSender1 = createMailSender();
-		   MimeMessage message = createMixedMail(null, subject, text1, Sender, to, null, null);
+		  public void sendMail(String to,String subject,String text1, String sender, String password) throws Exception {
+		   JavaMailSenderImpl mailSender1 = createMailSender(sender, password);
+		   MimeMessage message = createMixedMail(null, subject, text1, sender, to, null, null);
 		   mailSender1.send(message);
 		  }
+		  
+		  //发送邮件
+//		  public void sendMail(String to,String subject,String text1) throws Exception {
+//		   JavaMailSenderImpl mailSender1 = createMailSender();
+//		   MimeMessage message = createMixedMail(null, subject, text1, Sender, to, null, null);
+//		   mailSender1.send(message);
+//		  }
 	
 		  
 		  public static MimeMessage createMixedMail(Session session, String title, String content, String Sender,String recipients,String copyto,
