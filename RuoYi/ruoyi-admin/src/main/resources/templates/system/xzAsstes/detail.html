@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('资产详情')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-xzAsstes-detail"
+			th:object="${xzAsstes}">
+			<input id="id" name="id" th:field="*{id}" type="hidden">
+			<h4 class="form-header h4">基本信息</h4>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">资产编码：</label>
+						<div class="form-control-static" th:text="${xzAsstes.assetsId}"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">地域：</label>
+						<div class="form-control-static" th:text="${@dict.getLabel('xz_assets_region',xzAsstes.region)}" ></div>
+							
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">资产名称：</label>
+						<div class="form-control-static" th:text="${xzAsstes.assetsName}"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">分类码s/n：</label>
+						<div class="form-control-static" th:text="${xzAsstes.category}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">资产分类：</label>
+						<div class="form-control-static" th:text="${@dict.getLabel('xz_assets_assetsType',xzAsstes.assetsType)}"></div>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">资产型号：</label>
+						<div class="form-control-static" th:text="${xzAsstes.assetsModel}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">单价：</label>
+						<div class="form-control-static" th:text="${xzAsstes.price}+ ￥"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">单位：</label>
+						<div class="form-control-static" th:text="${@dict.getLabel('xz_assets_unit',xzAsstes.unit)}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">数量：</label>
+						<div class="form-control-static" th:text="${xzAsstes.count}"></div>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">归属公司：</label>
+						<div class="form-control-static" th:text="${@dict.getLabel('xz_assets_attach',xzAsstes.attach)}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">采购单号：</label>
+						<div class="form-control-static" th:text="${xzAsstes.purchaseNum}"></div>
+					</div>
+				</div>
+
+			</div>
+			<h4 class="form-header h4">详细信息</h4>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">品牌：</label>
+						<div class="form-control-static" th:text="${@dict.getLabel('xz_assets_brand',xzAsstes.brand)}"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">购买地址：</label>
+						<div class="form-control-static" th:text="${xzAsstes.buyAddress}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">发票类型：</label>
+						<div class="form-control-static" th:text="${@dict.getLabel('xz_assets_invoiceType',xzAsstes.invoiceType)}"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">发票编号：</label>
+						<div class="form-control-static" th:text="${xzAsstes.invoiceNum}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">采购人：</label>
+						<div class="form-control-static" th:text="${xzAsstes.purchaseBy}"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">购入时间：</label>
+						<div class="form-control-static" th:text="${#dates.format(xzAsstes.buyDate, 'yyyy-MM-dd')}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">附件：</label>
+						<div class="form-control-static" th:text="${xzAsstes.annex}"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">备注：</label>
+						<div class="form-control-static" th:text="${xzAsstes.remarks}"></div>
+					</div>
+				</div>
+			</div>
+			<h4 class="form-header h4">扩展信息</h4>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">扩展金额：</label>
+						<div class="form-control-static" th:text="${xzAsstes.extendMoney}"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">扩展时间：</label>
+						<div class="form-control-static" th:text="${#dates.format(xzAsstes.extendTime, 'yyyy-MM-dd')}"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">扩展内容：</label>
+						<div class="form-control-static" th:text="${xzAsstes.extendContent}"></div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript">
+		var prefix = ctx + "system/xzAsstes";
+		$("#form-xzAsstes-detail").validate({
+			rules : {
+				xxxx : {
+					required : true,
+				},
+			},
+			focusCleanup : true
+		});
+		function submitHandler() {
+			if ($.validate.form()) {
+				$.operate.save(prefix + "/detail", $('#form-xzAsstes-detail')
+						.serialize());
+			}
+		}
+	</script>
+</body>
+</html>

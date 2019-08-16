@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzAssetHandRecordMapper">
+    
+    <resultMap type="XzAssetHandRecord" id="XzAssetHandRecordResult">
+        <result property="id"    column="id"    />
+        <result property="assetId"    column="asset_id"    />
+        <result property="distributor"    column="distributor"    />
+        <result property="recipient"    column="recipient"    />
+        <result property="distributionDate"    column="distribution_date"    />
+        <result property="confirmDate"    column="confirm_date"    />
+        <result property="planReturnDate"    column="plan_return_date"    />
+        <result property="isClaim"    column="is_claim"    />
+        <result property="isMsg"    column="is_msg"    />
+        <result property="sourceType"    column="source_type"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+	
+	<sql id="selectXzAssetHandRecordVo">
+        select id, asset_id, distributor, recipient, distribution_date, confirm_date, plan_return_date, is_claim, is_msg, source_type, create_by, create_time, update_by, update_time from xz_asset_hand_record
+    </sql>
+	
+    <select id="selectXzAssetHandRecordList" parameterType="XzAssetHandRecord" resultMap="XzAssetHandRecordResult">
+        <include refid="selectXzAssetHandRecordVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="assetId != null  and assetId != '' "> and asset_id = #{assetId}</if>
+             <if test="distributor != null  and distributor != '' "> and distributor = #{distributor}</if>
+             <if test="recipient != null  and recipient != '' "> and recipient = #{recipient}</if>
+             <if test="distributionDate != null "> and distribution_date = #{distributionDate}</if>
+             <if test="confirmDate != null "> and confirm_date = #{confirmDate}</if>
+             <if test="planReturnDate != null "> and plan_return_date = #{planReturnDate}</if>
+             <if test="isClaim != null  and isClaim != '' "> and is_claim = #{isClaim}</if>
+             <if test="isMsg != null  and isMsg != '' "> and is_msg = #{isMsg}</if>
+             <if test="sourceType != null  and sourceType != '' "> and source_type = #{sourceType}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectXzAssetHandRecordById" parameterType="Long" resultMap="XzAssetHandRecordResult">
+        <include refid="selectXzAssetHandRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertXzAssetHandRecord" parameterType="XzAssetHandRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into xz_asset_hand_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="assetId != null  and assetId != ''  ">asset_id,</if>
+			<if test="distributor != null  and distributor != ''  ">distributor,</if>
+			<if test="recipient != null  and recipient != ''  ">recipient,</if>
+			<if test="distributionDate != null  ">distribution_date,</if>
+			<if test="confirmDate != null  ">confirm_date,</if>
+			<if test="planReturnDate != null  ">plan_return_date,</if>
+			<if test="isClaim != null  and isClaim != ''  ">is_claim,</if>
+			<if test="isMsg != null  and isMsg != ''  ">is_msg,</if>
+			<if test="sourceType != null  and sourceType != ''  ">source_type,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="assetId != null  and assetId != ''  ">#{assetId},</if>
+			<if test="distributor != null  and distributor != ''  ">#{distributor},</if>
+			<if test="recipient != null  and recipient != ''  ">#{recipient},</if>
+			<if test="distributionDate != null  ">#{distributionDate},</if>
+			<if test="confirmDate != null  ">#{confirmDate},</if>
+			<if test="planReturnDate != null  ">#{planReturnDate},</if>
+			<if test="isClaim != null  and isClaim != ''  ">#{isClaim},</if>
+			<if test="isMsg != null  and isMsg != ''  ">#{isMsg},</if>
+			<if test="sourceType != null  and sourceType != ''  ">#{sourceType},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzAssetHandRecord" parameterType="XzAssetHandRecord">
+        update xz_asset_hand_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assetId != null  and assetId != ''  ">asset_id = #{assetId},</if>
+            <if test="distributor != null  and distributor != ''  ">distributor = #{distributor},</if>
+            <if test="recipient != null  and recipient != ''  ">recipient = #{recipient},</if>
+            <if test="distributionDate != null  ">distribution_date = #{distributionDate},</if>
+            <if test="confirmDate != null  ">confirm_date = #{confirmDate},</if>
+            <if test="planReturnDate != null  ">plan_return_date = #{planReturnDate},</if>
+            <if test="isClaim != null  and isClaim != ''  ">is_claim = #{isClaim},</if>
+            <if test="isMsg != null  and isMsg != ''  ">is_msg = #{isMsg},</if>
+            <if test="sourceType != null  and sourceType != ''  ">source_type = #{sourceType},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteXzAssetHandRecordById" parameterType="Long">
+        delete from xz_asset_hand_record where id = #{id}
+    </delete>
+	
+    <delete id="deleteXzAssetHandRecordByIds" parameterType="String">
+        delete from xz_asset_hand_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

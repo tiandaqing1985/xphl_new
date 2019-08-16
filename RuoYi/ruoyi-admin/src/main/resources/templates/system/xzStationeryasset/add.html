@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增办公用品')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-xzStationeryasset-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">办公资产名称    取自办公类型子类型名称：</label>
+				<div class="col-sm-8">
+					<input id="stationeryAssetName" name="stationeryAssetName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">办公资产对应的id：</label>
+				<div class="col-sm-8">
+					<input id="stationeryAssetId" name="stationeryAssetId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">办公资产类型名称    取自办公类型的父类型名称：</label>
+				<div class="col-sm-8">
+					<input id="assetTypeName" name="assetTypeName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">：</label>
+				<div class="col-sm-8">
+					<input id="rukuCount" name="rukuCount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">办公资产类型对应的id：</label>
+				<div class="col-sm-8">
+					<input id="assetTypeId" name="assetTypeId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">当月入库数量：</label>
+				<div class="col-sm-8">
+					<input id="fenpeiCount" name="fenpeiCount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">库存中有的资产对应的品牌，多个品牌以，分割：</label>
+				<div class="col-sm-8">
+					<input id="brandType" name="brandType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">当月库存数量：</label>
+				<div class="col-sm-8">
+					<input id="kucunCount" name="kucunCount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">当月剩余数量：</label>
+				<div class="col-sm-8">
+					<input id="shengyuCount" name="shengyuCount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">地域：</label>
+				<div class="col-sm-8">
+					<input id="area" name="area" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">品牌的id字符串：</label>
+				<div class="col-sm-8">
+					<input id="brand" name="brand" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">model：</label>
+				<div class="col-sm-8">
+					<input id="model" name="model" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">：</label>
+				<div class="col-sm-8">
+					<input id="baocunType" name="baocunType" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">保存状态的资产id：</label>
+				<div class="col-sm-8">
+					<input id="assetId" name="assetId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">时间月份字符串：</label>
+				<div class="col-sm-8">
+					<input id="time" name="time" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">当月初始数量：</label>
+				<div class="col-sm-8">
+					<input id="chushiCount" name="chushiCount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">：</label>
+				<div class="col-sm-8">
+					<input id="categoryId" name="categoryId" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">：</label>
+				<div class="col-sm-8">
+					<input id="guihaiCount" name="guihaiCount" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">计量单位：</label>
+				<div class="col-sm-8">
+					<input id="unit" name="unit" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/xzStationeryasset"
+		$("#form-xzStationeryasset-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-xzStationeryasset-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

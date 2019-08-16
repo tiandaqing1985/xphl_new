@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzStationeryassetRecordMapper">
+
+	<resultMap type="XzStationeryassetRecord" id="XzStationeryassetRecordResult">
+		<result property="id" column="id" />
+		<result property="region" column="region" />
+		<result property="assetsName" column="assets_name" />
+		<result property="assetsType" column="assets_type" />
+		<result property="assetsType2" column="assets_type2" />
+		<result property="assetsModel" column="assets_model" />
+		<result property="brand" column="brand" />
+		<result property="price" column="price" />
+		<result property="unit" column="unit" />
+		<result property="count" column="count" />
+		<result property="sumPrice" column="sum_price" />
+		<result property="purchaseNum" column="purchase_num" />
+		<result property="purchaseBy" column="purchase_by" />
+		<result property="buyDate" column="buy_date" />
+		<result property="buyAddress" column="buy_address" />
+		<result property="invoiceType" column="invoice_type" />
+		<result property="invoiceNum" column="invoice_num" />
+		<result property="annex" column="annex" />
+		<result property="remarks" column="remarks" />
+		<result property="assetsStatus" column="assets_status" />
+		<result property="useStatus" column="use_status" />
+		<result property="distributor" column="distributor" />
+		<result property="distributionTime" column="distribution_time" />
+		<result property="useBy" column="use_by" />
+		<result property="useTime" column="use_time" />
+		<result property="department" column="department" />
+		<result property="submitType" column="submit_type" />
+		<result property="scrapDate" column="scrap_date" />
+		<result property="storeWay" column="store_way" />
+		<result property="createBy" column="create_by" />
+		<result property="createTime" column="create_time" />
+		<result property="updateBy" column="update_by" />
+		<result property="updateTime" column="update_time" />
+		<result property="subTime" column="sub_time" />
+		<result property="subBy" column="sub_by" />
+	</resultMap>
+
+	<sql id="selectXzStationeryassetRecordVo">
+		select id, region, assets_name, assets_type, assets_type2, assets_model,
+		brand, price, unit, count, sum_price, purchase_num, purchase_by,
+		buy_date, buy_address, invoice_type, invoice_num, annex, remarks,
+		assets_status, use_status, distributor, distribution_time, use_by,
+		use_time, department, submit_type, scrap_date, store_way, create_by,
+		create_time, update_by, update_time, sub_time, sub_by from
+		xz_stationeryAsset_record
+	</sql>
+
+	<select id="selectXzStationeryassetRecordList" parameterType="XzStationeryassetRecord"
+		resultMap="XzStationeryassetRecordResult">
+		<include refid="selectXzStationeryassetRecordVo" />
+		where 1=1 and assets_status ='3'
+		<if test="id != null "> and id = #{id}</if>
+		<if test="region != null  and region != '' "> and region = #{region}</if>
+		<if test="assetsName != null  and assetsName != '' "> and assets_name = #{assetsName}</if>
+		<if test="assetsType != null  and assetsType != '' "> and assets_type = #{assetsType}</if>
+		<if test="assetsType2 != null  and assetsType2 != '' "> and assets_type2 = #{assetsType2}</if>
+		<if test="assetsModel != null  and assetsModel != '' "> and assets_model = #{assetsModel}</if>
+		<if test="brand != null  and brand != '' "> and brand = #{brand}</if>
+		<if test="purchaseBy != null  and purchaseBy != '' "> and purchase_by = #{purchaseBy}</if>
+	</select>
+
+	<select id="selectXzStationeryassetRecordById" parameterType="Long"
+		resultMap="XzStationeryassetRecordResult">
+		<include refid="selectXzStationeryassetRecordVo" />
+		where id = #{id}
+	</select>
+
+	<insert id="insertXzStationeryassetRecord" parameterType="XzStationeryassetRecord"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into xz_stationeryAsset_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="region != null  and region != ''  ">region,</if>
+			<if test="assetsName != null  and assetsName != ''  ">assets_name,</if>
+			<if test="assetsType != null  and assetsType != ''  ">assets_type,</if>
+			<if test="assetsType2 != null  and assetsType2 != ''  ">assets_type2,</if>
+			<if test="assetsModel != null  and assetsModel != ''  ">assets_model,</if>
+			<if test="brand != null  and brand != ''  ">brand,</if>
+			<if test="price != null  and price != ''  ">price,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="count != null  and count != ''  ">count,</if>
+			<if test="sumPrice != null  and sumPrice != ''  ">sum_price,</if>
+			<if test="purchaseNum != null  and purchaseNum != ''  ">purchase_num,</if>
+			<if test="purchaseBy != null  and purchaseBy != ''  ">purchase_by,</if>
+			<if test="buyDate != null  ">buy_date,</if>
+			<if test="buyAddress != null  and buyAddress != ''  ">buy_address,</if>
+			<if test="invoiceType != null  and invoiceType != ''  ">invoice_type,</if>
+			<if test="invoiceNum != null  and invoiceNum != ''  ">invoice_num,</if>
+			<if test="annex != null  and annex != ''  ">annex,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="assetsStatus != null  and assetsStatus != ''  ">assets_status,</if>
+			<if test="useStatus != null  and useStatus != ''  ">use_status,</if>
+			<if test="distributor != null  and distributor != ''  ">distributor,</if>
+			<if test="distributionTime != null  ">distribution_time,</if>
+			<if test="useBy != null  and useBy != ''  ">use_by,</if>
+			<if test="useTime != null  ">use_time,</if>
+			<if test="department != null  and department != ''  ">department,</if>
+			<if test="submitType != null  and submitType != ''  ">submit_type,</if>
+			<if test="scrapDate != null  ">scrap_date,</if>
+			<if test="storeWay != null  and storeWay != ''  ">store_way,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+			<if test="subTime != null  ">sub_time,</if>
+			<if test="subBy != null  and subBy != ''  ">sub_by,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="region != null  and region != ''  ">#{region},</if>
+			<if test="assetsName != null  and assetsName != ''  ">#{assetsName},</if>
+			<if test="assetsType != null  and assetsType != ''  ">#{assetsType},</if>
+			<if test="assetsType2 != null  and assetsType2 != ''  ">#{assetsType2},</if>
+			<if test="assetsModel != null  and assetsModel != ''  ">#{assetsModel},</if>
+			<if test="brand != null  and brand != ''  ">#{brand},</if>
+			<if test="price != null  and price != ''  ">#{price},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="count != null  and count != ''  ">#{count},</if>
+			<if test="sumPrice != null  and sumPrice != ''  ">#{sumPrice},</if>
+			<if test="purchaseNum != null  and purchaseNum != ''  ">#{purchaseNum},</if>
+			<if test="purchaseBy != null  and purchaseBy != ''  ">#{purchaseBy},</if>
+			<if test="buyDate != null  ">#{buyDate},</if>
+			<if test="buyAddress != null  and buyAddress != ''  ">#{buyAddress},</if>
+			<if test="invoiceType != null  and invoiceType != ''  ">#{invoiceType},</if>
+			<if test="invoiceNum != null  and invoiceNum != ''  ">#{invoiceNum},</if>
+			<if test="annex != null  and annex != ''  ">#{annex},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="assetsStatus != null  and assetsStatus != ''  ">#{assetsStatus},</if>
+			<if test="useStatus != null  and useStatus != ''  ">#{useStatus},</if>
+			<if test="distributor != null  and distributor != ''  ">#{distributor},</if>
+			<if test="distributionTime != null  ">#{distributionTime},</if>
+			<if test="useBy != null  and useBy != ''  ">#{useBy},</if>
+			<if test="useTime != null  ">#{useTime},</if>
+			<if test="department != null  and department != ''  ">#{department},</if>
+			<if test="submitType != null  and submitType != ''  ">#{submitType},</if>
+			<if test="scrapDate != null  ">#{scrapDate},</if>
+			<if test="storeWay != null  and storeWay != ''  ">#{storeWay},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="subTime != null  ">#{subTime},</if>
+			<if test="subBy != null  and subBy != ''  ">#{subBy},</if>
+		</trim>
+	</insert>
+
+	<update id="updateXzStationeryassetRecord" parameterType="XzStationeryassetRecord">
+		update xz_stationeryAsset_record
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="region != null  and region != ''  ">region = #{region},</if>
+			<if test="assetsName != null  and assetsName != ''  ">assets_name = #{assetsName},</if>
+			<if test="assetsType != null  and assetsType != ''  ">assets_type = #{assetsType},</if>
+			<if test="assetsType2 != null  and assetsType2 != ''  ">assets_type2 = #{assetsType2},</if>
+			<if test="assetsModel != null  and assetsModel != ''  ">assets_model = #{assetsModel},</if>
+			<if test="brand != null  and brand != ''  ">brand = #{brand},</if>
+			<if test="price != null  and price != ''  ">price = #{price},</if>
+			<if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+			<if test="count != null  and count != ''  ">count = #{count},</if>
+			<if test="sumPrice != null  and sumPrice != ''  ">sum_price = #{sumPrice},</if>
+			<if test="purchaseNum != null  and purchaseNum != ''  ">purchase_num = #{purchaseNum},</if>
+			<if test="purchaseBy != null  and purchaseBy != ''  ">purchase_by = #{purchaseBy},</if>
+			<if test="buyDate != null  ">buy_date = #{buyDate},</if>
+			<if test="buyAddress != null  and buyAddress != ''  ">buy_address = #{buyAddress},</if>
+			<if test="invoiceType != null  and invoiceType != ''  ">invoice_type = #{invoiceType},</if>
+			<if test="invoiceNum != null  and invoiceNum != ''  ">invoice_num = #{invoiceNum},</if>
+			<if test="annex != null  and annex != ''  ">annex = #{annex},</if>
+			<if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+			<if test="assetsStatus != null  and assetsStatus != ''  ">assets_status = #{assetsStatus},</if>
+			<if test="useStatus != null  and useStatus != ''  ">use_status = #{useStatus},</if>
+			<if test="distributor != null  and distributor != ''  ">distributor = #{distributor},</if>
+			<if test="distributionTime != null  ">distribution_time = #{distributionTime},</if>
+			<if test="useBy != null  and useBy != ''  ">use_by = #{useBy},</if>
+			<if test="useTime != null  ">use_time = #{useTime},</if>
+			<if test="department != null  and department != ''  ">department = #{department},</if>
+			<if test="submitType != null  and submitType != ''  ">submit_type = #{submitType},</if>
+			<if test="scrapDate != null  ">scrap_date = #{scrapDate},</if>
+			<if test="storeWay != null  and storeWay != ''  ">store_way = #{storeWay},</if>
+			<if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+			<if test="createTime != null  ">create_time = #{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+			<if test="updateTime != null  ">update_time = #{updateTime},</if>
+			<if test="subTime != null  ">sub_time = #{subTime},</if>
+			<if test="subBy != null  and subBy != ''  ">sub_by = #{subBy},</if>
+		</trim>
+		where id = #{id}
+	</update>
+
+	<delete id="deleteXzStationeryassetRecordById" parameterType="Long">
+		delete from xz_stationeryAsset_record where id = #{id}
+	</delete>
+
+	<delete id="deleteXzStationeryassetRecordByIds" parameterType="String">
+		delete from xz_stationeryAsset_record where id in
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

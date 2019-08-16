@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('办公用品列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								资产名称：<input type="text" name="stationeryAssetName"/>
+							</li>
+							<li>
+								资产类型：<input type="text" name="assetTypeName"/>
+							</li>
+							
+							<li>
+								地域：<input type="text" name="area"/>
+							</li>
+
+							<li>
+								品牌：<input type="text" name="brand"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.addTab()" shiro:hasPermission="system:xzStationeryasset:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:xzStationeryasset:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:xzStationeryasset:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:xzStationeryasset:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:xzStationeryasset:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:xzStationeryasset:remove')}]];
+        var prefix = ctx + "system/xzStationeryasset";
+        var prefix2 = ctx + "system/xzStationeryassetRecord";
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix2 + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "办公用品",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : 'id',
+					visible: false
+				},
+				{
+					field : 'area', 
+					title : '地域',
+					sortable: true
+				},
+				{
+					field : 'stationeryAssetName', 
+					title : '资产名称',
+					sortable: true
+				},
+				
+				{
+					field : 'assetTypeName', 
+					title : '资产类型',
+					sortable: true
+				},
+				{
+					field : 'brand', 
+					title : '品牌',
+					sortable: true
+				},
+				{
+					field : 'unit', 
+					title : '计量单位',
+					sortable: true
+				},
+				{
+					field : 'fenpeiCount', 
+					title : '当月入库',
+					sortable: true
+				},
+				{
+					field : 'kucunCount', 
+					title : '当月库存',
+					sortable: true
+				},
+				{
+					field : 'shengyuCount', 
+					title : '当月剩余',
+					sortable: true
+				},
+				{
+					field : 'chushiCount', 
+					title : '当月初始',
+					sortable: true
+				},
+				{
+					field : 'time', 
+					title : '时间月份',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>分配</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

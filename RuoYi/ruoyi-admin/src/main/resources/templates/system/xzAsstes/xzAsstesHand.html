@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('资产分配列表')" />
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>资产编码：<input type="text" name="assetsId" />
+							</li>
+
+							<li>资产名称：<input type="text" name="assetsName" />
+							</li>
+
+							<li>所在地域： <select name="region"
+								th:with="type=${@dict.getType('xz_assets_region')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+										th:value="${dict.dictValue}"></option>
+							</select>
+							</li>
+
+							<li>采购人员：<input type="text" name="purchaseBy" />
+							</li>
+
+							<!-- <li>资产状态： <select name="assetsStatus"
+								th:with="type=${@dict.getType('xz_assets_assetsStatus')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+										th:value="${dict.dictValue}"></option>
+							</select>
+							</li>
+							<li>使用状态： <select name="useStatus"
+								th:with="type=${@dict.getType('xz_assets_useStatus')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+										th:value="${dict.dictValue}"></option>
+							</select>
+							</li> -->
+							<li class="select-time"><label>购入时间：</label> <input
+								type="text" class="time-input" id="startTime" placeholder="开始时间"
+								name="params[beginTime]" /> <span>-</span> <input type="text"
+								class="time-input" id="endTime" placeholder="结束时间"
+								name="params[endTime]" /></li>
+							<li><a class="btn btn-primary btn-rounded btn-sm"
+								onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm"
+								onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-warning" onclick="$.table.exportExcel()"
+					shiro:hasPermission="system:xzAsstes:export"> <i
+					class="fa fa-download"></i> 导出
+				</a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script th:inline="javascript">
+		var addHandFlag = [[${@permission.hasPermi('system:xzAssetHandRecord:add')}]];
+		var addFlag = [[${@permission.hasPermi('system:xzAssetHandRecord:add')}]];
+    	var detailFlag = [[${@permission.hasPermi('system:xzAssetHandRecord:detail')}]];
+        var prefix = ctx + "system/xzAssetHandRecord";
+        var prefix1 = ctx + "system/xzAsstes";
+        var region = [[${@dict.getType('xz_assets_region')}]];
+        var assetsType = [[${@dict.getType('xz_assets_assetsType')}]];
+        var brand = [[${@dict.getType('xz_assets_brand')}]];
+        var assetsStatus = [[${@dict.getType('xz_assets_assetsStatus')}]];
+        var useStatus = [[${@dict.getType('xz_assets_useStatus')}]];
+        $(function() {
+            var options = {
+                url: prefix1 + "/list",
+                createUrl: prefix + "/add/{id}",
+                updateSubUrl: prefix + "/editSub/{id}",
+                detailUrl: prefix + "/detail/{id}",
+				exportUrl: prefix1 + "/export",
+                modalName: "资产",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '主键',
+					visible: false
+				},
+				{
+					field : 'assetsId', 
+					title : '资产编码',
+					sortable: true
+				},
+				{
+					field : 'assetsName', 
+					title : '资产名称',
+					sortable: true
+				},
+				{
+					field : 'brand', 
+					title : '品牌',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(brand, value);
+					}
+				},
+				{
+					field : 'assetsModel', 
+					title : '资产型号',
+					sortable: true
+				},
+				{
+					field : 'price', 
+					title : '单价',
+					sortable: true
+				},
+				{
+					field : 'region', 
+					title : '地域',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(region, value);
+					}
+				},
+				{
+					field : 'assetsStatus', 
+					title : '资产状态',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(assetsStatus, value);
+					}
+				},
+				{
+					field : 'useStatus', 
+					title : '使用状态',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(useStatus, value);
+					}
+				},
+				{
+					field : 'purchaseBy', 
+					title : '采购人',
+					sortable: true
+				},
+				{
+					field : 'buyDate', 
+					title : '购入时间',
+					sortable: true
+				},
+				{
+					field : 'useBy', 
+					title : '前当使用人',
+					sortable: true
+				},
+				{
+					field : 'department', 
+					title : '使用部门',
+					sortable: true
+				},
+				{
+					field : 'useTime', 
+					title : '使用时间',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	
+		            	actions.push('<a class="btn btn-success btn-xs ' + detailFlag + '" href="#" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-edit"></i>查看</a> ');
+                        actions.push('<a class="btn btn-warning btn-xs ' + addFlag + '" href="#" onclick="$.operate.add(\'' + row.id + '\')"><i class="fa fa-add"></i>台账</a>');
+                        if(row.assetsStatus=="1"){
+		            		actions.push('<a class="btn btn-primary btn-xs ' + addHandFlag + '" href="#" onclick="$.operate.add(\'' + row.id + '\')"><i class="fa fa-add"></i>分配</a>');
+		            	}
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+<form id="importForm" enctype="multipart/form-data" class="mt20 mb10"
+	style="display: none;">
+	<div class="col-xs-offset-1">
+		<input type="file" id="file" name="file" />
+		<div class="mt10 pt5">
+			&nbsp; <a onclick="$.table.importTemplate()"
+				class="btn btn-default btn-xs"><i class="fa fa-file-excel-o"></i>
+				下载模板</a>
+		</div>
+		<font color="red" class="pull-left mt10">
+			提示：仅允许导入“xls”或“xlsx”格式文件！ </font>
+	</div>
+</form>
+</html>
