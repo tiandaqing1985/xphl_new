@@ -64,14 +64,9 @@ public class OaOutServiceImpl implements IOaOutService
 	@Override
 	public int insertOaOut(OaOut oaOut)
 	{
-		//新增外出报备
-		if("".equals(oaOut.getOutId()) || oaOut.getOutId() == null){
-			oaOutMapper.insertOaOut(oaOut);
-		}
-		
-		//新增外出报备审批记录
+		oaOutMapper.insertOaOut(oaOut);
 		SysUser user = userMapper.selectUserById(oaOut.getUserId());//查出当前用户的area值
-
+		
 		//生成审批记录
 		Long approvalId = 0L;//审批人id
 		
@@ -325,10 +320,6 @@ public class OaOutServiceImpl implements IOaOutService
 
 	@Override
 	public int updateOaOut(OaOut oaOut) {
-		OaOutApproval oaOutApproval = new OaOutApproval();
-		oaOutApproval.setOutId(oaOut.getOutId());
-		oaOutApprovalMapper.deleteOaOutApproval(oaOutApproval);
-		insertOaOut(oaOut);
 		oaOut.setState("1");
 		return oaOutMapper.updateOaOut(oaOut);
 	}

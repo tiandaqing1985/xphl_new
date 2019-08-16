@@ -10,11 +10,6 @@ import com.ruoyi.system.domain.SysUser;
  */
 public interface SysUserMapper
 {
-	/**
-	 * @return 所有leader
-	 */
-	public List<SysUser> selectLeaderList();
-	
     /**
      * 根据条件分页查询用户列表
      * 

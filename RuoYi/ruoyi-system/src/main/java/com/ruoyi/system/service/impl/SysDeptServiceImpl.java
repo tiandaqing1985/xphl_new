@@ -268,10 +268,4 @@ public class SysDeptServiceImpl implements ISysDeptService
         }
         return UserConstants.DEPT_NAME_UNIQUE;
     }
-    
-
-    public List<SysDept> parentInfo(String  parentId){
-            return deptMapper.parentInfo(parentId);
-        }
-   
 }

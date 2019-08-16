@@ -91,6 +91,4 @@ public interface ISysDeptService
      * @return 结果
      */
     public String checkDeptNameUnique(SysDept dept);
-    
-    public List<SysDept> parentInfo(String  deptId);
 }
