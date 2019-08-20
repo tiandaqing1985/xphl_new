@@ -8,15 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.config.ServerConfig;
 import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.FileUtils;
@@ -27,7 +23,6 @@ import com.ruoyi.common.utils.file.FileUtils;
  * @author ruoyi
  */
 @Controller
-@RequestMapping("/common")
 public class CommonController
 {
     private static final Logger log = LoggerFactory.getLogger(CommonController.class);
@@ -46,7 +41,7 @@ public class CommonController
      * @param fileName 文件名称
      * @param delete 是否删除
      */
-    @GetMapping("/download")
+    @GetMapping("common/download")
     public void fileDownload(String fileName, Boolean delete, HttpServletResponse response, HttpServletRequest request)
     {
         try
@@ -77,8 +72,7 @@ public class CommonController
     /**
      * 通用上传请求
      */
-	@Log(title = "上传文件", businessType = BusinessType.UPDATE)
-    @PostMapping("/upload")
+    @PostMapping("/common/upload")
     @ResponseBody
     public AjaxResult uploadFile(MultipartFile file) throws Exception
     {
@@ -98,6 +92,5 @@ public class CommonController
         {
             return AjaxResult.error(e.getMessage());
         }
-    }
-  
+    }  
 }

@@ -165,7 +165,7 @@
 			  formData.append('file', $('#provefile')[0].files[0]);
 			 
 			    $.ajax({
-			        url: "/common/upload1",
+			        url: "/common/upload",
 			        type: 'post',
 			        cache: false,
 			        data: formData,
@@ -209,13 +209,17 @@
 				if ($('#prove').val() == null || $('#prove').val() == '') {
 				      proveFlag = false;
 				}
-				
 				if(getNowFormatDate()>$("#starttime").val() && DateDiff(getNowFormatDate(),$("#starttime").val()) > 1){
-						p01.innerText="补卡时间超时";
-						$("#p01").css("color","red");
-						flag = false;
+					//周一可以补周五的假
+					if(new Date($("#starttime").val()).getDay() == 5 &&  new Date(getNowFormatDate()).getDay() == 1){
+						flag = true;
 						return;
-				}
+					}
+					p01.innerText="补卡时间超时";
+					$("#p01").css("color","red");
+					flag = false;
+					return;
+				} 
 				
 				if(endtime < starttime){
 					p02.innerText="结束日期不能小于开始日期";
@@ -476,7 +480,7 @@
         };
      	
     	function Datelength(sDate1, sDate2, timeapart1, timeapart2){
-debugger;
+		debugger;
 			var timep1 = 0;
 			var timep2 = 0;
 			
@@ -492,10 +496,45 @@ debugger;
 				timep2 = 1;
 			}
     		days = DateDiff(sDate1,  sDate2) - timep1 + timep2;
+    		//days = countWorkDay(sDate1,  sDate2) - timep1 + timep2;
     		return days;
     	}
     	
-    	
+    	//计算两个日期间的工作日（只除去周六日）
+    /* 	function countWorkDay(sDay,eDay){
+    	    var sDay = new Date(Date.parse(sDay.replace(/-/g, "/")));
+    	    var eDay = new Date(Date.parse(eDay.replace(/-/g, "/")));
+    	    var s_t_w = sDay.getDay(), e_t_w = eDay.getDay();
+    	    // 总相差天数
+    	    var diffDay = (eDay - sDay) / (1000 * 60 * 60 * 24) + 1;
+    	    if(parseInt(diffDay) == 0)
+    	        return parseInt(diffDay);
+    	    // 周末天数
+    	    var weekEnds = 0;
+    	    var dateList = formatEveryDay(sDay,eDay);
+    	    for(Date d : dateList){
+    	    	 if(d.getDay() == 0 || d.getDay() == 6) 
+     	            weekEnds ++; 
+    	    }
+    	    return parseInt(diffDay - weekEnds);
+    	} */
+
+    	//获取两个日期之间的每一天
+    	/* function formatEveryDay(start, end) {
+    	    let dateList = []; 
+    	    var startTime = getDate(start);
+    	    var endTime = getDate(end);
+
+    	    while ((endTime.getTime() - startTime.getTime()) >= 0) {
+    	        var year = startTime.getFullYear();
+    	        var month = startTime.getMonth() + 1 < 10 ? '0' + (startTime.getMonth() + 1) : startTime.getMonth() + 1;
+    	        var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
+    	        dateList.push(year + "-" + month + "-" + day); 
+    	        startTime.setDate(startTime.getDate() + 1);
+    	    }
+    	    return dateList;
+    	}
+ */
 	</script>
 </body>
 </html>

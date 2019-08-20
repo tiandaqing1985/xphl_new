@@ -344,10 +344,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<where>
 				 <if test="deptName != null and deptName != ''">and a.dept_name = #{deptName}</if>
 				<if test="starttime != null"><!-- 开始时间检索 -->
-					AND date_format(a.firstphase,'%y%m%d') &gt;= date_format(#{starttime},'%y%m%d')
+					AND date_format(a.update_time,'%y%m%d') &gt;= date_format(#{starttime},'%y%m%d')
 				</if>
 				<if test="endtime != null"><!-- 结束时间检索 -->
-					AND date_format(a.firstphase,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
+					AND date_format(a.update_time,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
 				</if>
 			</where>				
 	</select>

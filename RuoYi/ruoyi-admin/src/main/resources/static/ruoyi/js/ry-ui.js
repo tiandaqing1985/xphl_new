@@ -770,6 +770,20 @@
             	}
                 return url;
             },
+            // 下载
+            download: function(id) {
+            	
+            	$.modal.confirm("确定下载该条" + $.table._option.modalName + "信息吗？", function() {
+                    var url = $.common.isEmpty(id) ? $.table._option.downloadUrl : $.table._option.downloadUrl.replace("{fileId}", id);
+                    if($.table._option.type == table_type.bootstrapTreeTable) {
+                    	$.operate.get(url);
+                    } else {
+	            	    var data = { "ids": id };
+	            	    $.operate.submit(url, "post", "json", data);
+	                }
+            	});
+            	
+            },
             // 删除信息
             remove: function(id) {
             	$.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
