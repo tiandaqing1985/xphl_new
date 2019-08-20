@@ -13,7 +13,7 @@
 							style="color: red;">*</span>资产类型：</label>
 				<div class="col-sm-8">
 					<div class="input-group" style="width: 100%">
-						<select name="sex" class="form-control m-b"
+						<select name="assetsType" class="form-control m-b"
 							th:with="type=${@dict.getType('xz_assets_type')}" required>
 							<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
 								th:value="${dict.dictValue}" th:field="*{assetsType}"></option>

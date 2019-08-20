@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="selectXzStationeryassetRecordList" parameterType="XzStationeryassetRecord"
 		resultMap="XzStationeryassetRecordResult">
 		<include refid="selectXzStationeryassetRecordVo" />
-		where 1=1 and assets_status ='3'
+		where 1=1
 		<if test="id != null "> and id = #{id}</if>
 		<if test="region != null  and region != '' "> and region = #{region}</if>
 		<if test="assetsName != null  and assetsName != '' "> and assets_name = #{assetsName}</if>

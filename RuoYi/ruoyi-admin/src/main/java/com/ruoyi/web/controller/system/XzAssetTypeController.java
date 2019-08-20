@@ -29,56 +29,50 @@ import com.ruoyi.framework.util.ShiroUtils;
  */
 @Controller
 @RequestMapping("/system/xzAssetType")
-public class XzAssetTypeController extends BaseController
-{
-    private String prefix = "system/xzAssetType/type";
-	
+public class XzAssetTypeController extends BaseController {
+	private String prefix = "system/xzAssetType/type";
+
 	@Autowired
 	private IXzAssetTypeService xzAssetTypeService;
-	
+
 	@RequiresPermissions("system:xzAssetType:view")
 	@GetMapping()
-	public String xzAssetType()
-	{
-	    return prefix + "/type";
+	public String xzAssetType() {
+		return prefix + "/type";
 	}
-	
+
 	/**
 	 * 查询资产父类型列表
 	 */
 	@RequiresPermissions("system:xzAssetType:list")
 	@PostMapping("/list")
 	@ResponseBody
-	public TableDataInfo list(XzAssetType xzAssetType)
-	{
+	public TableDataInfo list(XzAssetType xzAssetType) {
 		startPage();
-        List<XzAssetType> list = xzAssetTypeService.selectXzAssetTypeList(xzAssetType);
+		List<XzAssetType> list = xzAssetTypeService.selectXzAssetTypeList(xzAssetType);
 		return getDataTable(list);
 	}
-	
-	
+
 	/**
 	 * 导出资产父类型列表
 	 */
 	@RequiresPermissions("system:xzAssetType:export")
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(XzAssetType xzAssetType)
-    {
-    	List<XzAssetType> list = xzAssetTypeService.selectXzAssetTypeList(xzAssetType);
-        ExcelUtil<XzAssetType> util = new ExcelUtil<XzAssetType>(XzAssetType.class);
-        return util.exportExcel(list, "xzAssetType");
-    }
-	
+	@PostMapping("/export")
+	@ResponseBody
+	public AjaxResult export(XzAssetType xzAssetType) {
+		List<XzAssetType> list = xzAssetTypeService.selectXzAssetTypeList(xzAssetType);
+		ExcelUtil<XzAssetType> util = new ExcelUtil<XzAssetType>(XzAssetType.class);
+		return util.exportExcel(list, "xzAssetType");
+	}
+
 	/**
 	 * 新增资产父类型
 	 */
 	@GetMapping("/add")
-	public String add()
-	{
-	    return prefix + "/add";
+	public String add() {
+		return prefix + "/add";
 	}
-	
+
 	/**
 	 * 新增保存资产父类型
 	 */
@@ -86,24 +80,32 @@ public class XzAssetTypeController extends BaseController
 	@Log(title = "资产类型", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public AjaxResult addSave(XzAssetType xzAssetType)
-	{		
+	public AjaxResult addSave(XzAssetType xzAssetType) {
+		
+		try {
+			if(xzAssetTypeService.selectXzAssetTypeByName(xzAssetType.getAssetsType(),xzAssetType.getName())>0){
+				return error("已存在"+xzAssetType.getName()+"资产类型!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		xzAssetType.setCreateTime(new Date());
 		xzAssetType.setCreateBy(ShiroUtils.getLoginName());
-		return toAjax(xzAssetTypeService.insertXzAssetType(xzAssetType));
+		String suc = xzAssetTypeService.insertXzAssetType(xzAssetType);
+		return success(suc);
 	}
 
 	/**
 	 * 修改资产父类型
 	 */
 	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Long id, ModelMap mmap)
-	{
+	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
 		XzAssetType xzAssetType = xzAssetTypeService.selectXzAssetTypeById(id);
 		mmap.put("xzAssetType", xzAssetType);
-	    return prefix + "/edit";
+		return prefix + "/edit";
 	}
-	
+
 	/**
 	 * 修改保存资产父类型
 	 */
@@ -111,40 +113,38 @@ public class XzAssetTypeController extends BaseController
 	@Log(title = "资产类型", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
-	public AjaxResult editSave(XzAssetType xzAssetType)
-	{		
+	public AjaxResult editSave(XzAssetType xzAssetType) {
 		xzAssetType.setUpdateBy(ShiroUtils.getLoginName());
 		xzAssetType.setUpdateTime(new Date());
 		return toAjax(xzAssetTypeService.updateXzAssetType(xzAssetType));
 	}
-	
+
 	/**
 	 * 删除资产父类型
 	 */
 	@RequiresPermissions("system:xzAssetType:remove")
 	@Log(title = "资产类型", businessType = BusinessType.DELETE)
-	@PostMapping( "/remove")
+	@PostMapping("/remove")
 	@ResponseBody
-	public AjaxResult remove(String ids)
-	{	try {
-		return toAjax(xzAssetTypeService.deleteXzAssetTypeByIds(ids));
-	} catch (Exception e) {
-		return error(e.getMessage());
+	public AjaxResult remove(String ids) {
+		try {
+			return toAjax(xzAssetTypeService.deleteXzAssetTypeByIds(ids));
+		} catch (Exception e) {
+			return error(e.getMessage());
+		}
+
 	}
-		
+
+	/**
+	 * 查询资产类型详细
+	 */
+	@RequiresPermissions("system:xzAssetType:list")
+	@GetMapping("/detail/{id}")
+	public String detail(@PathVariable("id") Long id, ModelMap mmap) {
+		/* mmap.put("id", id); */
+		mmap.put("type", xzAssetTypeService.selectXzAssetTypeById(id));
+		mmap.put("typeList", xzAssetTypeService.selectXzAssetTypeAll());
+		return "system/xzAssetType/data/data";
 	}
-	
-	 /**
-     * 查询资产类型详细
-     */
-    @RequiresPermissions("system:xzAssetType:list")
-    @GetMapping("/detail/{id}")
-    public String detail(@PathVariable("id") Long id, ModelMap mmap)
-    {
-        /*mmap.put("id", id);*/
-        mmap.put("type", xzAssetTypeService.selectXzAssetTypeById(id));
-        mmap.put("typeList", xzAssetTypeService.selectXzAssetTypeAll());
-        return "system/xzAssetType/data/data";
-    }
-    
+
 }

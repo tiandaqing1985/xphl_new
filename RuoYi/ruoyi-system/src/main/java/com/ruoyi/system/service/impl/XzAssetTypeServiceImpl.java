@@ -57,9 +57,11 @@ public class XzAssetTypeServiceImpl implements IXzAssetTypeService
      * @return 结果
      */
 	@Override
-	public int insertXzAssetType(XzAssetType xzAssetType)
+	public String insertXzAssetType(XzAssetType xzAssetType)
 	{
-	    return xzAssetTypeMapper.insertXzAssetType(xzAssetType);
+		//新增一条资产类型数据
+		xzAssetTypeMapper.insertXzAssetType(xzAssetType);
+	    return "添加成功";
 	}
 	
 	/**
@@ -105,5 +107,10 @@ public class XzAssetTypeServiceImpl implements IXzAssetTypeService
     {
         return xzAssetTypeMapper.selectXzAssetTypeAll();
     }
+
+	@Override
+	public int selectXzAssetTypeByName(String assetsType, String name) {
+		return xzAssetTypeMapper.selectXzAssetTypeByName(assetsType, name);
+	}
     
 }

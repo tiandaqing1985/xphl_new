@@ -2,6 +2,8 @@ package com.ruoyi.system.domain;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
@@ -22,36 +24,37 @@ public class XzStationeryasset extends BaseEntity
 	private Long stationeryAssetId;
 	/** 办公资产类型名称    取自办公类型的父类型名称 */
 	private String assetTypeName;
-	/**  */
-	private Integer rukuCount;
 	/** 办公资产类型对应的id */
-	private String assetTypeId;
-	/** 当月入库数量 */
-	private Integer fenpeiCount;
+	private Long assetTypeId;
+	/** 品牌的id字符串 */
+	private String brand;
 	/** 库存中有的资产对应的品牌，多个品牌以，分割 */
 	private String brandType;
+	/** 当月分配数量 */
+	private Integer fenpeiCount;
+	/** 当月入库数量 */
+	private Integer rukuCount;
 	/** 当月库存数量 */
 	private Integer kucunCount;
 	/** 当月剩余数量 */
 	private Integer shengyuCount;
+	/** 当月初始数量 */
+	private Integer chushiCount;
+	/** 归还数量 */
+	private Integer guihaiCount;
 	/** 地域 */
-	private Integer area;
-	/** 品牌的id字符串 */
-	private String brand;
+	private String region;
 	/** model */
 	private String model;
-	/**  */
+	/** 保存类型 */
 	private String baocunType;
 	/** 保存状态的资产id */
 	private Long assetId;
 	/** 时间月份字符串 */
+	@JsonFormat(pattern = "yyyy-MM")
 	private String time;
-	/** 当月初始数量 */
-	private Integer chushiCount;
-	/**  */
+	/**固定、办公类型分类 */
 	private Integer categoryId;
-	/**  */
-	private Integer guihaiCount;
 	/** 计量单位 */
 	private String unit;
 
@@ -100,12 +103,12 @@ public class XzStationeryasset extends BaseEntity
 	{
 		return rukuCount;
 	}
-	public void setAssetTypeId(String assetTypeId) 
+	public void setAssetTypeId(Long assetTypeId) 
 	{
 		this.assetTypeId = assetTypeId;
 	}
 
-	public String getAssetTypeId() 
+	public Long getAssetTypeId() 
 	{
 		return assetTypeId;
 	}
@@ -145,14 +148,14 @@ public class XzStationeryasset extends BaseEntity
 	{
 		return shengyuCount;
 	}
-	public void setArea(Integer area) 
+	public void setRegion(String region) 
 	{
-		this.area = area;
+		this.region = region;
 	}
 
-	public Integer getArea() 
+	public String getRegion() 
 	{
-		return area;
+		return region;
 	}
 	public void setBrand(String brand) 
 	{
@@ -248,7 +251,7 @@ public class XzStationeryasset extends BaseEntity
             .append("brandType", getBrandType())
             .append("kucunCount", getKucunCount())
             .append("shengyuCount", getShengyuCount())
-            .append("area", getArea())
+            .append("region", getRegion())
             .append("brand", getBrand())
             .append("model", getModel())
             .append("baocunType", getBaocunType())

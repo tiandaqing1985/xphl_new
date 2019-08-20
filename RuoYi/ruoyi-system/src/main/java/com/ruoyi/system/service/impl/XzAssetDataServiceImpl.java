@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.XzAssetDataMapper;
 import com.ruoyi.system.domain.XzAssetData;
+import com.ruoyi.system.domain.XzAssetType;
 import com.ruoyi.system.service.IXzAssetDataService;
 import com.ruoyi.common.core.text.Convert;
 
@@ -53,6 +54,9 @@ public class XzAssetDataServiceImpl implements IXzAssetDataService
 	@Override
 	public int insertXzAssetData(XzAssetData xzAssetData)
 	{
+		//添加资产子类型时，判断子类型是否存在重复数据
+		//添加资产子类型的同时，添加办公室用品管理的一条记录，以资产父类型id及子类型id确定一条数据
+		
 	    return xzAssetDataMapper.insertXzAssetData(xzAssetData);
 	}
 	
@@ -78,6 +82,16 @@ public class XzAssetDataServiceImpl implements IXzAssetDataService
 	public int deleteXzAssetDataByIds(String ids)
 	{
 		return xzAssetDataMapper.deleteXzAssetDataByIds(Convert.toStrArray(ids));
+	}
+
+	@Override
+	public List<XzAssetType> selectXzAssetDataByParentId(Long parentId) {
+		return xzAssetDataMapper.selectXzAssetDataByParentId(parentId);
+	}
+
+	@Override
+	public int selectXzAssetDataByName(XzAssetData xzAssetData) {
+		return xzAssetDataMapper.selectXzAssetDataByName(xzAssetData);
 	}
 	
 }

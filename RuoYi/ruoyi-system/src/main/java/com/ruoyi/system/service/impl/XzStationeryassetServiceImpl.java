@@ -80,4 +80,12 @@ public class XzStationeryassetServiceImpl implements IXzStationeryassetService
 		return xzStationeryassetMapper.deleteXzStationeryassetByIds(Convert.toStrArray(ids));
 	}
 	
+	/**
+	 * 根据typeId和地域查询数量
+	 */
+	@Override
+	public int selectXzStationeryassetByTypeId(XzStationeryasset xzStationeryasset) {
+		return xzStationeryassetMapper.selectXzStationeryassetByTypeId(xzStationeryasset);
+	}
+	
 }

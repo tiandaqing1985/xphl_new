@@ -19,22 +19,9 @@
 							</li>
 
 							<li>
-								资产父类型：<input type="text" name="assetsType"/>
-							</li>
-
-							<li>
-								资产子类型：<input type="text" name="assetsType2"/>
-							</li>
-
-							<li>
 								资产型号：<input type="text" name="assetsModel"/>
 							</li>
 
-							<li>
-								品牌：<input type="text" name="brand"/>
-							</li>
-
-							
 							<li>
 								前当使用人：<input type="text" name="useBy"/>
 							</li>
@@ -126,26 +113,13 @@
 					title : '数量',
 					sortable: true
 				},
+				
 				{
-					field : 'distributor', 
-					title : '分配人',
+					field : 'createTime', 
+					title : '创建时间',
 					sortable: true
 				},
-				{
-					field : 'distributionTime', 
-					title : '分配时间',
-					sortable: true
-				},
-				{
-					field : 'useBy', 
-					title : '前当使用人',
-					sortable: true
-				},
-				{
-					field : 'department', 
-					title : '使用部门',
-					sortable: true
-				}/* ,
+				
 		        {
 		            title: '操作',
 		            align: 'center',
@@ -155,7 +129,7 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 						return actions.join('');
 		            }
-		        } */
+		        } 
 				]
             };
             $.table.init(options);

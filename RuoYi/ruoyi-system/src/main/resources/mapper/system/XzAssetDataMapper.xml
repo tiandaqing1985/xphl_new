@@ -35,6 +35,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
     
+     <select id="selectXzAssetDataByName" parameterType="XzAssetData" resultType="int">
+        select count(1) from xz_asset_data where parent_id = #{parentId} and name=#{name}
+    </select>
+    
     <select id="selectXzAssetDataByParentId" parameterType="Long" resultMap="XzAssetDataResult">
         <include refid="selectXzAssetDataVo"/>
         where parent_id = #{parentId}

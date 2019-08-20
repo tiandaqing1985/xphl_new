@@ -58,5 +58,17 @@ public interface XzStationeryassetMapper
      * @return 结果
      */
 	public int deleteXzStationeryassetByIds(String[] ids);
-	
+
+	/**
+	 * 数量
+	 * @param xzStationeryasset
+	 * @return
+	 */
+	public int selectXzStationeryassetByTypeId(XzStationeryasset xzStationeryasset);
+	/**
+	 * 对象
+	 * @param xzStationeryasset
+	 * @return
+	 */
+	public XzStationeryasset selectXzStationeryassetByType(XzStationeryasset xzStationeryasset);
 }

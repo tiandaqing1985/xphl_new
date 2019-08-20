@@ -22,9 +22,9 @@ public class XzStationeryassetRecord extends BaseEntity
 	/** 资产名称 */
 	private String assetsName;
 	/** 资产父类型 */
-	private String assetsType;
+	private Long assetsType;
 	/** 资产子类型 */
-	private String assetsType2;
+	private Long assetsType2;
 	/** 资产型号 */
 	private String assetsModel;
 	/** 品牌 */
@@ -105,21 +105,21 @@ public class XzStationeryassetRecord extends BaseEntity
 	{
 		return assetsName;
 	}
-	public void setAssetsType(String assetsType) 
+	public void setAssetsType(Long assetsType) 
 	{
 		this.assetsType = assetsType;
 	}
 
-	public String getAssetsType() 
+	public Long getAssetsType() 
 	{
 		return assetsType;
 	}
-	public void setAssetsType2(String assetsType2) 
+	public void setAssetsType2(Long assetsType2) 
 	{
 		this.assetsType2 = assetsType2;
 	}
 
-	public String getAssetsType2() 
+	public Long getAssetsType2() 
 	{
 		return assetsType2;
 	}

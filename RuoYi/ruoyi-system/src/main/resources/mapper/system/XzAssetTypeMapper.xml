@@ -36,13 +36,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
     
+     <select id="selectXzAssetTypeByName" resultType="int">
+        select count(1) from xz_asset_type where assets_type=#{assetsType} and name = #{name}  
+    </select>
+    
     <select id="checkTypeUnique" parameterType="String" resultMap="XzAssetTypeResult">
         <include refid="selectXzAssetTypeVo"/>
         where name = #{name}
     </select>
     
+    <!-- 获取办公室用品的资产父级类型 -->
     <select id="selectXzAssetTypeAll"  resultMap="XzAssetTypeResult">
         <include refid="selectXzAssetTypeVo"/>
+        where assets_type='2'
     </select>
         
     <insert id="insertXzAssetType" parameterType="XzAssetType" useGeneratedKeys="true" keyProperty="id">

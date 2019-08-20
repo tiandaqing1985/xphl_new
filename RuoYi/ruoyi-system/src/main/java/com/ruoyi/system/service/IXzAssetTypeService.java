@@ -35,7 +35,7 @@ public interface IXzAssetTypeService {
 	 *            资产父类型信息
 	 * @return 结果
 	 */
-	public int insertXzAssetType(XzAssetType xzAssetType);
+	public String insertXzAssetType(XzAssetType xzAssetType);
 
 	/**
 	 * 修改资产父类型
@@ -61,5 +61,13 @@ public interface IXzAssetTypeService {
 	 * @return 资产父类型集合信息
 	 */
 	public List<XzAssetType> selectXzAssetTypeAll();
+
+	/**
+	 * 查询数量
+	 * @param assetsType 资产分类
+	 * @param name 资产名称
+	 * @return 结果
+	 */
+	public int selectXzAssetTypeByName(String assetsType, String name);
 
 }

@@ -14,7 +14,7 @@
 						<ul>
 						  	<li>
 								类型名称：
-									<select id="parentId" name="parentId" th:value="${type.id}" required lay-verify="required">
+									<select id="parentId" name="parentId" th:value="${type.id}" required>
 									    <option th:each="a:${typeList}"  th:value="${a.id}" th:text="${a.name}" th:selected="${a.id eq type.id}" ></option>
 									</select>
 							</li> 

@@ -56,6 +56,11 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:xzStationeryasset:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:xzStationeryasset:remove')}]];
+        
+        var region = [[${@dict.getType('xz_assets_region')}]];
+        var brand = [[${@dict.getType('xz_assets_brand')}]];
+        var unit = [[${@dict.getType('xz_assets_unit')}]];
+        
         var prefix = ctx + "system/xzStationeryasset";
         var prefix2 = ctx + "system/xzStationeryassetRecord";
         $(function() {
@@ -76,9 +81,11 @@
 					visible: false
 				},
 				{
-					field : 'area', 
+					field : 'region', 
 					title : '地域',
-					sortable: true
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(region, value);
+					}
 				},
 				{
 					field : 'stationeryAssetName', 
@@ -94,31 +101,40 @@
 				{
 					field : 'brand', 
 					title : '品牌',
-					sortable: true
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(brand, value);
+					}
 				},
 				{
 					field : 'unit', 
 					title : '计量单位',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(unit, value);
+					}
+				},
+				{
+					field : 'chushiCount', 
+					title : '当月初始',
 					sortable: true
 				},
 				{
-					field : 'fenpeiCount', 
+					field : '分配Count', 
+					title : '当月分配',
+					sortable: true
+				},
+				{
+					field : 'rukuCount', 
 					title : '当月入库',
 					sortable: true
 				},
 				{
-					field : 'kucunCount', 
-					title : '当月库存',
+					field : 'guihuanCount', 
+					title : '当月归还',
 					sortable: true
 				},
 				{
 					field : 'shengyuCount', 
 					title : '当月剩余',
-					sortable: true
-				},
-				{
-					field : 'chushiCount', 
-					title : '当月初始',
 					sortable: true
 				},
 				{
@@ -131,8 +147,7 @@
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>分配</a>');
+                        actions.push('<a class="btn btn-primary btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.add(\'' + row.id + '\')"><i class="fa fa-add"></i>分配</a>');
 						return actions.join('');
 		            }
 		        }]

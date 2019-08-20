@@ -1,6 +1,8 @@
 package com.ruoyi.system.service;
 
 import com.ruoyi.system.domain.XzAssetData;
+import com.ruoyi.system.domain.XzAssetType;
+
 import java.util.List;
 
 /**
@@ -50,5 +52,20 @@ public interface IXzAssetDataService
      * @return 结果
      */
 	public int deleteXzAssetDataByIds(String ids);
+
+	/**
+	 * 根据父资产类型ID查询资产类型列表
+	 * @param parentId
+	 * @return
+	 */
+	public List<XzAssetType> selectXzAssetDataByParentId(Long parentId);
+
+	/**
+	 * 根据父资产类型ID、name查询资产类型列表
+	 * @param parentId
+	 * @param name
+	 * @return
+	 */
+	public int selectXzAssetDataByName(XzAssetData xzAssetData);
 	
 }

@@ -60,6 +60,7 @@ public class XzAssetDataController extends BaseController
         List<XzAssetData> list = xzAssetDataService.selectXzAssetDataList(xzAssetData);
 		return getDataTable(list);
 	}
+
 	
 	
 	/**
@@ -97,6 +98,13 @@ public class XzAssetDataController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(XzAssetData xzAssetData)
 	{		
+		try {
+			if (xzAssetDataService.selectXzAssetDataByName(xzAssetData)>0){
+				return error("已存在"+xzAssetData.getName()+"资产类型!");
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		xzAssetData.setCreateBy(ShiroUtils.getLoginName());
 		xzAssetData.setCreateTime(new Date());
 		return toAjax(xzAssetDataService.insertXzAssetData(xzAssetData));

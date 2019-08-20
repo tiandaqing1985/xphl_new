@@ -1,7 +1,8 @@
 package com.ruoyi.system.mapper;
 
 import com.ruoyi.system.domain.XzAssetType;
-import java.util.List;	
+import java.util.List;
+import org.apache.ibatis.annotations.Param;	
 
 /**
  * 资产父类型 数据层
@@ -64,6 +65,14 @@ public interface XzAssetTypeMapper
 	 * @return 资产父类型集合信息
 	 */
 	public List<XzAssetType> selectXzAssetTypeAll();
+
+	/**
+	 * 根据资产分类、姓名判断是否唯一
+	 * @param name
+	 * @param string 
+	 * @return 结果
+	 */
+	public int selectXzAssetTypeByName(@Param("assetsType")String assetsType, @Param("name")String name);
 
 	
 }

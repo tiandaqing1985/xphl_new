@@ -90,11 +90,14 @@
         var editFlag = [[${@permission.hasPermi('system:xzAsstes:edit')}]];
         var editPartFlag = [[${@permission.hasPermi('system:xzAsstes:editPart')}]];
         var removeFlag = [[${@permission.hasPermi('system:xzAsstes:remove')}]];
-        var prefix = ctx + "system/xzAsstes";
+       
+        
         var region = [[${@dict.getType('xz_assets_region')}]];
         var brand = [[${@dict.getType('xz_assets_brand')}]];
         var assetsStatus = [[${@dict.getType('xz_assets_assetsStatus')}]];
         var useStatus = [[${@dict.getType('xz_assets_useStatus')}]];
+        
+        var prefix = ctx + "system/xzAsstes";
         $(function() {
             var options = {
                 url: prefix + "/list",

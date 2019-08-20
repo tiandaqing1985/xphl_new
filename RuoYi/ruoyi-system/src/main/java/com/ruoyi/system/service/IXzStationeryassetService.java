@@ -51,4 +51,13 @@ public interface IXzStationeryassetService
      */
 	public int deleteXzStationeryassetByIds(String ids);
 	
+	/**
+	 * 判断唯一
+	 * @param stationeryAssetId
+	 * @param assetTypeId
+	 * @param region
+	 * @return
+	 */
+	public int selectXzStationeryassetByTypeId(XzStationeryasset xzStationeryasset);
+	
 }
