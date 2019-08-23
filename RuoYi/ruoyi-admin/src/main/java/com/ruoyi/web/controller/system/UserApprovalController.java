@@ -308,7 +308,7 @@ public class UserApprovalController extends BaseController
 	{
 		boolean showFlag = false;
 		SysUser user = iSysUserService.selectUserById(ShiroUtils.getUserId());
-		user.setRoleId(6L);
+		user.setRoleId(3L);
 		Long personnelId = iSysRoleService.selectUserIdByRoleId(user);//查询人事id
 		if(personnelId.equals(ShiroUtils.getUserId())){
 			showFlag = true;

@@ -123,8 +123,8 @@ public class FileUploadUtils
     {
         String filename = file.getOriginalFilename();
         String extension = getExtension(file);
-//        filename = DateUtils.datePath() + "/" + encodingFilename(filename) + "." + extension;
-        filename =  filename;
+        filename = DateUtils.datePath() + "/" + encodingFilename(filename) + "." + extension;
+//        filename =  filename;
 
         return filename;
     }

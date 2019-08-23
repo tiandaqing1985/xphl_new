@@ -8,10 +8,14 @@ public class Data {
 
 	private String deptName;
 	
+	private long deptId;
+	
 	private int count;
 
-	private String ratio;//比率
+	private String ratio1;//离职率
 	
+	private String ratio2;//入职率
+
 	/** 开始时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date starttime;
@@ -19,6 +23,14 @@ public class Data {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date endtime;
     
+	public long getDeptId() {
+		return deptId;
+	}
+
+	public void setDeptId(long deptId) {
+		this.deptId = deptId;
+	}
+
 	public Date getStarttime() {
 		return starttime;
 	}
@@ -35,12 +47,20 @@ public class Data {
 		this.endtime = endtime;
 	}
 
-	public String getRatio() {
-		return ratio;
+	public String getRatio1() {
+		return ratio1;
 	}
 
-	public void setRatio(String ratio) {
-		this.ratio = ratio;
+	public void setRatio1(String ratio1) {
+		this.ratio1 = ratio1;
+	}
+
+	public String getRatio2() {
+		return ratio2;
+	}
+
+	public void setRatio2(String ratio2) {
+		this.ratio2 = ratio2;
 	}
 
 	public String getDeptName() {

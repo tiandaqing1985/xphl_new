@@ -130,6 +130,7 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 		
 		SysUser user = userMapper.selectUserById(queryConditions.getUserId());//查出当前用户
 
+		
 		//人事总监
 		SysUser user2 = new SysUser();
 		user2.setRoleId(6L);//人事总监

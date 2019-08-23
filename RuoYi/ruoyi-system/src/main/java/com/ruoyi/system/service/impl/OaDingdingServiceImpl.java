@@ -195,11 +195,11 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 	}
 
 	@Override
-	public int updateOaDingDingByOutAndApply() {
+	public int updateOaDingDingByOutAndApply(String applyState, String state) {
 		//（一）根据请假情况更新钉钉考勤表
 		UserApply apply = new UserApply();
-		apply.setApplyState("3");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
-		apply.setApplyType("1");//申请类型（1请假，2加班，销假）
+		apply.setApplyState(applyState);//申请状态（1 待审批，2已撤回，3申请成功，4申请失败） 
+		apply.setApplyType("1");//申请类型（1请假，2加班，销假） 
 		apply.setStatus("0");//是否更新在钉钉考勤表中：0 未更新  1已更新
 		List<UserApply> applyList = applyMapper.selectApplyList(apply);//申请成功的请假记录
 		
@@ -331,7 +331,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		//（一）根据外出报备情况更新钉钉考勤表
 		OaOut out = new OaOut();
 		out.setStatus("0");//是否更新在钉钉考勤表中：0 未更新  1已更新
-		out.setState("3");//申请成功
+		out.setState(state);//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
 		List<OaOut> outList = outMapper.selectOaOutList(out);//查询申请成功且未更新在钉钉考勤记录表中的外出报备数据
 		if(outList.size() == 0) return 1;
 		

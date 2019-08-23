@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OaFileDownloadMapper">
+    
+    <resultMap type="OaFileDownload" id="OaFileDownloadResult">
+        <result property="id"    column="id"    />
+        <result property="fileId"    column="file_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+	
+	<sql id="selectOaFileDownloadVo">
+        select id, file_id, user_id, create_time from oa_file_download
+    </sql>
+	
+    <select id="selectOaFileDownloadList" parameterType="OaFileDownload" resultMap="OaFileDownloadResult">
+        <include refid="selectOaFileDownloadVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="fileId != null "> and file_id = #{fileId}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectOaFileDownloadById" parameterType="Long" resultMap="OaFileDownloadResult">
+        <include refid="selectOaFileDownloadVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertOaFileDownload" parameterType="OaFileDownload" useGeneratedKeys="true" keyProperty="id">
+        insert into oa_file_download
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="fileId != null  ">file_id,</if>
+			<if test="userId != null  ">user_id,</if>
+			<if test="createTime != null  ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="fileId != null  ">#{fileId},</if>
+			<if test="userId != null  ">#{userId},</if>
+			<if test="createTime != null  ">sysdate(),</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateOaFileDownload" parameterType="OaFileDownload">
+        update oa_file_download
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileId != null  ">file_id = #{fileId},</if>
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteOaFileDownloadById" parameterType="Long">
+        delete from oa_file_download where id = #{id}
+    </delete>
+	
+    <delete id="deleteOaFileDownloadByIds" parameterType="String">
+        delete from oa_file_download where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -209,7 +209,8 @@
 				if ($('#prove').val() == null || $('#prove').val() == '') {
 				      proveFlag = false;
 				}
-				if(getNowFormatDate()>$("#starttime").val() && DateDiff(getNowFormatDate(),$("#starttime").val()) > 1){
+				/* 暂时取消此规定20190821 */
+				/* if(getNowFormatDate()>$("#endtime").val() && DateDiff(getNowFormatDate(),$("#endtime").val()) > 1){
 					//周一可以补周五的假
 					if(new Date($("#starttime").val()).getDay() == 5 &&  new Date(getNowFormatDate()).getDay() == 1){
 						flag = true;
@@ -219,7 +220,7 @@
 					$("#p01").css("color","red");
 					flag = false;
 					return;
-				} 
+				}  */
 				
 				if(endtime < starttime){
 					p02.innerText="结束日期不能小于开始日期";
@@ -310,12 +311,12 @@
 							return;
 						}
 						
-						if(datelength > 98){
+						if(datelength > 128){
 							$.modal.alertWarning("超出产假可享受休假时长");
 							return;
-						}else if(datelength < 98){
+						}else if(datelength < 128){
 							confirmFlag = true;
-							confirmText = "产假可享受98天";
+							confirmText = "产假可享受128天";
 						}
 					}
 					else if(leaveType == "7"){

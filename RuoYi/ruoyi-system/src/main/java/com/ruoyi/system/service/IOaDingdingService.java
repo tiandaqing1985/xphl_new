@@ -59,9 +59,12 @@ public interface IOaDingdingService
      */
 	public int deleteOaDingdingByIds(String ids);
 	
+	
 	/**
 	 * 根据外出报备和请假记录更新钉钉考勤状态
+	 * @param applyState 请假申请状态
+	 * @param state 外出报备申请状态
 	 * @return
 	 */
-	public int updateOaDingDingByOutAndApply();
+	public int updateOaDingDingByOutAndApply(String applyState, String state);
 }

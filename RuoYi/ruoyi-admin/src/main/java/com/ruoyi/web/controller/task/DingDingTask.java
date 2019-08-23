@@ -70,7 +70,7 @@ public class DingDingTask{
 //		super();
 //		// TODO Auto-generated constructor stub
 //	}
-//
+
 //	public static void main(String[] args) throws Exception {
 //		System.out.println("-------------------------------------------");
 //		DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
@@ -90,6 +90,10 @@ public class DingDingTask{
 //		System.out.println("---------------------------------------------------------");
 //		DingDingTask ding = new DingDingTask();
 //		ding.dingDingTask();
+		
+		//待审批的请假和外出报备申请更新在钉钉考勤中
+//		DingDingTask ding = new DingDingTask();
+//		ding.updateDing();
 //	}
 
 	public void dingDingTask() throws Exception
@@ -160,9 +164,15 @@ public class DingDingTask{
 
         
         //根据请假、外出报备修改钉钉打卡考勤结果
-        dingdingService.updateOaDingDingByOutAndApply();
+        dingdingService.updateOaDingDingByOutAndApply("3","3");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
         
         }
+	
+	//待审批的请假记录和外出报备记录更新在钉钉考勤里
+	public void updateDing(){
+		System.out.println("\n 待审批的请假记录和外出报备记录更新在钉钉考勤里\n");
+	    dingdingService.updateOaDingDingByOutAndApply("1","1");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+	}
 	
 	public static List<OaDingding> getAttendances(List<String> list, List<OaDingding> users, String workDateFrom, String workDateTo,String access_Token) {
       int listSize=list.size();

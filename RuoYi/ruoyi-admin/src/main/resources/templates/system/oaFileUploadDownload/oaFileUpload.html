@@ -57,6 +57,28 @@
 			  formData.append('fileName', $("#uploadfile").val());
 			  formData.append('file', $('#uploadfile')[0].files[0]);
 			  
+			  var fileName = $("#uploadfile").val();
+			  
+			  //验证文件是否已存在
+			  $.ajax({
+			        url: prefix+"/ifUpload/"+fileName,
+			        type: 'post',
+			        data:{"fileName":fileName},
+			        cache: false,
+			        processData: false,
+			        contentType: false,
+			        dataType: "json",
+			        success: function(result) {
+			        	if(result){
+			        		$.modal.alertWarning("文件已上传，请删除后再重新上传！");
+							return;
+			        	}
+			        },
+			        error:function(){
+			        	$.modal.alertWarning("请联系管理员");
+			        }
+			    });
+			  
 			    $.ajax({
 			        url: prefix+"/add",
 			        type: 'post',

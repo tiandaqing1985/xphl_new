@@ -332,7 +332,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    	LEFT JOIN sys_user_apply a  ON p.apply_id = a.`apply_id`
 	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id` 
 	    	LEFT JOIN sys_dept d ON u. dept_id = d.dept_id
-	    	LEFT JOIN (SELECT * FROM sys_user) s ON s.user_id = p.approver_id
+	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
 	    	<where>  
         	<if test="approverId != null "> and p.approver_id = #{approverId}</if>
         	<if test="approvalState != null  and approvalState != '' "> and p.approval_state = #{approvalState}</if>

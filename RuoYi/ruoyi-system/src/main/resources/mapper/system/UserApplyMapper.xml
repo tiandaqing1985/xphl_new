@@ -95,7 +95,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from sys_user_apply a 
 	    	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
 	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
-	    	LEFT JOIN (SELECT * FROM sys_user) s ON s.user_id = p.approver_id
+	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
         	
     </sql>
 	
@@ -207,7 +207,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from sys_user_apply a 
 	    	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
 	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
-	    	LEFT JOIN (SELECT * FROM sys_user) s ON s.user_id = p.approver_id
+	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
     	<where>  
              <if test="userId != null "> and a.user_id = #{userId}</if>
              <if test="listNum != null  and listNum != '' "> and a.list_num like concat('%', #{listNum}, '%')</if>
@@ -287,7 +287,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from sys_user_apply a 
 	    	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
 	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
-	    	LEFT JOIN (SELECT * FROM sys_user) s ON s.user_id = p.approver_id
+	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
     	<where>  
              <if test="userId != null "> and a.user_id = #{userId}</if>
              <if test="listNum != null  and listNum != '' "> and a.list_num like concat('%', #{listNum}, '%')</if>
