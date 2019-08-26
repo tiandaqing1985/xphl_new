@@ -73,7 +73,7 @@ public class SysUserController extends BaseController
         return "system/statistics/statistics";
     }
 
-    //查询各部门过三个月试用期人数
+    //查询各部门过三个月试用期人数(团建人数)
     @PostMapping("/statistics")
     @ResponseBody
     public TableDataInfo selectUserCount(String deptName)

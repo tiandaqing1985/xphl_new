@@ -400,7 +400,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			) d 
 	<where>
 			d.ratio1 = d.ratio2 =0
-		 <if test="deptName != null and deptName != ''">and a.dept_name = #{deptName}</if>				
+		 <if test="deptName != null and deptName != ''">and d.dept_name = #{deptName}</if>				
 	</where>		
 	</select>
 </mapper> 
