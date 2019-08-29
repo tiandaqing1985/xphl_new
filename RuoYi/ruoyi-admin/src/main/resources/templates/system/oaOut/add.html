@@ -76,7 +76,7 @@
 				var flag = false;//提交flag 
 				var repeatFlag = false;
 				
-				if(endtime <= starttime){
+				if(endtime < starttime){
 					p02.innerText="结束日期不能小于或等于开始日期";
 					$("#p02").css("color","red");
 					flag = false;

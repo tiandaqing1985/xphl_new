@@ -53,13 +53,7 @@
 					</div>
 				</form>
 			</div>
-			
-	        <div class="btn-group-sm" id="toolbar" role="group">
-				
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:userApproval:export">
-						<i class="fa fa-download"></i> 导出
-				 </a>
-			</div>
+				       
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
 			</div>
@@ -91,7 +85,7 @@
 				{
  					field : 'applyId', 
  					title : '申请ID',
- 					visible: true,
+ 					visible: false,
  					sortable: false
  				},
 				{

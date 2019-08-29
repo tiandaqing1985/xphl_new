@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ruoyi.system.mapper.OaOutApprovalMapper;
 import com.ruoyi.system.mapper.OaOutMapper;
@@ -26,6 +27,7 @@ import com.ruoyi.common.core.text.Convert;
  * @author ruoyi
  * @date 2019-08-01
  */
+@Transactional
 @Service
 public class OaOutServiceImpl implements IOaOutService 
 {
@@ -149,9 +151,9 @@ public class OaOutServiceImpl implements IOaOutService
 		if("1".equals(oaOut.getApprovalState())){
 			
 			if(approvalList1.size()==1 && approval.getApprovalLevel() == 1){//其他部门员工的一级审批
-				approval.setApprovalState("1");
+				approval.setApprovalState("1");//审批状态（1同意，2驳回 ，3未操作）
 				oaOutApprovalMapper.updateOaOutApprovalByApprovalId(approval);
-				oaOut.setState("3");
+				oaOut.setState("3");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
 				return oaOutMapper.updateOaOut(oaOut);
 			}else if(approvalList1.size()==2 && approval.getApprovalLevel() == 2){//人事部门员工的二级审批
 				approval.setApprovalState("1");
@@ -161,7 +163,7 @@ public class OaOutServiceImpl implements IOaOutService
 				
 			}else{//人事部门员工的一级审批
 				//leader审批
-				approval.setApprovalSight("0");
+				approval.setApprovalSight("0");//1可见  0不可见
 				approval.setApprovalState("1");
 				oaOutApprovalMapper.updateOaOutApprovalByApprovalId(approval);
 				
@@ -194,6 +196,7 @@ public class OaOutServiceImpl implements IOaOutService
 	@Override
 	public int deleteOaOutByIds(String ids)
 	{
+		oaOutApprovalMapper.deleteOaOutApprovalByOutIds(Convert.toStrArray(ids));
 		return oaOutMapper.deleteOaOutByIds(Convert.toStrArray(ids));
 	}
 	

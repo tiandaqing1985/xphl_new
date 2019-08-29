@@ -17,6 +17,8 @@ public class OaDingding extends BaseEntity
 	private Long userId;
 	/** 打卡日期 */
 	private Date workDate;
+	/** 星期几 */
+	private String weekDay;
 	/** 考勤类型 OnDuty：上班；OffDuty：下班 */
 	private String checkType;
 	/** 实际打卡时间 */
@@ -26,7 +28,26 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	private String timeResult;
 	/** 是否更新在钉钉考勤表中：0 未更新  1已更新 */
 	private String status;
+    /** 部门名称 */
+    private String deptName;
 	
+
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
+	public String getWeekDay() {
+		return weekDay;
+	}
+
+	public void setWeekDay(String weekDay) {
+		this.weekDay = weekDay;
+	}
+
 	public String getStatus() {
 		return status;
 	}

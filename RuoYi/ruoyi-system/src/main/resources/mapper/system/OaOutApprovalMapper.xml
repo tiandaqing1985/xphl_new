@@ -104,8 +104,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </delete>
 	
-    <delete id="deleteOaOutApprovalByIds" parameterType="String">
-        delete from oa_out_approval where id in 
+    <delete id="deleteOaOutApprovalByOutIds" parameterType="String">
+        delete from oa_out_approval where out_id in 
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

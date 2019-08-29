@@ -7,7 +7,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="OaDingding" id="OaDingdingResult">
         <result property="userId"    column="user_id"    />
         <result property="userName"    column="user_name"    />
+        <result property="deptName" column="dept_name"/>
         <result property="workDate"    column="workDate"    />
+        <result property="weekDay"    column="weekDay"    />
         <result property="checkType"    column="checkType"    />
         <result property="userCheckTime"    column="userCheckTime"    />
         <result property="timeResult"    column="timeResult"    />
@@ -17,7 +19,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="Dingding" id="DingdingResult">
         <result property="userId"    column="user_id"    />
         <result property="userName"    column="user_name"    />
+        <result property="deptName" column="dept_name"/>
         <result property="workDate"    column="workDate"    />
+        <result property="weekDay"    column="weekDay"    />
         <result property="checkType"    column="checkType"    />
         <result property="userCheckTime"    column="userCheckTime"    />
         <result property="timeResult"    column="timeResult"    />
@@ -79,12 +83,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <insert id="insertForeach" parameterType="List" useGeneratedKeys="false">
     	insert into oa_dingding 
-    	(user_id, workDate, checkType, userCheckTime, timeResult, status)
+    	(user_id, workDate, weekDay, checkType, userCheckTime, timeResult, status)
     	values
     	<foreach collection="list" item="item" index="index" separator=",">
     		(
     		 #{item.userId}, 
-    		 #{item.workDate}, 
+    		 #{item.workDate},
+    		 #{item.weekDay},
     		 #{item.checkType},
     		 #{item.userCheckTime},
     		 #{item.timeResult},
@@ -126,6 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
     
     <select id="selectDingData" parameterType="Dingding" resultMap="DingdingResult">
+    SELECT a.* FROM (
     	SELECT
 			ding.* 
 		FROM
@@ -135,6 +141,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				ouser.user_id,
 				us.user_name,
 				ding.workDate,
+				ding.weekDay,
 				(
 				 CASE WHEN ding.checkType='OnDuty' THEN '上班'
 				 ELSE '下班' END 
@@ -159,18 +166,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					  WHEN ding.timeResult = '9' THEN '丧假' 
 				      WHEN ding.timeResult = '10' THEN '哺乳假' 					 
 				ELSE '' END
-				) timeResult, ding.timeResult timeResult2
+				) timeResult, ding.timeResult timeResult2, d.dept_name, ouser.area, ouser.intime
 			FROM
 				`oa_dingding` ding
 				LEFT JOIN oa_dingding_user us ON ding.user_id = us.user_id
 				LEFT JOIN sys_user ouser ON ouser.user_name = us.user_name 
+				LEFT JOIN sys_dept d on d.dept_id = ouser.dept_id
 			) ding ON ding.user_id = nu.user_id 
 			<where>
              	<if test="userId != null and userId != 1"> and ding.user_id = #{userId}</if>
              	<if test="userName != null and userName != '' "> and ding.user_name like concat('%', #{userName}, '%')</if>  
              	<if test="workDate == 1 "> and ding.workDate = #{workDate}</if>  
              	<if test="checkType != null and checkType != '' "> and ding.checkType = #{checkType}</if>
+             	<if test="deptName != null and deptName != '' "> and ding.dept_name = #{deptName}</if>
              	<if test="timeResult != null and timeResult != ''"> and ding.timeResult2 = #{timeResult}</if>
+             	<if test="area != null and area != ''"> and ding.area = #{area}</if>
              	<if test="dSet != null"> 
              			and nu.dept_id in 
 			          <foreach collection="dSet" index="index" item="item" open="(" separator="," close=")">  
@@ -184,5 +194,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND date_format(ding.workDate,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
 		</if>
          	</where>   
+    ) a ORDER BY a.user_id,a.intime,a.userCheckTime
     </select>
 </mapper>

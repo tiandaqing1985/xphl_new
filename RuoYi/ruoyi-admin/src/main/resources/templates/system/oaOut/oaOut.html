@@ -31,6 +31,27 @@
 		});
 		
 	}
+	function del(outId){
+		$.ajax({
+			type:"post",
+			url:prefix+"/ifTakeback",
+			data:{"outId":outId},
+			dataType:"json",
+			success:function(result){
+				if(result == "0"){
+					var data = { "ids": outId };
+		     	    $.operate.submit(prefix+"/remove", "post", "json", data);
+				}
+				else{
+					$.modal.alertWarning("不能执行此操作");
+				}
+			},
+			error:function(){
+				$.modal.alertWarning("请联系管理员");
+			}
+		});
+		
+	}
 	function edit(outId){
 		$.ajax({
 			type:"post",
@@ -43,7 +64,7 @@
 					var url = $.table._option.updateUrl.replace("{outId}",outId);
 					$.modal.open("修改申请", url);
 				}else if(result == "1"){
-					$.modal.alertWarning("审批中，禁止修改");
+					$.modal.alertWarning("不能执行此操作");
 				}
 			},
 			error:function(){
@@ -86,7 +107,7 @@
 				<a class="btn btn-success" onclick="add()">
 					<i class="fa fa-plus"></i> 外出报备申请
 				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:oaOut:edit">
+				<!-- <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:oaOut:edit">
 					<i class="fa fa-edit"></i> 修改
 				</a>
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:oaOut:remove">
@@ -94,7 +115,7 @@
 				</a>
 				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:oaOut:export">
 						<i class="fa fa-download"></i> 导出
-				 </a>
+				 </a> -->
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -181,10 +202,10 @@
 		            formatter: function(value, row, index) {
 		            	var actions = [];
 		            	actions.push('<a class="btn btn-success btn-xs ' + '" href="#" onclick="toView(\'' + row.outId + '\')" id="check"><i class="fa fa-edit"></i>查看</a> ');
-/* 		            	actions.push('<a class="btn btn-info btn-xs ' + '" href="#" onclick="emailAlert(\'' + row.outId + '\')"><i class="fa fa-user"></i>催办</a>');
- */                        actions.push('<a class="btn btn-danger btn-xs ' + '" href="#" onclick="takeBack(\'' + row.outId + '\')"><i class="fa fa-refresh"></i>撤回</a>');
- 		            	actions.push('<div id="div1" class="btn btn-warning btn-xs" href="#" onclick="edit(\'' + row.outId + '\')"><i class="fa fa-edit"></i>修改</div> ');
-                        return actions.join('');
+                        actions.push('<a class="btn btn-danger btn-xs ' + '" href="#" onclick="takeBack(\'' + row.outId + '\')"><i class="fa fa-refresh"></i>撤回</a>');
+ 		            	actions.push('<a class="btn btn-info btn-xs ' + '" href="#" onclick="del(\'' + row.outId + '\')"><i class="fa fa-user"></i>删除</a>'); 
+                        actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="edit(\'' + row.outId + '\')"><i class="fa fa-edit"></i>修改</a> ');
+ 		            	return actions.join('');
 		            }
 		        }]
             };

@@ -13,6 +13,9 @@
 							<li>
 								员工姓名：<input type="text" name="userName"/>
 							</li>
+							<li>
+								部门名称：<input type="text" name="deptName"/>
+							</li>
 							<li class="select-time">
 								<label>打卡时间：</label>
 								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
@@ -84,8 +87,18 @@
 					sortable: false
 				},
 				{
+					field : 'deptName', 
+					title : '部门名称',
+					sortable: false
+				},
+				{
 					field : 'workDate', 
 					title : '打卡日期',
+					sortable: false
+				},
+				{
+					field : 'weekDay', 
+					title : '星期',
 					sortable: false
 				},
 				{

@@ -409,9 +409,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 	
     <delete id="deleteUserApprovalByIds" parameterType="String">
-        delete from sys_user_approval where approval_id in 
-        <foreach item="approvalId" collection="array" open="(" separator="," close=")">
-            #{approvalId}
+        delete from sys_user_approval where apply_id in 
+        <foreach item="applyId" collection="array" open="(" separator="," close=")">
+            #{applyId}
         </foreach>
     </delete>
     

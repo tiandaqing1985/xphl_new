@@ -20,14 +20,11 @@ import com.ruoyi.system.domain.HolidayRecord;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.UserApply;
 import com.ruoyi.system.domain.UserApplyList;
-import com.ruoyi.system.domain.UserApproval;
-import com.ruoyi.system.email.EmailSend;
 import com.ruoyi.system.service.IHolidayService;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IUserApplyService;
-import com.ruoyi.system.service.IUserApprovalService;
 import com.ruoyi.system.service.impl.HolidayRecordServiceImpl;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -52,9 +49,6 @@ public class UserApplyController extends BaseController
 	
 	@Autowired
 	private ISysUserService iSysUserService;
-	
-	@Autowired
-	private IUserApprovalService iUserApprovalService;
 	
 	@Autowired
 	private IHolidayService iHolidayService;
@@ -226,55 +220,6 @@ public class UserApplyController extends BaseController
 		int i = userApplyService.insertUserApply(userApply, ShiroUtils.getUserId());
 		return toAjax(i);
 	}
-	
-	/**
-	 * 申请确认列表——人事
-	 */
-	@GetMapping("/confirm")
-	public String confirm()
-	{
-	    return prefix + "/confirm";
-	}
-	
-	/**
-	 * 申请确认列表——人事
-	 */
-	@PostMapping("/confirm")
-	@ResponseBody
-	public AjaxResult confirm(UserApply userApply)
-	{		
-		
-		return toAjax(1);
-	}
-	
-	/**
-	 * 查询待确认申请列表
-	 */
-	@PostMapping("/allList")
-	@ResponseBody
-	public TableDataInfo list(UserApply userApply)
-	{
-		startPage();
-		//待确认的
-        userApply.setConfirmState("0");
-        List<UserApplyList> list = userApplyService.selectUserApplyConfirmAsList(userApply);
-		return getDataTable(list);
-	}
-	
-	/**
-	 * 确认申请
-	 */
-	@PostMapping("/confirmApply")
-	@ResponseBody
-	public AjaxResult confirmApply(Long ids)
-	{	
-		UserApply userApply = new UserApply();
-		userApply.setApplyId(ids);
-		userApply.setConfirmState("1");
-		
-		
-		return toAjax(userApplyService.updateUserApply(userApply));
-	}
 
 	/**
 	 * 修改申请
@@ -282,15 +227,8 @@ public class UserApplyController extends BaseController
 	@GetMapping("/edit/{applyId}")
 	public String edit(@PathVariable("applyId") Long applyId, ModelMap mmap)
 	{
-		
-		
-		
 		UserApply userApply = userApplyService.selectUserApplyByIdForUndo(applyId);
-
-		System.out.println(userApply.getTimeapart1());
-		System.out.println(userApply.getTimeapart2());
 		mmap.put("userApply", userApply);
-		
 	    return prefix + "/edit";
 	}
 	
@@ -302,8 +240,6 @@ public class UserApplyController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(UserApply userApply)
 	{		
-		userApply.setApplyType(null);
-		userApply.setLeaveType(null);
 		return toAjax(userApplyService.updateUserApply(userApply));
 	}
 	
@@ -393,39 +329,7 @@ public class UserApplyController extends BaseController
 		int i = userApplyService.addOvertimeSave(userApply,ShiroUtils.getUserId());
 		return toAjax(i);
 	}
-	
-	/**
-	 * 邮件提醒审批
-	 */
-	@PostMapping("/emailAlert")
-	@ResponseBody
-	public AjaxResult emailAlert(Long applyId)
-	{	
-		List<UserApply> userApply = userApplyService.selectUserApplyById(applyId);
-		String text = userApply.get(0).getSysUser().getUserName() + "提醒您请尽快批复 申请ID为" + applyId + "的申请"; 
 		
-		UserApproval userApproval = new UserApproval();
-		userApproval.setApplyId(applyId);
-		userApproval.setApprovalState("1");
-		UserApproval userApproval1 = iUserApprovalService.selectUserApprovalByUserApproval(userApproval);
-		
-		SysUser user = iSysUserService.selectUserById(userApproval1.getApproverId());
-		String to = user.getEmail();
-		
-
-	    
-	    EmailSend emailSend = new EmailSend();
-		if(text != null && to != null){
-			try {
-//				emailSend.sendMail(to, "审批提醒", text);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
-		return toAjax(1);
-	}
 	/**
 	 * 验证是否能做销假操作
 	 */
@@ -443,18 +347,16 @@ public class UserApplyController extends BaseController
     	}
     }
     /**
-	 * 验证是否能做撤销操作
+	 * 验证是否能已经审核过
 	 */
     @PostMapping("/ifTakeback")
     @ResponseBody
     public String ifTakeback(Long applyId)
     {
-    	System.out.println(applyId);
-    	
     	UserApply userApply = userApplyService.selectUserApplyByIdForUndo(applyId);
     	System.out.println(userApply);
     	//请假单是请假申请并且申请成功的时候可以做销假
-    	if(userApply.getApplyState().equals("待审批")){
+    	if(userApply.getApplyState().equals("待审批") || userApply.getApplyState().equals("已撤回")){
     		return "0";
     	}else{
     		return "1";
@@ -605,4 +507,56 @@ public class UserApplyController extends BaseController
     	}
     	
     }
+    
+    //----------------------------------------
+	
+	/**
+	 * 申请确认列表——人事
+	 */
+	@GetMapping("/confirm")
+	public String confirm()
+	{
+	    return prefix + "/confirm";
+	}
+	
+	/**
+	 * 申请确认列表——人事
+	 */
+	@PostMapping("/confirm")
+	@ResponseBody
+	public AjaxResult confirm(UserApply userApply)
+	{		
+		
+		return toAjax(1);
+	}
+	
+	/**
+	 * 查询待确认申请列表
+	 */
+	@PostMapping("/allList")
+	@ResponseBody
+	public TableDataInfo list(UserApply userApply)
+	{
+		startPage();
+		//待确认的
+        userApply.setConfirmState("0");
+        List<UserApplyList> list = userApplyService.selectUserApplyConfirmAsList(userApply);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 确认申请
+	 */
+	@PostMapping("/confirmApply")
+	@ResponseBody
+	public AjaxResult confirmApply(Long ids)
+	{	
+		UserApply userApply = new UserApply();
+		userApply.setApplyId(ids);
+		userApply.setConfirmState("1");
+		
+		
+		return toAjax(userApplyService.updateUserApply(userApply));
+	}
+
 }

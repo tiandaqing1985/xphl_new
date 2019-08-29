@@ -607,7 +607,7 @@ public class SysUserServiceImpl implements ISysUserService
 			String[] ancestorsArray = ancestors.split(",");
 			
 			if(ancestorsArray!=null && ancestorsArray.length>0){
-				for(int i=0;i<ancestorsArray.length;i++){
+				for(int i=0,length = ancestorsArray.length;i<length;i++){
 					if(!"0".equals(ancestorsArray[i])){ //排除总公司的 部门编号
 						Long deptId = Long.parseLong(ancestorsArray[i]);
 						Long id = userMapper.selectUserIdByDeptId(deptId);

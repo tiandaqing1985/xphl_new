@@ -96,7 +96,7 @@ public class YwArrearageController extends BaseController
 				
 			}else{ //销售经理看自己的
 				
-				for(int i=0;i<rlist.size();i++){
+				for(int i=0,length=rlist.size();i<length;i++){
 					SysRole role = rlist.get(i);
 					
 					if("销售助理".equals(role.getRoleName())){

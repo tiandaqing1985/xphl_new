@@ -364,11 +364,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					u.STATUS = 1 
 					AND dept_name IS NOT NULL 
 					<if test="starttime != null"><!-- 开始时间检索 -->
-							AND date_format(u.update_time,'%y%m%d') &gt;= date_format(#{starttime},'%y%m%d')
-						</if>
-						<if test="endtime != null"><!-- 结束时间检索 -->
-							AND date_format(u.update_time,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
-						</if> 
+						AND date_format(u.update_time,'%y%m%d') &gt;= date_format(#{starttime},'%y%m%d')
+					</if>
+					<if test="endtime != null"><!-- 结束时间检索 -->
+						AND date_format(u.update_time,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
+					</if> 
 				GROUP BY
 					d.dept_id 
 				) b ON a.dept_id = b.dept_id

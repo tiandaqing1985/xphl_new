@@ -23,8 +23,17 @@ public class Dingding extends BaseEntity
     @Excel(name = "用户名称")
     private String userName;
     
+    /** 部门名称 */
+    private String deptName;
+    
+    private String area;
+    
 	/** 打卡日期 */
 	private Date workDate;
+	
+	/** 星期几 */
+	private String weekDay;
+	
 	/** 考勤类型 */
 	private String checkType;
 	/** 实际打卡时间 */
@@ -43,6 +52,30 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	
 	private Date endTime;
 	
+
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
+	public String getWeekDay() {
+		return weekDay;
+	}
+
+	public void setWeekDay(String weekDay) {
+		this.weekDay = weekDay;
+	}
+
+	public String getArea() {
+		return area;
+	}
+
+	public void setArea(String area) {
+		this.area = area;
+	}
 
 	public String getStatus() {
 		return status;

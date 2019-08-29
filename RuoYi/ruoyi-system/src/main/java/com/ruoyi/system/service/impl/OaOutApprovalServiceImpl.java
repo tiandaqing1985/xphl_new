@@ -77,7 +77,7 @@ public class OaOutApprovalServiceImpl implements IOaOutApprovalService
 	@Override
 	public int deleteOaOutApprovalByIds(String ids)
 	{
-		return oaOutApprovalMapper.deleteOaOutApprovalByIds(Convert.toStrArray(ids));
+		return oaOutApprovalMapper.deleteOaOutApprovalByOutIds(Convert.toStrArray(ids));
 	}
 	
 }

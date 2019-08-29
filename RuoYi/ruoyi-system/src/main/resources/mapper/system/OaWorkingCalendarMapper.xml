@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.OaWorkingCalendarMapper">
+    
+    <resultMap type="WorkingCalendar" id="WorkingCalendarResult">
+        <result property="id"    column="id"    />
+        <result property="date"    column="date"    />
+        <result property="week"    column="week"    />
+        <result property="isWorkDay"    column="is_work_day"    />
+        <result property="note"    column="note"    />
+    </resultMap>
+	
+	<sql id="selectWorkingCalendarVo">
+        select id, date, week, is_work_day, note from oa_working_calendar
+    </sql>
+	
+    <select id="selectWorkingCalendarList" parameterType="WorkingCalendar" resultMap="WorkingCalendarResult">
+        <include refid="selectWorkingCalendarVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="date != null "> and date = #{date}</if>
+             <if test="week != null "> and week = #{week}</if>
+             <if test="isWorkDay != null "> and is_work_day = #{isWorkDay}</if>
+             <if test="note != null  and note != '' "> and note = #{note}</if>
+             <if test="starttime != null"><!-- 开始时间检索 -->
+				AND date_format(date,'%y%m%d') &gt;= date_format(#{starttime},'%y%m%d')
+			</if>
+			<if test="endtime != null"><!-- 结束时间检索 -->
+				AND date_format(date,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
+			</if> 
+         </where>
+    </select>
+    
+    <select id="selectWorkingCalendarById" parameterType="Integer" resultMap="WorkingCalendarResult">
+        <include refid="selectWorkingCalendarVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertWorkingCalendar" parameterType="WorkingCalendar" useGeneratedKeys="true" keyProperty="id">
+        insert into oa_working_calendar
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="date != null  ">date,</if>
+			<if test="week != null  ">week,</if>
+			<if test="isWorkDay != null  ">is_work_day,</if>
+			<if test="note != null  and note != ''  ">note,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="date != null  ">#{date},</if>
+			<if test="week != null  ">#{week},</if>
+			<if test="isWorkDay != null  ">#{isWorkDay},</if>
+			<if test="note != null  and note != ''  ">#{note},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateWorkingCalendar" parameterType="WorkingCalendar">
+        update oa_working_calendar
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="date != null  ">date = #{date},</if>
+            <if test="week != null  ">week = #{week},</if>
+            <if test="isWorkDay != null  ">is_work_day = #{isWorkDay},</if>
+            <if test="note != null  and note != ''  ">note = #{note},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteWorkingCalendarById" parameterType="Integer">
+        delete from oa_working_calendar where id = #{id}
+    </delete>
+	
+    <delete id="deleteWorkingCalendarByIds" parameterType="String">
+        delete from oa_working_calendar where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

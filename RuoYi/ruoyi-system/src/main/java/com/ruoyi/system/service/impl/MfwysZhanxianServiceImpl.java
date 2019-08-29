@@ -103,7 +103,7 @@ public class MfwysZhanxianServiceImpl implements IMfwysZhanxianService
 		
 				List<MfwysEnd> eList = mfwysEndMapper.selectMfwysEndList(null);
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-				for(int i=0;i<eList.size();i++){
+				for(int i=0,length=eList.size();i<length;i++){
 					
 					//后端数据
 					MfwysEnd mfwysEnd = eList.get(i);

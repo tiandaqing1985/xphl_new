@@ -177,7 +177,7 @@ public class DingDingTask{
 	public static List<OaDingding> getAttendances(List<String> list, List<OaDingding> users, String workDateFrom, String workDateTo,String access_Token) {
       int listSize=list.size();
       int toIndex = 50;
-      for(int i = 0;i < list.size();i += 50){
+      for(int i = 0,length = list.size();i < length;i += 50){
           if(i+50 > listSize){        //作用为toIndex最后没有50条数据则剩余几条newList中就装几条
               toIndex = listSize-i;
           }
@@ -210,6 +210,11 @@ public class DingDingTask{
                   date.setTime(record.getLong("workDate"));
                   dingding.setWorkDate(date);
                   
+                  //当前日期是星期几
+                  Calendar c = Calendar.getInstance(); 
+          		  c.setTime(date); 
+          		  dingding.setWeekDay(getWeekOfDate(date));
+          		
                   date = new Date();
                   date.setTime(record.getLong("userCheckTime"));
                   dingding.setUserCheckTime(date);
@@ -224,6 +229,25 @@ public class DingDingTask{
       }
       return users;
 	}
+	
+	/** 
+     * 获取当前日期是星期几 
+     * 
+     * @param dt 
+     * @return 当前日期是星期几 
+     */ 
+    public static String getWeekOfDate(Date dt) { 
+        String[] weekDays = {"日", "一", "二", "三", "四", "五", "六"}; 
+        Calendar cal = Calendar.getInstance(); 
+        cal.setTime(dt); 
+
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1; 
+        if (w < 0) 
+            w = 0; 
+
+        return weekDays[w]; 
+    } 
+	
 	 public static String doPost(String requestUrl,JSONObject json){
 	        @SuppressWarnings({ "resource", "deprecation" })
 			HttpClient client = new DefaultHttpClient();

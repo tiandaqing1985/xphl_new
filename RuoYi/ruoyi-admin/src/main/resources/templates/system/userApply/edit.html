@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh"  xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="include :: header('撤销申请')" />
+	<th:block th:include="include :: header('修改申请')" />
 	<th:block th:include="include :: jsonview-css" />
 	
 </head>
@@ -11,48 +11,53 @@
 		<input id="applyId" name="applyId" th:field="${userApply.applyId}"  type="hidden">
             
 		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">
-			<label class="col-sm-2 control-label">请假类型：</label>
+			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>请假类型：</label>
 			<div class="col-sm-8">
-                <input name="showLeaveType" class="form-control" type="text" maxlength="30" th:field="*{leaveType}" disabled="value">
-            </div>
+                <input class="form-control" type="text" maxlength="30" th:field="*{leaveType}" readonly>
+            </div> 
+           <!--  <div class="col-sm-8">
+					<select name="leaveType" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_leavetype')}" required>
+	                    <option th:field="*{leaveType}" th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" ></option>
+	                </select>
+			</div> -->
 		</div>
 		<div class="form-group">
-			<label class="col-sm-2 control-label">开始时间：</label>
+			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>开始时间：</label>
 			<div class="col-sm-8">
 				<div class="select-time" style="width: 100%">
-                	<input name="starttime" class="form-control" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" disabled="value">
+                	<input name="starttime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" required>
                 </div>
 			</div>
 		</div>
 		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">
-			<label class="col-sm-2 control-label">开始时段：</label>
+			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>开始时段：</label>
 			<div class="col-sm-8">
-                <select id="timeapart1" name="timeapart1" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_timeapart')}" disabled="value">
-                    	<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"  th:field="*{timeapart1}"></option>
+                <select id="timeapart1" name="timeapart1" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_timeapart')}">
+                    	<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"  th:field="*{timeapart1}" required></option>
                 </select>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-2 control-label">结束时间：</label>
+			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>结束时间：</label>
 			<div class="col-sm-8">
-                <input name="endtime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" >
+                <input name="endtime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" required>
 			</div>
 		</div>
 		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">
-			<label class="col-sm-2 control-label">结束时段：</label>
+			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>结束时段：</label>
 			<div class="col-sm-8">
-                <select id="timeapart2" name="timeapart2" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_timeapart')}" >
-                    	<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"  th:field="*{timeapart2}"></option>
+                <select id="timeapart2" name="timeapart2" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_timeapart')}" required >
+                    	<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"  th:field="*{timeapart2}" ></option>
                 </select>
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-2 control-label">修改理由：</label>
+			<label class="col-sm-2 control-label" ><span style="color: red; ">*</span>修改理由：</label>
 			<div class="col-sm-8">
-                <textarea id="details" name="details" type="text" class="form-control" maxlength="500" rows="3" ></textarea>
+                <textarea id="details" name="details" class="form-control" maxlength="500" rows="3" th:field="*{details}"  required></textarea>
 			</div>
 		</div>
-		<div class="form-group">	<span id="p03"></span>
+		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">	<span id="p03"></span>
 			<label class="col-sm-2 control-label">证明附件：</label>
 			<div class="col-sm-8">
                <div class="file-loading">

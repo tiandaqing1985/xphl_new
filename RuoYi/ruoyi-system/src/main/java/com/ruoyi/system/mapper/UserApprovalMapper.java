@@ -58,7 +58,7 @@ public interface UserApprovalMapper
      * @param approvalIds 需要删除的数据ID
      * @return 结果
      */
-	public int deleteUserApprovalByIds(String[] approvalIds);
+	public int deleteUserApprovalByIds(String[] applyId);
 	
 	/**
 	 * 按条件查询审批单

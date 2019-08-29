@@ -10,30 +10,79 @@
     <link href="../static/css/font-awesome.min.css" th:href="@{/css/font-awesome.min.css}" rel="stylesheet"/>
     <link href="../static/css/main/animate.min.css" th:href="@{/css/main/animate.min.css}" rel="stylesheet"/>
     <link href="../static/css/main/style.min862f.css" th:href="@{/css/main/style.min862f.css}" rel="stylesheet"/>
+    <style type="text/css">
+	    .divcss5{ line-height:50px;
+	    		  font-size:20px
+	    		 }/* 行高、字体大小 */ 
+	    		 
+	    .fontcss1{color:red;
+	    		  font-weight:bold
+	    }/* 字体颜色、字体加粗 */ 
+	    
+	    .tablecss{
+	    	margin-left:45px;	    	
+	    }/* 向右移动 */ 
+	    
+	    .tablecss tr th{
+  		 padding:0px 17px;
+		}/* 表格文字两边间距 */ 
+		
+	    .tablecss tr td{
+  		 padding:0px 17px;
+		}/* 表格文字两边间距 */ 
+    </style>
 </head>
 
 <body class="gray-bg">
     <div class="row  border-bottom white-bg dashboard-header">
-
-
-
+		<marquee><font size="4px">欢迎加入新普大家庭！！！</font></marquee>
     </div>
-
+    <div style="margin-left:130px;display:none">
+		<div><p style="margin-left:470px"><font size="20px">通&#12288;知</font></p></div>
+		<div class="divcss5">
+			<p>全体员工：</p>
+			&#12288;&#12288; 人力资源部<font class="fontcss1">8月20日</font>将在汇百川组织开展三场补充医疗讲解答疑，具体安排如下：<br/>
+			<table border="1" class="tablecss">
+				<tr>
+				  <th>时间</th>
+				  <th>部门</th>
+				</tr>
+				<tr>
+				  <td>13：30-14：30</td>
+				  <td>策略支持部、创意策划部、媒介部、技术部、SEO、三叶视频工作室、品牌广告业务事业部</td>
+				</tr>
+				<tr>
+				  <td>14：40-15：40</td>
+				  <td>数字营销服务部</td>
+				</tr>
+				<tr>
+				  <td>15：50-16：50</td>
+				  <td>运营管理中心、华北业务部、市场拓展部、运营管理部、法务部</td>
+				</tr>
+			</table>
+		<!-- 	<h4>垂直的表头：</h4>
+			<table border="1">
+			<tr>
+			  <th>姓名</th>
+			  <td>Bill Gates</td>
+			</tr>
+			<tr>
+			  <th>电话</th>
+			  <td>555 77 854</td>
+			</tr>
+			<tr>
+			  <th>电话</th>
+			  <td>555 77 855</td>
+			</tr> 
+			</table>-->
+			&#12288;&#12288;烦请各部门负责人安排好工作，小伙伴们带上笔和本，踊跃参加~
+			<p style="margin-left:920px;">8月14日</p>
+		</div>
+	</div>
+<!-- 	<img alt="[ 新普互联 ]" src="../static/ruoyi.png" th:src="@{/ruoyi.png}">
+ -->		
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
     <script th:src="@{/ajax/libs/layer/layer.min.js}"></script>
-    <script type="text/javascript">
-	    $('#pay-qrcode').click(function(){
-	        var html=$(this).html();
-	        parent.layer.open({
-	            title: false,
-	            type: 1,
-	            closeBtn:false,
-	            shadeClose:true,
-	            area: ['600px', 'auto'],
-	            content: html
-	        });
-	    });
-    </script>
 </body>
 </html>

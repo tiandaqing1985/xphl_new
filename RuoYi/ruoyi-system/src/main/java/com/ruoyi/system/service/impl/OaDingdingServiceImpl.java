@@ -76,6 +76,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		}
 		
 		SysUser user = userMapper.selectUserById(ding.getUserId());
+		ding.setArea(user.getArea());
 		
 		//人事总监
 		SysUser user2 = new SysUser();

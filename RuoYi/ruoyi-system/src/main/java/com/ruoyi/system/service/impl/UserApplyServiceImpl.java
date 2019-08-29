@@ -361,6 +361,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 	@Override
 	public int deleteUserApplyByIds(String ids)
 	{
+		userApprovalMapper.deleteUserApprovalByIds(Convert.toStrArray(ids));
 		return userApplyMapper.deleteUserApplyByIds(Convert.toStrArray(ids));
 	}
 	/**
@@ -369,8 +370,6 @@ public class UserApplyServiceImpl implements IUserApplyService
 	@Override
 	public Double countTime(Date beginTime, Date endtime, String timepart1 ,String timepart2) {
 		Double timeLength = 0.0;
-		SimpleDateFormat s=new SimpleDateFormat("yyyy-MM-dd");
-		
 		
 		Calendar cal = Calendar.getInstance();
         cal.setTime(beginTime);
@@ -465,7 +464,6 @@ public class UserApplyServiceImpl implements IUserApplyService
 	 * 拿到某天上个月的第一天或最后一天
 	 */
 	public Date getDate(String monthName, Date date , String day){
-		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		
@@ -504,7 +502,6 @@ public class UserApplyServiceImpl implements IUserApplyService
 	 */
 	@Override
 	public Double leaveCount(String monthName, Long userId, Date date){
-		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
 		
 		//拿到上个月的第一天和最后一天
 		Date firstDay = getDate(monthName, date ,"第一天");
@@ -763,7 +760,6 @@ public class UserApplyServiceImpl implements IUserApplyService
 		userApprovalMapper.insertUserApproval(userApproval); //插入一级审批记录
 		
 		//二级审批记录
-		boolean flag = true;
 		UserApproval userApproval1 = new UserApproval();//二级审批人
 		Long approverId2 = iSysUserService.selectUpApproverIdByApplyerId(userApproval.getApproverId());
 		if(approverId2 != null){
@@ -803,7 +799,6 @@ public class UserApplyServiceImpl implements IUserApplyService
 		userApprovalMapper.insertUserApproval(personnel);
 		
 		
-		UserApproval COO = new UserApproval(); //COO审批人
 		if(timeLength >= 3){
 			Long COOId = iSysUserService.selectUserIdByDeptId(100L);
 

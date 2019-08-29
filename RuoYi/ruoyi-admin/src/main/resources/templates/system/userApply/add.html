@@ -191,12 +191,27 @@
 				var timeapart2 = $("#timeapart2").val();
 				var applyType = $("#applyType").val();
 				var datelength = 0.0;
+				var restlength = 0.0;
+				
+				//计算休息日时长
+				$.ajax({
+					type:"post",
+					async:false,
+					url:"/system/workingCalendar/count",
+					data:{"isWorkDay":0,"starttime":starttime,"endtime":endtime},
+					dataType:"json",
+					success:function(result){
+						restlength = result;						
+					}
+				}); 
+			//	alert(restlength);
+				
 				if(leaveType == "10"){
 					datelength = 1.0;
 				}else{
-					datelength = Datelength(starttime, endtime, timeapart1, timeapart2);
+					datelength = Datelength(starttime, endtime, timeapart1, timeapart2)-restlength;
 				}
-					
+				
 				$("#timelength").val(datelength);
 				
 				var flag = false;//提交flag 
@@ -238,7 +253,7 @@
 				else{
 					if(leaveType == "1"){  //年假
 						if(datelength >3){
-							if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 2){
+							if(DateDiff(getNowFormatDate(),$("#starttime").val())-restlength < 2){
 								p01.innerText="超过3天的年假需提前2天提交申请";
 								$("#p01").css("color","red");
 								flag = false;
@@ -246,7 +261,7 @@
 							}
 						}
 						else if (datelength >1){
-							if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 1){
+							if(DateDiff(getNowFormatDate(),$("#starttime").val()) -restlength < 1){
 								p01.innerText="超过1天的年假需提前提交申请";
 								$("#p01").css("color","red");
 								flag = false;
@@ -269,7 +284,7 @@
 						}
 					}
 					else if(leaveType == "5"){ //婚假
-						if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 7){
+						if(DateDiff(getNowFormatDate(),$("#starttime").val()) -restlength < 7){
 							p01.innerText="婚假需提前一周提交申请";
 							$("#p01").css("color","red");
 							flag = false;
@@ -294,7 +309,7 @@
 						}
 					}
 					else if(leaveType == "6"){//产假 
-						if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 15){
+						if(DateDiff(getNowFormatDate(),$("#starttime").val()) - restlength < 15){
 							p01.innerText="产假需提前15天提交申请";
 							$("#p01").css("color","red");
 							flag = false;
@@ -354,10 +369,10 @@
 						}
 					}
 					else if(leaveType == "10"){
-						if( DateDiff(starttime ,endtime) > 365){
+						if( DateDiff(starttime ,endtime) - restlength > 365){
 							$.modal.alertWarning("超出哺乳假可选择日期");
 							return;
-						}else if(DateDiff(starttime ,endtime) < 365){
+						}else if(DateDiff(starttime ,endtime) - restlength < 365){
 							confirmFlag = true;
 							confirmText = "哺乳假可享受365天";
 						}
@@ -477,7 +492,7 @@
             aDate  =  sDate2.split("-")  
             oDate2  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])  
             iDays  =  parseInt(Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数  
-            return  iDays  
+            return  iDays 
         };
      	
     	function Datelength(sDate1, sDate2, timeapart1, timeapart2){
@@ -496,46 +511,9 @@
 			}else{
 				timep2 = 1;
 			}
-    		days = DateDiff(sDate1,  sDate2) - timep1 + timep2;
-    		//days = countWorkDay(sDate1,  sDate2) - timep1 + timep2;
+    		days = DateDiff(sDate1,  sDate2) - timep1 + timep2;    		
     		return days;
     	}
-    	
-    	//计算两个日期间的工作日（只除去周六日）
-    /* 	function countWorkDay(sDay,eDay){
-    	    var sDay = new Date(Date.parse(sDay.replace(/-/g, "/")));
-    	    var eDay = new Date(Date.parse(eDay.replace(/-/g, "/")));
-    	    var s_t_w = sDay.getDay(), e_t_w = eDay.getDay();
-    	    // 总相差天数
-    	    var diffDay = (eDay - sDay) / (1000 * 60 * 60 * 24) + 1;
-    	    if(parseInt(diffDay) == 0)
-    	        return parseInt(diffDay);
-    	    // 周末天数
-    	    var weekEnds = 0;
-    	    var dateList = formatEveryDay(sDay,eDay);
-    	    for(Date d : dateList){
-    	    	 if(d.getDay() == 0 || d.getDay() == 6) 
-     	            weekEnds ++; 
-    	    }
-    	    return parseInt(diffDay - weekEnds);
-    	} */
-
-    	//获取两个日期之间的每一天
-    	/* function formatEveryDay(start, end) {
-    	    let dateList = []; 
-    	    var startTime = getDate(start);
-    	    var endTime = getDate(end);
-
-    	    while ((endTime.getTime() - startTime.getTime()) >= 0) {
-    	        var year = startTime.getFullYear();
-    	        var month = startTime.getMonth() + 1 < 10 ? '0' + (startTime.getMonth() + 1) : startTime.getMonth() + 1;
-    	        var day = startTime.getDate().toString().length == 1 ? "0" + startTime.getDate() : startTime.getDate();
-    	        dateList.push(year + "-" + month + "-" + day); 
-    	        startTime.setDate(startTime.getDate() + 1);
-    	    }
-    	    return dateList;
-    	}
- */
 	</script>
 </body>
 </html>

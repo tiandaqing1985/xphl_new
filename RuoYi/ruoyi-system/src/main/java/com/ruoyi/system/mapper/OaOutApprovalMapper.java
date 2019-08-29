@@ -64,6 +64,6 @@ public interface OaOutApprovalMapper
      * @param ids 需要删除的数据ID
      * @return 结果
      */
-	public int deleteOaOutApprovalByIds(String[] ids);
+	public int deleteOaOutApprovalByOutIds(String[] ids);
 	
 }

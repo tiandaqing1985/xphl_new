@@ -141,7 +141,7 @@ public class EmailSend {
 				         try {
 				             List<InternetAddress> list = new ArrayList<InternetAddress>();//不能使用string类型的类型，这样只能发送一个收件人
 				             String[] median=str.split(",");//对输入的多个邮件进行逗号分割
-				             for(int i=0;i<median.length;i++){
+				             for(int i=0,length=median.length;i<length;i++){
 				            	 if(median[i].contains("<")){
 				            	        Matcher matcher = pattern.matcher(median[i]);
 				            	        while(matcher.find())

@@ -54,17 +54,17 @@
 					$.modal.alertWarning("请联系管理员");
 				}
 			});
-		}
-		function emailAlert(applyId){
+		}	
+		function del(applyId){
 			$.ajax({
 				type:"post",
-				url:"/system/userApply/ifTakeback",
+				url:prefix+"/ifTakeback",
 				data:{"applyId":applyId},
 				dataType:"json",
 				success:function(result){
 					if(result == "0"){
-						var data = { "applyId": applyId };
-			     	    $.operate.submit("/system/userApply/emailAlert", "post", "json", data);
+						var data = { "ids": applyId };
+			     	    $.operate.submit(prefix+"/remove", "post", "json", data);
 					}
 					else{
 						$.modal.alertWarning("不能执行此操作");
@@ -74,6 +74,28 @@
 					$.modal.alertWarning("请联系管理员");
 				}
 			});
+			
+		}
+		function edit(applyId){
+			$.ajax({
+				type:"post",
+				async:false,
+				url:prefix+"/ifTakeback",
+				data:{"applyId":applyId},
+				dataType:"json",
+				success:function(result){
+					if(result == "0"){
+						var url = $.table._option.updateUrl.replace("{applyId}",applyId);
+						$.modal.open("修改申请", url);
+					}else if(result == "1"){
+						$.modal.alertWarning("不能执行此操作");
+					}
+				},
+				error:function(){
+					$.modal.alertWarning("请联系管理员");
+				}
+			});
+			
 		}
 	</script>
 </head>
@@ -149,7 +171,7 @@
                 undoUrl:"/system/userApply/undo/{applyId}",
                 toViewUrl: "/system/userApply/toView/{applyId}",
                 createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
+                updateUrl: prefix + "/edit/{applyId}",
                 removeUrl: prefix + "/remove",
 				exportUrl: prefix + "/export",
                 modalName: "申请",
@@ -203,10 +225,11 @@
 		            formatter: function(value, row, index) {
 		            	var actions = [];
 		            	actions.push('<a class="btn btn-success btn-xs ' + '" href="#" onclick="toView(\'' + row.applyId + '\')" id="check"><i class="fa fa-edit"></i>查看</a> ');
-		            	actions.push('<a class="btn btn-info btn-xs ' + '" href="#" onclick="emailAlert(\'' + row.applyId + '\')"><i class="fa fa-user"></i>催办</a>');
+                        actions.push('<a class="btn btn-warning btn-xs" href="#" onclick="edit(\'' + row.applyId + '\')"><i class="fa fa-edit"></i>修改</a> ');
+						actions.push('<a class="btn btn-info btn-xs ' + '" href="#" onclick="del(\'' + row.applyId + '\')"><i class="fa fa-user"></i>删除</a>'); 
+						actions.push('<a class="btn btn-primary btn-xs' + '" href="#" onclick="undo(\'' + row.applyId + '\')"><i class="fa fa-remove"></i>销假</a>');
                         actions.push('<a class="btn btn-danger btn-xs ' + '" href="#" onclick="takeBack(\'' + row.applyId + '\')"><i class="fa fa-refresh"></i>撤回</a>');
-						actions.push('<a class="btn btn-warning btn-xs ' + '" href="#" onclick="undo(\'' + row.applyId + '\')"><i class="fa fa-remove"></i>销假</a>');
-                        return actions.join('');
+						return actions.join('');
 		            }
 		        }]
             };
