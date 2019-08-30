@@ -51,4 +51,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 </where>
 	</select>
 	
+	<select id="selectRoleIdByUserId" parameterType="SysUser" resultType="Long">
+		 SELECT
+				ro.role_id
+			FROM
+				sys_user_role ro
+				LEFT JOIN sys_user us ON ro.user_id = us.user_id 
+		 <where>
+		 	<if test="userId != null">and us.user_id=#{userId}</if>
+		 </where>
+	</select>
+	
 </mapper> 

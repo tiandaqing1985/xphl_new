@@ -128,6 +128,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     		FROM sys_user_apply a
 			LEFT JOIN sys_user us ON us.user_id = a.user_id 
 		<where>
+			us.status = 0
 		     <if test="applyType != null  and applyType != '' "> a.apply_type = #{applyType}</if>
 			 <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
 			 <if test="status != null and status != ''">AND a.STATUS = #{status}</if>	
@@ -209,6 +210,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
 	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
     	<where>  
+    		u.status = 0 and s.status = 0
              <if test="userId != null "> and a.user_id = #{userId}</if>
              <if test="listNum != null  and listNum != '' "> and a.list_num like concat('%', #{listNum}, '%')</if>
              <if test="timelength != null "> and a.timelength = #{timelength}</if>
@@ -289,6 +291,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
 	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
     	<where>  
+    		u.status = 0 and s.status = 0
              <if test="userId != null "> and a.user_id = #{userId}</if>
              <if test="listNum != null  and listNum != '' "> and a.list_num like concat('%', #{listNum}, '%')</if>
              <if test="timelength != null "> and a.timelength = #{timelength}</if>
@@ -387,7 +390,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		        from sys_user_apply a
 		        	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
 		        	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
-        			where a.apply_id = #{applyId} 
+        			where u.status = 0 and a.apply_id = #{applyId} 
     </select>
     
     <select id="selectUserApplyByIdForUndo" parameterType="Long" resultMap="UserApplyResult">

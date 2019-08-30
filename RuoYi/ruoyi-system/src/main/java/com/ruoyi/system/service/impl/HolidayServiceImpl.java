@@ -7,6 +7,8 @@ import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ruoyi.system.mapper.HolidayMapper;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
@@ -26,6 +28,7 @@ import com.ruoyi.common.core.text.Convert;
  * @author ruoyi
  * @date 2019-06-17
  */
+@Transactional
 @Service
 public class HolidayServiceImpl implements IHolidayService 
 {
@@ -194,6 +197,23 @@ public class HolidayServiceImpl implements IHolidayService
 		Long chiefId = userRoleMapper.selectUserIdByRoleId(user2);//人事总监id
 		if(chiefId.longValue() == user.getUserId().longValue()){
 			sysUser.setUserId(1L);
+			return holidayMapper.selectRestByUserId(sysUser);
+		}
+		
+		if(sysUser.getUserId() == 103L){//COO
+			//leader
+			SysDept dept = deptMapper.selectDeptByUserId(sysUser.getUserId());
+			dept = new SysDept();
+			dept.setLeader(user.getUserName());
+			dSet.clear();
+			getDeptList(dept);	
+			sysUser.setdSet(dSet);
+			sysUser.setUserId(0L);
+			return holidayMapper.selectRestByUserId(sysUser);
+		}
+		
+		if(sysUser.getUserId() == 101L){//CEO
+			sysUser.setUserId(0L);
 			return holidayMapper.selectRestByUserId(sysUser);
 		}
 		

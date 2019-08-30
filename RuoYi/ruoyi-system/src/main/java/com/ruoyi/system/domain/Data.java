@@ -10,11 +10,12 @@ public class Data {
 	
 	private long deptId;
 	
-	private int count;
-
-	private String ratio1;//离职率
+	private int count;//团建人数
 	
-	private String ratio2;//入职率
+	private int status;//帐号状态（0正常 1停用）
+	
+	private String ratio;//入离职率
+	
 
 	/** 开始时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -23,6 +24,14 @@ public class Data {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date endtime;
     
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
 	public long getDeptId() {
 		return deptId;
 	}
@@ -47,20 +56,20 @@ public class Data {
 		this.endtime = endtime;
 	}
 
-	public String getRatio1() {
-		return ratio1;
+	public int getStatus() {
+		return status;
 	}
 
-	public void setRatio1(String ratio1) {
-		this.ratio1 = ratio1;
+	public void setStatus(int status) {
+		this.status = status;
 	}
 
-	public String getRatio2() {
-		return ratio2;
+	public String getRatio() {
+		return ratio;
 	}
 
-	public void setRatio2(String ratio2) {
-		this.ratio2 = ratio2;
+	public void setRatio(String ratio) {
+		this.ratio = ratio;
 	}
 
 	public String getDeptName() {
@@ -70,14 +79,4 @@ public class Data {
 	public void setDeptName(String deptName) {
 		this.deptName = deptName;
 	}
-
-	public int getCount() {
-		return count;
-	}
-
-	public void setCount(int count) {
-		this.count = count;
-	}
-	
-	
 }

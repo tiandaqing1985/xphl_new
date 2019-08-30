@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('入职率')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								部门：<input type="text" name="deptName">
+							</li>
+							<li class="select-time">
+								<label>时间：</label>
+								<input type="text" class="time-input" id="starttime"  placeholder="yyyy-MM-dd" name="starttime"/>
+								<span>-</span>
+								<input type="text" class="time-input" id="endtime"  placeholder="yyyy-MM-dd" name="endtime"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>				       	
+	       
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = ctx + "system/user";
+        $(function() {
+            var options = {
+                url: prefix + "/inRatio",  
+
+                modalName: "入职率",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'deptName', 
+					title : '部门名称',
+					sortable: false
+				},
+				{
+					field : 'ratio', 
+					title : '入职率',
+					sortable: false
+				}]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

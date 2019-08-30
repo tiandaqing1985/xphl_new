@@ -83,21 +83,40 @@ public class SysUserController extends BaseController
         return getDataTable(list);
     }
     
-    @GetMapping("/ratio")
-    public String ratio()
+    @GetMapping("/inRatio")
+    public String inRatio()
     {
-        return "system/statistics/ratio";
+        return "system/statistics/inRatio";
     }
 
-    //离职率
-    @PostMapping("/ratio")
+    //入职率
+    @PostMapping("/inRatio")
     @ResponseBody
     public TableDataInfo selectUserRatio(Data data)
     {
         startPage();
+        data.setStatus(0);
         List<Data> list = userService.selectUserRatio(data);
         return getDataTable(list);
     }
+    
+    @GetMapping("/outRatio")
+    public String outRatio()
+    {
+        return "system/statistics/outRatio";
+    }
+
+    //离职率
+    @PostMapping("/outRatio")
+    @ResponseBody
+    public TableDataInfo selectoutRatio(Data data)
+    {
+        startPage();
+        data.setStatus(1);
+        List<Data> list = userService.selectUserRatio(data);
+        return getDataTable(list);
+    }
+    
     @Log(title = "用户管理", businessType = BusinessType.EXPORT)
     @RequiresPermissions("system:user:export")
     @PostMapping("/export")

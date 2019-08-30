@@ -86,6 +86,13 @@ public class OaFileUploadController extends BaseController
 		user.setArea("1");
 		Long hrId = iSysRoleService.selectUserIdByRoleId(user);//人事总监id
 		Long userId = ShiroUtils.getUserId();
+		
+		if(userId == 101L || userId == 103L){
+			removeFlag = false;
+	        m.addAttribute("removeFlag", removeFlag);
+			return getDataTable(list);
+		}
+		
 		Long leaderId = iSysUserService.selectApproverIdByApplyerId(userId);//所在部门负责人id
 		Long upLeaderId =iSysUserService.selectUpApproverIdByApplyerId(userId);//所在部门负责人的上级leader
 		

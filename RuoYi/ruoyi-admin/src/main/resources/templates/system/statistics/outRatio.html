@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('入离职率')" />
+	<th:block th:include="include :: header('离职率')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -38,7 +38,8 @@
         var prefix = ctx + "system/user";
         $(function() {
             var options = {
-                url: prefix + "/ratio",          
+                url: prefix + "/outRatio",  
+
                 modalName: "离职率",
 		        showExport: true,
                 columns: [{
@@ -50,12 +51,7 @@
 					sortable: false
 				},
 				{
-					field : 'ratio2', 
-					title : '入职率',
-					sortable: false
-				},
-				{
-					field : 'ratio1', 
+					field : 'ratio', 
 					title : '离职率',
 					sortable: false
 				}]

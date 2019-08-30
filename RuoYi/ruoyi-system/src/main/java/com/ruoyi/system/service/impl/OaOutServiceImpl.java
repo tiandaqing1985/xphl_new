@@ -97,6 +97,7 @@ public class OaOutServiceImpl implements IOaOutService
 		}
 		
 		user.setRoleId(6L);//人事总监
+		user.setArea(null);
 		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事总监id	
 		
 		
@@ -234,6 +235,23 @@ public class OaOutServiceImpl implements IOaOutService
 		Long chiefId = userRoleMapper.selectUserIdByRoleId(user2);//人事总监id
 		if(chiefId.longValue() == user.getUserId().longValue()){
 			oaOut.setUserId(1L);
+			return oaOutMapper.selectOutApprovalList(oaOut);
+		}
+		
+		if(oaOut.getUserId() == 103L){//COO
+			//leader
+			SysDept dept = deptMapper.selectDeptByUserId(oaOut.getUserId());
+			dept = new SysDept();
+			dept.setLeader(user.getUserName());
+			dSet.clear();
+			getDeptList(dept);	
+			oaOut.setdSet(dSet);
+			oaOut.setUserId(0L);
+			return oaOutMapper.selectOutApprovalList(oaOut);
+		}
+		
+		if(oaOut.getUserId() == 101L){//CEO
+			oaOut.setUserId(0L);
 			return oaOutMapper.selectOutApprovalList(oaOut);
 		}
 		

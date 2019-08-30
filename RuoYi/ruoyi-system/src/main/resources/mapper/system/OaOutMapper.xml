@@ -111,6 +111,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			LEFT JOIN sys_user us ON us.user_id = app.approval_id 
 			LEFT JOIN sys_dept d ON USER.dept_id = d.dept_id
         <where>  
+        	 us.`status`=0 and USER.`status`=0
             <if test="outId != null"> and ou.out_id = #{outId}</if>
              <if test="userId != null and userId != 1L"> and ou.user_id = #{userId}</if>
              <if test="approvalId != null "> and app.approval_id=#{approvalId}</if>

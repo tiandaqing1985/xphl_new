@@ -114,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 left join sys_dept d on u.dept_id = d.dept_id
 			 left join sys_user_role ur on u.user_id = ur.user_id
 			 left join sys_role r on r.role_id = ur.role_id
-	    where u.del_flag = '0' and r.role_id = #{roleId}
+	    where u.del_flag = '0' and u.status=0 and r.role_id = #{roleId}
 	    <if test="loginName != null and loginName != ''">
 			AND u.login_name like concat('%', #{loginName}, '%')
 		</if>
@@ -310,97 +310,79 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				d.dept_id
 	</select>
 	
-	<!-- 分部门查询入离职率 ：ratio1离职率、ratio2入职率-->
+	<!-- 分部门查询入离职率 ：ratio入离职率-->
 	<select id="selectUserRatio" parameterType="Data" resultType="Data">
-			SELECT
+		SELECT
 			d.dept_name deptName,
-			d.dept_id deptId, 
-			d.ratio1,
-			d.ratio2 
-		FROM
-			(
-			SELECT
-				a.dept_name,
-				a.order_num,
-				a.parent_id,
-				a.dept_id,
-				concat(
-				LEFT ( IFNULL( b.count, 0 )/( a.count )* 100, 5 )) ratio1,
-				concat(
-				LEFT ( IFNULL( c.count, 0 )/( a.count )* 100, 5 )) ratio2 
-			FROM
-				(
-				SELECT
-					d.dept_name,
-					d.dept_id,
-					d.order_num,
-					d.parent_id,
-					count( u.user_id ) count 
-				FROM
-					sys_user u
-					LEFT JOIN sys_dept d ON u.dept_id = d.dept_id 
-				WHERE
-					dept_name IS NOT NULL 
-					<if test="endtime != null"><!-- 结束时间检索 -->
-							AND date_format(u.intime,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
-						</if>
-						<if test="endtime == null"><!-- 结束时间检索 -->
-							AND date_format(u.intime,'%y%m%d') &lt;= date_format(sysdate(),'%y%m%d')
-						</if>
-				GROUP BY
-					d.dept_id 
-				) a
-				LEFT JOIN (
-				SELECT
-					d.dept_name,
-					d.dept_id,
-					d.order_num,
-					d.parent_id,
-					count( u.user_id ) count 
-				FROM
-					sys_user u
-					LEFT JOIN sys_dept d ON u.dept_id = d.dept_id 
-				WHERE
-					u.STATUS = 1 
-					AND dept_name IS NOT NULL 
+			d.dept_id deptId,
+			d.ratio 
+		FROM(	
+		  	SELECT
+						a.dept_name,
+						a.order_num,
+						a.parent_id,
+						a.dept_id,
+						concat( LEFT ( IFNULL( a.count, 0 ) / ( b.count ) * 100, 5 ) ) ratio	
+					FROM
+						(
+						SELECT
+							d.dept_name,
+							d.dept_id,
+							d.order_num,
+							d.parent_id,
+							count( u.user_id ) count 
+						FROM
+							sys_user u
+							LEFT JOIN sys_dept d ON u.dept_id = d.dept_id 
+						WHERE
+							dept_name IS NOT NULL 
+							
 					<if test="starttime != null"><!-- 开始时间检索 -->
-						AND date_format(u.update_time,'%y%m%d') &gt;= date_format(#{starttime},'%y%m%d')
+						AND date_format(u.intime,'%y%m%d') &gt;= date_format(#{starttime},'%y%m%d')
+					</if>		
+					<if test="endtime != null"><!-- 结束时间检索 -->
+						AND date_format(u.intime,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
 					</if>
+					<if test="endtime == null"><!-- 结束时间检索 -->
+						AND date_format(u.intime,'%y%m%d') &lt;= date_format(sysdate(),'%y%m%d')
+					</if>
+					<!-- 帐号状态（0正常 1停用） -->
+					<if test="status != null">and u.`status`= #{status}</if>
+
+						GROUP BY
+							d.dept_id 
+						) a
+						LEFT JOIN 
+						(
+						SELECT
+							d.dept_name,
+							d.dept_id,
+							d.order_num,
+							d.parent_id,
+							count( u.user_id ) count 
+						FROM
+							sys_user u
+							LEFT JOIN sys_dept d ON u.dept_id = d.dept_id 
+						WHERE
+							dept_name IS NOT NULL 
+								
 					<if test="endtime != null"><!-- 结束时间检索 -->
-						AND date_format(u.update_time,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
-					</if> 
-				GROUP BY
-					d.dept_id 
-				) b ON a.dept_id = b.dept_id
-				LEFT JOIN (
-				SELECT
-					d.dept_name,
-					d.dept_id,
-					d.order_num,
-					d.parent_id,
-					count( u.user_id ) count 
-				FROM
-					sys_user u
-					LEFT JOIN sys_dept d ON u.dept_id = d.dept_id 
-				WHERE
-					u.STATUS = 0 
-					AND dept_name IS NOT NULL 
-					<if test="starttime != null"><!-- 开始时间检索 -->
-							AND date_format(u.intime,'%y%m%d') &gt;= date_format(#{starttime},'%y%m%d')
-						</if>
-						<if test="endtime != null"><!-- 结束时间检索 -->
-							AND date_format(u.intime,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
-						</if>
-				GROUP BY
-					d.dept_id 
-				) c ON a.dept_id = c.dept_id 
-			ORDER BY
-				a.parent_id,
-				a.order_num 
-			) d 
-	<where>
-			d.ratio1 = d.ratio2 =0
+						AND date_format(u.intime,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
+					</if>
+					<if test="endtime == null"><!-- 结束时间检索 -->
+						AND date_format(u.intime,'%y%m%d') &lt;= date_format(sysdate(),'%y%m%d')
+					</if>
+						GROUP BY
+							d.dept_id 
+						) b ON a.dept_id = b.dept_id
+					ORDER BY
+						a.parent_id,
+						a.order_num 
+		
+		)d
+		<where>
+			d.ratio != 0
 		 <if test="deptName != null and deptName != ''">and d.dept_name = #{deptName}</if>				
-	</where>		
+		</where>
 	</select>
 </mapper> 

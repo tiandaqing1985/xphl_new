@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
@@ -24,6 +25,7 @@ import com.ruoyi.common.core.text.Convert;
  * @author ruoyi
  * @date 2019-06-04
  */
+@Transactional
 @Service
 public class UserApprovalServiceImpl implements IUserApprovalService 
 {
@@ -140,6 +142,23 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 			return userApprovalMapper.selectQueryConditionsList(queryConditions);
 		}
 		
+		if(queryConditions.getUserId() == 103L){//COO
+			//leader
+			SysDept dept = deptMapper.selectDeptByUserId(queryConditions.getUserId());
+			dept = new SysDept();
+			dept.setLeader(user.getUserName());
+			dSet.clear();
+			getDeptList(dept);	
+			queryConditions.setdSet(dSet);
+			queryConditions.setUserId(0L);
+			return userApprovalMapper.selectQueryConditionsList(queryConditions);
+		}
+		
+		if(queryConditions.getUserId() == 101L){//CEO		
+			queryConditions.setUserId(0L);
+			return userApprovalMapper.selectQueryConditionsList(queryConditions);
+		}
+
 		Long upLeaderId =userMapper.selectUpApproverIdByApplyerId(queryConditions.getUserId());//所在部门负责人的上级leader
 		user.setRoleId(3L);//人事专员
 		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id

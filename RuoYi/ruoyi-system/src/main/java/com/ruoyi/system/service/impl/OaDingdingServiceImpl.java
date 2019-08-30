@@ -7,6 +7,8 @@ import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ruoyi.system.mapper.OaDingdingMapper;
 import com.ruoyi.system.mapper.OaDingdingUserMapper;
 import com.ruoyi.system.mapper.OaOutMapper;
@@ -29,6 +31,7 @@ import com.ruoyi.system.service.IOaDingdingService;
  * @author ruoyi
  * @date 2019-07-26
  */
+@Transactional
 @Service
 public class OaDingdingServiceImpl implements IOaDingdingService 
 {
@@ -76,7 +79,28 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		}
 		
 		SysUser user = userMapper.selectUserById(ding.getUserId());
+		
+
+		if(user.getUserId() == 103L){//COO
+			//leader
+			SysDept dept = deptMapper.selectDeptByUserId(ding.getUserId());
+			dept = new SysDept();
+			dept.setLeader(user.getUserName());
+			dSet.clear();
+			getDeptList(dept);	
+			ding.setdSet(dSet);
+			ding.setUserId(0L);
+			return oaDingdingMapper.selectDingData(ding);
+		}
+		
+		if(user.getUserId() == 101L){//CEO
+			ding.setUserId(1L);
+			return oaDingdingMapper.selectDingData(ding);
+		}
 		ding.setArea(user.getArea());
+		
+		//查询当前用户的角色id
+		List<Long> roleIdList = userRoleMapper.selectRoleIdByUserId(user);
 		
 		//人事总监
 		SysUser user2 = new SysUser();
@@ -87,25 +111,16 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 			return oaDingdingMapper.selectDingData(ding);
 		}
 		
-		Long upLeaderId =userMapper.selectUpApproverIdByApplyerId(ding.getUserId());//所在部门负责人的上级leader
 		user.setRoleId(3L);//人事专员
 		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id
 		SysDept dept = deptMapper.selectDeptByUserId(ding.getUserId());//查询用户所在部门
-		Long leaderId = userMapper.selectApproverIdByApplyerId(ding.getUserId());//所在部门负责人
 
 			//人事专员
 		if(user.getUserId().longValue()==hrId.longValue()){
 			ding.setUserId(1L);
 			return oaDingdingMapper.selectDingData(ding);
 			
-		}
-		//其他人事和普通员工这里还有考虑？？？
-		else if(user.getUserId().longValue()!=hrId.longValue() && chiefId.longValue() == upLeaderId.longValue()){
-			//其他人事==普通员工
-			return oaDingdingMapper.selectDingData(ding);
-			
-		}
-		else if(user.getUserId().longValue()!=hrId.longValue() && chiefId.longValue() != upLeaderId.longValue() && leaderId.longValue() != user.getUserId().longValue()){
+		}else if(roleIdList.get(0) == 4L){
 			//普通员工
 			return oaDingdingMapper.selectDingData(ding);
 			

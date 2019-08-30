@@ -166,7 +166,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					  WHEN ding.timeResult = '9' THEN '丧假' 
 				      WHEN ding.timeResult = '10' THEN '哺乳假' 					 
 				ELSE '' END
-				) timeResult, ding.timeResult timeResult2, d.dept_name, ouser.area, ouser.intime
+				) timeResult, ding.timeResult timeResult2, d.dept_name, ouser.area, ouser.intime, ouser.`status`
 			FROM
 				`oa_dingding` ding
 				LEFT JOIN oa_dingding_user us ON ding.user_id = us.user_id
@@ -174,6 +174,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				LEFT JOIN sys_dept d on d.dept_id = ouser.dept_id
 			) ding ON ding.user_id = nu.user_id 
 			<where>
+				ding.STATUS = 0 
              	<if test="userId != null and userId != 1"> and ding.user_id = #{userId}</if>
              	<if test="userName != null and userName != '' "> and ding.user_name like concat('%', #{userName}, '%')</if>  
              	<if test="workDate == 1 "> and ding.workDate = #{workDate}</if>  
