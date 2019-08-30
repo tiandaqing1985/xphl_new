@@ -213,7 +213,7 @@ public class HolidayServiceImpl implements IHolidayService
 		}
 		
 		if(sysUser.getUserId() == 101L){//CEO
-			sysUser.setUserId(0L);
+			sysUser.setUserId(null);
 			return holidayMapper.selectRestByUserId(sysUser);
 		}
 		

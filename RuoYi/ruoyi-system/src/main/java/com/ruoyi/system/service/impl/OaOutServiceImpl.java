@@ -89,7 +89,16 @@ public class OaOutServiceImpl implements IOaOutService
 		oaOutApproval.setApprovalState("3");//审批状态（1同意，2驳回 ，3未操作）
 		oaOutApproval.setApprovalSight("1");//1可见  0不可见
 		oaOutApproval.setApprovalLevel(1);
+		
+		if(oaOut.getUserId() == 103L){//COO
+			oaOutApproval.setApprovalId(101L);
+		}
+		
 		oaOutApprovalMapper.insertOaOutApproval(oaOutApproval);
+		
+		if(upLeaderId ==  null){
+			return 1;
+		}
 		
 		//如果是审批人是 coo 直接结束
 		if(approvalId != null && approvalId.longValue()==103){ 
@@ -251,7 +260,7 @@ public class OaOutServiceImpl implements IOaOutService
 		}
 		
 		if(oaOut.getUserId() == 101L){//CEO
-			oaOut.setUserId(0L);
+			oaOut.setUserId(null);
 			return oaOutMapper.selectOutApprovalList(oaOut);
 		}
 		

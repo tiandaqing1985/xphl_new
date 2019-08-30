@@ -17,6 +17,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="timelength"    column="timelength"    />
         <result property="applyType"    column="apply_type"    />
         <result property="applyState"    column="apply_state"    />
+        <result property="approvalState"    column="approval_state"    />
         <result property="confirmState"    column="confirm_state"    />
         <result property="details"    column="details"    />
         <result property="leaveType"    column="leave_type"    />
@@ -419,6 +420,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         ELSE 
 		            ''
 		        END)apply_state, 
+		        
+		        (
+				CASE
+				
+				WHEN app.approval_state = 1 THEN
+				'同意' 
+				WHEN app.approval_state = 2 THEN
+				'驳回' 
+				WHEN app.approval_state = 3 THEN
+				'未操作' 
+				ELSE '' 
+				END 
+				) approval_state,
+		        
 		        (CASE
 		         WHEN a.confirm_state = 1 THEN
 		          '未确认'
@@ -450,7 +465,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		            ''
 		        END)leave_type, a.apply_time
 		        from sys_user_apply a
-        		where a.apply_id = #{applyId}
+		        LEFT JOIN sys_user_approval app on a.apply_id = app.apply_id
+        		where app.approval_level=1 and a.apply_id = #{applyId}
     </select>
 
     <insert id="insertUserApply" parameterType="UserApply" useGeneratedKeys="true" keyProperty="applyId">

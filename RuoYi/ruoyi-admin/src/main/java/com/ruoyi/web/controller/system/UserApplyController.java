@@ -356,9 +356,12 @@ public class UserApplyController extends BaseController
     	UserApply userApply = userApplyService.selectUserApplyByIdForUndo(applyId);
     	System.out.println(userApply);
     	//请假单是请假申请并且申请成功的时候可以做销假
-    	if(userApply.getApplyState().equals("待审批") || userApply.getApplyState().equals("已撤回")){
+    	if(userApply.getApplyState().equals("已撤回")){
     		return "0";
-    	}else{
+    	}else if(userApply.getApplyState().equals("待审批") && userApply.getApprovalState().equals("未操作")){
+    		return "0";
+    	}
+    	else{
     		return "1";
     	}
     }

@@ -14,11 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ruoyi.system.mapper.HolidayMapper;
 import com.ruoyi.system.mapper.HolidayRecordMapper;
+import com.ruoyi.system.mapper.SysDictDataMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.mapper.UserApplyMapper;
 import com.ruoyi.system.mapper.UserApprovalMapper;
 import com.ruoyi.system.domain.Holiday;
 import com.ruoyi.system.domain.HolidayRecord;
+import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.UserApply;
 import com.ruoyi.system.domain.UserApplyList;
@@ -57,6 +59,9 @@ public class UserApplyServiceImpl implements IUserApplyService
 	
     @Autowired
     private SysUserMapper userMapper;
+    
+    @Autowired
+    private SysDictDataMapper dictDataMapper;
     
 	/**
      * 查询申请信息
@@ -216,8 +221,15 @@ public class UserApplyServiceImpl implements IUserApplyService
 			userApproval.setApproverId(leaderId);
 			approvalId = leaderId;
 		}
+		if(userId == 103L){//COO
+			userApproval.setApproverId(101L);
+		}
 		userApprovalMapper.insertUserApproval(userApproval); //插入一级审批记录
-				
+		
+		if(upLeaderId ==  null){
+			return 1;
+		}
+		
 		//人事审批
 		UserApproval personnel = new UserApproval();//人事审批  *必审
 		personnel.setApplyId(userApply.getApplyId());
@@ -349,6 +361,11 @@ public class UserApplyServiceImpl implements IUserApplyService
 	@Override
 	public int updateUserApply(UserApply userApply)
 	{
+		userApply.setApplyState("1");
+		SysDictData dictData = new SysDictData();
+		dictData.setDictLabel(userApply.getLeaveType());
+		List<SysDictData> dList = dictDataMapper.selectDictDataList(dictData);
+		userApply.setLeaveType(dList.get(0).getDictValue());
 	    return userApplyMapper.updateUserApply(userApply);
 	}
 

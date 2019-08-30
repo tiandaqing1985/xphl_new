@@ -37,6 +37,9 @@ public class UserApply extends BaseEntity
 	private String applyType;
 	/** 申请状态（1保存，2审批中，3审批完） */
 	private String applyState;
+	/** 审批意见（1同意，2驳回 ，3未操作） */
+	private String approvalState;
+	
 	/** 撤销状态（0未撤销，1已撤销） */
 	private String confirmState;
 	/** 详情 */
@@ -65,7 +68,17 @@ public class UserApply extends BaseEntity
 	private String approverName;
 	
 	
-    public String getUserName() {
+    public String getApprovalState() {
+		return approvalState;
+	}
+
+
+	public void setApprovalState(String approvalState) {
+		this.approvalState = approvalState;
+	}
+
+
+	public String getUserName() {
 		return userName;
 	}
 
