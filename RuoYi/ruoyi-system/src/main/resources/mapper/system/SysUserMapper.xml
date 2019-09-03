@@ -285,6 +285,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT user_id FROM sys_user WHERE user_name like concat('%', #{userName}, '%') ;
 	</select>
 	
+	<!-- 精确查询 -->
+	<select id="selectUserIdByUserNameOnly" parameterType="String" resultType="Long">
+		SELECT user_id FROM sys_user WHERE user_name = #{userName}
+	</select>
+	
 	<select id="selectAncestorsByUserId" parameterType="Long" resultType="String">
 		SELECT d.`ancestors` FROM `sys_user` u,`sys_dept` d WHERE u.`dept_id` = d.`dept_id` AND u.`user_id` = #{userId};
 	</select>
