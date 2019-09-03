@@ -26,9 +26,9 @@ public class XzAsstes extends BaseEntity
 	private String assetsName;
 	/** 资产父类型 */
 	@Excel(name = "资产类型", prompt = "资产类型")
-	private String assetsType;
+	private Long assetsType;
 	/** 资产子类型 */
-	private String assetsType2;
+	private Long assetsType2;
 	/** 品牌 */
 	@Excel(name = "品牌", prompt = "品牌")
 	private String brand;
@@ -76,7 +76,10 @@ public class XzAsstes extends BaseEntity
 	private String useStatus;
 	/** 采购人 */
 	@Excel(name = "采购人", prompt = "采购人")
-	private String purchaseBy;
+	private Long purchaseBy;
+	/** 采购人 */
+	@Excel(name = "采购人", prompt = "采购人")
+	private String purchaseName;
 	/** 购入时间 */
 	@Excel(name = "购入时间", prompt = "购入时间")
 	@JsonFormat(pattern = "yyyy-MM-dd")
@@ -97,10 +100,15 @@ public class XzAsstes extends BaseEntity
 	private String extendContent;
 	/** 前当使用人 */
 	@Excel(name = "当前使用人", prompt = "当前使用人")
-	private String useBy;
+	private Long useBy;
+	/** 前当使用人 */
+	@Excel(name = "当前使用人", prompt = "当前使用人")
+	private String useName;
 	/** 使用部门 */
 	@Excel(name = "使用部门", prompt = "使用部门")
-	private String department;
+	private Long department;
+	@Excel(name = "使用部门", prompt = "使用部门")
+	private String departmentName;
 	/** 使用时间 */
 	@Excel(name = "使用时间", prompt = "使用时间")
 	@JsonFormat(pattern = "yyyy-MM-dd")
@@ -117,6 +125,36 @@ public class XzAsstes extends BaseEntity
 	private Date scrapDate;
 	/** 资产入库方式 */
 	private String storeWay;
+	/** 资产分类（1固定资产、2办公用品资产）**/
+	private String sort;
+	
+	private SysUser user;
+	
+	private SysDept dept;
+
+	public SysUser getUser() {
+		return user;
+	}
+
+	public void setUser(SysUser user) {
+		this.user = user;
+	}
+
+	public SysDept getDept() {
+		return dept;
+	}
+
+	public void setDept(SysDept dept) {
+		this.dept = dept;
+	}
+
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
 
 	public void setId(Long id) 
 	{
@@ -154,21 +192,21 @@ public class XzAsstes extends BaseEntity
 	{
 		return assetsName;
 	}
-	public void setAssetsType(String assetsType) 
+	public void setAssetsType(Long assetsType) 
 	{
 		this.assetsType = assetsType;
 	}
 
-	public String getAssetsType() 
+	public Long getAssetsType() 
 	{
 		return assetsType;
 	}
-	public void setAssetsType2(String assetsType2) 
+	public void setAssetsType2(Long assetsType2) 
 	{
 		this.assetsType2 = assetsType2;
 	}
 
-	public String getAssetsType2() 
+	public Long getAssetsType2() 
 	{
 		return assetsType2;
 	}
@@ -289,12 +327,12 @@ public class XzAsstes extends BaseEntity
 	{
 		return invoiceNum;
 	}
-	public void setPurchaseBy(String purchaseBy) 
+	public void setPurchaseBy(Long purchaseBy) 
 	{
 		this.purchaseBy = purchaseBy;
 	}
 
-	public String getPurchaseBy() 
+	public Long getPurchaseBy() 
 	{
 		return purchaseBy;
 	}
@@ -370,21 +408,21 @@ public class XzAsstes extends BaseEntity
 	{
 		return useStatus;
 	}
-	public void setUseBy(String useBy) 
+	public void setUseBy(Long useBy) 
 	{
 		this.useBy = useBy;
 	}
 
-	public String getUseBy() 
+	public Long getUseBy() 
 	{
 		return useBy;
 	}
-	public void setDepartment(String department) 
+	public void setDepartment(Long department) 
 	{
 		this.department = department;
 	}
 
-	public String getDepartment() 
+	public Long getDepartment() 
 	{
 		return department;
 	}
@@ -441,7 +479,30 @@ public class XzAsstes extends BaseEntity
 		this.subTime = date;
 	}
 
-    @Override
+	public String getPurchaseName() {
+		return purchaseName;
+	}
+
+	public void setPurchaseName(String purchaseName) {
+		this.purchaseName = purchaseName;
+	}
+
+	public String getUseName() {
+		return useName;
+	}
+
+	public void setUseName(String useName) {
+		this.useName = useName;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+	@Override
 	public String toString() {
 		return "XzAsstes [id=" + id + ", assetsId=" + assetsId + ", assetsName=" + assetsName + ", assetsType="
 				+ assetsType + ", assetsType2=" + assetsType2 + ", brand=" + brand + ", category=" + category
@@ -449,10 +510,13 @@ public class XzAsstes extends BaseEntity
 				+ ", region=" + region + ", attach=" + attach + ", purchaseNum=" + purchaseNum + ", buyAddress="
 				+ buyAddress + ", manufacturer=" + manufacturer + ", supplier=" + supplier + ", invoiceType="
 				+ invoiceType + ", invoiceNum=" + invoiceNum + ", assetsStatus=" + assetsStatus + ", useStatus="
-				+ useStatus + ", purchaseBy=" + purchaseBy + ", buyDate=" + buyDate + ", annex=" + annex + ", remarks="
-				+ remarks + ", extendMoney=" + extendMoney + ", extendTime=" + extendTime + ", extendContent="
-				+ extendContent + ", useBy=" + useBy + ", department=" + department + ", useTime=" + useTime
+				+ useStatus + ", purchaseBy=" + purchaseBy + ", purchaseName=" + purchaseName + ", buyDate=" + buyDate
+				+ ", annex=" + annex + ", remarks=" + remarks + ", extendMoney=" + extendMoney + ", extendTime="
+				+ extendTime + ", extendContent=" + extendContent + ", useBy=" + useBy + ", useName=" + useName
+				+ ", department=" + department + ", departmentName=" + departmentName + ", useTime=" + useTime
 				+ ", subBy=" + subBy + ", subTime=" + subTime + ", submitType=" + submitType + ", scrapDate="
-				+ scrapDate + ", storeWay=" + storeWay + "]";
+				+ scrapDate + ", storeWay=" + storeWay + ", sort=" + sort + ", user=" + user + ", dept=" + dept + "]";
 	}
+
+    
 }

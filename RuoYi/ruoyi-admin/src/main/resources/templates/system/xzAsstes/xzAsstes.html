@@ -3,6 +3,11 @@
 	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
 <th:block th:include="include :: header('资产列表')" />
+<script type="text/javascript">
+	function editPart(id){
+		$.modal.openTab("提交后修改", $.table._option.editPartUrl.replace("{id}",id));
+	} 
+</script>
 </head>
 <body class="gray-bg">
 	<div class="container-div">
@@ -88,7 +93,6 @@
 	<script th:inline="javascript">
     	var detailFlag = [[${@permission.hasPermi('system:xzAsstes:detail')}]];
         var editFlag = [[${@permission.hasPermi('system:xzAsstes:edit')}]];
-        var editPartFlag = [[${@permission.hasPermi('system:xzAsstes:editPart')}]];
         var removeFlag = [[${@permission.hasPermi('system:xzAsstes:remove')}]];
        
         
@@ -96,6 +100,7 @@
         var brand = [[${@dict.getType('xz_assets_brand')}]];
         var assetsStatus = [[${@dict.getType('xz_assets_assetsStatus')}]];
         var useStatus = [[${@dict.getType('xz_assets_useStatus')}]];
+        var submitType = [[${@dict.getType('xz_assets_submitType')}]];
         
         var prefix = ctx + "system/xzAsstes";
         $(function() {
@@ -104,6 +109,7 @@
                 createUrl: prefix + "/add",
                 createSubUrl: prefix + "/addSub",
                 updateUrl: prefix + "/edit/{id}",
+                editPartUrl: prefix + "/editPart/{id}",
                 updateSubUrl: prefix + "/editSub/{id}",
                 detailUrl: prefix + "/detail/{id}",
                 removeUrl: prefix + "/remove",
@@ -169,7 +175,7 @@
 					}
 				},
 				{
-					field : 'purchaseBy', 
+					field : 'purchaseName', 
 					title : '采购人',
 					sortable: true
 				},
@@ -179,31 +185,25 @@
 					sortable: true
 				},
 				{
-					field : 'useBy', 
-					title : '前当使用人',
-					sortable: true
+					field : 'submitType', 
+					title : '提交状态',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(submitType, value);
+					}
 				},
-				{
-					field : 'department', 
-					title : '使用部门',
-					sortable: true
-				},
-				{
-					field : 'useTime', 
-					title : '使用时间',
-					sortable: true
-				},
+				
 		        {
 		            title: '操作',
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		            	var actions = [];
-		            	if(row.assetsStatus=="2"){
-		            		actions.push('<a class="btn btn-primary btn-xs ' + editPartFlag + '" href="#" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		            	if(row.submitType=="2"){
+		            		actions.push('<a class="btn btn-primary btn-xs ' + '" href="#" onclick="editPart(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
 		            	}else{
 		            		actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		            		actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 		            	}
-                        actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="#" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-detail"></i>详细</a>');
+                        actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详细</a>');
 						return actions.join('');
 		            }
 		        }]

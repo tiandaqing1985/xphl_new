@@ -112,5 +112,15 @@ public class XzAssetTypeServiceImpl implements IXzAssetTypeService
 	public int selectXzAssetTypeByName(String assetsType, String name) {
 		return xzAssetTypeMapper.selectXzAssetTypeByName(assetsType, name);
 	}
+
+	@Override
+	public List<XzAssetType> selectXzAssetTypeByAssAll() {
+		return xzAssetTypeMapper.selectXzAssetTypeByAssAll();
+	}
+
+	@Override
+	public List<XzAssetType> selectXzAssetTypeByStaAll() {
+		return xzAssetTypeMapper.selectXzAssetTypeByStaAll();
+	}
     
 }

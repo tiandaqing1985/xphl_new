@@ -1,7 +1,7 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
 
@@ -17,13 +17,40 @@ public class XzAssetHandRecord extends BaseEntity
 	
 	/**  */
 	private Long id;
+	/** 申请id */
+	private Long applyId;
 	/** 资产ID */
-	private String assetId;
+	@Excel(name = "资产id", prompt = "资产id")
+	private Long assetId;
+	/** 资产名称 */
+	@Excel(name = "资产名称", prompt = "资产名称")
+	private String assetName;
 	/** 发人分ID */
-	private String distributor;
+	private Long distributor;
+	/** 发人分名称 */
+	@Excel(name = "分配人", prompt = "分配人")
+	private String distributorName;
+	@Excel(name = "审批状态", prompt = "审批状态")
+	private String distributorStatus;
+	public String getDistributorStatus() {
+		return distributorStatus;
+	}
+
+	public void setDistributorStatus(String distributorStatus) {
+		this.distributorStatus = distributorStatus;
+	}
+
 	/** 接收人ID */
-	private String recipient;
+	private Long recipient;
+	/** 接收人名称 */
+	@Excel(name = "使用人", prompt = "使用人")
+	private String recipientName;
+	/** 使用部门 */
+	@Excel(name = "使用部门", prompt = "使用部门")
+	private String departmentName;
 	/** 分发资产日期 */
+	@Excel(name = "资产分发时间", prompt = "资产分发时间")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date distributionDate;
 	/** 认确领用日期 */
 	private Date confirmDate;
@@ -35,6 +62,37 @@ public class XzAssetHandRecord extends BaseEntity
 	private String isMsg;
 	/** 分配类型 */
 	private String sourceType;
+	/** 分配数量*/
+	private int count;
+	/** 资产子类型id*/
+	private Long assetType2Id;
+	/** 地域*/
+	private String region;
+	
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public Long getAssetType2Id() {
+		return assetType2Id;
+	}
+
+	public void setAssetType2Id(Long assetType2Id) {
+		this.assetType2Id = assetType2Id;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
 
 	public void setId(Long id) 
 	{
@@ -45,30 +103,30 @@ public class XzAssetHandRecord extends BaseEntity
 	{
 		return id;
 	}
-	public void setAssetId(String assetId) 
+	public void setAssetId(Long assetId) 
 	{
 		this.assetId = assetId;
 	}
 
-	public String getAssetId() 
+	public Long getAssetId() 
 	{
 		return assetId;
 	}
-	public void setDistributor(String distributor) 
+	public void setDistributor(Long distributor) 
 	{
 		this.distributor = distributor;
 	}
 
-	public String getDistributor() 
+	public Long getDistributor() 
 	{
 		return distributor;
 	}
-	public void setRecipient(String recipient) 
+	public void setRecipient(Long recipient) 
 	{
 		this.recipient = recipient;
 	}
 
-	public String getRecipient() 
+	public Long getRecipient() 
 	{
 		return recipient;
 	}
@@ -126,23 +184,56 @@ public class XzAssetHandRecord extends BaseEntity
 	{
 		return sourceType;
 	}
+	
+	public String getRecipientName() {
+		return recipientName;
+	}
 
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("assetId", getAssetId())
-            .append("distributor", getDistributor())
-            .append("recipient", getRecipient())
-            .append("distributionDate", getDistributionDate())
-            .append("confirmDate", getConfirmDate())
-            .append("planReturnDate", getPlanReturnDate())
-            .append("isClaim", getIsClaim())
-            .append("isMsg", getIsMsg())
-            .append("sourceType", getSourceType())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
-    }
+	public void setRecipientName(String recipientName) {
+		this.recipientName = recipientName;
+	}
+
+	public String getAssetName() {
+		return assetName;
+	}
+
+	public void setAssetName(String assetName) {
+		this.assetName = assetName;
+	}
+
+	public String getDistributorName() {
+		return distributorName;
+	}
+
+	public void setDistributorName(String distributorName) {
+		this.distributorName = distributorName;
+	}
+
+	public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+	
+	public Long getApplyId() {
+		return applyId;
+	}
+
+	public void setApplyId(Long applyId) {
+		this.applyId = applyId;
+	}
+
+
+	@Override
+	public String toString() {
+		return "XzAssetHandRecord [id=" + id + ", applyId=" + applyId + ", assetId=" + assetId + ", assetName="
+				+ assetName + ", distributor=" + distributor + ", distributorName=" + distributorName
+				+ ", distributorStatus=" + distributorStatus + ", recipient=" + recipient + ", recipientName="
+				+ recipientName + ", departmentName=" + departmentName + ", distributionDate=" + distributionDate
+				+ ", confirmDate=" + confirmDate + ", planReturnDate=" + planReturnDate + ", isClaim=" + isClaim
+				+ ", isMsg=" + isMsg + ", sourceType=" + sourceType + ", count=" + count + ", assetType2Id="
+				+ assetType2Id + ", region=" + region + "]";
+	}
 }

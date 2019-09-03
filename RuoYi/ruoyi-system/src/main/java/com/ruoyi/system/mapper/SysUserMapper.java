@@ -173,4 +173,19 @@ public interface SysUserMapper
 	 * @return
 	 */
 	public Long selectUserIdByDeptId(Long deptId);
+	
+	/**
+	 * 根据username查询userid
+	 * @param userId
+	 * @return 模糊查询结果
+	 */
+	public Long selectUserIdByUserName(String userName);
+	
+	/**
+	 * 根据username查询userid
+	 * @param userId
+	 * @return 模糊查询结果
+	 */
+	public Long selectUserIdByUserNameOnly(String userName);
+
 }

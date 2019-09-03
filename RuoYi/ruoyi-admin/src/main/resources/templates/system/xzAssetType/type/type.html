@@ -12,7 +12,7 @@
 						<ul>
 							<li>
 								资产类型：
-								<select name="assetsType" th:with="type=${@dict.getType('xz_assets_type')}">
+								<select name="sort" th:with="type=${@dict.getType('xz_assets_type')}">
 									<option value="">所有</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
 								</select>
@@ -75,7 +75,7 @@
 					visible: false
 				},
 				{
-					field : 'assetsType', 
+					field : 'sort', 
 					title : '资产类型',
 					formatter: function(value, row, index) {
 			            	return $.table.selectDictLabel(datas, value);

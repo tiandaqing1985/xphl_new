@@ -33,7 +33,7 @@ public interface IXzAssetHandRecordService
      * @param xzAssetHandRecord 资产分配记录信息
      * @return 结果
      */
-	public int insertXzAssetHandRecord(XzAssetHandRecord xzAssetHandRecord);
+	public String insertXzAssetHandRecord(XzAssetHandRecord xzAssetHandRecord);
 	
 	/**
      * 修改资产分配记录
@@ -50,5 +50,7 @@ public interface IXzAssetHandRecordService
      * @return 结果
      */
 	public int deleteXzAssetHandRecordByIds(String ids);
+
+	public String insertXzAssetHandStaRecord(XzAssetHandRecord xzAssetHandRecord);
 	
 }

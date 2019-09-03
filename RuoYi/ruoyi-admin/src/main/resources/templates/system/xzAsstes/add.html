@@ -8,7 +8,7 @@
 		<form class="form-horizontal m" id="form-xzAsstes-add">
 			<h4 class="form-header h4">基本信息</h4>
 			<div class="row">
-				<div class="col-sm-6">
+				<!-- <div class="col-sm-6">
 					<div class="form-group">
 						<label class="col-sm-3 control-label"><span
 							style="color: red;">*</span>资产编码：</label>
@@ -17,7 +17,7 @@
 								type="text" required>
 						</div>
 					</div>
-				</div>
+				</div> -->
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label class="col-sm-3 control-label"><span
@@ -60,21 +60,33 @@
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label class="col-sm-3 control-label"><span
-							style="color: red;">*</span>资产分类：</label>
+							style="color: red;">*</span>资产类型：</label>
 						<div class="col-sm-8">
 							<div class="input-group" style="width: 100%">
-								<select name="assetsType" class="form-control m-b"
-									th:with="type=${@dict.getType('xz_assets_assetsType')}"
-									required>
+								<select id="assetsType" name="assetsType"
+									class="form-control m-b" onchange="selectAll()">
 									<option value=""></option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-										th:value="${dict.dictValue}"></option>
+									<option th:each="a:${typeList}" th:value="${a.id}"
+										th:text="${a.name}"></option>
 								</select>
 							</div>
 						</div>
 					</div>
 				</div>
-
+				
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-3 control-label"><span
+							style="color: red;">*</span>资产二级类型：</label>
+						<div class="col-sm-8">
+							<select id="assetsType2" name="assetsType2"
+								class="form-control m-b">
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label class="col-sm-3 control-label">资产型号：</label>
@@ -84,8 +96,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label class="col-sm-3 control-label"><span
@@ -96,6 +106,8 @@
 						</div>
 					</div>
 				</div>
+			</div>
+			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label class="col-sm-3 control-label">单位：</label>
@@ -111,8 +123,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label class="col-sm-3 control-label"><span
@@ -123,7 +133,8 @@
 						</div>
 					</div>
 				</div>
-
+			</div>
+			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label class="col-sm-3 control-label"><span
@@ -140,8 +151,6 @@
 						</div>
 					</div>
 				</div>
-			</div>
-			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label class="col-sm-3 control-label"><span
@@ -208,16 +217,17 @@
 				</div>
 			</div>
 			<div class="row">
-				 <div class="col-sm-6">
+				<div class="col-sm-6">
 					<div class="form-group">
-						<label class="col-sm-3 control-label"><span style="color: red; ">*</span>采购人：</label>
+						<label class="col-sm-3 control-label"><span
+							style="color: red;">*</span>采购人：</label>
 						<div class="col-sm-8">
-							<input id="purchaseBy" name="purchaseBy" class="form-control"
+							<input id="purchaseName" name="purchaseName" class="form-control"
 								type="text" required>
 						</div>
 					</div>
-				</div> 
-				
+				</div>
+
 				<div class="col-sm-6">
 					<div class="form-group">
 						<label class="col-sm-3 control-label"><span
@@ -370,6 +380,31 @@
 					$.modal.alertSuccess("上传成功");
 				}
 			});
+		}
+
+		//资产类型二级联动
+		function selectAll() {
+			var index = $('#assetsType option:selected').text();
+			var index1 = $('#assetsType option:selected').val();
+			var optionJson = [];
+			$.ajax({
+				url : prefix + "/onSelect/" + index1,
+				type : "post",
+				data : {
+					"id" : index1
+				},
+				datatype : "json",
+				success : function(data) {
+					optionJson = data;
+					var selectObj = document.getElementById("assetsType2");
+					selectObj.options.length = 0;
+					selectObj.options.add(new Option("--请选择--", 0));
+					for (var i = 0; i < data.length; i++) {
+						selectObj.add(new Option(optionJson[i].name,
+								optionJson[i].id));
+					}
+				}
+			})
 		}
 	</script>
 </body>

@@ -9,55 +9,80 @@ import java.util.List;
  * @author ruoyi
  * @date 2019-08-02
  */
-public interface IXzAsstesService 
-{
+public interface IXzAsstesService {
 	/**
-     * 查询资产信息
-     * 
-     * @param id 资产ID
-     * @return 资产信息
-     */
+	 * 查询资产信息
+	 * 
+	 * @param id
+	 *            资产ID
+	 * @return 资产信息
+	 */
 	public XzAsstes selectXzAsstesById(Long id);
-	
+
 	/**
-     * 查询资产列表
-     * 
-     * @param xzAsstes 资产信息
-     * @return 资产集合
-     */
+	 * 查询资产列表
+	 * 
+	 * @param xzAsstes
+	 *            资产信息
+	 * @return 资产集合
+	 */
 	public List<XzAsstes> selectXzAsstesList(XzAsstes xzAsstes);
-	
+
 	/**
-     * 新增资产
-     * 
-     * @param xzAsstes 资产信息
-     * @return 结果
-     */
+	 * 新增资产
+	 * 
+	 * @param xzAsstes
+	 *            资产信息
+	 * @return 结果
+	 */
 	public int insertXzAsstes(XzAsstes xzAsstes);
-	
+
 	/**
-     * 修改资产
-     * 
-     * @param xzAsstes 资产信息
-     * @return 结果
-     */
+	 * 修改资产
+	 * 
+	 * @param xzAsstes
+	 *            资产信息
+	 * @return 结果
+	 */
 	public int updateXzAsstes(XzAsstes xzAsstes);
-		
+
 	/**
-     * 删除资产信息
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
+	 * 删除资产信息
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
 	public int deleteXzAsstesByIds(String ids);
 
 	/**
 	 * 
-	 * @param assetsList 资产数据列表
+	 * @param assetsList
+	 *            资产数据列表
 	 * @param updateSupport
 	 * @param operName
 	 * @return
 	 */
 	public String importXzAsstes(List<XzAsstes> assetsList, boolean updateSupport, String operName);
+
+	/**
+	 * 根据使用者id修改资产状态
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public String updateXzAsstesByAllDraw(Long userId);
 	
+	/**
+	 * 根据使用者id查询待领取资产数量
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public int countXzAsstesByAllDraw(Long userId);
+
+	public String updateXzAsstesByAssetId(XzAsstes xzAsstes);
+
+	public String insertStaAsstes(XzAsstes xzAsstes);
+
 }

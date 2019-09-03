@@ -1,6 +1,5 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.Date;
 import java.util.List;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +14,10 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.XzAssetHandRecord;
 import com.ruoyi.system.domain.XzAsstes;
-import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.system.domain.XzPersonalApply;
 import com.ruoyi.system.service.IXzAssetHandRecordService;
 import com.ruoyi.system.service.IXzAsstesService;
+import com.ruoyi.system.service.IXzPersonalApplyService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -38,6 +38,9 @@ public class XzAssetHandRecordController extends BaseController
     
     @Autowired
 	private IXzAsstesService xzAsstesService;
+    
+    @Autowired
+   	private IXzPersonalApplyService xzPersonalApplyService;
     
 	@Autowired
 	private IXzAssetHandRecordService xzAssetHandRecordService;
@@ -75,7 +78,7 @@ public class XzAssetHandRecordController extends BaseController
     }
 	
 	/**
-	 * 新增资产分配记录
+	 * 新增固定资产分配记录
 	 */
 	@GetMapping("/add/{id}")
 	public String add(@PathVariable("id") Long id, ModelMap mmap)
@@ -86,31 +89,50 @@ public class XzAssetHandRecordController extends BaseController
 	}
 	
 	/**
-	 * 新增保存资产分配记录
+	 * 新增办公用品资产分配记录
+	 */
+	@GetMapping("/staHand/{applyId}")
+	public String addStaHand(@PathVariable("applyId") Long applyId, ModelMap mmap)
+	{
+		XzPersonalApply apply=xzPersonalApplyService.selectXzPersonalApplyById(applyId);
+		XzAsstes xzAsstes=new XzAsstes();
+		xzAsstes.setAssetsType(apply.getAssetTypeId());
+		xzAsstes.setAssetsType2(apply.getAssetType2Id());
+		xzAsstes.setAssetsModel(apply.getAssetModel());
+		mmap.put("apply", apply);
+	    return prefix + "/staHand";
+	}
+	
+	/**
+	 * 新增固定资产分配记录
 	 */
 	@Log(title = "资产分配记录", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(XzAssetHandRecord xzAssetHandRecord)
 	{	
-		Date date=new Date();
-		XzAsstes xzAsstes=xzAsstesService.selectXzAsstesById(xzAssetHandRecord.getId());
-		//分配后资产状态为-已分配2，使用状态为-待领取2
-		xzAsstes.setAssetsStatus("2");
-		xzAsstes.setUseStatus("2");
-		xzAsstes.setUseBy(xzAssetHandRecord.getRecipient());
-		xzAsstes.setUpdateBy(xzAssetHandRecord.getCreateBy());
-		xzAsstes.setUpdateTime(date);
-		xzAsstesService.updateXzAsstes(xzAsstes);
-		xzAssetHandRecord.setAssetId(xzAsstes.getAssetsId());
-		xzAssetHandRecord.setCreateBy(ShiroUtils.getSysUser().getUserName());
-		xzAssetHandRecord.setAssetId(xzAsstes.getAssetsId());
-		xzAssetHandRecord.setCreateBy(ShiroUtils.getSysUser().getUserName());
-		xzAssetHandRecord.setCreateTime(date);
-		xzAssetHandRecord.setIsClaim("2");
-		xzAssetHandRecord.setIsMsg("2");
-		xzAssetHandRecord.setSourceType("1");
-		return toAjax(xzAssetHandRecordService.insertXzAssetHandRecord(xzAssetHandRecord));
+		xzAssetHandRecord.setCreateBy(ShiroUtils.getUserId().toString());
+		xzAssetHandRecord.setDistributor(ShiroUtils.getUserId());
+		String str= xzAssetHandRecordService.insertXzAssetHandRecord(xzAssetHandRecord);
+		if(str.equals("0")){
+			return success("分配成功");
+		}else{
+			return error("此人不存在，请重新分配");
+		}
+		
+	}
+	
+	/**
+	 * 新增办公资产分配记录
+	 */
+	@Log(title = "资产分配记录", businessType = BusinessType.INSERT)
+	@PostMapping("/staHand")
+	@ResponseBody
+	public AjaxResult staHandSave(XzAssetHandRecord xzAssetHandRecord)
+	{	
+		xzAssetHandRecord.setDistributor(ShiroUtils.getUserId());
+		String str= xzAssetHandRecordService.insertXzAssetHandStaRecord(xzAssetHandRecord);
+		return success(str);	
 	}
 
 	/**

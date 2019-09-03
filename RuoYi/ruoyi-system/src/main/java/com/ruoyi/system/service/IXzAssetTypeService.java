@@ -56,6 +56,20 @@ public interface IXzAssetTypeService {
 	public int deleteXzAssetTypeByIds(String ids);
 
 	/**
+	 * 根据办公资产父类型
+	 * 
+	 * @return 资产父类型集合信息
+	 */
+	public List<XzAssetType> selectXzAssetTypeByAssAll();
+	
+	/**
+	 * 根据固定资产父类型
+	 * 
+	 * @return 资产父类型集合信息
+	 */
+	public List<XzAssetType> selectXzAssetTypeByStaAll();
+	
+	/**
 	 * 根据所有资产父类型
 	 * 
 	 * @return 资产父类型集合信息

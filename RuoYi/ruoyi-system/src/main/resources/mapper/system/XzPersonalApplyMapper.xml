@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzPersonalApplyMapper">
+
+	<resultMap type="XzPersonalApply" id="XzPersonalApplyResult">
+		<result property="applyId" column="apply_id" />
+		<result property="applyStatus" column="apply_status" />
+		<result property="applyType" column="apply_type" />
+		<result property="assetTypeId" column="asset_type_id" />
+		<result property="assetTypeName" column="asset_type_name" />
+		<result property="assetType2Id" column="asset_type2_id" />
+		<result property="assetType2Name" column="asset_type2_name" />
+		<result property="assetModel" column="asset_model" />
+		<result property="region" column="region" />
+		<result property="count" column="count" />
+		<result property="unit" column="unit" />
+		<result property="purpose" column="purpose" />
+		<result property="remarks" column="remarks" />
+		<result property="useDate" column="use_date" />
+		<result property="submitType" column="submit_type" />
+		<result property="sort" column="sort" />
+		<result property="updateBy" column="update_by" />
+		<result property="updateTime" column="update_time" />
+		<result property="createBy" column="create_by" />
+		<result property="createTime" column="create_time" />
+		<result property="createByName" column="create_by_name" />
+		<result property="userId" column="user_id" />
+	</resultMap>
+
+	<sql id="selectXzPersonalApplyVo">
+		select apply_id, apply_status, apply_type, asset_type_id, asset_type2_id,
+		asset_model, region, count, unit, purpose, remarks,
+		use_date, submit_type, sort, update_by, update_time, create_by, create_time
+		from xz_personal_apply
+	</sql>
+
+	<sql id="selectXzPersonalApply">
+		select pa.apply_id, pa.apply_status, pa.apply_type, pa.asset_type_id,
+		pa.asset_type2_id, pa.asset_model, pa.region,pa.user_id,
+		pa.count, pa.unit, pa.purpose, pa.remarks, pa.use_date, pa.submit_type,
+		pa.sort, pa.update_by, pa.update_time,
+		pa.create_by, pa.create_time,
+		at.name asset_type_name ,ad.name asset_type2_name ,u.user_name create_by_name
+		from xz_personal_apply pa
+		left join sys_user u on u.user_id=pa.create_by
+		left join xz_asset_type at on at.id=pa.asset_type_id
+		left join xz_asset_data ad on ad.id=pa.asset_type2_id
+	</sql>
+
+	<select id="selectXzPersonalApplyList" parameterType="XzPersonalApply"
+		resultMap="XzPersonalApplyResult">
+		<include refid="selectXzPersonalApply" />
+		<where>
+			<if test="applyStatus != null  and applyStatus != '' "> and pa.apply_status = #{applyStatus}</if>
+			<if test="applyType != null  and applyType != '' "> and pa.apply_type = #{applyType}</if>
+			<if test="applyStatus != null  and applyStatus != '' "> and pa.apply_Status = #{applyStatus}</if>
+			<if test="assetType2Name != null and assetType2Name != ''  "> and ad.name = #{assetType2Name}</if>
+			<if test="sort != null  and sort != '' "> and pa.sort = #{sort}</if>
+			<if test="userId != null "> and pa.user_id = #{userId}</if>
+		</where>
+	</select>
+
+	<select id="selectXzPersonalApplyById" parameterType="Long"
+		resultMap="XzPersonalApplyResult">
+		<include refid="selectXzPersonalApply" />
+		where apply_id = #{applyId}
+	</select>
+
+	<insert id="insertXzPersonalApply" parameterType="XzPersonalApply"
+		useGeneratedKeys="true" keyProperty="applyId">
+		insert into xz_personal_apply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="applyStatus != null  and applyStatus != ''  ">apply_status,</if>
+			<if test="applyType != null  and applyType != ''  ">apply_type,</if>
+			<if test="assetTypeId != null  ">asset_type_id,</if>
+			<if test="assetType2Id != null  ">asset_type2_id,</if>
+			<if test="assetModel != null  and assetModel != ''  ">asset_model,</if>
+			<if test="region != null  and region != ''  ">region,</if>
+			<if test="count != null  ">count,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="purpose != null  and purpose != ''  ">purpose,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="useDate != null  ">use_date,</if>
+			<if test="submitType != null  and submitType != ''  ">submit_type,</if>
+			<if test="sort != null  and sort != ''  ">sort,</if>
+			<if test="updateBy != null  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+			<if test="createBy != null  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="userId != null and userId != ''  ">user_id,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="applyStatus != null  and applyStatus != ''  ">#{applyStatus},</if>
+			<if test="applyType != null  and applyType != ''  ">#{applyType},</if>
+			<if test="assetTypeId != null  ">#{assetTypeId},</if>
+			<if test="assetType2Id != null  ">#{assetType2Id},</if>
+			<if test="assetModel != null  and assetModel != ''  ">#{assetModel},</if>
+			<if test="region != null  and region != ''  ">#{region},</if>
+			<if test="count != null  ">#{count},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="purpose != null  and purpose != ''  ">#{purpose},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="useDate != null  ">#{useDate},</if>
+			<if test="submitType != null  and submitType != ''  ">#{submitType},</if>
+			<if test="sort != null  and sort != ''  ">#{sort},</if>
+			<if test="updateBy != null  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="createBy != null  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="userId != null and userId != ''  ">#{userId},</if>
+		</trim>
+	</insert>
+
+	<update id="updateXzPersonalApply" parameterType="XzPersonalApply">
+		update xz_personal_apply
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="applyStatus != null  and applyStatus != ''  ">apply_status = #{applyStatus},</if>
+			<if test="applyType != null  and applyType != ''  ">apply_type = #{applyType},</if>
+			<if test="assetTypeId != null  ">asset_type_id = #{assetTypeId},</if>
+			<if test="assetType2Id != null  ">asset_type2_id = #{assetType2Id},</if>
+			<if test="assetModel != null  and assetModel != ''  ">asset_model = #{assetModel},</if>
+			<if test="region != null  and region != ''  ">region = #{region},</if>
+			<if test="count != null  ">count = #{count},</if>
+			<if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+			<if test="purpose != null  and purpose != ''  ">purpose = #{purpose},</if>
+			<if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+			<if test="useDate != null  ">use_date = #{useDate},</if>
+			<if test="submitType != null  and submitType != ''  ">submit_type = #{submitType},</if>
+			<if test="sort != null  and sort != ''  ">sort = #{sort},</if>
+			<if test="updateBy != null  ">update_by = #{updateBy},</if>
+			<if test="updateTime != null  ">update_time = #{updateTime},</if>
+			<if test="createBy != null  ">create_by = #{createBy},</if>
+			<if test="createTime != null  ">create_time = #{createTime},</if>
+		</trim>
+		where apply_id = #{applyId}
+	</update>
+
+	<delete id="deleteXzPersonalApplyById" parameterType="Long">
+		delete from xz_personal_apply where apply_id = #{applyId}
+	</delete>
+
+	<delete id="deleteXzPersonalApplyByIds" parameterType="String">
+		delete from xz_personal_apply where apply_id in
+		<foreach item="applyId" collection="array" open="(" separator=","
+			close=")">
+			#{applyId}
+		</foreach>
+	</delete>
+
+</mapper>

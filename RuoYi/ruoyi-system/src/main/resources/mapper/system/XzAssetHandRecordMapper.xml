@@ -6,6 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="XzAssetHandRecord" id="XzAssetHandRecordResult">
         <result property="id"    column="id"    />
+        <result property="applyId"    column="apply_id"    />
         <result property="assetId"    column="asset_id"    />
         <result property="distributor"    column="distributor"    />
         <result property="recipient"    column="recipient"    />
@@ -19,29 +20,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="assetName"    column="asset_name"    />
+        <result property="distributorName"    column="distributor_name"    />
+        <result property="recipientName"    column="recipient_name"    />
+        <result property="departmentName"    column="department_name"    />
     </resultMap>
 	
 	<sql id="selectXzAssetHandRecordVo">
-        select id, asset_id, distributor, recipient, distribution_date, confirm_date, plan_return_date, is_claim, is_msg, source_type, create_by, create_time, update_by, update_time from xz_asset_hand_record
+        select id, apply_id, asset_id, distributor, recipient, distribution_date, confirm_date, plan_return_date, is_claim, is_msg, source_type, create_by, create_time, update_by, update_time from xz_asset_hand_record
+    </sql>
+    
+    <sql id="selectXzAssetHandRecord">
+        select ahr.id, ahr.apply_id, ahr.asset_id, ahr.distributor, ahr.recipient, ahr.distribution_date, ahr.confirm_date, ahr.plan_return_date, ahr.is_claim, ahr.is_msg, ahr.source_type, ahr.create_by, ahr.create_time, ahr.update_by, ahr.update_time, 
+        a.assets_name asset_name,d.dept_name department_name, u.user_name distributor_name,ur.user_name recipient_name
+        from xz_asset_hand_record ahr 
+        left join xz_asstes a on a.id =ahr.asset_id
+        left join sys_user u on u.user_id= ahr.distributor
+        left join sys_user ur on ur.user_id= ahr.recipient
+        left join sys_dept d on d.dept_id=a.department
+        left join xz_personal_apply xpa on xpa.apply_id=ahr.apply_id
     </sql>
 	
     <select id="selectXzAssetHandRecordList" parameterType="XzAssetHandRecord" resultMap="XzAssetHandRecordResult">
-        <include refid="selectXzAssetHandRecordVo"/>
+        <include refid="selectXzAssetHandRecord"/>
         <where>  
-            <if test="id != null "> and id = #{id}</if>
-             <if test="assetId != null  and assetId != '' "> and asset_id = #{assetId}</if>
-             <if test="distributor != null  and distributor != '' "> and distributor = #{distributor}</if>
-             <if test="recipient != null  and recipient != '' "> and recipient = #{recipient}</if>
-             <if test="distributionDate != null "> and distribution_date = #{distributionDate}</if>
-             <if test="confirmDate != null "> and confirm_date = #{confirmDate}</if>
-             <if test="planReturnDate != null "> and plan_return_date = #{planReturnDate}</if>
-             <if test="isClaim != null  and isClaim != '' "> and is_claim = #{isClaim}</if>
-             <if test="isMsg != null  and isMsg != '' "> and is_msg = #{isMsg}</if>
-             <if test="sourceType != null  and sourceType != '' "> and source_type = #{sourceType}</if>
-             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
-             <if test="createTime != null "> and create_time = #{createTime}</if>
-             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
-             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="assetName != null  and assetName != '' "> and a.assets_name = #{assetName}</if>
+              and a.sort = '2'
          </where>
     </select>
     
@@ -53,6 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertXzAssetHandRecord" parameterType="XzAssetHandRecord" useGeneratedKeys="true" keyProperty="id">
         insert into xz_asset_hand_record
 		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="applyId != null  and applyId != ''  ">apply_id,</if>
 			<if test="assetId != null  and assetId != ''  ">asset_id,</if>
 			<if test="distributor != null  and distributor != ''  ">distributor,</if>
 			<if test="recipient != null  and recipient != ''  ">recipient,</if>
@@ -68,6 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="updateTime != null  ">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+        	<if test="applyId != null  and applyId != ''  ">#{applyId},</if>
 			<if test="assetId != null  and assetId != ''  ">#{assetId},</if>
 			<if test="distributor != null  and distributor != ''  ">#{distributor},</if>
 			<if test="recipient != null  and recipient != ''  ">#{recipient},</if>
@@ -87,6 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateXzAssetHandRecord" parameterType="XzAssetHandRecord">
         update xz_asset_hand_record
         <trim prefix="SET" suffixOverrides=",">
+        	<if test="applyId != null  and applyId != ''  ">apply_id = #{applyId},</if>
             <if test="assetId != null  and assetId != ''  ">asset_id = #{assetId},</if>
             <if test="distributor != null  and distributor != ''  ">distributor = #{distributor},</if>
             <if test="recipient != null  and recipient != ''  ">recipient = #{recipient},</if>

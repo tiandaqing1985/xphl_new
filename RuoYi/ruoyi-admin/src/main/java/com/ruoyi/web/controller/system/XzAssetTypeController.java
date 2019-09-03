@@ -83,7 +83,7 @@ public class XzAssetTypeController extends BaseController {
 	public AjaxResult addSave(XzAssetType xzAssetType) {
 		
 		try {
-			if(xzAssetTypeService.selectXzAssetTypeByName(xzAssetType.getAssetsType(),xzAssetType.getName())>0){
+			if(xzAssetTypeService.selectXzAssetTypeByName(xzAssetType.getSort(),xzAssetType.getName())>0){
 				return error("已存在"+xzAssetType.getName()+"资产类型!");
 			}
 		} catch (Exception e) {

@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.system.domain.XzAssetType;
 import com.ruoyi.system.domain.XzAsstes;
+import com.ruoyi.system.service.IXzAssetDataService;
+import com.ruoyi.system.service.IXzAssetTypeService;
 import com.ruoyi.system.service.IXzAsstesService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -35,6 +38,12 @@ public class XzAsstesController extends BaseController {
 
 	@Autowired
 	private IXzAsstesService xzAsstesService;
+	
+	@Autowired
+	private IXzAssetTypeService xzAssetTypeService;
+	
+	@Autowired
+	private IXzAssetDataService xzAssetDataService;
 
 	@RequiresPermissions("system:xzAsstes:view")
 	@GetMapping()
@@ -46,6 +55,11 @@ public class XzAsstesController extends BaseController {
 	public String xzAsstesHand() {
 		return prefix + "/xzAsstesHand";
 	}
+	
+	@GetMapping("/xzStationeryasset")
+	public String xzStationeryasset() {
+		return "system/xzStationeryasset/xzStationeryasset";
+	}
 
 	/**
 	 * 查询资产列表
@@ -54,6 +68,19 @@ public class XzAsstesController extends BaseController {
 	@ResponseBody
 	public TableDataInfo list(XzAsstes xzAsstes) {
 		startPage();
+		xzAsstes.setSort("1");//固定资产
+		List<XzAsstes> list = xzAsstesService.selectXzAsstesList(xzAsstes);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 查询资产列表
+	 */
+	@PostMapping("/xzStationeryassetList")
+	@ResponseBody
+	public TableDataInfo xzStationeryassetList(XzAsstes xzAsstes) {
+		startPage();
+		xzAsstes.setSort("2");//办公用品资产
 		List<XzAsstes> list = xzAsstesService.selectXzAsstesList(xzAsstes);
 		return getDataTable(list);
 	}
@@ -87,46 +114,99 @@ public class XzAsstesController extends BaseController {
 	}
 
 	/**
-	 * 新增资产
+	 * 新增固定资产资产
 	 */
 	@GetMapping("/add")
-	public String add() {
+	public String add(ModelMap mmap) {
+		//获取办公用品资产父级类型
+		mmap.put("typeList", xzAssetTypeService.selectXzAssetTypeByAssAll());
 		return prefix + "/add";
+	}
+	
+	/**
+	 * 新增办公用品资产
+	 */
+	@GetMapping("/addSta")
+	public String addSta(ModelMap mmap) {
+		//获取办公用品资产父级类型
+		mmap.put("typeList", xzAssetTypeService.selectXzAssetTypeByStaAll());
+		return "system/xzStationeryasset/add";
 	}
 
 	/**
-	 * 新增保存资产
+	 * 新增保存固定资产
 	 */
 	@Log(title = "资产", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(XzAsstes xzAsstes) {
 		Date date = new Date();
-		xzAsstes.setCreateBy(ShiroUtils.getSysUser().getUserName());
+		xzAsstes.setCreateBy(ShiroUtils.getSysUser().getUserId().toString());
 		xzAsstes.setCreateTime(date);
-		// 新增时初始值:资产状态-未入库7、资产使用状态-无7、提交方式-保存1
-		xzAsstes.setAssetsStatus("7");
-		xzAsstes.setUseStatus("7");
+		// 新增时初始值:资产状态-未入库1、资产使用状态-无1、提交方式-保存1
+		xzAsstes.setAssetsStatus("1");
+		xzAsstes.setUseStatus("1");
 		xzAsstes.setSubmitType("1");
+		xzAsstes.setSort("1");
 		return toAjax(xzAsstesService.insertXzAsstes(xzAsstes));
 	}
 
 	/**
-	 * 新增提交资产
+	 * 新增保存办公资产
+	 */
+	@Log(title = "资产", businessType = BusinessType.INSERT)
+	@PostMapping("/addSta")
+	@ResponseBody
+	public AjaxResult addStaSave(XzAsstes xzAsstes) {
+		Date date = new Date();
+		xzAsstes.setCreateBy(ShiroUtils.getSysUser().getUserId().toString());
+		xzAsstes.setCreateTime(date);
+		// 新增时初始值:资产状态-未入库1、资产使用状态-无1、提交方式-保存1
+		xzAsstes.setAssetsStatus("1");
+		xzAsstes.setUseStatus("1");
+		xzAsstes.setSubmitType("1");
+		xzAsstes.setSort("2");
+		String str=xzAsstesService.insertStaAsstes(xzAsstes);
+		return success(str);
+	}
+	
+	/**
+	 * 新增提交固定资产
 	 */
 	@Log(title = "资产", businessType = BusinessType.INSERT)
 	@PostMapping("/addSub")
 	@ResponseBody
 	public AjaxResult addSubSave(XzAsstes xzAsstes) {
 		Date date = new Date();
-		xzAsstes.setCreateBy(ShiroUtils.getSysUser().getUserName());
+		xzAsstes.setCreateBy(ShiroUtils.getSysUser().getUserId().toString());
 		xzAsstes.setCreateTime(date);
-		// 新增时初始值:资产状态-在库1、资产使用状态-未分配1、提交方式-提交2
-		xzAsstes.setAssetsStatus("1");
+		// 新增时初始值:资产状态-在库2、资产使用状态-无1、提交方式-提交2
+		xzAsstes.setAssetsStatus("2");
 		xzAsstes.setUseStatus("1");
 		xzAsstes.setSubmitType("2");
+		xzAsstes.setSort("1");
 		return toAjax(xzAsstesService.insertXzAsstes(xzAsstes));
 	}
+	
+	/**
+	 * 新增提交资产
+	 */
+	@Log(title = "资产", businessType = BusinessType.INSERT)
+	@PostMapping("/addStaSub")
+	@ResponseBody
+	public AjaxResult addStaSubSave(XzAsstes xzAsstes) {
+		Date date = new Date();
+		xzAsstes.setCreateBy(ShiroUtils.getSysUser().getUserId().toString());
+		xzAsstes.setCreateTime(date);
+		// 新增时初始值:资产状态-在库2、资产使用状态-无1、提交方式-提交2
+		xzAsstes.setAssetsStatus("2");
+		xzAsstes.setUseStatus("1");
+		xzAsstes.setSubmitType("2");
+		xzAsstes.setSort("1");
+		return toAjax(xzAsstesService.insertXzAsstes(xzAsstes));
+	}
+	
+	
 
 	/**
 	 * 修改资产
@@ -135,7 +215,19 @@ public class XzAsstesController extends BaseController {
 	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
 		XzAsstes xzAsstes = xzAsstesService.selectXzAsstesById(id);
 		mmap.put("xzAsstes", xzAsstes);
+		//获取办公用品资产父级类型
+		mmap.put("typeList", xzAssetTypeService.selectXzAssetTypeByAssAll());
 		return prefix + "/edit";
+	}
+	
+	/**
+	 * 修改资产
+	 */
+	@GetMapping("/editPart/{id}")
+	public String editPart(@PathVariable("id") Long id, ModelMap mmap) {
+		XzAsstes xzAsstes = xzAsstesService.selectXzAsstesById(id);
+		mmap.put("xzAsstes", xzAsstes);
+		return prefix + "/editPart";
 	}
 
 	/**
@@ -146,7 +238,7 @@ public class XzAsstesController extends BaseController {
 	@ResponseBody
 	public AjaxResult editSave(XzAsstes xzAsstes) {
 		Date date = new Date();
-		xzAsstes.setUpdateBy(ShiroUtils.getSysUser().getUserName());
+		xzAsstes.setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
 		xzAsstes.setUpdateTime(date);
 		xzAsstes.setSubmitType("1");
 		return toAjax(xzAsstesService.updateXzAsstes(xzAsstes));
@@ -159,23 +251,18 @@ public class XzAsstesController extends BaseController {
 	@PostMapping("/editSub")
 	@ResponseBody
 	public AjaxResult editSubSave(XzAsstes xzAsstes) {
+		XzAsstes asset=xzAsstesService.selectXzAsstesById(xzAsstes.getId());
+		
 		Date date = new Date();
-		xzAsstes.setSubBy(ShiroUtils.getSysUser().getUserName());
+		xzAsstes.setSubBy(ShiroUtils.getSysUser().getUserId().toString());
 		xzAsstes.setSubTime(date);
-		xzAsstes.setUpdateBy(ShiroUtils.getSysUser().getUserName());
+		xzAsstes.setUpdateBy(ShiroUtils.getSysUser().getUserId().toString());
 		xzAsstes.setUpdateTime(date);
-		// 保存状态下修改提交:资产状态-在库1、资产使用状态-未分配1、提交方式-提交2
-		if(("1").equals(xzAsstes.getAssetsStatus())){
-			xzAsstes.setAssetsStatus("1");
-			xzAsstes.setUseStatus("1");
-			xzAsstes.setSubmitType("1");
-		//办公用品数量增加
-			
-		}else if(("2").equals(xzAsstes.getAssetsStatus())){
-			xzAsstes.setAssetsStatus("1");
+		// 保存状态下修改提交:资产状态-在库2、资产使用状态-无1、提交方式-提交2
+		if(("1").equals(asset.getAssetsStatus())){
+			xzAsstes.setAssetsStatus("2");
 			xzAsstes.setUseStatus("1");
 			xzAsstes.setSubmitType("2");
-			//判断是否分配，分配后修改办
 		}
 		
 		return toAjax(xzAsstesService.updateXzAsstes(xzAsstes));
@@ -199,6 +286,16 @@ public class XzAsstesController extends BaseController {
 	@ResponseBody
 	public AjaxResult remove(String ids) {
 		return toAjax(xzAsstesService.deleteXzAsstesByIds(ids));
+	}
+	
+	/**
+	 * 查询资产子类型详细
+	 */
+	@PostMapping(value = "/onSelect/{id}")
+	@ResponseBody
+	public List<XzAssetType> onSelect(@PathVariable("id") Long id) {
+		List<XzAssetType> dataInfo = xzAssetDataService.selectXzAssetDataByParentId(id);
+		return dataInfo;
 	}
 
 }

@@ -17,7 +17,7 @@ public class XzAssetType extends BaseEntity
 	/** 父资产类型ID */
 	private Long id;
 	/** 资产类型ID */
-	private String assetsType;
+	private String sort;
 	/**  */
 	private String name;
 
@@ -30,15 +30,15 @@ public class XzAssetType extends BaseEntity
 	{
 		return id;
 	}
-	public void setAssetsType(String assetsType) 
-	{
-		this.assetsType = assetsType;
+	
+	public String getSort() {
+		return sort;
 	}
 
-	public String getAssetsType() 
-	{
-		return assetsType;
+	public void setSort(String sort) {
+		this.sort = sort;
 	}
+
 	public void setName(String name) 
 	{
 		this.name = name;
@@ -52,7 +52,7 @@ public class XzAssetType extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
-            .append("assetsType", getAssetsType())
+            .append("sort", getSort())
             .append("name", getName())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

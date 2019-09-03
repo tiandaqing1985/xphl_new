@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('新增个人申请')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-xzPersonalApply-add">
+
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span
+					style="color: red;">*</span>资产类型：</label>
+				<div class="col-sm-8">
+					<div class="input-group" style="width: 100%">
+						<select id="assetTypeId" name="assetTypeId"
+							class="form-control m-b" onchange="selectAll()">
+							<option value=""></option>
+							<option th:each="a:${typeList}" th:value="${a.id}"
+								th:text="${a.name}"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span
+					style="color: red;">*</span>资产二级类型：</label>
+				<div class="col-sm-8">
+					<select id="assetType2Id" name="assetType2Id"
+						class="form-control m-b">
+					</select>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">资产型号：</label>
+				<div class="col-sm-8">
+					<input id="assetModel" name="assetModel" class="form-control"
+						type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span
+					style="color: red;">*</span>地域：</label>
+				<div class="col-sm-8">
+					<div class="input-group" style="width: 100%">
+						<select name="region" class="form-control m-b"
+							th:with="type=${@dict.getType('xz_assets_region')}" required>
+							<option value=""></option>
+							<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+								th:value="${dict.dictValue}"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">数量：</label>
+				<div class="col-sm-8">
+					<input id="count" name="count" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">单位：</label>
+				<div class="col-sm-8">
+					<div class="input-group" style="width: 100%">
+						<select name="unit" class="form-control m-b"
+							th:with="type=${@dict.getType('xz_assets_unit')}">
+							<option value="">所有</option>
+							<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+								th:value="${dict.dictValue}"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">用途：</label>
+				<div class="col-sm-8">
+					<input id="purpose" name="purpose" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remarks" name="remarks" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span
+					style="color: red;">*</span>预计使用时间：</label>
+				<div class="col-sm-8">
+					<input id="useDate" name="useDate" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript">
+		var prefix = ctx + "system/xzPersonalApply"
+		$("#form-xzPersonalApply-add").validate({
+			rules : {
+				xxxx : {
+					required : true,
+				},
+			},
+			focusCleanup : true
+		});
+
+		function submitHandler() {
+			if ($.validate.form()) {
+				$.operate.save(prefix + "/add", $('#form-xzPersonalApply-add')
+						.serialize());
+			}
+		}
+		
+		//资产类型二级联动
+		function selectAll() {
+			var index = $('#assetTypeId option:selected').text();
+			var index1 = $('#assetTypeId option:selected').val();
+			var optionJson = [];
+			$.ajax({
+				url : prefix + "/onSelect/" + index1,
+				type : "post",
+				data : {
+					"id" : index1
+				},
+				datatype : "json",
+				success : function(data) {
+					optionJson = data;
+					var selectObj = document.getElementById("assetType2Id");
+					selectObj.options.length = 0;
+					selectObj.options.add(new Option("--请选择--", 0));
+					for (var i = 0; i < data.length; i++) {
+						selectObj.add(new Option(optionJson[i].name,
+								optionJson[i].id));
+					}
+				}
+			})
+		}
+		
+		$(function() {
+			//初始化日期选择器
+			layui.use('laydate', function() {
+				var laydate = layui.laydate;
+				laydate.render({
+					elem : '#useDate', //指定元素
+					trigger : 'click'
+				});
+			});
+		});
+	</script>
+</body>
+</html>

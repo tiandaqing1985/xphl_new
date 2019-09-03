@@ -65,6 +65,18 @@ public interface XzAssetTypeMapper
 	 * @return 资产父类型集合信息
 	 */
 	public List<XzAssetType> selectXzAssetTypeAll();
+	
+	/**
+	 * 根据办公资产父类型
+	 * @return 资产父类型集合信息
+	 */
+	public List<XzAssetType> selectXzAssetTypeByStaAll();
+	
+	/**
+	 * 根据固定资产父类型
+	 * @return 资产父类型集合信息
+	 */
+	public List<XzAssetType> selectXzAssetTypeByAssAll();
 
 	/**
 	 * 根据资产分类、姓名判断是否唯一
@@ -72,7 +84,7 @@ public interface XzAssetTypeMapper
 	 * @param string 
 	 * @return 结果
 	 */
-	public int selectXzAssetTypeByName(@Param("assetsType")String assetsType, @Param("name")String name);
+	public int selectXzAssetTypeByName(@Param("sort")String sort, @Param("name")String name);
 
 	
 }

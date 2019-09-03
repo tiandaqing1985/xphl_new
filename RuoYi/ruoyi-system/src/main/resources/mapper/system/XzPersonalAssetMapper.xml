@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzPersonalAssetMapper">
+    
+    <resultMap type="XzPersonalAsset" id="XzPersonalAssetResult">
+        <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="assetId"    column="asset_id"    />
+        <result property="assetName"    column="asset_name"    />
+        <result property="useTime"    column="use_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <association property="xzAsstes"    column="id" javaType="com.ruoyi.system.domain.XzAsstes" resultMap="XzAsstesResult" />
+    </resultMap>
+    
+    <resultMap type="com.ruoyi.system.domain.XzAsstes" id="XzAsstesResult">
+        <result property="id"    column="id"    />
+        <result property="assetsId"    column="assets_id"    />
+        <result property="region"    column="region"    />
+        <result property="assetsName"    column="assets_name"    />
+        <result property="assetsType"    column="assets_type"    />
+        <result property="assetsType2"    column="assets_type2"    />
+        <result property="assetsModel"    column="assets_model"    />
+        <result property="useStatus"    column="use_status"    />
+        <result property="unit"    column="unit"    />
+        <result property="brand"    column="brand"    />
+        <result property="sort"    column="sort"    />
+        <result property="useTime"    column="use_time"    />
+    </resultMap>
+	
+	<sql id="selectXzPersonalAssetVo">
+        select id, user_id, asset_id, use_time, create_by, create_time, update_by, update_time from xz_personal_asset
+    </sql>
+	
+    <select id="selectXzPersonalAssetList" parameterType="XzPersonalAsset" resultMap="XzPersonalAssetResult">
+     <!-- <include refid="selectXzPersonalAssetVo"/> -->
+        select pa.id, pa.user_id, pa.asset_id, pa.create_by, pa.create_time, pa.update_by, pa.update_time ,
+        xa.assets_id, xa.region, xa.assets_name, xa.assets_type, xa.assets_type2, xa.assets_model,  xa.unit ,xa.brand,
+        xa.use_status,xa.sort,xa.use_time
+        from xz_personal_asset pa
+        left join xz_asstes xa on xa.id =pa.asset_id 
+        <where>  
+            <if test="id != null "> and pa.id = #{id}</if>
+             <if test="assetId != null "> and pa.asset_id = #{assetId}</if>
+             <if test="assetName != null and assetName !='' "> and xa.assets_name = #{assetName}</if>  
+            <if test="userId != null "> and user_id = #{userId}</if>
+         </where>
+    </select>
+    
+    <select id="selectXzPersonalAssetById" parameterType="Long" resultMap="XzPersonalAssetResult">
+        <include refid="selectXzPersonalAssetVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertXzPersonalAsset" parameterType="XzPersonalAsset">
+        insert into xz_personal_asset
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="userId != null  ">user_id,</if>
+			<if test="assetId != null  ">asset_id,</if>
+			<if test="useTime != null  ">use_time,</if>
+			<if test="createBy != null  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="userId != null  ">#{userId},</if>
+			<if test="assetId != null  ">#{assetId},</if>
+			<if test="useTime != null  ">#{useTime},</if>
+			<if test="createBy != null  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzPersonalAsset" parameterType="XzPersonalAsset">
+        update xz_personal_asset
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="assetId != null  ">asset_id = #{assetId},</if>
+            <if test="useTime != null  ">use_time = #{useTime},</if>
+            <if test="createBy != null  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where 1=1 and id = #{id} and asset_id=#{assetId}
+    </update>
+
+	<delete id="deleteXzPersonalAssetById" parameterType="Long">
+        delete from xz_personal_asset where id = #{id}
+    </delete>
+	
+    <delete id="deleteXzPersonalAssetByIds" parameterType="String">
+        delete from xz_personal_asset where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
