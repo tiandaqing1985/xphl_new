@@ -65,9 +65,9 @@ public class EmailSend {
 //			}
 //		}
 		  //发送邮件
-		  public void sendMail(String to,String subject,String text1, String sender, String password) throws Exception {
+		  public void sendMail(String recipients, String copyto,String title,String content, String sender, String password) throws Exception {
 		   JavaMailSenderImpl mailSender1 = createMailSender(sender, password);
-		   MimeMessage message = createMixedMail(null, subject, text1, sender, to, null, null);
+		   MimeMessage message = createMixedMail(null, title, content, sender, recipients, copyto, null);
 		   mailSender1.send(message);
 		  }
 		  

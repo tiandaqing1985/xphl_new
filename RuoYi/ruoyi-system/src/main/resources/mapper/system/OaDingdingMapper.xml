@@ -29,13 +29,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectOaDingdingVo">
-        select user_id, workDate, checkType, userCheckTime, timeResult, status from oa_dingding
+        select user_id, user_name, workDate, checkType, userCheckTime, timeResult, status from oa_dingding
     </sql>
 	
     <select id="selectOaDingdingList" parameterType="OaDingding" resultMap="OaDingdingResult">
         <include refid="selectOaDingdingVo"/>
         <where>  
             <if test="userId != null"> and user_id = #{userId}</if>
+              <if test="userName != null  and userName != '' "> and userName = #{userName}</if>
              <if test="workDate != null "> and workDate = #{workDate}</if>
              <if test="checkType != null  and checkType != '' "> and checkType = #{checkType}</if>
              <if test="userCheckTime != null "> and userCheckTime = #{userCheckTime}</if>
@@ -43,16 +44,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="status != null and status != ''"> and status = #{status}</if>
          </where>
     </select>
-    <select id="selectOaDingdingListByCondition" parameterType="Dingding" resultType="Dingding">
-    	select ding.* from (
-			SELECT du.user_name, di.* FROM oa_dingding di
-			LEFT JOIN oa_dingding_user du on di.user_id = du.user_id
-		) ding
+    <select id="selectOaDingdingListByCondition" parameterType="Dingding" resultMap="DingdingResult">
+    	select * from oa_dingding
 		<where>
-			<if test="userId != null">and ding.user_id = #{userId}</if>
-			<if test="userName != null and userName != ''">and ding.user_name = #{userName}</if>
-			<if test="startTime != null and endTime != null"> and ding.userCheckTime between #{startTime} and #{endTime}</if>
-			<if test="checkType != null and checkType != ''">and ding.checkType= #{checkType}</if>
+			<if test="userId != null">and user_id = #{userId}</if>
+			<if test="userName != null and userName != ''">and user_name = #{userName}</if>
+			<if test="startTime != null and endTime != null"> and userCheckTime between #{startTime} and #{endTime}</if>
+			<if test="checkType != null and checkType != ''">and checkType= #{checkType}</if>
 		</where> 
     </select>
     
@@ -83,11 +81,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <insert id="insertForeach" parameterType="List" useGeneratedKeys="false">
     	insert into oa_dingding 
-    	(user_id, workDate, weekDay, checkType, userCheckTime, timeResult, status)
+    	(user_id, user_name, workDate, weekDay, checkType, userCheckTime, timeResult, status)
     	values
     	<foreach collection="list" item="item" index="index" separator=",">
     		(
     		 #{item.userId}, 
+    		 #{item.userName},
     		 #{item.workDate},
     		 #{item.weekDay},
     		 #{item.checkType},
@@ -101,6 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateOaDingding" parameterType="OaDingding">
         update oa_dingding
         <trim prefix="SET" suffixOverrides=",">
+        	<if test="userName != null and userName != ''">user_name = #{userName},</if>
             <if test="workDate != null  ">workDate = #{workDate},</if>
             <if test="checkType != null  and checkType != ''  ">checkType = #{checkType},</if>
             <if test="userCheckTime != null  ">userCheckTime = #{userCheckTime},</if>
@@ -139,7 +139,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			RIGHT JOIN (
 			SELECT
 				ouser.user_id,
-				us.user_name,
+				ding.user_name,
 				ding.workDate,
 				ding.weekDay,
 				(
@@ -169,8 +169,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				) timeResult, ding.timeResult timeResult2, d.dept_name, ouser.area, ouser.intime, ouser.`status`
 			FROM
 				`oa_dingding` ding
-				LEFT JOIN oa_dingding_user us ON ding.user_id = us.user_id
-				LEFT JOIN sys_user ouser ON ouser.user_name = us.user_name 
+				LEFT JOIN sys_user ouser ON ouser.user_name = ding.user_name 
 				LEFT JOIN sys_dept d on d.dept_id = ouser.dept_id
 			) ding ON ding.user_id = nu.user_id 
 			<where>

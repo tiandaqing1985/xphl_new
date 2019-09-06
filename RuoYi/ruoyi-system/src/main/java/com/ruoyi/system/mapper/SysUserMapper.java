@@ -146,6 +146,13 @@ public interface SysUserMapper
     
     public List<SysUser> selectUserByDpetList(Long deptId);
     
+	
+	/**	根据用户id查询leader
+	 * @param userId
+	 * @return
+	 */
+	public SysUser selectLeaderByUserId(Long userId);
+    
     /**
      * 根据用户id查询该部门领导id
      */

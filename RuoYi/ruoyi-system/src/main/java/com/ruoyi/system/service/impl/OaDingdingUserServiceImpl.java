@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.OaDingdingUserMapper;
 import com.ruoyi.system.domain.OaDingdingUser;
 import com.ruoyi.system.service.IOaDingdingUserService;
-import com.ruoyi.common.core.text.Convert;
 
 /**
  * 钉钉用户 服务层实现

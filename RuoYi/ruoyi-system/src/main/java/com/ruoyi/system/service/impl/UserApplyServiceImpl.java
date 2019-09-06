@@ -361,7 +361,6 @@ public class UserApplyServiceImpl implements IUserApplyService
 	@Override
 	public int updateUserApply(UserApply userApply)
 	{
-		userApply.setApplyState("1");
 		SysDictData dictData = new SysDictData();
 		dictData.setDictLabel(userApply.getLeaveType());
 		List<SysDictData> dList = dictDataMapper.selectDictDataList(dictData);

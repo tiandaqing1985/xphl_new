@@ -15,6 +15,8 @@ public class OaDingding extends BaseEntity
 	
 	/** 用户id */
 	private Long userId;
+	/** 用户名 */
+	private String userName;
 	/** 打卡日期 */
 	private Date workDate;
 	/** 星期几 */
@@ -31,6 +33,14 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
     /** 部门名称 */
     private String deptName;
 	
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 	public String getDeptName() {
 		return deptName;

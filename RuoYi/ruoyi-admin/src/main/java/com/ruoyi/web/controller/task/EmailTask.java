@@ -33,6 +33,82 @@ public class EmailTask {
 	@Autowired
 	private IHolidayService holidayService;
 	
+	//三个月试用期到期提醒(提前两周)
+	//六个月试用期到期提醒(提前一个月)
+	//收件人：部门leader、宋彬、王梦 、辛本荣
+	public void sendEmail4(){
+
+		List<SysUser> userList = userService.selectAllUser();
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+		String today = s.format(new Date());		
+
+		int count = 0;//记录发送邮件数量
+		for(SysUser user : userList){
+			String firstphase = s.format(user.getFirstphase());//一期到期时间
+			String secondphase = s.format(user.getSecondphase());//二期到期时间
+	        
+			SysUser leader = userMapper.selectLeaderByUserId(user.getUserId());//查询部门leader
+			
+			long day = secondsBetween(today,firstphase)/3600/24;//两个日期相差的天数
+			String second = "";
+			try {
+				second = s.format(userService.getDate(s.format(user.getIntime()), 5));//5个月以后的入职时间
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			if(day == 14L){//提前两周通知
+				
+				  EmailSend es = new EmailSend();
+		  			try {
+		  				es.sendMail(leader.getEmail(), 
+//		  		  		es.sendMail("wugaofang@perfect-cn.cn", 
+		  		  				"songbin@perfect-cn.cn,xinbenrong@perfect-cn.cn,wangmeng@perfect-cn.cn",
+		  						"三/六个月考核到期提醒",  
+		  						"<font size='3'>"+leader.getUserName()+"您好:<br/><br/>&#12288;&#12288;您部门员工<font size='4' color='red'>"+user.getUserName()+"</font>三个月考核将于<font size='4' color='red'>"
+		  						+firstphase+"</font>结束，请在此之前将考核结果反馈给人力资源部。<br/><br/>"
+		  						+"&#12288;&#12288;三个月考核员工考核要素分为人力资源评价、工作态度、工作能力三大项，具体如下：<br/><br/>"
+		  						+"&#12288;&#12288;(1)人力资源评价：包括出勤情况、公司融合度<br/><br/>" 
+		  						+"&#12288;&#12288;(2)工作态度：包括积极性、纪律性、团队意识、责任感<br/><br/>"
+		  						+"&#12288;&#12288;(3)工作能力：包括基本知识技能、执行能力、学习能力、表达沟通</font>",
+		  						Global.getEmail(), Global.getPassword());
+		  				count ++;		  			
+		  			} catch (Exception e) {
+		  				// TODO Auto-generated catch block
+		  				e.printStackTrace();
+		  			}	
+		        }
+			
+	    
+	        if(second.equals(today)){//提前一个月通知
+	        	
+	        	  EmailSend es = new EmailSend();
+	  			try {
+	  				es.sendMail(leader.getEmail(), 
+//	  				es.sendMail("wugaofang@perfect-cn.cn", 
+	  		  				"songbin@perfect-cn.cn,xinbenrong@perfect-cn.cn,wangmeng@perfect-cn.cn",
+	  						"三/六个月考核到期提醒",  
+	  						"<font size='3'>"+leader.getUserName()+"您好:<br/><br/>&#12288;&#12288;您部门员工<font size='4' color='red'>"+user.getUserName()+"</font>六个月试用期将于<font size='4' color='red'>"
+	  						+secondphase+"</font>结束，请在此之前将考核结果反馈给人力资源部。<br/><br/>"
+	  						+"&#12288;&#12288;试用期员工考核要素分为人力资源评价、工作态度、工作能力、工作业绩四大项，具体如下：<br/><br/>"
+	  						+"&#12288;&#12288;(1)人力资源评价：包括出勤情况、公司融合度<br/><br/>" 
+	  						+"&#12288;&#12288;(2)工作态度：包括积极性、团队意识、责任感<br/><br/>"
+	  						+"&#12288;&#12288;(3)工作能力：包括执行能力、学习能力、表达沟通<br/><br/>"
+	  						+"&#12288;&#12288;(4)工作业绩：包括工作效率、工作质量</font>",
+	  						Global.getEmail(), Global.getPassword());
+	  				count ++;	  					  	  				
+	  			} catch (Exception e) {
+	  				// TODO Auto-generated catch block
+	  				e.printStackTrace();
+	  			}	
+	        
+	        }
+		}
+		System.out.println("\n三/六个月考核到期提醒邮件已发送数量："+count+"\n");
+	
+	}
+	
 	//假期到期提醒
 	public void sendEmail3(){
 		List<SysUser> userList = userService.selectAllUser();
@@ -80,7 +156,7 @@ public class EmailTask {
 	        if(ynum != 0 && tnum != 0){
 	        	  EmailSend es = new EmailSend();
 	  			try {
-	  				es.sendMail(user.getEmail(), 
+	  				es.sendMail(user.getEmail(), null,
 //	  		  		es.sendMail("wugaofang@perfect-cn.cn", 
 	  						"假期到期提醒",  
 	  						user.getUserName()+"：<br/>&#12288;&#12288;您有"+ynum+"天年假、"+tnum+"小时调休假即将到期，过期时间为"+toverDate+"，请尽快使用~", 
@@ -93,7 +169,7 @@ public class EmailTask {
 	        }else if(ynum != 0 && tnum == 0){
 	        	 EmailSend es = new EmailSend();
 		  			try {
-		  				es.sendMail(user.getEmail(), 
+		  				es.sendMail(user.getEmail(),  null,
 //		  		  		es.sendMail("wugaofang@perfect-cn.cn", 
 		  						"假期到期提醒",  
 		  						user.getUserName()+"：<br/>&#12288;&#12288;您有"+ynum+"天年假即将到期，过期时间为"+yoverDate+"，请尽快使用~", 
@@ -106,7 +182,7 @@ public class EmailTask {
 	        }else{
 	        	 EmailSend es = new EmailSend();
 		  			try {
-		  				es.sendMail(user.getEmail(), 
+		  				es.sendMail(user.getEmail(),  null,
 //		  		  		es.sendMail("wugaofang@perfect-cn.cn", 
 		  						"假期到期提醒",  
 		  						user.getUserName()+"：<br/>&#12288;&#12288;您有"+tnum+"小时调休假即将到期，过期时间为"+toverDate+"，请尽快使用~", 
@@ -159,7 +235,7 @@ public class EmailTask {
 					
 					EmailSend es = new EmailSend();
 						try {
-							es.sendMail(user.getEmail(), 
+							es.sendMail(user.getEmail(), null,
 //			  		  		es.sendMail("wugaofang@perfect-cn.cn", 
 									"司龄提醒", 
 									"亲爱的"+user.getUserName()+"：<br/><br>&#12288;&#12288;不知不觉你和新普相互陪伴走过了<font color='red' size='4'>"+year+"</font>年，<font color='red' size='4'>"
@@ -191,7 +267,7 @@ public class EmailTask {
 		for(SysUser user : leaderList){
 			EmailSend es = new EmailSend();
 			 try {
-				es.sendMail(user.getEmail(), 
+				es.sendMail(user.getEmail(), null,
 //		  		es.sendMail("wugaofang@perfect-cn.cn", 
 						"审批提醒",  
 						"您的人事OA系统中有未审批的申请，烦请尽快完成审批。谢谢 ！<br/><br/> OA系统登陆网址："+

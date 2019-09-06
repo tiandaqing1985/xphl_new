@@ -24,22 +24,19 @@ import com.dingtalk.api.request.OapiDepartmentListIdsRequest;
 import com.dingtalk.api.request.OapiDepartmentListRequest;
 import com.dingtalk.api.request.OapiGettokenRequest;
 import com.dingtalk.api.request.OapiUserGetDeptMemberRequest;
-import com.dingtalk.api.request.OapiUserGetRequest;
 import com.dingtalk.api.request.OapiUserSimplelistRequest;
 import com.dingtalk.api.response.OapiDepartmentListIdsResponse;
 import com.dingtalk.api.response.OapiDepartmentListResponse;
 import com.dingtalk.api.response.OapiDepartmentListResponse.Department;
 import com.dingtalk.api.response.OapiGettokenResponse;
 import com.dingtalk.api.response.OapiUserGetDeptMemberResponse;
-import com.dingtalk.api.response.OapiUserGetResponse;
 import com.dingtalk.api.response.OapiUserSimplelistResponse;
 import com.dingtalk.api.response.OapiUserSimplelistResponse.Userlist;
 import com.ruoyi.system.domain.OaDingding;
 import com.ruoyi.system.domain.OaDingdingUser;
+import com.ruoyi.system.mapper.OaDingdingUserMapper;
 import com.ruoyi.system.service.IOaDingdingService;
 import com.ruoyi.system.service.IOaDingdingUserService;
-import com.taobao.api.ApiException;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -55,8 +52,8 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.HttpResponse;
 import java.io.IOException;
-import java.util.*;
 
+@SuppressWarnings("deprecation")
 @Component("dingding")
 public class DingDingTask{
 	
@@ -65,37 +62,21 @@ public class DingDingTask{
 	
 	@Autowired
 	IOaDingdingUserService dingdingUserService;
+
+	@Autowired
+	OaDingdingUserMapper oaDingdingUserMapper;
 	
-//	public DingDingTask() {
-//		super();
-//		// TODO Auto-generated constructor stub
-//	}
+	public DingDingTask() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
-//	public static void main(String[] args) throws Exception {
-//		System.out.println("-------------------------------------------");
-//		DingTalkClient client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/get");
-//		String accessToken = getAccess_token(client);		
-//
-//		OapiUserGetRequest request = new OapiUserGetRequest();
-//		request.setUserid("231061213824243894");
-//		request.setHttpMethod("GET");
-//		OapiUserGetResponse response = client.execute(request, accessToken);
-//		
-//		System.out.println(response+"==========================");
-//		
-//		DingTalkClient client = new DefaultDingTalkClient("");
-//		
-//		String accessToken = getAccess_token(client);	
-//		List<String> userList = getDeptUser(client, accessToken, "93977150");
-//		System.out.println("---------------------------------------------------------");
-//		DingDingTask ding = new DingDingTask();
-//		ding.dingDingTask();
-		
+	public static void main(String[] args) throws Exception {	
 		//待审批的请假和外出报备申请更新在钉钉考勤中
-//		DingDingTask ding = new DingDingTask();
-//		ding.updateDing();
-//	}
-
+		DingDingTask ding = new DingDingTask();
+		ding.updateDing();
+	}
+	
 	public void dingDingTask() throws Exception
 	{		
 
@@ -174,7 +155,7 @@ public class DingDingTask{
 	    dingdingService.updateOaDingDingByOutAndApply("1","1");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
 	}
 	
-	public static List<OaDingding> getAttendances(List<String> list, List<OaDingding> users, String workDateFrom, String workDateTo,String access_Token) {
+	public List<OaDingding> getAttendances(List<String> list, List<OaDingding> users, String workDateFrom, String workDateTo,String access_Token) {
       int listSize=list.size();
       int toIndex = 50;
       for(int i = 0,length = list.size();i < length;i += 50){
@@ -198,6 +179,7 @@ public class DingDingTask{
               JSONArray recordFirst = firstJson.getJSONArray("recordresult");//当前部门下的userList
               for(int j = 0;j < recordFirst.size(); j++) {
                   JSONObject record = recordFirst.getJSONObject(j);
+                  
                   OaDingding dingding = new OaDingding();
                   dingding.setCheckType(record.getString("checkType"));
                   if(!"manager8676".equals(record.getString("userId"))){
@@ -205,6 +187,8 @@ public class DingDingTask{
 	  			  }else{
 	  					dingding.setUserId(8676L);
 	  			  }
+                  
+                  dingding.setUserName(dingdingUserService.selectOaDingdingUserById(dingding.getUserId()).getUserName());
                   
                   Date date = new Date();
                   date.setTime(record.getLong("workDate"));
@@ -236,7 +220,7 @@ public class DingDingTask{
      * @param dt 
      * @return 当前日期是星期几 
      */ 
-    public static String getWeekOfDate(Date dt) { 
+    public String getWeekOfDate(Date dt) { 
         String[] weekDays = {"日", "一", "二", "三", "四", "五", "六"}; 
         Calendar cal = Calendar.getInstance(); 
         cal.setTime(dt); 
@@ -248,8 +232,8 @@ public class DingDingTask{
         return weekDays[w]; 
     } 
 	
-	 public static String doPost(String requestUrl,JSONObject json){
-	        @SuppressWarnings({ "resource", "deprecation" })
+	 public String doPost(String requestUrl,JSONObject json){
+	        @SuppressWarnings({ "resource" })
 			HttpClient client = new DefaultHttpClient();
 	        HttpPost post = new HttpPost(requestUrl);
 	        post.setHeader("Content-Type", "application/json");
@@ -289,13 +273,13 @@ public class DingDingTask{
 	   private static String corpId = "ding306f151d37f14d4035c2f4657eb6378f";
 	   private static String corpSecret = "3wJRsyR6kyWF23I4SuesPZfuwmDpsqXmiAovTREP_7sf1vf9RdjobpHd0fPeZdTk";
 	 
-	    public static String getAccessToken() {
+	    public String getAccessToken() {
 	        Map<String,Object> map = new HashMap<>();
 	        map.put("corpid",corpId);
 	        map.put("corpsecret",corpSecret);
 	        return httpGetStringResult(accessTokenUrl, map);//获取access_token
 	    }
-	    public static String httpGetStringResult(String url,Map<String,Object> param){
+	    public String httpGetStringResult(String url,Map<String,Object> param){
 	        String content = null;
 	        CloseableHttpClient httpClient = HttpClients.createDefault();
 	        if(param != null && !param.isEmpty()){
@@ -332,7 +316,7 @@ public class DingDingTask{
 	        return content;
 	    }
 
-     private static String getPreDayOrAfterDay(String current, int flag) {
+     private String getPreDayOrAfterDay(String current, int flag) {
          SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
          Calendar calendar = Calendar.getInstance();//获取日历实例
          try {
@@ -346,7 +330,7 @@ public class DingDingTask{
      }
 
 	
-	 public static String getAttendance(Map<String, Object> map ,String access_token_str) {
+	 public String getAttendance(Map<String, Object> map ,String access_token_str) {
 	        String dingDingAttendance = "https://oapi.dingtalk.com/attendance/list?access_token="+access_token_str;
 	        JSONObject jsonObject = new JSONObject();
 	        jsonObject.put("workDateFrom",map.get("workDateFrom"));
@@ -361,7 +345,7 @@ public class DingDingTask{
 
 	//获取部门用户
 	//"userlist":[{"name":"牛德源","userid":"213121072228921172"},{"name":"张智伟","userid":"042262656224235781"},{"name":"徐美玲","userid":"150906420524551796"}]}
-	private static List<Userlist> getUser(DingTalkClient client, String accessToken, long deptId) throws Exception{
+	private List<Userlist> getUser(DingTalkClient client, String accessToken, long deptId) throws Exception{
 		client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/simplelist");
 		OapiUserSimplelistRequest request = new OapiUserSimplelistRequest();
 		request.setDepartmentId(deptId);//获取的部门id
@@ -382,7 +366,7 @@ public class DingDingTask{
 	
 	//获取部门用户userid列表
 	//[042262656224235781, 213121072228921172, 150906420524551796]
-	private static List<String> getDeptUser(DingTalkClient client, String accessToken, String deptId) throws Exception{
+	private List<String> getDeptUser(DingTalkClient client, String accessToken, String deptId) throws Exception{
 		client = new DefaultDingTalkClient("https://oapi.dingtalk.com/user/getDeptMember");
 		OapiUserGetDeptMemberRequest req = new OapiUserGetDeptMemberRequest();
 		req.setDeptId(deptId);//部门id
@@ -394,7 +378,7 @@ public class DingDingTask{
 	
 	//获取子部门ID列表
 	//[120356124, 94058110, 93977150, 94045157]
-	private static List<Long> getSubDept(DingTalkClient client, String accessToken, String deptId) throws Exception{
+	private List<Long> getSubDept(DingTalkClient client, String accessToken, String deptId) throws Exception{
 		client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list_ids");
 		OapiDepartmentListIdsRequest request = new OapiDepartmentListIdsRequest();
 		request.setId(deptId);//父部门id。根部门的话传1
@@ -406,7 +390,7 @@ public class DingDingTask{
 	
 	//获取部门列表
 	//{"createDeptGroup":true,"name":"数字营销服务部","id":94020168,"autoAddUser":true,"parentid":87676139}
-	private static List<Department> getDept(DingTalkClient client, String accessToken) throws Exception{
+	private List<Department> getDept(DingTalkClient client, String accessToken) throws Exception{
 		client = new DefaultDingTalkClient("https://oapi.dingtalk.com/department/list");
 		OapiDepartmentListRequest request = new OapiDepartmentListRequest();
 		request.setId("1");//父部门id（如果不传，默认部门为根部门，根部门ID为1
@@ -416,7 +400,7 @@ public class DingDingTask{
 		return departList;
 	}
 	
-	private static String getAccess_token(DingTalkClient client) throws Exception{
+	private String getAccess_token(DingTalkClient client) throws Exception{
 		client = new DefaultDingTalkClient("https://oapi.dingtalk.com/gettoken");
 		OapiGettokenRequest request = new OapiGettokenRequest();
 		request.setAppkey("dingdgiqxnj8qyayn7za");
