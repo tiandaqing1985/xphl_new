@@ -87,4 +87,11 @@ public interface OaDingdingMapper
 	 * @return
 	 */
 	public List<Dingding> selectOaDingdingListByCondition(Dingding ding);
+	
+	/**
+	 * 10:00 - 10:30之间的考勤
+	 * @param ding
+	 * @return
+	 */
+	public List<Dingding> selectOaDingByTime(Dingding ding);
 }

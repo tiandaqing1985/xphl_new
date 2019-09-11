@@ -153,6 +153,12 @@ public interface SysUserMapper
 	 */
 	public SysUser selectLeaderByUserId(Long userId);
     
+	/**	根据用户id查询上上级部门领导信息
+	 * @param userId
+	 * @return
+	 */
+	public SysUser selectUpLeaderByUserId(Long userId);
+	
     /**
      * 根据用户id查询该部门领导id
      */

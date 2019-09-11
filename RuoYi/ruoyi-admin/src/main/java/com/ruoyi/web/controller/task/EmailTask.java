@@ -46,8 +46,6 @@ public class EmailTask {
 		for(SysUser user : userList){
 			String firstphase = s.format(user.getFirstphase());//一期到期时间
 			String secondphase = s.format(user.getSecondphase());//二期到期时间
-	        
-			SysUser leader = userMapper.selectLeaderByUserId(user.getUserId());//查询部门leader
 			
 			long day = secondsBetween(today,firstphase)/3600/24;//两个日期相差的天数
 			String second = "";
@@ -58,15 +56,33 @@ public class EmailTask {
 				e1.printStackTrace();
 			}
 			
+			if(day != 14L & !second.equals(today)) continue;
+			
+			SysUser leader = userMapper.selectLeaderByUserId(user.getUserId());//查询部门leader
+			SysUser upleader = userMapper.selectUpLeaderByUserId(user.getUserId());//查询上上级部门leader
+			String leaderEmail = "";//上级邮箱
+			String copyto = "";//抄送人邮箱
+			if(user.getEmail().equals(leader.getEmail())){
+				leaderEmail = upleader.getEmail();
+			}else{
+				leaderEmail = leader.getEmail();
+			}
+			
+			if(leaderEmail != null && "songbin@perfect-cn.cn".equals(leaderEmail)){
+				copyto = "xinbenrong@perfect-cn.cn,wangmeng@perfect-cn.cn";//抄送人邮箱
+			}else{
+				copyto = "songbin@perfect-cn.cn,xinbenrong@perfect-cn.cn,wangmeng@perfect-cn.cn";//抄送人邮箱
+			}
+			
 			if(day == 14L){//提前两周通知
 				
 				  EmailSend es = new EmailSend();
 		  			try {
-		  				es.sendMail(leader.getEmail(), 
+		  				es.sendMail(leaderEmail, 
 //		  		  		es.sendMail("wugaofang@perfect-cn.cn", 
-		  		  				"songbin@perfect-cn.cn,xinbenrong@perfect-cn.cn,wangmeng@perfect-cn.cn",
+		  		  				copyto,
 		  						"三/六个月考核到期提醒",  
-		  						"<font size='3'>"+leader.getUserName()+"您好:<br/><br/>&#12288;&#12288;您部门员工<font size='4' color='red'>"+user.getUserName()+"</font>三个月考核将于<font size='4' color='red'>"
+		  						"<font size='3'>领导好:<br/><br/>&#12288;&#12288;您部门员工<font size='4' color='red'>"+user.getUserName()+"</font>三个月考核将于<font size='4' color='red'>"
 		  						+firstphase+"</font>结束，请在此之前将考核结果反馈给人力资源部。<br/><br/>"
 		  						+"&#12288;&#12288;三个月考核员工考核要素分为人力资源评价、工作态度、工作能力三大项，具体如下：<br/><br/>"
 		  						+"&#12288;&#12288;(1)人力资源评价：包括出勤情况、公司融合度<br/><br/>" 
@@ -85,11 +101,11 @@ public class EmailTask {
 	        	
 	        	  EmailSend es = new EmailSend();
 	  			try {
-	  				es.sendMail(leader.getEmail(), 
+	  				es.sendMail(leaderEmail, 
 //	  				es.sendMail("wugaofang@perfect-cn.cn", 
-	  		  				"songbin@perfect-cn.cn,xinbenrong@perfect-cn.cn,wangmeng@perfect-cn.cn",
+	  						copyto,
 	  						"三/六个月考核到期提醒",  
-	  						"<font size='3'>"+leader.getUserName()+"您好:<br/><br/>&#12288;&#12288;您部门员工<font size='4' color='red'>"+user.getUserName()+"</font>六个月试用期将于<font size='4' color='red'>"
+	  						"<font size='3'>领导好:<br/><br/>&#12288;&#12288;您部门员工<font size='4' color='red'>"+user.getUserName()+"</font>六个月试用期将于<font size='4' color='red'>"
 	  						+secondphase+"</font>结束，请在此之前将考核结果反馈给人力资源部。<br/><br/>"
 	  						+"&#12288;&#12288;试用期员工考核要素分为人力资源评价、工作态度、工作能力、工作业绩四大项，具体如下：<br/><br/>"
 	  						+"&#12288;&#12288;(1)人力资源评价：包括出勤情况、公司融合度<br/><br/>" 
@@ -292,7 +308,7 @@ public class EmailTask {
 			 cal.setTime(sdf.parse(smdate));    
 			 time1 = cal.getTimeInMillis();                 
 			 cal.setTime(sdf.parse(bdate));    
-			 time2 = cal.getTimeInMillis()+24*3600*1000;
+			 time2 = cal.getTimeInMillis();
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

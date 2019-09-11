@@ -222,11 +222,11 @@ public class HolidayServiceImpl implements IHolidayService
 		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id
 
 			//人事专员
-		if(user.getUserId().longValue()==hrId.longValue()){
+		if(hrId != null && user.getUserId().longValue()==hrId.longValue()){
 			sysUser.setUserId(1L);
 			return holidayMapper.selectRestByUserId(sysUser);
 			
-		}else if(user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() == upLeaderId.longValue()){
+		}else if(hrId != null && user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() == upLeaderId.longValue()){
 			//其他人事==普通员工
 			return holidayMapper.selectRestByUserId(sysUser);
 			

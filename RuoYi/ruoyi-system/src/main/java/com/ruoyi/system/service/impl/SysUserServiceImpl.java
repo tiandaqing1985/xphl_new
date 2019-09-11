@@ -198,7 +198,7 @@ public class SysUserServiceImpl implements ISysUserService
     	try {
     		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
 			user.setFirstphase(getDate(sd.format(user.getIntime()), user.getN()));
-			user.setSecondphase(getDate(sd.format(user.getIntime()), user.getN()));
+			user.setSecondphase(getDate(sd.format(user.getIntime()), user.getN()*2));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -508,7 +508,7 @@ public class SysUserServiceImpl implements ISysUserService
 			e.printStackTrace();
 		}
 		c.setTime(date);
-		int day = c.get(Calendar.DAY_OF_MONTH);
+		int day = c.get(Calendar.DAY_OF_MONTH)-1;
 		int month = c.get(Calendar.MONTH);
 		int year = c.get(Calendar.YEAR);
 		

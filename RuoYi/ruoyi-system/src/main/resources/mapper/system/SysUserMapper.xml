@@ -179,6 +179,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		)
 	</select>
 	
+	<!-- 根据用户id查询上上级部门领导信息-->
+	<select id="selectUpLeaderByUserId" parameterType="Long" resultMap="SysUserResult">
+		SELECT
+			s.*
+		FROM
+			sys_user s 
+		WHERE
+			s.user_name = (
+			SELECT
+				e.leader 
+			FROM
+				sys_dept e 
+			WHERE
+			e.dept_id = ( SELECT d.parent_id FROM `sys_dept` d, `sys_user` u WHERE u.`dept_id` = d.`dept_id` AND u.`user_id` = #{userId} ) 
+			)
+	</select>
 	
 	<select id="checkLoginNameUnique" parameterType="String" resultType="int">
 		select count(1) from sys_user where login_name=#{loginName}

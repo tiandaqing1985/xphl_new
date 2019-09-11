@@ -1,5 +1,8 @@
 package com.ruoyi.system.service.impl;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -116,11 +119,11 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		SysDept dept = deptMapper.selectDeptByUserId(ding.getUserId());//查询用户所在部门
 
 			//人事专员
-		if(user.getUserId().longValue()==hrId.longValue()){
+		if(hrId != null && user.getUserId().longValue()==hrId.longValue()){
 			ding.setUserId(1L);
 			return oaDingdingMapper.selectDingData(ding);
 			
-		}else if(roleIdList.get(0) == 4L){
+		}else if(hrId != null && roleIdList.get(0) == 4L){
 			//普通员工
 			return oaDingdingMapper.selectDingData(ding);
 			
@@ -379,4 +382,82 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		return 1;
 	}
 
+	@Override
+	public int updateOaDingDingByElasticTime() {
+		Dingding ding = new Dingding();
+		
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+			Date date = sdf.parse("2019-08-26"); 
+			ding.setWorkDate(date);
+			//查询十点-十点半之间迟到的记录
+			List<Dingding> dingList = oaDingdingMapper.selectOaDingByTime(ding);
+			
+			String onduty = "";
+			String offduty = "";
+			sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+
+			for(Dingding d : dingList){
+				onduty = sdf.format(d.getUserCheckTime());
+				
+				OaDingding od = new OaDingding();
+				od.setWorkDate(d.getWorkDate());
+				od.setUserId(d.getUserId());
+				od.setCheckType("OffDuty");
+				od.setTimeResult("Normal");
+				List<OaDingding> odList = oaDingdingMapper.selectOaDingdingList(od);
+				if(odList.size() == 0) continue;
+				
+				OaDingding oad = odList.get(0);//查询下班打卡记录
+				
+				offduty = sdf.format(oad.getUserCheckTime());
+				
+				long hour = secondsBetween(onduty,offduty)/3600;
+				
+				System.out.println("\n"+onduty+" "+offduty+"  "+hour+"\n");
+				
+				//早晚打卡时间差大于等于9h
+				if(hour >= 9) {
+					Dingding di2 = new Dingding();
+					di2.setUserId(d.getUserId());
+					di2.setWorkDate(d.getWorkDate());
+					di2.setCheckType("OnDuty");
+					di2.setTimeResult("Normal");
+					oaDingdingMapper.updateOaDingDingByTime(di2);//修改上班打卡结果
+				}else{
+					Dingding di = new Dingding();
+					di.setUserId(oad.getUserId());
+					di.setWorkDate(oad.getWorkDate());
+					di.setCheckType("OffDuty");
+					di.setTimeResult("Early");
+					oaDingdingMapper.updateOaDingDingByTime(di);//修改下班打卡结果
+				}
+									
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 1;
+	}
+
+	 /** 
+	    *字符串的日期格式的计算 
+	    */  
+	 private long secondsBetween(String smdate,String bdate){  
+	    long time1 = 0L;
+		long time2 = 0L;
+		try {
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+			 Calendar cal = Calendar.getInstance();    
+			 cal.setTime(sdf.parse(smdate));    
+			 time1 = cal.getTimeInMillis();                 
+			 cal.setTime(sdf.parse(bdate));    
+			 time2 = cal.getTimeInMillis();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}         
+	     return (time2-time1)/1000;     
+	 }
 }

@@ -196,4 +196,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          	</where>   
     ) a ORDER BY a.user_id,a.intime,a.userCheckTime
     </select>
+    
+    <!-- 10:00 - 10:30之间的考勤 -->
+    <select id="selectOaDingByTime"  parameterType="Dingding" resultMap="DingdingResult">
+		SELECT
+			* 
+		FROM
+			oa_dingding 
+		WHERE
+			workDate &gt;= #{workDate}
+			AND HOUR ( userCheckTime ) = 10 
+			AND MINUTE ( userCheckTime )  &lt;= 30 
+			AND timeResult = 'late' 
+		ORDER BY
+			workDate
+    </select>
 </mapper>

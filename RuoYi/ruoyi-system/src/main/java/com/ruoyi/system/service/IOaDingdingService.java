@@ -67,4 +67,10 @@ public interface IOaDingdingService
 	 * @return
 	 */
 	public int updateOaDingDingByOutAndApply(String applyState, String state);
+	
+	/**
+	 * 弹性工作制
+	 * @return
+	 */
+	public int updateOaDingDingByElasticTime();
 }

@@ -147,7 +147,13 @@ public class DingDingTask{
         //根据请假、外出报备修改钉钉打卡考勤结果
         dingdingService.updateOaDingDingByOutAndApply("3","3");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
         
+
         }
+	
+	public void dingElasticTime(){
+		//弹性工作制
+		dingdingService.updateOaDingDingByElasticTime();
+	}
 	
 	//待审批的请假记录和外出报备记录更新在钉钉考勤里
 	public void updateDing(){

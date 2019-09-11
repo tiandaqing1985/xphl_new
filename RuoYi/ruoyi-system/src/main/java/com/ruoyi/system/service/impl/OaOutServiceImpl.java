@@ -269,11 +269,11 @@ public class OaOutServiceImpl implements IOaOutService
 		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id
 
 			//人事专员
-		if(user.getUserId().longValue()==hrId.longValue()){
+		if(hrId != null && user.getUserId().longValue()==hrId.longValue()){
 			oaOut.setUserId(1L);
 			return oaOutMapper.selectOutApprovalList(oaOut);
 			
-		}else if(user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() == upLeaderId.longValue()){
+		}else if(hrId != null && user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() == upLeaderId.longValue()){
 			//其他人事==普通员工
 			return oaOutMapper.selectOutApprovalList(oaOut);
 			
