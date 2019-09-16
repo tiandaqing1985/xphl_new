@@ -19,19 +19,22 @@ public class XzAsstes extends BaseEntity
 	private Long id;
 	/** 资产编码 */
 	@Excel(name = "资产编码", prompt = "资产编码")
-	private String assetsId;
-	
+	private String assetsCode;
 	/** 资产名称 */
 	@Excel(name = "资产名称", prompt = "资产名称")
 	private String assetsName;
 	/** 资产父类型 */
-	@Excel(name = "资产类型", prompt = "资产类型")
 	private Long assetsType;
+	@Excel(name = "资产类型", prompt = "资产类型")
+	private String assetsTypeName;
 	/** 资产子类型 */
 	private Long assetsType2;
+	@Excel(name = "资产二级类型", prompt = "资产二级类型")
+	private String assetsType2Name;
 	/** 品牌 */
-	@Excel(name = "品牌", prompt = "品牌")
 	private String brand;
+	@Excel(name = "品牌", prompt = "品牌")
+	private String brandName;
 	/** 分类码s/n */
 	@Excel(name = "分类码s/n", prompt = "分类码s/n")
 	private String category;
@@ -42,52 +45,41 @@ public class XzAsstes extends BaseEntity
 	@Excel(name = "单价", prompt = "单价")
 	private String price;
 	/** 单位 */
-	@Excel(name = "单位", prompt = "单位")
 	private String unit;
+	@Excel(name = "单位", prompt = "单位")
+	private String unitName;
 	/** 数量 */
 	@Excel(name = "数量", prompt = "数量")
 	private String count;
 	/** 地域 */
-	@Excel(name = "所在区域", prompt = "所在区域")
 	private String region;
+	@Excel(name = "所在区域", prompt = "所在区域")
+	private String regionName;
 	/** 归属公司 */
-	@Excel(name = "归属公司", prompt = "归属公司")
 	private String attach;
+	@Excel(name = "归属公司", prompt = "归属公司")
+	private String attachName;
 	/** 采购单号 */
 	@Excel(name = "采购单号", prompt = "采购单号")
 	private String purchaseNum;
-	
-	/** 购买地址（如网上购买链接） */
-	@Excel(name = "购买地址", prompt = "购买地址")
-	private String buyAddress;
-	/** 制造商 */
-	private String manufacturer;
-	/** 供应商 */
-	private String supplier;
-	/** 发票类型 */
-	private String invoiceType;
-	/** 发票编号 */
-	private String invoiceNum;
-	/** 资产状态 */
-	@Excel(name = "资产状态", prompt = "资产状态")
-	private String assetsStatus;
-	/** 使用状态 */
-	@Excel(name = "使用状态", prompt = "使用状态")
-	private String useStatus;
 	/** 采购人 */
-	@Excel(name = "采购人", prompt = "采购人")
 	private Long purchaseBy;
-	/** 采购人 */
 	@Excel(name = "采购人", prompt = "采购人")
 	private String purchaseName;
 	/** 购入时间 */
 	@Excel(name = "购入时间", prompt = "购入时间")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date buyDate;
-	/** 附件 */
-	private String annex;
-	/** 备注 */
-	private String remarks;
+	/** 购买地址（如网上购买链接） */
+	@Excel(name = "购买地址", prompt = "购买地址")
+	private String buyAddress;
+	/** 发票类型 */
+	private String invoiceType;
+	@Excel(name = "发票类型", prompt = "发票类型")
+	private String invoiceTypeName;
+	/** 发票编号 */
+	@Excel(name = "发票编号", prompt = "发票编号")
+	private String invoiceNum;
 	/** 扩展金额 */
 	@Excel(name = "扩展金额", prompt = "扩展金额")
 	private String extendMoney;
@@ -98,14 +90,19 @@ public class XzAsstes extends BaseEntity
 	/** 扩展内容 */
 	@Excel(name = "扩展内容", prompt = "扩展内容")
 	private String extendContent;
+	/** 资产状态 */
+	private String assetsStatus;
+	@Excel(name = "资产状态", prompt = "资产状态")
+	private String assetsStatusName;
+	/** 使用状态 */
+	private String useStatus;
+	@Excel(name = "使用状态", prompt = "使用状态")
+	private String useStatusName;
 	/** 前当使用人 */
-	@Excel(name = "当前使用人", prompt = "当前使用人")
 	private Long useBy;
-	/** 前当使用人 */
 	@Excel(name = "当前使用人", prompt = "当前使用人")
 	private String useName;
 	/** 使用部门 */
-	@Excel(name = "使用部门", prompt = "使用部门")
 	private Long department;
 	@Excel(name = "使用部门", prompt = "使用部门")
 	private String departmentName;
@@ -113,6 +110,14 @@ public class XzAsstes extends BaseEntity
 	@Excel(name = "使用时间", prompt = "使用时间")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date useTime;
+	/** 制造商 */
+	private String manufacturer;
+	/** 供应商 */
+	private String supplier;
+	/** 附件 */
+	private String annex;
+	/** 备注 */
+	private String remarks;
 	/** 资产提交时间 */
 	private String subBy;
 	/** 资产提交人*/
@@ -165,14 +170,14 @@ public class XzAsstes extends BaseEntity
 	{
 		return id;
 	}
-	public void setAssetsId(String assetsId) 
+	public void setAssetsCode(String assetsCode) 
 	{
-		this.assetsId = assetsId;
+		this.assetsCode = assetsCode;
 	}
 
-	public String getAssetsId() 
+	public String getAssetsCode() 
 	{
-		return assetsId;
+		return assetsCode;
 	}
 	public void setRegion(String region) 
 	{
@@ -502,19 +507,95 @@ public class XzAsstes extends BaseEntity
 	public void setDepartmentName(String departmentName) {
 		this.departmentName = departmentName;
 	}
+
+	public String getAssetsTypeName() {
+		return assetsTypeName;
+	}
+
+	public void setAssetsTypeName(String assetsTypeName) {
+		this.assetsTypeName = assetsTypeName;
+	}
+
+	public String getAssetsType2Name() {
+		return assetsType2Name;
+	}
+
+	public void setAssetsType2Name(String assetsType2Name) {
+		this.assetsType2Name = assetsType2Name;
+	}
+
+	public String getBrandName() {
+		return brandName;
+	}
+
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
+
+	public String getUnitName() {
+		return unitName;
+	}
+
+	public void setUnitName(String unitName) {
+		this.unitName = unitName;
+	}
+
+	public String getRegionName() {
+		return regionName;
+	}
+
+	public void setRegionName(String regionName) {
+		this.regionName = regionName;
+	}
+
+	public String getAttachName() {
+		return attachName;
+	}
+
+	public void setAttachName(String attachName) {
+		this.attachName = attachName;
+	}
+
+	public String getInvoiceTypeName() {
+		return invoiceTypeName;
+	}
+
+	public void setInvoiceTypeName(String invoiceTypeName) {
+		this.invoiceTypeName = invoiceTypeName;
+	}
+
+	public String getAssetsStatusName() {
+		return assetsStatusName;
+	}
+
+	public void setAssetsStatusName(String assetsStatusName) {
+		this.assetsStatusName = assetsStatusName;
+	}
+
+	public String getUseStatusName() {
+		return useStatusName;
+	}
+
+	public void setUseStatusName(String useStatusName) {
+		this.useStatusName = useStatusName;
+	}
+
 	@Override
 	public String toString() {
-		return "XzAsstes [id=" + id + ", assetsId=" + assetsId + ", assetsName=" + assetsName + ", assetsType="
-				+ assetsType + ", assetsType2=" + assetsType2 + ", brand=" + brand + ", category=" + category
-				+ ", assetsModel=" + assetsModel + ", price=" + price + ", unit=" + unit + ", count=" + count
-				+ ", region=" + region + ", attach=" + attach + ", purchaseNum=" + purchaseNum + ", buyAddress="
-				+ buyAddress + ", manufacturer=" + manufacturer + ", supplier=" + supplier + ", invoiceType="
-				+ invoiceType + ", invoiceNum=" + invoiceNum + ", assetsStatus=" + assetsStatus + ", useStatus="
-				+ useStatus + ", purchaseBy=" + purchaseBy + ", purchaseName=" + purchaseName + ", buyDate=" + buyDate
-				+ ", annex=" + annex + ", remarks=" + remarks + ", extendMoney=" + extendMoney + ", extendTime="
-				+ extendTime + ", extendContent=" + extendContent + ", useBy=" + useBy + ", useName=" + useName
+		return "XzAsstes [id=" + id + ", assetsCode=" + assetsCode + ", assetsName=" + assetsName + ", assetsType="
+				+ assetsType + ", assetsTypeName=" + assetsTypeName + ", assetsType2=" + assetsType2
+				+ ", assetsType2Name=" + assetsType2Name + ", brand=" + brand + ", brandName=" + brandName
+				+ ", category=" + category + ", assetsModel=" + assetsModel + ", price=" + price + ", unit=" + unit
+				+ ", unitName=" + unitName + ", count=" + count + ", region=" + region + ", regionName=" + regionName
+				+ ", attach=" + attach + ", attachName=" + attachName + ", purchaseNum=" + purchaseNum + ", purchaseBy="
+				+ purchaseBy + ", purchaseName=" + purchaseName + ", buyDate=" + buyDate + ", buyAddress=" + buyAddress
+				+ ", invoiceType=" + invoiceType + ", invoiceTypeName=" + invoiceTypeName + ", invoiceNum=" + invoiceNum
+				+ ", extendMoney=" + extendMoney + ", extendTime=" + extendTime + ", extendContent=" + extendContent
+				+ ", assetsStatus=" + assetsStatus + ", assetsStatusName=" + assetsStatusName + ", useStatus="
+				+ useStatus + ", useStatusName=" + useStatusName + ", useBy=" + useBy + ", useName=" + useName
 				+ ", department=" + department + ", departmentName=" + departmentName + ", useTime=" + useTime
-				+ ", subBy=" + subBy + ", subTime=" + subTime + ", submitType=" + submitType + ", scrapDate="
+				+ ", manufacturer=" + manufacturer + ", supplier=" + supplier + ", annex=" + annex + ", remarks="
+				+ remarks + ", subBy=" + subBy + ", subTime=" + subTime + ", submitType=" + submitType + ", scrapDate="
 				+ scrapDate + ", storeWay=" + storeWay + ", sort=" + sort + ", user=" + user + ", dept=" + dept + "]";
 	}
 

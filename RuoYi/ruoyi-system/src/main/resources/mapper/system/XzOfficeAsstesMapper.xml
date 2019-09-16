@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzOfficeAsstesMapper">
+    
+    <resultMap type="XzOfficeAsstes" id="XzOfficeAsstesResult">
+        <result property="id"    column="id"    />
+        <result property="region"    column="region"    />
+        <result property="assetsName"    column="assets_name"    />
+        <result property="assetsType"    column="assets_type"    />
+        <result property="assetsTypeName"    column="assets_type_name"    />
+        <result property="assetsType2"    column="assets_type2"    />
+        <result property="assetsType2Name"    column="assets_type2_name"    />
+        <result property="assetsModel"    column="assets_model"    />
+        <result property="price"    column="price"    />
+        <result property="unit"    column="unit"    />
+        <result property="count"    column="count"    />
+        <result property="attach"    column="attach"    />
+        <result property="brand"    column="brand"    />
+        <result property="buyAddress"    column="buy_address"    />
+        <result property="invoiceType"    column="invoice_type"    />
+        <result property="invoiceNum"    column="invoice_num"    />
+        <result property="purchaseBy"    column="purchase_by"    />
+        <result property="purchaseName"    column="purchase_name"    />
+        <result property="buyDate"    column="buy_date"    />
+        <result property="annex"    column="annex"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="submitType"    column="submit_type"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="subTime"    column="sub_time"    />
+        <result property="subBy"    column="sub_by"    />
+    </resultMap>
+	
+	<sql id="selectXzOfficeAsstesVo">
+        select id, region, assets_name, assets_type, assets_type2, assets_model, price, unit, count, attach, brand, buy_address, invoice_type, invoice_num, purchase_by, buy_date, annex, remarks, submit_type, create_by, create_time, update_by, update_time, sub_time, sub_by from xz_office_asstes
+    </sql>
+    
+    <sql id="selectXzOfficeAsstes">
+        select a.id,	a.region,	a.assets_name,	a.assets_type,	a.assets_type2,	a.assets_model,	a.price,	a.unit,	a.count,	
+        a.attach,	a.brand,	a.buy_address,	a.invoice_type,	a.invoice_num,	a.purchase_by,	a.buy_date,	a.annex,	a.remarks,	
+        a.submit_type,	a.create_by,	a.create_time,	a.update_by,	a.update_time,	a.sub_time,	a.sub_by,su.user_name purchase_name,
+        at.name assets_type_name, ad.name assets_type2_name
+ 		from xz_office_asstes a
+ 		left join sys_user su on su.user_id =a.purchase_by
+ 		left join xz_asset_type at on at.id=a.assets_type
+ 		left join xz_asset_data ad on ad.id=a.assets_type2
+    </sql>
+	
+    <select id="selectXzOfficeAsstesList" parameterType="XzOfficeAsstes" resultMap="XzOfficeAsstesResult">
+        <include refid="selectXzOfficeAsstes"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="region != null  and region != '' "> and region = #{region}</if>
+             <if test="assetsName != null  and assetsName != '' "> and assets_name = #{assetsName}</if>
+             <if test="assetsType != null  and assetsType != '' "> and assets_type = #{assetsType}</if>
+             <if test="assetsType2 != null  and assetsType2 != '' "> and assets_type2 = #{assetsType2}</if>
+             <if test="assetsModel != null  and assetsModel != '' "> and assets_model = #{assetsModel}</if>
+             <if test="price != null  and price != '' "> and price = #{price}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="count != null  and count != '' "> and count = #{count}</if>
+             <if test="attach != null  and attach != '' "> and attach = #{attach}</if>
+             <if test="brand != null  and brand != '' "> and brand = #{brand}</if>
+             <if test="buyAddress != null  and buyAddress != '' "> and buy_address = #{buyAddress}</if>
+             <if test="invoiceType != null  and invoiceType != '' "> and invoice_type = #{invoiceType}</if>
+             <if test="invoiceNum != null  and invoiceNum != '' "> and invoice_num = #{invoiceNum}</if>
+             <if test="purchaseBy != null  and purchaseBy != '' "> and purchase_by = #{purchaseBy}</if>
+             <if test="buyDate != null "> and buy_date = #{buyDate}</if>
+             <if test="annex != null  and annex != '' "> and annex = #{annex}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+             <if test="submitType != null  and submitType != '' "> and submit_type = #{submitType}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+             <if test="subTime != null "> and sub_time = #{subTime}</if>
+             <if test="subBy != null  and subBy != '' "> and sub_by = #{subBy}</if>
+         </where>
+    </select>
+    
+    <select id="selectXzOfficeAsstesById" parameterType="Long" resultMap="XzOfficeAsstesResult">
+        <include refid="selectXzOfficeAsstes"/>
+        where a.id = #{id}
+    </select>
+        
+    <insert id="insertXzOfficeAsstes" parameterType="XzOfficeAsstes" useGeneratedKeys="true" keyProperty="id">
+        insert into xz_office_asstes
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="region != null  and region != ''  ">region,</if>
+			<if test="assetsName != null  and assetsName != ''  ">assets_name,</if>
+			<if test="assetsType != null  and assetsType != ''  ">assets_type,</if>
+			<if test="assetsType2 != null  and assetsType2 != ''  ">assets_type2,</if>
+			<if test="assetsModel != null  and assetsModel != ''  ">assets_model,</if>
+			<if test="price != null  and price != ''  ">price,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="count != null  and count != ''  ">count,</if>
+			<if test="attach != null  and attach != ''  ">attach,</if>
+			<if test="brand != null  and brand != ''  ">brand,</if>
+			<if test="buyAddress != null  and buyAddress != ''  ">buy_address,</if>
+			<if test="invoiceType != null  and invoiceType != ''  ">invoice_type,</if>
+			<if test="invoiceNum != null  and invoiceNum != ''  ">invoice_num,</if>
+			<if test="purchaseBy != null  and purchaseBy != ''  ">purchase_by,</if>
+			<if test="buyDate != null  ">buy_date,</if>
+			<if test="annex != null  and annex != ''  ">annex,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+			<if test="submitType != null  and submitType != ''  ">submit_type,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+			<if test="subTime != null  ">sub_time,</if>
+			<if test="subBy != null  and subBy != ''  ">sub_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="region != null  and region != ''  ">#{region},</if>
+			<if test="assetsName != null  and assetsName != ''  ">#{assetsName},</if>
+			<if test="assetsType != null  and assetsType != ''  ">#{assetsType},</if>
+			<if test="assetsType2 != null  and assetsType2 != ''  ">#{assetsType2},</if>
+			<if test="assetsModel != null  and assetsModel != ''  ">#{assetsModel},</if>
+			<if test="price != null  and price != ''  ">#{price},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="count != null  and count != ''  ">#{count},</if>
+			<if test="attach != null  and attach != ''  ">#{attach},</if>
+			<if test="brand != null  and brand != ''  ">#{brand},</if>
+			<if test="buyAddress != null  and buyAddress != ''  ">#{buyAddress},</if>
+			<if test="invoiceType != null  and invoiceType != ''  ">#{invoiceType},</if>
+			<if test="invoiceNum != null  and invoiceNum != ''  ">#{invoiceNum},</if>
+			<if test="purchaseBy != null  and purchaseBy != ''  ">#{purchaseBy},</if>
+			<if test="buyDate != null  ">#{buyDate},</if>
+			<if test="annex != null  and annex != ''  ">#{annex},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+			<if test="submitType != null  and submitType != ''  ">#{submitType},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="subTime != null  ">#{subTime},</if>
+			<if test="subBy != null  and subBy != ''  ">#{subBy},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzOfficeAsstes" parameterType="XzOfficeAsstes">
+        update xz_office_asstes
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="region != null  and region != ''  ">region = #{region},</if>
+            <if test="assetsName != null  and assetsName != ''  ">assets_name = #{assetsName},</if>
+            <if test="assetsType != null  and assetsType != ''  ">assets_type = #{assetsType},</if>
+            <if test="assetsType2 != null  and assetsType2 != ''  ">assets_type2 = #{assetsType2},</if>
+            <if test="assetsModel != null  and assetsModel != ''  ">assets_model = #{assetsModel},</if>
+            <if test="price != null  and price != ''  ">price = #{price},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="count != null  and count != ''  ">count = #{count},</if>
+            <if test="attach != null  and attach != ''  ">attach = #{attach},</if>
+            <if test="brand != null  and brand != ''  ">brand = #{brand},</if>
+            <if test="buyAddress != null  and buyAddress != ''  ">buy_address = #{buyAddress},</if>
+            <if test="invoiceType != null  and invoiceType != ''  ">invoice_type = #{invoiceType},</if>
+            <if test="invoiceNum != null  and invoiceNum != ''  ">invoice_num = #{invoiceNum},</if>
+            <if test="purchaseBy != null  and purchaseBy != ''  ">purchase_by = #{purchaseBy},</if>
+            <if test="buyDate != null  ">buy_date = #{buyDate},</if>
+            <if test="annex != null  and annex != ''  ">annex = #{annex},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+            <if test="submitType != null  and submitType != ''  ">submit_type = #{submitType},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="subTime != null  ">sub_time = #{subTime},</if>
+            <if test="subBy != null  and subBy != ''  ">sub_by = #{subBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteXzOfficeAsstesById" parameterType="Long">
+        delete from xz_office_asstes where id = #{id}
+    </delete>
+	
+    <delete id="deleteXzOfficeAsstesByIds" parameterType="String">
+        delete from xz_office_asstes where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

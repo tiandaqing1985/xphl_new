@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('个人申请列表')" />
+	<th:block th:include="include :: header('审批列表')" />
 	<script type="text/javascript">
 	function toStaHand(applyId){
 		var url = $.table._option.toStaHand.replace("{applyId}",applyId);
 		$.modal.open("办公用品分配", url);
+	}
+	function toCancelHand(applyId){
+		var url = $.table._option.toCancelHand.replace("{applyId}",applyId);
+		$.modal.open("取消办公用品分配", url);
 	}
 	
 	</script>
@@ -15,9 +19,9 @@
 		<div class="row">
 			<div class="col-sm-12 search-collapse">
 				<form id="formId">
+				<input id="applyStatus" name = "applyStatus"  type="hidden"/>
 					<div class="select-list">
 						<ul>
-							
 
 							<li>申请类型： <select name="applyType"
 								th:with="type=${@dict.getType('xz_assets_applyType')}">
@@ -37,12 +41,14 @@
 			</div>
 			
 	        <div class="btn-group-sm" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="agency()" >
+				<a class="btn btn-success" onclick="list(1);$.table.search() " >
 					查看代办事项
 				</a>
-				
-				<a class="btn btn-success" onclick="already()" >
+				<a class="btn btn-success" onclick="list(2);$.table.search()" >
 					 查看已办事项
+				</a> 
+				<a class="btn btn-success" onclick="list(3);$.table.search()" >
+					 查看取消事项
 				</a> 
 			</div>
 			<div class="col-sm-12 select-table table-striped">
@@ -63,6 +69,7 @@
             var options = {
                 url: prefix + "/distributionList",
                 toStaHand:"/system/xzAssetHandRecord/staHand/{applyId}",
+                toCancelHand:"/system/xzAssetHandRecord/cancelHand/{applyId}",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
@@ -111,14 +118,23 @@
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		            	var actions = [];
-		            	actions.push('<a class="btn btn-primary btn-xs ' + '" onclick="toStaHand(\'' + row.applyId + '\')">分配</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" onclick="$.operate.remove(\'' + row.applyId + '\')">取消分配</a>');
+		            	if(row.applyStatus=='2'||row.applyStatus=='3' ){
+		            		//不显示
+		            	}else{
+		            		actions.push('<a class="btn btn-primary btn-xs ' + '" onclick="toStaHand(\'' + row.applyId + '\')">分配</a> ');
+	                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" onclick="toCancelHand(\'' + row.applyId + '\')">取消分配</a>');
+		            	}
+		            	
 						return actions.join('');
 		            }
 		        }]
             };
             $.table.init(options);
         });
+        
+        function list(f){
+     	   $("#applyStatus").val(f);
+        }
     </script>
 </body>
 </html>

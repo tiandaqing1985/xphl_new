@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="distributorName"    column="distributor_name"    />
         <result property="recipientName"    column="recipient_name"    />
         <result property="departmentName"    column="department_name"    />
+        <result property="reason"    column="reason"    />
     </resultMap>
 	
 	<sql id="selectXzAssetHandRecordVo">
@@ -53,6 +54,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectXzAssetHandRecordVo"/>
         where id = #{id}
     </select>
+    
+    <select id="selectXzAssetHandRecordByAssetId" parameterType="Long" resultMap="XzAssetHandRecordResult">
+        <include refid="selectXzAssetHandRecord"/>
+        where a.id = #{assetId}
+    </select>
         
     <insert id="insertXzAssetHandRecord" parameterType="XzAssetHandRecord" useGeneratedKeys="true" keyProperty="id">
         insert into xz_asset_hand_record
@@ -71,6 +77,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="createTime != null  ">create_time,</if>
 			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
 			<if test="updateTime != null  ">update_time,</if>
+			<if test="reason != null and reason !='' ">reason,</if>
+			<if test="distributorStatus != null  and distributorStatus != ''  ">distributor_status,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
         	<if test="applyId != null  and applyId != ''  ">#{applyId},</if>
@@ -87,6 +95,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="createTime != null  ">#{createTime},</if>
 			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
 			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="reason != null and reason != ''"> #{reason},</if>
+			<if test="distributorStatus != null  and distributorStatus != ''  ">#{distributorStatus},</if>
          </trim>
     </insert>
 	 

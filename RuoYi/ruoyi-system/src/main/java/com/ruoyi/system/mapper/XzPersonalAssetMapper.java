@@ -58,5 +58,19 @@ public interface XzPersonalAssetMapper
      * @return 结果
      */
 	public int deleteXzPersonalAssetByIds(String[] ids);
+
+	/**
+	 * 修改该用户所有个人资产未领取信息状态
+	 * @param xzPersonalAsset
+	 * @return
+	 */
+	public int updateByAssetUserId(XzPersonalAsset xzPersonalAsset);
+
+	/**
+	 * 修改该用户个人资产未领取信息状态
+	 * @param 资产id
+	 * @return
+	 */
+	public int updateByAssetId(XzPersonalAsset xzPersonalAsset);
 	
 }

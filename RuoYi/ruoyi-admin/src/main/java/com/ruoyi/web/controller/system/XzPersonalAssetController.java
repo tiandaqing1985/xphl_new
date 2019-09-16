@@ -149,11 +149,13 @@ public class XzPersonalAssetController extends BaseController {
 	@ResponseBody
 	public AjaxResult draw(Long assetId) {
 		Long userId=ShiroUtils.getUserId();
-		if (userId.equals(xzAsstesService.selectXzAsstesById(assetId).getUpdateBy())){
+		if (userId.equals(xzAsstesService.selectXzAsstesById(assetId).getUseBy())){
 			XzAsstes asset=new XzAsstes();
 			asset.setId(assetId);
 			asset.setUseTime(new Date());
+			asset.setUseBy(userId);
 			String str=xzAsstesService.updateXzAsstesByAssetId(asset);
+			
 			return success(str);
 		}else{
 			return error("非本人不可领取");

@@ -21,14 +21,10 @@ public class XzPersonalAsset extends BaseEntity
 	private Long assetId;
 	/** 产资名称 */
 	private String assetName;
-	public String getAssetName() {
-		return assetName;
-	}
-
-	public void setAssetName(String assetName) {
-		this.assetName = assetName;
-	}
-
+	/** 状态 */
+	private String assetStatus;
+	/** 产资父类型名称 */
+	private String assetTypeName;
 	/** 领用时间 */
 	private Date useTime;
 	
@@ -77,12 +73,39 @@ public class XzPersonalAsset extends BaseEntity
 	{
 		return useTime;
 	}
+	
+	public String getAssetName() {
+		return assetName;
+	}
+
+	public void setAssetName(String assetName) {
+		this.assetName = assetName;
+	}
+	
+	public String getAssetTypeName() {
+		return assetTypeName;
+	}
+
+	public void setAssetTypeName(String assetTypeName) {
+		this.assetTypeName = assetTypeName;
+	}
+
+	public String getAssetStatus() {
+		return assetStatus;
+	}
+
+	public void setAssetStatus(String assetStatus) {
+		this.assetStatus = assetStatus;
+	}
 
 	@Override
 	public String toString() {
 		return "XzPersonalAsset [id=" + id + ", userId=" + userId + ", assetId=" + assetId + ", assetName=" + assetName
-				+ ", useTime=" + useTime + ", xzAsstes=" + xzAsstes + "]";
+				+ ", assetStatus=" + assetStatus + ", assetTypeName=" + assetTypeName + ", useTime=" + useTime
+				+ ", xzAsstes=" + xzAsstes + "]";
 	}
+
+	
 
     
 }

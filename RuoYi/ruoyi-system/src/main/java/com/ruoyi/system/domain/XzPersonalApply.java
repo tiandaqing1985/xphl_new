@@ -19,7 +19,7 @@ public class XzPersonalApply extends BaseEntity
 	private String applyStatus;
 	/** 申请人id */
 	private Long userId;
-	/** 申请类型（1资产申请，2借用申请，3采购申请） */
+	/** 申请类型（1资产申请，2归还申请） */
 	private String applyType;
 	/** 父资产类型 */
 	private Long assetTypeId;

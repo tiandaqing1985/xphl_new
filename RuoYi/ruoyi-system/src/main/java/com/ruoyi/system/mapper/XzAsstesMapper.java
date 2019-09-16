@@ -1,6 +1,8 @@
 package com.ruoyi.system.mapper;
 
 import com.ruoyi.system.domain.XzAsstes;
+import com.ruoyi.system.domain.XzAsstesSta;
+
 import java.util.List;
 
 /**
@@ -98,5 +100,20 @@ public interface XzAsstesMapper {
 	 * @return
 	 */
 	public XzAsstes selectMinAssetByType2AndRegion(XzAsstes xzAsstes);
+	
+	public int countAssetByType2AndRegion(XzAsstes xzAsstes);
+	/**
+	 * 查询最大的资产编码
+	 * @param xzAsstes
+	 * @return
+	 */
+	public String selectMaxCodeByType(XzAsstes xzAsstes);
+
+	/**
+	 * 库存
+	 * @param xzAsstes
+	 * @return
+	 */
+	public List<XzAsstesSta> selectXzStatisticsList(XzAsstesSta xzAsstesSta);
 
 }

@@ -104,6 +104,17 @@ public class XzAssetHandRecordController extends BaseController
 	}
 	
 	/**
+	 * 新增办公用品资产分配记录
+	 */
+	@GetMapping("/cancelHand/{applyId}")
+	public String cancelHand(@PathVariable("applyId") Long applyId, ModelMap mmap)
+	{
+		XzPersonalApply apply=xzPersonalApplyService.selectXzPersonalApplyById(applyId);
+		mmap.put("apply", apply);
+	    return prefix + "/cancelHand";
+	}
+	
+	/**
 	 * 新增固定资产分配记录
 	 */
 	@Log(title = "资产分配记录", businessType = BusinessType.INSERT)
@@ -132,6 +143,26 @@ public class XzAssetHandRecordController extends BaseController
 	{	
 		xzAssetHandRecord.setDistributor(ShiroUtils.getUserId());
 		String str= xzAssetHandRecordService.insertXzAssetHandStaRecord(xzAssetHandRecord);
+		if(str=="1"){
+			return success("分配成功");
+		}else if(str=="2"){
+			return error("分配失败");	
+		}else{
+			return AjaxResult.warn("该资产库存不足，请采购！");	
+		}
+		
+	}
+	
+	/**
+	 * 取消办公资产分配记录
+	 */
+	@Log(title = "资产分配记录", businessType = BusinessType.INSERT)
+	@PostMapping("/cancelHand")
+	@ResponseBody
+	public AjaxResult cancelHandSave(XzAssetHandRecord xzAssetHandRecord)
+	{	
+		xzAssetHandRecord.setDistributor(ShiroUtils.getUserId());
+		String str= xzAssetHandRecordService.cancelHandRecord(xzAssetHandRecord);
 		return success(str);	
 	}
 

@@ -32,6 +32,8 @@ public class XzAssetHandRecord extends BaseEntity
 	private String distributorName;
 	@Excel(name = "审批状态", prompt = "审批状态")
 	private String distributorStatus;
+	/** 取消分配原因*/
+	private String reason;
 	public String getDistributorStatus() {
 		return distributorStatus;
 	}
@@ -225,15 +227,22 @@ public class XzAssetHandRecord extends BaseEntity
 		this.applyId = applyId;
 	}
 
+	public String getReason() {
+		return reason;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 
 	@Override
 	public String toString() {
 		return "XzAssetHandRecord [id=" + id + ", applyId=" + applyId + ", assetId=" + assetId + ", assetName="
 				+ assetName + ", distributor=" + distributor + ", distributorName=" + distributorName
-				+ ", distributorStatus=" + distributorStatus + ", recipient=" + recipient + ", recipientName="
-				+ recipientName + ", departmentName=" + departmentName + ", distributionDate=" + distributionDate
-				+ ", confirmDate=" + confirmDate + ", planReturnDate=" + planReturnDate + ", isClaim=" + isClaim
-				+ ", isMsg=" + isMsg + ", sourceType=" + sourceType + ", count=" + count + ", assetType2Id="
-				+ assetType2Id + ", region=" + region + "]";
+				+ ", distributorStatus=" + distributorStatus + ", reason=" + reason + ", recipient=" + recipient
+				+ ", recipientName=" + recipientName + ", departmentName=" + departmentName + ", distributionDate="
+				+ distributionDate + ", confirmDate=" + confirmDate + ", planReturnDate=" + planReturnDate
+				+ ", isClaim=" + isClaim + ", isMsg=" + isMsg + ", sourceType=" + sourceType + ", count=" + count
+				+ ", assetType2Id=" + assetType2Id + ", region=" + region + "]";
 	}
 }

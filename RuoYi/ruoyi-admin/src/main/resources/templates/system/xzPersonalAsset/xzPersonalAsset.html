@@ -11,6 +11,16 @@
 	function draw(assetId) {
 		$.operate.post(prefix + "/draw", { "assetId": assetId});
 	}
+	
+	function toReturn(assetId){
+		var url = $.table._option.toReturnUrl.replace("{assetId}",assetId);
+		$.modal.open("资产归还", url);
+	}
+	
+	function toRepair(assetId){
+		var url = $.table._option.toRepairUrl.replace("{assetId}",assetId);
+		$.modal.open("资产报修登记", url);
+	}
 	</script>
 </head>
 <body class="gray-bg">
@@ -60,9 +70,12 @@
         var region = [[${@dict.getType('xz_assets_region')}]];
         var brand = [[${@dict.getType('xz_assets_brand')}]];
         var useStatus = [[${@dict.getType('xz_assets_useStatus')}]];
+        var assetsStatus = [[${@dict.getType('xz_assets_assetsStatus')}]];
         $(function() {
             var options = {
                 url: prefix + "/list",
+                toReturnUrl: "/system/xzAssetReturn/add/{assetId}",
+                toRepairUrl: "/system/xzAssetRepair/add/{assetId}",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
@@ -78,7 +91,7 @@
 					visible: false
 				},
 				{
-					field : 'xzAsstes.assetsId', 
+					field : 'xzAsstes.assetsCode', 
 					title : '资产编码',
 					sortable: true
 				},
@@ -89,7 +102,7 @@
 				},
 				
 				{
-					field : 'xzAsstes.assetsType', 
+					field : 'assetTypeName', 
 					title : '资产类型',
 					sortable: true
 				},
@@ -113,7 +126,15 @@
 					}
 				},
 				{
-					field : 'xzAsstes.useStatus', 
+					field : 'xzAsstes.assetsStatus', 
+					title : '使用状态',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(assetsStatus, value);
+					},
+					visible: false
+				},
+				{
+					field : 'assetStatus', 
 					title : '使用状态',
 					formatter: function(value, row, index) {
 					    return $.table.selectDictLabel(useStatus, value);
@@ -133,8 +154,8 @@
 		            		actions.push('<a class="btn btn-success btn-xs ' + '" onclick="draw(\'' + row.assetId + '\')">领取</a> ');
 		            	}
 		            	if(row.xzAsstes.useStatus=='3'){
-		            		actions.push('<a class="btn btn-danger btn-xs ' + '" onclick="#">报修</a> ');
-		            		actions.push('<a class="btn btn-white btn-xs ' + '" onclick="#">归还</a> ');
+		            		actions.push('<a class="btn btn-danger btn-xs ' + '" onclick="toRepair(\'' + row.assetId + '\')">报修</a> ');
+		            		actions.push('<a class="btn btn-white btn-xs ' + '" onclick="toReturn(\'' + row.assetId + '\')">归还</a> ');
 		            	}
 						return actions.join('');
 		            }

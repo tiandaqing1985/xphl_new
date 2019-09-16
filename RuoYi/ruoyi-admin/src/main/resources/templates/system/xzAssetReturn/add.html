@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('资产归还')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-xzAssetReturn-add">
+ 		<input id="assetId" name="assetId" th:value="*{xzAsstes.id}" type="hidden">
+ 		<h4 class="form-header h4">基本信息</h4>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">资产编码：</label>
+						<div class="form-control-static" th:text="${xzAsstes.assetsCode}"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">地域：</label>
+						<div class="form-control-static"
+							th:text="${@dict.getLabel('xz_assets_region',xzAsstes.region)}"></div>
+
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">资产名称：</label>
+						<div class="form-control-static" th:text="${xzAsstes.assetsName}"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">分类码s/n：</label>
+						<div class="form-control-static" th:text="${xzAsstes.category}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">资产分类：</label>
+						<div class="form-control-static"
+							th:text="${xzAsstes.assetsTypeName}"></div>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">资产型号：</label>
+						<div class="form-control-static" th:text="${xzAsstes.assetsModel}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">单位：</label>
+						<div class="form-control-static"
+							th:text="${@dict.getLabel('xz_assets_unit',xzAsstes.unit)}"></div>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">数量：</label>
+						<div class="form-control-static" th:text="${xzAsstes.count}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">品牌：</label>
+						<div class="form-control-static"
+							th:text="${@dict.getLabel('xz_assets_brand',xzAsstes.brand)}"></div>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">归属公司：</label>
+						<div class="form-control-static"
+							th:text="${@dict.getLabel('xz_assets_attach',xzAsstes.attach)}"></div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">分配人：</label>
+						<div class="form-control-static"
+							th:text="${xzHand.distributorName}"></div>
+					</div>
+				</div>
+
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">分配时间：</label>
+						<div class="form-control-static" th:text="${#dates.format(xzHand.createTime, 'yyyy-MM-dd')}" ></div>
+					</div>
+				</div>
+			</div>
+			<h4 class="form-header h4">归还信息</h4>
+ 			<div class="form-group">
+				<label class="col-sm-3 control-label"><span
+							style="color: red;">*</span>归还时间：</label>
+				<div class="col-sm-8">
+					<input id="createTime" name="createTime" th:value="${#dates.format(new java.util.Date().getTime(),'yyyy-MM-dd')}" class="form-control"
+						type="text" required>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span
+							style="color: red;">*</span>归还人员：</label>
+				<div class="col-sm-8">
+					<input id="createByName" name="createByName" th:value="${xzHand.recipientName}" class="form-control"
+						type="text" required>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label class="col-sm-3 control-label">备注信息：</label>
+				<div class="col-sm-8">
+					<textarea id="remark" name="remark" class="form-control" ></textarea>
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/xzAssetReturn"
+		$("#form-xzAssetReturn-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-xzAssetReturn-add').serialize());
+	        }
+	    }
+		 $(function() {
+				//初始化日期选择器
+				layui.use('laydate', function() {
+					var laydate = layui.laydate;
+					laydate.render({
+						elem : '#createTime', //指定元素
+						trigger : 'click'
+					});
+				});
+			}); 
+	</script>
+</body>
+</html>

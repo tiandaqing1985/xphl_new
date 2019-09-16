@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.XzAssetType;
+import com.ruoyi.system.domain.XzAsstes;
 import com.ruoyi.system.domain.XzPersonalApply;
 import com.ruoyi.system.service.IXzAssetDataService;
 import com.ruoyi.system.service.IXzAssetTypeService;
+import com.ruoyi.system.service.IXzAsstesService;
 import com.ruoyi.system.service.IXzPersonalApplyService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -38,6 +40,9 @@ public class XzPersonalApplyController extends BaseController
 	
 	@Autowired
 	private IXzPersonalApplyService xzPersonalApplyService;
+	
+	@Autowired
+	private IXzAsstesService xzAsstesService;
 	
 	@Autowired
 	private IXzAssetTypeService xzAssetTypeService;
@@ -76,11 +81,20 @@ public class XzPersonalApplyController extends BaseController
 	 */
 	@PostMapping("/distributionList")
 	@ResponseBody
-	public TableDataInfo distributionList(XzPersonalApply xzPersonalApply)
+	public TableDataInfo distributionList(XzPersonalApply xzPersonalApply,String applyStatus)
 	{
 		startPage();
-		xzPersonalApply.setApplyStatus("1");//查看申请状态为 1待审批 的数据
-		xzPersonalApply.setSort("2");//只查看办公用品的申请
+		xzPersonalApply.setApplyStatus(applyStatus);
+		if(xzPersonalApply.getApplyStatus()==null || xzPersonalApply.getApplyStatus().isEmpty() ){
+			xzPersonalApply.setApplyStatus("1");//查看申请状态为 1待审批 的数据
+		}
+		if(xzPersonalApply.getApplyType().equals("1")){
+			xzPersonalApply.setSort("2");//只查看办公用品的申请
+		}
+		if(xzPersonalApply.getApplyType().equals("2")){
+			xzPersonalApply.setSort("1");//只查看固定资产的申请
+		}
+		
         List<XzPersonalApply> list = xzPersonalApplyService.selectXzPersonalApplyList(xzPersonalApply);
 		return getDataTable(list);
 	}
@@ -121,7 +135,8 @@ public class XzPersonalApplyController extends BaseController
 		mmap.put("typeList", xzAssetTypeService.selectXzAssetTypeByStaAll());
 		return prefix + "/add";
 	}
-	
+
+    
 	/**
 	 * 新增保存个人申请
 	 */
@@ -133,7 +148,7 @@ public class XzPersonalApplyController extends BaseController
 		xzPersonalApply.setUserId(ShiroUtils.getUserId());
 		xzPersonalApply.setCreateBy(ShiroUtils.getUserId().toString());
 		xzPersonalApply.setApplyStatus("1");//申请状态：1申请中 2申请成功 3申请失败
-		xzPersonalApply.setApplyType("1");//申请类型：1资产申请 2借用申请 2采购申请
+		xzPersonalApply.setApplyType("1");//申请类型：1资产申请 2借用申请 
 		xzPersonalApply.setSubmitType("2");//提交状态：1已保存 2已提交
 		xzPersonalApply.setCreateTime(new Date());
 		xzPersonalApply.setSort("2");

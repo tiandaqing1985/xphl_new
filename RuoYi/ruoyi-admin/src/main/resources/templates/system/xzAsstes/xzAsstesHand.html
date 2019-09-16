@@ -57,12 +57,12 @@
 				</form>
 			</div>
 
-			<div class="btn-group-sm" id="toolbar" role="group">
+			<!-- <div class="btn-group-sm" id="toolbar" role="group">
 				<a class="btn btn-warning" onclick="$.table.exportExcel()"
 					shiro:hasPermission="system:xzAsstes:export"> <i
 					class="fa fa-download"></i> 导出
 				</a>
-			</div>
+			</div> -->
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
 			</div>
@@ -84,7 +84,7 @@
         var useStatus = [[${@dict.getType('xz_assets_useStatus')}]];
         $(function() {
             var options = {
-                url: prefix1 + "/list",
+                url: prefix1 + "/handlist",
                 createUrl: prefix + "/add/{id}",
                 updateSubUrl: prefix + "/editSub/{id}",
                 detailUrl: prefix + "/detail/{id}",
@@ -100,7 +100,7 @@
 					visible: false
 				},
 				{
-					field : 'assetsId', 
+					field : 'assetsCode', 
 					title : '资产编码',
 					sortable: true
 				},

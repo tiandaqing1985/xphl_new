@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzAssetReturnMapper">
+    
+    <resultMap type="XzAssetReturn" id="XzAssetReturnResult">
+        <result property="id"    column="id"    />
+        <result property="assetId"    column="asset_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="userName" column="user_name" />
+        <result property="handlerId"    column="handler_id"    />
+        <result property="returnStatus"    column="return_status"    />
+        <result property="remark"    column="remark"    />
+        <result property="remark2"    column="remark2"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <association property="xzAsstes" column="id" javaType="com.ruoyi.system.domain.XzAsstes" resultMap="XzAsstesResult" />
+    </resultMap>
+    
+    <resultMap type="com.ruoyi.system.domain.XzAsstes" id="XzAsstesResult">
+		<result property="id" column="id" />
+		<result property="assetsCode" column="assets_code" />
+		<result property="region" column="region" />
+		<result property="assetsName" column="assets_name" />
+		<result property="assetsType" column="assets_type" />
+		<result property="assetsTypeName" column="assets_type_name" />
+		<result property="category" column="category" />
+		<result property="assetsModel" column="assets_model" />
+		<result property="useStatus" column="use_status" />
+		<result property="unit" column="unit" />
+		<result property="brand" column="brand" />
+		<result property="sort" column="sort" />
+		<result property="useTime" column="use_time" />
+	</resultMap>
+	
+	<sql id="selectXzAssetReturnVo">
+        select id, asset_id, user_id, handler_id, return_status, remark,remark2, create_by, create_time, update_by, update_time from xz_asset_return
+    </sql>
+    
+  
+	
+    <select id="selectXzAssetReturnList" parameterType="XzAssetReturn" resultMap="XzAssetReturnResult">
+    	select ar.id, ar.asset_id, ar.user_id, ar.handler_id, ar.return_status, ar.remark,ar.remark2, ar.create_by, ar.create_time, ar.update_by, ar.update_time,
+    	xa.assets_code,xa.assets_name, xa.region,at.name assets_type_name,xa.assets_model,xa.use_status,xa.category,xa.unit ,xa.brand,
+		u.user_name user_name 
+    	from xz_asset_return ar
+    	left join xz_asstes xa on xa.id =ar.asset_id
+        left join xz_asset_type at on at.id =xa.assets_type 
+        left join sys_user u on u.user_id =ar.user_id
+        <where>  
+         	 return_status ='1'
+             <if test="returnStatus != null  and returnStatus != '' "> and ar.return_status = #{returnStatus}</if>
+            <!--  <if test="createTime != null "> and create_time = #{createTime}</if> -->
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND date_format(ar.create_time,'%y%m%d') &gt;=
+				date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				AND date_format(ar.create_time,'%y%m%d') &lt;=
+				date_format(#{params.endTime},'%y%m%d')
+			</if>
+         </where>
+         ORDER BY create_time DESC
+    </select>
+    
+    <select id="selectXzAssetReturnById" parameterType="Long" resultMap="XzAssetReturnResult">
+        <include refid="selectXzAssetReturnVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertXzAssetReturn" parameterType="XzAssetReturn" useGeneratedKeys="true" keyProperty="id">
+        insert into xz_asset_return
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="assetId != null  ">asset_id,</if>
+			<if test="userId != null  ">user_id,</if>
+			<if test="handlerId != null  ">handler_id,</if>
+			<if test="returnStatus != null  and returnStatus != ''  ">return_status,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+			<if test="createBy != null  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="assetId != null  ">#{assetId},</if>
+			<if test="userId != null  ">#{userId},</if>
+			<if test="handlerId != null  ">#{handlerId},</if>
+			<if test="returnStatus != null  and returnStatus != ''  ">#{returnStatus},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+			<if test="createBy != null  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzAssetReturn" parameterType="XzAssetReturn">
+        update xz_asset_return
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assetId != null  ">asset_id = #{assetId},</if>
+            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="handlerId != null  ">handler_id = #{handlerId},</if>
+            <if test="returnStatus != null  and returnStatus != ''  ">return_status = #{returnStatus},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="createBy != null  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteXzAssetReturnById" parameterType="Long">
+        delete from xz_asset_return where id = #{id}
+    </delete>
+	
+    <delete id="deleteXzAssetReturnByIds" parameterType="String">
+        delete from xz_asset_return where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

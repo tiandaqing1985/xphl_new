@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="sort"    column="sort"    />
         <result property="name"    column="name"    />
+        <result property="code"    column="code"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -15,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectXzAssetTypeVo">
-        select id, sort, name, create_by, create_time, update_by, update_time from xz_asset_type
+        select id, sort, name, code, create_by, create_time, update_by, update_time from xz_asset_type
     </sql>
 	
     <select id="selectXzAssetTypeList" parameterType="XzAssetType" resultMap="XzAssetTypeResult">
@@ -24,6 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="id != null "> and id = #{id}</if>
              <if test="sort != null  and sort != '' "> and sort = #{sort}</if>
              <if test="name != null  and name != '' "> and name = #{name}</if>
+             <if test="code != null  and code != '' "> and code = #{code}</if>
              <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
              <if test="createTime != null "> and create_time = #{createTime}</if>
              <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
@@ -67,6 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="sort != null  and sort != ''  ">sort,</if>
 			<if test="name != null  and name != ''  ">name,</if>
+			<if test="code != null  and code != ''  ">code,</if>
 			<if test="createBy != null  and createBy != ''  ">create_by,</if>
 			<if test="createTime != null  ">create_time,</if>
 			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
@@ -75,6 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="sort != null  and sort != ''  ">#{sort},</if>
 			<if test="name != null  and name != ''  ">#{name},</if>
+			<if test="code != null  and code != ''  ">#{code},</if>
 			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
 			<if test="createTime != null  ">#{createTime},</if>
 			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
@@ -87,6 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="sort != null  and sort != ''  ">sort = #{sort},</if>
             <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="code != null  and code != ''  ">code = #{code},</if>
             <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
             <if test="createTime != null  ">create_time = #{createTime},</if>
             <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>

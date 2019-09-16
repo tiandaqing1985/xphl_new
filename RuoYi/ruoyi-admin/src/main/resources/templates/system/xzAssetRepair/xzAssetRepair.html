@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('资产维修列表')" />
+	<script type="text/javascript">
+	function edit(repairId){
+		$.modal.openTab("资产维修处理", $.table._option.updateUrl.replace("{repairId}",repairId));
+	}
+	</script>
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>资产编码：<input type="text" name="assetsCode" />
+							</li>
+							<li>资产名称：<input type="text" name="assetsName" />
+							</li>
+
+							<li><a class="btn btn-primary btn-rounded btn-sm"
+								onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm"
+								onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script th:inline="javascript">
+        var prefix = ctx + "system/xzAssetRepair";
+
+        var region = [[${@dict.getType('xz_assets_region')}]];
+        var repairStatus = [[${@dict.getType('xz_assets_repairStatus')}]];
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{repairId}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "资产维修",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'repairId', 
+					title : '主键',
+					visible: false
+				},
+				{
+					field : 'xzAsstes.assetsCode', 
+					title : '资产编码',
+					sortable: true
+				},
+				
+				{
+					field : 'xzAsstes.assetsName', 
+					title : '资产名称',
+					sortable: true
+				},
+				{
+					field : 'xzAsstes.assetsTypeName', 
+					title : '资产类型',
+					sortable: true
+				},
+				{
+					field : 'xzAsstes.category', 
+					title : 's/n码',
+					sortable: true
+				},
+				{
+					field : 'xzAsstes.assetsModel', 
+					title : '资产型号',
+					sortable: true
+				},
+				{
+					field : 'xzAsstes.region', 
+					title : '地域',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(region, value);
+					}
+				},
+				{
+					field : 'repairTime', 
+					title : '故障时间',
+					sortable: true
+				},
+				{
+					field : 'repairStatus', 
+					title : '状态',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(repairStatus, value);
+					}
+				},
+				{
+					field : 'problemContext', 
+					title : '问题描述',
+					sortable: true
+				},
+				{
+					field : 'userName', 
+					title : '报修人员',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-primary btn-xs ' + '" href="javascript:void(0)" onclick="edit(\'' + row.repairId + '\')"></i>处理</a> ');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

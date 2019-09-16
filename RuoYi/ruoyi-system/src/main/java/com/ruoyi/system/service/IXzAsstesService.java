@@ -1,6 +1,8 @@
 package com.ruoyi.system.service;
 
 import com.ruoyi.system.domain.XzAsstes;
+import com.ruoyi.system.domain.XzAsstesSta;
+
 import java.util.List;
 
 /**
@@ -29,13 +31,13 @@ public interface IXzAsstesService {
 	public List<XzAsstes> selectXzAsstesList(XzAsstes xzAsstes);
 
 	/**
-	 * 新增资产
+	 * 新增固定资产
 	 * 
 	 * @param xzAsstes
 	 *            资产信息
 	 * @return 结果
 	 */
-	public int insertXzAsstes(XzAsstes xzAsstes);
+	public String insertXzAsstes(XzAsstes xzAsstes);
 
 	/**
 	 * 修改资产
@@ -72,7 +74,7 @@ public interface IXzAsstesService {
 	 * @return
 	 */
 	public String updateXzAsstesByAllDraw(Long userId);
-	
+
 	/**
 	 * 根据使用者id查询待领取资产数量
 	 * 
@@ -84,5 +86,28 @@ public interface IXzAsstesService {
 	public String updateXzAsstesByAssetId(XzAsstes xzAsstes);
 
 	public String insertStaAsstes(XzAsstes xzAsstes);
+
+	/**
+	 * 查询最大的资产编号
+	 * 
+	 * @param xzAsstes
+	 * @return
+	 */
+	public String selectMaxCodeByType(XzAsstes xzAsstes);
+
+	/**
+	 * 提交多条资产记录
+	 * @param ids
+	 * @param xzAsstes 
+	 * @return
+	 */
+	public String updateXzAsstesBySub(String ids, XzAsstes xzAsstes);
+
+	/**
+	 * 库存
+	 * @param xzAsstes
+	 * @return
+	 */
+	public List<XzAsstesSta> selectXzStatisticsList(XzAsstesSta xzAsstesSta);
 
 }

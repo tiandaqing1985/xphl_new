@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('办公用品资产列表')" />
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+
+							<li>所在地域： <select name="region"
+								th:with="type=${@dict.getType('xz_assets_region')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+										th:value="${dict.dictValue}"></option>
+							</select>
+							</li>
+
+							<li>资产名称：<input type="text" name="assetType2IdName" />
+							</li>
+							
+							<li><a class="btn btn-primary btn-rounded btn-sm"
+								onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm"
+								onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<!-- <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.addTab()"
+					shiro:hasPermission="system:xzStationeryassetRecord:add"> <i
+					class="fa fa-plus"></i> 添加
+				</a> <a class="btn btn-primary btn-edit disabled"
+					onclick="$.operate.edit()"
+					shiro:hasPermission="system:xzStationeryassetRecord:edit"> <i
+					class="fa fa-edit"></i> 修改
+				</a> <a class="btn btn-danger btn-del btn-del disabled"
+					onclick="$.operate.removeAll()"
+					shiro:hasPermission="system:xzStationeryassetRecord:remove"> <i
+					class="fa fa-remove"></i> 删除
+				</a> <a class="btn btn-warning" onclick="$.table.exportExcel()"
+					shiro:hasPermission="system:xzStationeryassetRecord:export"> <i
+					class="fa fa-download"></i> 导出
+				</a>
+			</div> -->
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script th:inline="javascript">
+        var region = [[${@dict.getType('xz_assets_region')}]];
+        var brand = [[${@dict.getType('xz_assets_brand')}]];
+        var unit = [[${@dict.getType('xz_assets_unit')}]];
+        
+        var prefix = ctx + "system/xzAsstes";
+        $(function() {
+            var options = {
+                url: prefix + "/xzStatisticsList",
+                modalName: "办公用品分配记录",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '主键',
+					visible: false
+				},
+				{
+					field : 'region', 
+					title : '地域',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(region, value);
+					}
+				},
+				{
+					field : 'assetType2IdName', 
+					title : '资产名称',
+					sortable: true
+				},
+				{
+					field : 'assetTypeIdName', 
+					title : '资产类型',
+					sortable: true
+				},
+				{
+					field : 'unit', 
+					title : '单位',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(unit, value);
+					}
+				},
+				{
+					field : 'brand', 
+					title : '品牌',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(brand, value);
+					}
+				},
+				{
+					field : 'assetsModel', 
+					title : '资产型号',
+					sortable: true
+				},
+				
+				{
+					field : 'chushiCount', 
+					title : '当月初始',
+					sortable: true
+				},
+				{
+					field : 'fenpeiCount', 
+					title : '当月分配',
+					sortable: true
+				},
+				{
+					field : 'rukuCount', 
+					title : '当月入库',
+					sortable: true
+				},
+				{
+					field : 'guihuanCount', 
+					title : '当月归还',
+					sortable: true
+				},
+				{
+					field : 'shengyuCount', 
+					title : '当月剩余',
+					sortable: true
+				}
+				]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

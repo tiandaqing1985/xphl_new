@@ -7,16 +7,27 @@
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-xzAssetData-add">
 			<div class="form-group">	
-				<label class="col-sm-3 control-label">父资产类型：</label>
+				<label class="col-sm-3 control-label"><span
+					style="color: red;">*</span>父资产类型：</label>
 				<div class="col-sm-8">
 					<input id="parentId" name="parentId" th:value="${xzAssetType.id}"  type="hidden">
-					<input id="parentId" name="parentId" class="form-control" readonly="readonly" th:value="${xzAssetType.name}">
+					<input id="parentId" name="parentId" class="form-control" readonly="readonly" th:value="${xzAssetType.name}" required>
 				</div>
 			</div>
 			<div class="form-group">	
-				<label class="col-sm-3 control-label">资产类型名称：</label>
+				<label class="col-sm-3 control-label"><span
+					style="color: red;">*</span>资产类型名称：</label>
 				<div class="col-sm-8">
-					<input id="name" name="name" class="form-control" type="text">
+					<input id="name" name="name" class="form-control" type="text" required>
+				</div>
+			</div>
+			
+			<div class="form-group">	
+				<label class="col-sm-3 control-label"><span
+					style="color: red;">*</span>资产类型名称：</label>
+				<div class="col-sm-8">
+					<input id="code" name="code" onkeyup="value=value.replace(/[^A-\Z]/g,'')" class="form-control" type="text" required>
+					<span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 编码由大写字母组成（例：BJB）</span>
 				</div>
 			</div>
 			

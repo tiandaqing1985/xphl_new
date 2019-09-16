@@ -7,6 +7,22 @@
 	function editPart(id){
 		$.modal.openTab("提交后修改", $.table._option.editPartUrl.replace("{id}",id));
 	} 
+	function submit(id){
+		$.operate.post(prefix + "/toSubmit", {"id": id});
+	}
+	// 批量提交信息
+    function toSubmitAll() {
+		var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+		if (rows.length == 0) {
+			$.modal.alertWarning("请至少选择一条记录");
+			return;
+		}
+		$.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function() {
+			var url = $.table._option.toAllSubmitUrl;
+			var data = { "ids": rows.join() };
+			$.operate.submit(url, "post", "json", data);
+		});
+    }
 </script>
 </head>
 <body class="gray-bg">
@@ -16,7 +32,7 @@
 				<form id="formId">
 					<div class="select-list">
 						<ul>
-							<li>资产编码：<input type="text" name="assetsId" />
+							<li>资产编码：<input type="text" name="assetsCode" />
 							</li>
 
 							<li>资产状态： <select name="assetsStatus"
@@ -35,7 +51,7 @@
 							</select>
 							</li>
 
-							<li>采购人员：<input type="text" name="purchaseBy" />
+							<li>采购人员：<input type="text" name="purchaseName" />
 							</li>
 
 
@@ -76,12 +92,14 @@
 					onclick="$.operate.removeAll()"
 					shiro:hasPermission="system:xzAsstes:remove"> <i
 					class="fa fa-remove"></i> 删除
-				</a> <a class="btn btn-info" onclick="$.table.importExcel()"
+				</a> <!-- <a class="btn btn-info" onclick="$.table.importExcel()"
 					shiro:hasPermission="system:xzAsstes:import"> <i
 					class="fa fa-upload"></i> 导入
 				</a> <a class="btn btn-warning" onclick="$.table.exportExcel()"
 					shiro:hasPermission="system:xzAsstes:export"> <i
 					class="fa fa-download"></i> 导出
+				</a> --> <a class="btn btn-danger btn-del disabled"  onclick="toSubmitAll()"> <i
+					class="fa fa-check"></i>一键领取
 				</a>
 			</div>
 			<div class="col-sm-12 select-table table-striped">
@@ -106,6 +124,8 @@
         $(function() {
             var options = {
                 url: prefix + "/list",
+                toSubmitUrl:prefix + "/addSub",
+                toAllSubmitUrl:prefix + "/toAllSubmit",
                 createUrl: prefix + "/add",
                 createSubUrl: prefix + "/addSub",
                 updateUrl: prefix + "/edit/{id}",
@@ -127,7 +147,7 @@
 					visible: false
 				},
 				{
-					field : 'assetsId', 
+					field : 'assetsCode', 
 					title : '资产编码',
 					sortable: true
 				},
@@ -200,8 +220,9 @@
 		            	if(row.submitType=="2"){
 		            		actions.push('<a class="btn btn-primary btn-xs ' + '" href="#" onclick="editPart(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
 		            	}else{
-		            		actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+		            		actions.push('<a class="btn btn-success btn-xs ' + '" href="#" onclick="submit(\'' + row.id + '\')"><i class="fa fa-check"></i>提交</a> ');
 		            		actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+		            		actions.push('<a class="btn btn-info btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
 		            	}
                         actions.push('<a class="btn btn-warning btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详细</a>');
 						return actions.join('');

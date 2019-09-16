@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.mapper.XzPersonalApplyMapper;
 import com.ruoyi.system.domain.XzPersonalApply;
 import com.ruoyi.system.service.IXzPersonalApplyService;
@@ -21,6 +22,9 @@ public class XzPersonalApplyServiceImpl implements IXzPersonalApplyService
 {
 	@Autowired
 	private XzPersonalApplyMapper xzPersonalApplyMapper;
+	
+	@Autowired
+	private SysUserMapper sysUserMapper;
 
 	/**
      * 查询个人申请信息
@@ -56,6 +60,11 @@ public class XzPersonalApplyServiceImpl implements IXzPersonalApplyService
 	@Transactional
 	public int insertXzPersonalApply(XzPersonalApply xzPersonalApply)
 	{
+		//如果是资产借用
+		if(xzPersonalApply.getApplyType().equals("2")){
+			sysUserMapper.selectUserIdByUserNameOnly(xzPersonalApply.getCreateByName());
+		}
+		
 	    return xzPersonalApplyMapper.insertXzPersonalApply(xzPersonalApply);
 	}
 	

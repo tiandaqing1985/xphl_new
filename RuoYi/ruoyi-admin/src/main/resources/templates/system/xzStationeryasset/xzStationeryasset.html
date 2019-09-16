@@ -91,6 +91,12 @@
 					title : '主键',
 					visible: false
 				},
+				
+				{
+					field : 'assetsCode', 
+					title : '资产编码',
+					visible: true
+				},
 				{
 					field : 'region', 
 					title : '地域',
@@ -121,11 +127,6 @@
 					formatter: function(value, row, index) {
 					    return $.table.selectDictLabel(unit, value);
 					}
-				},
-				{
-					field : 'count', 
-					title : '数量',
-					sortable: true
 				},
 				
 		        {

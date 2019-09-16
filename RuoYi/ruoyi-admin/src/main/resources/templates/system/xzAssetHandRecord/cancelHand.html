@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('资产分配')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-xzAssetHandRecord-cancelHand">
+				<input id="id" name="id" th:field="*{apply.applyId}" type="hidden">
+				<input id="recipient" name="recipient" th:value="*{apply.userId}" type="hidden">
+					<div class="form-group">
+						<label class="col-sm-2 control-label">取消原因：</label>
+						<div class="col-sm-8">
+							<textarea id="reason" name="reason" class="form-control" ></textarea>
+						</div>
+					</div>
+		</form>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript">
+		var prefix = ctx + "system/xzAssetHandRecord"
+
+		$("#form-xzAssetHandRecord-cancelHand").validate({
+			rules : {
+				xxxx : {
+					required : true,
+				},
+			},
+			focusCleanup : true
+		});
+		function submitHandler() {
+			if ($.validate.form()) {
+				$.operate.save(prefix + "/cancelHand", $(
+						'#form-xzAssetHandRecord-cancelHand').serialize());
+			}
+		}
+	</script>
+</body>
+</html>

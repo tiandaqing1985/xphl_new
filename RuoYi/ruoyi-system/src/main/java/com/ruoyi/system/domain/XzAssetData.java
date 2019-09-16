@@ -1,7 +1,5 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
@@ -20,6 +18,8 @@ public class XzAssetData extends BaseEntity
 	private Long parentId;
 	/** 资产类型名称 */
 	private String name;
+	
+	private String code;
 
 	public void setId(Long id) 
 	{
@@ -48,16 +48,18 @@ public class XzAssetData extends BaseEntity
 	{
 		return name;
 	}
+  
+	public String getCode() {
+		return code;
+	}
 
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("parentId", getParentId())
-            .append("name", getName())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .toString();
-    }
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
+	  @Override
+		public String toString() {
+			return "XzAssetData [id=" + id + ", parentId=" + parentId + ", name=" + name + ", code=" + code + "]";
+		}
+
 }

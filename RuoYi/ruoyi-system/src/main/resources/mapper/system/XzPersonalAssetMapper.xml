@@ -9,6 +9,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="userId"    column="user_id"    />
         <result property="assetId"    column="asset_id"    />
         <result property="assetName"    column="asset_name"    />
+        <result property="assetStatus"    column="asset_status"    />
+        <result property="assetTypeName"    column="asset_type_name"    />
         <result property="useTime"    column="use_time"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -19,12 +21,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="com.ruoyi.system.domain.XzAsstes" id="XzAsstesResult">
         <result property="id"    column="id"    />
-        <result property="assetsId"    column="assets_id"    />
+        <result property="assetsCode"    column="assets_code"    />
         <result property="region"    column="region"    />
         <result property="assetsName"    column="assets_name"    />
         <result property="assetsType"    column="assets_type"    />
         <result property="assetsType2"    column="assets_type2"    />
         <result property="assetsModel"    column="assets_model"    />
+        <result property="assetsStatus"    column="assets_status"    />
         <result property="useStatus"    column="use_status"    />
         <result property="unit"    column="unit"    />
         <result property="brand"    column="brand"    />
@@ -38,11 +41,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
     <select id="selectXzPersonalAssetList" parameterType="XzPersonalAsset" resultMap="XzPersonalAssetResult">
      <!-- <include refid="selectXzPersonalAssetVo"/> -->
-        select pa.id, pa.user_id, pa.asset_id, pa.create_by, pa.create_time, pa.update_by, pa.update_time ,
-        xa.assets_id, xa.region, xa.assets_name, xa.assets_type, xa.assets_type2, xa.assets_model,  xa.unit ,xa.brand,
-        xa.use_status,xa.sort,xa.use_time
+        select pa.id, pa.user_id, pa.asset_id, pa.create_by, pa.create_time, pa.update_by, pa.update_time ,pa.asset_status,
+        xa.assets_code, xa.region, xa.assets_name, xa.assets_type, xa.assets_type2, xa.assets_model,  xa.unit ,xa.brand,
+        xa.use_status,xa.assets_status,xa.sort,xa.use_time,at.name asset_type_name
         from xz_personal_asset pa
         left join xz_asstes xa on xa.id =pa.asset_id 
+        left join xz_asset_type at on at.id =xa.assets_type 
         <where>  
             <if test="id != null "> and pa.id = #{id}</if>
              <if test="assetId != null "> and pa.asset_id = #{assetId}</if>
@@ -62,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="id != null  ">id,</if>
 			<if test="userId != null  ">user_id,</if>
 			<if test="assetId != null  ">asset_id,</if>
+			<if test="assetStatus!= null and assetStatus!='' ">asset_status,</if>
 			<if test="useTime != null  ">use_time,</if>
 			<if test="createBy != null  ">create_by,</if>
 			<if test="createTime != null  ">create_time,</if>
@@ -72,6 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="id != null  ">#{id},</if>
 			<if test="userId != null  ">#{userId},</if>
 			<if test="assetId != null  ">#{assetId},</if>
+			<if test="assetStatus!= null and assetStatus!='' ">#{assetStatus},</if>
 			<if test="useTime != null  ">#{useTime},</if>
 			<if test="createBy != null  ">#{createBy},</if>
 			<if test="createTime != null  ">#{createTime},</if>
@@ -85,6 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null  ">user_id = #{userId},</if>
             <if test="assetId != null  ">asset_id = #{assetId},</if>
+            <if test="assetStatus != null  ">asset_status = #{assetStatus},</if>
             <if test="useTime != null  ">use_time = #{useTime},</if>
             <if test="createBy != null  ">create_by = #{createBy},</if>
             <if test="createTime != null  ">create_time = #{createTime},</if>
@@ -104,5 +111,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+    
+    <update id="updateByAssetUserId" parameterType="XzPersonalAsset">
+    	update xz_personal_asset pa 
+    	left join xz_asstes a on a.id=pa.asset_id and a.use_by=pa.user_id 
+    	set pa.asset_status =a.use_status 
+    	where pa.user_id=#{userId} and pa.asset_status ='2' 
+    </update>
+    <update id="updateByAssetId" parameterType="XzPersonalAsset">
+    	update xz_personal_asset pa 
+    	left join xz_asstes a on a.id=pa.asset_id and a.use_by=pa.user_id 
+    	set pa.asset_status =a.use_status 
+    	where pa.user_id=#{userId} and pa.asset_id=#{assetId} and pa.asset_status ='2'
+    </update>
     
 </mapper>

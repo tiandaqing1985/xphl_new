@@ -58,5 +58,12 @@ public interface XzAssetHandRecordMapper
      * @return 结果
      */
 	public int deleteXzAssetHandRecordByIds(String[] ids);
+
+	/**
+	 * 查询资产分配记录信息 assetId
+	 * @param assetId
+	 * @return
+	 */
+	public XzAssetHandRecord selectXzAssetHandRecordByAssetId(Long assetId);
 	
 }

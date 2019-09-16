@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzAssetRepairMapper">
+
+	<resultMap type="XzAssetRepair" id="XzAssetRepairResult">
+		<result property="repairId" column="repair_id" />
+		<result property="assetId" column="asset_id" />
+		<result property="userId" column="user_id" />
+		<result property="userName" column="user_name" />
+		<result property="repairTime" column="repair_time" />
+		<result property="problemContext" column="problem_context" />
+		<result property="handlerId" column="handler_id" />
+		<result property="handlerTime" column="handler_time" />
+		<result property="inspectorId" column="inspector_id" />
+		<result property="inspectorName" column="inspector_Name" />
+		<result property="repairStatus" column="repair_status" />
+		<result property="repairContext" column="repair_context" />
+		<result property="remark" column="remark" />
+		<result property="createBy" column="create_by" />
+		<result property="createTime" column="create_time" />
+		<result property="updateBy" column="update_by" />
+		<result property="updateTime" column="update_time" />
+		<result property="assetsCode" column="assets_code" />
+		<result property="assetsName" column="assets_name" />
+		<association property="xzAsstes" column="id" javaType="com.ruoyi.system.domain.XzAsstes" resultMap="XzAsstesResult" />
+	</resultMap>
+
+	<resultMap type="com.ruoyi.system.domain.XzAsstes" id="XzAsstesResult">
+		<result property="id" column="id" />
+		<result property="assetsCode" column="assets_code" />
+		<result property="region" column="region" />
+		<result property="assetsName" column="assets_name" />
+		<result property="assetsType" column="assets_type" />
+		<result property="assetsTypeName" column="assets_type_name" />
+		<result property="category" column="category" />
+		<result property="assetsModel" column="assets_model" />
+		<result property="useStatus" column="use_status" />
+		<result property="unit" column="unit" />
+		<result property="brand" column="brand" />
+		<result property="sort" column="sort" />
+		<result property="useTime" column="use_time" />
+	</resultMap>
+
+	<sql id="selectXzAssetRepairVo">
+		select repair_id, asset_id, user_id, repair_time, problem_context,
+		handler_id, handler_time, inspector_id, repair_status, repair_context,
+		remark, create_by, create_time, update_by, update_time from
+		xz_asset_repair
+	</sql>
+
+	<select id="selectXzAssetRepairList" parameterType="XzAssetRepair"
+		resultMap="XzAssetRepairResult">
+		select ar.repair_id,	ar.asset_id,	ar.user_id,	ar.repair_time,	ar.problem_context,	ar.handler_id,	ar.handler_time,	
+		ar.inspector_id,	ar.repair_status,	ar.repair_context,	ar.remark,	ar.create_by,	ar.create_time,	ar.update_by,	
+		ar.update_time,xa.assets_code,xa.assets_name, xa.region,at.name assets_type_name,xa.assets_model,xa.use_status,xa.category,xa.unit ,xa.brand,
+		u.user_name user_name
+		from xz_asset_repair ar
+		left join xz_asstes xa on xa.id =ar.asset_id
+        left join xz_asset_type at on at.id =xa.assets_type 
+        left join sys_user u on u.user_id =ar.user_id
+		<where>
+			ar.repair_status in (1,2)
+			<if test="assetsCode != null and assetsCode !='' "> and xa.assets_code like concat('%', #{assetsCode}, '%')</if>
+			<if test="assetsName != null and assetsName !='' "> and xa.assets_name like concat('%', #{assetsName}, '%')</if>
+			
+		</where>
+	</select>
+
+	<select id="selectXzAssetRepairById" parameterType="Long"
+		resultMap="XzAssetRepairResult">
+		<include refid="selectXzAssetRepairVo" />
+		where repair_id = #{repairId}
+	</select>
+
+	<insert id="insertXzAssetRepair" parameterType="XzAssetRepair">
+		insert into xz_asset_repair
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="repairId != null  ">repair_id,</if>
+			<if test="assetId != null  ">asset_id,</if>
+			<if test="userId != null  ">user_id,</if>
+			<if test="repairTime != null  ">repair_time,</if>
+			<if test="problemContext != null  and problemContext != ''  ">problem_context,</if>
+			<if test="handlerId != null  ">handler_id,</if>
+			<if test="handlerTime != null  ">handler_time,</if>
+			<if test="inspectorId != null  ">inspector_id,</if>
+			<if test="repairStatus != null  and repairStatus != ''  ">repair_status,</if>
+			<if test="repairContext != null  and repairContext != ''  ">repair_context,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+			<if test="createBy != null  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="repairId != null  ">#{repairId},</if>
+			<if test="assetId != null  ">#{assetId},</if>
+			<if test="userId != null  ">#{userId},</if>
+			<if test="repairTime != null  ">#{repairTime},</if>
+			<if test="problemContext != null  and problemContext != ''  ">#{problemContext},</if>
+			<if test="handlerId != null  ">#{handlerId},</if>
+			<if test="handlerTime != null  ">#{handlerTime},</if>
+			<if test="inspectorId != null  ">#{inspectorId},</if>
+			<if test="repairStatus != null  and repairStatus != ''  ">#{repairStatus},</if>
+			<if test="repairContext != null  and repairContext != ''  ">#{repairContext},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+			<if test="createBy != null  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+		</trim>
+	</insert>
+
+	<update id="updateXzAssetRepair" parameterType="XzAssetRepair">
+		update xz_asset_repair
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="assetId != null  ">asset_id = #{assetId},</if>
+			<if test="userId != null  ">user_id = #{userId},</if>
+			<if test="repairTime != null  ">repair_time = #{repairTime},</if>
+			<if test="problemContext != null  and problemContext != ''  ">problem_context = #{problemContext},</if>
+			<if test="handlerId != null  ">handler_id = #{handlerId},</if>
+			<if test="handlerTime != null  ">handler_time = #{handlerTime},</if>
+			<if test="inspectorId != null  ">inspector_id = #{inspectorId},</if>
+			<if test="repairStatus != null  and repairStatus != ''  ">repair_status = #{repairStatus},</if>
+			<if test="repairContext != null  and repairContext != ''  ">repair_context = #{repairContext},</if>
+			<if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+			<if test="createBy != null  ">create_by = #{createBy},</if>
+			<if test="createTime != null  ">create_time = #{createTime},</if>
+			<if test="updateBy != null  ">update_by = #{updateBy},</if>
+			<if test="updateTime != null  ">update_time = #{updateTime},</if>
+		</trim>
+		where repair_id = #{repairId}
+	</update>
+
+	<delete id="deleteXzAssetRepairById" parameterType="Long">
+		delete from xz_asset_repair where repair_id = #{repairId}
+	</delete>
+
+	<delete id="deleteXzAssetRepairByIds" parameterType="String">
+		delete from xz_asset_repair where repair_id in
+		<foreach item="repairId" collection="array" open="("
+			separator="," close=")">
+			#{repairId}
+		</foreach>
+	</delete>
+
+</mapper>
