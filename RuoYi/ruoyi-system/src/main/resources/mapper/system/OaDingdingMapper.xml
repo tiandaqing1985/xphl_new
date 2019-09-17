@@ -50,8 +50,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="userId != null">and user_id = #{userId}</if>
 			<if test="userName != null and userName != ''">and user_name = #{userName}</if>
 			<if test="startTime != null and endTime != null"> and userCheckTime between #{startTime} and #{endTime}</if>
-			<if test="checkType != null and checkType != ''">and checkType= #{checkType}</if>
+			<if test="checkType != null and checkType != ''">and checkType = #{checkType}</if>
+			<if test="workDate != null">and workDate = #{workDate}</if>
 		</where> 
+		ORDER BY checkType DESC
     </select>
     
     <select id="selectOaDingdingById" parameterType="Long" resultMap="OaDingdingResult">
@@ -211,4 +213,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ORDER BY
 			workDate
     </select>
+        
+     <!-- 查询具体某个员工在10:00 - 10:30之间的考勤 -->
+    <select id="selectOaDingByTime2"  parameterType="Dingding" resultMap="DingdingResult">
+		SELECT
+			* 
+		FROM
+			oa_dingding 
+		<where>
+			<if test="workDate != null">and workDate = #{workDate}</if>
+			<if test="userName != null">and user_name = #{userName}</if>
+			AND HOUR ( userCheckTime ) = 10 
+			AND MINUTE ( userCheckTime )  &lt;= 30 
+		</where>
+		ORDER BY
+			workDate
+    </select>
+    
 </mapper>

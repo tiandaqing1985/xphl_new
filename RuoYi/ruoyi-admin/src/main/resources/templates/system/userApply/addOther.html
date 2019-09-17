@@ -82,10 +82,13 @@
 			debugger;
 		   var flag = false;//提交flag 
 		   var repeatFlag = false;
+		   var startFlag = false;
+		   var beforeFlag = false;
 	       if ($.validate.form()) {
 	    	   var applyType = $("#applyType").val();
 	    	   var starttime = $("#starttime").val();
-			   var endtime = $("#endtime").val();
+			   var endtime = $("#endtime").val();			 
+			   
 			   if(endtime < starttime){
 					p02.innerText="结束时间不能小于开始时间";
 					$("#p02").css("color","red");
@@ -102,7 +105,30 @@
 				   return;
 			   }
 			   
-			 //验证所请假期 是否与已有申请时段重复 
+			 //验证起始时间是否是昨天之前的时间
+				 $.ajax({
+					type:"post",
+					async:false,
+					url:"/system/userApply/ifBefore",
+					data:{"starttime":starttime,"endtime":endtime },
+					dataType:"json",
+					success:function(result){
+						 if(result == "0"){
+							 beforeFlag = true;
+						}
+						else{
+							beforeFlag = false;
+							$.modal.alertWarning("只能提交昨天（含）之前的加班申请。");
+							return;
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				}); 
+			 
+		if(beforeFlag){
+				 //验证所请假期 是否与已有申请时段重复 
 				 $.ajax({
 					type:"post",
 					async:false,
@@ -124,6 +150,29 @@
 					}
 				}); 
 				
+			//验证起始时间是否在加班时间范围内
+				 $.ajax({
+					type:"post",
+					async:false,
+					url:"/system/userApply/ifSatisfy",
+					data:{"starttime":starttime,"endtime":endtime },
+					dataType:"json",
+					success:function(result){
+						 if(result == "0"){
+							 startFlag = true;
+						}
+						else{
+							startFlag = false;
+							$.modal.alertWarning("开始时间未达到加班申请时间，请重新填写。");
+							return;
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				}); 
+				 
+			 //验证选择的加班开始时间是否超过可选时间
 			   $.ajax({
 					type:"post",
 					async:false,
@@ -145,9 +194,11 @@
 						$.modal.alertWarning("请联系管理员");
 					}
 				});
-			   if(flag && repeatFlag){
+			   if(flag && repeatFlag && startFlag){
 				   $.operate.save(prefix + "/addOther", $('#form-userApply-addOther').serialize());
 			   }
+		}	 
+			
 	           
 	       }
 	   };

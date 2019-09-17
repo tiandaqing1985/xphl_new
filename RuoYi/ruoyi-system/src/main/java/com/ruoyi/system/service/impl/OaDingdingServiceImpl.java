@@ -383,12 +383,12 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 	}
 
 	@Override
-	public int updateOaDingDingByElasticTime() {
+	public int updateOaDingDingByElasticTime(String yesterday) {
 		Dingding ding = new Dingding();
 		
 		try {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-			Date date = sdf.parse("2019-08-26"); 
+			Date date = sdf.parse(yesterday); 
 			ding.setWorkDate(date);
 			//查询十点-十点半之间迟到的记录
 			List<Dingding> dingList = oaDingdingMapper.selectOaDingByTime(ding);

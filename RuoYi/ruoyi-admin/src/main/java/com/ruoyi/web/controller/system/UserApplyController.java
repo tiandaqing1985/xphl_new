@@ -329,7 +329,34 @@ public class UserApplyController extends BaseController
 		int i = userApplyService.addOvertimeSave(userApply,ShiroUtils.getUserId());
 		return toAjax(i);
 	}
-		
+	
+	/**
+	 * 验证起始时间是否在加班时间范围内
+	 */
+    @PostMapping("/ifSatisfy")
+    @ResponseBody
+    public String ifSatisfy(UserApply userApply)
+    {
+    	userApply.setUserId(ShiroUtils.getUserId());
+    	return userApplyService.selectUserApplyListByTime(userApply);
+    }
+    
+	/**
+	 * 验证开始时间是否为昨天之前的时间
+	 */
+    @PostMapping("/ifBefore")
+    @ResponseBody
+    public String ifBefore(UserApply userApply)
+    {
+    	Date nowDate = new Date();
+		//判断起始时间是否是昨天的时间
+		if(userApply.getStarttime().getTime() > nowDate.getTime()){
+			return "1";
+		}else{
+	    	return "0";
+		}
+    }
+    
 	/**
 	 * 验证是否能做销假操作
 	 */
@@ -347,7 +374,7 @@ public class UserApplyController extends BaseController
     	}
     }
     /**
-	 * 验证是否能已经审核过
+	 * 验证是否已经审核过
 	 */
     @PostMapping("/ifTakeback")
     @ResponseBody

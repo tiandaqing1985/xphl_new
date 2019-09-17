@@ -140,7 +140,9 @@ public class DingDingTask{
 	    
         List<OaDingding> users = new ArrayList<>();
         List<OaDingding> dataList = getAttendances(allUserIdList,users, workDateFrom,  workDateTo, accessToken);
-        dingdingService.insertForeach(dataList);
+        if(dataList.size() != 0){
+            dingdingService.insertForeach(dataList);
+        }
 //        System.out.println("获取从昨天0点到今天0点时间的打卡记录"+ Arrays.asList(users));
 
         
@@ -152,7 +154,13 @@ public class DingDingTask{
 	
 	public void dingElasticTime(){
 		//弹性工作制
-		dingdingService.updateOaDingDingByElasticTime();
+		//设置查询时间
+		Date date = new Date();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = sdf.format(date);
+        
+        String yesterday = getPreDayOrAfterDay(currentDate, -1);//-1是前一天， +1是后一天
+		dingdingService.updateOaDingDingByElasticTime(yesterday);
 	}
 	
 	//待审批的请假记录和外出报备记录更新在钉钉考勤里

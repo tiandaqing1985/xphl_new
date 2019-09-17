@@ -14,10 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ruoyi.system.mapper.HolidayMapper;
 import com.ruoyi.system.mapper.HolidayRecordMapper;
+import com.ruoyi.system.mapper.OaDingdingMapper;
+import com.ruoyi.system.mapper.OaWorkingCalendarMapper;
 import com.ruoyi.system.mapper.SysDictDataMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.mapper.UserApplyMapper;
 import com.ruoyi.system.mapper.UserApprovalMapper;
+import com.ruoyi.system.domain.Dingding;
 import com.ruoyi.system.domain.Holiday;
 import com.ruoyi.system.domain.HolidayRecord;
 import com.ruoyi.system.domain.SysDictData;
@@ -25,6 +28,7 @@ import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.UserApply;
 import com.ruoyi.system.domain.UserApplyList;
 import com.ruoyi.system.domain.UserApproval;
+import com.ruoyi.system.domain.WorkingCalendar;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IUserApplyService;
@@ -62,7 +66,11 @@ public class UserApplyServiceImpl implements IUserApplyService
     
     @Autowired
     private SysDictDataMapper dictDataMapper;
-    
+	@Autowired
+	private OaDingdingMapper oaDingdingMapper;
+	@Autowired
+	private OaWorkingCalendarMapper oaWorkingCalendarMapper;
+	
 	/**
      * 查询申请信息
      * 
@@ -873,5 +881,67 @@ public class UserApplyServiceImpl implements IUserApplyService
 		userApprovalMapper.insertUserApproval(personnel);
 	
 		return 1;
+	}
+
+	@Override
+	public String selectUserApplyListByTime(UserApply userApply) {
+		Date nowDate = new Date();
+		//判断起始时间是否是昨天的时间
+		if(userApply.getStarttime().getTime() > nowDate.getTime()){
+			return "1";
+		}
+		
+		SysUser user = userMapper.selectUserById(userApply.getUserId());
+		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
+		String workDate = sd.format(userApply.getStarttime());
+		
+		Date wDate = null;
+		try {
+			wDate = sd.parse(workDate);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//判断申请加班日期是否是特殊节假日
+		WorkingCalendar workingCalendar= new WorkingCalendar();
+		workingCalendar.setDate(wDate);
+		List<WorkingCalendar> wList = oaWorkingCalendarMapper.selectWorkingCalendarList(workingCalendar);
+		if(wList.get(0).getIsWorkDay() == 0){
+			return "0";
+		}
+		
+		//获取10:00 - 10:30之间的考勤
+		Dingding ding = new Dingding();
+		ding.setUserName(user.getUserName());
+		ding.setWorkDate(wDate);
+		List<Dingding> dingList = oaDingdingMapper.selectOaDingByTime2(ding);
+		if(dingList.size() == 0) return "0";
+		
+		Date onduty = dingList.get(0).getUserCheckTime();		
+			
+		//9h之后的正常下班时间
+		Date normal = getWorkDate(onduty,9);
+		
+		//判断申请加班起始时间是否在加班时间之后
+		if(userApply.getStarttime().after(normal)){//a.after(b)返回一个boolean，如果a的时间在b之后（不包括等于）返回true
+			return "0";
+		}else if(userApply.getStarttime().equals(normal)){
+			return "0";
+		}
+		return "1";
+	}
+	
+	/**
+	 * 计算n小时后的时间
+	 * @param 请假时间
+	 * @return 标准打卡时间
+	 */
+	private Date getWorkDate(Date d,int n){
+		Date result = new Date();
+		long t = d.getTime();
+		t+=n*60*60*1000;
+		result.setTime(t);
+		return result; 
 	}
 }

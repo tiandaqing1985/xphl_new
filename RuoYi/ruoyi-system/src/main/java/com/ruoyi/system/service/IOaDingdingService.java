@@ -72,5 +72,5 @@ public interface IOaDingdingService
 	 * 弹性工作制
 	 * @return
 	 */
-	public int updateOaDingDingByElasticTime();
+	public int updateOaDingDingByElasticTime(String yesterday);
 }
