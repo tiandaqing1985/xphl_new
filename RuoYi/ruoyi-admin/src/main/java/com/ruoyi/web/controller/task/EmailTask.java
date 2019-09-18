@@ -5,14 +5,21 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.ruoyi.common.config.Global;
 import com.ruoyi.system.domain.Holiday;
+import com.ruoyi.system.domain.OaOut;
+import com.ruoyi.system.domain.OutApproval;
+import com.ruoyi.system.domain.QueryConditions;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.email.EmailSend;
+import com.ruoyi.system.mapper.OaOutMapper;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.mapper.UserApprovalMapper;
@@ -23,16 +30,20 @@ import com.ruoyi.system.service.ISysUserService;
 public class EmailTask {
 	
 	@Autowired
-	UserApprovalMapper userApprovalMapper;
+	private UserApprovalMapper userApprovalMapper;
 	@Autowired
-	SysUserMapper userMapper;
+	private SysUserMapper userMapper;
 	@Autowired
-	SysDeptMapper deptMapper;
+	private SysDeptMapper deptMapper;
+	@Autowired
+	private OaOutMapper oaOutMapper;
 	@Autowired
 	private ISysUserService userService;
 	@Autowired
 	private IHolidayService holidayService;
 	
+	private static final Set<SysDept> dSet = new TreeSet<SysDept>();  //部门集合                                                                   
+
 	//三个月试用期到期提醒(提前两周)
 	//六个月试用期到期提醒(提前一个月)
 	//收件人：部门leader、宋彬、王梦 、辛本荣
@@ -78,9 +89,8 @@ public class EmailTask {
 				
 				  EmailSend es = new EmailSend();
 		  			try {
-		  				es.sendMail(leaderEmail, 
-//		  		  		es.sendMail("wugaofang@perfect-cn.cn", 
-		  		  				copyto,
+		  				es.sendMail(leaderEmail, copyto,
+//		  		  		es.sendMail("wugaofang@perfect-cn.cn", null,
 		  						"三/六个月考核到期提醒",  
 		  						"<font size='3'>领导好:<br/><br/>&#12288;&#12288;您部门员工<font size='4' color='red'>"+user.getUserName()+"</font>三个月考核将于<font size='4' color='red'>"
 		  						+firstphase+"</font>结束，请在此之前将考核结果反馈给人力资源部。<br/><br/>"
@@ -101,9 +111,8 @@ public class EmailTask {
 	        	
 	        	  EmailSend es = new EmailSend();
 	  			try {
-	  				es.sendMail(leaderEmail, 
-//	  				es.sendMail("wugaofang@perfect-cn.cn", 
-	  						copyto,
+	  				es.sendMail(leaderEmail, copyto,
+//	  		  				es.sendMail("wugaofang@perfect-cn.cn", null,
 	  						"三/六个月考核到期提醒",  
 	  						"<font size='3'>领导好:<br/><br/>&#12288;&#12288;您部门员工<font size='4' color='red'>"+user.getUserName()+"</font>六个月试用期将于<font size='4' color='red'>"
 	  						+secondphase+"</font>结束，请在此之前将考核结果反馈给人力资源部。<br/><br/>"
@@ -274,28 +283,81 @@ public class EmailTask {
 		}
 	}
 	
+
 	//邮件审批提醒
 	public void sendEmail(){
 		//查询所有审批人	
 		List<SysUser> leaderList = userMapper.selectLeaderList();
+		QueryConditions query = new QueryConditions();
 		
 		int count = 0;//记录邮件发送数量
 		for(SysUser user : leaderList){
+			//leader
+			SysDept dept = deptMapper.selectDeptByUserId(user.getUserId());//根据审批人id查询其下所有部门
+			
+			if(dept == null || "".equals(dept)) continue;
+			
+			dept = new SysDept();
+			dept.setLeader(user.getUserName());
+			dSet.clear();
+			getDeptList(dept);	
+			
+			//查询未审批请假记录
+			query.setdSet(dSet);
+			query.setApproverId(user.getUserId());//审批人ID
+			query.setApprovalState("3");//审批意见（1同意，2驳回 ，3未操作）
+			query.setApprovalSight("1");//可见性（1可见 0不可见）
+			query.setApplyState("1");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+			List<QueryConditions> cList = userApprovalMapper.selectQueryConditionsList(query);
+			
+			
+			//查询外出报备待审批列表
+			OaOut oaOut = new OaOut();
+			oaOut.setApprovalId(user.getUserId());
+			oaOut.setApprovalState("3");//审批状态（1同意，2驳回 ，3未操作）
+			oaOut.setApprovalSight("1");
+	        List<OutApproval> list = oaOutMapper.selectOutApprovalList(oaOut);
+
+			if(cList.size() == 0 && list.size() == 0) continue;
+
 			EmailSend es = new EmailSend();
 			 try {
-				es.sendMail(user.getEmail(), null,
-//		  		es.sendMail("wugaofang@perfect-cn.cn", 
-						"审批提醒",  
-						"您的人事OA系统中有未审批的申请，烦请尽快完成审批。谢谢 ！<br/><br/> OA系统登陆网址："+
-						"<a href=\"\\192.168.88.191\"\">http://192.168.88.191/</a>", 
-						Global.getEmail(), Global.getPassword());
-				count++;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+				 if(cList.size() != 0 || list.size() != 0){
+					 System.out.println("\n"+user.getEmail()+"\n");
+
+						es.sendMail(user.getEmail(), null,
+//				  		es.sendMail("wugaofang@perfect-cn.cn", null,
+								"审批提醒",  
+								"您的人事OA系统中有未审批的申请，烦请尽快完成审批。谢谢 ！<br/><br/> OA系统登陆网址："+
+								"<a href=\"\\192.168.88.191\"\">http://192.168.88.191/</a>", 
+								Global.getEmail(), Global.getPassword());
+						count++;
+				 }
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 		}
 		System.out.println("\n 审批提醒已发送邮件数量："+count+"\n");
 	}
+	
+	/**
+	 * 递归实现获取当前用户负责的所有部门id
+	 * @param dept
+	 * @author wgf
+	 */
+	private void getDeptList(SysDept dept){
+		SysDept dept2 = new SysDept();
+		List<SysDept> deptList = deptMapper.selectDeptList(dept);
+		dSet.addAll(deptList);
+		for(SysDept d : deptList){
+			dept2.setParentId(d.getDeptId());
+			List<SysDept> deptList2 = deptMapper.selectDeptList(dept2);
+			if(deptList2 != null && !"".equals(deptList2) && deptList2.size() != 0){
+				getDeptList(dept2);
+			}
+		}
+	}
+	
 	 /** 
 	    *字符串的日期格式的计算 
 	    */  
