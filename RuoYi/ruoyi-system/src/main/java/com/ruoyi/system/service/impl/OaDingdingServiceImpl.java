@@ -77,7 +77,8 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 	@Override
 	public List<Dingding> selectOaDingdingList(Dingding ding)
 	{
-		if(ding.getUserId() == 1){//admin用户
+		if(ding.getUserId() == 1 || ding.getUserId() == 222L){//admin用户
+			ding.setUserId(1L);
 			return oaDingdingMapper.selectDingData(ding);
 		}
 		

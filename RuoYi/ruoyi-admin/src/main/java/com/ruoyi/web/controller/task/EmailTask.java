@@ -47,7 +47,7 @@ public class EmailTask {
 	//三个月试用期到期提醒(提前两周)
 	//六个月试用期到期提醒(提前一个月)
 	//收件人：部门leader、宋彬、王梦 、辛本荣
-	public void sendEmail4(){
+	/*public void sendEmail4(){
 
 		List<SysUser> userList = userService.selectAllUser();
 		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
@@ -134,7 +134,7 @@ public class EmailTask {
 	
 	}
 	
-	//假期到期提醒
+	//假期到期提醒 暂停20190923
 	public void sendEmail3(){
 		List<SysUser> userList = userService.selectAllUser();
 		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
@@ -310,13 +310,16 @@ public class EmailTask {
 			query.setApplyState("1");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
 			List<QueryConditions> cList = userApprovalMapper.selectQueryConditionsList(query);
 			
+			System.out.println("\n"+"未审批请假总数："+cList.size()+"\n");
 			
 			//查询外出报备待审批列表
 			OaOut oaOut = new OaOut();
 			oaOut.setApprovalId(user.getUserId());
 			oaOut.setApprovalState("3");//审批状态（1同意，2驳回 ，3未操作）
 			oaOut.setApprovalSight("1");
+			oaOut.setState("1");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
 	        List<OutApproval> list = oaOutMapper.selectOutApprovalList(oaOut);
+			System.out.println("\n"+"未审批外出报备请假总数："+list.size()+"\n");
 
 			if(cList.size() == 0 && list.size() == 0) continue;
 
@@ -327,8 +330,8 @@ public class EmailTask {
 
 						es.sendMail(user.getEmail(), null,
 //				  		es.sendMail("wugaofang@perfect-cn.cn", null,
-								"审批提醒",  
-								"您的人事OA系统中有未审批的申请，烦请尽快完成审批。谢谢 ！<br/><br/> OA系统登陆网址："+
+								"审批提醒",
+								"您的人事OA系统中有未审批的申请，烦请尽快完成审批。谢谢 ！！<br/><br/> OA系统登陆网址："+
 								"<a href=\"\\192.168.88.191\"\">http://192.168.88.191/</a>", 
 								Global.getEmail(), Global.getPassword());
 						count++;
@@ -339,7 +342,7 @@ public class EmailTask {
 		}
 		System.out.println("\n 审批提醒已发送邮件数量："+count+"\n");
 	}
-	
+	*/
 	/**
 	 * 递归实现获取当前用户负责的所有部门id
 	 * @param dept

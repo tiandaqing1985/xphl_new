@@ -158,4 +158,7 @@ public interface IUserApplyService
 	 * @return
 	 */
 	public String selectUserApplyListByTime(UserApply userApply);
+	
+	/** 判断员工是否通过试用一期 */
+	public String ifPass(Long userId);
 }

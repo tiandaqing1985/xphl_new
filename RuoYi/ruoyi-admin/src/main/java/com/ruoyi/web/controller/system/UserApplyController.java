@@ -265,7 +265,7 @@ public class UserApplyController extends BaseController
 		if(userApply.get(0).getLeaveType().equals("年假") || userApply.get(0).getLeaveType().equals("调休")){
 			//在年假调休使用记录中找到该申请生成的记录
 			HolidayRecord holidayRecord = new HolidayRecord();
-			holidayRecord.setUseApplyId(ids);
+			holidayRecord.setApplyId(ids);
 			List<HolidayRecord> holidayRecordList = holidayRecordServiceImpl.selectHolidayRecordList(holidayRecord);
 			for(HolidayRecord holidayRecord1 : holidayRecordList){
 				
@@ -329,6 +329,16 @@ public class UserApplyController extends BaseController
 		int i = userApplyService.addOvertimeSave(userApply,ShiroUtils.getUserId());
 		return toAjax(i);
 	}
+	
+	/**
+	 * 验证员工是否通过试用一期
+	 * */
+	@PostMapping("/ifPass")
+	@ResponseBody
+	public String ifPass(){
+		return userApplyService.ifPass(ShiroUtils.getUserId());
+	}
+	
 	
 	/**
 	 * 验证起始时间是否在加班时间范围内

@@ -77,7 +77,7 @@ public class DingDingTask{
 		ding.updateDing();
 	}
 	
-	public void dingDingTask() throws Exception
+	/*public void dingDingTask() throws Exception
 	{		
 
 		DingTalkClient client = new DefaultDingTalkClient("");
@@ -162,7 +162,7 @@ public class DingDingTask{
         String yesterday = getPreDayOrAfterDay(currentDate, -1);//-1是前一天， +1是后一天
 		dingdingService.updateOaDingDingByElasticTime(yesterday);
 	}
-	
+	*/
 	//待审批的请假记录和外出报备记录更新在钉钉考勤里
 	public void updateDing(){
 		System.out.println("\n 待审批的请假记录和外出报备记录更新在钉钉考勤里\n");

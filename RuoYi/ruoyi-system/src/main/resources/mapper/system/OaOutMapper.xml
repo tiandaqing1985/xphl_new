@@ -84,8 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			'申请成功' 
 			WHEN ou.state = 4 THEN
 			'申请失败' 
-			WHEN ou.state = 5 THEN
-			'已销假' ELSE '' 
+			 ELSE '' 
 		END 
 		) state,
 		ou.create_date,

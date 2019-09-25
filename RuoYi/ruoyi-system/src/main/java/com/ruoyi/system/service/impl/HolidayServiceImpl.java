@@ -186,7 +186,7 @@ public class HolidayServiceImpl implements IHolidayService
 	 */
 	@Override
 	public List<RestHoliday> selectRestByUserId(SysUser sysUser) {
-		if(sysUser.getUserId() == 1){//admin用户
+		if(sysUser.getUserId() == 1 || sysUser.getUserId() == 222L){//admin用户
 			return holidayMapper.selectRestByUserId(sysUser);
 		}
 		SysUser user = userMapper.selectUserById(sysUser.getUserId());//查出当前用户

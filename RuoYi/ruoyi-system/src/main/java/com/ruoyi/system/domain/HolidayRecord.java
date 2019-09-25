@@ -1,7 +1,5 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
@@ -21,7 +19,7 @@ public class HolidayRecord extends BaseEntity
 	/** 用户id */
 	private Long userId;
 	/** 申请id */
-	private Long useApplyId;
+	private Long applyId;
 	/** 使用天数 */
 	private Double value;
 	/** 使用状态(1申请中，2已使用，3撤销，4销假，5申请失败) */
@@ -50,15 +48,15 @@ public class HolidayRecord extends BaseEntity
 	{
 		return holidayId;
 	}
-	public void setUseApplyId(Long useApplyId) 
-	{
-		this.useApplyId = useApplyId;
+	
+	public Long getApplyId() {
+		return applyId;
 	}
 
-	public Long getUseApplyId() 
-	{
-		return useApplyId;
+	public void setApplyId(Long applyId) {
+		this.applyId = applyId;
 	}
+
 	public void setValue(Double value) 
 	{
 		this.value = value;
@@ -102,13 +100,12 @@ public class HolidayRecord extends BaseEntity
 		this.recordHolidayType = recordHolidayType;
 	}
 
+	@Override
 	public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("holidayId", getHolidayId())
-            .append("useApplyId", getUseApplyId())
-            .append("value", getValue())
-            .append("useState", getUseState())
-            .toString();
-    }
+		return "HolidayRecord [id=" + id + ", holidayId=" + holidayId + ", userId=" + userId + ", applyId=" + applyId
+				+ ", value=" + value + ", useState=" + useState + ", recordHolidayType=" + recordHolidayType
+				+ ", holiday=" + holiday + "]";
+	}
+
+	
 }

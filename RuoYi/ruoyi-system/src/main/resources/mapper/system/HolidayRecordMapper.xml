@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="HolidayRecord" id="HolidayRecordResult">
         <result property="id"    column="id"    />
         <result property="holidayId"    column="holiday_id"    />
-        <result property="useApplyId"    column="use_apply_id"    />
+        <result property="applyId"    column="apply_id"    />
         <result property="value"    column="value"    />
         <result property="useState"    column="use_state"    />
         <result property="recordHolidayType"    column="holiday_type"    />
@@ -28,7 +28,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
 	
 	<sql id="selectHolidayRecordVo">
-        SELECT r.id, r.holiday_id, r.use_apply_id, r.value, r.use_state,
+        SELECT r.id, r.holiday_id, r.apply_id, r.value, r.use_state,
        		   h.`apply_id`, h.`availability`, h.`createdate`, h.`holiday_type`, h.`overdate`,h.`user_id`, h.`value`
     	FROM sys_holiday_record r
 			LEFT JOIN sys_holiday h ON r.`holiday_id` = h.`id`
@@ -39,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="id != null "> and r.id = #{id}</if>
              <if test="holidayId != null "> and r.holiday_id = #{holidayId}</if>
-             <if test="useApplyId != null "> and r.use_apply_id = #{useApplyId}</if>
+             <if test="applyId != null "> and r.apply_id = #{applyId}</if>
              <if test="value != null "> and r.value = #{value}</if>
              <if test="useState != null  and useState != '' "> and r.use_state = #{useState}</if>
              <if test="recordHolidayType != null  and recordHolidayType != '' ">h.holiday_type = #{recordHolidayType}</if>
@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <!-- 查询使用的假期记录 -->
     <select id="selectUsedHolidayRecordList" parameterType="HolidayRecord" resultMap="HolidayRecordResult">
-        SELECT r.id, r.holiday_id, r.use_apply_id, r.value, 
+        SELECT r.id, r.holiday_id, r.apply_id, r.value, 
         	   (CASE
 		         WHEN r.use_state = 1 THEN
 		          '申请中'
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
              <if test="id != null "> and r.id = #{id}</if>
              <if test="holidayId != null "> and r.holiday_id = #{holidayId}</if>
-             <if test="useApplyId != null "> and r.use_apply_id = #{useApplyId}</if>
+             <if test="applyId != null "> and r.apply_id = #{applyId}</if>
              <if test="value != null "> and r.value = #{value}</if>
              and r.use_state in (1, 2)
              <if test="recordHolidayType != null  and recordHolidayType != '' ">and h.holiday_type = #{recordHolidayType}</if>
@@ -80,13 +80,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into sys_holiday_record
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="holidayId != null  ">holiday_id,</if>
-			<if test="useApplyId != null  ">use_apply_id,</if>
+			<if test="applyId != null  ">apply_id,</if>
 			<if test="value != null  ">value,</if>
 			<if test="useState != null  and useState != ''  ">use_state,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="holidayId != null  ">#{holidayId},</if>
-			<if test="useApplyId != null  ">#{useApplyId},</if>
+			<if test="applyId != null  ">#{applyId},</if>
 			<if test="value != null  ">#{value},</if>
 			<if test="useState != null  and useState != ''  ">#{useState},</if>
          </trim>
@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_holiday_record
         <trim prefix="SET" suffixOverrides=",">
             <if test="holidayId != null  ">holiday_id = #{holidayId},</if>
-            <if test="useApplyId != null  ">use_apply_id = #{useApplyId},</if>
+            <if test="applyId != null  ">apply_id = #{applyId},</if>
             <if test="value != null  ">value = #{value},</if>
             <if test="useState != null  and useState != ''  ">use_state = #{useState},</if>
         </trim>
@@ -110,7 +110,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="value != null  ">value = #{value},</if>
             <if test="useState != null  and useState != ''  ">use_state = #{useState},</if>
         </trim>
-        where use_apply_id = #{useApplyId}
+        where apply_id = #{applyId}
     </update>
 
 	<delete id="deleteHolidayRecordById" parameterType="Long">

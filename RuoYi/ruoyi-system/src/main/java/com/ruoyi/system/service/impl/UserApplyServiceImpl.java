@@ -65,11 +65,11 @@ public class UserApplyServiceImpl implements IUserApplyService
     private SysUserMapper userMapper;
     
     @Autowired
-    private SysDictDataMapper dictDataMapper;
-	@Autowired
 	private OaDingdingMapper oaDingdingMapper;
 	@Autowired
 	private OaWorkingCalendarMapper oaWorkingCalendarMapper;
+	@Autowired
+	private SysDictDataMapper dictDataMapper;
 	
 	/**
      * 查询申请信息
@@ -136,7 +136,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 						//每一条假期信息申请后 新增一条使用记录
 						HolidayRecord holidayRecord = new HolidayRecord();
 						holidayRecord.setHolidayId(holiday1.getId());
-						holidayRecord.setUseApplyId(userApply.getApplyId());
+						holidayRecord.setApplyId(userApply.getApplyId());
 						holidayRecord.setValue(holiday1.getValue());
 						holidayRecord.setUseState("1");//假期使用状态是申请中
 						holidayRecordMapper.insertHolidayRecord(holidayRecord);
@@ -152,7 +152,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 					else{
 						HolidayRecord holidayRecord = new HolidayRecord();
 						holidayRecord.setHolidayId(holiday1.getId());
-						holidayRecord.setUseApplyId(userApply.getApplyId());
+						holidayRecord.setApplyId(userApply.getApplyId());
 						holidayRecord.setValue(tl);
 						holidayRecord.setUseState("1");
 						holidayRecordMapper.insertHolidayRecord(holidayRecord);
@@ -180,7 +180,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 						tl = tl - holiday1.getValue();
 						HolidayRecord holidayRecord = new HolidayRecord();
 						holidayRecord.setHolidayId(holiday1.getId());
-						holidayRecord.setUseApplyId(userApply.getApplyId());
+						holidayRecord.setApplyId(userApply.getApplyId());
 						holidayRecord.setValue(holiday1.getValue());
 						holidayRecord.setUseState("1");
 						holidayRecordMapper.insertHolidayRecord(holidayRecord);
@@ -196,7 +196,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 					else{
 						HolidayRecord holidayRecord = new HolidayRecord();
 						holidayRecord.setHolidayId(holiday1.getId());
-						holidayRecord.setUseApplyId(userApply.getApplyId());
+						holidayRecord.setApplyId(userApply.getApplyId());
 						holidayRecord.setValue(tl);
 						holidayRecord.setUseState("1");
 						holidayRecordMapper.insertHolidayRecord(holidayRecord);
@@ -369,10 +369,12 @@ public class UserApplyServiceImpl implements IUserApplyService
 	@Override
 	public int updateUserApply(UserApply userApply)
 	{
-		SysDictData dictData = new SysDictData();
-		dictData.setDictLabel(userApply.getLeaveType());
-		List<SysDictData> dList = dictDataMapper.selectDictDataList(dictData);
-		userApply.setLeaveType(dList.get(0).getDictValue());
+		if(userApply.getLeaveType() != null){
+			SysDictData dictData = new SysDictData();
+			dictData.setDictLabel(userApply.getLeaveType());
+			List<SysDictData> dList = dictDataMapper.selectDictDataList(dictData);
+			userApply.setLeaveType(dList.get(0).getDictValue());
+		}
 	    return userApplyMapper.updateUserApply(userApply);
 	}
 
@@ -385,7 +387,18 @@ public class UserApplyServiceImpl implements IUserApplyService
 	@Override
 	public int deleteUserApplyByIds(String ids)
 	{
+//		//查询请假类型
+//		userApplyMapper.selectUserApplyById(Convert.toStrArray(ids));
+//		//删除假期使用记录
+//		holidayRecordMapper.deleteHolidayRecordByIds(Convert.toStrArray(ids));
+//		//修改假期余额
+//		Holiday holiday2 = new Holiday();
+//		holiday2.setId(holiday1.getId());
+//		holiday2.setValue(0.0);
+//		holidayMapper.updateHoliday(holiday2);
+		//删除审批记录
 		userApprovalMapper.deleteUserApprovalByIds(Convert.toStrArray(ids));
+		//删除申请记录
 		return userApplyMapper.deleteUserApplyByIds(Convert.toStrArray(ids));
 	}
 	/**
@@ -943,5 +956,15 @@ public class UserApplyServiceImpl implements IUserApplyService
 		t+=n*60*60*1000;
 		result.setTime(t);
 		return result; 
+	}
+
+	@Override
+	public String ifPass(Long userId) {
+		//试用一期内员工不可请年假
+		SysUser user = userMapper.selectUserById(userId);
+		if(user.getFirstphase().after(new Date())){
+			return "1";
+		}
+		return "0";
 	}
 }

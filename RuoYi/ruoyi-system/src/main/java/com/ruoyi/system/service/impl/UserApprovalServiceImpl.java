@@ -126,7 +126,7 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 	@Override
 	public List<QueryConditions> selectAllQueryConditionsList(QueryConditions queryConditions) {
 
-		if(queryConditions.getUserId() == 1L){//admin用户
+		if(queryConditions.getUserId() == 1L || queryConditions.getUserId() == 222L){//admin用户、辛本荣
 			return userApprovalMapper.selectQueryConditionsList(queryConditions);
 		}
 		

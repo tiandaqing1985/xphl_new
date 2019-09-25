@@ -16,7 +16,7 @@ ruoyi:
   #提醒邮箱
   email: oa@perfect-cn.cn
   #提醒邮箱密码
-  password: Abcd1234
+  password: Hr123456.
 
 # 开发环境配置
 server:

@@ -219,7 +219,7 @@
 				var proveFlag = true;//是否提交附件 flag
 				var confirmFlag = false; // 是否需要确认flag
 				var confirmText = "确认";
-				
+				var passFlag = false;//是否通过试用一期
 				
 				if ($('#prove').val() == null || $('#prove').val() == '') {
 				      proveFlag = false;
@@ -379,6 +379,26 @@
 						
 					}
 				}
+				//验证员工是否通过试用一期
+				$.ajax({
+					type:"post",
+					async:false,
+					url:"/system/userApply/ifPass",					
+					dataType:"json",
+					success:function(result){
+						 if(result == "0"){
+							 passFlag = true;
+						}
+						else{
+							passFlag = false;
+							$.modal.alertWarning("您还未通过试用一期，暂不能申请年假!");
+							return;
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				});
 				
 				//验证所请假期 是否与已有申请时段重复 
 				$.ajax({
@@ -438,7 +458,7 @@
 						
 					})
 				}else{
-					if(flag && repeatFlag){
+					if(flag && repeatFlag && passFlag){
 						save(prefix + "/add", $('#form-userApply-add').serialize());
 					}
 				}

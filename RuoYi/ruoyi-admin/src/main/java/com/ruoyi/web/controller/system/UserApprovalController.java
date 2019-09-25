@@ -387,7 +387,7 @@ public class UserApprovalController extends BaseController
 				String leaveType = userApproval1.getUserApply().getLeaveType();
 				if(leaveType.equals("1") || leaveType.equals("2")){
 					HolidayRecord holidayRecord = new HolidayRecord();
-					holidayRecord.setUseApplyId(userApproval1.getUserApply().getForApplyId());
+					holidayRecord.setApplyId(userApproval1.getUserApply().getForApplyId());
 					holidayRecord.setUseState("2");
 					List<HolidayRecord> holidayRecordList = holidayRecordServiceImpl.selectHolidayRecordList(holidayRecord);
 					
@@ -409,7 +409,7 @@ public class UserApprovalController extends BaseController
 						//新增一条假期使用记录的销假记录
 						HolidayRecord holidayRecord3 = new HolidayRecord();
 						holidayRecord3.setHolidayId(holidayRecord1.getHolidayId());
-						holidayRecord3.setUseApplyId(userApproval1.getApplyId());
+						holidayRecord3.setApplyId(userApproval1.getApplyId());
 						holidayRecord3.setValue(holidayRecord1.getValue());
 						holidayRecord3.setUseState("4");//
 						holidayRecordServiceImpl.insertHolidayRecord(holidayRecord3);
@@ -463,7 +463,7 @@ public class UserApprovalController extends BaseController
 				if(leaveType.equals("1")  || leaveType.equals("2")){
 					//将假期使用记录中的申请状态改为已使用
 					HolidayRecord holidayRecord = new HolidayRecord();
-					holidayRecord.setUseApplyId(userApproval1.getApplyId());
+					holidayRecord.setApplyId(userApproval1.getApplyId());
 					List<HolidayRecord> holidayRecordList = holidayRecordServiceImpl.selectHolidayRecordList(holidayRecord);
 					if(holidayRecordList != null){
 						for(HolidayRecord holidayRecord1 : holidayRecordList){
@@ -556,7 +556,7 @@ public class UserApprovalController extends BaseController
 		
 		//在年假调休使用记录中找到该申请生成的记录
 		HolidayRecord holidayRecord = new HolidayRecord();
-		holidayRecord.setUseApplyId(applyId);
+		holidayRecord.setApplyId(applyId);
 		List<HolidayRecord> holidayRecordList = holidayRecordServiceImpl.selectHolidayRecordList(holidayRecord);
 		if(holidayRecordList != null){
 			for(HolidayRecord holidayRecord1 : holidayRecordList){
