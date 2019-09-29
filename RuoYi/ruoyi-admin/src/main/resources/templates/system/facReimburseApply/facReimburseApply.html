@@ -10,53 +10,13 @@
             <form id="formId">
                 <div class="select-list">
                     <ul>
-                        <!--							<li>-->
-                        <!--								借款编号：<input type="text" name="num"/>-->
-                        <!--							</li>-->
-
-                        <!--							<li>-->
-                        <!--								借款名称：<input type="text" name="name"/>-->
-                        <!--							</li>-->
-
-                        <!--							<li>-->
-                        <!--								借款金额：<input type="text" name="amount"/>-->
-                        <!--							</li>-->
-
-                        <!--							<li>-->
-                        借款人：<input type="text" name="loanUser"/>
+                        <li>
+                        报销人：<input type="text" name="userName"/>
                         </li>
 
-                        <!--							<li>-->
-                        <!--								创建时间：<input type="text" name="createTime"/>-->
-                        <!--							</li>-->
-
-                        <!--							<li>-->
-                        <!--								报销时间：<input type="text" name="reimburseTime"/>-->
-                        <!--							</li>-->
-
-                        <!--							<li>-->
-                        <!--								财务操作：<input type="text" name="facOperate"/>-->
-                        <!--							</li>-->
-
-                        <!--							<li>-->
-                        <!--								借款事由：<input type="text" name="reason"/>-->
-                        <!--							</li>-->
-
-                        <!--							<li>-->
-                        <!--								申请人操作：<input type="text" name="applyStatus"/>-->
-                        <!--							</li>-->
-
-                        <!--							<li>-->
-                        <!--								修改时间：<input type="text" name="updateTime"/>-->
-                        <!--							</li>-->
-
-                        <!--							<li>-->
-                        <!--								核票通过时间：<input type="text" name="passTime"/>-->
-                        <!--							</li>-->
-
-                        <!--							<li>-->
-                        <!--								类型：<input type="text" name="type"/>-->
-                        <!--							</li>-->
+                        <li>
+                            类型：<input type="text" name="type"/>
+                        </li>
 
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -70,7 +30,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" >
+            <a class="btn btn-success" onclick="$.operate.addTab()" >
                 <i class="fa fa-plus"></i> 日常报销申请
             </a>
             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
@@ -131,20 +91,15 @@
                     sortable: true
                 },
                 {
-                    field: 'loanUser',
+                    field: 'userName',
                     title: '报销人',
                     sortable: true
                 },
                 {
-                    field: 'createTime',
+                    field: 'reimburseTime',
                     title: '报销时间',
                     sortable: true
                 },
-                // {
-                // 	field : 'reimburseTime',
-                // 	title : '报销时间',
-                // 	sortable: true
-                // },
                 {
                     field: 'facOperate',
                     title: '财务操作',

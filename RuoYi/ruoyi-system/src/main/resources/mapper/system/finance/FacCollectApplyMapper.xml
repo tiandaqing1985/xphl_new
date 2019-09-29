@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.finance.FacCollectApplyMapper">
+    
+    <resultMap type="FacCollectApply" id="FacCollectApplyResult">
+        <result property="id"    column="id"    />
+        <result property="num"    column="num"    />
+        <result property="deptCompany"    column="dept_company"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="applicant"    column="applicant"    />
+        <result property="amount"    column="amount"    />
+        <result property="applicationTime"    column="application_time"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="leagueProject"    column="league_project"    />
+        <result property="participants"    column="participants"    />
+        <result property="parNumber"    column="par_number"    />
+        <result property="activityPlace"    column="activity_place"    />
+        <result property="activityForm"    column="activity_form"    />
+        <result property="status"    column="status"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+	
+	<sql id="selectFacCollectApplyVo">
+        select id, num, dept_company, dept_name, applicant, amount, application_time, start_date, end_date, league_project, participants, par_number, activity_place, activity_form, status, remarks from fac_collect_apply
+    </sql>
+	
+    <select id="selectFacCollectApplyList" parameterType="FacCollectApply" resultMap="FacCollectApplyResult">
+        <include refid="selectFacCollectApplyVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="num != null  and num != '' "> and num = #{num}</if>
+             <if test="deptCompany != null  and deptCompany != '' "> and dept_company = #{deptCompany}</if>
+             <if test="deptName != null  and deptName != '' "> and dept_name = #{deptName}</if>
+             <if test="applicant != null "> and applicant = #{applicant}</if>
+             <if test="amount != null "> and amount = #{amount}</if>
+             <if test="applicationTime != null "> and application_time = #{applicationTime}</if>
+             <if test="startDate != null "> and start_date = #{startDate}</if>
+             <if test="endDate != null "> and end_date = #{endDate}</if>
+             <if test="leagueProject != null  and leagueProject != '' "> and league_project = #{leagueProject}</if>
+             <if test="participants != null  and participants != '' "> and participants = #{participants}</if>
+             <if test="parNumber != null "> and par_number = #{parNumber}</if>
+             <if test="activityPlace != null  and activityPlace != '' "> and activity_place = #{activityPlace}</if>
+             <if test="activityForm != null  and activityForm != '' "> and activity_form = #{activityForm}</if>
+             <if test="status != null "> and status = #{status}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+         </where>
+    </select>
+    
+    <select id="selectFacCollectApplyById" parameterType="Long" resultMap="FacCollectApplyResult">
+        <include refid="selectFacCollectApplyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFacCollectApply" parameterType="FacCollectApply" useGeneratedKeys="true" keyProperty="id">
+        insert into fac_collect_apply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">num,</if>
+			<if test="deptCompany != null  and deptCompany != ''  ">dept_company,</if>
+			<if test="deptName != null  and deptName != ''  ">dept_name,</if>
+			<if test="applicant != null  ">applicant,</if>
+			<if test="amount != null  ">amount,</if>
+			<if test="applicationTime != null  ">application_time,</if>
+			<if test="startDate != null  ">start_date,</if>
+			<if test="endDate != null  ">end_date,</if>
+			<if test="leagueProject != null  and leagueProject != ''  ">league_project,</if>
+			<if test="participants != null  and participants != ''  ">participants,</if>
+			<if test="parNumber != null  ">par_number,</if>
+			<if test="activityPlace != null  and activityPlace != ''  ">activity_place,</if>
+			<if test="activityForm != null  and activityForm != ''  ">activity_form,</if>
+			<if test="status != null  ">status,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">#{num},</if>
+			<if test="deptCompany != null  and deptCompany != ''  ">#{deptCompany},</if>
+			<if test="deptName != null  and deptName != ''  ">#{deptName},</if>
+			<if test="applicant != null  ">#{applicant},</if>
+			<if test="amount != null  ">#{amount},</if>
+			<if test="applicationTime != null  ">#{applicationTime},</if>
+			<if test="startDate != null  ">#{startDate},</if>
+			<if test="endDate != null  ">#{endDate},</if>
+			<if test="leagueProject != null  and leagueProject != ''  ">#{leagueProject},</if>
+			<if test="participants != null  and participants != ''  ">#{participants},</if>
+			<if test="parNumber != null  ">#{parNumber},</if>
+			<if test="activityPlace != null  and activityPlace != ''  ">#{activityPlace},</if>
+			<if test="activityForm != null  and activityForm != ''  ">#{activityForm},</if>
+			<if test="status != null  ">#{status},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateFacCollectApply" parameterType="FacCollectApply">
+        update fac_collect_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null  and num != ''  ">num = #{num},</if>
+            <if test="deptCompany != null  and deptCompany != ''  ">dept_company = #{deptCompany},</if>
+            <if test="deptName != null  and deptName != ''  ">dept_name = #{deptName},</if>
+            <if test="applicant != null  ">applicant = #{applicant},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="applicationTime != null  ">application_time = #{applicationTime},</if>
+            <if test="startDate != null  ">start_date = #{startDate},</if>
+            <if test="endDate != null  ">end_date = #{endDate},</if>
+            <if test="leagueProject != null  and leagueProject != ''  ">league_project = #{leagueProject},</if>
+            <if test="participants != null  and participants != ''  ">participants = #{participants},</if>
+            <if test="parNumber != null  ">par_number = #{parNumber},</if>
+            <if test="activityPlace != null  and activityPlace != ''  ">activity_place = #{activityPlace},</if>
+            <if test="activityForm != null  and activityForm != ''  ">activity_form = #{activityForm},</if>
+            <if test="status != null  ">status = #{status},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteFacCollectApplyById" parameterType="Long">
+        delete from fac_collect_apply where id = #{id}
+    </delete>
+	
+    <delete id="deleteFacCollectApplyByIds" parameterType="String">
+        delete from fac_collect_apply where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -16,7 +16,7 @@ public class FacLoanApply extends BaseEntity
 	private static final long serialVersionUID = 1L;
 	
 	/** ID */
-	private String id;
+	private Long id;
 	/** 借款编号 */
 	private String num;
 	/** 借款名称 */
@@ -24,7 +24,7 @@ public class FacLoanApply extends BaseEntity
 	/** 借款金额 */
 	private Double amount;
 	/** 借款人 */
-	private Date loanUser;
+	private Long loanUser;
 	/** 借款时间 */
 	private Date loanTime;
 	/** 预计还款时间 */
@@ -35,16 +35,21 @@ public class FacLoanApply extends BaseEntity
 	private String reason;
 	/** 申请人操作 */
 	private String applyStatus;
+	/**创建时间*/
+	private Date createTime;
+	/**更改时间*/
+	private Date updateTime;
+	
+	
+	 
+	public Long getId() {
+		return id;
+	}
 
-	public void setId(String id) 
-	{
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public String getId() 
-	{
-		return id;
-	}
 	public void setNum(String num) 
 	{
 		this.num = num;
@@ -71,16 +76,16 @@ public class FacLoanApply extends BaseEntity
 	public Double getAmount() 
 	{
 		return amount;
+	} 
+
+	public Long getLoanUser() {
+		return loanUser;
 	}
-	public void setLoanUser(Date loanUser) 
-	{
+
+	public void setLoanUser(Long loanUser) {
 		this.loanUser = loanUser;
 	}
 
-	public Date getLoanUser() 
-	{
-		return loanUser;
-	}
 	public void setLoanTime(Date loanTime) 
 	{
 		this.loanTime = loanTime;
@@ -127,7 +132,24 @@ public class FacLoanApply extends BaseEntity
 		return applyStatus;
 	}
 
-    public String toString() {
+    public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	
+	public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("num", getNum())
@@ -140,6 +162,8 @@ public class FacLoanApply extends BaseEntity
             .append("facOperate", getFacOperate())
             .append("reason", getReason())
             .append("applyStatus", getApplyStatus())
+            .append("createTime", getCreateTime())
+            .append("updateTime", getUpdateTime())
             .toString();
     }
 }

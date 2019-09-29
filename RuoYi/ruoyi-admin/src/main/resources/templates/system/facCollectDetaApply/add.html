@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('新增团建明细')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-facCollectDetaApply-add">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">团建编号：</label>
+				<div class="col-sm-8">
+					<input id="num" name="num" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">部门名称：</label>
+				<div class="col-sm-8">
+					<input id="depaName" name="depaName" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">地区：</label>
+				<div class="col-sm-8">
+					<input id="region" name="region" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">团建人数：</label>
+				<div class="col-sm-8">
+					<input id="number" name="number" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">上月结转：</label>
+				<div class="col-sm-8">
+					<input id="lastMonth" name="lastMonth" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">预算额度：</label>
+				<div class="col-sm-8">
+					<input id="budgetMargin" name="budgetMargin" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">剩余额度：</label>
+				<div class="col-sm-8">
+					<input id="remaMargin" name="remaMargin" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">部门负责人账号：</label>
+				<div class="col-sm-8">
+					<input id="email" name="email" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">团建时间：</label>
+				<div class="col-sm-8">
+					<input id="collectTime" name="collectTime" class="form-control" type="date">
+				</div>
+			</div>
+		</form>
+	</div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/facCollectDetaApply"
+		$("#form-facCollectDetaApply-add").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/add", $('#form-facCollectDetaApply-add').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

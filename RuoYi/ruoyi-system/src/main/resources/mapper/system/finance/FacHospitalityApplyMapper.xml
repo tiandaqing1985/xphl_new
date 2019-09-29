@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.finance.FacHospitalityApplyMapper">
+    
+    <resultMap type="FacHospitalityApply" id="FacHospitalityApplyResult">
+        <result property="id"    column="id"    />
+        <result property="num"    column="num"    />
+        <result property="dept"    column="dept"    />
+        <result property="userId"    column="userId"    />
+        <result property="zdName"    column="zd_name"    />
+        <result property="loanId"    column="loanId"    />
+        <result property="zdDate"    column="zd_date"    />
+        <result property="reason"    column="reason"    />
+        <result property="addUser"    column="add_user"    />
+        <result property="totalNumber"    column="total_number"    />
+        <result property="standardAmount"    column="standard_amount"    />
+        <result property="amount"    column="amount"    />
+        <result property="applicationTime"    column="application_time"    />
+        <result property="states"    column="states"    />
+    </resultMap>
+	
+	<sql id="selectFacHospitalityApplyVo">
+        select id, num, dept, userId, zd_name, loanId, zd_date, reason, add_user, total_number, standard_amount, amount, application_time, states from fac_hospitality_apply
+    </sql>
+	
+    <select id="selectFacHospitalityApplyList" parameterType="FacHospitalityApply" resultMap="FacHospitalityApplyResult">
+        <include refid="selectFacHospitalityApplyVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="num != null  and num != '' "> and num = #{num}</if>
+             <if test="dept != null  and dept != '' "> and dept = #{dept}</if>
+             <if test="userId != null "> and userId = #{userId}</if>
+             <if test="zdName != null  and zdName != '' "> and zd_name = #{zdName}</if>
+             <if test="loanId != null "> and loanId = #{loanId}</if>
+             <if test="zdDate != null "> and zd_date = #{zdDate}</if>
+             <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
+             <if test="addUser != null  and addUser != '' "> and add_user = #{addUser}</if>
+             <if test="totalNumber != null  and totalNumber != '' "> and total_number = #{totalNumber}</if>
+             <if test="standardAmount != null "> and standard_amount = #{standardAmount}</if>
+             <if test="amount != null "> and amount = #{amount}</if>
+             <if test="applicationTime != null "> and application_time = #{applicationTime}</if>
+             <if test="states != null "> and states = #{states}</if>
+         </where>
+    </select>
+    
+    <select id="selectFacHospitalityApplyById" parameterType="Long" resultMap="FacHospitalityApplyResult">
+        <include refid="selectFacHospitalityApplyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFacHospitalityApply" parameterType="FacHospitalityApply" useGeneratedKeys="true" keyProperty="id">
+        insert into fac_hospitality_apply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">num,</if>
+			<if test="dept != null  and dept != ''  ">dept,</if>
+			<if test="userId != null  ">userId,</if>
+			<if test="zdName != null  and zdName != ''  ">zd_name,</if>
+			<if test="loanId != null  ">loanId,</if>
+			<if test="zdDate != null  ">zd_date,</if>
+			<if test="reason != null  and reason != ''  ">reason,</if>
+			<if test="addUser != null  and addUser != ''  ">add_user,</if>
+			<if test="totalNumber != null  and totalNumber != ''  ">total_number,</if>
+			<if test="standardAmount != null  ">standard_amount,</if>
+			<if test="amount != null  ">amount,</if>
+			<if test="applicationTime != null  ">application_time,</if>
+			<if test="states != null  ">states,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">#{num},</if>
+			<if test="dept != null  and dept != ''  ">#{dept},</if>
+			<if test="userId != null  ">#{userId},</if>
+			<if test="zdName != null  and zdName != ''  ">#{zdName},</if>
+			<if test="loanId != null  ">#{loanId},</if>
+			<if test="zdDate != null  ">#{zdDate},</if>
+			<if test="reason != null  and reason != ''  ">#{reason},</if>
+			<if test="addUser != null  and addUser != ''  ">#{addUser},</if>
+			<if test="totalNumber != null  and totalNumber != ''  ">#{totalNumber},</if>
+			<if test="standardAmount != null  ">#{standardAmount},</if>
+			<if test="amount != null  ">#{amount},</if>
+			<if test="applicationTime != null  ">#{applicationTime},</if>
+			<if test="states != null  ">#{states},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateFacHospitalityApply" parameterType="FacHospitalityApply">
+        update fac_hospitality_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null  and num != ''  ">num = #{num},</if>
+            <if test="dept != null  and dept != ''  ">dept = #{dept},</if>
+            <if test="userId != null  ">userId = #{userId},</if>
+            <if test="zdName != null  and zdName != ''  ">zd_name = #{zdName},</if>
+            <if test="loanId != null  ">loanId = #{loanId},</if>
+            <if test="zdDate != null  ">zd_date = #{zdDate},</if>
+            <if test="reason != null  and reason != ''  ">reason = #{reason},</if>
+            <if test="addUser != null  and addUser != ''  ">add_user = #{addUser},</if>
+            <if test="totalNumber != null  and totalNumber != ''  ">total_number = #{totalNumber},</if>
+            <if test="standardAmount != null  ">standard_amount = #{standardAmount},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="applicationTime != null  ">application_time = #{applicationTime},</if>
+            <if test="states != null  ">states = #{states},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteFacHospitalityApplyById" parameterType="Long">
+        delete from fac_hospitality_apply where id = #{id}
+    </delete>
+	
+    <delete id="deleteFacHospitalityApplyByIds" parameterType="String">
+        delete from fac_hospitality_apply where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

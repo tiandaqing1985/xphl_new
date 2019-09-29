@@ -59,7 +59,7 @@ public class ReiTrafficApply {
      */
     private String type;
     /**
-     * 报销编号
+     *
      */
     private String num;
 

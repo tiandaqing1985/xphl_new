@@ -18,6 +18,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
         <result property="passTime"    column="pass_time"    />
         <result property="type"    column="type"    />
+         <result property="userName"    column="user_name"    /> 
+          <result property="deptName"    column="dept_name"    /> 
+          <result property="userName"    column="user_name"    />
+            <result property="applyStatus"    column="apply_status"    />
+         
     </resultMap>
 	
 	<sql id="selectFacReimburseApplyVo">
@@ -29,14 +34,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         a.id,
   a.num,
   a.name,
-  c.`dept_name` as deptName,
+  c.`dept_name` ,
   a.`type`,
   a.amount,
-  b.user_name as name,
-  a.`create_time`as reimburseTime,
-  a.`pass_time`as passTime,
+  a.reason,
+  b.user_name,
+  a.`create_time`,
+  a.pass_time,
   a.`fac_operate`,
-  a.`status`
+  a.`status`,
+   a.reimburse_time,
+   a.update_time,
+  a.apply_status
 FROM
   fac_reimburse_apply AS a
   LEFT JOIN sys_user AS b
@@ -145,11 +154,10 @@ FROM fac_traffic_rei_apply   AS a
 
 
     <insert id="TrafficBatchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO fac_traffic_rei_apply (dd_date, target_unit, amount, user, departure, target, apply_user,
-        document_num,reason,type,num)
+        INSERT INTO fac_traffic_rei_apply (dd_date, target_unit, amount, user, departure, target, apply_user,document_num,reason,type,num)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.ddDate}, #{item.targetUnit}, #{item.amount}, #{item.user}, #{item.departure}, #{item.target}, #{item.documentNum},#{item.reason},#{item.reason},#{item.reason},#{item.type},#{item.num})
+            (#{item.ddDate}, #{item.targetUnit}, #{item.amount}, #{item.user}, #{item.departure}, #{item.target},#{item.applyUser}, #{item.documentNum},#{item.reason},#{item.type},#{item.num})
         </foreach>
     </insert>
     <insert id="HospBatchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">

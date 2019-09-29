@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('报销申请添加')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-add">
+        <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
+        <div class="row">
+            <div class="form-group ui-sortable-helper col-md-6">
+                <label class="col-sm-3 control-label">日期</label>
+                <div class="col-sm-9">
+                    <div class="form-group">
+                        <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                            <input type="text" class="form-control" value="2018-04-20">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="col-sm-3 control-label">类别</label>
+                <div class="col-sm-9">
+                    <select id="type" name="type">
+                        <option value="1">公出交通费用申请</option>
+                        <option value="2">加班交通费用申请</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">金额</label>
+                <div class="col-sm-9">
+                    <input id="amount" name="amount" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">人员</label>
+                <div class="col-sm-9">
+                    <input id="user" name="user" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">出发地</label>
+                <div class="col-sm-9">
+                    <input id="departure" name="departure" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">目的地</label>
+                <div class="col-sm-9">
+                    <input id="target" name="target" class="form-control" type="text">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">附单据数</label>
+                <div class="col-sm-9">
+                    <input id="documentNum" name="documentNum" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">目标单位简称</label>
+                    <div class="col-sm-9">
+                        <input id="targetUnit" name="targetUnit" class="form-control" type="text">
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                        <label class="col-sm-3 control-label">事由</label>
+                        <div class="col-sm-9">
+                            <textarea id="reason" name="reason" class="form-control" type="text"></textarea>
+                        </div>
+                    </div>
+                </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript">
+    var prefix = ctx + "system/facReimburseApply";
+    var num =$("#num").val();
+
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            var data = $("#form-add").serializeArray();
+            var num = $.form.selectCheckeds("num");
+            var type = $.form.selectCheckeds("type");
+            var amount = $.form.selectCheckeds("amount");
+            var user = $.form.selectCheckeds("user");
+            var departure = $.form.selectCheckeds("departure");
+            var target = $.form.selectCheckeds("target");
+            var documentNum = $.form.selectCheckeds("documentNum");
+            var targetUnit = $.form.selectCheckeds("targetUnit");
+            var reason = $.form.selectCheckeds("reason");
+            data.push({"name": "num", "value": num});
+            data.push({"name": "type", "value": type});
+            data.push({"name": "amount", "value": amount});
+            data.push({"name": "user", "value": user});
+            data.push({"name": "departure", "value": departure});
+            data.push({"name": "target", "value": target});
+            data.push({"name": "documentNum", "value": documentNum});
+            data.push({"name": "targetUnit", "value": targetUnit});
+            data.push({"name": "reason", "value": reason});
+            window.localStorage.setItem('param',JSON.stringify(data))  //存储数据
+            $.modal.close();
+        }
+
+    }
+</script>
+</body>
+</html>

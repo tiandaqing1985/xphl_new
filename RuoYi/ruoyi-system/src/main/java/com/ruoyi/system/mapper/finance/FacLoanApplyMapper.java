@@ -1,9 +1,9 @@
 package com.ruoyi.system.mapper.finance;
 
 
-import com.ruoyi.system.domain.finance.FacLoanApply;
-
 import java.util.List;
+
+import com.ruoyi.system.domain.finance.FacLoanApply;
 
 /**
  * 借款申请 数据层
@@ -60,5 +60,13 @@ public interface FacLoanApplyMapper
      * @return 结果
      */
 	public int deleteFacLoanApplyByIds(String[] ids);
+	 
+	/**
+	 * 借款申请
+	 * @param num
+	 * @return
+	 */
+	List<FacLoanApply> detail(String num);
+	  
 	
 }

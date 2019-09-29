@@ -37,7 +37,7 @@ public class ReiHospitalityApply {
      */
     private String reason;
     /**
-     * 报销编号
+     *
      */
     private String num;
     /**

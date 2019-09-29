@@ -35,7 +35,7 @@ public class ReiAdiApply {
      */
     private String reason;
     /**
-     * 报销编号
+     *
      */
     private String num;
     /**

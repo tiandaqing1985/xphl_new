@@ -20,7 +20,7 @@ public class FacReimburseApply extends BaseEntity {
      */
     private String id;
     /**
-     * 报销编号
+     *
      */
     private String num;
     /**
@@ -65,6 +65,11 @@ public class FacReimburseApply extends BaseEntity {
      */
     private String applyStatus;
     /**
+     *修改时间 
+     * */
+    private Date updateTime;
+    
+    /**
      * 核票通过时间
      */
     private Date passTime;
@@ -75,25 +80,18 @@ public class FacReimburseApply extends BaseEntity {
     private String type;
     /**
      * 状态
-     */
+     */ 
     private String status;
     /**
      * 公出交通申请
      */
     private List<ReiTrafficApply> trafficReiApplyList;
-    /**
-     * 加班交通申请
-     */
-    private List<ReiTrafficApply> AddtrafficReiApplyList;
 
     /**
      * 其他费用报销申请
      */
     private List<ReiAdiApply> otherReiAdiApplies;
-    /**
-     * 行政费用报销申请
-     */
-    private List<ReiAdiApply> reiAdiApplies;
+   
     /**
      * 招待费报销申请
      */
@@ -116,14 +114,7 @@ public class FacReimburseApply extends BaseEntity {
         this.trafficReiApplyList = trafficReiApplyList;
     }
 
-    public List<ReiTrafficApply> getAddtrafficReiApplyList() {
-        return AddtrafficReiApplyList;
-    }
-
-    public void setAddtrafficReiApplyList(List<ReiTrafficApply> addtrafficReiApplyList) {
-        AddtrafficReiApplyList = addtrafficReiApplyList;
-    }
-
+    
     public List<ReiAdiApply> getOtherReiAdiApplies() {
         return otherReiAdiApplies;
     }
@@ -132,14 +123,7 @@ public class FacReimburseApply extends BaseEntity {
         this.otherReiAdiApplies = otherReiAdiApplies;
     }
 
-    public List<ReiAdiApply> getReiAdiApplies() {
-        return reiAdiApplies;
-    }
-
-    public void setReiAdiApplies(List<ReiAdiApply> reiAdiApplies) {
-        this.reiAdiApplies = reiAdiApplies;
-    }
-
+   
     public List<ReiHospitalityApply> getHospitalityApplies() {
         return hospitalityApplies;
     }
@@ -244,7 +228,15 @@ public class FacReimburseApply extends BaseEntity {
         this.passTime = passTime;
     }
 
-    public String getType() {
+    public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public String getType() {
         return type;
     }
 

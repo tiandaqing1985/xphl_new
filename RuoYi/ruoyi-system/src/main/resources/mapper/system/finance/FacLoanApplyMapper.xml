@@ -2,52 +2,58 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.system.mapper.FacLoanApplyMapper">
-    
-    <resultMap type="com.ruoyi.system.domain.finance.FacLoanApply" id="FacLoanApplyResult">
-        <result property="id"    column="id"    />
-        <result property="num"    column="num"    />
-        <result property="loanName"    column="loan_name"    />
-        <result property="amount"    column="amount"    />
-        <result property="loanUser"    column="loan_user"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="loanTime"    column="loan_time"    />
-        <result property="repayTime"    column="repay_time"    />
-        <result property="facOperate"    column="fac_operate"    />
-        <result property="reason"    column="reason"    />
-        <result property="applyStatus"    column="apply_status"    />
-    </resultMap>
-	
+<mapper namespace="com.ruoyi.system.mapper.finance.FacLoanApplyMapper">
+
+	<resultMap type="FacLoanApply" id="FacLoanApplyResult">
+		<result property="id" column="id" />
+		<result property="num" column="num" />
+		<result property="loanName" column="loan_name" />
+		<result property="amount" column="amount" />
+		<result property="loanUser" column="loan_user" />
+		<result property="createTime" column="create_time" />
+		<result property="loanTime" column="loan_time" />
+		<result property="repayTime" column="repay_time" />
+		<result property="facOperate" column="fac_operate" />
+		<result property="reason" column="reason" />
+		<result property="applyStatus" column="apply_status" />
+		<result property="updateTime" column="update_time" />
+	</resultMap>
+
 	<sql id="selectFacLoanApplyVo">
-        select id, num, loan_name, amount, loan_user, create_time, loan_time, repay_time, fac_operate, reason, apply_status from fac_loan_apply
-    </sql>
-	
-    <select id="selectFacLoanApplyList" parameterType="com.ruoyi.system.domain.finance.FacLoanApply" resultMap="FacLoanApplyResult">
-        <include refid="selectFacLoanApplyVo"/>
-        <where>  
-            <if test="id != null  and id != '' "> and id = #{id}</if>
-             <if test="num != null  and num != '' "> and num = #{num}</if>
-             <if test="loanName != null  and loanName != '' "> and loan_name = #{loanName}</if>
-             <if test="amount != null "> and amount = #{amount}</if>
-             <if test="loanUser != null "> and loan_user = #{loanUser}</if>
-             <if test="createTime != null "> and create_time = #{createTime}</if>
-             <if test="loanTime != null "> and loan_time = #{loanTime}</if>
-             <if test="repayTime != null "> and repay_time = #{repayTime}</if>
-             <if test="facOperate != null  and facOperate != '' "> and fac_operate = #{facOperate}</if>
-             <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
-             <if test="applyStatus != null  and applyStatus != '' "> and apply_status = #{applyStatus}</if>
-         </where>
-    </select>
-    
-    <select id="selectFacLoanApplyById" parameterType="String" resultMap="FacLoanApplyResult">
-        <include refid="selectFacLoanApplyVo"/>
-        where id = #{id}
-    </select>
-        
-    <insert id="insertFacLoanApply" parameterType="com.ruoyi.system.domain.finance.FacLoanApply">
-        insert into fac_loan_apply
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id != null  and id != ''  ">id,</if>
+		select id, num, loan_name, amount, loan_user, create_time, loan_time,
+		repay_time, fac_operate, reason, apply_status, update_time from
+		fac_loan_apply
+	</sql>
+
+	<select id="selectFacLoanApplyList" parameterType="FacLoanApply"
+		resultMap="FacLoanApplyResult">
+		<include refid="selectFacLoanApplyVo" />
+		<where>
+			<if test="id != null  and id != '' "> and id = #{id}</if>
+			<if test="num != null  and num != '' "> and num = #{num}</if>
+			<if test="loanName != null  and loanName != '' "> and loan_name = #{loanName}</if>
+			<if test="amount != null "> and amount = #{amount}</if>
+			<if test="loanUser != null "> and loan_user = #{loanUser}</if>
+			<if test="createTime != null "> and create_time = #{createTime}</if>
+			<if test="loanTime != null "> and loan_time = #{loanTime}</if>
+			<if test="repayTime != null "> and repay_time = #{repayTime}</if>
+			<if test="facOperate != null  and facOperate != '' "> and fac_operate = #{facOperate}</if>
+			<if test="reason != null  and reason != '' "> and reason = #{reason}</if>
+			<if test="applyStatus != null  and applyStatus != '' "> and apply_status = #{applyStatus}</if>
+			<if test="updateTime != null "> and update_time = #{updateTime}</if>
+		</where>
+	</select>
+
+	<select id="selectFacLoanApplyById" parameterType="String"
+		resultMap="FacLoanApplyResult">
+		<include refid="selectFacLoanApplyVo" />
+		where id = #{id}
+	</select>
+
+	<insert id="insertFacLoanApply" parameterType="FacLoanApply"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into fac_loan_apply
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
 			<if test="num != null  and num != ''  ">num,</if>
 			<if test="loanName != null  and loanName != ''  ">loan_name,</if>
 			<if test="amount != null  ">amount,</if>
@@ -58,9 +64,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="facOperate != null  and facOperate != ''  ">fac_operate,</if>
 			<if test="reason != null  and reason != ''  ">reason,</if>
 			<if test="applyStatus != null  and applyStatus != ''  ">apply_status,</if>
-         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="id != null  and id != ''  ">#{id},</if>
+			<if test="updateTime != null  ">update_time,</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=","> 
 			<if test="num != null  and num != ''  ">#{num},</if>
 			<if test="loanName != null  and loanName != ''  ">#{loanName},</if>
 			<if test="amount != null  ">#{amount},</if>
@@ -71,35 +77,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="facOperate != null  and facOperate != ''  ">#{facOperate},</if>
 			<if test="reason != null  and reason != ''  ">#{reason},</if>
 			<if test="applyStatus != null  and applyStatus != ''  ">#{applyStatus},</if>
-         </trim>
-    </insert>
-	 
-    <update id="updateFacLoanApply" parameterType="com.ruoyi.system.domain.finance.FacLoanApply">
-        update fac_loan_apply
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="num != null  and num != ''  ">num = #{num},</if>
-            <if test="loanName != null  and loanName != ''  ">loan_name = #{loanName},</if>
-            <if test="amount != null  ">amount = #{amount},</if>
-            <if test="loanUser != null  ">loan_user = #{loanUser},</if>
-            <if test="createTime != null  ">create_time = #{createTime},</if>
-            <if test="loanTime != null  ">loan_time = #{loanTime},</if>
-            <if test="repayTime != null  ">repay_time = #{repayTime},</if>
-            <if test="facOperate != null  and facOperate != ''  ">fac_operate = #{facOperate},</if>
-            <if test="reason != null  and reason != ''  ">reason = #{reason},</if>
-            <if test="applyStatus != null  and applyStatus != ''  ">apply_status = #{applyStatus},</if>
-        </trim>
-        where id = #{id}
-    </update>
+			<if test="updateTime != null  ">#{updateTime},</if>
+		</trim>
+	</insert>
+
+	<update id="updateFacLoanApply" parameterType="FacLoanApply">
+		update fac_loan_apply
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">num = #{num},</if>
+			<if test="loanName != null  and loanName != ''  ">loan_name = #{loanName},</if>
+			<if test="amount != null  ">amount = #{amount},</if>
+			<if test="loanUser != null  ">loan_user = #{loanUser},</if>
+			<if test="createTime != null  ">create_time = #{createTime},</if>
+			<if test="loanTime != null  ">loan_time = #{loanTime},</if>
+			<if test="repayTime != null  ">repay_time = #{repayTime},</if>
+			<if test="facOperate != null  and facOperate != ''  ">fac_operate = #{facOperate},</if>
+			<if test="reason != null  and reason != ''  ">reason = #{reason},</if>
+			<if test="applyStatus != null  and applyStatus != ''  ">apply_status = #{applyStatus},</if>
+			<if test="updateTime != null  ">update_time = #{updateTime},</if>
+		</trim>
+		where id = #{id}
+	</update>
 
 	<delete id="deleteFacLoanApplyById" parameterType="String">
-        delete from fac_loan_apply where id = #{id}
-    </delete>
-	
-    <delete id="deleteFacLoanApplyByIds" parameterType="String">
-        delete from fac_loan_apply where id in 
-        <foreach item="id" collection="array" open="(" separator="," close=")">
-            #{id}
-        </foreach>
-    </delete>
-    
+		delete from fac_loan_apply where id = #{id}
+	</delete>
+
+	<delete id="deleteFacLoanApplyByIds" parameterType="String">
+		delete from fac_loan_apply where id in
+		<foreach item="id" collection="array" open="(" separator=","
+			close=")">
+			#{id}
+		</foreach>
+	</delete>
+
 </mapper>

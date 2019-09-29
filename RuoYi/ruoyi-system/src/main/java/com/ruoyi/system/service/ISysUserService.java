@@ -216,7 +216,7 @@ public interface ISysUserService
     public List<SysUser> selectAllUser();
     
     /**
-     * 根据用户id查询所有三级以上负责人的id
+     * 根据用户id查询所有领导的id
      */
     public List<Long> selectCenterIdByUserId(Long userId);
     
