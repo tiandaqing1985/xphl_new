@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzExpenseRecordMapper">
+    
+    <resultMap type="XzExpenseRecord" id="XzExpenseRecordResult">
+        <result property="id"    column="id"    />
+        <result property="expenseName"    column="expense_name"    />
+        <result property="expenseTypeParent"    column="expense_type_parent"    />
+        <result property="expenseType"    column="expense_type"    />
+        <result property="expenseTypeName"    column="expense_type_name"    />
+        <result property="region"    column="region"    />
+        <result property="devDesc"    column="dev_desc"    />
+        <result property="purchaseChannel"    column="purchase_channel"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="count"    column="count"    />
+        <result property="markDate"    column="mark_date"    />
+        <result property="useDate"    column="use_date"    />
+        <result property="markUser"    column="mark_user"    />
+        <result property="applyUser"    column="apply_user"    />
+        <result property="applyUserName"    column="apply_user_name"    />
+        <result property="comment"    column="comment"    />
+        <result property="submitType"    column="submit_type"    />
+        <result property="place"    column="place"    />
+        <result property="endDate"    column="end_date"    />
+        <result property="startDate"    column="start_date"    />
+        <result property="activeName"    column="active_name"    />
+        <result property="sumPrice"    column="sum_price"    />
+        <result property="resourceId"    column="resource_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+	
+	<sql id="selectXzExpenseRecordVo">
+        select id, expense_name, expense_type_parent, expense_type, region, dev_desc, purchase_channel, unit_price, count, mark_date, use_date, mark_user, apply_user, comment, submit_type, place, end_date, start_date, active_name, sum_price, resource_id, create_by, create_time, update_by, update_time from xz_expense_record
+    </sql>
+	
+    <select id="selectXzExpenseRecordList" parameterType="XzExpenseRecord" resultMap="XzExpenseRecordResult">
+        select  er.id,
+				er.expense_name,
+				er.expense_type_parent,
+				er.expense_type,
+				er.region,
+				er.dev_desc,
+				er.purchase_channel,
+				er.unit_price,
+				er.count,
+				er.mark_date,
+				er.use_date,
+				er.mark_user,
+				er.apply_user,
+				er.comment,
+				er.submit_type,
+				er.place,
+				er.end_date,
+				er.start_date,
+				er.active_name,
+				er.sum_price,
+				er.resource_id,
+				er.create_by,
+				er.create_time,
+				er.update_by,
+				er.update_time,
+				u.user_name apply_user_name,
+				rt.name expense_type_name
+				from xz_expense_record er
+				left join sys_user u on u.user_id= er.apply_user
+				left join xz_resource_type rt on rt.id=er.expense_type
+				left join xz_resource_type xrt on xrt.id=er.expense_type_parent
+        <where>  
+             <if test="expenseType != null "> and rt.id = #{expenseType}</if>
+             <if test="expenseTypeParent != null "> and xrt.id = #{expenseTypeParent}</if>
+             <if test="expenseName != null  and expenseName != '' "> and er.expense_name like concat('%' ,#{expenseName} ,'%') </if>
+             <if test="region != null and region != '' "> and er.region = #{region}</if>
+             <if test="applyUserName != null and applyUserName != ''"> and u.user_name like concat('%' ,#{applyUserName} ,'%') </if>
+             <if test="useDate != null "> and er.useDate = #{useDate}</if>
+         </where>
+         ORDER BY er.use_date DESC
+    </select>
+    
+    <select id="selectXzExpenseRecordById" parameterType="Long" resultMap="XzExpenseRecordResult">
+        select  er.id,
+				er.expense_name,
+				er.expense_type_parent,
+				er.expense_type,
+				er.region,
+				er.dev_desc,
+				er.purchase_channel,
+				er.unit_price,
+				er.count,
+				er.mark_date,
+				er.use_date,
+				er.mark_user,
+				er.apply_user,
+				er.comment,
+				er.submit_type,
+				er.place,
+				er.end_date,
+				er.start_date,
+				er.active_name,
+				er.sum_price,
+				er.resource_id,
+				er.create_by,
+				er.create_time,
+				er.update_by,
+				er.update_time,
+				u.user_name apply_user_name,
+				rt.name expense_type_name
+				from xz_expense_record er
+				left join sys_user u on u.user_id= er.apply_user
+				left join xz_resource_type rt on rt.id=er.expense_type
+				left join xz_resource_type xrt on xrt.id=er.expense_type_parent
+        where er.id = #{id}
+    </select>
+        
+    <insert id="insertXzExpenseRecord" parameterType="XzExpenseRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into xz_expense_record
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="expenseName != null  and expenseName != ''  ">expense_name,</if>
+			<if test="expenseTypeParent != null  ">expense_type_parent,</if>
+			<if test="expenseType != null  ">expense_type,</if>
+			<if test="region != null  ">region,</if>
+			<if test="devDesc != null  and devDesc != ''  ">dev_desc,</if>
+			<if test="purchaseChannel != null  and purchaseChannel != ''  ">purchase_channel,</if>
+			<if test="unitPrice != null  ">unit_price,</if>
+			<if test="count != null  ">count,</if>
+			<if test="markDate != null  ">mark_date,</if>
+			<if test="useDate != null  ">use_date,</if>
+			<if test="markUser != null  ">mark_user,</if>
+			<if test="applyUser != null  ">apply_user,</if>
+			<if test="comment != null  and comment != ''  ">comment,</if>
+			<if test="submitType != null  ">submit_type,</if>
+			<if test="place != null  and place != ''  ">place,</if>
+			<if test="endDate != null  ">end_date,</if>
+			<if test="startDate != null  ">start_date,</if>
+			<if test="activeName != null  and activeName != ''  ">active_name,</if>
+			<if test="sumPrice != null  ">sum_price,</if>
+			<if test="resourceId != null  and resourceId != ''  ">resource_id,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="expenseName != null  and expenseName != ''  ">#{expenseName},</if>
+			<if test="expenseTypeParent != null  ">#{expenseTypeParent},</if>
+			<if test="expenseType != null  ">#{expenseType},</if>
+			<if test="region != null  ">#{region},</if>
+			<if test="devDesc != null  and devDesc != ''  ">#{devDesc},</if>
+			<if test="purchaseChannel != null  and purchaseChannel != ''  ">#{purchaseChannel},</if>
+			<if test="unitPrice != null  ">#{unitPrice},</if>
+			<if test="count != null  ">#{count},</if>
+			<if test="markDate != null  ">#{markDate},</if>
+			<if test="useDate != null  ">#{useDate},</if>
+			<if test="markUser != null  ">#{markUser},</if>
+			<if test="applyUser != null  ">#{applyUser},</if>
+			<if test="comment != null  and comment != ''  ">#{comment},</if>
+			<if test="submitType != null  ">#{submitType},</if>
+			<if test="place != null  and place != ''  ">#{place},</if>
+			<if test="endDate != null  ">#{endDate},</if>
+			<if test="startDate != null  ">#{startDate},</if>
+			<if test="activeName != null  and activeName != ''  ">#{activeName},</if>
+			<if test="sumPrice != null  ">#{sumPrice},</if>
+			<if test="resourceId != null  and resourceId != ''  ">#{resourceId},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzExpenseRecord" parameterType="XzExpenseRecord">
+        update xz_expense_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="expenseName != null  and expenseName != ''  ">expense_name = #{expenseName},</if>
+            <if test="expenseTypeParent != null  ">expense_type_parent = #{expenseTypeParent},</if>
+            <if test="expenseType != null  ">expense_type = #{expenseType},</if>
+            <if test="region != null  ">region = #{region},</if>
+            <if test="devDesc != null  and devDesc != ''  ">dev_desc = #{devDesc},</if>
+            <if test="purchaseChannel != null  and purchaseChannel != ''  ">purchase_channel = #{purchaseChannel},</if>
+            <if test="unitPrice != null  ">unit_price = #{unitPrice},</if>
+            <if test="count != null  ">count = #{count},</if>
+            <if test="markDate != null  ">mark_date = #{markDate},</if>
+            <if test="useDate != null  ">use_date = #{useDate},</if>
+            <if test="markUser != null  ">mark_user = #{markUser},</if>
+            <if test="applyUser != null  ">apply_user = #{applyUser},</if>
+            <if test="comment != null  and comment != ''  ">comment = #{comment},</if>
+            <if test="submitType != null  ">submit_type = #{submitType},</if>
+            <if test="place != null  and place != ''  ">place = #{place},</if>
+            <if test="endDate != null  ">end_date = #{endDate},</if>
+            <if test="startDate != null  ">start_date = #{startDate},</if>
+            <if test="activeName != null  and activeName != ''  ">active_name = #{activeName},</if>
+            <if test="sumPrice != null  ">sum_price = #{sumPrice},</if>
+            <if test="resourceId != null  and resourceId != ''  ">resource_id = #{resourceId},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteXzExpenseRecordById" parameterType="Long">
+        delete from xz_expense_record where id = #{id}
+    </delete>
+	
+    <delete id="deleteXzExpenseRecordByIds" parameterType="String">
+        delete from xz_expense_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <resultMap type="XzExpenseSta" id="XzExpenseStaResult">
+        <result property="expenseTypeParent"    column="expense_type_parent"    />
+        <result property="expenseTypeParentName"    column="expense_type_parent_name"    />
+        <result property="expenseType"    column="expense_type"    />
+        <result property="expenseTypeName"    column="expense_type_name"    />
+        <result property="region"    column="region"    />
+        <result property="year"    column="year"    />
+        <result property="month1" column="month1"/>
+        <result property="month2" column="month2"/>
+        <result property="month3" column="month3"/>
+        <result property="month4" column="month4"/>
+        <result property="month5" column="month5"/>
+        <result property="month6" column="month6"/>
+        <result property="month7" column="month7"/>
+        <result property="month8" column="month8"/>
+        <result property="month9" column="month9"/>
+        <result property="month10" column="month10"/>
+        <result property="month11" column="month11"/>
+        <result property="month12" column="month12"/>
+    </resultMap>
+    
+	<select id="selectXzExpenseList" parameterType="XzExpenseSta" resultMap="XzExpenseStaResult">
+		select a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
+			a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
+			a.month10, a.month11, a.month12, (a.month1+a.month2+a.month3+a.month4+a.month5+a.month6+a.month7+
+			a.month8+a.month9+a.a.month11+a.month12) sum
+		  from (SELECT er.expense_type_parent,rt.name expense_type_parent_name,
+				 er.expense_type,xrt.name expense_type_name,YEAR(use_date) as year,
+				(CASE WHEN MONTH(er.use_date) =1 THEN sum(er.unit_price * er.count) ELSE 0 END) month1,
+				(CASE WHEN MONTH(er.use_date) =2 THEN sum(er.unit_price * er.count) ELSE 0 END) month2,
+				(CASE WHEN MONTH(er.use_date) =3 THEN sum(er.unit_price * er.count) ELSE 0 END) month3,
+				(CASE WHEN MONTH(er.use_date) =4 THEN sum(er.unit_price * er.count) ELSE 0 END) month4,
+				(CASE WHEN MONTH(er.use_date) =5 THEN sum(er.unit_price * er.count) ELSE 0 END) month5,
+				(CASE WHEN MONTH(er.use_date) =6 THEN sum(er.unit_price * er.count) ELSE 0 END) month6,
+				(CASE WHEN MONTH(er.use_date) =7 THEN sum(er.unit_price * er.count) ELSE 0 END) month7,
+				(CASE WHEN MONTH(er.use_date) =8 THEN sum(er.unit_price * er.count) ELSE 0 END) month8,
+				(CASE WHEN MONTH(er.use_date) =9 THEN sum(er.unit_price * er.count) ELSE 0 END) month9,
+				(CASE WHEN MONTH(er.use_date) =10 THEN sum(er.unit_price * er.count) ELSE 0 END) month10,
+				(CASE WHEN MONTH(er.use_date) =11 THEN sum(er.unit_price * er.count) ELSE 0 END) month11,
+				(CASE WHEN MONTH(er.use_date) =12 THEN sum(er.unit_price * er.count) ELSE 0 END) month12,
+				er.region,er.use_date
+			FROM xz_expense_record er
+			LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent
+			LEFT JOIN xz_resource_type xrt on xrt.id=er.expense_type
+			where er.submit_type='2'
+			GROUP BY er.expense_type_parent)a
+		
+        <where>
+        	 <if test="year != null and year != '' "> and a.year = #{year}</if> 
+        	 <if test="region != null and region != '' "> and a.region = #{region}</if>
+             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND date_format(a.use_date,'%y%m%d') &gt;=
+				date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				AND date_format(a.use_date,'%y%m%d') &lt;=
+				date_format(#{params.endTime},'%y%m%d')
+			</if>
+        </where>
+        
+    </select>
+    
+    <select id="selectXzExpenseDetailList" parameterType="XzExpenseSta" resultMap="XzExpenseStaResult">
+		select a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
+			a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
+			a.month10, a.month11, a.month12, (a.month1+a.month2+a.month3+a.month4+a.month5+a.month6+a.month7+
+			a.month8+a.month9+a.a.month11+a.month12) sum
+		  from (SELECT er.expense_type_parent,rt.name expense_type_parent_name,
+				 er.expense_type,xrt.name expense_type_name,YEAR(use_date) as year,
+				(CASE WHEN MONTH(er.use_date) =1 THEN sum(er.unit_price * er.count) ELSE 0 END) month1,
+				(CASE WHEN MONTH(er.use_date) =2 THEN sum(er.unit_price * er.count) ELSE 0 END) month2,
+				(CASE WHEN MONTH(er.use_date) =3 THEN sum(er.unit_price * er.count) ELSE 0 END) month3,
+				(CASE WHEN MONTH(er.use_date) =4 THEN sum(er.unit_price * er.count) ELSE 0 END) month4,
+				(CASE WHEN MONTH(er.use_date) =5 THEN sum(er.unit_price * er.count) ELSE 0 END) month5,
+				(CASE WHEN MONTH(er.use_date) =6 THEN sum(er.unit_price * er.count) ELSE 0 END) month6,
+				(CASE WHEN MONTH(er.use_date) =7 THEN sum(er.unit_price * er.count) ELSE 0 END) month7,
+				(CASE WHEN MONTH(er.use_date) =8 THEN sum(er.unit_price * er.count) ELSE 0 END) month8,
+				(CASE WHEN MONTH(er.use_date) =9 THEN sum(er.unit_price * er.count) ELSE 0 END) month9,
+				(CASE WHEN MONTH(er.use_date) =10 THEN sum(er.unit_price * er.count) ELSE 0 END) month10,
+				(CASE WHEN MONTH(er.use_date) =11 THEN sum(er.unit_price * er.count) ELSE 0 END) month11,
+				(CASE WHEN MONTH(er.use_date) =12 THEN sum(er.unit_price * er.count) ELSE 0 END) month12,
+				er.region,er.use_date
+			FROM xz_expense_record er
+			LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent
+			LEFT JOIN xz_resource_type xrt on xrt.id=er.expense_type
+			where er.submit_type='2'
+			GROUP BY er.expense_type)a
+			where a.expense_type_parent=#{expenseTypeParent}
+    </select>
+    
+</mapper>

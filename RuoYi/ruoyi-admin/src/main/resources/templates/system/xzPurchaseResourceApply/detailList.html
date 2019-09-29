@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('采购资源列表')" />
+	<script type="text/javascript">
+	function toEdit(id){
+		$.modal.open("补录采购信息", $.table._option.toEditUrl.replace("{id}",id));
+	}
+	</script>
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<h4>费用关联</h4>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+				<div class="col-sm-offset-5 col-sm-10">
+					<button type="button" class="btn btn-sm btn-danger"
+						onclick="closeItem()">
+						<i class="fa fa-reply-all"></i>取消
+					</button>
+					&nbsp;&nbsp;
+					<button type="button" class="btn btn-sm btn-success"
+						onclick="submitHandlerSub()">
+						<i class="fa fa-check"></i>提交
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div th:include="include::footer"></div>
+	<script th:inline="javascript">
+		var prefix = ctx + "system/xzPurchaseResource";
+		var prefix1 = ctx + "system/xzPurchaseResourceApply";
+	 	var datas = [[${@dict.getType('xz_assets_purchaseChannel')}]];
+		var code = [[${code}]];
+		var isRelation =[[${isRelation}]];
+		$(function() {
+			var options = {
+				url : prefix + "/detailList/" + code,
+				toEditUrl : prefix + "/toEdit/{id}",
+				modalName : "采购资源列表",
+				showExport : true,
+				columns : [
+						{
+							checkbox : true
+						},
+						{
+							field : 'id',
+							title : '',
+							visible : false
+						},
+
+						/* {
+							field : 'resourceTypeName',
+							title : '购买类别',
+							sortable : true
+						}, */
+						{
+							field : 'resourceName',
+							title : '物品名称',
+							sortable : true
+						},
+						
+						{
+							field : 'purchaseChannel',
+							title : '购买渠道',
+							formatter: function(value, item, index) {
+							    return $.table.selectDictLabel(datas, value);
+							}
+						}, 
+						{
+							field : 'detail',
+							title : '明细',
+							sortable : true
+						},
+						{
+							field : 'resourcePrice',
+							title : '单价',
+							sortable : true
+						},
+						{
+							field : 'resourceCount',
+							title : '件数',
+							sortable : true
+						},
+						{
+							field : 'sumPrice',
+							title : '单价合计',
+							sortable : true
+						},
+						{
+							field : 'unit',
+							title : '单位',
+							sortable : true
+						},
+						{
+							field : 'brand',
+							title : '品牌',
+							sortable : true
+						},
+						{
+							field : 'resourceSpec',
+							title : '规格',
+							sortable : true
+						},
+						{
+							field : 'actualPrice',
+							title : '实际总金额',
+							sortable : true
+						},
+						{
+							field : 'floatPrice',
+							title : '浮动金额',
+							sortable : true
+						},
+						{
+							title : '操作',
+							align : 'center',
+							formatter : function(value, row, index) {
+								var actions = [];
+								debugger;
+								if(isRelation=="2"){
+									actions.push('<a class="btn btn-success btn-xs ' + '"onclick="toEdit(\'' + row.id + '\')">补录采购信息</a>');
+								}
+								
+								return actions.join('');
+							}
+						} ]
+			};
+			$.table.init(options);
+		});
+        $(function() {
+			//初始化日期选择器
+			layui.use('laydate', function() {
+				var laydate = layui.laydate;
+				laydate.render({
+					elem : '#subTime', //指定元素
+					trigger : 'click'
+				});
+			});
+		});
+        
+        function submitHandlerSub() {
+				$.operate.saveTab(prefix1 + "/editSub/"+code);
+		}
+    </script>
+</body>
+</html>

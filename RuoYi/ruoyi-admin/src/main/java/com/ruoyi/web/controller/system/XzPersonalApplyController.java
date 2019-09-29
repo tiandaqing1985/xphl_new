@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.XzAssetType;
-import com.ruoyi.system.domain.XzAsstes;
 import com.ruoyi.system.domain.XzPersonalApply;
 import com.ruoyi.system.service.IXzAssetDataService;
 import com.ruoyi.system.service.IXzAssetTypeService;
-import com.ruoyi.system.service.IXzAsstesService;
 import com.ruoyi.system.service.IXzPersonalApplyService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -40,9 +38,6 @@ public class XzPersonalApplyController extends BaseController
 	
 	@Autowired
 	private IXzPersonalApplyService xzPersonalApplyService;
-	
-	@Autowired
-	private IXzAsstesService xzAsstesService;
 	
 	@Autowired
 	private IXzAssetTypeService xzAssetTypeService;

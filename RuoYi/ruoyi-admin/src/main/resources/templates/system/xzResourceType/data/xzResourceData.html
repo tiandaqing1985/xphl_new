@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('资产子类型列表')" />
-
+	<th:block th:include="include :: header('采购类型列表')" />
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -10,16 +9,16 @@
 			<div class="col-sm-12 search-collapse">
 				<form id="formId">
 					<div class="select-list">
-					<!-- <input id="typeId" name="typeId" th:value="${id}"  type="hidden"> -->
 						<ul>
-						  	<li>
+							<li>
 								类型名称：
 									<select id="parentId" name="parentId" th:value="${type.id}" required>
 									    <option th:each="a:${typeList}"  th:value="${a.id}" th:text="${a.name}" th:selected="${a.id eq type.id}" ></option>
 									</select>
 							</li> 
+
 							<li>
-								类型标签：<input type="text" name="name"/>
+								类型名称：<input type="text" name="name"/>
 							</li>
 
 							<li>
@@ -32,19 +31,15 @@
 			</div>
 			
 	        <div class="btn-group-sm" id="toolbar" role="group">
- 				<a class="btn btn-success" onclick="add()">
+				<a class="btn btn-success" onclick="add()">
 					<i class="fa fa-plus"></i> 添加
-				</a> 
-
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:xzAssetData:edit">
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
 					<i class="fa fa-edit"></i> 修改
 				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:xzAssetData:remove">
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
 					<i class="fa fa-remove"></i> 删除
 				</a>
-				<!-- <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:xzAssetData:export">
-						<i class="fa fa-download"></i> 导出
-				 </a> -->
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -53,35 +48,31 @@
 	</div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:xzAssetData:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:xzAssetData:remove')}]];
-        var prefix = ctx + "system/xzAssetData";
+        var editFlag = [[${@permission.hasPermi('system:xzResourceType:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:xzResourceType:remove')}]];
+        var prefix = ctx + "system/xzResourceType";
+
         $(function() {
             var options = {
-                url: prefix + "/list",
+                url: prefix + "/DataList",
                 createUrl: prefix + "/add/{id}",
-                updateUrl: prefix + "/edit/{id}",
+                updateUrl: prefix + "/editData/{id}",
                 removeUrl: prefix + "/remove",
 				exportUrl: prefix + "/export",
 				queryParams: queryParams,
-                modalName: "资产子类型",
+                modalName: "采购类型",
 		        showExport: true,
                 columns: [{
 		            checkbox: true
 		        },
 				{
 					field : 'id', 
-					title : '',
+					title : '主键',
 					visible: false
 				},
 				{
 					field : 'name', 
-					title : '分类名称',
-					sortable: true
-				},
-				{
-					field : 'code', 
-					title : '编码',
+					title : '名称',
 					sortable: true
 				},
 				{
@@ -102,27 +93,24 @@
             };
             $.table.init(options);
         });
-        
         function queryParams(params) {
         	debugger;
 			var search = $.table.queryParams(params);
 			search.parentId = $("#parentId").val();
 			return search;
 		}
-        
         /*资产类型数据-新增类型*/
-		function add() {
+		 function add() {
 		    var parentId = $("#parentId option:selected").val();
-		    debugger;
 		    $.operate.add(parentId);
 		}
-        
-		/* function addType(){
-			var id = $("#typeId").val();
-	        var url = $.table._option.createUrl.replace("{id}",id);
-			 $.modal.open("添加跟进信息", url);
-		} */
-        
+         
+		/* function add(){
+		var id = $("#parentId").val();
+		debugger;
+        var url = $.table._option.createUrl.replace("{id}",id);
+		 $.modal.open("添加资源分类", url);
+		} */ 
     </script>
 </body>
 </html>

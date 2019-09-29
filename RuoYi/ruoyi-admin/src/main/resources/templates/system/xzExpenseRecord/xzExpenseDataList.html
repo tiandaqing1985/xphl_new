@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('费用统计列表')" />
+	<!-- <script type="text/javascript">
+	function detail(id){
+		$.modal.openTab("费用详情", $.table._option.detailUrl.replace("{id}",id));
+	}
+	</script> -->
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = ctx + "system/xzExpenseRecord";
+		var expenseTypeParent=[[${expenseTypeParent}]];
+        $(function() {
+            var options = {
+                url: prefix + "/xzExpenseDataList/"+expenseTypeParent,
+                modalName: "费用记录",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+		        {
+					field : 'expenseType', 
+					title : '类型id',
+					visible: false
+				},
+				{
+					field : 'expenseTypeName', 
+					title : '类型名称',
+					sortable: true
+				},
+				{
+					field : 'month1', 
+					title : '一月',
+					sortable: true
+				},
+				{
+					field : 'month2', 
+					title : '二月',
+					sortable: true
+				},
+				{
+					field : 'month3', 
+					title : '三月',
+					sortable: true
+				},
+				{
+					field : 'month4', 
+					title : '四月',
+					sortable: true
+				},
+				{
+					field : 'month5', 
+					title : '五月',
+					sortable: true
+				},
+				{
+					field : 'month6', 
+					title : '六月',
+					sortable: true
+				},
+				{
+					field : 'month7', 
+					title : '七月',
+					sortable: true
+				},
+				{
+					field : 'month8', 
+					title : '八月',
+					sortable: true
+				},
+				{
+					field : 'month9', 
+					title : '九月',
+					sortable: true
+				},
+				{
+					field : 'month10', 
+					title : '十月',
+					sortable: true
+				},
+				{
+					field : 'month11', 
+					title : '十一月',
+					sortable: true
+				},
+				{
+					field : 'month12', 
+					title : '十二月',
+					sortable: true
+				},
+				{
+					field : 'sum', 
+					title : '合计',
+					sortable: true
+				}]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzPurchaseResourceApplyMapper">
+    
+    <resultMap type="XzPurchaseResourceApply" id="XzPurchaseResourceApplyResult">
+        <result property="id"    column="id"    />
+        <result property="code"    column="code"    />
+        <result property="purpose"    column="purpose"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="applyName"    column="apply_name"    />
+        <result property="applyUserId"    column="apply_user_id"    />
+        <result property="applyUserName"    column="apply_user_name"    />
+        <result property="purchaseUserId"    column="purchase_user_id"    />
+        <result property="applyPrice"    column="apply_price"    />
+        <result property="actualPrice"    column="actual_price"    />
+        <result property="floatPrice"    column="float_price"    />
+        <result property="subTime"    column="sub_time"    />
+        <result property="subType"    column="sub_type"    />
+        <result property="approvalTime"    column="approval_time"    />
+        <result property="approvalStatus"    column="approval_status"    />
+        <result property="isRelation"    column="is_relation"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <collection  property="xzPurchaseResource" javaType="java.util.List" resultMap="XzPurchaseResourceResult" />
+        <collection  property="xzPurchaseApproval" column="id" javaType="com.ruoyi.system.domain.XzPurchaseApproval" resultMap="XzPurchaseApprovalResult" />
+    </resultMap>
+    
+     <resultMap type="XzPurchaseResource" id="XzPurchaseResourceResult">
+        <result property="id"    			column="id"    />
+        <result property="resourceName"    	column="resource_name"    />
+        <result property="resourceCount"    column="resource_count"    />
+        <result property="resourcePrice"    column="resource_price"    />
+        <result property="unit"    			column="unit"    />
+        <result property="resourceSpec"    	column="resource_spec"    />
+        <result property="purchaseChannel"  column="purchase_channel"    />
+        <result property="brand"    		column="brand"    />
+        <result property="detail"    		column="detail"    />
+        <result property="remark"    		column="remark"    />
+    </resultMap>
+    
+    <resultMap type="com.ruoyi.system.domain.XzPurchaseApproval" id="XzPurchaseApprovalResult">
+        <result property="id"    column="id"    />
+        <result property="approvalState"    column="approval_state"    />
+        <result property="approvalId"    column="approval_id"    />
+        <result property="approvalName"    column="approval_name"    />
+        <result property="approvalDate"    column="approval_date"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+	
+	<sql id="selectXzPurchaseResourceApplyVo">
+        select  pra.id,pra.code,pra.purpose,pra.apply_id,pra.apply_user_id,pra.purchase_user_id,pra.apply_price,sum(pr.actual_price) actual_price,sum(pr.float_price) float_price,
+				pra.sub_time,pra.sub_type,pra.approval_time,pra.approval_status,pra.is_relation,pra.create_by,pra.create_time,pra.update_by,
+				pra.update_time,pr.id,pr.resource_name,
+				pr.resource_count,pr.resource_price,pr.unit,IFNULL(pr.resource_spec,'')as resource_spec,pr.purchase_channel,
+				pr.brand,pr.detail,pr.remark,
+				u.user_name apply_user_name,pa.approval_state,user.user_name approval_name,pa.approval_date,pa.remarks
+          from xz_purchase_resource_apply pra
+          left join xz_purchase_resource pr on pr.code=pra.code
+          left join xz_purchase_approval pa on pa.apply_id=pra.id
+          left join sys_user u on u.user_id= pra.apply_user_id
+          left join sys_user user on user.user_id= pa.approval_id
+          
+    </sql>
+	
+    <select id="selectXzPurchaseResourceApplyList" parameterType="XzPurchaseResourceApply" resultMap="XzPurchaseResourceApplyResult">
+       select  pra.id,
+				pra.code,
+				pra.purpose,
+				pra.apply_id,
+				pra.apply_user_id,
+				pra.purchase_user_id,
+				pra.apply_price,
+				pra.actual_price,
+				pra.float_price,
+				pra.sub_time,
+				pra.sub_type,
+				pra.approval_time,
+				pra.approval_status,
+				pra.is_relation,
+				pra.create_by,
+				pra.create_time,
+				pra.update_by,
+				pra.update_time,
+				u.user_name apply_user_name,
+				b.names apply_name
+        from xz_purchase_resource_apply pra
+        left join sys_user u on u.user_id= pra.apply_user_id
+         left join (select code,GROUP_CONCAT(resource_name) as names from xz_purchase_resource group by code) b on b.code=pra.code
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="code != null  and code != '' "> and pra.code like concat('%',#{code},'%') </if>
+             <if test="applyUserName != null and applyUserName!='' "> and u.user_name like concat('%', #{applyUserName} ,'%') </if>
+             <if test="subTime != null "> and pra.sub_time = #{subTime}</if>
+             <if test="approvalStatus != null and approvalStatus != '' "> and pra.approval_status = #{approvalStatus}</if>
+         </where>
+         order by  pra.create_time DESC 
+    </select>
+    
+    <select id="selectXzPurchaseResourceApplyById" parameterType="Long" resultMap="XzPurchaseResourceApplyResult">
+        <include refid="selectXzPurchaseResourceApplyVo"/>
+        where pra.id = #{id}
+    </select>
+    
+    <select id="selectXzPurchaseResourceApplyByCode" parameterType="String" resultMap="XzPurchaseResourceApplyResult">
+        <include refid="selectXzPurchaseResourceApplyVo"/>
+        where pra.code = #{code}
+    </select>
+    
+    <select id="detail" resultType="com.ruoyi.system.domain.XzPurchaseResourceApply">
+    	select * from xz_purchase_resource_apply
+    	where code=#{code}
+    </select>
+    
+    <select id="perResDetail" resultType="com.ruoyi.system.domain.XzPurchaseResource">
+    	select pr.id,
+    			rt.name resourceTypeName, 
+    			pr.resource_name resourceName,
+    			pr.resource_count resourceCount,
+    			pr.purchase_channel purchaseChannel
+    	from xz_purchase_resource pr
+    	left join xz_resource_type rt on rt.id=pr.resource_type_id
+    	where pr.code=#{code}
+    	order by pr.create_time DESC
+    </select>
+        
+    <insert id="insertXzPurchaseResourceApply" parameterType="XzPurchaseResourceApply" useGeneratedKeys="true" keyProperty="id">
+        insert into xz_purchase_resource_apply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="code != null  and code != ''  ">code,</if>
+			<if test="purpose != null  and purpose != ''  ">purpose,</if>
+			<if test="applyId != null  and applyId != ''  ">apply_id,</if>
+			<if test="applyUserId != null  ">apply_user_id,</if>
+			<if test="purchaseUserId != null  ">purchase_user_id,</if>
+			<if test="applyPrice != null  ">apply_price,</if>
+			<if test="actualPrice != null  ">actual_price,</if>
+			<if test="floatPrice != null  ">float_price,</if>
+			<if test="subTime != null  ">sub_time,</if>
+			<if test="subType != null  and subType != ''  ">sub_type,</if>
+			<if test="approvalTime != null  ">approval_time,</if>
+			<if test="approvalStatus != null  and approvalStatus != ''  ">approval_status,</if>
+			<if test="isRelation != null  and isRelation != ''  ">is_relation,</if>
+			<if test="createBy != null  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="code != null  and code != ''  ">#{code},</if>
+			<if test="purpose != null  and purpose != ''  ">#{purpose},</if>
+			<if test="applyId != null  and applyId != ''  ">#{applyId},</if>
+			<if test="applyUserId != null  ">#{applyUserId},</if>
+			<if test="purchaseUserId != null  ">#{purchaseUserId},</if>
+			<if test="applyPrice != null  ">#{applyPrice},</if>
+			<if test="actualPrice != null  ">#{actualPrice},</if>
+			<if test="floatPrice != null  ">#{floatPrice},</if>
+			<if test="subTime != null  ">#{subTime},</if>
+			<if test="subType != null  and subType != ''  ">#{subType},</if>
+			<if test="approvalTime != null  ">#{approvalTime},</if>
+			<if test="approvalStatus != null  and approvalStatus != ''  ">#{approvalStatus},</if>
+			<if test="isRelation != null  and isRelation != ''  ">#{isRelation},</if>
+			<if test="createBy != null  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzPurchaseResourceApply" parameterType="XzPurchaseResourceApply">
+        update xz_purchase_resource_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''  ">code = #{code},</if>
+            <if test="applyId != null  and applyId != ''  ">apply_id = #{applyId},</if>
+            <if test="applyUserId != null  ">apply_user_id = #{applyUserId},</if>
+            <if test="purchaseUserId != null  ">purchase_user_id = #{purchaseUserId},</if>
+            <if test="applyPrice != null  ">apply_price = #{applyPrice},</if>
+            <if test="actualPrice != null  ">actual_price = #{actualPrice},</if>
+            <if test="floatPrice != null  ">float_price = #{floatPrice},</if>
+            <if test="subTime != null  ">sub_time = #{subTime},</if>
+            <if test="subType != null  and subType != ''  ">sub_type = #{subType},</if>
+            <if test="approvalTime != null  ">approval_time = #{approvalTime},</if>
+            <if test="approvalStatus != null  and approvalStatus != ''  ">approval_status = #{approvalStatus},</if>
+            <if test="isRelation != null  and isRelation != ''  ">is_relation = #{isRelation},</if>
+            <if test="createBy != null  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteXzPurchaseResourceApplyById" parameterType="Long">
+        delete from xz_purchase_resource_apply where id = #{id}
+    </delete>
+	<delete id="deleteXzPurchaseResourceByCode" parameterType="String">
+        delete from xz_purchase_resource_apply where code = #{code}
+    </delete>
+	
+    <delete id="deleteXzPurchaseResourceApplyByIds" parameterType="String">
+        delete from xz_purchase_resource_apply where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

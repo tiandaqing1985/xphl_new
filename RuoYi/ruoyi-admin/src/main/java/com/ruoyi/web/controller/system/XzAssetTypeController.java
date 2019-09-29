@@ -44,7 +44,6 @@ public class XzAssetTypeController extends BaseController {
 	/**
 	 * 查询资产父类型列表
 	 */
-	@RequiresPermissions("system:xzAssetType:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(XzAssetType xzAssetType) {
@@ -56,7 +55,6 @@ public class XzAssetTypeController extends BaseController {
 	/**
 	 * 导出资产父类型列表
 	 */
-	@RequiresPermissions("system:xzAssetType:export")
 	@PostMapping("/export")
 	@ResponseBody
 	public AjaxResult export(XzAssetType xzAssetType) {
@@ -76,7 +74,6 @@ public class XzAssetTypeController extends BaseController {
 	/**
 	 * 新增保存资产父类型
 	 */
-	@RequiresPermissions("system:xzAssetType:add")
 	@Log(title = "资产类型", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -109,7 +106,6 @@ public class XzAssetTypeController extends BaseController {
 	/**
 	 * 修改保存资产父类型
 	 */
-	@RequiresPermissions("system:xzAssetType:edit")
 	@Log(title = "资产类型", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -122,7 +118,6 @@ public class XzAssetTypeController extends BaseController {
 	/**
 	 * 删除资产父类型
 	 */
-	@RequiresPermissions("system:xzAssetType:remove")
 	@Log(title = "资产类型", businessType = BusinessType.DELETE)
 	@PostMapping("/remove")
 	@ResponseBody
@@ -138,7 +133,6 @@ public class XzAssetTypeController extends BaseController {
 	/**
 	 * 查询资产类型详细
 	 */
-	@RequiresPermissions("system:xzAssetType:list")
 	@GetMapping("/detail/{id}")
 	public String detail(@PathVariable("id") Long id, ModelMap mmap) {
 		/* mmap.put("id", id); */

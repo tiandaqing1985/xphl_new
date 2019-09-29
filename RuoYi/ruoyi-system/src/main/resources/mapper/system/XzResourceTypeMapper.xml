@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzResourceTypeMapper">
+    
+    <resultMap type="XzResourceType" id="XzResourceTypeResult">
+        <result property="id"    column="id"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="parentName"    column="parent_name"    />
+        <result property="name"    column="name"    />
+        <result property="sourceType"    column="source_type"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+	
+	<sql id="selectXzResourceTypeVo">
+        select id, parent_id, name, source_type, create_by, create_time, update_by, update_time from xz_resource_type
+    </sql>
+    
+    <sql id="selectXzResourceType">
+        select rt.id, rt.parent_id, xrt.name parent_name, rt.name, rt.source_type, rt.create_by, rt.create_time, rt.update_by, rt.update_time 
+        from xz_resource_type rt
+        left join xz_resource_type xrt on xrt.id=rt.parent_id
+    </sql>
+	
+    <select id="selectXzResourceTypeList" parameterType="XzResourceType" resultMap="XzResourceTypeResult">
+        <include refid="selectXzResourceTypeVo"/>
+        <where>  
+        	parent_id is null
+             <if test="id != null "> and id = #{id}</if>
+             <if test="name != null  and name != '' "> and name = #{name}</if>
+             <if test="sourceType != null "> and source_type = #{sourceType}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+         </where>
+    </select>
+    
+     <select id="selectXzResourceDataList" parameterType="XzResourceType" resultMap="XzResourceTypeResult">
+        <include refid="selectXzResourceTypeVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="parentId != null "> and parent_id = #{parentId}</if>
+             <if test="name != null  and name != '' "> and name = #{name}</if>
+             <if test="sourceType != null "> and source_type = #{sourceType}</if>
+             <if test="createBy != null  and createBy != '' "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null  and updateBy != '' "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectXzResourceTypeById" parameterType="Long" resultMap="XzResourceTypeResult">
+        <include refid="selectXzResourceType"/>
+        where rt.id = #{id}
+    </select>
+        
+    <insert id="insertXzResourceType" parameterType="XzResourceType" useGeneratedKeys="true" keyProperty="id">
+        insert into xz_resource_type
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="parentId != null  ">parent_id,</if>
+			<if test="name != null  and name != ''  ">name,</if>
+			<if test="sourceType != null  ">source_type,</if>
+			<if test="createBy != null  and createBy != ''  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="parentId != null  ">#{parentId},</if>
+			<if test="name != null  and name != ''  ">#{name},</if>
+			<if test="sourceType != null  ">#{sourceType},</if>
+			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzResourceType" parameterType="XzResourceType">
+        update xz_resource_type
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="parentId != null  ">parent_id = #{parentId},</if>
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="sourceType != null  ">source_type = #{sourceType},</if>
+            <if test="createBy != null  and createBy != ''  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteXzResourceTypeById" parameterType="Long">
+        delete from xz_resource_type where id = #{id}
+    </delete>
+	
+    <delete id="deleteXzResourceTypeByIds" parameterType="String">
+        delete from xz_resource_type where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+    <select id="selectXzResourceTypeByName" resultType="int">
+    	select count(1) from xz_resource_type where source_type = #{sourceType} and name = #{name}
+    </select>
+    
+   <select id="selectXzResourceTypeByAll" resultMap="XzResourceTypeResult"> 
+   		select * from xz_resource_type where parent_id is null
+   </select>
+   
+   <select id="selectByFeiList" resultMap="XzResourceTypeResult"> 
+   		select * from xz_resource_type where parent_id is null and source_type='1'
+   </select>
+   
+   <select id="xzResourceDataByParentId" resultMap="XzResourceTypeResult"> 
+   		select * from xz_resource_type where parent_id = #{id}
+   </select>
+    
+</mapper>

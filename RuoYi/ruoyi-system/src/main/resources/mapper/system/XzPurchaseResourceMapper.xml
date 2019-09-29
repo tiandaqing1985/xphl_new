@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzPurchaseResourceMapper">
+    
+    <resultMap type="XzPurchaseResource" id="XzPurchaseResourceResult">
+        <result property="id"    column="id"    />
+        <result property="code"    column="code"    />
+        <result property="region"    column="region"    />
+        <result property="resourceTypeId"    column="resource_type_id"    />
+        <result property="resourceTypeName"    column="resource_type_Name"    />
+        <result property="resourceParentId"    column="resource_parent_id"    />
+        <result property="resourceName"    column="resource_name"    />
+        <result property="resourceCount"    column="resource_count"    />
+        <result property="resourcePrice"    column="resource_price"    />
+        <result property="sumPrice"    column="sum_price"    />
+        <result property="unit"    column="unit"    />
+        <result property="resourceSpec"    column="resource_spec"    />
+        <result property="purchaseChannel"    column="purchase_channel"    />
+        <result property="purchaseAddress"    column="purchase_address"    />
+        <result property="brand"    column="brand"    />
+        <result property="detail"    column="detail"    />
+        <result property="remark"    column="remark"    />
+        <result property="fileUrl"    column="file_url"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="actualPrice"    column="actual_price"    />
+        <result property="floatPrice"    column="float_price"    />
+        <result property="floatComment"    column="float_comment"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+	
+	<sql id="selectXzPurchaseResourceVo">
+        select id, code,region, resource_type_id, resource_parent_id, resource_name, resource_count, resource_price, unit, resource_spec, purchase_channel, purchase_address, brand, detail, remark, file_url, file_name, actual_price, float_price, float_comment, create_by, create_time, update_by, update_time from xz_purchase_resource
+    </sql>
+	<select id="selectXzPurchaseResourceListByCode" resultType="com.ruoyi.system.domain.XzPurchaseResource">
+		select pr.id,
+    			rt.name resourceTypeName, 
+    			pr.region region,
+    			pr.resource_name resourceName,
+    			pr.resource_count resourceCount,
+    			pr.purchase_channel purchaseChannel,
+    			pr.resource_price resourcePrice,
+				pr.resource_spec  resourceSpec,
+				pr.unit unit,
+				pr.brand brand,
+				pr.detail detail,
+				pr.actual_price actualPrice,
+				pr.float_price floatPrice,
+				pr.float_comment floatComment,
+				(pr.resource_price*pr.resource_count)sumPrice
+    	from xz_purchase_resource pr
+    	left join xz_resource_type rt on rt.id=pr.resource_type_id
+    	where pr.code=#{code}
+    	order by pr.create_time DESC
+	</select>
+	
+	<select id="selectXzPurchaseResourceIdByCode" resultType="com.ruoyi.system.domain.XzPurchaseResourceApply">
+	select a.ids applyId,a.sumPrice applyPrice from
+		(select GROUP_CONCAT(id) as ids,sum(resource_price*resource_count) as sumPrice from xz_purchase_resource where code=#{code})a
+	</select>
+    <select id="selectXzPurchaseResourceList" parameterType="XzPurchaseResource" resultMap="XzPurchaseResourceResult">
+        <include refid="selectXzPurchaseResourceVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="code != null  and code != '' "> and code = #{code}</if>
+             <if test="region != null  and region != '' "> and region = #{region}</if>
+             <if test="resourceTypeId != null "> and resource_type_id = #{resourceTypeId}</if>
+             <if test="resourceParentId != null "> and resource_parent_id = #{resourceParentId}</if>
+             <if test="resourceName != null  and resourceName != '' "> and resource_name = #{resourceName}</if>
+             <if test="resourceCount != null "> and resource_count = #{resourceCount}</if>
+             <if test="resourcePrice != null "> and resource_price = #{resourcePrice}</if>
+             <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
+             <if test="resourceSpec != null  and resourceSpec != '' "> and resource_spec = #{resourceSpec}</if>
+             <if test="purchaseChannel != null  and purchaseChannel != '' "> and purchase_channel = #{purchaseChannel}</if>
+             <if test="purchaseAddress != null  and purchaseAddress != '' "> and purchase_address = #{purchaseAddress}</if>
+             <if test="brand != null  and brand != '' "> and brand = #{brand}</if>
+             <if test="detail != null  and detail != '' "> and detail = #{detail}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+             <if test="fileUrl != null  and fileUrl != '' "> and file_url = #{fileUrl}</if>
+             <if test="fileName != null  and fileName != '' "> and file_name = #{fileName}</if>
+             <if test="actualPrice != null "> and actual_price = #{actualPrice}</if>
+             <if test="floatPrice != null "> and float_price = #{floatPrice}</if>
+             <if test="floatComment != null  and floatComment != '' "> and float_comment = #{floatComment}</if>
+             <if test="createBy != null "> and create_by = #{createBy}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+             <if test="updateBy != null "> and update_by = #{updateBy}</if>
+             <if test="updateTime != null "> and update_time = #{updateTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectXzPurchaseResourceById" parameterType="Long" resultMap="XzPurchaseResourceResult">
+        select  pr.id,
+				pr.code,
+				pr.region,
+				pr.resource_type_id,
+				pr.resource_parent_id,
+				pr.resource_name,
+				pr.resource_count,
+				pr.resource_price,
+				pr.unit,
+				pr.resource_spec,
+				pr.purchase_channel,
+				pr.purchase_address,
+				pr.brand,
+				pr.detail,
+				pr.remark,
+				pr.file_url,
+				pr.file_name,
+				pr.actual_price,
+				pr.float_price,
+				pr.float_comment,
+				pr.create_by,
+				pr.create_time,
+				pr.update_by,
+				pr.update_time,
+				(pr.resource_count*pr.resource_price) sum_price
+				 from xz_purchase_resource pr
+        where pr.id = #{id}
+    </select>
+        
+    <insert id="insertXzPurchaseResource" parameterType="XzPurchaseResource" useGeneratedKeys="true" keyProperty="id">
+        insert into xz_purchase_resource
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="code != null  and code != ''  ">code,</if>
+			<if test="region != null  and region != ''  ">region,</if>
+			<if test="resourceTypeId != null  ">resource_type_id,</if>
+			<if test="resourceParentId != null  ">resource_parent_id,</if>
+			<if test="resourceName != null  and resourceName != ''  ">resource_name,</if>
+			<if test="resourceCount != null  ">resource_count,</if>
+			<if test="resourcePrice != null  ">resource_price,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
+			<if test="resourceSpec != null  and resourceSpec != ''  ">resource_spec,</if>
+			<if test="purchaseChannel != null  and purchaseChannel != ''  ">purchase_channel,</if>
+			<if test="purchaseAddress != null  and purchaseAddress != ''  ">purchase_address,</if>
+			<if test="brand != null  and brand != ''  ">brand,</if>
+			<if test="detail != null  and detail != ''  ">detail,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+			<if test="fileUrl != null  and fileUrl != ''  ">file_url,</if>
+			<if test="fileName != null  and fileName != ''  ">file_name,</if>
+			<if test="actualPrice != null  ">actual_price,</if>
+			<if test="floatPrice != null  ">float_price,</if>
+			<if test="floatComment != null  and floatComment != ''  ">float_comment,</if>
+			<if test="createBy != null  ">create_by,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="updateBy != null  ">update_by,</if>
+			<if test="updateTime != null  ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="code != null  and code != ''  ">#{code},</if>
+			<if test="region != null  and region != ''  ">#{region},</if>
+			<if test="resourceTypeId != null  ">#{resourceTypeId},</if>
+			<if test="resourceParentId != null  ">#{resourceParentId},</if>
+			<if test="resourceName != null  and resourceName != ''  ">#{resourceName},</if>
+			<if test="resourceCount != null  ">#{resourceCount},</if>
+			<if test="resourcePrice != null  ">#{resourcePrice},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
+			<if test="resourceSpec != null  and resourceSpec != ''  ">#{resourceSpec},</if>
+			<if test="purchaseChannel != null  and purchaseChannel != ''  ">#{purchaseChannel},</if>
+			<if test="purchaseAddress != null  and purchaseAddress != ''  ">#{purchaseAddress},</if>
+			<if test="brand != null  and brand != ''  ">#{brand},</if>
+			<if test="detail != null  and detail != ''  ">#{detail},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+			<if test="fileUrl != null  and fileUrl != ''  ">#{fileUrl},</if>
+			<if test="fileName != null  and fileName != ''  ">#{fileName},</if>
+			<if test="actualPrice != null  ">#{actualPrice},</if>
+			<if test="floatPrice != null  ">#{floatPrice},</if>
+			<if test="floatComment != null  and floatComment != ''  ">#{floatComment},</if>
+			<if test="createBy != null  ">#{createBy},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="updateBy != null  ">#{updateBy},</if>
+			<if test="updateTime != null  ">#{updateTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzPurchaseResource" parameterType="XzPurchaseResource">
+        update xz_purchase_resource
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null  and code != ''  ">code = #{code},</if>
+            <if test="region != null  and region != ''  ">region = #{region},</if>
+            <if test="resourceTypeId != null  ">resource_type_id = #{resourceTypeId},</if>
+            <if test="resourceParentId != null  ">resource_parent_id = #{resourceParentId},</if>
+            <if test="resourceName != null  and resourceName != ''  ">resource_name = #{resourceName},</if>
+            <if test="resourceCount != null  ">resource_count = #{resourceCount},</if>
+            <if test="resourcePrice != null  ">resource_price = #{resourcePrice},</if>
+            <if test="unit != null  and unit != ''  ">unit = #{unit},</if>
+            <if test="resourceSpec != null  and resourceSpec != ''  ">resource_spec = #{resourceSpec},</if>
+            <if test="purchaseChannel != null  and purchaseChannel != ''  ">purchase_channel = #{purchaseChannel},</if>
+            <if test="purchaseAddress != null  and purchaseAddress != ''  ">purchase_address = #{purchaseAddress},</if>
+            <if test="brand != null  and brand != ''  ">brand = #{brand},</if>
+            <if test="detail != null  and detail != ''  ">detail = #{detail},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="fileUrl != null  and fileUrl != ''  ">file_url = #{fileUrl},</if>
+            <if test="fileName != null  and fileName != ''  ">file_name = #{fileName},</if>
+            <if test="actualPrice != null  ">actual_price = #{actualPrice},</if>
+            <if test="floatPrice != null  ">float_price = #{floatPrice},</if>
+            <if test="floatComment != null  and floatComment != ''  ">float_comment = #{floatComment},</if>
+            <if test="createBy != null  ">create_by = #{createBy},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="updateBy != null  ">update_by = #{updateBy},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteXzPurchaseResourceById" parameterType="Long">
+        delete from xz_purchase_resource where id = #{id}
+    </delete>
+	
+    <delete id="deleteXzPurchaseResourceByIds" parameterType="String">
+        delete from xz_purchase_resource where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

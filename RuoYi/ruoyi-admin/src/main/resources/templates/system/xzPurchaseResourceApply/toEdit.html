@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('采购资源补录')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="form-xzPurchaseResource-edit"
+			th:object="${xzPurchaseResource}">
+			<input id="id" name="id" th:field="*{id}" type="hidden">
+			<input id="sumPrice" name="sumPrice" th:field="*{sumPrice}" type="hidden">
+			<h4 class="form-header h4">采购信息</h4>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span
+							style="color: red;">*</span>实际金额：</label>
+				<div class="col-sm-6">
+					<input id="actualPrice" name="actualPrice" class="form-control"
+						type="text" required="required">
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">备注说明：</label>
+				<div class="col-sm-6">
+					<textarea id="floatComment" name="floatComment"
+						class="form-control"></textarea>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div th:include="include::footer"></div>
+	<script type="text/javascript">
+		var prefix = ctx + "system/xzPurchaseResource";
+		$("#form-xzPurchaseResource-edit").validate({
+			rules : {
+				xxxx : {
+					required : true,
+				},
+			},
+			focusCleanup : true
+		});
+
+		function submitHandler() {
+			if ($.validate.form()) {
+				$.operate.save(prefix + "/toEdit", $(
+						'#form-xzPurchaseResource-edit').serialize());
+			}
+		}
+	</script>
+</body>
+</html>

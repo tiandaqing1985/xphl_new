@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('采购资源申请')" />
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+		<form class="form-horizontal m" id="from-detail" th:object="${xzPurchaseResourceApply}">
+			<input id="id" name="id" th:field="*{id}" type="hidden">
+			<h4 class="form-header h4">采购申请</h4>
+			<div>
+				<table id="tab" border="1" style="width:100%;">
+					<tr>
+						<th colspan="6">审批单</th>
+					</tr>
+					<tr>
+						<th>用途</th>
+						<td colspan="5">[[${xzPurchaseResourceApply.purpose}]]</td>
+					</tr>
+					<tr>
+						<th>申请时间</th>
+						<td colspan="2">[[${#dates.format(xzPurchaseResourceApply.subTime, 'yyyy-MM-dd')}]]</td>
+						<th>申请人</th>
+						<td colspan="2">[[${xzPurchaseResourceApply.applyUserName}]]</td>
+					</tr>
+					<tr>
+						<th colspan="6">采购清单</th>
+					</tr>
+					
+					<table id="tab2" border="1" style="width:100%;">
+						<tr>
+						<th>序号</th>
+						<th>物品</th>
+						<th>单价</th>
+						<th>件数</th>
+						<th>规格</th>
+						<th>合计</th>
+					</tr>
+					</table>
+					<table id="tab3" border="1" style="width:100%;">
+					<tr>
+						<th colspan="1">审批人</th>
+						<th colspan="3">审批意见</th>
+						<th colspan="1">审批状态</th>
+						<th colspan="1">审批时间</th>
+					</tr>
+					<tr>
+						<td colspan="1">[[${xzPurchaseResourceApply.xzPurchaseApproval.approvalName}]]</td>
+						<td colspan="3">[[${xzPurchaseResourceApply.xzPurchaseApproval.remarks}]]</td>
+						<td colspan="1">[[${@dict.getLabel('sys_user_approval_state',xzPurchaseResourceApply.xzPurchaseApproval.approvalState)}]]</td>
+						<td colspan="1">[[${#dates.format(xzPurchaseResourceApply.xzPurchaseApproval.approvalDate, 'yyyy-MM-dd')}]]</td>
+					</tr>
+				</table>
+			</div>
+		</form>
+	</div>
+	<div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+       		<button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关闭</button>
+            
+        </div>
+    </div>
+	<div th:include="include::footer"></div>
+	 <script th:inline="javascript">
+		var prefix = ctx + "system/xzPurchaseResourceApply";
+		$("#from-detail").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		$(function() {
+			//展示数据
+			debugger;
+			var dataSum=[[${xzPurchaseResourceApply.xzPurchaseApproval}]];
+			var data =[[${xzPurchaseResourceApply.xzPurchaseResource}]];
+			var str = "";//定义用于拼接的字符串
+			var sum=0;
+	        for (var i = 0; i < data.length; i++) {
+	        	debugger;
+	        	sumPrice=data[i].resourcePrice*data[i].resourceCount;
+	            //拼接表格的行和列
+	            str = "<tr><td>" + (i+1) + "</td><td>" + data[i].resourceName + "</td><td>" + data[i].resourcePrice+"￥" + "</td><td>" 
+	            		+ data[i].resourceCount + "</td><td>" + data[i].resourceSpec + "</td><td>" + sumPrice +"￥"+ "</td></tr>";
+	            //追加到table中
+	            $("#tab2").append(str);
+	            sum+=sumPrice;
+			}
+	        str2 = "<tr><th>" + "合计" + "</th><td>" + sum+"￥" + "</td></tr>";
+            $("#tab2").append(str2);
+		});
+		
+		
+		
+	</script>
+</body>
+</html>

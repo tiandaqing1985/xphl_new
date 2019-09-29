@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('费用统计列表')" />
+	<script type="text/javascript">
+	function detail(expenseTypeParent){
+		$.modal.openTab("费用统计-详情", $.table._option.detailUrl.replace("{expenseTypeParent}",expenseTypeParent));
+	}
+	</script>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>所在地域： <select name="region"
+								th:with="type=${@dict.getType('xz_assets_region')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+										th:value="${dict.dictValue}"></option>
+							</select>
+							</li>
+							<li class="select-time"><label>购入时间：</label> <input
+								type="text" class="time-input" id="startTime" placeholder="开始时间"
+								name="params[beginTime]" /> <span>-</span> <input type="text"
+								class="time-input" id="endTime" placeholder="结束时间"
+								name="params[endTime]" />
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:xzExpenseRecord:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:xzExpenseRecord:remove')}]];
+        var prefix = ctx + "system/xzExpenseRecord";
+
+        $(function() {
+            var options = {
+                url: prefix + "/xzExpenseList",
+                detailUrl:prefix + "/xzExpenseDataList/{expenseTypeParent}",
+                modalName: "费用记录",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+		        {
+					field : 'expenseTypeParent', 
+					title : '类型id',
+					visible: false
+				},
+				{
+					field : 'expenseTypeParentName', 
+					title : '类型名称',
+					sortable: true
+				},
+				{
+					field : 'month1', 
+					title : '一月',
+					sortable: true
+				},
+				{
+					field : 'month2', 
+					title : '二月',
+					sortable: true
+				},
+				{
+					field : 'month3', 
+					title : '三月',
+					sortable: true
+				},
+				{
+					field : 'month4', 
+					title : '四月',
+					sortable: true
+				},
+				{
+					field : 'month5', 
+					title : '五月',
+					sortable: true
+				},
+				{
+					field : 'month6', 
+					title : '六月',
+					sortable: true
+				},
+				{
+					field : 'month7', 
+					title : '七月',
+					sortable: true
+				},
+				{
+					field : 'month8', 
+					title : '八月',
+					sortable: true
+				},
+				{
+					field : 'month9', 
+					title : '九月',
+					sortable: true
+				},
+				{
+					field : 'month10', 
+					title : '十月',
+					sortable: true
+				},
+				{
+					field : 'month11', 
+					title : '十一月',
+					sortable: true
+				},
+				{
+					field : 'month12', 
+					title : '十二月',
+					sortable: true
+				},
+				{
+					field : 'sum', 
+					title : '合计',
+					sortable: true
+				},
+				
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + '" onclick="detail(\'' + row.expenseTypeParent + '\')">查看</a> ');
+		            	
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>
