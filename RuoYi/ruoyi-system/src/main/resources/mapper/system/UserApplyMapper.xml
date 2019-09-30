@@ -129,11 +129,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     		FROM sys_user_apply a
 			LEFT JOIN sys_user us ON us.user_id = a.user_id 
 		<where>
-			us.status = 0
 		     <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
 			 <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
 			 <if test="status != null and status != ''">AND a.STATUS = #{status}</if>	
 		</where>
+    </select>
+    
+    <select id="selectUserApplyByApplyId" parameterType="Long" resultMap="UserApplyResult">
+    	select * from sys_user_apply where apply_id=#{applyId}
     </select>
     
     <select id="selectUserApplyAsList"  parameterType="UserApply" resultMap="UserApplyResult">
@@ -157,7 +160,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
 		         ELSE 
-		            ''
+		            '取消请假'
 	        	END)apply_type,  
 		        (CASE
 		         WHEN a.apply_state = 1 THEN
@@ -211,7 +214,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
 	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
     	<where>  
-    		u.status = 0 and s.status = 0
              <if test="userId != null "> and a.user_id = #{userId}</if>
              <if test="listNum != null  and listNum != '' "> and a.list_num like concat('%', #{listNum}, '%')</if>
              <if test="timelength != null "> and a.timelength = #{timelength}</if>
@@ -238,7 +240,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
 		         ELSE 
-		            ''
+		            '取消请假'
 	        	END)apply_type,  
 		        (CASE
 		         WHEN a.apply_state = 1 THEN
@@ -292,7 +294,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
 	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
     	<where>  
-    		u.status = 0 and s.status = 0
              <if test="userId != null "> and a.user_id = #{userId}</if>
              <if test="listNum != null  and listNum != '' "> and a.list_num like concat('%', #{listNum}, '%')</if>
              <if test="timelength != null "> and a.timelength = #{timelength}</if>
@@ -342,7 +343,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
 		         ELSE 
-		            ''
+		            '取消请假'
 		        END)apply_type,  
 		        (CASE
 		         WHEN a.apply_state = 1 THEN
@@ -391,7 +392,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		        from sys_user_apply a
 		        	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
 		        	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
-        			where u.status = 0 and a.apply_id = #{applyId} 
+        			where a.apply_id = #{applyId} 
     </select>
     
     <select id="selectUserApplyByIdForUndo" parameterType="Long" resultMap="UserApplyResult">
@@ -404,7 +405,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
 		         ELSE 
-		            ''
+		            '取消请假'
 		        END)apply_type,  
 		        (CASE
 		         WHEN a.apply_state = 1 THEN
@@ -487,7 +488,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="leaveType != null  and leaveType != ''  ">leave_type,</if>
 			<if test="forApplyId != null  and forApplyId != ''  ">for_applyid,</if>
 			<if test="prove != null and prove != '' ">prove,</if>
-			apply_time,
+			apply_time
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="userId != null  ">#{userId},</if>
@@ -525,10 +526,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="confirmState != null  and confirmState != ''  ">confirm_state = #{confirmState},</if>
             <if test="details != null  and details != ''  ">details = #{details},</if>
             <if test="leaveType != null  and leaveType != ''  ">leave_type = #{leaveType},</if>
-            <if test="applyTime != null  ">apply_time = #{applyTime}</if>
+            <if test="applyTime != null  ">apply_time = #{applyTime},</if>
             <if test="prove != null and prove != '' ">prove = #{prove}</if>
             <if test="forApplyId != null  and forApplyId != ''  ">for_applyid = #{forApplyId},</if>
-            <if test="status != null and status != ''"> status = #{status}</if>
+            <if test="status != null and status != ''"> status = #{status},</if>
         </trim>
         where apply_id = #{applyId}
     </update>

@@ -164,7 +164,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
 	    	LEFT JOIN sys_dept d ON u. dept_id = d.dept_id
         <where>  
-        	u.status = 0
             <if test="approvalId != null "> and p.approval_id = #{approvalId}</if>
              <if test="applyId != null "> and p.apply_id = #{applyId}</if>
              <if test="approvalState != null  and approvalState != '' "> and p.approval_state = #{approvalState}</if>
@@ -254,7 +253,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    	LEFT JOIN sys_dept d ON u. dept_id = d.dept_id
 	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
         <where> 
-        	u.status = 0 and s.status = 0
         	<if test="approverId != null "> and p.approver_id = #{approverId}</if>
         	<if test="approvalState != null  and approvalState != '' "> and p.approval_state = #{approvalState,jdbcType=VARCHAR}</if>
         	<if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState,jdbcType=VARCHAR}</if>
@@ -267,9 +265,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         	<if test="approvalId != null "> and p.approval_id = #{approvalId}</if>
         	<if test="applyerId != null "> and a.user_id = #{applyerId}</if>
         	<if test="deptName != null  and deptName != '' "> and d.dept_name = #{deptName}</if>
-        	<if test="approvalSight != null  and approvalSight != '' "> and p.approval_sight = #{approvalSight,jdbcType=VARCHAR}
+        	<!-- <if test="approvalSight != null  and approvalSight != '' "> and p.approval_sight = #{approvalSight,jdbcType=VARCHAR}
         		 and u.`status`=0 and s.`status`=0
-        	</if>
+        	</if> -->
       		<if test="status ==1">and p.approval_state != 3</if>
       		<if test="dSet != null">
 					and d.dept_id in
@@ -338,7 +336,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    	LEFT JOIN sys_dept d ON u. dept_id = d.dept_id
 	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
 	    	<where>  
-	    		u.status = 0 and s.status = 0
         	<if test="approverId != null "> and p.approver_id = #{approverId}</if>
         	<if test="approvalState != null  and approvalState != '' "> and p.approval_state = #{approvalState}</if>
         	<if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>

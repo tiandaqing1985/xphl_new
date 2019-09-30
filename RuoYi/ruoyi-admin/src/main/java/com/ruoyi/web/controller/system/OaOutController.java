@@ -85,7 +85,6 @@ public class OaOutController extends BaseController
 	public TableDataInfo unApprovalList(OaOut oaOut)
 	{
 		startPage();
-		oaOut.setUserId(ShiroUtils.getUserId());
 		oaOut.setApprovalId(ShiroUtils.getUserId());
 		oaOut.setApprovalState("3");//审批状态（1同意，2驳回 ，3未操作）
 		oaOut.setApprovalSight("1");
@@ -108,7 +107,6 @@ public class OaOutController extends BaseController
 	public TableDataInfo myApprovalList(OaOut oaOut)
 	{
 		startPage();
-		oaOut.setUserId(ShiroUtils.getUserId());
 		oaOut.setApprovalId(ShiroUtils.getUserId());
 		oaOut.setApprovalState("4");//审批状态（1同意，2驳回 ，3未操作）
         List<OutApproval> list = oaOutService.selectOutApprovalList(oaOut);
@@ -129,7 +127,7 @@ public class OaOutController extends BaseController
 	public TableDataInfo allList(OaOut oaOut)
 	{
 		startPage();
-		oaOut.setUserId(ShiroUtils.getUserId());
+		oaOut.setApprovalId(ShiroUtils.getUserId());
 		oaOut.setApprovalSight("1");
         List<OutApproval> list = oaOutService.selectOutApprovalList(oaOut);
 		return getDataTable(list);

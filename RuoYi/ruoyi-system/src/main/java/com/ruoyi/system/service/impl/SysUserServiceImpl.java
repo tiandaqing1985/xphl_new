@@ -197,8 +197,8 @@ public class SysUserServiceImpl implements ISysUserService
     	
     	try {
     		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
-			user.setFirstphase(getDate(sd.format(user.getIntime()), user.getN()));
-			user.setSecondphase(getDate(sd.format(user.getIntime()), user.getN()*2));
+			user.setFirstphase(getDate2(sd.format(user.getIntime()), user.getN()));
+			user.setSecondphase(getDate2(sd.format(user.getIntime()), user.getN()*2));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -508,7 +508,7 @@ public class SysUserServiceImpl implements ISysUserService
 			e.printStackTrace();
 		}
 		c.setTime(date);
-		int day = c.get(Calendar.DAY_OF_MONTH)-1;
+		int day = c.get(Calendar.DAY_OF_MONTH);
 		int month = c.get(Calendar.MONTH);
 		int year = c.get(Calendar.YEAR);
 		
@@ -533,6 +533,7 @@ public class SysUserServiceImpl implements ISysUserService
 		
 		return s.parse(nextDay);
 	}
+	
 	
 	/**
      * 根据用户id查询该部门领导id
@@ -643,5 +644,42 @@ public class SysUserServiceImpl implements ISysUserService
 	@Override
 	public List<Data> selectUserRatio(Data data) {
 		return userMapper.selectUserRatio(data);
+	}
+
+	@Override
+	public Date getDate2(String intime, int n) throws ParseException {
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = Calendar.getInstance();
+		Date date = null;
+		try {
+			date = s.parse(intime);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		c.setTime(date);
+		int day = c.get(Calendar.DAY_OF_MONTH)-1;
+		int month = c.get(Calendar.MONTH);
+		int year = c.get(Calendar.YEAR);
+		
+		if(month + n > 12){
+			year = year + 1;
+			month = month + n -12;
+		}
+		else{
+			month = month + n;
+		}
+		
+		c.set(year, month, 1);
+		int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+		
+		if(maxDay < day){
+			c.set(year, month, maxDay);
+		}
+		else{
+			c.set(year, month, day);
+		}
+		String nextDay = s.format(c.getTime());
+		
+		return s.parse(nextDay);
 	}
 }

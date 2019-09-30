@@ -219,7 +219,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		//（一）根据请假情况更新钉钉考勤表
 		UserApply apply = new UserApply();
 		apply.setApplyState(applyState);//申请状态（1 待审批，2已撤回，3申请成功，4申请失败） 
-		apply.setApplyType("1");//申请类型（1请假，2加班，销假） 
+		apply.setApplyType("1");//申请类型（1请假，2加班，3销假） 
 		apply.setStatus("0");//是否更新在钉钉考勤表中：0 未更新  1已更新
 		List<UserApply> applyList = applyMapper.selectApplyList(apply);//申请成功的请假记录
 		

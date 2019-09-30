@@ -47,7 +47,7 @@ public class EmailTask {
 	//三个月试用期到期提醒(提前两周)
 	//六个月试用期到期提醒(提前一个月)
 	//收件人：部门leader、宋彬、王梦 、辛本荣
-	/*public void sendEmail4(){
+	public void sendEmail4(){
 
 		List<SysUser> userList = userService.selectAllUser();
 		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
@@ -342,7 +342,7 @@ public class EmailTask {
 		}
 		System.out.println("\n 审批提醒已发送邮件数量："+count+"\n");
 	}
-	*/
+	
 	/**
 	 * 递归实现获取当前用户负责的所有部门id
 	 * @param dept

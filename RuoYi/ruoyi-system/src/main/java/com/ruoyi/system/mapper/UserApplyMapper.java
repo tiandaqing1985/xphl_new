@@ -53,7 +53,7 @@ public interface UserApplyMapper
      * @param userApply 申请信息
      * @return 结果
      */
-	public int insertUserApply(UserApply userApply);
+	public Long insertUserApply(UserApply userApply);
 	
 	/**
      * 修改申请
@@ -82,7 +82,7 @@ public interface UserApplyMapper
 	/**
 	 * 根据申请Id查询申请信息
 	 */
-	public UserApply selectUserApplyByApplyId(Long id);
+	public UserApply selectUserApplyByApplyId(Long applyId);
 	
 	/**
 	 * 根据申请id修改申请状态为撤回

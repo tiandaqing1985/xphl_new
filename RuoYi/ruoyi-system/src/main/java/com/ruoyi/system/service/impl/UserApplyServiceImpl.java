@@ -759,7 +759,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 	@Transactional
 	public int undoSave(UserApply userApply, Long userId) {
 		
-	
+		Date now = new Date();
 		
 		UserApply userApply1 = new UserApply();
 		userApply1.setUserId(userId);  //申请人
@@ -771,33 +771,48 @@ public class UserApplyServiceImpl implements IUserApplyService
 		userApply1.setTimeapart2(userApply.getTimeapart2());
 		userApply1.setStarttime(userApply.getStarttime()); //开始时间
 		userApply1.setEndtime(userApply.getEndtime());		//结束时间
+		userApply1.setApplyTime(now);
 		
 		Double timeLength = countTime(userApply.getStarttime(), userApply.getEndtime(), userApply.getTimeapart1(), userApply.getTimeapart2());
 		
 		userApply1.setTimelength(timeLength);  //时长
 		userApply1.setForApplyId(userApply.getApplyId()); 
 		
-		userApplyMapper.insertUserApply(userApply1); 
+		Long appLyId = userApplyMapper.insertUserApply(userApply1); 
+		
+		//查询原申请
+		UserApply userApply2 = userApplyMapper.selectUserApplyByApplyId(userApply.getApplyId());
+		
+		//修改申请状态
+		if(userApply2.getTimelength().longValue() == timeLength.longValue()){
+			userApply2.setApplyType("4");//取消请假
+			userApplyMapper.updateUserApply(userApply2);
+		}
+		
+		
 		
 		//审批记录
 		int level = 1;
-		
+			
 		UserApproval userApproval = new UserApproval();//一级审批人  *必审
-		userApproval.setApplyId(userApply.getApplyId());
+		userApproval.setApplyId(appLyId);
 		userApproval.setApprovalSight("1");
 		userApproval.setApprovalLevel(level);
 		Long leaderId = iSysUserService.selectApproverIdByApplyerId(userId);//所在部门负责人id
-		Long upLeaderId =iSysUserService.selectUpApproverIdByApplyerId(userId);
+		Long upLeaderId =iSysUserService.selectUpApproverIdByApplyerId(userId);//所在部门负责人的上级leader
 		if(leaderId.equals(userId)){	//判断用户是否部门负责人  确定一、二级审批人id
 			userApproval.setApproverId(upLeaderId); //一级审批人id	
 		}
 		else{
 			userApproval.setApproverId(leaderId);
 		}
+		if(userId == 103L){//COO
+			userApproval.setApproverId(101L);
+		}
 		userApprovalMapper.insertUserApproval(userApproval); //插入一级审批记录
 		
 		//二级审批记录
-		UserApproval userApproval1 = new UserApproval();//二级审批人
+		/*UserApproval userApproval1 = new UserApproval();//二级审批人
 		Long approverId2 = iSysUserService.selectUpApproverIdByApplyerId(userApproval.getApproverId());
 		if(approverId2 != null){
 			if(timeLength >= 3){
@@ -807,6 +822,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 				userApprovalMapper.insertUserApproval(userApproval1);
 			}
 		}
+		*/
 		
 //		//中心负责人审批记录
 //		UserApproval center = new UserApproval();//中心负责人
@@ -825,7 +841,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 //			}
 //		}
 		
-		//人事审批
+		/*//人事审批
 		UserApproval personnel = new UserApproval();//人事审批  *必审
 		
 		personnel.setApplyId(userApply.getApplyId());
@@ -833,10 +849,10 @@ public class UserApplyServiceImpl implements IUserApplyService
 		SysUser user = userMapper.selectUserById(userApply.getUserId());
 		user.setRoleId(3L);
 		personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user));
-		userApprovalMapper.insertUserApproval(personnel);
+		userApprovalMapper.insertUserApproval(personnel);*/
 		
 		
-		if(timeLength >= 3){
+	/*	if(timeLength >= 3){
 			Long COOId = iSysUserService.selectUserIdByDeptId(100L);
 
 			if(COOId.equals(userApproval.getApproverId()) || COOId.equals(userApproval1.getApproverId()) || COOId.equals(userId)){
@@ -849,7 +865,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 //					userApprovalMapper.insertUserApproval(center);
 				}
 			}
-		}	
+		}*/	
 	
 		return 1;
 	}

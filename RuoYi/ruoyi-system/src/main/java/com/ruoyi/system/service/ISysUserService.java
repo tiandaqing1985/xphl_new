@@ -198,6 +198,10 @@ public interface ISysUserService
     public Date getDate(String intime , int n) throws ParseException;
     
     /**
+     * 得到第n个月的入职日期,计算试用一期二期时使用此方法
+     */
+    public Date getDate2(String intime , int n) throws ParseException;
+    /**
      * 根据用户id查询该部门领导id
      */
     public Long selectApproverIdByApplyerId(Long userId);
@@ -216,7 +220,7 @@ public interface ISysUserService
     public List<SysUser> selectAllUser();
     
     /**
-     * 根据用户id查询所有领导的id
+     * 根据用户id查询所有三级以上负责人的id
      */
     public List<Long> selectCenterIdByUserId(Long userId);
     

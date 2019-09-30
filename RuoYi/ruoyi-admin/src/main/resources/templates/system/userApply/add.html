@@ -194,17 +194,21 @@
 				var restlength = 0.0;
 				
 				//计算休息日时长
-				$.ajax({
-					type:"post",
-					async:false,
-					url:"/system/workingCalendar/count",
-					data:{"isWorkDay":0,"starttime":starttime,"endtime":endtime},
-					dataType:"json",
-					success:function(result){
-						restlength = result;						
-					}
-				}); 
-			//	alert(restlength);
+				//年假、调休、事假、病假需要计算休息日
+				if(leaveType == "1" || leaveType == "2" || leaveType == "3" || leaveType == "4"){
+					$.ajax({
+						type:"post",
+						async:false,
+						url:"/system/workingCalendar/count",
+						data:{"isWorkDay":0,"starttime":starttime,"endtime":endtime},
+						dataType:"json",
+						success:function(result){
+							restlength = result;						
+						}
+					}); 
+				}
+			
+				//alert(restlength);
 				
 				if(leaveType == "10"){
 					datelength = 1.0;
@@ -219,7 +223,7 @@
 				var proveFlag = true;//是否提交附件 flag
 				var confirmFlag = false; // 是否需要确认flag
 				var confirmText = "确认";
-				var passFlag = false;//是否通过试用一期
+				var passFlag = true;//是否通过试用一期
 				
 				if ($('#prove').val() == null || $('#prove').val() == '') {
 				      proveFlag = false;
@@ -379,26 +383,30 @@
 						
 					}
 				}
+				
 				//验证员工是否通过试用一期
-				$.ajax({
-					type:"post",
-					async:false,
-					url:"/system/userApply/ifPass",					
-					dataType:"json",
-					success:function(result){
-						 if(result == "0"){
-							 passFlag = true;
+				if(leaveType == "1"){
+					$.ajax({
+						type:"post",
+						async:false,
+						url:"/system/userApply/ifPass",					
+						dataType:"json",
+						success:function(result){
+							 if(result == "0"){
+								 passFlag = true;
+							}
+							else{
+								passFlag = false;
+								$.modal.alertWarning("您还未通过试用一期，暂不能申请年假!");
+								return;
+							}
+						},
+						error:function(){
+							$.modal.alertWarning("请联系管理员");
 						}
-						else{
-							passFlag = false;
-							$.modal.alertWarning("您还未通过试用一期，暂不能申请年假!");
-							return;
-						}
-					},
-					error:function(){
-						$.modal.alertWarning("请联系管理员");
-					}
-				});
+					});	
+				}
+				
 				
 				//验证所请假期 是否与已有申请时段重复 
 				$.ajax({

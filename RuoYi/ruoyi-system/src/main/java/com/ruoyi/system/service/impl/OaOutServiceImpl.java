@@ -231,46 +231,45 @@ public class OaOutServiceImpl implements IOaOutService
 	public List<OutApproval> selectOutApprovalList(OaOut oaOut) {
 		//admin查看全部
 		if(oaOut.getUserId() != null && oaOut.getUserId().longValue() == 1L){
-			oaOut.setUserId(null);
 			return oaOutMapper.selectOutApprovalList(oaOut);
 
 		}
 		
-		SysUser user = userMapper.selectUserById(oaOut.getUserId());//查出当前用户
+		SysUser user = userMapper.selectUserById(oaOut.getApprovalId());//查出当前用户
 
 		//人事总监
 		SysUser user2 = new SysUser();
 		user2.setRoleId(6L);//人事总监
 		Long chiefId = userRoleMapper.selectUserIdByRoleId(user2);//人事总监id
-		if(chiefId.longValue() == user.getUserId().longValue()){
+		if(user.getUserId() != null && chiefId.longValue() == user.getUserId().longValue()){
 			oaOut.setUserId(1L);
+			oaOut.setApprovalId(null);
 			return oaOutMapper.selectOutApprovalList(oaOut);
 		}
 		
-		if(oaOut.getUserId() == 103L){//COO
+		if(oaOut.getApprovalId() == 103L){//COO
 			//leader
-			SysDept dept = deptMapper.selectDeptByUserId(oaOut.getUserId());
+			SysDept dept = deptMapper.selectDeptByUserId(oaOut.getApprovalId());
 			dept = new SysDept();
 			dept.setLeader(user.getUserName());
 			dSet.clear();
 			getDeptList(dept);	
 			oaOut.setdSet(dSet);
-			oaOut.setUserId(0L);
 			return oaOutMapper.selectOutApprovalList(oaOut);
 		}
 		
-		if(oaOut.getUserId() == 101L){//CEO
-			oaOut.setUserId(null);
+		if(oaOut.getApprovalId() == 101L){//CEO
 			return oaOutMapper.selectOutApprovalList(oaOut);
 		}
 		
-		Long upLeaderId =userMapper.selectUpApproverIdByApplyerId(oaOut.getUserId());//所在部门负责人的上级leader
+		Long upLeaderId =userMapper.selectUpApproverIdByApplyerId(oaOut.getApprovalId());//所在部门负责人的上级leader
 		user.setRoleId(3L);//人事专员
 		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id
 
 			//人事专员
 		if(hrId != null && user.getUserId().longValue()==hrId.longValue()){
 			oaOut.setUserId(1L);
+			oaOut.setApprovalId(null);
 			return oaOutMapper.selectOutApprovalList(oaOut);
 			
 		}else if(hrId != null && user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() == upLeaderId.longValue()){
@@ -286,13 +285,12 @@ public class OaOutServiceImpl implements IOaOutService
 		}*/
 		else{
 			//leader
-			SysDept dept = deptMapper.selectDeptByUserId(oaOut.getUserId());
+			SysDept dept = deptMapper.selectDeptByUserId(oaOut.getApprovalId());
 			dept = new SysDept();
 			dept.setLeader(user.getUserName());
 			dSet.clear();
 			getDeptList(dept);	
 			oaOut.setdSet(dSet);
-			oaOut.setUserId(null);
 			return oaOutMapper.selectOutApprovalList(oaOut);
 		}
 	}

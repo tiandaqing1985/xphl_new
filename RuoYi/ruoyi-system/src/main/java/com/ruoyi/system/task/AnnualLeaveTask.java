@@ -32,7 +32,7 @@ public class AnnualLeaveTask {
 		
 	}
 	
-	/*public void annualLeaveTask(){
+	public void annualLeaveTask(){
 
 		List<SysUser> userList = userService.selectAllUser();
 		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
@@ -158,5 +158,5 @@ public class AnnualLeaveTask {
 			holidayMapper.updateHolidayValue(holiday);
 		}
 		
-	}*/
+	}
 }

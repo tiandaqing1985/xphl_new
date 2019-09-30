@@ -175,7 +175,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				LEFT JOIN sys_dept d on d.dept_id = ouser.dept_id
 			) ding ON ding.user_id = nu.user_id 
 			<where>
-				ding.STATUS = 0 
              	<if test="userId != null and userId != 1"> and ding.user_id = #{userId}</if>
              	<if test="userName != null and userName != '' "> and ding.user_name like concat('%', #{userName}, '%')</if>  
              	<if test="workDate == 1 "> and ding.workDate = #{workDate}</if>  
