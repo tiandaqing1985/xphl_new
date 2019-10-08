@@ -82,6 +82,6 @@ public interface IXzAssetTypeService {
 	 * @param name 资产名称
 	 * @return 结果
 	 */
-	public int selectXzAssetTypeByName(String assetsType, String name);
+	public XzAssetType selectXzAssetTypeByName(String assetsType, String name);
 
 }

@@ -90,7 +90,7 @@ public class XzAssetDataServiceImpl implements IXzAssetDataService
 	}
 
 	@Override
-	public int selectXzAssetDataByName(XzAssetData xzAssetData) {
+	public XzAssetData selectXzAssetDataByName(XzAssetData xzAssetData) {
 		return xzAssetDataMapper.selectXzAssetDataByName(xzAssetData);
 	}
 	

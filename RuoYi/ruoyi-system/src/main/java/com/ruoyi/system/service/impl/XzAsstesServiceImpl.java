@@ -6,11 +6,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.ruoyi.system.mapper.SysDictDataMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.mapper.XzAssetDataMapper;
 import com.ruoyi.system.mapper.XzAssetTypeMapper;
 import com.ruoyi.system.mapper.XzAsstesMapper;
 import com.ruoyi.system.mapper.XzPersonalAssetMapper;
+import com.ruoyi.system.domain.XzAssetData;
+import com.ruoyi.system.domain.XzAssetType;
 import com.ruoyi.system.domain.XzAsstes;
 import com.ruoyi.system.domain.XzAsstesSta;
 import com.ruoyi.system.domain.XzPersonalAsset;
@@ -38,6 +42,9 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
 
 	@Autowired
 	private XzAssetDataMapper xzAssetDataMapper;
+	
+	@Autowired
+	private SysDictDataMapper dictDataMapper;
 	
 	@Autowired
 	private XzPersonalAssetMapper xzPersonalAssetMapper;
@@ -91,7 +98,7 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
 		x.setCreateBy(xzAsstes.getCreateBy());
 		x.setCreateTime(xzAsstes.getCreateTime());
 		x.setExtendContent(xzAsstes.getExtendContent());
-		x.setExtendContent(xzAsstes.getExtendMoney());
+		x.setExtendMoney(xzAsstes.getExtendMoney());
 		x.setExtendTime(xzAsstes.getExtendTime());
 		x.setInvoiceNum(xzAsstes.getInvoiceNum());
 		x.setInvoiceType(xzAsstes.getInvoiceType());
@@ -263,15 +270,18 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
 		return xzAsstesMapper.deleteXzAsstesByIds(Convert.toStrArray(ids));
 	}
 
+	/**
+	 * 数据批量导入（excel）
+	 */
 	@Override
-	@Transactional
+	@Transactional(rollbackFor = Exception.class)
 	public String importXzAsstes(List<XzAsstes> assetsList, boolean updateSupport, String operName) {
 
 		if (StringUtils.isNull(assetsList) || assetsList.size() == 0) {
 			throw new BusinessException("导入资产数据不能为空！");
 		}
 		try {
-			if (null != assetsList && assetsList.size() > 0) {
+			/*if (null != assetsList && assetsList.size() > 0) {
 				int pointsDataLimit = 10000;// 限制条数
 				Integer size = assetsList.size();
 				// 判断是否有必要分批
@@ -291,6 +301,73 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
 					}
 				} else {
 					xzAsstesMapper.batchInsert(assetsList);
+				}
+			}*/
+			if (null != assetsList && assetsList.size() > 0) {
+				for(int i=0;i<assetsList.size();i++){
+					XzAsstes x = new XzAsstes();
+					x.setAssetsModel(assetsList.get(i).getAssetsModel());
+					x.setAssetsName(assetsList.get(i).getAssetsName());
+					x.setAssetsStatus("2");
+					x.setUseStatus("1");
+					if(assetsList.get(i).getRegionName().equals("北京")){
+						x.setRegion("1");
+						x.setAttach("1");
+					}else if(assetsList.get(i).getRegionName().equals("上海")){
+						x.setRegion("2");
+						x.setAttach("2");
+					}else if(assetsList.get(i).getRegionName().equals("广州")){
+						x.setRegion("3");
+						x.setAttach("3");
+					}else if(assetsList.get(i).getRegionName().equals("新疆")){
+						x.setRegion("4");
+						x.setAttach("4");
+					}else{
+						x.setRegion(assetsList.get(i).getRegionName());
+					}
+					XzAssetType type=xzAssetTypeMapper.selectXzAssetTypeByName("1", assetsList.get(i).getAssetsTypeName());
+					x.setAssetsType(type.getId());
+					XzAssetData data=new XzAssetData();
+					data.setParentId(type.getId());
+					data.setName(assetsList.get(i).getAssetsType2Name());
+					XzAssetData type2=xzAssetDataMapper.selectXzAssetDataByName(data);
+					x.setAssetsType2(type2.getId());
+					x.setAssetsCode(createCode(x));
+					if(assetsList.get(i).getBrandName()!=null || assetsList.get(i).getBrandName()!=""){
+						String b= dictDataMapper.selectDictValue("xz_assets_brand", assetsList.get(i).getBrandName());
+						x.setBrand(b);
+					}
+					if(assetsList.get(i).getUnitName()!=null || assetsList.get(i).getUnitName()!=""){
+						String u=dictDataMapper.selectDictValue("xz_assets_unit", assetsList.get(i).getUnitName());
+						x.setBrand(u);
+					}
+					if(assetsList.get(i).getInvoiceTypeName()!=null || assetsList.get(i).getInvoiceTypeName()!=""){
+						String iv=dictDataMapper.selectDictValue("xz_assets_invoiceType", assetsList.get(i).getInvoiceTypeName());
+						x.setInvoiceType(iv);
+					}
+					x.setBuyAddress(assetsList.get(i).getBuyAddress());
+					x.setBuyDate(assetsList.get(i).getBuyDate());
+					x.setCategory(assetsList.get(i).getCategory());
+					x.setCount("1");
+					x.setCreateBy(operName);
+					x.setCreateTime(new Date());
+					x.setExtendContent(assetsList.get(i).getExtendContent());
+					x.setExtendMoney(assetsList.get(i).getExtendMoney());
+					x.setExtendTime(assetsList.get(i).getExtendTime());
+					x.setInvoiceNum(assetsList.get(i).getInvoiceNum());
+					x.setInvoiceType(assetsList.get(i).getInvoiceType());
+					x.setPrice(assetsList.get(i).getPrice());
+					x.setPurchaseBy(sysUserMapper.selectUserIdByUserNameOnly(assetsList.get(i).getPurchaseName()));
+					x.setPurchaseNum(assetsList.get(i).getPurchaseNum());
+					x.setRemarks(assetsList.get(i).getRemarks());
+					x.setSort("1");
+					x.setSubmitType("2");
+					x.setSubBy(operName);
+					x.setSubTime(new Date());
+					
+					//新增
+					xzAsstesMapper.insertXzAsstes(x);
+					
 				}
 			}
 

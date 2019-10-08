@@ -120,4 +120,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  		)
 	</insert>
 	
+	<select id="selectDictValue" resultType="com.ruoyi.system.domain.SysDictData">
+		select dict_value from sys_dict_data
+		where dict_type = #{dictType} and dict_label = #{dictLabel}
+	</select>
+	
 </mapper> 

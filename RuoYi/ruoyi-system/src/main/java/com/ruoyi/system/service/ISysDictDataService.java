@@ -74,4 +74,12 @@ public interface ISysDictDataService
      * @return 结果
      */
     public int updateDictData(SysDictData dictData);
+
+    /**
+     * 根据字典类型和字典信息查询字典键值
+     * @param dictType
+     * @param dictLable
+     * @return
+     */
+	String selectDictValue(String dictType, String dictLable);
 }

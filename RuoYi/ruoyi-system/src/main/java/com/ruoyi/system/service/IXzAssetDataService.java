@@ -66,6 +66,6 @@ public interface IXzAssetDataService
 	 * @param name
 	 * @return
 	 */
-	public int selectXzAssetDataByName(XzAssetData xzAssetData);
+	public XzAssetData selectXzAssetDataByName(XzAssetData xzAssetData);
 	
 }

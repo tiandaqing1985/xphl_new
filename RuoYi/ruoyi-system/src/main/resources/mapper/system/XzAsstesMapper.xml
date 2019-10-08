@@ -105,7 +105,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="attach != null  and attach != '' "> and a.attach = #{attach}</if>
 			<if test="category != null  and category != '' "> and a.category = #{category}</if>
 			<if test="brand != null  and brand != '' "> and a.brand = #{brand}</if>
-			<if test="purchaseName != null  and purchaseName != '' "> and su.user_name = #{purchaseName}</if>
+			<if test="purchaseName != null  and purchaseName != '' "> and su.user_name like concat('%', #{purchaseName}, '%')</if>
+			<if test="useName != null  and useName != '' "> and user.user_name like concat('%', #{useName}, '%')</if>
 			<!-- <if test="buyDate != null "> and buy_date = #{buyDate}</if> -->
 			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
 				AND date_format(a.buy_date,'%y%m%d') &gt;=
@@ -281,12 +282,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO xz_asstes
 		(assets_code,region,assets_name,assets_type,assets_model,price,unit,count,attach,purchase_num,category,brand,buy_address,
-		purchase_by,buy_date,extend_money,extend_time,extend_content,assets_status,use_status,use_by,department,use_time)
+		purchase_by,buy_date,extend_money,extend_time,extend_content,assets_status,use_status,use_by,department,use_time,sort)
 		VALUES
 		<foreach collection="list" item="item" separator=",">
 			(#{item.assetsCode},#{item.region},#{item.assetsName},#{item.assetsType},#{item.assetsModel},#{item.price},#{item.unit},#{item.count},
 			#{item.attach},#{item.purchaseNum},#{item.category},#{item.brand},#{item.buyAddress},#{item.purchaseBy},#{item.buyDate},#{item.extendMoney},
-			#{item.extendTime},#{item.extendContent},#{item.assetsStatus},#{item.useStatus},#{item.useBy},#{item.department},#{item.useTime})
+			#{item.extendTime},#{item.extendContent},#{item.assetsStatus},#{item.useStatus},#{item.useBy},#{item.department},#{item.useTime},"1")
 		</foreach>
 	</insert>
 

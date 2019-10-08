@@ -38,8 +38,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
     
-     <select id="selectXzAssetTypeByName" resultType="int">
-        select count(1) from xz_asset_type where sort=#{sort} and name = #{name}  
+     <select id="selectXzAssetTypeByName" resultMap="XzAssetTypeResult">
+        select * from xz_asset_type where sort=#{sort} and name = #{name}  
     </select>
     
     <select id="checkTypeUnique" parameterType="String" resultMap="XzAssetTypeResult">

@@ -144,9 +144,16 @@ public class XzAsstesController extends BaseController {
 	public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
 		ExcelUtil<XzAsstes> util = new ExcelUtil<XzAsstes>(XzAsstes.class);
 		List<XzAsstes> assetsList = util.importExcel(file.getInputStream(), 0, 1);
-		String operName = ShiroUtils.getSysUser().getLoginName();
+		String operName = ShiroUtils.getUserId().toString();
 		String message = xzAsstesService.importXzAsstes(assetsList, updateSupport, operName);
-		return AjaxResult.success(message);
+		if(message.equals("导入成功")){
+			return AjaxResult.success(message);
+		}else if(message.equals("导入失败")){
+			return AjaxResult.error(message);
+		}else{
+			return AjaxResult.warn(message);
+		}
+		
 	}
 
 	@GetMapping("/importTemplate")

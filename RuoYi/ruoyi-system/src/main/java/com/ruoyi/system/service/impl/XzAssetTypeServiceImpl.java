@@ -109,7 +109,7 @@ public class XzAssetTypeServiceImpl implements IXzAssetTypeService
     }
 
 	@Override
-	public int selectXzAssetTypeByName(String assetsType, String name) {
+	public XzAssetType selectXzAssetTypeByName(String assetsType, String name) {
 		return xzAssetTypeMapper.selectXzAssetTypeByName(assetsType, name);
 	}
 

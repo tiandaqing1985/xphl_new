@@ -94,7 +94,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="id != null "> and id = #{id}</if>
              <if test="code != null  and code != '' "> and pra.code like concat('%',#{code},'%') </if>
              <if test="applyUserName != null and applyUserName!='' "> and u.user_name like concat('%', #{applyUserName} ,'%') </if>
-             <if test="subTime != null "> and pra.sub_time = #{subTime}</if>
+            <!--  <if test="subTime != null and subTime !=''  "> and pra.sub_time = #{subTime}</if> -->
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND date_format(pra.sub_time,'%y%m%d') &gt;=
+				date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				AND date_format(pra.sub_time,'%y%m%d') &lt;=
+				date_format(#{params.endTime},'%y%m%d')
+			</if>
              <if test="approvalStatus != null and approvalStatus != '' "> and pra.approval_status = #{approvalStatus}</if>
          </where>
          order by  pra.create_time DESC 

@@ -36,9 +36,11 @@
 							</select>
 							</li>
 
-							<li>
-								申请时间：<input type="text" id="subTime" name="subTime"/>
-							</li>
+							<li class="select-time"><label>申请时间：</label> <input
+								type="text" class="time-input" id="startTime" placeholder="开始时间"
+								name="params[beginTime]" /> <span>-</span> <input type="text"
+								class="time-input" id="endTime" placeholder="结束时间"
+								name="params[endTime]" /></li>
 
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>

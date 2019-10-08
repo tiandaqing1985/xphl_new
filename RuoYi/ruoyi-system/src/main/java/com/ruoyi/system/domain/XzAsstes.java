@@ -18,7 +18,6 @@ public class XzAsstes extends BaseEntity
 	/** 主键 */
 	private Long id;
 	/** 资产编码 */
-	@Excel(name = "资产编码", prompt = "资产编码")
 	private String assetsCode;
 	/** 资产名称 */
 	@Excel(name = "资产名称", prompt = "资产名称")
@@ -92,22 +91,17 @@ public class XzAsstes extends BaseEntity
 	private String extendContent;
 	/** 资产状态 */
 	private String assetsStatus;
-	@Excel(name = "资产状态", prompt = "资产状态")
 	private String assetsStatusName;
 	/** 使用状态 */
 	private String useStatus;
-	@Excel(name = "使用状态", prompt = "使用状态")
 	private String useStatusName;
 	/** 前当使用人 */
 	private Long useBy;
-	@Excel(name = "当前使用人", prompt = "当前使用人")
 	private String useName;
 	/** 使用部门 */
 	private Long department;
-	@Excel(name = "使用部门", prompt = "使用部门")
 	private String departmentName;
 	/** 使用时间 */
-	@Excel(name = "使用时间", prompt = "使用时间")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date useTime;
 	/** 制造商 */

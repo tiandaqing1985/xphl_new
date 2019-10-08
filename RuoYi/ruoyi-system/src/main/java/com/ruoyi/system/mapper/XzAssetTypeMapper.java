@@ -84,7 +84,7 @@ public interface XzAssetTypeMapper
 	 * @param string 
 	 * @return 结果
 	 */
-	public int selectXzAssetTypeByName(@Param("sort")String sort, @Param("name")String name);
+	public XzAssetType selectXzAssetTypeByName(@Param("sort")String sort, @Param("name")String name);
 
 	
 }

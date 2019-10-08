@@ -26,7 +26,7 @@
 							<li>资产型号：<input type="text" name="assetsModel" />
 							</li>
 
-							<li>前当使用人：<input type="text" name="useBy" />
+							<li>前当使用人：<input type="text" name="useName" />
 							</li>
 
 
@@ -127,7 +127,7 @@
 					formatter: function(value, row, index) {
 					    return $.table.selectDictLabel(unit, value);
 					}
-				},
+				}/* ,
 				
 		        {
 		            title: '操作',
@@ -138,7 +138,7 @@
                         actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 						return actions.join('');
 		            }
-		        } 
+		        }  */
 				]
             };
             $.table.init(options);
