@@ -22,6 +22,15 @@
 								<span>-</span>
 								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
 							</li>
+							
+							<li>
+								打卡状态：
+								<select id="status" name="status" th:with="type=${@dict.getType('oa_dingding_status')}">
+	                    			<option value="">-----------请选择-----------</option>
+	                    			<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictLabel}" ></option>
+	                			</select>
+							</li>
+							
 							<li>
 								时间结果：
 								<select id="timeResult" name="timeResult" th:with="type=${@dict.getType('oa_ding_timeResult')}">
@@ -112,8 +121,18 @@
 					sortable: false
 				},
 				{
+					field : 'status', 
+					title : '打卡状态',
+					sortable: false
+				},
+				{
 					field : 'timeResult', 
 					title : '时间结果',
+					sortable: false
+				},
+				{
+					field : 'applyState', 
+					title : '请假/外出申请状态',
 					sortable: false
 				}
 				

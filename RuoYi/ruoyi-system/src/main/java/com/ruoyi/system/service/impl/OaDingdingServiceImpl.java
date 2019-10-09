@@ -215,10 +215,10 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 	}
 
 	@Override
-	public int updateOaDingDingByOutAndApply(String applyState, String state) {
+	public int updateOaDingDingByOutAndApply() {
 		//（一）根据请假情况更新钉钉考勤表
 		UserApply apply = new UserApply();
-		apply.setApplyState(applyState);//申请状态（1 待审批，2已撤回，3申请成功，4申请失败） 
+//		apply.setApplyState(applyState);//申请状态（1 待审批，2已撤回，3申请成功，4申请失败） 
 		apply.setApplyType("1");//申请类型（1请假，2加班，3销假） 
 		apply.setStatus("0");//是否更新在钉钉考勤表中：0 未更新  1已更新
 		List<UserApply> applyList = applyMapper.selectApplyList(apply);//申请成功的请假记录
@@ -228,6 +228,8 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		}
 		
 		for(UserApply a : applyList){
+			String applyState = a.getApplyState();//申请状态（1 待审批，2已撤回，3申请成功，4申请失败） 
+			
 			OaDingdingUser dingUser = new OaDingdingUser();
 			dingUser.setUserName(a.getUserName());			
 			List<OaDingdingUser> dingUserList = oaDingdingUserMapper.selectOaDingdingUserList(dingUser);//根据userName查找钉钉考勤用户表中的userId
@@ -261,6 +263,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 					Dingding ding = new Dingding();
 					ding.setUserId(userId);
 					ding.setTimeResult(leaveType);
+					ding.setApplyState(applyState);
 					ding.setStartTime(startTime);
 					ding.setEndTime(endTime);
 					ding.setStatus("1");
@@ -274,6 +277,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 						Dingding ding = new Dingding();
 						ding.setUserId(userId);
 						ding.setTimeResult(leaveType);
+						ding.setApplyState(applyState);
 						ding.setStartTime(startDate);
 						ding.setEndTime(endDate);
 						ding.setStatus("1");
@@ -286,6 +290,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 						Dingding ding = new Dingding();
 						ding.setUserId(userId);
 						ding.setTimeResult(leaveType);
+						ding.setApplyState(applyState);
 						ding.setStartTime(startDate);
 						ding.setEndTime(endDate);
 						ding.setStatus("1");
@@ -299,6 +304,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 						Dingding ding = new Dingding();
 						ding.setUserId(userId);
 						ding.setTimeResult(leaveType);
+						ding.setApplyState(applyState);
 						ding.setStartTime(startDate);
 						ding.setEndTime(endDate);
 						ding.setStatus("1");
@@ -324,7 +330,8 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 								Dingding ding2 = new Dingding();
 								ding2.setUserId(dingUserList.get(0).getUserId());
 								ding2.setCheckType("OnDuty");
-								ding2.setTimeResult(leaveType);					
+								ding2.setTimeResult(leaveType);
+								ding.setApplyState(applyState);
 								ding2.setStatus("1");
 								oaDingdingMapper.updateOaDingDingByTime(ding2);
 							}
@@ -335,7 +342,8 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 							if(d.getUserCheckTime().compareTo(endDate) > 0){//打卡时间在标准值内
 								Dingding ding1 = new Dingding();
 								ding1.setUserId(dingUserList.get(0).getUserId());
-								ding1.setTimeResult(leaveType);						
+								ding1.setTimeResult(leaveType);	
+								ding.setApplyState(applyState);
 								ding1.setStatus("1");
 								ding1.setCheckType("OffDuty");
 								oaDingdingMapper.updateOaDingDingByTime(ding1);
@@ -351,11 +359,13 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		//（一）根据外出报备情况更新钉钉考勤表
 		OaOut out = new OaOut();
 		out.setStatus("0");//是否更新在钉钉考勤表中：0 未更新  1已更新
-		out.setState(state);//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+//		out.setState(state);//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
 		List<OaOut> outList = outMapper.selectOaOutList(out);//查询申请成功且未更新在钉钉考勤记录表中的外出报备数据
 		if(outList.size() == 0) return 1;
 		
 		for(OaOut o : outList){
+			String state = o.getState();//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+			
 			OaDingdingUser dingUser = new OaDingdingUser();
 			dingUser.setUserName(o.getUserName());			
 			List<OaDingdingUser> dingUserList = oaDingdingUserMapper.selectOaDingdingUserList(dingUser);//根据userName查找钉钉考勤用户表中的userId
@@ -372,6 +382,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 			if(dingList.size() == 0) continue;
 			
 			ding.setTimeResult("out");
+			ding.setApplyState(state);
 			ding.setStatus("1");
 			oaDingdingMapper.updateOaDingDingByTime(ding);
 			
@@ -442,6 +453,58 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		return 1;
 	}
 
+	@Override
+	public int updateOaDingDingBySpecialTime(String time) {
+		Dingding ding = new Dingding();
+		
+		try {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
+			Date date = sdf.parse(time); 
+			ding.setWorkDate(date);
+			ding.setCheckType("OnDuty");
+			//查询某一天上班打卡的记录
+			List<Dingding> dingList = oaDingdingMapper.selectOaDingdingListByCondition(ding);
+			
+			String onduty = "";
+			String offduty = "";
+			SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
+
+			for(Dingding d : dingList){
+				onduty = sdf2.format(d.getUserCheckTime());
+				
+				OaDingding od = new OaDingding();
+				od.setWorkDate(date);
+				od.setUserId(d.getUserId());
+				od.setCheckType("OffDuty");
+				od.setTimeResult("Early");
+				List<OaDingding> odList = oaDingdingMapper.selectOaDingdingList(od);//下班早退的记录
+				if(odList.size() == 0) continue;
+				
+				OaDingding oad = odList.get(0);//查询下班打卡记录
+				
+				offduty = sdf2.format(oad.getUserCheckTime());
+				
+				long hour = secondsBetween(onduty,offduty)/3600;
+				
+				System.out.println("\n"+onduty+" "+offduty+"  "+hour+"\n");
+				
+				//早晚打卡时间差大于等于6h
+				if(hour >= 6) {
+					Dingding di2 = new Dingding();
+					di2.setUserId(d.getUserId());
+					di2.setWorkDate(d.getWorkDate());
+//					di2.setCheckType("OnDuty");
+					di2.setTimeResult("Normal");
+					oaDingdingMapper.updateOaDingDingByTime(di2);//修改上下班打卡结果
+				}
+									
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return 1;
+	}
 	 /** 
 	    *字符串的日期格式的计算 
 	    */  
@@ -461,4 +524,5 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		}         
 	     return (time2-time1)/1000;     
 	 }
+
 }

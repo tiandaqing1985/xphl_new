@@ -292,6 +292,10 @@ public class EmailTask {
 		
 		int count = 0;//记录邮件发送数量
 		for(SysUser user : leaderList){
+			
+			//用户已经离职
+			if(user.getStatus().equals("1"))continue;
+			
 			//leader
 			SysDept dept = deptMapper.selectDeptByUserId(user.getUserId());//根据审批人id查询其下所有部门
 			

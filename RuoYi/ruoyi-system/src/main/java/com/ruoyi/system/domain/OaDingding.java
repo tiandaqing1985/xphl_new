@@ -30,9 +30,18 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	private String timeResult;
 	/** 是否更新在钉钉考勤表中：0 未更新  1已更新 */
 	private String status;
+	/**申请状态（1 待审批，2已撤回，3申请成功，4申请失败）*/
+	private String applyState;
     /** 部门名称 */
     private String deptName;
-	
+
+	public String getApplyState() {
+		return applyState;
+	}
+
+	public void setApplyState(String applyState) {
+		this.applyState = applyState;
+	}
 
 	public String getUserName() {
 		return userName;

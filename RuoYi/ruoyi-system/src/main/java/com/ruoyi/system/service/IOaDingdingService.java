@@ -66,11 +66,17 @@ public interface IOaDingdingService
 	 * @param state 外出报备申请状态
 	 * @return
 	 */
-	public int updateOaDingDingByOutAndApply(String applyState, String state);
+	public int updateOaDingDingByOutAndApply();
 	
 	/**
 	 * 弹性工作制
 	 * @return
 	 */
 	public int updateOaDingDingByElasticTime(String yesterday);
+	
+	/**
+	 * 16:00下班
+	 * @return
+	 */
+	public int updateOaDingDingBySpecialTime(String time);
 }

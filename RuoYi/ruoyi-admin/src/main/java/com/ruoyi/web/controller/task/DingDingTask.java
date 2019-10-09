@@ -66,17 +66,6 @@ public class DingDingTask{
 	@Autowired
 	OaDingdingUserMapper oaDingdingUserMapper;
 	
-	public DingDingTask() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public static void main(String[] args) throws Exception {	
-		//待审批的请假和外出报备申请更新在钉钉考勤中
-		DingDingTask ding = new DingDingTask();
-		ding.updateDing();
-	}
-	
 	public void dingDingTask() throws Exception
 	{		
 
@@ -147,11 +136,10 @@ public class DingDingTask{
 
         
         //根据请假、外出报备修改钉钉打卡考勤结果
-        dingdingService.updateOaDingDingByOutAndApply("3","3");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
-        
-
+        dingdingService.updateOaDingDingByOutAndApply();
         }
 	
+	//弹性工作制
 	public void dingElasticTime(){
 		//弹性工作制
 		//设置查询时间
@@ -163,12 +151,11 @@ public class DingDingTask{
 		dingdingService.updateOaDingDingByElasticTime(yesterday);
 	}
 	
-	//待审批的请假记录和外出报备记录更新在钉钉考勤里
-	public void updateDing(){
-		System.out.println("\n 待审批的请假记录和外出报备记录更新在钉钉考勤里\n");
-	    dingdingService.updateOaDingDingByOutAndApply("1","1");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+	//特殊下班（16:00）
+	public void dingSpecialTime(String time){
+		dingdingService.updateOaDingDingBySpecialTime(time);
 	}
-	
+		
 	public List<OaDingding> getAttendances(List<String> list, List<OaDingding> users, String workDateFrom, String workDateTo,String access_Token) {
       int listSize=list.size();
       int toIndex = 50;
@@ -217,7 +204,11 @@ public class DingDingTask{
                   date.setTime(record.getLong("userCheckTime"));
                   dingding.setUserCheckTime(date);
                   
-                  dingding.setTimeResult(record.getString("timeResult"));
+                  String timeResult = record.getString("timeResult");
+                  if(!"Normal".equals(timeResult)){
+                	  dingding.setStatus("1");
+                  }
+                  dingding.setTimeResult(timeResult);
                   users.add(dingding);
               }
               if(hasMore) {//有下一页偏移量加一
