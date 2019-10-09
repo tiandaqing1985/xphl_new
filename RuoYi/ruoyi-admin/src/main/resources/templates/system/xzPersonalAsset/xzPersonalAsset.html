@@ -12,13 +12,13 @@
 		$.operate.post(prefix + "/draw", { "assetId": assetId});
 	}
 	
-	function toReturn(assetId){
-		var url = $.table._option.toReturnUrl.replace("{assetId}",assetId);
+	function toReturn(id){
+		var url = $.table._option.toReturnUrl.replace("{id}",id);
 		$.modal.open("资产归还", url);
 	}
 	
-	function toRepair(assetId){
-		var url = $.table._option.toRepairUrl.replace("{assetId}",assetId);
+	function toRepair(id){
+		var url = $.table._option.toRepairUrl.replace("{id}",id);
 		$.modal.open("资产报修登记", url);
 	}
 	</script>
@@ -74,8 +74,8 @@
         $(function() {
             var options = {
                 url: prefix + "/list",
-                toReturnUrl: "/system/xzAssetReturn/add/{assetId}",
-                toRepairUrl: "/system/xzAssetRepair/add/{assetId}",
+                toReturnUrl: "/system/xzAssetReturn/add/{id}",
+                toRepairUrl: "/system/xzAssetRepair/add/{id}",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
@@ -126,14 +126,6 @@
 					}
 				},
 				{
-					field : 'xzAsstes.assetsStatus', 
-					title : '使用状态',
-					formatter: function(value, row, index) {
-					    return $.table.selectDictLabel(assetsStatus, value);
-					},
-					visible: false
-				},
-				{
 					field : 'assetStatus', 
 					title : '使用状态',
 					formatter: function(value, row, index) {
@@ -150,12 +142,12 @@
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		            	var actions = [];
-		            	if(row.xzAsstes.useStatus=='2'){
+		            	if(row.assetStatus=='2'){
 		            		actions.push('<a class="btn btn-success btn-xs ' + '" onclick="draw(\'' + row.assetId + '\')">领取</a> ');
 		            	}
-		            	if(row.xzAsstes.useStatus=='3'){
-		            		actions.push('<a class="btn btn-danger btn-xs ' + '" onclick="toRepair(\'' + row.assetId + '\')">报修</a> ');
-		            		actions.push('<a class="btn btn-white btn-xs ' + '" onclick="toReturn(\'' + row.assetId + '\')">归还</a> ');
+		            	if(row.assetStatus=='3'){
+		            		actions.push('<a class="btn btn-danger btn-xs ' + '" onclick="toRepair(\'' + row.id + '\')">报修</a> ');
+		            		actions.push('<a class="btn btn-white btn-xs ' + '" onclick="toReturn(\'' + row.id + '\')">归还</a> ');
 		            	}
 						return actions.join('');
 		            }

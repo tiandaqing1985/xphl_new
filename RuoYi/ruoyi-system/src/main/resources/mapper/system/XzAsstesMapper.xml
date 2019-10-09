@@ -249,9 +249,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="extendContent != null  and extendContent != ''  ">extend_content = #{extendContent},</if>
 			<if test="assetsStatus != null  and assetsStatus != ''  ">assets_status = #{assetsStatus},</if>
 			<if test="useStatus != null  and useStatus != ''  ">use_status = #{useStatus},</if>
-			<if test="useBy != null  and useBy != ''  ">use_by = #{useBy},</if>
-			<if test="department != null  and department != ''  ">department = #{department},</if>
-			<if test="useTime != null  ">use_time = #{useTime},</if>
+			<if test="useBy != ''  ">use_by = #{useBy},</if>
+			<if test="department != ''  ">department = #{department},</if>
+			<if test="useTime != ''  ">use_time = #{useTime},</if>
 			<if test="submitType != null  and submitType != ''  ">submit_type = #{submitType},</if>
 			<if test="scrapDate != null  ">scrap_date = #{scrapDate},</if>
 			<if test="storeWay != null  and storeWay != ''  ">store_way = #{storeWay},</if>
@@ -438,5 +438,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="assetType2IdName != null and assetType2IdName !='' "> and t.typeName2 like concat('%', #{assetType2IdName}, '%')</if>
 	</select>
 	
-
+	<select id="selectAssetByType12" parameterType="XzAsstes" resultType="int">
+		select count(id) from xz_asstes  where sort ="2" and assets_status="2" and assets_type =#{assetsType} and assets_type2=#{assetsType2}
+	</select>
 </mapper>

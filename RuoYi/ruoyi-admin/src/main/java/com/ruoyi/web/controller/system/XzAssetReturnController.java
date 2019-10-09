@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.XzAssetReturn;
+import com.ruoyi.system.domain.XzPersonalAsset;
 import com.ruoyi.system.service.IXzAssetHandRecordService;
 import com.ruoyi.system.service.IXzAssetReturnService;
 import com.ruoyi.system.service.IXzAsstesService;
+import com.ruoyi.system.service.IXzPersonalAssetService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -43,6 +45,9 @@ public class XzAssetReturnController extends BaseController
 	
 	@Autowired
 	private IXzAssetHandRecordService xzAssetHandRecordService;
+	
+	@Autowired
+	private IXzPersonalAssetService xzPersonalAssetService;
 
 	
 	@RequiresPermissions("system:xzAssetReturn:view")
@@ -60,6 +65,8 @@ public class XzAssetReturnController extends BaseController
 	public TableDataInfo list(XzAssetReturn xzAssetReturn)
 	{
 		startPage();
+		//查看报备未操作的数据
+		xzAssetReturn.setReturnStatus("3");
         List<XzAssetReturn> list = xzAssetReturnService.selectXzAssetReturnList(xzAssetReturn);
 		return getDataTable(list);
 	}
@@ -78,13 +85,15 @@ public class XzAssetReturnController extends BaseController
     }
 	
 	/**
-	 * 新增资产归还
+	 * 新增资产归还（id为个人资产id）
 	 */
-	@GetMapping("/add/{assetId}")
-	public String add(@PathVariable("assetId") Long assetId, ModelMap mmap)
+	@GetMapping("/add/{id}")
+	public String add(@PathVariable("id") Long id, ModelMap mmap)
 	{
-		mmap.put("xzAsstes", xzAsstesService.selectXzAsstesById(assetId));
-		mmap.put("xzHand", xzAssetHandRecordService.selectXzAssetHandRecordByAssetId(assetId));
+		XzPersonalAsset xzPersonalAsset = xzPersonalAssetService.selectXzPersonalAssetById(id);
+		mmap.put("id", id);
+		mmap.put("xzAsstes", xzAsstesService.selectXzAsstesById(xzPersonalAsset.getAssetId()));
+		mmap.put("xzHand", xzAssetHandRecordService.selectXzAssetHandRecordByAssetId(xzPersonalAsset.getAssetId()));
 	    return prefix + "/add";
 	}
 	
@@ -95,8 +104,8 @@ public class XzAssetReturnController extends BaseController
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(XzAssetReturn xzAssetReturn)
-	{	//增加一条资产归还记录
-		xzAssetReturn.setReturnStatus("1");
+	{	//增加一条资产归还宝贝记录
+		xzAssetReturn.setReturnStatus("3");////1同意 2驳回 3未操作
 		xzAssetReturn.setCreateBy(ShiroUtils.getUserId().toString());
 		xzAssetReturn.setCreateTime(new Date());
 		return toAjax(xzAssetReturnService.insertXzAssetReturn(xzAssetReturn));
@@ -110,7 +119,8 @@ public class XzAssetReturnController extends BaseController
 	{
 		XzAssetReturn xzAssetReturn = xzAssetReturnService.selectXzAssetReturnById(id);
 		mmap.put("xzAssetReturn", xzAssetReturn);
-	    return prefix + "/edit";
+		mmap.put("id", id);
+	    return prefix + "/approvalModer";
 	}
 	
 	/**
@@ -121,6 +131,7 @@ public class XzAssetReturnController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(XzAssetReturn xzAssetReturn)
 	{		
+		
 		xzAssetReturn.setHandlerId(ShiroUtils.getUserId());
 		xzAssetReturn.setUpdateBy(ShiroUtils.getUserId().toString());
 		xzAssetReturn.setUpdateTime(new Date());
@@ -136,6 +147,64 @@ public class XzAssetReturnController extends BaseController
 	public AjaxResult remove(String ids)
 	{		
 		return toAjax(xzAssetReturnService.deleteXzAssetReturnByIds(ids));
+	}
+	
+	/**
+	 * 资产归还->报废
+	 */
+	@Log(title = "资产归还-报废", businessType = BusinessType.UPDATE)
+	@PostMapping( "/scrap")
+	@ResponseBody
+	public AjaxResult scrap(Long id)
+	{		
+		XzAssetReturn xzAssetReturn = xzAssetReturnService.selectXzAssetReturnById(id);
+		xzAssetReturn.setReturnStatus("1");
+		return toAjax(xzAssetReturnService.updateXzAssetScrap(xzAssetReturn));
+	}
+	
+	
+	/**
+	 * 同意申请
+	 */
+	@PostMapping("/agree")
+	@ResponseBody
+	public AjaxResult agree(Long id,String remark)
+	{	
+		XzAssetReturn xzAssetReturn = xzAssetReturnService.selectXzAssetReturnById(id);
+		XzAssetReturn xz = new XzAssetReturn();
+		xz.setId(id);
+		//个人资产id 非资产id
+		xz.setAssetId(xzAssetReturn.getAssetId());
+		xz.setHandlerId(ShiroUtils.getUserId());
+		xz.setReturnStatus("1");//1同意 2驳回 3未操作
+		xz.setRemark2(remark);
+		xz.setUpdateBy(ShiroUtils.getUserId().toString());
+		xz.setUpdateTime(new Date());
+		//在申请数据上修改审批记录
+		xzAssetReturnService.updateXzAssetReturn(xz);
+		return toAjax(1);
+	}
+	
+
+	/**
+	 * 驳回申请
+	 */
+	@PostMapping("/reject")
+	@ResponseBody
+	public AjaxResult reject(Long id, String remark)
+	{	
+		XzAssetReturn xzAssetReturn = xzAssetReturnService.selectXzAssetReturnById(id);
+		XzAssetReturn xz = new XzAssetReturn();
+		xz.setId(id);
+		xz.setAssetId(xzAssetReturn.getAssetId());
+		xz.setHandlerId(ShiroUtils.getUserId());
+		xz.setRemark2(remark);
+		xz.setReturnStatus("2");//1同意 2驳回 3未操作
+		xz.setUpdateBy(ShiroUtils.getUserId().toString());
+		xz.setUpdateTime(new Date());
+		//在申请记录上修改审批记录
+		xzAssetReturnService.updateXzAssetReturn(xz);
+		return toAjax(1);
 	}
 	
 }

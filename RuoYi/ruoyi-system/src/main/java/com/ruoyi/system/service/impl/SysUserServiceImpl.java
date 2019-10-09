@@ -682,4 +682,9 @@ public class SysUserServiceImpl implements ISysUserService
 		
 		return s.parse(nextDay);
 	}
+
+	@Override
+	public Long selectUserIdByUserNameOnly(String recipientName) {
+		return userMapper.selectUserIdByUserNameOnly(recipientName);
+	}
 }

@@ -230,4 +230,11 @@ public interface ISysUserService
 	 * @return
 	 */
 	public Long selectUserIdByDeptId(Long deptId);
+
+	/**
+	 * 根据姓名查id
+	 * @param recipientName
+	 * @return
+	 */
+	public Long selectUserIdByUserNameOnly(String recipientName);
 }

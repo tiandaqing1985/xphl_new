@@ -50,5 +50,7 @@ public interface IXzAssetReturnService
      * @return 结果
      */
 	public int deleteXzAssetReturnByIds(String ids);
+
+	public int updateXzAssetScrap(XzAssetReturn xzAssetReturn);
 	
 }

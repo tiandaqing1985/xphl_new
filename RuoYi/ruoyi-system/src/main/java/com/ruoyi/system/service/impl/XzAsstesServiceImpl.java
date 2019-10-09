@@ -496,4 +496,9 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
 		return xzAsstesMapper.selectXzStatisticsList(xzAsstesSta);
 	}
 
+	@Override
+	public int selectAssetByType12(XzAsstes xz) {
+		return xzAsstesMapper.selectAssetByType12(xz);
+	}
+
 }

@@ -36,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectXzPersonalAssetVo">
-        select id, user_id, asset_id, use_time, create_by, create_time, update_by, update_time from xz_personal_asset
+        select id, user_id, asset_id, create_by, create_time, update_by, update_time from xz_personal_asset
     </sql>
 	
     <select id="selectXzPersonalAssetList" parameterType="XzPersonalAsset" resultMap="XzPersonalAssetResult">
@@ -91,14 +91,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null  ">user_id = #{userId},</if>
             <if test="assetId != null  ">asset_id = #{assetId},</if>
-            <if test="assetStatus != null  ">asset_status = #{assetStatus},</if>
+            <if test="assetStatus != null and assetStatus!='' ">asset_status = #{assetStatus},</if>
             <if test="useTime != null  ">use_time = #{useTime},</if>
             <if test="createBy != null  ">create_by = #{createBy},</if>
             <if test="createTime != null  ">create_time = #{createTime},</if>
             <if test="updateBy != null  ">update_by = #{updateBy},</if>
             <if test="updateTime != null  ">update_time = #{updateTime},</if>
         </trim>
-        where 1=1 and id = #{id} and asset_id=#{assetId}
+        where id =#{id}
     </update>
 
 	<delete id="deleteXzPersonalAssetById" parameterType="Long">

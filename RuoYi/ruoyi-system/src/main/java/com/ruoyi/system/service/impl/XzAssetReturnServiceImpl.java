@@ -22,115 +22,141 @@ import com.ruoyi.common.core.text.Convert;
  * @date 2019-09-11
  */
 @Service
-public class XzAssetReturnServiceImpl implements IXzAssetReturnService 
-{
+public class XzAssetReturnServiceImpl implements IXzAssetReturnService {
 	@Autowired
 	private XzAssetReturnMapper xzAssetReturnMapper;
-	
+
 	@Autowired
 	private SysUserMapper sysUserMapper;
 
 	@Autowired
 	private XzAsstesMapper xzAsstesMapper;
-	
+
 	@Autowired
 	private XzPersonalAssetMapper xzPersonalAssetMapper;
 
+	/**
+	 * 查询资产归还信息
+	 * 
+	 * @param id
+	 *            资产归还ID
+	 * @return 资产归还信息
+	 */
+	@Override
+	public XzAssetReturn selectXzAssetReturnById(Long id) {
+		return xzAssetReturnMapper.selectXzAssetReturnById(id);
+	}
 
 	/**
-     * 查询资产归还信息
-     * 
-     * @param id 资产归还ID
-     * @return 资产归还信息
-     */
-    @Override
-	public XzAssetReturn selectXzAssetReturnById(Long id)
-	{
-	    return xzAssetReturnMapper.selectXzAssetReturnById(id);
-	}
-	
-	/**
-     * 查询资产归还列表
-     * 
-     * @param xzAssetReturn 资产归还信息
-     * @return 资产归还集合
-     */
+	 * 查询资产归还列表
+	 * 
+	 * @param xzAssetReturn
+	 *            资产归还信息
+	 * @return 资产归还集合
+	 */
 	@Override
-	public List<XzAssetReturn> selectXzAssetReturnList(XzAssetReturn xzAssetReturn)
-	{
-	    return xzAssetReturnMapper.selectXzAssetReturnList(xzAssetReturn);
+	public List<XzAssetReturn> selectXzAssetReturnList(XzAssetReturn xzAssetReturn) {
+		return xzAssetReturnMapper.selectXzAssetReturnList(xzAssetReturn);
 	}
-	
-    /**
-     * 新增资产归还
-     * 
-     * @param xzAssetReturn 资产归还信息
-     * @return 结果
-     */
-	@Override
-	public int insertXzAssetReturn(XzAssetReturn xzAssetReturn)
-	{
-		xzAssetReturn.setUserId(sysUserMapper.selectUserIdByUserNameOnly(xzAssetReturn.getCreateByName()));
-		//个人资产表信息更正
-		XzPersonalAsset xzPersonalAsset=new XzPersonalAsset();
-		xzPersonalAsset.setAssetId(xzAssetReturn.getAssetId());
-		//个人资产状态变为已归还待确认
-		xzPersonalAsset.setAssetStatus("9");
-		xzPersonalAssetMapper.updateXzPersonalAsset(xzPersonalAsset);
-		
-		//资产表信息更正
-		XzAsstes xzAsstes = new XzAsstes();
-		xzAsstes.setId(xzAssetReturn.getAssetId());
-		//资产状态变为已归还待确认
-		xzAsstes.setUseStatus("9");
-		xzAsstesMapper.updateXzAsstes(xzAsstes);
-		
-	    return xzAssetReturnMapper.insertXzAssetReturn(xzAssetReturn);
-	}
-	
+
 	/**
-     * 修改资产归还
-     * 
-     * @param xzAssetReturn 资产归还信息
-     * @return 结果
-     */
+	 * 新增资产归还
+	 * 
+	 * @param xzAssetReturn
+	 *            资产归还信息
+	 * @return 结果
+	 */
 	@Override
 	@Transactional
-	public int updateXzAssetReturn(XzAssetReturn xzAssetReturn)
-	{
-		if(xzAssetReturn.getReturnStatus().equals("2")){
-			//已归还
-			//资产表信息更正
+	public int insertXzAssetReturn(XzAssetReturn xzAssetReturn) {
+		xzAssetReturn.setUserId(sysUserMapper.selectUserIdByUserNameOnly(xzAssetReturn.getCreateByName()));
+		// 1.个人资产表信息更正(归还中)
+		XzPersonalAsset xzPersonalAsset = new XzPersonalAsset();
+		xzPersonalAsset.setId(xzAssetReturn.getAssetId());
+		xzPersonalAsset.setAssetStatus("7");// 归还中
+		xzPersonalAssetMapper.updateXzPersonalAsset(xzPersonalAsset);
+
+		return xzAssetReturnMapper.insertXzAssetReturn(xzAssetReturn);
+	}
+
+	/**
+	 * 修改资产归还
+	 * 
+	 * @param xzAssetReturn
+	 *            资产归还信息
+	 * @return 结果
+	 */
+	@Override
+	@Transactional
+	public int updateXzAssetReturn(XzAssetReturn xzAssetReturn) {
+		// 同意入库
+		if (xzAssetReturn.getReturnStatus().equals("1")) {
+
+			XzPersonalAsset xzPersonalAsset = xzPersonalAssetMapper
+					.selectXzPersonalAssetById(xzAssetReturn.getAssetId());
+			// 已归还
+			xzPersonalAsset.setAssetStatus("4");
+			xzPersonalAssetMapper.updateXzPersonalAsset(xzPersonalAsset);
+
+			// 资产表信息更正
 			XzAsstes xzAsstes = new XzAsstes();
-			xzAsstes.setId(xzAssetReturn.getAssetId());
-			//资产状态变为在库，无
+			xzAsstes.setId(xzPersonalAsset.getAssetId());
+			// 资产状态变为在库，无
 			xzAsstes.setAssetsStatus("2");
 			xzAsstes.setUseStatus("1");
 			xzAsstes.setUseBy(null);
 			xzAsstes.setDepartment(null);
 			xzAsstes.setUseTime(null);
 			xzAsstesMapper.updateXzAsstes(xzAsstes);
-			
-			//个人资产表信息更正
-			XzPersonalAsset xzPersonalAsset=new XzPersonalAsset();
-			xzPersonalAsset.setAssetId(xzAssetReturn.getAssetId());
-			//个人资产状态变为已归还待确认
-			xzPersonalAsset.setAssetStatus("4");
+		} else if (xzAssetReturn.getReturnStatus().equals("2")) {
+			// 个人资产表信息更正
+			XzPersonalAsset xzPersonalAsset = xzPersonalAssetMapper
+					.selectXzPersonalAssetById(xzAssetReturn.getAssetId());
+			// 已归还
+			xzPersonalAsset.setAssetStatus("3");
 			xzPersonalAssetMapper.updateXzPersonalAsset(xzPersonalAsset);
 		}
-	    return xzAssetReturnMapper.updateXzAssetReturn(xzAssetReturn);
+		return xzAssetReturnMapper.updateXzAssetReturn(xzAssetReturn);
 	}
 
 	/**
-     * 删除资产归还对象
-     * 
-     * @param ids 需要删除的数据ID
-     * @return 结果
-     */
+	 * 删除资产归还对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
 	@Override
-	public int deleteXzAssetReturnByIds(String ids)
-	{
+	public int deleteXzAssetReturnByIds(String ids) {
 		return xzAssetReturnMapper.deleteXzAssetReturnByIds(Convert.toStrArray(ids));
 	}
-	
+
+	/**
+	 * 资产报废
+	 */
+	@Override
+	@Transactional
+	public int updateXzAssetScrap(XzAssetReturn xzAssetReturn) {
+		//审批通过
+		if(xzAssetReturn.getReturnStatus().equals("1")){
+					
+			XzPersonalAsset xzPersonalAsset = xzPersonalAssetMapper.selectXzPersonalAssetById(xzAssetReturn.getAssetId());
+			//已报废
+			xzPersonalAsset.setAssetStatus("6");
+			xzPersonalAssetMapper.updateXzPersonalAsset(xzPersonalAsset);
+					
+			//资产表信息更正
+			XzAsstes xzAsstes = new XzAsstes();
+			xzAsstes.setId(xzPersonalAsset.getAssetId());
+			//资产状态变为在库，无
+			xzAsstes.setAssetsStatus("6");
+			xzAsstes.setUseStatus("6");
+			xzAsstes.setUseBy(null);
+			xzAsstes.setDepartment(null);
+			xzAsstes.setUseTime(null);
+			xzAsstesMapper.updateXzAsstes(xzAsstes);
+		
+		}
+		return xzAssetReturnMapper.updateXzAssetReturn(xzAssetReturn);
+	}
 }

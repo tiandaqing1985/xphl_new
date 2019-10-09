@@ -16,7 +16,7 @@ public class XzAssetRepair extends BaseEntity
 	
 	/** 主键 */
 	private Long repairId;
-	/** 资产id */
+	/** 个人资产id */
 	private Long assetId;
 	/** 报修人id */
 	private Long userId;

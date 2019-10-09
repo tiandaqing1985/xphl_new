@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.XzAssetRepair;
+import com.ruoyi.system.domain.XzPersonalAsset;
 import com.ruoyi.system.service.IXzAssetHandRecordService;
 import com.ruoyi.system.service.IXzAssetRepairService;
 import com.ruoyi.system.service.IXzAsstesService;
+import com.ruoyi.system.service.IXzPersonalAssetService;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -42,6 +44,9 @@ public class XzAssetRepairController extends BaseController {
 	
 	@Autowired
 	private IXzAssetHandRecordService xzAssetHandRecordService;
+	
+	@Autowired
+	private IXzPersonalAssetService xzPersonalAssetService;
 
 
 	@RequiresPermissions("system:xzAssetRepair:view")
@@ -75,10 +80,12 @@ public class XzAssetRepairController extends BaseController {
 	/**
 	 * 新增资产维修
 	 */
-	@GetMapping("/add/{assetId}")
-	public String add(@PathVariable("assetId") Long assetId, ModelMap mmap) {
-		mmap.put("xzAsstes", xzAsstesService.selectXzAsstesById(assetId));
-		mmap.put("xzHand", xzAssetHandRecordService.selectXzAssetHandRecordByAssetId(assetId));
+	@GetMapping("/add/{id}")
+	public String add(@PathVariable("id") Long id, ModelMap mmap) {
+		XzPersonalAsset xzPersonalAsset = xzPersonalAssetService.selectXzPersonalAssetById(id);
+		mmap.put("id", id);
+		mmap.put("xzAsstes", xzAsstesService.selectXzAsstesById(xzPersonalAsset.getAssetId()));
+		mmap.put("xzHand", xzAssetHandRecordService.selectXzAssetHandRecordByAssetId(xzPersonalAsset.getAssetId()));
 		return prefix + "/add";
 	}
 
@@ -89,7 +96,6 @@ public class XzAssetRepairController extends BaseController {
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(XzAssetRepair xzAssetRepair) {
-		xzAssetRepair.setAssetId(xzAssetRepair.getAssetId());
 		xzAssetRepair.setUserId(ShiroUtils.getUserId());
 		//待维修
 		xzAssetRepair.setRepairStatus("1");
@@ -104,9 +110,10 @@ public class XzAssetRepairController extends BaseController {
 	@GetMapping("/edit/{repairId}")
 	public String edit(@PathVariable("repairId") Long repairId, ModelMap mmap) {
 		XzAssetRepair xzAssetRepair = xzAssetRepairService.selectXzAssetRepairById(repairId);
+		XzPersonalAsset xzPersonalAsset = xzPersonalAssetService.selectXzPersonalAssetById(xzAssetRepair.getAssetId());
 		mmap.put("xzAssetRepair", xzAssetRepair);
-		mmap.put("xzAsstes", xzAsstesService.selectXzAsstesById(xzAssetRepair.getAssetId()));
-		mmap.put("xzHand", xzAssetHandRecordService.selectXzAssetHandRecordByAssetId(xzAssetRepair.getAssetId()));
+		mmap.put("xzAsstes", xzAsstesService.selectXzAsstesById(xzPersonalAsset.getAssetId()));
+		mmap.put("xzHand", xzAssetHandRecordService.selectXzAssetHandRecordByAssetId(xzPersonalAsset.getAssetId()));
 		return prefix + "/edit";
 	}
 

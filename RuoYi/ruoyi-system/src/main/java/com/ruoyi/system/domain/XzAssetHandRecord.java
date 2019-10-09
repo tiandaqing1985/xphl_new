@@ -34,14 +34,6 @@ public class XzAssetHandRecord extends BaseEntity
 	private String distributorStatus;
 	/** 取消分配原因*/
 	private String reason;
-	public String getDistributorStatus() {
-		return distributorStatus;
-	}
-
-	public void setDistributorStatus(String distributorStatus) {
-		this.distributorStatus = distributorStatus;
-	}
-
 	/** 接收人ID */
 	private Long recipient;
 	/** 接收人名称 */
@@ -234,6 +226,15 @@ public class XzAssetHandRecord extends BaseEntity
 	public void setReason(String reason) {
 		this.reason = reason;
 	}
+	
+	public String getDistributorStatus() {
+		return distributorStatus;
+	}
+
+	public void setDistributorStatus(String distributorStatus) {
+		this.distributorStatus = distributorStatus;
+	}
+
 
 	@Override
 	public String toString() {

@@ -57,7 +57,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectXzAssetHandRecordByAssetId" parameterType="Long" resultMap="XzAssetHandRecordResult">
         <include refid="selectXzAssetHandRecord"/>
-        where a.id = #{assetId}
+        where ahr.id in (select max(id) from xz_asset_hand_record where asset_id = #{assetId}) 
     </select>
         
     <insert id="insertXzAssetHandRecord" parameterType="XzAssetHandRecord" useGeneratedKeys="true" keyProperty="id">

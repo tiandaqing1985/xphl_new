@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+<th:block th:include="include :: header('新增审批')" />
+</head>
+<body class="white-bg">
+	<input type="hidden" th:value="${id}" id="id" />
+	<div class="col-md-12">
+		<div class="form-group">
+			<label class="col-sm-3 control-label">审批意见：</label>
+			<div class="col-sm-8">
+				<label class="radio-box"> <input type="radio" checked
+					value="1" name="shenpi" style="position: absolute; opacity: 0;">
+					同意
+				</label> <label class="radio-box"> <input type="radio" value="2"
+					name="shenpi" style="position: absolute; opacity: 0;"> 驳回
+				</label>
+			</div>
+		</div>
+		<div class="form-group" id="remark">
+			<label class="col-sm-3 control-label">备注：</label>
+			<div class="col-sm-8">
+				<textarea name="remark" class="form-control" placeholder="备注"></textarea>
+			</div>
+		</div>
+	</div>
+</body>
+<th:block th:include="include :: footer" />
+<script type="text/javascript">
+	function submitHandler() {
+		var shenpi = $("input[name='shenpi']:checked").val();
+		var prefix = ctx + "system/xzAssetReturn";
+		var shenpiUrl = "/system/xzAssetReturn/agree";
+		if (shenpi == 2) {
+			shenpiUrl = "/system/xzAssetReturn/reject";
+		}
+
+		debugger;
+		var id = $("#id").val();
+		var remark = $('textarea[name=remark]').val();
+		$.ajax({
+			cache : true,
+			type : "POST",
+			url : shenpiUrl,
+			data : {
+				"id" : id,
+				"remark" : remark
+			},
+			async : false,
+			error : function(request) {
+				$.modal.alertError("系统错误");
+			},
+			success : function(data) {
+				$.operate.successCallback(data);
+			}
+		});
+
+	}
+</script>
+</html>

@@ -57,7 +57,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ar.update_time,xa.assets_code,xa.assets_name, xa.region,at.name assets_type_name,xa.assets_model,xa.use_status,xa.category,xa.unit ,xa.brand,
 		u.user_name user_name
 		from xz_asset_repair ar
-		left join xz_asstes xa on xa.id =ar.asset_id
+		left join xz_personal_asset pa on pa.id=ar.asset_id
+		left join xz_asstes xa on xa.id =pa.asset_id
         left join xz_asset_type at on at.id =xa.assets_type 
         left join sys_user u on u.user_id =ar.user_id
 		<where>

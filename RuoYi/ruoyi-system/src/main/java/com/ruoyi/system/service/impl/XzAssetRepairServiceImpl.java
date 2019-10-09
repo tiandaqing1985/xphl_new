@@ -8,8 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.mapper.XzAssetRepairMapper;
 import com.ruoyi.system.mapper.XzAsstesMapper;
+import com.ruoyi.system.mapper.XzPersonalAssetMapper;
 import com.ruoyi.system.domain.XzAssetRepair;
 import com.ruoyi.system.domain.XzAsstes;
+import com.ruoyi.system.domain.XzPersonalAsset;
 import com.ruoyi.system.service.IXzAssetRepairService;
 import com.ruoyi.common.core.text.Convert;
 
@@ -29,6 +31,9 @@ public class XzAssetRepairServiceImpl implements IXzAssetRepairService {
 
 	@Autowired
 	private SysUserMapper sysUserMapper;
+	
+	@Autowired
+	private XzPersonalAssetMapper xzPersonalAssetMapper;
 
 
 	/**
@@ -65,11 +70,12 @@ public class XzAssetRepairServiceImpl implements IXzAssetRepairService {
 	@Override
 	@Transactional
 	public int insertXzAssetRepair(XzAssetRepair xzAssetRepair) {
-		// 资产表要变更资产使用状态为待维修
-		XzAsstes xzAsstes = new XzAsstes();
-		xzAsstes.setId(xzAssetRepair.getAssetId());
-		xzAsstes.setUseStatus("7");
-		xzAsstesMapper.updateXzAsstes(xzAsstes);
+		
+		// 1.个人资产表信息更正(维修中)
+		XzPersonalAsset xzPersonalAsset = new XzPersonalAsset();
+		xzPersonalAsset.setId(xzAssetRepair.getAssetId());
+		xzPersonalAsset.setAssetStatus("8");// 维修中
+		xzPersonalAssetMapper.updateXzPersonalAsset(xzPersonalAsset);
 		// 新增一条维修记录
 		return xzAssetRepairMapper.insertXzAssetRepair(xzAssetRepair);
 	}
@@ -82,21 +88,35 @@ public class XzAssetRepairServiceImpl implements IXzAssetRepairService {
 	 * @return 结果
 	 */
 	@Override
+	@Transactional
 	public int updateXzAssetRepair(XzAssetRepair xzAssetRepair) {
 		xzAssetRepair.setInspectorId(sysUserMapper.selectUserIdByUserNameOnly(xzAssetRepair.getInspectorName()));
 		// 资产表要变更资产使用状态
 		XzAsstes xzAsstes = new XzAsstes();
-		xzAsstes.setId(xzAssetRepair.getAssetId());
+		xzAsstes.setId(xzPersonalAssetMapper.selectXzPersonalAssetById(xzAssetRepair.getAssetId()).getAssetId());
 		if(xzAssetRepair.getRepairStatus()!=null || xzAssetRepair.getRepairStatus()!=""){
-			if(xzAssetRepair.getRepairStatus().equals("2")){
+			if(xzAssetRepair.getRepairStatus().equals("2")){//维修中
 				//维修中
 				xzAsstes.setUseStatus("8");
-			}else if(xzAssetRepair.getRepairStatus().equals("3")){
-				//已维修
+				xzAsstes.setAssetsStatus("5");
+			}else if(xzAssetRepair.getRepairStatus().equals("3")){//已维修
+				//使用中
 				xzAsstes.setUseStatus("3");
+				xzAsstes.setAssetsStatus("3");
+				// 1.个人资产表信息更正(使用中)
+				XzPersonalAsset xzPersonalAsset = new XzPersonalAsset();
+				xzPersonalAsset.setId(xzAssetRepair.getAssetId());
+				xzPersonalAsset.setAssetStatus("3");// 使用中
+				xzPersonalAssetMapper.updateXzPersonalAsset(xzPersonalAsset);
 			}else if(xzAssetRepair.getRepairStatus().equals("4")){
-				//已报废-需要归还
+				//已报废
 				xzAsstes.setUseStatus("6");
+				xzAsstes.setAssetsStatus("6");
+				// 1.个人资产表信息更正(使用中)
+				XzPersonalAsset xzPersonalAsset = new XzPersonalAsset();
+				xzPersonalAsset.setId(xzAssetRepair.getAssetId());
+				xzPersonalAsset.setAssetStatus("6");// 已报废
+				xzPersonalAssetMapper.updateXzPersonalAsset(xzPersonalAsset);
 			}else{
 				//不做变动
 			}

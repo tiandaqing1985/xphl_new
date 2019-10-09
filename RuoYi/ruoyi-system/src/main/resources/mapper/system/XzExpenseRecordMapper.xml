@@ -239,21 +239,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
 			a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
 			a.month10, a.month11, a.month12, (a.month1+a.month2+a.month3+a.month4+a.month5+a.month6+a.month7+
-			a.month8+a.month9+a.a.month11+a.month12) sum
+			a.month8+a.month9+a.month10+a.month11+a.month12) sum
 		  from (SELECT er.expense_type_parent,rt.name expense_type_parent_name,
 				 er.expense_type,xrt.name expense_type_name,YEAR(use_date) as year,
-				(CASE WHEN MONTH(er.use_date) =1 THEN sum(er.unit_price * er.count) ELSE 0 END) month1,
-				(CASE WHEN MONTH(er.use_date) =2 THEN sum(er.unit_price * er.count) ELSE 0 END) month2,
-				(CASE WHEN MONTH(er.use_date) =3 THEN sum(er.unit_price * er.count) ELSE 0 END) month3,
-				(CASE WHEN MONTH(er.use_date) =4 THEN sum(er.unit_price * er.count) ELSE 0 END) month4,
-				(CASE WHEN MONTH(er.use_date) =5 THEN sum(er.unit_price * er.count) ELSE 0 END) month5,
-				(CASE WHEN MONTH(er.use_date) =6 THEN sum(er.unit_price * er.count) ELSE 0 END) month6,
-				(CASE WHEN MONTH(er.use_date) =7 THEN sum(er.unit_price * er.count) ELSE 0 END) month7,
-				(CASE WHEN MONTH(er.use_date) =8 THEN sum(er.unit_price * er.count) ELSE 0 END) month8,
-				(CASE WHEN MONTH(er.use_date) =9 THEN sum(er.unit_price * er.count) ELSE 0 END) month9,
-				(CASE WHEN MONTH(er.use_date) =10 THEN sum(er.unit_price * er.count) ELSE 0 END) month10,
-				(CASE WHEN MONTH(er.use_date) =11 THEN sum(er.unit_price * er.count) ELSE 0 END) month11,
-				(CASE WHEN MONTH(er.use_date) =12 THEN sum(er.unit_price * er.count) ELSE 0 END) month12,
+				sum(CASE WHEN MONTH(er.use_date) =1 THEN   er.unit_price * er.count ELSE 0 END) month1,
+				sum(CASE WHEN MONTH(er.use_date) =2 THEN   er.unit_price * er.count ELSE 0 END) month2,
+				sum(CASE WHEN MONTH(er.use_date) =3 THEN   er.unit_price * er.count ELSE 0 END) month3,
+				sum(CASE WHEN MONTH(er.use_date) =4 THEN   er.unit_price * er.count ELSE 0 END) month4,
+				sum(CASE WHEN MONTH(er.use_date) =5 THEN   er.unit_price * er.count ELSE 0 END) month5,
+				sum(CASE WHEN MONTH(er.use_date) =6 THEN   er.unit_price * er.count ELSE 0 END) month6,
+				sum(CASE WHEN MONTH(er.use_date) =7 THEN   er.unit_price * er.count ELSE 0 END) month7,
+				sum(CASE WHEN MONTH(er.use_date) =8 THEN   er.unit_price * er.count ELSE 0 END) month8,
+				sum(CASE WHEN MONTH(er.use_date) =9 THEN   er.unit_price * er.count ELSE 0 END) month9,
+				sum(CASE WHEN MONTH(er.use_date) =10 THEN  er.unit_price * er.count ELSE 0 END) month10,
+				sum(CASE WHEN MONTH(er.use_date) =11 THEN  er.unit_price * er.count ELSE 0 END) month11,
+				sum(CASE WHEN MONTH(er.use_date) =12 THEN  er.unit_price * er.count  ELSE 0 END) month12,
 				er.region,er.use_date
 			FROM xz_expense_record er
 			LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent
@@ -280,21 +280,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
 			a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
 			a.month10, a.month11, a.month12, (a.month1+a.month2+a.month3+a.month4+a.month5+a.month6+a.month7+
-			a.month8+a.month9+a.a.month11+a.month12) sum
+			a.month8+a.month9+a.month10+a.month11+a.month12) sum
 		  from (SELECT er.expense_type_parent,rt.name expense_type_parent_name,
 				 er.expense_type,xrt.name expense_type_name,YEAR(use_date) as year,
-				(CASE WHEN MONTH(er.use_date) =1 THEN sum(er.unit_price * er.count) ELSE 0 END) month1,
-				(CASE WHEN MONTH(er.use_date) =2 THEN sum(er.unit_price * er.count) ELSE 0 END) month2,
-				(CASE WHEN MONTH(er.use_date) =3 THEN sum(er.unit_price * er.count) ELSE 0 END) month3,
-				(CASE WHEN MONTH(er.use_date) =4 THEN sum(er.unit_price * er.count) ELSE 0 END) month4,
-				(CASE WHEN MONTH(er.use_date) =5 THEN sum(er.unit_price * er.count) ELSE 0 END) month5,
-				(CASE WHEN MONTH(er.use_date) =6 THEN sum(er.unit_price * er.count) ELSE 0 END) month6,
-				(CASE WHEN MONTH(er.use_date) =7 THEN sum(er.unit_price * er.count) ELSE 0 END) month7,
-				(CASE WHEN MONTH(er.use_date) =8 THEN sum(er.unit_price * er.count) ELSE 0 END) month8,
-				(CASE WHEN MONTH(er.use_date) =9 THEN sum(er.unit_price * er.count) ELSE 0 END) month9,
-				(CASE WHEN MONTH(er.use_date) =10 THEN sum(er.unit_price * er.count) ELSE 0 END) month10,
-				(CASE WHEN MONTH(er.use_date) =11 THEN sum(er.unit_price * er.count) ELSE 0 END) month11,
-				(CASE WHEN MONTH(er.use_date) =12 THEN sum(er.unit_price * er.count) ELSE 0 END) month12,
+				sum(CASE WHEN MONTH(er.use_date) =1 THEN   er.unit_price * er.count ELSE 0 END) month1,
+				sum(CASE WHEN MONTH(er.use_date) =2 THEN   er.unit_price * er.count ELSE 0 END) month2,
+				sum(CASE WHEN MONTH(er.use_date) =3 THEN   er.unit_price * er.count ELSE 0 END) month3,
+				sum(CASE WHEN MONTH(er.use_date) =4 THEN   er.unit_price * er.count ELSE 0 END) month4,
+				sum(CASE WHEN MONTH(er.use_date) =5 THEN   er.unit_price * er.count ELSE 0 END) month5,
+				sum(CASE WHEN MONTH(er.use_date) =6 THEN   er.unit_price * er.count ELSE 0 END) month6,
+				sum(CASE WHEN MONTH(er.use_date) =7 THEN   er.unit_price * er.count ELSE 0 END) month7,
+				sum(CASE WHEN MONTH(er.use_date) =8 THEN   er.unit_price * er.count ELSE 0 END) month8,
+				sum(CASE WHEN MONTH(er.use_date) =9 THEN   er.unit_price * er.count ELSE 0 END) month9,
+				sum(CASE WHEN MONTH(er.use_date) =10 THEN  er.unit_price * er.count ELSE 0 END) month10,
+				sum(CASE WHEN MONTH(er.use_date) =11 THEN  er.unit_price * er.count ELSE 0 END) month11,
+				sum(CASE WHEN MONTH(er.use_date) =12 THEN  er.unit_price * er.count  ELSE 0 END) month12,
 				er.region,er.use_date
 			FROM xz_expense_record er
 			LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent

@@ -141,20 +141,22 @@
 			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group">
-						<label class="col-sm-3 control-label">检修时间：</label>
+						<label class="col-sm-3 control-label"><span
+							style="color: red;">*</span>检修时间：</label>
 						<div class="col-sm-8">
 							<input id="handlerTime" name="handlerTime"
 								th:value="${#dates.format(new java.util.Date().getTime(),'yyyy-MM-dd')}"
-								class="form-control" type="text">
+								class="form-control" type="text" required="required">
 						</div>
 					</div>
 				</div>
 				<div class="col-sm-6">
 					<div class="form-group">
-						<label class="col-sm-3 control-label">检修人：</label>
+						<label class="col-sm-3 control-label"><span
+							style="color: red;">*</span>检修人：</label>
 						<div class="col-sm-8">
 							<input id="inspectorName" name="inspectorName"
-								class="form-control" type="text">
+								class="form-control" type="text" required="required">
 						</div>
 					</div>
 				</div>
@@ -162,14 +164,15 @@
 			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group">
-						<label class="col-sm-3 control-label">设备状态：</label>
+						<label class="col-sm-3 control-label"><span
+							style="color: red;">*</span>设备状态：</label>
 						<div class="col-sm-8">
 							<div class="input-group" style="width: 100%">
 								<select name="repairStatus" class="form-control m-b"
 									th:with="type=${@dict.getType('xz_assets_repairStatus')}" required>
-									<option value=""></option>
+									<option value="">请选择</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-										th:value="${dict.dictValue}"></option>
+										th:value="${dict.dictValue}" th:field="*{repairStatus}"></option>
 								</select>
 							</div>
 						</div>

@@ -14,8 +14,9 @@
 				<div class="col-sm-8">
 					<div class="input-group" style="width: 100%">
 						<select id="assetTypeId" name="assetTypeId"
-							class="form-control m-b" onchange="selectAll()">
-							<option value=""></option>
+							class="form-control m-b" onchange="selectAll()"
+							required="required">
+							<option value="">请选择</option>
 							<option th:each="a:${typeList}" th:value="${a.id}"
 								th:text="${a.name}"></option>
 						</select>
@@ -24,47 +25,49 @@
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label"><span
-					style="color: red;">*</span>资产二级类型：</label>
+					style="color: red;">*</span>物品名称：</label>
 				<div class="col-sm-8">
 					<select id="assetType2Id" name="assetType2Id"
-						class="form-control m-b">
+						class="form-control m-b" required="required">
 					</select>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span
+					style="color: red;">*</span>所属地域：</label>
+				<div class="col-sm-8">
+					<div class="input-group" style="width: 100%">
+						<select name="region" class="form-control m-b"
+							th:with="type=${@dict.getType('xz_assets_region')}" required>
+							<option value="">请选择</option>
+							<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+								th:value="${dict.dictValue}"></option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span
+					style="color: red;">*</span>申请数量：</label>
+				<div class="col-sm-8">
+					<input id="count" name="count" class="form-control" type="text" oninput='this.value=this.value.replace(/^[0]+[0-9]*$/gi,"")'
+						placeholder="只能输入非零开头的数字" required="required">
 				</div>
 			</div>
 			<div class="form-group">
 				<label class="col-sm-3 control-label">资产型号：</label>
 				<div class="col-sm-8">
-					<input id="assetModel" name="assetModel" class="form-control"
-						type="text">
+					<input id="assetModel" name="assetModel" class="form-control" type="text">
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-3 control-label"><span
-					style="color: red;">*</span>地域：</label>
-				<div class="col-sm-8">
-					<div class="input-group" style="width: 100%">
-						<select name="region" class="form-control m-b"
-							th:with="type=${@dict.getType('xz_assets_region')}" required>
-							<option value=""></option>
-							<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-								th:value="${dict.dictValue}"></option>
-						</select>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">数量：</label>
-				<div class="col-sm-8">
-					<input id="count" name="count" class="form-control" type="text">
-				</div>
-			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label">单位：</label>
+				<label class="col-sm-3 control-label">物品单位：</label>
 				<div class="col-sm-8">
 					<div class="input-group" style="width: 100%">
 						<select name="unit" class="form-control m-b"
 							th:with="type=${@dict.getType('xz_assets_unit')}">
-							<option value="">所有</option>
+							<option value="">请选择</option>
 							<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
 								th:value="${dict.dictValue}"></option>
 						</select>
@@ -72,9 +75,24 @@
 				</div>
 			</div>
 			<div class="form-group">
-				<label class="col-sm-3 control-label">用途：</label>
+				<label class="col-sm-3 control-label"><span
+					style="color: red;">*</span>预计使用时间：</label>
 				<div class="col-sm-8">
-					<input id="purpose" name="purpose" class="form-control" type="text">
+					<div class="input-group date">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<input id="useDate" name="useDate" class="form-control"
+							placeholder="yyyy-MM-dd" autocomplete="off" type="text"
+							required="required">
+					</div>
+					<span id="p01"></span>
+				</div>
+			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label"><span
+					style="color: red;">*</span>用途：</label>
+				<div class="col-sm-8">
+					<input id="purpose" name="purpose" class="form-control" type="text"
+						required="required">
 				</div>
 			</div>
 			<div class="form-group">
@@ -83,13 +101,7 @@
 					<input id="remarks" name="remarks" class="form-control" type="text">
 				</div>
 			</div>
-			<div class="form-group">
-				<label class="col-sm-3 control-label"><span
-					style="color: red;">*</span>预计使用时间：</label>
-				<div class="col-sm-8">
-					<input id="useDate" name="useDate" class="form-control" type="text">
-				</div>
-			</div>
+
 		</form>
 	</div>
 	<div th:include="include::footer"></div>
@@ -110,7 +122,7 @@
 						.serialize());
 			}
 		}
-		
+
 		//资产类型二级联动
 		function selectAll() {
 			var index = $('#assetTypeId option:selected').text();
@@ -135,7 +147,7 @@
 				}
 			})
 		}
-		
+
 		$(function() {
 			//初始化日期选择器
 			layui.use('laydate', function() {

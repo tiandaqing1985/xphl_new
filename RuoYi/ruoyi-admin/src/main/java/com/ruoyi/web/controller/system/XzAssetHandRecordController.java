@@ -15,6 +15,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.XzAssetHandRecord;
 import com.ruoyi.system.domain.XzAsstes;
 import com.ruoyi.system.domain.XzPersonalApply;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IXzAssetHandRecordService;
 import com.ruoyi.system.service.IXzAsstesService;
 import com.ruoyi.system.service.IXzPersonalApplyService;
@@ -38,6 +39,9 @@ public class XzAssetHandRecordController extends BaseController
     
     @Autowired
 	private IXzAsstesService xzAsstesService;
+    
+    @Autowired
+    private ISysUserService sysUserService;
     
     @Autowired
    	private IXzPersonalApplyService xzPersonalApplyService;
@@ -89,7 +93,7 @@ public class XzAssetHandRecordController extends BaseController
 	}
 	
 	/**
-	 * 新增办公用品资产分配记录
+	 * 新增办公用品资产分配记录(申请分配)
 	 */
 	@GetMapping("/staHand/{applyId}")
 	public String addStaHand(@PathVariable("applyId") Long applyId, ModelMap mmap)
@@ -101,6 +105,21 @@ public class XzAssetHandRecordController extends BaseController
 		xzAsstes.setAssetsModel(apply.getAssetModel());
 		mmap.put("apply", apply);
 	    return prefix + "/staHand";
+	}
+	
+	/**
+	 * 新增办公用品资产分配记录(主动分配)
+	 */
+	@GetMapping("/toStaHand")
+	public String toStaHand(Long assetTypeId,Long assetType2Id, ModelMap mmap)
+	{
+		XzAsstes xz =new XzAsstes();
+		xz.setAssetsType(assetTypeId);
+		xz.setAssetsType2(assetType2Id);
+		mmap.put("assetTypeId", assetTypeId);
+		mmap.put("assetType2Id", assetType2Id);
+		mmap.put("sum", xzAsstesService.selectAssetByType12(xz));
+		return prefix + "/toStaHand";
 	}
 	
 	/**
@@ -142,6 +161,29 @@ public class XzAssetHandRecordController extends BaseController
 	public AjaxResult staHandSave(XzAssetHandRecord xzAssetHandRecord)
 	{	
 		xzAssetHandRecord.setDistributor(ShiroUtils.getUserId());
+		String str= xzAssetHandRecordService.insertXzAssetHandStaRecord(xzAssetHandRecord);
+		if(str=="1"){
+			return success("分配成功");
+		}else if(str=="2"){
+			return error("分配失败");	
+		}else{
+			return AjaxResult.warn("该资产库存不足，请采购！");	
+		}
+		
+	}
+	/**
+	 * 新增办公资产分配记录
+	 */
+	@Log(title = "资产分配记录", businessType = BusinessType.INSERT)
+	@PostMapping("/toStaHand")
+	@ResponseBody
+	public AjaxResult toStaHandSave(XzAssetHandRecord xzAssetHandRecord)
+	{	
+		Long recipientId=sysUserService.selectUserIdByUserNameOnly(xzAssetHandRecord.getRecipientName());
+		String region=sysUserService.selectUserById(recipientId).getArea();
+		xzAssetHandRecord.setDistributor(ShiroUtils.getUserId());
+		xzAssetHandRecord.setRecipient(recipientId);
+		xzAssetHandRecord.setRegion(region);
 		String str= xzAssetHandRecordService.insertXzAssetHandStaRecord(xzAssetHandRecord);
 		if(str=="1"){
 			return success("分配成功");

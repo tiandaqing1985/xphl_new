@@ -14,7 +14,7 @@ public class XzAssetReturn extends BaseEntity
 	
 	/** 主键 */
 	private Long id;
-	/** 资产id */
+	/** 个人资产id */
 	private Long assetId;
 	/** 申请人id */
 	private Long userId;

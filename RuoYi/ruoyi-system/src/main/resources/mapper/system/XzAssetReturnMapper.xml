@@ -47,11 +47,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	xa.assets_code,xa.assets_name, xa.region,at.name assets_type_name,xa.assets_model,xa.use_status,xa.category,xa.unit ,xa.brand,
 		u.user_name user_name 
     	from xz_asset_return ar
-    	left join xz_asstes xa on xa.id =ar.asset_id
+    	left join xz_personal_asset pa on pa.id=ar.asset_id
+    	left join xz_asstes xa on xa.id =pa.asset_id
         left join xz_asset_type at on at.id =xa.assets_type 
         left join sys_user u on u.user_id =ar.user_id
         <where>  
-         	 return_status ='1'
              <if test="returnStatus != null  and returnStatus != '' "> and ar.return_status = #{returnStatus}</if>
             <!--  <if test="createTime != null "> and create_time = #{createTime}</if> -->
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				date_format(#{params.endTime},'%y%m%d')
 			</if>
          </where>
-         ORDER BY create_time DESC
+         ORDER BY ar.create_time DESC
     </select>
     
     <select id="selectXzAssetReturnById" parameterType="Long" resultMap="XzAssetReturnResult">
@@ -105,6 +105,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="handlerId != null  ">handler_id = #{handlerId},</if>
             <if test="returnStatus != null  and returnStatus != ''  ">return_status = #{returnStatus},</if>
             <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="remark2 != null  and remark2 != ''  ">remark2 = #{remark2},</if>
             <if test="createBy != null  ">create_by = #{createBy},</if>
             <if test="createTime != null  ">create_time = #{createTime},</if>
             <if test="updateBy != null  ">update_by = #{updateBy},</if>

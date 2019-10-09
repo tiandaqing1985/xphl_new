@@ -116,4 +116,6 @@ public interface XzAsstesMapper {
 	 */
 	public List<XzAsstesSta> selectXzStatisticsList(XzAsstesSta xzAsstesSta);
 
+	public int selectAssetByType12(XzAsstes xz);
+
 }
