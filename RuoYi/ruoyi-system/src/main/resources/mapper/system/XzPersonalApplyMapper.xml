@@ -59,6 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="assetType2Name != null and assetType2Name != ''  "> and ad.name = #{assetType2Name}</if>
 			<if test="sort != null  and sort != '' "> and pa.sort = #{sort}</if>
 			<if test="userId != null "> and pa.user_id = #{userId}</if>
+			<if test="region != null and region !=''"> and pa.region = #{region}</if>
 		</where>
 	</select>
 

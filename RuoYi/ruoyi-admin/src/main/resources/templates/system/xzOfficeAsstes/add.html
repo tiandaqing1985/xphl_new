@@ -43,13 +43,13 @@
 							style="color: red;">*</span>资产类型：</label>
 						<div class="col-sm-8">
 							<div class="input-group" style="width: 100%">
-								<select id="assetsType" name="assetsType" class="form-control m-b" onchange="selectAll()">
+								<select id="assetsType" name="assetsType" class="form-control m-b" onchange="selectAll()" required="required">
 									<option value=""></option>
 									<option th:each="a:${typeList}" th:value="${a.id}"
 										th:text="${a.name}"></option>
 								</select> 
 								<span>-</span> 
-								<select id="assetsType2" name="assetsType2" class="form-control m-b">
+								<select id="assetsType2" name="assetsType2" class="form-control m-b" required="required">
 								</select>
 							</div>
 						</div>
@@ -114,7 +114,7 @@
 						<div class="col-sm-8">
 							<div class="input-group" style="width: 100%">
 								<select name="brand" class="form-control m-b"
-									th:with="type=${@dict.getType('xz_assets_brand')}">
+									th:with="type=${@dict.getType('xz_assets_brandSta')}">
 									<option value=""></option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
@@ -196,11 +196,11 @@
 						<div class="col-sm-8">
 							<input name="annex" id="annex" type="hidden"> <input
 								name="annexfile" id="annexfile" class="form-control" type="file">
-							<button type="button" class="btn btn-sm btn-primary"
+							<!-- <button type="button" class="btn btn-sm btn-primary"
 								onclick="shangchuan()">
 								<i class="fa fa-check"></i>上传
 							</button>
-							&nbsp;
+							&nbsp; -->
 						</div>
 					</div>
 				</div>
@@ -254,7 +254,7 @@
 	    }
 		function submitHandlerSub() {
 	        if ($.validate.form()) {
-	            $.operate.saveTab(prefix + "/addSub", $('#form-xzOfficeAsstes-add').serialize());
+	            $.operate.save(prefix + "/addSub", $('#form-xzOfficeAsstes-add').serialize());
 	        }
 	    }
 		

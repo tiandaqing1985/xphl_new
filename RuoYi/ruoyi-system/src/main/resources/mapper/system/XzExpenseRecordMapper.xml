@@ -236,7 +236,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
     
 	<select id="selectXzExpenseList" parameterType="XzExpenseSta" resultMap="XzExpenseStaResult">
-		select a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
+		select  a.region,a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
 			a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
 			a.month10, a.month11, a.month12, (a.month1+a.month2+a.month3+a.month4+a.month5+a.month6+a.month7+
 			a.month8+a.month9+a.month10+a.month11+a.month12) sum
@@ -259,7 +259,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent
 			LEFT JOIN xz_resource_type xrt on xrt.id=er.expense_type
 			where er.submit_type='2'
-			GROUP BY er.expense_type_parent)a
+			<if test="region ==null or region ==''">GROUP BY  er.expense_type_parent)a</if>
+			<if test="region !=null and region !=''">GROUP BY er.region, er.expense_type_parent)a</if>
+			
+			
 		
         <where>
         	 <if test="year != null and year != '' "> and a.year = #{year}</if> 
@@ -277,7 +280,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="selectXzExpenseDetailList" parameterType="XzExpenseSta" resultMap="XzExpenseStaResult">
-		select a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
+		select a.region,a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
 			a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
 			a.month10, a.month11, a.month12, (a.month1+a.month2+a.month3+a.month4+a.month5+a.month6+a.month7+
 			a.month8+a.month9+a.month10+a.month11+a.month12) sum
@@ -300,8 +303,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent
 			LEFT JOIN xz_resource_type xrt on xrt.id=er.expense_type
 			where er.submit_type='2'
-			GROUP BY er.expense_type)a
-			where a.expense_type_parent=#{expenseTypeParent}
+			<if test="region ==null or region ==''">GROUP BY  er.expense_type)a</if>
+			<if test="region !=null and region !=''">GROUP BY er.region, er.expense_type)a</if>
+			where a.expense_type_parent=#{expenseTypeParent} 
+			<if test="region !=null and region !=''">and a.region = #{region}</if>
     </select>
     
 </mapper>

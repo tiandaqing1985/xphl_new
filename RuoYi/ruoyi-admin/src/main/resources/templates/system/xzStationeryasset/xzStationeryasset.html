@@ -41,20 +41,14 @@
 			</div>
 
 			<div class="btn-group-sm" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.addTab()"
-					shiro:hasPermission="system:xzStationeryassetRecord:add"> <i
-					class="fa fa-plus"></i> 添加
-				</a> <a class="btn btn-primary btn-edit disabled"
-					onclick="$.operate.edit()"
-					shiro:hasPermission="system:xzStationeryassetRecord:edit"> <i
-					class="fa fa-edit"></i> 修改
+				<a class="btn btn-success" onclick="$.operate.addTab()">
+					<i class="fa fa-plus"></i> 添加
+				</a> <!-- <a class="btn btn-primary btn-edit disabled"
+					onclick="$.operate.edit()"> <i class="fa fa-edit"></i> 修改
 				</a> <a class="btn btn-danger btn-del btn-del disabled"
-					onclick="$.operate.removeAll()"
-					shiro:hasPermission="system:xzStationeryassetRecord:remove"> <i
-					class="fa fa-remove"></i> 删除
-				</a> <a class="btn btn-warning" onclick="$.table.exportExcel()"
-					shiro:hasPermission="system:xzStationeryassetRecord:export"> <i
-					class="fa fa-download"></i> 导出
+					onclick="$.operate.removeAll()"> <i class="fa fa-remove"></i> 删除
+				</a> --> <a class="btn btn-warning" onclick="$.table.exportExcel()">
+					<i class="fa fa-download"></i> 导出
 				</a>
 			</div>
 			<div class="col-sm-12 select-table table-striped">

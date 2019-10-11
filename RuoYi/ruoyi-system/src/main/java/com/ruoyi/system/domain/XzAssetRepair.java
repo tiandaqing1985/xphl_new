@@ -35,6 +35,8 @@ public class XzAssetRepair extends BaseEntity
 	private String inspectorName;
 	/** 维修状态 */
 	private String repairStatus;
+	/** 地区*/
+	private String region;
 	/** 维修说明 */
 	private String repairContext;
 	private String assetsCode;
@@ -179,6 +181,14 @@ public class XzAssetRepair extends BaseEntity
 				+ handlerId + ", handlerTime=" + handlerTime + ", inspectorId=" + inspectorId + ", inspectorName="
 				+ inspectorName + ", repairStatus=" + repairStatus + ", repairContext=" + repairContext
 				+ ", assetsCode=" + assetsCode + ", assetsName=" + assetsName + ", xzAsstes=" + xzAsstes + "]";
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
 	}
 
 }

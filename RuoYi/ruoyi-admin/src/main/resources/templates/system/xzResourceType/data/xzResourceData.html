@@ -2,6 +2,15 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
 	<th:block th:include="include :: header('采购类型列表')" />
+	<script type="text/javascript">
+	function remove(id) {
+		 $.modal.confirm("确定删除吗？", function() {
+	         var url = $.table._option.removeUrl.replace("{id}", id);
+	     	 var data = { "id": id };
+	     	 $.operate.submit(url, "post", "json", data);
+	 	});
+	} 
+	</script>
 </head>
 <body class="gray-bg">
      <div class="container-div">
@@ -34,13 +43,13 @@
 				<a class="btn btn-success" onclick="add()">
 					<i class="fa fa-plus"></i> 添加
 				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
+				<!-- <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
 					<i class="fa fa-edit"></i> 修改
 				</a>
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
 					<i class="fa fa-remove"></i> 删除
 				</a>
-			</div>
+ -->			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
 			</div>
@@ -85,8 +94,8 @@
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+		            	actions.push('<a class="btn btn-success btn-xs " onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs " onclick="remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 						return actions.join('');
 		            }
 		        }]

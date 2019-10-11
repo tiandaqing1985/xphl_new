@@ -74,7 +74,7 @@ public class XzPurchaseApprovalController extends BaseController
 		xz.setApplyId(applyId);
 		xz.setApprovalState("1");//1同意 2驳回 3未操作
 		xz.setApprovalId(ShiroUtils.getUserId());//审批人id
-		xz.setRemark(remark);
+		xz.setRemarks(remark);
 		xz.setApprovalDate(new Date());
 		xz.setCreateBy(ShiroUtils.getUserId().toString());
 		xz.setCreateTime(new Date());
@@ -95,7 +95,10 @@ public class XzPurchaseApprovalController extends BaseController
 		xz.setApplyId(applyId);
 		xz.setApprovalState("2");//1同意 2驳回 3未操作
 		xz.setApprovalId(ShiroUtils.getUserId());//审批人id
-		xz.setRemark(remark);
+		xz.setRemarks(remark);
+		xz.setApprovalDate(new Date());
+		xz.setCreateBy(ShiroUtils.getUserId().toString());
+		xz.setCreateTime(new Date());
 		//新增一条审批记录
 		xzPurchaseApprovalService.insertXzPurchaseApproval(xz);
 		return toAjax(1);

@@ -171,9 +171,9 @@ public class XzResourceTypeController extends BaseController
 	@Log(title = "采购类型", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody
-	public AjaxResult remove(String ids)
+	public AjaxResult remove(Long id)
 	{		
-		return toAjax(xzResourceTypeService.deleteXzResourceTypeByIds(ids));
+		return toAjax(xzResourceTypeService.deleteXzResourceTypeByIds(id.toString()));
 	}
 	
 	/**

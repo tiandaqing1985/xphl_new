@@ -4,8 +4,8 @@
 <head>
 <th:block th:include="include :: header('办公用品资产列表')" />
 <script type="text/javascript">
-function toStaHand(assetTypeId,assetType2Id){
-	$.modal.open("办公用品分配", "/system/xzAssetHandRecord/toStaHand?assetTypeId="+assetTypeId+"&assetType2Id="+assetType2Id);
+function toStaHand(assetTypeId,assetType2Id,shengyuCount){
+	$.modal.open("办公用品分配", "/system/xzAssetHandRecord/toStaHand?assetTypeId="+assetTypeId+"&assetType2Id="+assetType2Id+"&shengyuCount="+shengyuCount);
 }
 
 </script>
@@ -150,7 +150,7 @@ function toStaHand(assetTypeId,assetType2Id){
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		            	var actions = [];
-                        actions.push('<a class="btn btn-primary btn-xs ' +  '" onclick="toStaHand(\'' + row.assetTypeId + '\',\'' + row.assetType2Id + '\')"><i class="fa fa-add"></i>分配</a>');
+                        actions.push('<a class="btn btn-primary btn-xs ' +  '" onclick="toStaHand(\'' + row.assetTypeId + '\',\'' + row.assetType2Id + '\',\'' + row.shengyuCount + '\')"><i class="fa fa-add"></i>分配</a>');
                         return actions.join('');
 		            }
 		        }

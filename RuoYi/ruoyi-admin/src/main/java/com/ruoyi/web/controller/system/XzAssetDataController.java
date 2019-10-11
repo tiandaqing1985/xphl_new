@@ -41,8 +41,8 @@ public class XzAssetDataController extends BaseController
 	@Autowired
 	private IXzAssetTypeService xzAssetTypeService;
 	
-	@RequiresPermissions("system:xzAssetData:view")
 	@GetMapping()
+	@RequiresPermissions("system:xzAssetData:view")
 	public String xzAssetData()
 	{
 	    return prefix + "/data";
@@ -51,7 +51,6 @@ public class XzAssetDataController extends BaseController
 	/**
 	 * 查询资产子类型列表
 	 */
-	@RequiresPermissions("system:xzAssetData:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(XzAssetData xzAssetData)
@@ -66,7 +65,6 @@ public class XzAssetDataController extends BaseController
 	/**
 	 * 导出资产子类型列表
 	 */
-	@RequiresPermissions("system:xzAssetData:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(XzAssetData xzAssetData)
@@ -92,7 +90,6 @@ public class XzAssetDataController extends BaseController
 	/**
 	 * 新增保存资产子类型
 	 */
-	@RequiresPermissions("system:xzAssetData:add")
 	@Log(title = "资产子类型", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -126,7 +123,6 @@ public class XzAssetDataController extends BaseController
 	/**
 	 * 修改保存资产子类型
 	 */
-	@RequiresPermissions("system:xzAssetData:edit")
 	@Log(title = "资产子类型", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -140,13 +136,12 @@ public class XzAssetDataController extends BaseController
 	/**
 	 * 删除资产子类型
 	 */
-	@RequiresPermissions("system:xzAssetData:remove")
 	@Log(title = "资产子类型", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody
-	public AjaxResult remove(String ids)
+	public AjaxResult remove(String id)
 	{		
-		return toAjax(xzAssetDataService.deleteXzAssetDataByIds(ids));
+		return toAjax(xzAssetDataService.deleteXzAssetDataByIds(id.toString()));
 	}
 }
 	

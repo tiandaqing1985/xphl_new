@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.XzAssetRepair;
 import com.ruoyi.system.domain.XzPersonalAsset;
+import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.IXzAssetHandRecordService;
 import com.ruoyi.system.service.IXzAssetRepairService;
 import com.ruoyi.system.service.IXzAsstesService;
@@ -47,6 +49,9 @@ public class XzAssetRepairController extends BaseController {
 	
 	@Autowired
 	private IXzPersonalAssetService xzPersonalAssetService;
+	
+	@Autowired
+	private ISysDeptService sysDeptService;
 
 
 	@RequiresPermissions("system:xzAssetRepair:view")
@@ -62,6 +67,14 @@ public class XzAssetRepairController extends BaseController {
 	@ResponseBody
 	public TableDataInfo list(XzAssetRepair xzAssetRepair) {
 		startPage();
+		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
+		
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){ //超级管理员 和 任总 行政部门leader看所有数据  
+			xzAssetRepair.setRegion(xzAssetRepair.getRegion());
+		}else{
+			String region=ShiroUtils.getSysUser().getArea();
+			xzAssetRepair.setRegion(region);
+		}
 		List<XzAssetRepair> list = xzAssetRepairService.selectXzAssetRepairList(xzAssetRepair);
 		return getDataTable(list);
 	}

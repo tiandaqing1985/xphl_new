@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.XzAsstes;
 import com.ruoyi.system.domain.XzOfficeAsstes;
+import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.IXzAssetDataService;
 import com.ruoyi.system.service.IXzAssetTypeService;
 import com.ruoyi.system.service.IXzAsstesService;
@@ -50,6 +52,9 @@ public class XzOfficeAsstesController extends BaseController {
 
 	@Autowired
 	private IXzAssetDataService xzAssetDataService;
+	
+	@Autowired
+	private ISysDeptService sysDeptService;
 
 	@RequiresPermissions("system:xzOfficeAsstes:view")
 	@GetMapping()
@@ -64,6 +69,14 @@ public class XzOfficeAsstesController extends BaseController {
 	@ResponseBody
 	public TableDataInfo list(XzOfficeAsstes xzOfficeAsstes) {
 		startPage();
+		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
+		
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){ //超级管理员 和 任总 行政部门leader看所有数据  
+			xzOfficeAsstes.setRegion(xzOfficeAsstes.getRegion());
+		}else{
+			String region=ShiroUtils.getSysUser().getArea();
+			xzOfficeAsstes.setRegion(region);
+		}
 		List<XzOfficeAsstes> list = xzOfficeAsstesService.selectXzOfficeAsstesList(xzOfficeAsstes);
 		return getDataTable(list);
 	}
@@ -201,8 +214,8 @@ public class XzOfficeAsstesController extends BaseController {
 	@Log(title = "办公资产记录", businessType = BusinessType.DELETE)
 	@PostMapping("/remove")
 	@ResponseBody
-	public AjaxResult remove(String ids) {
-		return toAjax(xzOfficeAsstesService.deleteXzOfficeAsstesByIds(ids));
+	public AjaxResult remove(Long id) {
+		return toAjax(xzOfficeAsstesService.deleteXzOfficeAsstesByIds(id.toString()));
 	}
 	
 	

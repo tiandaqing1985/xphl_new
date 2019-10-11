@@ -61,9 +61,10 @@ public class XzExpenseRecordController extends BaseController
 	/**
 	 * 查询类型费用详细统计
 	 */
-	@GetMapping("/xzExpenseDataList/{expenseTypeParent}")
-	public String detailList(@PathVariable("expenseTypeParent") Long expenseTypeParent, ModelMap mmap) {
+	@GetMapping("/xzExpenseDataList")
+	public String detailList(Long expenseTypeParent,String region, ModelMap mmap) {
 		mmap.put("expenseTypeParent", expenseTypeParent);
+		mmap.put("region", region);
 		return "system/xzExpenseRecord/xzExpenseDataList";
 	}
 	/**
@@ -98,6 +99,19 @@ public class XzExpenseRecordController extends BaseController
 	@ResponseBody
 	public TableDataInfo xzExpenseList(XzExpenseSta xzExpenseSta) {
 		startPage();
+		
+		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
+		
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据  
+			
+		}else{
+			if(ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){  //行政部门leader查看所有
+				
+			}else{
+				String region=ShiroUtils.getSysUser().getArea();
+				xzExpenseSta.setRegion(region);
+			}
+		}
 		List<XzExpenseSta> list = xzExpenseRecordService.selectXzExpenseList(xzExpenseSta);
 		return getDataTable(list);
 	}
@@ -105,12 +119,13 @@ public class XzExpenseRecordController extends BaseController
 	/**
 	 * 查询费用统计列表
 	 */
-	@PostMapping("/xzExpenseDataList/{expenseTypeParent}")
+	@PostMapping("/xzExpenseDataList")
 	@ResponseBody
-	public TableDataInfo xzExpenseDataList(@PathVariable("expenseTypeParent") Long expenseTypeParent) {
+	public TableDataInfo xzExpenseDataList(Long expenseTypeParent,String region) {
 		startPage();
 		XzExpenseSta xzExpenseSta=new XzExpenseSta();
 		xzExpenseSta.setExpenseTypeParent(expenseTypeParent);
+		xzExpenseSta.setRegion(region);
 		List<XzExpenseSta> list = xzExpenseRecordService.selectXzExpenseDetailList(xzExpenseSta);
 		return getDataTable(list);
 	}
@@ -135,6 +150,7 @@ public class XzExpenseRecordController extends BaseController
 	public String add(ModelMap mmap)
 	{
 		mmap.put("applyUser", ShiroUtils.getSysUser().getUserName());
+		mmap.put("region", ShiroUtils.getSysUser().getArea());
 		//获取采购类型
 		mmap.put("typeList", xzResourceTypeService.selectByFeiList());
 	    return prefix + "/add";
@@ -148,6 +164,7 @@ public class XzExpenseRecordController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(XzExpenseRecord xzExpenseRecord)
 	{		
+		xzExpenseRecord.setRegion(ShiroUtils.getSysUser().getArea());
 		xzExpenseRecord.setCreateBy(ShiroUtils.getUserId().toString());
 		xzExpenseRecord.setCreateTime(new Date());
 		xzExpenseRecord.setApplyUser(ShiroUtils.getUserId().toString());
@@ -162,6 +179,7 @@ public class XzExpenseRecordController extends BaseController
 	@ResponseBody
 	public AjaxResult addSubSave(XzExpenseRecord xzExpenseRecord)
 	{		
+		xzExpenseRecord.setRegion(ShiroUtils.getSysUser().getArea());
 		xzExpenseRecord.setCreateBy(ShiroUtils.getUserId().toString());
 		xzExpenseRecord.setCreateTime(new Date());
 		xzExpenseRecord.setApplyUser(ShiroUtils.getUserId().toString());
@@ -204,6 +222,7 @@ public class XzExpenseRecordController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(XzExpenseRecord xzExpenseRecord)
 	{		
+		xzExpenseRecord.setRegion(ShiroUtils.getSysUser().getArea());
 		xzExpenseRecord.setUpdateBy(ShiroUtils.getUserId().toString());
 		xzExpenseRecord.setUpdateTime(new Date());
 		xzExpenseRecord.setApplyUser(ShiroUtils.getUserId().toString());
@@ -217,6 +236,7 @@ public class XzExpenseRecordController extends BaseController
 	@ResponseBody
 	public AjaxResult editSubSave(XzExpenseRecord xzExpenseRecord)
 	{		
+		xzExpenseRecord.setRegion(ShiroUtils.getSysUser().getArea());
 		xzExpenseRecord.setUpdateBy(ShiroUtils.getUserId().toString());
 		xzExpenseRecord.setUpdateTime(new Date());
 		xzExpenseRecord.setSubmitType("2");
@@ -230,9 +250,9 @@ public class XzExpenseRecordController extends BaseController
 	@Log(title = "费用记录", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody
-	public AjaxResult remove(String ids)
+	public AjaxResult remove(Long id)
 	{		
-		return toAjax(xzExpenseRecordService.deleteXzExpenseRecordByIds(ids));
+		return toAjax(xzExpenseRecordService.deleteXzExpenseRecordByIds(id.toString()));
 	}
 	
 }

@@ -122,7 +122,7 @@
 		            		//不显示
 		            	}else{
 		            		actions.push('<a class="btn btn-primary btn-xs ' + '" onclick="toStaHand(\'' + row.applyId + '\')">分配</a> ');
-	                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" onclick="toCancelHand(\'' + row.applyId + '\')">取消分配</a>');
+	                        actions.push('<a class="btn btn-danger btn-xs " onclick="toCancelHand(\'' + row.applyId + '\')">取消分配</a>');
 		            	}
 		            	
 						return actions.join('');

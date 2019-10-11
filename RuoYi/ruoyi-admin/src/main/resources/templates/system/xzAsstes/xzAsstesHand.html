@@ -181,7 +181,7 @@
 		            	/* actions.push('<a class="btn btn-success btn-xs ' + detailFlag + '" href="#" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-edit"></i>查看</a> ');
                         actions.push('<a class="btn btn-warning btn-xs ' + addFlag + '" href="#" onclick="$.operate.add(\'' + row.id + '\')"><i class="fa fa-add"></i>台账</a>'); */
                         if(row.assetsStatus=="2"){
-		            		actions.push('<a class="btn btn-primary btn-xs ' + addHandFlag + '" href="#" onclick="$.operate.add(\'' + row.id + '\')"><i class="fa fa-add"></i>分配</a>');
+		            		actions.push('<a class="btn btn-primary btn-xs " href="#" onclick="$.operate.add(\'' + row.id + '\')"><i class="fa fa-add"></i>分配</a>');
 		            	}
 						return actions.join('');
 		            }

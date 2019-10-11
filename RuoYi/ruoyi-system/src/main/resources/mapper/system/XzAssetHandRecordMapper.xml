@@ -46,6 +46,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectXzAssetHandRecord"/>
         <where>  
              <if test="assetName != null  and assetName != '' "> and a.assets_name = #{assetName}</if>
+             <if test="region != null  and region != '' "> and a.region = #{region}</if>
               and a.sort = '2'
          </where>
     </select>

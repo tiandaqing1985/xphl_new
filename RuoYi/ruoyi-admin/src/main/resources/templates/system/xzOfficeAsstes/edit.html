@@ -129,8 +129,8 @@
 						<div class="col-sm-8">
 							<div class="input-group" style="width: 100%">
 								<select name="brand" class="form-control m-b"
-									th:with="type=${@dict.getType('xz_assets_brand')}">
-									<option value=""></option>
+									th:with="type=${@dict.getType('xz_assets_brandSta')}">
+									<option value="">请选择</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}" th:field="*{brand}"></option>
 								</select>
@@ -156,7 +156,7 @@
 							<div class="input-group" style="width: 100%">
 								<select name="invoiceType" class="form-control m-b"
 									th:with="type=${@dict.getType('xz_assets_invoiceType')}">
-									<option value=""></option>
+									<option value="">请选择</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}" th:field="*{invoiceType}"></option>
 								</select>
@@ -191,7 +191,7 @@
 							style="color: red;">*</span>购入时间：</label>
 						<div class="col-sm-8">
 							<input id="buyDate" name="buyDate" class="form-control"
-								th:field="*{buyDate}" type="text">
+								th:field="*{buyDate}" autocomplete="off" type="text" required="required">
 						</div>
 					</div>
 				</div>
@@ -204,11 +204,11 @@
 						<div class="col-sm-8">
 							<input name="annex" id="annex" type="hidden"> <input
 								name="annexfile" id="annexfile" class="form-control" type="file">
-							<button type="button" class="btn btn-sm btn-primary"
+							<!-- <button type="button" class="btn btn-sm btn-primary"
 								onclick="shangchuan()" th:field="*{annex}">
 								<i class="fa fa-check"></i>上传
 							</button>
-							&nbsp;
+							&nbsp; -->
 						</div>
 					</div>
 				</div>

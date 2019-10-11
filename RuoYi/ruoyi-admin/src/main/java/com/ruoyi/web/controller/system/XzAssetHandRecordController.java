@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.XzAssetHandRecord;
 import com.ruoyi.system.domain.XzAsstes;
 import com.ruoyi.system.domain.XzPersonalApply;
+import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IXzAssetHandRecordService;
 import com.ruoyi.system.service.IXzAsstesService;
@@ -49,6 +51,9 @@ public class XzAssetHandRecordController extends BaseController
 	@Autowired
 	private IXzAssetHandRecordService xzAssetHandRecordService;
 	
+	@Autowired
+	private ISysDeptService sysDeptService;
+	
 	@RequiresPermissions("system:xzAssetHandRecord:view")
 	@GetMapping()
 	public String xzAssetHandRecord()
@@ -64,6 +69,14 @@ public class XzAssetHandRecordController extends BaseController
 	public TableDataInfo list(XzAssetHandRecord xzAssetHandRecord)
 	{
 		startPage();
+		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
+		
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){ //超级管理员 和 任总 行政部门leader看所有数据  
+			xzAssetHandRecord.setRegion(xzAssetHandRecord.getRegion());
+		}else{
+			String region=ShiroUtils.getSysUser().getArea();
+			xzAssetHandRecord.setRegion(region);
+		}
         List<XzAssetHandRecord> list = xzAssetHandRecordService.selectXzAssetHandRecordList(xzAssetHandRecord);
 		return getDataTable(list);
 	}
@@ -111,14 +124,14 @@ public class XzAssetHandRecordController extends BaseController
 	 * 新增办公用品资产分配记录(主动分配)
 	 */
 	@GetMapping("/toStaHand")
-	public String toStaHand(Long assetTypeId,Long assetType2Id, ModelMap mmap)
+	public String toStaHand(Long assetTypeId,Long assetType2Id,String shengyuCount, ModelMap mmap)
 	{
 		XzAsstes xz =new XzAsstes();
 		xz.setAssetsType(assetTypeId);
 		xz.setAssetsType2(assetType2Id);
 		mmap.put("assetTypeId", assetTypeId);
 		mmap.put("assetType2Id", assetType2Id);
-		mmap.put("sum", xzAsstesService.selectAssetByType12(xz));
+		mmap.put("sum", shengyuCount);
 		return prefix + "/toStaHand";
 	}
 	

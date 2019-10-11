@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.XzPurchaseResourceApply;
 import com.ruoyi.system.domain.XzResourceType;
+import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.IXzPurchaseResourceApplyService;
 import com.ruoyi.system.service.IXzResourceTypeService;
 import com.ruoyi.common.core.controller.BaseController;
@@ -43,6 +45,9 @@ public class XzPurchaseResourceApplyController extends BaseController
 	@Autowired
 	private IXzResourceTypeService xzResourceTypeService;
 	
+	@Autowired
+	private ISysDeptService sysDeptService;
+	
 	@RequiresPermissions("system:xzPurchaseResourceApply:view")
 	@GetMapping()
 	public String xzPurchaseResourceApply()
@@ -58,6 +63,18 @@ public class XzPurchaseResourceApplyController extends BaseController
 	public TableDataInfo list(XzPurchaseResourceApply xzPurchaseResourceApply)
 	{
 		startPage();
+		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据 
+			
+		}else {
+			if(ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){
+				//部门leader看部门所有
+			}else{
+				//员工看自己的
+				xzPurchaseResourceApply.setApplyUserId(ShiroUtils.getUserId());
+			}
+		}
+		
         List<XzPurchaseResourceApply> list = xzPurchaseResourceApplyService.selectXzPurchaseResourceApplyList(xzPurchaseResourceApply);
 		return getDataTable(list);
 	}
@@ -154,6 +171,7 @@ public class XzPurchaseResourceApplyController extends BaseController
 	{
 		IdWorker idWorker=new IdWorker(0,1);
 		mmap.put("code","cg"+idWorker.nextId());
+		mmap.put("region", ShiroUtils.getSysUser().getArea());
 		//获取采购类型
 		mmap.put("typeList", xzResourceTypeService.selectXzResourceTypeByAll());
 		mmap.put("userName",ShiroUtils.getSysUser().getUserName());
@@ -208,6 +226,7 @@ public class XzPurchaseResourceApplyController extends BaseController
 	{
 		XzPurchaseResourceApply xzPurchaseResourceApply = xzPurchaseResourceApplyService.selectXzPurchaseResourceApplyById(id);
 		mmap.put("code",xzPurchaseResourceApply.getCode());
+		mmap.put("region", ShiroUtils.getSysUser().getArea());
 		mmap.put("purpose",xzPurchaseResourceApply.getPurpose());
 		mmap.put("typeList", xzResourceTypeService.selectXzResourceTypeByAll());
 		mmap.put("userName",ShiroUtils.getSysUser().getUserName());
@@ -248,9 +267,9 @@ public class XzPurchaseResourceApplyController extends BaseController
 	@Log(title = "采购资源申请", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody
-	public AjaxResult remove(String ids)
+	public AjaxResult remove(Long id)
 	{		
-		return toAjax(xzPurchaseResourceApplyService.deleteXzPurchaseResourceApplyByIds(ids));
+		return toAjax(xzPurchaseResourceApplyService.deleteXzPurchaseResourceApplyByIds(id.toString()));
 	}
 	
 	

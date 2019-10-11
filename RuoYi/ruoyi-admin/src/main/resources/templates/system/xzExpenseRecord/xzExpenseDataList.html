@@ -9,6 +9,7 @@
 	</script> -->
 </head>
 <body class="gray-bg">
+
      <div class="container-div">
 		<div class="row">
 			<div class="col-sm-12 select-table table-striped">
@@ -20,9 +21,11 @@
     <script th:inline="javascript">
         var prefix = ctx + "system/xzExpenseRecord";
 		var expenseTypeParent=[[${expenseTypeParent}]];
+		debugger;
+		var region=[[${region}]];
         $(function() {
             var options = {
-                url: prefix + "/xzExpenseDataList/"+expenseTypeParent,
+                url: prefix + "/xzExpenseDataList?expenseTypeParent="+expenseTypeParent+"&region="+region,
                 modalName: "费用记录",
 		        showExport: true,
                 columns: [{

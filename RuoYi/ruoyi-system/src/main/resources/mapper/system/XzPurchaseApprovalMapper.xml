@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="approvalId"    column="approval_id"    />
         <result property="approvalDate"    column="approval_date"    />
         <result property="remark"    column="remark"    />
+        <result property="remarks"    column="remarks"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -49,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="approvalState != null  and approvalState != ''  ">approval_state,</if>
 			<if test="approvalId != null  ">approval_id,</if>
 			<if test="approvalDate != null  ">approval_date,</if>
-			<if test="remark != null  and remark != ''  ">remark,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
 			<if test="createBy != null  and createBy != ''  ">create_by,</if>
 			<if test="createTime != null  ">create_time,</if>
 			<if test="updateBy != null  and updateBy != ''  ">update_by,</if>
@@ -60,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="approvalState != null  and approvalState != ''  ">#{approvalState},</if>
 			<if test="approvalId != null  ">#{approvalId},</if>
 			<if test="approvalDate != null  ">#{approvalDate},</if>
-			<if test="remark != null  and remark != ''  ">#{remark},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
 			<if test="createBy != null  and createBy != ''  ">#{createBy},</if>
 			<if test="createTime != null  ">#{createTime},</if>
 			<if test="updateBy != null  and updateBy != ''  ">#{updateBy},</if>

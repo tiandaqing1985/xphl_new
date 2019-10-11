@@ -138,7 +138,8 @@ public class XzPurchaseResourceController extends BaseController
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(XzPurchaseResource xzPurchaseResource)
-	{		
+	{	
+		xzPurchaseResource.setRegion(ShiroUtils.getSysUser().getArea());
 		xzPurchaseResource.setCreateBy(ShiroUtils.getUserId().toString());
 		xzPurchaseResource.setCreateTime(new Date());
 		return toAjax(xzPurchaseResourceService.insertXzPurchaseResource(xzPurchaseResource));
@@ -167,6 +168,7 @@ public class XzPurchaseResourceController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(XzPurchaseResource xzPurchaseResource)
 	{		
+		xzPurchaseResource.setRegion(ShiroUtils.getSysUser().getArea());
 		xzPurchaseResource.setUpdateBy(ShiroUtils.getUserId().toString());
 		xzPurchaseResource.setUpdateTime(new Date());
 		return toAjax(xzPurchaseResourceService.updateXzPurchaseResource(xzPurchaseResource));

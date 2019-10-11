@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.XzAssetType;
 import com.ruoyi.system.domain.XzPersonalApply;
+import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.IXzAssetDataService;
 import com.ruoyi.system.service.IXzAssetTypeService;
 import com.ruoyi.system.service.IXzPersonalApplyService;
@@ -44,6 +46,9 @@ public class XzPersonalApplyController extends BaseController
 	
 	@Autowired
 	private IXzAssetDataService xzAssetDataService;
+	
+	@Autowired
+	private ISysDeptService sysDeptService;
 	
 	@RequiresPermissions("system:xzPersonalApply:view")
 	@GetMapping()
@@ -89,6 +94,14 @@ public class XzPersonalApplyController extends BaseController
 		if(xzPersonalApply.getApplyType().equals("2")){
 			xzPersonalApply.setSort("1");//只查看固定资产的申请
 		}
+		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
+		
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){ //超级管理员 和 任总 行政部门leader看所有数据  
+			xzPersonalApply.setRegion(xzPersonalApply.getRegion());
+		}else{
+			String region=ShiroUtils.getSysUser().getArea();
+			xzPersonalApply.setRegion(region);
+		}
 		
         List<XzPersonalApply> list = xzPersonalApplyService.selectXzPersonalApplyList(xzPersonalApply);
 		return getDataTable(list);
@@ -105,6 +118,14 @@ public class XzPersonalApplyController extends BaseController
 		startPage();
 		xzPersonalApply.setApplyStatus("2,3");//查看申请状态为 2 申请成功 3 申请失败 的数据
 		xzPersonalApply.setSort("2");//只查看办公用品的申请
+		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
+		
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){ //超级管理员 和 任总 行政部门leader看所有数据  
+			xzPersonalApply.setRegion(xzPersonalApply.getRegion());
+		}else{
+			String region=ShiroUtils.getSysUser().getArea();
+			xzPersonalApply.setRegion(region);
+		}
         List<XzPersonalApply> list = xzPersonalApplyService.selectXzPersonalApplyList(xzPersonalApply);
 		return getDataTable(list);
 	}

@@ -23,6 +23,8 @@ public class XzAssetReturn extends BaseEntity
 	private Long handlerId;
 	/** 归还状态 */
 	private String returnStatus;
+	/** 地区*/
+	private String region;
 	/** 处理备注说明*/
 	private String remark2;
 	private String createByName;
@@ -111,6 +113,14 @@ public class XzAssetReturn extends BaseEntity
 		return "XzAssetReturn [id=" + id + ", assetId=" + assetId + ", userId=" + userId + ", userName=" + userName
 				+ ", handlerId=" + handlerId + ", returnStatus=" + returnStatus + ", remark2=" + remark2
 				+ ", createByName=" + createByName + ", xzAsstes=" + xzAsstes + "]";
+	}
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
 	}
 
 

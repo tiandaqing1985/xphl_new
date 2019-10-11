@@ -3,8 +3,8 @@
 <head>
 	<th:block th:include="include :: header('费用统计列表')" />
 	<script type="text/javascript">
-	function detail(expenseTypeParent){
-		$.modal.openTab("费用统计-详情", $.table._option.detailUrl.replace("{expenseTypeParent}",expenseTypeParent));
+	function detail(expenseTypeParent,region){
+		$.modal.openTab("费用统计-详情", "/system/xzExpenseRecord/xzExpenseDataList?expenseTypeParent="+expenseTypeParent+"&region="+region);
 	}
 	</script>
 </head>
@@ -15,7 +15,7 @@
 				<form id="formId">
 					<div class="select-list">
 						<ul>
-							<li>所在地域： <select name="region"
+							<li>所在地域： <select name="region" id="region"
 								th:with="type=${@dict.getType('xz_assets_region')}">
 									<option value="">所有</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -46,7 +46,6 @@
         var editFlag = [[${@permission.hasPermi('system:xzExpenseRecord:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:xzExpenseRecord:remove')}]];
         var prefix = ctx + "system/xzExpenseRecord";
-
         $(function() {
             var options = {
                 url: prefix + "/xzExpenseList",
@@ -131,13 +130,12 @@
 					title : '合计',
 					sortable: true
 				},
-				
 		        {
 		            title: '操作',
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + '" onclick="detail(\'' + row.expenseTypeParent + '\')">查看</a> ');
+		            	actions.push('<a class="btn btn-success btn-xs ' + '" onclick="detail(\'' + row.expenseTypeParent + '\',\'' + $("#region").val() + '\')">查看</a> ');
 		            	
 						return actions.join('');
 		            }

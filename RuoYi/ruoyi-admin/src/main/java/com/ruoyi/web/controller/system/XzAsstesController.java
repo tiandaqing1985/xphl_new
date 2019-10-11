@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.XzAssetType;
 import com.ruoyi.system.domain.XzAsstes;
 import com.ruoyi.system.domain.XzAsstesSta;
+import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IXzAssetDataService;
 import com.ruoyi.system.service.IXzAssetTypeService;
@@ -46,6 +48,9 @@ public class XzAsstesController extends BaseController {
 
 	@Autowired
 	private IXzAssetDataService xzAssetDataService;
+	
+	@Autowired
+	private ISysDeptService sysDeptService;
 	
 	@Autowired
 	private ISysUserService sysUserService;
@@ -79,6 +84,18 @@ public class XzAsstesController extends BaseController {
 	public TableDataInfo list(XzAsstes xzAsstes) {
 		startPage();
 		xzAsstes.setSort("1");// 固定资产
+		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
+		
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据  
+			
+		}else{
+			if(ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){  //行政部门leader查看所有
+				
+			}else{
+				String region=ShiroUtils.getSysUser().getArea();
+				xzAsstes.setRegion(region);
+			}
+		}
 		List<XzAsstes> list = xzAsstesService.selectXzAsstesList(xzAsstes);
 		return getDataTable(list);
 	}
@@ -92,6 +109,18 @@ public class XzAsstesController extends BaseController {
 		startPage();
 		xzAsstes.setSort("1");// 固定资产
 		xzAsstes.setSubmitType("2");
+		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
+		
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据  
+			
+		}else{
+			if(ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){  //行政部门leader查看所有
+				
+			}else{
+				String region=ShiroUtils.getSysUser().getArea();
+				xzAsstes.setRegion(region);
+			}
+		}
 		List<XzAsstes> list = xzAsstesService.selectXzAsstesList(xzAsstes);
 		return getDataTable(list);
 	}
@@ -115,13 +144,24 @@ public class XzAsstesController extends BaseController {
 	@ResponseBody
 	public TableDataInfo xzStatisticsList(XzAsstesSta xzAsstesSta) {
 		startPage();
-		Long loginUser=ShiroUtils.getUserId();
+		/*Long loginUser=ShiroUtils.getUserId();
 		if(loginUser==1 ||ShiroUtils.getLoginName()=="admin" ){
 			//查看全部
 		}else{
 			//使用者查看所在地区的资产库存
 			if(xzAsstesSta.getRegion()==null||xzAsstesSta.getRegion().isEmpty()){
 				xzAsstesSta.setRegion(sysUserService.selectUserById(loginUser).getArea());
+			}
+		}*/
+		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据  
+			
+		}else{
+			if(ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){  //行政部门leader查看所有
+				
+			}else{
+				String region=ShiroUtils.getSysUser().getArea();
+				xzAsstesSta.setRegion(region);
 			}
 		}
 		List<XzAsstesSta> list = xzAsstesService.selectXzStatisticsList(xzAsstesSta);

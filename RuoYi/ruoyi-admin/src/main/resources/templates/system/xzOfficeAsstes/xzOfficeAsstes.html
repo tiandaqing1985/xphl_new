@@ -6,6 +6,18 @@
 	function submit(id){
 		$.operate.post(prefix + "/toSubmit", {"id": id});
 	}
+	
+	function edit(id){
+		$.modal.openTab("办公资产修改", $.table._option.updateUrl.replace("{id}",id));
+	}
+	
+	function remove(id) {
+		 $.modal.confirm("确定删除吗？", function() {
+	         var url = $.table._option.removeUrl.replace("{id}", id);
+	     	 var data = { "id": id };
+	     	 $.operate.submit(url, "post", "json", data);
+	 	});
+	} 
 	</script>
 </head>
 <body class="gray-bg">
@@ -48,15 +60,15 @@
 				<a class="btn btn-success" onclick="$.operate.addTab()" >
 					<i class="fa fa-plus"></i> 添加
 				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
+				<!-- <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
 					<i class="fa fa-edit"></i> 修改
 				</a>
 				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
 					<i class="fa fa-remove"></i> 删除
-				</a>
+				</a> 
 				<a class="btn btn-warning" onclick="$.table.exportExcel()">
 						<i class="fa fa-download"></i> 导出
-				 </a>
+				 </a>-->
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -65,13 +77,13 @@
 	</div>
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:xzOfficeAsstes:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:xzOfficeAsstes:remove')}]];
+       /*  var editFlag = [[${@permission.hasPermi('system:xzOfficeAsstes:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:xzOfficeAsstes:remove')}]]; */
         var prefix = ctx + "system/xzOfficeAsstes";
         var prefix1 = ctx + "system/xzAsstes";
 
         var region = [[${@dict.getType('xz_assets_region')}]];
-        var brand = [[${@dict.getType('xz_assets_brand')}]];
+        var brand = [[${@dict.getType('xz_assets_brandSta')}]];
         var unit = [[${@dict.getType('xz_assets_unit')}]];
         var submitType = [[${@dict.getType('xz_assets_submitType')}]];
         $(function() {
@@ -163,8 +175,8 @@
 		            	var actions = [];
 		            	if(row.submitType=="1"){
 		            	actions.push('<a class="btn btn-success btn-xs ' + '" href="javascript:void(0)" onclick="submit(\'' + row.id + '\')"><i class="fa fa-check"></i>提交</a> ');
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+		            	actions.push('<a class="btn btn-success btn-xs ' + '" href="javascript:void(0)" onclick="edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + '" href="javascript:void(0)" onclick="remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 		            	}
 						return actions.join('');
 		            }

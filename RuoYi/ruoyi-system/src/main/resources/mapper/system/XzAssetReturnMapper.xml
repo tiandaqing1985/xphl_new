@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="returnStatus"    column="return_status"    />
         <result property="remark"    column="remark"    />
         <result property="remark2"    column="remark2"    />
+        <result property="region"    column="region"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -53,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join sys_user u on u.user_id =ar.user_id
         <where>  
              <if test="returnStatus != null  and returnStatus != '' "> and ar.return_status = #{returnStatus}</if>
+             <if test="region != null  and region != '' "> and xa.region = #{region}</if>
             <!--  <if test="createTime != null "> and create_time = #{createTime}</if> -->
             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
 				AND date_format(ar.create_time,'%y%m%d') &gt;=

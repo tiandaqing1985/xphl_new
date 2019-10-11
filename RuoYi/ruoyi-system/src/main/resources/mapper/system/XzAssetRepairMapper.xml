@@ -18,6 +18,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="repairStatus" column="repair_status" />
 		<result property="repairContext" column="repair_context" />
 		<result property="remark" column="remark" />
+		<result property="region" column="region" />
 		<result property="createBy" column="create_by" />
 		<result property="createTime" column="create_time" />
 		<result property="updateBy" column="update_by" />
@@ -63,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join sys_user u on u.user_id =ar.user_id
 		<where>
 			ar.repair_status in (1,2)
+			 <if test="region != null  and region != '' "> and xa.region = #{region}</if>
 			<if test="assetsCode != null and assetsCode !='' "> and xa.assets_code like concat('%', #{assetsCode}, '%')</if>
 			<if test="assetsName != null and assetsName !='' "> and xa.assets_name like concat('%', #{assetsName}, '%')</if>
 			
