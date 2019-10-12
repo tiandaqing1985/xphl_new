@@ -21,8 +21,11 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacLoanApply;
+import com.ruoyi.system.domain.finance.FacLoanRepayApply;
 import com.ruoyi.system.service.finance.IFacLoanApplyService;
+import com.ruoyi.system.service.finance.IFacLoanRepayApplyService;
 
 /**
  * 借款申请 信息操作处理
@@ -37,7 +40,9 @@ public class FacLoanApplyController extends BaseController {
 
 	@Autowired
 	private IFacLoanApplyService facLoanApplyService;
-
+	@Autowired
+	private IFacLoanRepayApplyService facLoanRepayApplyService;
+	
 	@GetMapping()
 	public String facLoanApply() {
 		return prefix + "/facLoanApply";
@@ -83,10 +88,10 @@ public class FacLoanApplyController extends BaseController {
 	@Log(title = "借款申请", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public int addSave(FacLoanApply facLoanApply) {
+	public AjaxResult addSave(FacLoanApply facLoanApply) {
 		IdWorker idWorker = new IdWorker(0, 1);
 		facLoanApply.setNum("CL" + idWorker.nextId());
-		return facLoanApplyService.insertFacLoanApply(facLoanApply);
+		return toAjax(facLoanApplyService.insertFacLoanApply(facLoanApply));
 	}
 
 	/**
@@ -151,8 +156,7 @@ public class FacLoanApplyController extends BaseController {
 		map.put("status", facReimburseApplies.get(0).getApplyStatus());
 		return prefix + "/detail";
 	}
-	/** 还款 **/
-
+	/** 还款 **/ 
 	@RequiresPermissions("system:facLostApply:repayment")
 	@GetMapping("/repayment")
 	public String repayment(@RequestParam("id") Long id, ModelMap map) {
@@ -165,5 +169,38 @@ public class FacLoanApplyController extends BaseController {
 		map.put("status", facReimburseApplies.get(0).getApplyStatus());
 		return prefix + "/repayment";
 	}
-
+	
+	
+	 
+	/**
+	 * 新增保存还款信息
+	 */
+	@Log(title = "还款申请", businessType = BusinessType.INSERT)
+	@PostMapping("/repayment")
+	@ResponseBody
+	public AjaxResult repayment(FacLoanRepayApply facLoanApply) {
+		facLoanApply.setPayer(ShiroUtils.getUserId());	
+		return toAjax(facLoanRepayApplyService.insertFacLoanRepayApply(facLoanApply));
+	}
+	 
+ 
+	/**
+	 * 查看借款详情
+	 */
+	@PostMapping("/repay")
+	@ResponseBody
+	public TableDataInfo repay(FacLoanRepayApply facLoanRepayApply) {
+		startPage();
+        List<FacLoanRepayApply> list = facLoanRepayApplyService.selectFacLoanRepayApplyList(facLoanRepayApply);
+		return getDataTable(list);
+	}
+	
+	/**
+	 * 新增借款申请
+	 */
+	@GetMapping("/repay")
+	public String repay(String num, ModelMap map) {
+		map.put("num",num);
+		return prefix + "/repayAdd";
+	}
 }

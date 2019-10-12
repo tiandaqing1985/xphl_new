@@ -1,26 +1,23 @@
 package com.ruoyi.system.service.finance;
-
-
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.system.domain.finance.FacPayPublicApply;
-
 import java.util.List;
+
+import com.ruoyi.system.domain.finance.FacPayPublicApply;
 
 /**
  * 对公申请 服务层
  * 
  * @author ruoyi
- * @date 2019-08-01
+ * @date 2019-10-10
  */
 public interface IFacPayPublicApplyService 
 {
 	/**
      * 查询对公申请信息
      * 
-     * @param num 对公申请ID
+     * @param id 对公申请ID
      * @return 对公申请信息
      */
-	FacPayPublicApply selectFacPayPublicApplyById(String num);
+	public FacPayPublicApply selectFacPayPublicApplyById(Integer id);
 	
 	/**
      * 查询对公申请列表
@@ -36,7 +33,7 @@ public interface IFacPayPublicApplyService
      * @param facPayPublicApply 对公申请信息
      * @return 结果
      */
-	public AjaxResult insertFacPayPublicApply(FacPayPublicApply facPayPublicApply);
+	public int insertFacPayPublicApply(FacPayPublicApply facPayPublicApply);
 	
 	/**
      * 修改对公申请
@@ -54,4 +51,10 @@ public interface IFacPayPublicApplyService
      */
 	public int deleteFacPayPublicApplyByIds(String ids);
 	
+	/**
+	 * 根据差旅编号查询差旅申请详情
+	 * @param num
+	 * @return
+	 */
+	FacPayPublicApply deatil(String num);
 }

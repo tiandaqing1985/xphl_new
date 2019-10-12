@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.finance.FacLoanRepayApplyMapper">
+    
+    <resultMap type="FacLoanRepayApply" id="FacLoanRepayApplyResult">
+        <result property="id"    column="id"    />
+        <result property="num"    column="num"    />
+        <result property="payer"    column="payer"    />
+        <result property="repayTime"    column="repayTime"    />
+        <result property="repayMethod"    column="repayMethod"    />
+        <result property="repayAmount"    column="repayAmount"    />
+        <result property="arrears"    column="arrears"    />
+        <result property="voucher"    column="voucher"    />
+        <result property="method"    column="method"    />
+        <result property="amount"    column="amount"    />
+        <result property="states"    column="states"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+	
+	<sql id="selectFacLoanRepayApplyVo">
+        select id, num, payer, repayTime, repayMethod, repayAmount, arrears, voucher, method, amount, states, remarks from fac_loan_repay_apply
+    </sql>
+	
+    <select id="selectFacLoanRepayApplyList" parameterType="FacLoanRepayApply" resultMap="FacLoanRepayApplyResult">
+        <include refid="selectFacLoanRepayApplyVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="num != null  and num != '' "> and num = #{num}</if>
+             <if test="payer != null "> and payer = #{payer}</if>
+             <if test="repayTime != null "> and repayTime = #{repayTime}</if>
+             <if test="repayMethod != null  and repayMethod != '' "> and repayMethod = #{repayMethod}</if>
+             <if test="repayAmount != null "> and repayAmount = #{repayAmount}</if>
+             <if test="arrears != null "> and arrears = #{arrears}</if>
+             <if test="voucher != null  and voucher != '' "> and voucher = #{voucher}</if>
+             <if test="method != null "> and method = #{method}</if>
+             <if test="amount != null "> and amount = #{amount}</if>
+             <if test="states != null  and states != '' "> and states = #{states}</if>
+             <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
+         </where>
+    </select>
+    
+    <select id="selectFacLoanRepayApplyById" parameterType="Long" resultMap="FacLoanRepayApplyResult">
+        <include refid="selectFacLoanRepayApplyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFacLoanRepayApply" parameterType="FacLoanRepayApply" useGeneratedKeys="true" keyProperty="id">
+        insert into fac_loan_repay_apply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">num,</if>
+			<if test="payer != null  ">payer,</if>
+			<if test="repayTime != null  ">repayTime,</if>
+			<if test="repayMethod != null  and repayMethod != ''  ">repayMethod,</if>
+			<if test="repayAmount != null  ">repayAmount,</if>
+			<if test="arrears != null  ">arrears,</if>
+			<if test="voucher != null  and voucher != ''  ">voucher,</if>
+			<if test="method != null  ">method,</if>
+			<if test="amount != null  ">amount,</if>
+			<if test="states != null  and states != ''  ">states,</if>
+			<if test="remarks != null  and remarks != ''  ">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">#{num},</if>
+			<if test="payer != null  ">#{payer},</if>
+			<if test="repayTime != null  ">#{repayTime},</if>
+			<if test="repayMethod != null  and repayMethod != ''  ">#{repayMethod},</if>
+			<if test="repayAmount != null  ">#{repayAmount},</if>
+			<if test="arrears != null  ">#{arrears},</if>
+			<if test="voucher != null  and voucher != ''  ">#{voucher},</if>
+			<if test="method != null  ">#{method},</if>
+			<if test="amount != null  ">#{amount},</if>
+			<if test="states != null  and states != ''  ">#{states},</if>
+			<if test="remarks != null  and remarks != ''  ">#{remarks},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateFacLoanRepayApply" parameterType="FacLoanRepayApply">
+        update fac_loan_repay_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null  and num != ''  ">num = #{num},</if>
+            <if test="payer != null  ">payer = #{payer},</if>
+            <if test="repayTime != null  ">repayTime = #{repayTime},</if>
+            <if test="repayMethod != null  and repayMethod != ''  ">repayMethod = #{repayMethod},</if>
+            <if test="repayAmount != null  ">repayAmount = #{repayAmount},</if>
+            <if test="arrears != null  ">arrears = #{arrears},</if>
+            <if test="voucher != null  and voucher != ''  ">voucher = #{voucher},</if>
+            <if test="method != null  ">method = #{method},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="states != null  and states != ''  ">states = #{states},</if>
+            <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteFacLoanRepayApplyById" parameterType="Long">
+        delete from fac_loan_repay_apply where id = #{id}
+    </delete>
+	
+    <delete id="deleteFacLoanRepayApplyByIds" parameterType="String">
+        delete from fac_loan_repay_apply where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

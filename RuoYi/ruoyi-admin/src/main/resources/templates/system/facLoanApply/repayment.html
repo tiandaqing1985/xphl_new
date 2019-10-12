@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
-<head> 
+<head>
     <th:block th:include="include :: header('初始多表格')"/>
-    <th:block th:include="include :: layout-latest-css" />
-    <th:block th:include="include :: ztree-css" />
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -12,126 +12,182 @@
         <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
 
 
- <div>
-        <h4 class="form-header h4">借款详情</h4>
-   
+        <div>
+            <h4 class="form-header h4">借款详情</h4>
+            <div class="col-sm-12 select-table table-striped">
 
-        <div class="col-sm-12 select-table table-striped">
-
-            <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
-            <h4 class="form-header h4">还款信息表</h4>
-            <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+                <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <a id="addAll" class="btn btn-success" onclick="add()">
+                    <i class="fa fa-plus"></i> 还款
+                </a>
+                <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+            </div>
         </div>
- 
-</div>
-<div th:include="include :: footer"></div>
-<script th:inline="javascript">
-    var prefix = ctx + "system/facCostApply";
-    var datas = [[${@dict.getType('sys_normal_disable')}]];
-    var num = $("#num").val();
-    var msg = $("#msg").val();
+        <div th:include="include :: footer"></div>
+        <script th:inline="javascript">
+            var prefix = ctx + "system/facLoanApply";
+            var datas = [[${@dict.getType('sys_normal_disable')}]];
+            var num = $("#num").val();
+            var msg = $("#msg").val();
+debugger;
+            $(function () {
+                var options = {
+                    id: "bootstrap-table-1",
+                    url: prefix + "/querys?num=" + num,
+                    showSearch: false,
+                    showRefresh: false,
+                    showToggle: false,
+                    showColumns: false,
+                    modalName: "借款详细信息",
+                    columns: [
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field: 'num',
+                            title: '借款编号',
+                            sortable: true
+                        },
+                        {
+                            field: 'loanName',
+                            title: '借款名称',
+                            sortable: true
+                        },
+                        {
+                            field: 'amount',
+                            title: '借款金额',
+                            sortable: true
+                        },
+                        {
+                            field: 'loanUser',
+                            title: '借款人',
+                            sortable: true
+                        },
+                        {
+                            field: 'createTime',
+                            title: '创建时间',
+                            sortable: true
+                        },
+                        {
+                            field: 'loanTime',
+                            title: '借款时间',
+                            sortable: true
+                        },
+                        {
+                            field: 'repayTime',
+                            title: '预计还款时间',
+                            sortable: true
+                        },
+                        {
+                            field: 'facOperate',
+                            title: '单据状态',
+                            sortable: true
+                        },
+                        {
+                            field: 'reason',
+                            title: '借款事由',
+                            sortable: true
+                        },
+                        {
+                            field: 'applyStatus',
+                            title: '申请人操作',
+                            sortable: true
+                        }
+                    ]
+                };
+                $.table.init(options);
+            });
 
-alert("-------");
+            function add(){
+                debugger;
+                alert(num);
+                $.modal.open("还款详细信息", "/system/facLoanApply/repay?num ="+num);
+            }
 
-    $(function () {
-        var options = {
-            id: "bootstrap-table-1",
-            url: prefix + "/query?num="+num,
-            createUrl: prefix + "/tranDetail?id="+num,
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            modalName: "差旅详细信息",
-            columns: [
-                {
-                    checkbox: true
-                },
-                {
-                    field: 'num',
-                    title: '差旅编号'
-                },
-                {
-                    field: 'bus_name',
-                    title: '项目名称'
-                },
-                {
-                    field: 'outTime',
-                    title: '出差时间'
-                },
-                {
-                    field: 'backTimeEs',
-                    title: '预计返回时间'
-                },
-                {
-                    field: 'outMan',
-                    title: '出差人员'
-                },
-                {
-                    field: 'moneyEs',
-                    title: '预计费用'
-                },
-                {
-                    field: 'toLocal',
-                    title: '出差目的地'
-                },
-                {
-                    field: 'reason',
-                    title: '事由'
-                }
-            ]
-        };
-        $.table.init(options);
-    });
+            function toView(a){
+                var url = $.table._option.toViewUrl.replace("{num}",a);
+                $.modal.open("查看申请", url);
+            }
 
-    $(function () {
-        var options = {
-            id: "bootstrap-table-2",
-            url: prefix + "/querys?num="+num,
-            createUrl: prefix + "/tranDetail?id="+num,
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            modalName: "还款信息表",
-            columns: [
-                {
-                    checkbox: true
-                },
-                {
-                    field: 'num',
-                    title: '差旅编号'
-                },
-                {
-                    field: 'costDate',
-                    title: '时间'
-                },
-                {
-                    field: 'vehicle',
-                    title: '交通工具'
-                },
-                {
-                    field: 'departure',
-                    title: '出发地'
-                },
-                {
-                    field: 'target',
-                    title: '目的地'
-                },
-                {
-                    field: 'amount',
-                    title: '预算金额'
-                },
-                {
-                    field: 'reason',
-                    title: '事由'
-                }
-            ]
-        };
-        $.table.init(options);
-    });
+            $(function() {
+                var options = {
+                    id: "bootstrap-table-2",
+                    url: prefix + "/repay?num=" + num,
+                    toViewUrl: prefix + "/repay/{num}",
+                    showSearch: false,
+                    showRefresh: false,
+                    showToggle: false,
+                    showColumns: false,
+                    modalName: "还款详细信息",
+                    columns: [{
+                        checkbox: true
+                    },
+                        {
+                            field : 'id',
+                            title : 'id',
+                            visible: false
+                        },
+                        {
+                            field : 'num',
+                            title : '借款编号',
+                            sortable: true
+                        },
+                        {
+                            field : 'payer',
+                            title : '还款人',
+                            sortable: true
+                        },
+                        {
+                            field : 'repayTime',
+                            title : '还款时间',
+                            sortable: true
+                        },
+                        {
+                            field : 'repayMethod',
+                            title : '还款方式',
+                            sortable: true
+                        },
+                        {
+                            field : 'repayAmount',
+                            title : '还款金额（元）',
+                            sortable: true
+                        },
+                        {
+                            field : 'arrears',
+                            title : '实际欠款金额（元）',
+                            sortable: true
+                        },
+                        {
+                            field : 'voucher',
+                            title : '还款凭证',
+                            sortable: true
+                        },
+                        {
+                            field : 'method',
+                            title : '财务确认还款金额',
+                            sortable: true
+                        },
+                        {
+                            field : 'amount',
+                            title : '核实后欠款金额',
+                            sortable: true
+                        },
+                        {
+                            field : 'states',
+                            title : '还款状态',
+                            sortable: true
+                        },
+                        {
+                            field : 'remarks',
+                            title : '备注',
+                            sortable: true
+                        } ]
+                };
+                $.table.init(options);
+            });
 
-
-</script>
+        </script>
 </body>
 </html>

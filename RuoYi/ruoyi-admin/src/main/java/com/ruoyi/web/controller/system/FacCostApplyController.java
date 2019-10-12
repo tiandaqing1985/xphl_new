@@ -57,7 +57,25 @@ public class FacCostApplyController extends BaseController {
 				.selectFacCostApplyList(facCostApply);
 		return getDataTable(list);
 	}
+	
+	
+	
+	/**
+	 * 查看行程安排详情
+	 */
+	@PostMapping("/querys/{num}")
+	@ResponseBody
+	public TableDataInfo detail1s(@PathVariable("num") String num) {
+	   startPage();
+	   List<FacCostDetailApply> list = facCostApplyService.deatils(num);
+	   if (list != null) {
 
+	      return getDataTable(list);
+	   } else {
+	      List<String> a = new ArrayList<>();
+	      return getDataTable(a);
+	   }
+	}
 	/**
 	 * 导出差旅申请列表
 	 */
@@ -146,22 +164,8 @@ public class FacCostApplyController extends BaseController {
 		}
 	}
 
-	/**
-	 * 查看行程安排详情
-	 */
-	@PostMapping("/querys")
-	@ResponseBody
-	public TableDataInfo detail1s(String num) {
-		startPage();
-		List<FacCostDetailApply> list = facCostApplyService.deatils(num);
-		if (list != null) {
-
-			return getDataTable(list);
-		} else {
-			List<String> a = new ArrayList<>();
-			return getDataTable(a);
-		}
-	}
+	
+	
 	/**
 	 * 查看详情
 	 */
@@ -194,9 +198,9 @@ public class FacCostApplyController extends BaseController {
 	@Log(title = "行程安排", businessType = BusinessType.INSERT)
 	@PostMapping("/tranDetail")
 	@ResponseBody
-	public int tranDetailSave(FacCostDetailApply facCostDetailApply) {
+	public AjaxResult tranDetailSave(FacCostDetailApply facCostDetailApply) {
 
-		return facCostApplyService.insertFacCostDetailApply(facCostDetailApply);
+		return toAjax(facCostApplyService.insertFacCostDetailApply(facCostDetailApply));
 	}
 
 }

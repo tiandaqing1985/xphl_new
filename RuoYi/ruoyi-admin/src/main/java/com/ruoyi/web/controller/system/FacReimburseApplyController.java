@@ -88,8 +88,9 @@ public class FacReimburseApplyController extends BaseController {
     @GetMapping("/add")
     public String add(ModelMap mmp) {
         IdWorker idWorker = new IdWorker(0, 1);
-        mmp.put("num", "bx" + idWorker.nextId());
+        mmp.put("num", "BX" + idWorker.nextId());
         mmp.put("msg","1");
+        mmp.put("userId",ShiroUtils.getUserId());
         return prefix + "/reimbuseDetail";
     } 
     /**
@@ -118,7 +119,7 @@ public class FacReimburseApplyController extends BaseController {
     @GetMapping("/addAll")
     public String addAll(ModelMap mmp) {
     	IdWorker idWorker = new IdWorker(0, 1);
-        mmp.put("num", "bx" + idWorker.nextId());
+        mmp.put("num", "BX" + idWorker.nextId());
         mmp.put("msg","1");
         return prefix + "/addAll";
     } 

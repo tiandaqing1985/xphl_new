@@ -49,6 +49,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<include refid="selectFacLoanApplyVo" />
 		where id = #{id}
 	</select>
+	 
+	 
+	 <select id="FacLoanAmount" parameterType="Double" resultMap="FacLoanApplyResult">
+		select amount from fac_loan_apply
+		where num =#{num}
+	</select>
+	 
+	<select id="detail" resultMap="FacLoanApplyResult">
+		select id, num, loan_name, amount, loan_user, create_time, loan_time,
+		repay_time, fac_operate, reason, apply_status, update_time from
+		fac_loan_apply
+		where  num =#{num}
+	</select>
 
 	<insert id="insertFacLoanApply" parameterType="FacLoanApply"
 		useGeneratedKeys="true" keyProperty="id">

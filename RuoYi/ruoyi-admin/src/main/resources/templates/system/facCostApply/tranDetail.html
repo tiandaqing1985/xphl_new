@@ -59,9 +59,7 @@
         debugger
         if ($.validate.form()) {
             $.operate.save(prefix + "/tranDetail", $('#form-add').serialize());
-            $.operate.successCallback();
-            window.location.reload();
-            $.modal.close();
+
         }
     }
 </script>

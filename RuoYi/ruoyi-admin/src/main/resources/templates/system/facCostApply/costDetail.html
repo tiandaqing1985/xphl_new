@@ -31,7 +31,6 @@
     var num = $("#num").val();
     var msg = $("#msg").val();
 
-alert(num);
 
     $(function () {
         var options = {
@@ -87,7 +86,7 @@ alert(num);
     $(function () {
         var options = {
             id: "bootstrap-table-2",
-            url: prefix + "/querys?num="+num,
+            url: prefix + "/querys/"+num,
             createUrl: prefix + "/tranDetail?id="+num,
             showSearch: false,
             showRefresh: false,
