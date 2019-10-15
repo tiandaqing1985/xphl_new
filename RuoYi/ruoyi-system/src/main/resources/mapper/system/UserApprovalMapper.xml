@@ -9,7 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="applyId"    column="apply_id"    />
         <result property="approvalState"    column="approval_state"    />
         <result property="approverId"    column="approver_id"    />
-        <result property="approvaTime"    column="approval_time"/>
+        <result property="approvalTime"    column="approval_time"/>
         <result property="approvalSight"    column="approval_sight"    />
         <result property="approvalLevel"    column="approval_level"/>
         <result property="remark"    column="remark"/>
@@ -231,7 +231,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.leave_type = 9 THEN
 		          '丧假'
 		         ELSE 
-		            ''
+		            '哺乳假'
 		     END)leave_type, a.apply_time,
         	(CASE
 	         WHEN p.approval_state = 1 THEN
@@ -265,9 +265,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         	<if test="approvalId != null "> and p.approval_id = #{approvalId}</if>
         	<if test="applyerId != null "> and a.user_id = #{applyerId}</if>
         	<if test="deptName != null  and deptName != '' "> and d.dept_name = #{deptName}</if>
-        	<!-- <if test="approvalSight != null  and approvalSight != '' "> and p.approval_sight = #{approvalSight,jdbcType=VARCHAR}
-        		 and u.`status`=0 and s.`status`=0
-        	</if> -->
+        	<if test="approvalSight != null  and approvalSight != '' "> and p.approval_sight = #{approvalSight,jdbcType=VARCHAR}</if> 
       		<if test="status ==1">and p.approval_state != 3</if>
       		<if test="dSet != null">
 					and d.dept_id in
@@ -400,8 +398,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="approverId != null  ">approver_id = #{approverId},</if>
             <if test="approvalSight != null  and approvalSight != ''  ">approval_sight = #{approvalSight},</if>
             <if test="approvalLevel != null  and approvalLevel != ''  ">approval_level = #{approvalLevel},</if>
-            <if test="remark != null  and remark != '' ">remark = #{remark},</if>   
-            approval_time = sysdate()
+            <if test="remark != null  and remark != '' ">remark = #{remark},</if>
+            <if test="approvalTime != null and approvalTime != ''">approval_time = #{approvalTime},</if>   
         </trim>
         where approval_id = #{approvalId}
     </update>
@@ -410,6 +408,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         delete from sys_user_approval where approval_id = #{approvalId}
     </delete>
 	
+	<delete id="deleteUserApprovalByApplyId" parameterType="Long">
+        delete from sys_user_approval where apply_id = #{applyId}
+    </delete>
+    
     <delete id="deleteUserApprovalByIds" parameterType="String">
         delete from sys_user_approval where apply_id in 
         <foreach item="applyId" collection="array" open="(" separator="," close=")">

@@ -148,7 +148,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectLeaderList" resultMap="SysUserResult">
-		select DISTINCT u.user_id,u.user_name ,u.email
+		select DISTINCT u.user_id,u.user_name ,u.email, u.status
 		from sys_user u
 		right join sys_dept d on d.leader = u.user_name
 		where u.user_id is not null

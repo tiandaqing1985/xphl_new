@@ -22,6 +22,13 @@ public interface UserApplyMapper
 	public List<UserApply> selectUserApplyById(Long applyId);
 	
 	/**
+	 * 查询申请信息
+	 * @param ids
+	 * @return
+	 */
+	public List<UserApply> selectUserApplyByIds(String[] ids);
+	
+	/**
      * 查询申请信息
      * 
      * @param applyId 申请ID

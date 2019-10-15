@@ -12,13 +12,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createdate"    column="createdate"    />
         <result property="overdate"    column="overdate"    />
         <result property="value"    column="value"    />
-        <result property="applyId"    column="apply_id"    />
         <result property="holidayDetail"    column="holiday_detail"   />
     </resultMap>
 	
 	
 	<sql id="selectHolidayVo">
-        select id, user_id, holiday_type, availability, createdate, overdate, value, apply_id, holiday_detail from sys_holiday
+        select id, user_id, holiday_type, availability, createdate, overdate, value,  holiday_detail from sys_holiday
     </sql>
 	
     <select id="selectHolidayList" parameterType="Holiday" resultMap="HolidayResult">
@@ -31,7 +30,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="createdate != null "> and createdate = #{createdate}</if>
              <if test="overdate != null "> and overdate = #{overdate}</if>
              <if test="value != null "> and value = #{value}</if>
-             <if test="applyId != null "> and apply_id = #{applyId}</if>
              <if test="holidayDetail != null  and holidayDetail != '' "> and holiday_detail = #{holidayDetail}</if>
          </where>
     </select>
@@ -54,7 +52,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="createdate != null  ">createdate,</if>
 			<if test="overdate != null  ">overdate,</if>
 			<if test="value != null  ">value,</if>
-			<if test="applyId != null  ">apply_id,</if>
 			<if test="holidayDetail != null  and holidayDetail != ''  ">holiday_detail,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -64,7 +61,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="createdate != null  ">#{createdate},</if>
 			<if test="overdate != null  ">#{overdate},</if>
 			<if test="value != null  ">#{value},</if>
-			<if test="applyId != null  ">#{applyId},</if>
 			<if test="holidayDetail != null  and holidayDetail != ''  ">#{holidayDetail},</if>
          </trim>
     </insert>
@@ -78,7 +74,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createdate != null  ">createdate = #{createdate},</if>
             <if test="overdate != null  ">overdate = #{overdate},</if>
             <if test="value != null  ">value = #{value},</if>
-            <if test="applyId != null  ">apply_id = #{applyId},</if>
             <if test="holidayDetail != null  and holidayDetail != ''  ">holiday_detail = #{holidayDetail},</if>
         </trim>
         where id = #{id}
@@ -110,7 +105,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="createdate != null "> and createdate = #{createdate}</if>
              <if test="overdate != null "> and overdate = #{overdate}</if>
              <if test="value != null "> and value = #{value}</if>
-             <if test="applyId != null "> and apply_id = #{applyId}</if>
              <if test="holidayDetail != null  and holidayDetail != '' "> and holiday_detail = #{holidayDetail}</if>
          </where>
     </select>

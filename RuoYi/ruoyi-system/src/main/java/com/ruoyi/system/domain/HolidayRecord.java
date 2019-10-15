@@ -20,8 +20,10 @@ public class HolidayRecord extends BaseEntity
 	private Long userId;
 	/** 申请id */
 	private Long applyId;
-	/** 使用天数 */
+	/** 假期记录使用天数 */
 	private Double value;
+	/** 假期使用天数 */
+	private Double hvalue;
 	/** 使用状态(1申请中，2已使用，3撤销，4销假，5申请失败) */
 	private String useState;
 	/** 假期类型 */
@@ -29,6 +31,14 @@ public class HolidayRecord extends BaseEntity
 	
 	/** 假期对象 */
 	private Holiday holiday;
+
+	public Double getHvalue() {
+		return hvalue;
+	}
+
+	public void setHvalue(Double hvalue) {
+		this.hvalue = hvalue;
+	}
 
 	public void setId(Long id) 
 	{

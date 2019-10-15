@@ -58,6 +58,13 @@ public interface HolidayRecordMapper
      * @return 结果
      */
 	public int deleteHolidayRecordById(Long id);
+
+	/**
+	 * 删除假期使用记录
+	 * @param applyId 申请id
+	 * @return
+	 */
+	public int deleteHolidayRecordByApplyId(Long applyId);
 	
 	/**
      * 批量删除假期使用记录

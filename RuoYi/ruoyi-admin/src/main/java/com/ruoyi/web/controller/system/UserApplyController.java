@@ -15,17 +15,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.system.domain.Holiday;
-import com.ruoyi.system.domain.HolidayRecord;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.UserApply;
 import com.ruoyi.system.domain.UserApplyList;
-import com.ruoyi.system.service.IHolidayService;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IUserApplyService;
-import com.ruoyi.system.service.impl.HolidayRecordServiceImpl;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -48,16 +44,10 @@ public class UserApplyController extends BaseController
 	private IUserApplyService userApplyService;
 	
 	@Autowired
-	private ISysUserService iSysUserService;
-	
-	@Autowired
-	private IHolidayService iHolidayService;
+	private ISysUserService iSysUserService;	
 	
 	@Autowired
 	private ISysPostService postService;
-	
-	@Autowired
-	private HolidayRecordServiceImpl holidayRecordServiceImpl;
 	
 	@Autowired
 	private ISysRoleService iSysRoleService;
@@ -217,6 +207,7 @@ public class UserApplyController extends BaseController
 	@ResponseBody
 	public AjaxResult addSave(UserApply userApply)
 	{
+		userApply.setUserId(ShiroUtils.getUserId());
 		int i = userApplyService.insertUserApply(userApply, ShiroUtils.getUserId());
 		return toAjax(i);
 	}
@@ -240,6 +231,7 @@ public class UserApplyController extends BaseController
 	@ResponseBody
 	public AjaxResult editSave(UserApply userApply)
 	{		
+		userApply.setUserId(ShiroUtils.getUserId());
 		return toAjax(userApplyService.updateUserApply(userApply));
 	}
 	
@@ -261,29 +253,7 @@ public class UserApplyController extends BaseController
 	@ResponseBody
 	public AjaxResult takeBack(Long ids)
 	{	
-		List<UserApply> userApply = userApplyService.selectUserApplyById(ids);
-		if(userApply.get(0).getLeaveType().equals("年假") || userApply.get(0).getLeaveType().equals("调休")){
-			//在年假调休使用记录中找到该申请生成的记录
-			HolidayRecord holidayRecord = new HolidayRecord();
-			holidayRecord.setApplyId(ids);
-			List<HolidayRecord> holidayRecordList = holidayRecordServiceImpl.selectHolidayRecordList(holidayRecord);
-			for(HolidayRecord holidayRecord1 : holidayRecordList){
-				
-				Holiday holiday = new Holiday();
-				//原本此条假期信息
-				Holiday holiday1 = iHolidayService.selectHolidayById(holidayRecord1.getHolidayId());
-				holiday.setId(holidayRecord1.getHolidayId());
-				holiday.setValue(holidayRecord1.getValue() + holiday1.getValue());
-				iHolidayService.updateHoliday(holiday);
-				
-				HolidayRecord holidayRecord2 = new HolidayRecord();
-				holidayRecord2.setId(holidayRecord1.getId());
-				holidayRecord2.setUseState("3");
-				holidayRecordServiceImpl.updateHolidayRecord(holidayRecord2);
-			}
-			
-		}
-		return toAjax(userApplyService.updateUserApplyStateById(ids));
+		return toAjax(userApplyService.takeBack(ids));
 	}
 	
 	/**
@@ -409,54 +379,8 @@ public class UserApplyController extends BaseController
     @ResponseBody
     public String ifHolidayEnough(UserApply userApply)
     {
-    	System.out.println(userApply);
-    	Double timeLength = userApply.getTimelength();
-    	Double holidayLength = 0.0;
-    	if(userApply.getLeaveType().equals("1")){
-    		Holiday holiday = new Holiday();
-    		holiday.setUserId(ShiroUtils.getUserId());
-    		holiday.setHolidayType("1");
-    		if(iHolidayService.selectHolidaySumByUserId(holiday) != null){
-    			holidayLength = iHolidayService.selectHolidaySumByUserId(holiday);
-    		}
-    	}
-    	else if(userApply.getLeaveType().equals("2")){
-    		
-    		Holiday holiday = new Holiday();
-    		holiday.setUserId(ShiroUtils.getUserId());
-    		holiday.setHolidayType("2");
-    		Double selectResult = iHolidayService.selectHolidaySumByUserId(holiday);
-    		if(selectResult != null){
-    			holidayLength = selectResult/8;
-    		}
-    		
-    	}else if(userApply.getLeaveType().equals("4")){//病假
-    		if(userApply.getTimelength() < 1 ){
-    			UserApply sickUserApply = new UserApply();
-    			sickUserApply.setUserId(ShiroUtils.getUserId());
-    			sickUserApply.setStarttime(userApply.getStarttime());
-    			UserApply sick = userApplyService.selcetSickLeaveByUserApply(sickUserApply);
-    			if(sick != null){
-    				return "1";
-    			}else{
-    	    		return "0";
-    	    	}
-    		}else{
-        		return "0";
-        	}
-    	}
-    	else{//不是年假也不是调休，不需要比较直接可以通过
-    		return "0";
-    	}
-    	//如果申请的时长不超过可申请假期总数，则可以申请
-    	if(timeLength <= holidayLength){
-    		return "0";
-    	}
-    	else{
-    		return "1";
-    	}
-    	
-    	
+    	userApply.setUserId(ShiroUtils.getUserId());
+    	return userApplyService.ifHolidayEnough(userApply);    		
     }
     
     /**
@@ -497,6 +421,12 @@ public class UserApplyController extends BaseController
     	List<UserApply> ifStarttimeRepeat = userApplyService.selectUserApplyListByStartTime(userApply);
     	List<UserApply> ifEndtimeRepeat = userApplyService.selectUserApplyListByEndTime(userApply);
     	if(ifStarttimeRepeat != null && ifStarttimeRepeat.size()>0){
+    		if(ifStarttimeRepeat.size()==1){
+    			//查出本身
+    			if(ifStarttimeRepeat.get(0).getApplyId().longValue()==userApply.getApplyId().longValue()){
+    				return "0";
+    			}
+    		}
     		if(userApply.getTimeapart1() != null){
     			for(UserApply sUserApply : ifStarttimeRepeat){
     				if(sUserApply.getTimeapart1().equals("1")){
@@ -513,6 +443,12 @@ public class UserApplyController extends BaseController
     		
     	}
     	else if(ifEndtimeRepeat != null && ifEndtimeRepeat.size()>0){
+    		if(ifEndtimeRepeat.size()==1){
+    			//查出本身
+    			if(ifEndtimeRepeat.get(0).getApplyId().longValue()==userApply.getApplyId().longValue()){
+    				return "0";
+    			}
+    		}
     		if(userApply.getTimeapart2() != null){
     			for(UserApply sUserApply : ifEndtimeRepeat){
     				if(sUserApply.getTimeapart2().equals("1")){
@@ -548,6 +484,20 @@ public class UserApplyController extends BaseController
     	
     }
     
+    /**
+ 	 * 验证销假时间是否在原请假时间范围内
+ 	 */
+     @PostMapping("/ifBetween")
+     @ResponseBody
+     public String ifBetween(UserApply userApply){
+    	boolean flag =  userApplyService.ifBetween(userApply);
+     	if(flag){
+     		return "0";
+     	}else{
+     		return "1";
+     	}
+     	
+     }
     //----------------------------------------
 	
 	/**

@@ -149,6 +149,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          CONCAT(TRUNCATE(a.timelength,0 ) , '小时')
 		         WHEN a.apply_type = 3 THEN
 		          CONCAT(TRUNCATE(a.timelength,1 ) , '天')
+		          WHEN a.apply_type = 4 THEN
+					CONCAT( TRUNCATE ( a.timelength, 1 ), '天' )
 		         ELSE 
 		            ''
 	        	END)timelengthPlus,
@@ -204,9 +206,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.leave_type = 9 THEN
 		          '丧假'
 		         ELSE 
-		            ''
+		            '哺乳假'
 		        END)leave_type, a.apply_time,
-        		p.approval_id, p.apply_id, p.approval_state, p.approver_id,  (p.approval_sight)approval_s ,p.approval_time,
+        		p.approval_id, p.apply_id,
+        		 	(
+					CASE
+							
+							WHEN p.approval_state = 1 THEN
+							'同意' 
+							WHEN p.approval_state = 2 THEN
+							'驳回' 
+							WHEN p.approval_state = 3 THEN
+							'未审批' ELSE '' 
+						END 
+						) approval_state,
+        		 
+        		 p.approver_id,  (p.approval_sight)approval_s ,p.approval_time,
         		u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
         		(s.user_name)approver_name
         from sys_user_apply a 
@@ -307,6 +322,95 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="forApplyId != null and forApplyId != '' ">and a.for_applyid = #{forApplyId}</if>
              <if test="approvalS != null and approvalS != '' ">and p.approval_sight = #{approvalS}</if>
          </where>
+    </select>
+
+    <select id="selectUserApplyByIds" parameterType="String" resultMap="UserApplyResult">
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.for_applyid, a.prove,
+        		(CASE
+		         WHEN a.timeapart1 = 1 THEN
+		          '10:00——15:00'
+		         WHEN a.timeapart1 = 2 THEN
+		          '15:00——19:00'
+		         ELSE 
+		            ''
+		        END)timeapart1, 
+		        (CASE
+		         WHEN a.timeapart2 = 1 THEN
+		          '10:00——15:00'
+		         WHEN a.timeapart2 = 2 THEN
+		          '15:00——19:00'
+		         ELSE 
+		            ''
+		        END)timeapart2,
+		        (CASE
+		         WHEN a.timeapart3 = 1 THEN
+		          '早上(10:00——11:00)'
+		         WHEN a.timeapart3 = 2 THEN
+		          '下午(18:00——19:00)'
+		         ELSE 
+		            ''
+		        END)timeapart3, a.timelength, 
+    			(CASE
+		         WHEN a.apply_type = 1 THEN
+		          '请假'
+		         WHEN a.apply_type = 2 THEN
+		          '加班'
+		         WHEN a.apply_type = 3 THEN
+		          '销假'
+		         ELSE 
+		            '取消请假'
+		        END)apply_type,  
+		        (CASE
+		         WHEN a.apply_state = 1 THEN
+		          '待审批'
+		         WHEN a.apply_state = 2 THEN
+		          '已撤回'
+		         WHEN a.apply_state = 3 THEN
+		          '申请成功'
+		         WHEN a.apply_state = 4 THEN
+		          '申请失败'
+		        WHEN a.apply_state = 5 THEN
+		      		'已销假'
+		         ELSE 
+		            ''
+		        END)apply_state, 
+		        (CASE
+		         WHEN a.confirm_state = 1 THEN
+		          '未确认'
+		         WHEN a.confirm_state = 2 THEN
+		          '已确认'
+		         ELSE 
+		            ''
+		        END)confirm_state, a.details, 
+		        (CASE
+		         WHEN a.leave_type = 1 THEN
+		          '年假'
+		         WHEN a.leave_type = 2 THEN
+		          '调休'
+		         WHEN a.leave_type = 3 THEN
+		          '事假'
+		         WHEN a.leave_type = 4 THEN
+		          '病假'
+		         WHEN a.leave_type = 5 THEN
+		          '婚假'
+		         WHEN a.leave_type = 6 THEN
+		          '产假'
+		         WHEN a.leave_type = 7 THEN
+		          '陪产假'
+		         WHEN a.leave_type = 8 THEN
+		          '产检假'
+		         WHEN a.leave_type = 9 THEN
+		          '丧假'
+		         ELSE 
+		            ''
+		        END)leave_type, a.apply_time, u.user_name, p.approver_id,p.remark
+		        from sys_user_apply a
+		        	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
+		        	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
+        			where a.apply_id in 
+        <foreach item="applyId" collection="array" open="(" separator="," close=")">
+            #{applyId}
+        </foreach>
     </select>
     
     <select id="selectUserApplyById" parameterType="Long" resultMap="UserApplyResult">
@@ -463,14 +567,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.leave_type = 9 THEN
 		          '丧假'
 		         ELSE 
-		            ''
+		            '哺乳假'
 		        END)leave_type, a.apply_time
 		        from sys_user_apply a
 		        LEFT JOIN sys_user_approval app on a.apply_id = app.apply_id
         		where app.approval_level=1 and a.apply_id = #{applyId}
     </select>
 
-    <insert id="insertUserApply" parameterType="UserApply" useGeneratedKeys="true" keyProperty="applyId">
+    <insert id="insertUserApply" parameterType="UserApply" useGeneratedKeys="true" keyProperty="applyId" keyColumn="apply_id">
         insert into sys_user_apply
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="userId != null  ">user_id,</if>

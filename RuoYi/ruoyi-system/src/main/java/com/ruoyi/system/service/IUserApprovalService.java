@@ -76,4 +76,17 @@ public interface IUserApprovalService
      */
 	public List<QueryConditions> selectAllQueryConditionsList(QueryConditions queryConditions);
 	
+	/**
+	 * 驳回
+	 * @param ids
+	 * @param remark
+	 */
+	public void reject(Long ids, String remark);
+	
+	/**
+	 * 同意 
+	 * @param ids
+	 */
+	public void agree(Long ids);
+	
 }

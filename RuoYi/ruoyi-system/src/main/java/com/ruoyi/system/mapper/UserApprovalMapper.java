@@ -53,6 +53,14 @@ public interface UserApprovalMapper
 	public int deleteUserApprovalById(Long approvalId);
 	
 	/**
+     * 删除审批
+     * 
+     * @param applyId 申请ID
+     * @return 结果
+     */
+	public int deleteUserApprovalByApplyId(Long applyId);
+	
+	/**
      * 批量删除审批
      * 
      * @param approvalIds 需要删除的数据ID

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh"  xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="include :: header('撤销申请')" />
+	<th:block th:include="include :: header('销假申请')" />
 	<th:block th:include="include :: jsonview-css" />
 	
 </head>
@@ -16,14 +16,14 @@
 		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">
 			<label class="col-sm-2 control-label">请假类型：</label>
 			<div class="col-sm-8">
-                <input name="showLeaveType" class="form-control" type="text" maxlength="30" th:field="*{leaveType}" disabled="value">
+                <input name="leaveType" class="form-control" type="text" maxlength="30" th:field="*{leaveType}" readonly>
             </div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-2 control-label">开始时间：</label>
 			<div class="col-sm-8">
 				<div class="select-time" style="width: 100%">
-                	<input name="starttime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" >
+                	<input id="starttime" name="starttime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" >
                 </div>
 			</div>
 		</div>
@@ -38,7 +38,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label">结束时间：</label>
 			<div class="col-sm-8">
-                <input name="endtime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" >
+                <input id="endtime" name="endtime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" >
 			</div>
 		</div>
 		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">
@@ -72,7 +72,53 @@
 		
 		function submitHandler() {
 	       if ($.validate.form()) {
-	           $.operate.save(prefix + "/undo", $('#undoForm').serialize());
+	    	 	debugger;
+				var applyId = $("#applyId").val();
+				var starttime = $("#starttime").val();
+				var endtime = $("#endtime").val();
+				var timeapart1 = $("#timeapart1").val();
+				var timeapart2 = $("#timeapart2").val();	
+				var betweenFlag = false;
+				
+				if(endtime < starttime){
+					p02.innerText="结束日期不能小于开始日期";
+					$("#p02").css("color","red");
+					flag = false;
+					return;
+				}else if(endtime == starttime){
+					if(timeapart1 == "2" && timeapart2 == "1"){
+						p02.innerText="结束日期不能小于开始日期";
+						$("#p02").css("color","red");
+						flag = false;
+						return;
+					}
+				}
+				
+				//验证销假时间是否在原请假时间范围内
+				$.ajax({
+					type:"post",
+					async:false,
+					url:"/system/userApply/ifBetween",	
+					data:{"applyId":applyId,"starttime":starttime,"endtime":endtime,"timeapart1":timeapart1, "timeapart2":timeapart2 },
+					dataType:"json",
+					success:function(result){
+						 if(result == "0"){
+							 betweenFlag = true;
+						}
+						else{
+							betweenFlag = false;
+							$.modal.alertWarning("销假时间必须在原请假时间范围内!");
+							return;
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				});	
+				
+				if(betweenFlag){
+			        $.operate.save(prefix + "/undo", $('#undoForm').serialize());
+				}
 	       }
 	   };
    </script>

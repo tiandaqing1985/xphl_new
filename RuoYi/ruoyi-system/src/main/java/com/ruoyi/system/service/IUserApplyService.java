@@ -161,4 +161,25 @@ public interface IUserApplyService
 	
 	/** 判断员工是否通过试用一期 */
 	public String ifPass(Long userId);
+	
+	/**
+	 * 验证假期余额是否足够
+	 * @param userApply
+	 * @return
+	 */
+	public String ifHolidayEnough(UserApply userApply);
+	
+	/**
+	 * 撤回
+	 * @param userApply
+	 * @return
+	 */
+	public int takeBack(Long ids);
+	
+	/**
+	 * 验证销假时间是否在原请假时间范围内
+	 * @param userApply
+	 * @return
+	 */
+	public boolean ifBetween(UserApply userApply);
 }

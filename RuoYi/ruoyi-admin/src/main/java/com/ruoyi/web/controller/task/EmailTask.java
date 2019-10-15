@@ -46,7 +46,7 @@ public class EmailTask {
 
 	//三个月试用期到期提醒(提前两周)
 	//六个月试用期到期提醒(提前一个月)
-	//收件人：部门leader、宋彬、王梦 、辛本荣
+	//收件人：部门leader、宋彬、李嘉欣、辛本荣
 	public void sendEmail4(){
 
 		List<SysUser> userList = userService.selectAllUser();
@@ -80,9 +80,9 @@ public class EmailTask {
 			}
 			
 			if(leaderEmail != null && "songbin@perfect-cn.cn".equals(leaderEmail)){
-				copyto = "xinbenrong@perfect-cn.cn,wangmeng@perfect-cn.cn";//抄送人邮箱
+				copyto = "xinbenrong@perfect-cn.cn,lijiaxin@perfect-cn.cn";//抄送人邮箱
 			}else{
-				copyto = "songbin@perfect-cn.cn,xinbenrong@perfect-cn.cn,wangmeng@perfect-cn.cn";//抄送人邮箱
+				copyto = "songbin@perfect-cn.cn,xinbenrong@perfect-cn.cn,lijiaxin@perfect-cn.cn";//抄送人邮箱
 			}
 			
 			if(day == 14L){//提前两周通知
