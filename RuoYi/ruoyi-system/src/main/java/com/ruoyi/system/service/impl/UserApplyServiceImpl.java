@@ -383,15 +383,6 @@ public class UserApplyServiceImpl implements IUserApplyService
 	}
 	
 	/**
-	 * 根据申请id销假（修改销假状态和和销假原因）
-	 */
-	@Override
-	public UserApply updateConfirmMasageById(UserApply userApply){
-		
-		return userApplyMapper.updateConfirmMasageById(userApply);
-	}
-	
-	/**
 	 * 查出事假病假的请假单
 	 */
 	@Override
@@ -546,17 +537,6 @@ public class UserApplyServiceImpl implements IUserApplyService
 	}
 
 	/**
-	 * 根据条件查询需要人事确认的（待审批和撤回的）申请列表
-	 * @param userApply
-	 * @return
-	 */
-	@Override
-	public List<UserApplyList> selectUserApplyConfirmAsList(UserApply userApply) {
-		
-		return userApplyMapper.selectUserApplyConfirmAsList(userApply);
-	}
-
-	/**
 	 * 根据条件查询小于一天的病假
 	 * @param userApply
 	 * @return
@@ -676,20 +656,21 @@ public class UserApplyServiceImpl implements IUserApplyService
 		//查询原申请
 		UserApply oldUserApply = userApplyMapper.selectUserApplyByApplyId(applyId);
 		
-		//修改原申请状态
+		//修改原申请状态为销假
 		UserApply userApply2 = new UserApply();
 		userApply2.setApplyId(applyId);
-		userApply2.setApplyType("4");//申请类型（1请假，2加班，3销假,，4取消请假）
+		userApply2.setApplyType("3");//申请类型（1请假，2加班，3销假）
+		userApply2.setApplyState("5");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败，5已销假）
 		userApplyMapper.updateUserApply(userApply2);
 
 		//还原假期值,修改假期记录表状态
-		holidayService.restoreHoliday(applyId, "4");//使用状态(1申请中，2已使用，3撤销，4销假，5被销假，6被驳回)
+		holidayService.restoreHoliday(applyId, "4");//使用状态(1申请中，2已使用，3撤销，4销假)
 		
-		//生成新销假记录
+		//生成新请假记录
 		Date now = new Date();
 		UserApply userApply1 = new UserApply();
 		userApply1.setUserId(userId);  //申请人
-		userApply1.setApplyType("3");  //类型为销假
+		userApply1.setApplyType("1");  //类型为请假
 		userApply1.setApplyState("1");  //状态待审批
 		
 		String leaveType = oldUserApply.getLeaveType();
@@ -952,10 +933,16 @@ public class UserApplyServiceImpl implements IUserApplyService
 
 	@Override
 	public boolean ifBetween(UserApply userApply) {
-		List<UserApply> applyList1 = userApplyMapper.selectUserApplyListByStartTime(userApply);
-		List<UserApply> applyList2 = userApplyMapper.selectUserApplyListByEndTime(userApply);
-		if(applyList1.size() == 0 && applyList2.size() == 0){
-			return false;
+		UserApply apply = userApplyMapper.selectUserApplyByApplyId(userApply.getApplyId());//查出当前申请
+		if(apply.getForApplyId() == null){//当前申请不是销假申请
+			if(userApply.getTimelength() > apply.getTimelength()){
+				return false;
+			}
+		}else{//当前申请是销假申请
+			UserApply oldApply = userApplyMapper.selectUserApplyByApplyId(apply.getForApplyId());//查出原来的申请
+			if(userApply.getTimelength() > oldApply.getTimelength()){
+				return false;
+			}
 		}
 		return true;
 	}

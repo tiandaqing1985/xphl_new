@@ -92,21 +92,15 @@ public interface UserApplyMapper
 	public UserApply selectUserApplyByApplyId(Long applyId);
 	
 	/**
-	 * 根据申请id修改申请状态为撤回
-	 */
-	public int updateUserApplyStateById(Long applyId);
-	
-	/**
-	 * 根据申请id销假（修改销假状态和和销假原因）
-	 */
-	public UserApply updateConfirmMasageById(UserApply userApply);
-	
-	/**
-	 * 根据申请id修改status状态为1（是否更新在钉钉考勤表中：0 未更新  1已更新）
-	 * @param applyId
+	 * 根据销假申请对应的请假申请id查询申请信息
+	 * @param forApplyId
 	 * @return
 	 */
-	public int updateUserApplyStatusById(Long applyId);
+	public UserApply selectUserApplyByForApplyId(Long forApplyId);
+	/**
+	 * 根据申请id修改申请状态为撤回
+	 */
+	public int updateUserApplyStateById(Long applyId);	
 	
 	/**
 	 * 查出事假病假的请假单
@@ -128,13 +122,6 @@ public interface UserApplyMapper
 	 * @return
 	 */
 	public Double selectTimeLengthSumByUserApply(UserApply userApply);
-	
-	/**
-	 * 根据条件查询需要人事确认的（待审批和撤回的）申请列表
-	 * @param userApply
-	 * @return
-	 */
-	public List<UserApplyList> selectUserApplyConfirmAsList(UserApply userApply);
 	
 	/**
 	 * 根据条件查询小于一天的病假

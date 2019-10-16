@@ -52,9 +52,10 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label">销假理由：</label>
 			<div class="col-sm-8">
-                <textarea id="details" name="details" type="text" class="form-control" maxlength="500" rows="3" ></textarea>
+                <textarea id="details" name="details" class="form-control" maxlength="500" rows="3" ></textarea>
 			</div>
 		</div>
+		<input id="timelength" name="timelength" style="display:none"/>
 	</form>
     </div>
     <th:block th:include="include :: footer" />
@@ -74,11 +75,32 @@
 	       if ($.validate.form()) {
 	    	 	debugger;
 				var applyId = $("#applyId").val();
+				var leaveType = leave($("#leaveType").val());
 				var starttime = $("#starttime").val();
 				var endtime = $("#endtime").val();
 				var timeapart1 = $("#timeapart1").val();
 				var timeapart2 = $("#timeapart2").val();	
+				var datelength = 0.0;
+				var restlength = 0.0;
 				var betweenFlag = false;
+				
+				//计算休息日时长
+				//年假、调休、事假、病假需要计算休息日
+				if(leaveType == "1" || leaveType == "2" || leaveType == "3" || leaveType == "4"){
+					$.ajax({
+						type:"post",
+						async:false,
+						url:"/system/workingCalendar/count",
+						data:{"isWorkDay":0,"starttime":starttime,"endtime":endtime},
+						dataType:"json",
+						success:function(result){
+							restlength = result;						
+						}
+					}); 
+				}
+				
+				datelength = Datelength(starttime, endtime, timeapart1, timeapart2)-restlength;
+				$("#timelength").val(datelength);
 				
 				if(endtime < starttime){
 					p02.innerText="结束日期不能小于开始日期";
@@ -99,7 +121,7 @@
 					type:"post",
 					async:false,
 					url:"/system/userApply/ifBetween",	
-					data:{"applyId":applyId,"starttime":starttime,"endtime":endtime,"timeapart1":timeapart1, "timeapart2":timeapart2 },
+					data:{"applyId":applyId,"starttime":starttime,"endtime":endtime,"timelength":datelength },
 					dataType:"json",
 					success:function(result){
 						 if(result == "0"){
@@ -121,6 +143,62 @@
 				}
 	       }
 	   };
+	   //计算天数差的函数，通用  
+	       function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式  
+	           var  aDate,  oDate1,  oDate2,  iDays  
+	           aDate  =  sDate1.split("-")  
+	           oDate1  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])    //转换为12-18-2006格式  
+	           aDate  =  sDate2.split("-")  
+	           oDate2  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])  
+	           iDays  =  parseInt(Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数  
+	           return  iDays 
+	       };
+	    	
+	   	function Datelength(sDate1, sDate2, timeapart1, timeapart2){
+			debugger;
+				var timep1 = 0;
+				var timep2 = 0;
+				
+				if(timeapart1 == "1"){
+					timep1 = 0;
+				}else{
+					timep1 = 0.5;
+				}
+				
+				if(timeapart2 == "1"){
+					timep2 = 0.5;
+				}else{
+					timep2 = 1;
+				}
+	   		days = DateDiff(sDate1,  sDate2) - timep1 + timep2;    		
+	   		return days;
+	   	}
+	   	function leave(leaveType){
+	   		var leave = "0";
+	   		
+		   if(leaveType == "年假"){
+			   leave = "1";
+		   }else if(leaveType == "调休"){
+			   leave = "2";
+		   }else if(leaveType =="事假"){
+			   leave = "3";
+		   }else if(leaveType == "病假"){
+			   leave = "4";
+		   }else if(leaveType == "婚假"){
+			   leave = "5";
+		   }else if(leaveType == "产假"){
+			   leave = "6";
+		   }else if(leaveType == "陪产假"){
+			   leave = "7";
+		   }else if(leaveType == "产检假"){
+			   leaveType = "8";
+		   }else if(leaveType == "丧假"){
+			   leave = "9";
+		   }else{
+			   leave = "10";//哺乳假
+		   }
+		   return leave;
+	   	}
    </script>
 </body>
 </html>

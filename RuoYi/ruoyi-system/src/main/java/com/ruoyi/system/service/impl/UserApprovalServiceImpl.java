@@ -400,7 +400,7 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 					HolidayRecord holidayRecord = new HolidayRecord();
 					holidayRecord.setApplyId(userApproval1.getApplyId());
 					holidayRecord.setUseState("2");
-					holidayRecordMapper.updateHolidayRecord(holidayRecord);
+					holidayRecordMapper.updateHolidayRecordByApplyId(holidayRecord);
 
 					/*List<HolidayRecord> holidayRecordList = holidayRecordMapper.selectHolidayRecordList(holidayRecord);
 					if(holidayRecordList != null){
@@ -477,7 +477,7 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 		}
 		
 		//修改当前审批人审批状态
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		userApproval.setApprovalTime(sdf.format(new Date()));
 		userApprovalMapper.updateUserApproval(userApproval);
 		}

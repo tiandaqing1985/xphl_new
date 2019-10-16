@@ -19,25 +19,26 @@
 			$.modal.open("查看申请", url);
 		}
 		function takeBack(id){
-			$.ajax({
-				type:"post",
-				url:"/system/userApply/ifTakeback",
-				data:{"applyId":id},
-				dataType:"json",
-				success:function(result){
-					if(result == "0"){
-						var data = { "ids": id };
-			     	    $.operate.submit("/system/userApply/takeBack", "post", "json", data);
+			if(confirm("确定撤回吗？")){
+				$.ajax({
+					type:"post",
+					url:"/system/userApply/ifTakeback",
+					data:{"applyId":id},
+					dataType:"json",
+					success:function(result){
+						if(result == "0"){
+							var data = { "ids": id };
+				     	    $.operate.submit("/system/userApply/takeBack", "post", "json", data);
+						}
+						else{
+							$.modal.alertWarning("不能执行此操作");
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
 					}
-					else{
-						$.modal.alertWarning("不能执行此操作");
-					}
-				},
-				error:function(){
-					$.modal.alertWarning("请联系管理员");
-				}
-			});
-			
+				});
+			}
 		}
 		function undo(applyId){
 			$.ajax({
@@ -60,25 +61,26 @@
 			});
 		}	
 		function del(applyId){
-			$.ajax({
-				type:"post",
-				url:prefix+"/ifTakeback",
-				data:{"applyId":applyId},
-				dataType:"json",
-				success:function(result){
-					if(result == "0"){
-						var data = { "ids": applyId };
-			     	    $.operate.submit(prefix+"/remove", "post", "json", data);
+			if(confirm("确定删除吗？")){
+				$.ajax({
+					type:"post",
+					url:prefix+"/ifTakeback",
+					data:{"applyId":applyId},
+					dataType:"json",
+					success:function(result){
+						if(result == "0"){
+							var data = { "ids": applyId };
+				     	    $.operate.submit(prefix+"/remove", "post", "json", data);
+						}
+						else{
+							$.modal.alertWarning("不能执行此操作");
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
 					}
-					else{
-						$.modal.alertWarning("不能执行此操作");
-					}
-				},
-				error:function(){
-					$.modal.alertWarning("请联系管理员");
-				}
-			});
-			
+				});
+			}						
 		}
 		function edit(applyId){
 			$.ajax({

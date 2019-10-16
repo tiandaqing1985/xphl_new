@@ -39,9 +39,6 @@ public class UserApply extends BaseEntity
 	private String applyState;
 	/** 审批意见（1同意，2驳回 ，3未操作） */
 	private String approvalState;
-	
-	/** 撤销状态（0未撤销，1已撤销） */
-	private String confirmState;
 	/** 详情 */
 	private String details;
 	/** 请假类型 */
@@ -56,8 +53,6 @@ public class UserApply extends BaseEntity
 	private String prove;
 	/** 有时间后缀的时长*/
 	private String timelengthPlus;
-	/** 是否更新在钉钉考勤表中：0 未更新  1已更新 */
-	private String status;
 	
 	private SysUser sysUser;
 	
@@ -86,17 +81,6 @@ public class UserApply extends BaseEntity
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-
-
-	public String getStatus() {
-		return status;
-	}
-
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 
 	public Long getApplyId() {
 		return applyId;
@@ -196,17 +180,6 @@ public class UserApply extends BaseEntity
 	public void setApplyState(String applyState) {
 		this.applyState = applyState;
 	}
-
-
-	public String getConfirmState() {
-		return confirmState;
-	}
-
-
-	public void setConfirmState(String confirmState) {
-		this.confirmState = confirmState;
-	}
-
 
 	public String getDetails() {
 		return details;
@@ -334,10 +307,10 @@ public class UserApply extends BaseEntity
 		return "UserApply [applyId=" + applyId + ", userId=" + userId + ", userName=" + userName + ", listNum="
 				+ listNum + ", starttime=" + starttime + ", endtime=" + endtime + ", timeapart1=" + timeapart1
 				+ ", timeapart2=" + timeapart2 + ", timeapart3=" + timeapart3 + ", timelength=" + timelength
-				+ ", applyType=" + applyType + ", applyState=" + applyState + ", confirmState=" + confirmState
+				+ ", applyType=" + applyType + ", applyState=" + applyState 
 				+ ", details=" + details + ", leaveType=" + leaveType + ", approvalS=" + approvalS + ", applyTime="
 				+ applyTime + ", forApplyId=" + forApplyId + ", prove=" + prove + ", timelengthPlus=" + timelengthPlus
-				+ ", status=" + status + ", sysUser=" + sysUser + ", sysDept=" + sysDept + ", userApproval="
+				+ ", sysUser=" + sysUser + ", sysDept=" + sysDept + ", userApproval="
 				+ userApproval + ", approverName=" + approverName + "]";
 	}
 

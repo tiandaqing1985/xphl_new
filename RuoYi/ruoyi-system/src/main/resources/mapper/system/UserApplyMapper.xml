@@ -18,7 +18,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="applyType"    column="apply_type"    />
         <result property="applyState"    column="apply_state"    />
         <result property="approvalState"    column="approval_state"    />
-        <result property="confirmState"    column="confirm_state"    />
         <result property="details"    column="details"    />
         <result property="leaveType"    column="leave_type"    />
         <result property="applyTime"    column="apply_time"    />
@@ -28,7 +27,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="prove"  column="prove"/>
         <result property="timelengthPlus"  column="timelengthPlus"/>
         <result property="remark"  column="remark"/>
-        <result property="status"  column="status"/>
         <association property="userApproval" column="approval_id" javaType="UserApproval" resultMap="UserApprovalResult"/>
         <association property="sysUser" column="user_id" javaType="SysUser" resultMap="SysUserResult"/>
         <association property="sysDept" column="dept_id" javaType="SysDept" resultMap="SysDeptResult"/>  
@@ -45,7 +43,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="avatar"       column="avatar"       />
 		<result property="password"     column="password"     />
 		<result property="salt"         column="salt"         />
-		<result property="status"       column="status"       />
 		<result property="delFlag"      column="del_flag"     />
 		<result property="loginIp"      column="login_ip"     />
 		<result property="loginDate"    column="login_date"   />
@@ -79,7 +76,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="leader"     column="leader"      />
 		<result property="phone"      column="phone"       />
 		<result property="email"      column="email"       />
-		<result property="status"     column="status"      />
 		<result property="delFlag"    column="del_flag"    />
 		<result property="parentName" column="parent_name" />
 		<result property="createBy"   column="create_by"   />
@@ -89,10 +85,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<sql id="selectUserApplyVo">
-        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.confirm_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove,
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove,
         		p.approval_id, p.apply_id, p.approval_state, p.approver_id,  p.approval_sight,p.approval_time,
-        		u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
-        		s.user_id, s.dept_id, s.login_name, (s.user_name)approver_name, s.email, s.phonenumber, s.sex, s.avatar, s.password, s.salt, s.status, s.del_flag, s.login_ip, s.login_date, s.create_time, s.remark,s.record,s.intime,s.firstphase,s.secondphase
+        		u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
+        		s.user_id, s.dept_id, s.login_name, (s.user_name)approver_name, s.email, s.phonenumber, s.sex, s.avatar, s.password, s.salt, s.del_flag, s.login_ip, s.login_date, s.create_time, s.remark,s.record,s.intime,s.firstphase,s.secondphase
         from sys_user_apply a 
 	    	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
 	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
@@ -114,7 +110,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="timelength != null "> and a.timelength = #{timelength}</if>
              <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
              <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
-             <if test="confirmState != null  and confirmState != '' "> and a.confirm_state = #{confirmState}</if>
              <if test="details != null  and details != '' "> and a.details = #{details}</if>
              <if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
              <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
@@ -131,12 +126,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<where>
 		     <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
 			 <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
-			 <if test="status != null and status != ''">AND a.STATUS = #{status}</if>	
 		</where>
     </select>
     
     <select id="selectUserApplyByApplyId" parameterType="Long" resultMap="UserApplyResult">
     	select * from sys_user_apply where apply_id=#{applyId}
+    </select>
+    
+   <select id="selectUserApplyByForApplyId" parameterType="Long" resultMap="UserApplyResult">
+    	select * from sys_user_apply where for_applyid=#{forApplyId}
     </select>
     
     <select id="selectUserApplyAsList"  parameterType="UserApply" resultMap="UserApplyResult">
@@ -148,9 +146,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.apply_type = 2 THEN
 		          CONCAT(TRUNCATE(a.timelength,0 ) , '小时')
 		         WHEN a.apply_type = 3 THEN
-		          CONCAT(TRUNCATE(a.timelength,1 ) , '天')
-		          WHEN a.apply_type = 4 THEN
-					CONCAT( TRUNCATE ( a.timelength, 1 ), '天' )
+		          CONCAT(TRUNCATE(a.timelength,1 ) , '天')		        
 		         ELSE 
 		            ''
 	        	END)timelengthPlus,
@@ -162,7 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
 		         ELSE 
-		            '取消请假'
+		            ''
 	        	END)apply_type,  
 		        (CASE
 		         WHEN a.apply_state = 1 THEN
@@ -178,14 +174,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         ELSE 
 		            ''
 		        END)apply_state, 
-		        (CASE
-		         WHEN a.confirm_state = 0 THEN
-		          '未确认'
-		         WHEN a.confirm_state = 1 THEN
-		          '已确认'
-		         ELSE 
-		            ''
-		        END)confirm_state, a.details, 
+		        a.details, 
 		        (CASE
 		         WHEN a.leave_type = 1 THEN
 		          '年假'
@@ -222,7 +211,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 						) approval_state,
         		 
         		 p.approver_id,  (p.approval_sight)approval_s ,p.approval_time,
-        		u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
+        		u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
         		(s.user_name)approver_name
         from sys_user_apply a 
 	    	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
@@ -234,7 +223,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="timelength != null "> and a.timelength = #{timelength}</if>
              <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
              <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
-             <if test="confirmState != null  and confirmState != '' "> and a.confirm_state = #{confirmState}</if>
              <if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
              <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
              <if test="prove != null and prove != '' ">and a.prove = #{prove}</if>
@@ -243,85 +231,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="approvalS != null and approvalS != '' ">and p.approval_sight = #{approvalS}</if>
          </where>
          ORDER BY a.apply_id DESC
-    </select>
-    
-     <select id="selectUserApplyConfirmAsList"  parameterType="UserApply" resultMap="UserApplyResult">
-    	select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength,a.for_applyid, a.prove,
-    			(CASE
-		         WHEN a.apply_type = 1 THEN
-		          '请假'
-		         WHEN a.apply_type = 2 THEN
-		          '加班'
-		         WHEN a.apply_type = 3 THEN
-		          '销假'
-		         ELSE 
-		            '取消请假'
-	        	END)apply_type,  
-		        (CASE
-		         WHEN a.apply_state = 1 THEN
-		          '待审批'
-		         WHEN a.apply_state = 2 THEN
-		          '已撤回'
-		         WHEN a.apply_state = 3 THEN
-		          '申请成功'
-		         WHEN a.apply_state = 4 THEN
-		          '申请失败'
-		         WHEN a.apply_state = 5 THEN
-		      		'已销假'
-		         ELSE 
-		            ''
-		        END)apply_state, 
-		        (CASE
-		         WHEN a.confirm_state = 0 THEN
-		          '未确认'
-		         WHEN a.confirm_state = 1 THEN
-		          '已确认'
-		         ELSE 
-		            ''
-		        END)confirm_state, a.details, 
-		        (CASE
-		         WHEN a.leave_type = 1 THEN
-		          '年假'
-		         WHEN a.leave_type = 2 THEN
-		          '调休'
-		         WHEN a.leave_type = 3 THEN
-		          '事假'
-		         WHEN a.leave_type = 4 THEN
-		          '病假'
-		         WHEN a.leave_type = 5 THEN
-		          '婚假'
-		         WHEN a.leave_type = 6 THEN
-		          '产假'
-		         WHEN a.leave_type = 7 THEN
-		          '陪产假'
-		         WHEN a.leave_type = 8 THEN
-		          '产检假'
-		         WHEN a.leave_type = 9 THEN
-		          '丧假'
-		         ELSE 
-		            ''
-		        END)leave_type, a.apply_time,
-        		p.approval_id, p.apply_id, p.approval_state, p.approver_id,  (p.approval_sight)approval_s ,p.approval_time,
-        		u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
-        		(s.user_name)approver_name
-        from sys_user_apply a 
-	    	LEFT JOIN sys_user_approval p ON p.apply_id = a.`apply_id`
-	    	LEFT JOIN sys_user u ON u.`user_id` = a.`user_id`
-	    	LEFT JOIN sys_user s ON s.user_id = p.approver_id
-    	<where>  
-             <if test="userId != null "> and a.user_id = #{userId}</if>
-             <if test="listNum != null  and listNum != '' "> and a.list_num like concat('%', #{listNum}, '%')</if>
-             <if test="timelength != null "> and a.timelength = #{timelength}</if>
-             <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
-             and a.apply_state  in(1, 2)
-             <if test="confirmState != null  and confirmState != '' "> and a.confirm_state = #{confirmState}</if>
-             <if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
-             <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
-             <if test="prove != null and prove != '' ">and a.prove = #{prove}</if>
-             <if test="approverName != null and approverName != '' ">and s.user_name = #{approverName}</if>
-             <if test="forApplyId != null and forApplyId != '' ">and a.for_applyid = #{forApplyId}</if>
-             <if test="approvalS != null and approvalS != '' ">and p.approval_sight = #{approvalS}</if>
-         </where>
     </select>
 
     <select id="selectUserApplyByIds" parameterType="String" resultMap="UserApplyResult">
@@ -358,7 +267,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
 		         ELSE 
-		            '取消请假'
+		            ''
 		        END)apply_type,  
 		        (CASE
 		         WHEN a.apply_state = 1 THEN
@@ -374,14 +283,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         ELSE 
 		            ''
 		        END)apply_state, 
-		        (CASE
-		         WHEN a.confirm_state = 1 THEN
-		          '未确认'
-		         WHEN a.confirm_state = 2 THEN
-		          '已确认'
-		         ELSE 
-		            ''
-		        END)confirm_state, a.details, 
+		        a.details, 
 		        (CASE
 		         WHEN a.leave_type = 1 THEN
 		          '年假'
@@ -447,7 +349,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
 		         ELSE 
-		            '取消请假'
+		            ''
 		        END)apply_type,  
 		        (CASE
 		         WHEN a.apply_state = 1 THEN
@@ -463,14 +365,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         ELSE 
 		            ''
 		        END)apply_state, 
-		        (CASE
-		         WHEN a.confirm_state = 1 THEN
-		          '未确认'
-		         WHEN a.confirm_state = 2 THEN
-		          '已确认'
-		         ELSE 
-		            ''
-		        END)confirm_state, a.details, 
+		        a.details, 
 		        (CASE
 		         WHEN a.leave_type = 1 THEN
 		          '年假'
@@ -509,7 +404,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
 		         ELSE 
-		            '取消请假'
+		            ''
 		        END)apply_type,  
 		        (CASE
 		         WHEN a.apply_state = 1 THEN
@@ -538,15 +433,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				ELSE '' 
 				END 
 				) approval_state,
-		        
-		        (CASE
-		         WHEN a.confirm_state = 1 THEN
-		          '未确认'
-		         WHEN a.confirm_state = 2 THEN
-		          '已确认'
-		         ELSE 
-		            ''
-		        END)confirm_state, a.details, 
+		        a.details, 
 		        (CASE
 		         WHEN a.leave_type = 1 THEN
 		          '年假'
@@ -587,7 +474,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="timelength != null  ">timelength,</if>
 			<if test="applyType != null  and applyType != ''  ">apply_type,</if>
 			<if test="applyState != null  and applyState != ''  ">apply_state,</if>
-			<if test="confirmState != null  and confirmState != ''  ">confirm_state,</if>
 			<if test="details != null  and details != ''  ">details,</if>
 			<if test="leaveType != null  and leaveType != ''  ">leave_type,</if>
 			<if test="forApplyId != null  and forApplyId != ''  ">for_applyid,</if>
@@ -605,7 +491,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="timelength != null  ">#{timelength},</if>
 			<if test="applyType != null  and applyType != ''  ">#{applyType},</if>
 			<if test="applyState != null  and applyState != ''  ">#{applyState},</if>
-			<if test="confirmState != null  and confirmState != ''  ">#{confirmState},</if>
 			<if test="details != null  and details != ''  ">#{details},</if>
 			<if test="leaveType != null  and leaveType != ''  ">#{leaveType},</if>
 			<if test="forApplyId != null  and forApplyId != ''  ">#{forApplyId},</if>
@@ -627,13 +512,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="timelength != null  ">timelength = #{timelength},</if>
             <if test="applyType != null  and applyType != ''  ">apply_type = #{applyType},</if>
             <if test="applyState != null  and applyState != ''  ">apply_state = #{applyState},</if>
-            <if test="confirmState != null  and confirmState != ''  ">confirm_state = #{confirmState},</if>
             <if test="details != null  and details != ''  ">details = #{details},</if>
             <if test="leaveType != null  and leaveType != ''  ">leave_type = #{leaveType},</if>
             <if test="applyTime != null  ">apply_time = #{applyTime},</if>
             <if test="prove != null and prove != '' ">prove = #{prove}</if>
             <if test="forApplyId != null  and forApplyId != ''  ">for_applyid = #{forApplyId},</if>
-            <if test="status != null and status != ''"> status = #{status},</if>
         </trim>
         where apply_id = #{applyId}
     </update>
@@ -650,15 +533,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
     
     <update id="updateUserApplyStateById" parameterType="Long">
-    	UPDATE `sys_user_apply` SET apply_state = 2, confirm_state = 0 WHERE apply_id = #{applyId}
-    </update>
-    
-    <update id="updateUserApplyStatusById" parameterType="Long">
-    	UPDATE `sys_user_apply` SET status = 2 WHERE apply_id = #{applyId}
-    </update>
-    
-    <update id="updateConfirmMasageById" parameterType="UserApply">
-    	UPDATE `sys_user_apply` SET confirm_state = 1 WHERE apply_id = #{applyId}
+    	UPDATE `sys_user_apply` SET apply_state = 2 WHERE apply_id = #{applyId}
     </update>
     
     <select id="selectLeaveUserApplyByuserId" parameterType="UserApply" resultType="Double">
@@ -726,9 +601,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    	</select>
    	
    	<select id="selectUserApplyListByStartTime" parameterType="UserApply" resultMap="UserApplyResult">
-        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.confirm_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove
         from sys_user_apply a		
         <where>
+        	 <if test="applyId != null "> and a.apply_id = #{applyId}</if>
              <if test="userId != null "> and a.user_id = #{userId}</if>
              <if test="starttime != null "> <![CDATA[ and starttime <= #{starttime} ]]></if>
              <if test="endtime != null "><![CDATA[ and a.endtime >= #{starttime} ]]></if>
@@ -742,7 +618,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     
     <select id="selectUserApplyListByEndTime" parameterType="UserApply" resultMap="UserApplyResult">
-        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.confirm_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove
         from sys_user_apply a	
         <where>
              <if test="userId != null "> and a.user_id = #{userId}</if>

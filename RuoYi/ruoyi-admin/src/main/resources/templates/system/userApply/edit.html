@@ -207,6 +207,7 @@
 				var confirmFlag = false; // 是否需要确认flag
 				var confirmText = "确认";
 				var passFlag = true;//是否通过试用一期
+				var betweenFlag = false;
 				
 				if ($('#prove').val() == null || $('#prove').val() == '') {
 				      proveFlag = false;
@@ -389,7 +390,7 @@
 						}
 					});	
 				}
-				
+				debugger;
 				//验证所请假期 是否与已有申请时段重复 
 				$.ajax({
 					type:"post",
@@ -411,6 +412,31 @@
 						$.modal.alertWarning("请联系管理员");
 					}
 				}); 
+				
+				//验证是否为销假申请且时长是否在原申请时长范围内
+				if(leaveType == "1" || leaveType == "2"){
+					$.ajax({
+						type:"post",
+						async:false,
+						url:"/system/userApply/ifBetween",
+						data:{"applyId":applyId,"starttime":starttime,"endtime":endtime,"timelength":datelength },
+						dataType:"json",
+						success:function(result){
+							 if(result == "0"){
+								 betweenFlag = true;
+							}
+							else{
+								betweenFlag = false;
+								$.modal.alertWarning("销假申请时长不在原申请时长范围内，请重新编辑!");
+								return;
+							}
+						},
+						error:function(){
+							$.modal.alertWarning("请联系管理员");
+						}
+					}); 
+				}
+				
 				//验证所请假期 余额是否足够 
 				$.ajax({
 					type:"post",
@@ -448,7 +474,7 @@
 						
 					})
 				}else{
-					if(flag && repeatFlag && passFlag){
+					if(flag && repeatFlag && passFlag && betweenFlag){
 						save(prefix + "/edit", $('#editForm').serialize());
 					}
 				}

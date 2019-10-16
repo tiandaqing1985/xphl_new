@@ -89,11 +89,7 @@ public interface IUserApplyService
 	 * 根据申请id修改申请状态为撤回
 	 */
 	public int updateUserApplyStateById(Long applyId);
-	
-	/**
-	 * 根据申请id销假（修改销假状态和和销假原因）
-	 */
-	public UserApply updateConfirmMasageById(UserApply userApply);
+
 	/**
 	 * 查出事假病假的请假单
 	 */
@@ -122,12 +118,6 @@ public interface IUserApplyService
 	 * 计算请假时长
 	 */
 	public Double countTimeLength(Date beginTime, Date endtime);
-	/**
-	 * 根据条件查询需要人事确认的（待审批和撤回的）申请列表
-	 * @param userApply
-	 * @return
-	 */
-	public List<UserApplyList> selectUserApplyConfirmAsList(UserApply userApply);
 	
 	/**
 	 * 根据条件查询小于一天的病假
