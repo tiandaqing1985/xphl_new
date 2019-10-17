@@ -55,13 +55,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE a.num =#{num}
 	</select>
 
-<select id="selectAmount" resultType="com.ruoyi.system.domain.finance.FacCostDetailApply">
-		SELECT  a.amount  
-		FROM
-		fac_cost_detail_apply AS a
-		WHERE a.num =#{num}
-	</select>
 
+<select id="selectAmount" resultType="double">
+
+		select ifNull((select
+		sum(amount) from fac_cost_detail_apply where num
+		=#{num}),0);
+	</select>
 
 	<select id="selectFacCostApplyById" parameterType="Long"
 		resultMap="FacCostApplyResult">

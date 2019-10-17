@@ -61,4 +61,6 @@ public interface FacReiAdiApplyMapper
      */
 	public int deleteFacReiAdiApplyByIds(String[] ids);
 	
+	public double selectAmount(String num);
+	
 }

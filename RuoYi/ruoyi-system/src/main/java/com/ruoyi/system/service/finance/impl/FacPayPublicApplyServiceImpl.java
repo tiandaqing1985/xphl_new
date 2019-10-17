@@ -160,8 +160,7 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 
 	@Override
 	public List<FacPayPublicDetailed> dgtail(String num) {
-		return facPayPublicDetailedMapper.selectDetailedList(num);
-
+		return facPayPublicDetailedMapper.selectDetailedList(num); 
 	}
 
 	@Override

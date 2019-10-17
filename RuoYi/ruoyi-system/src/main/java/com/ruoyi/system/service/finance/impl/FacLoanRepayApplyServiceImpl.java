@@ -57,13 +57,12 @@ public class FacLoanRepayApplyServiceImpl implements IFacLoanRepayApplyService
 	@Override
 	public int insertFacLoanRepayApply(FacLoanRepayApply facLoanRepayApply)
 	{ 	facLoanRepayApply.getRepayAmount();
-		Double money=facLoanApplyMapper.FacLoanAmount(facLoanRepayApply.getNum());//总欠款额
+		double money=facLoanApplyMapper.FacLoanAmount(facLoanRepayApply.getNum());//总欠款额
 		List<FacLoanRepayApply> repayApply=facLoanRepayApplyMapper.selectFacLoanRepayApplyList(facLoanRepayApply);
 		if(repayApply==null || repayApply.equals("")){
 			facLoanRepayApply.setArrears(money-facLoanRepayApply.getRepayAmount());//实际欠款金额（元）
 		}else{
 			double s = facLoanRepayApplyMapper.selectAmount(facLoanRepayApply.getNum());
-
 			facLoanRepayApply.setArrears(money-facLoanRepayApply.getRepayAmount());
 		}
 		facLoanRepayApply.setRepayTime(new Date());//还款时间 

@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	 
 	 
-	 <select id="FacLoanAmount" parameterType="Double" resultMap="FacLoanApplyResult">
+	 <select id="FacLoanAmount" resultType="double">
 		select amount from fac_loan_apply
 		where num =#{num}
 	</select>

@@ -64,6 +64,9 @@
     var removeFlag = [[${@permission.hasPermi('system:facHospitalityApply:remove')}]];
     var prefix = ctx + "system/facHospitalityApply";
     var prefixs = ctx + "system/facReimburseApply";
+    var approvalState = [[${@dict.getType('fac_approval_state')}]];
+
+
     $(function () {
         var options = {
             url: prefix + "/list",
@@ -118,8 +121,9 @@
                 {
                     field: 'states',
                     title: '审批结果',
-                    sortable: true
-                },
+                    formatter: function(value, row, index) {
+                        return $.table.selectDictLabel(approvalState, value);
+                }},
                 {
                     title: '操作',
                     align: 'center',

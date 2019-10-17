@@ -63,4 +63,6 @@ public interface FacHospitalityApplyMapper
 	
 	public  FacHospitalityApply detail(String num);
 	
+	public String selectDeptName(Long dept);
+	
 }

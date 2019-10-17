@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where id = #{id}
 	</select>
 
-	<select id="selectMoney" parameterType="double"> 
+	<select id="selectMoney" resultType="double"> 
 		select sum(money) from fac_cost_putup_apply where num =
 		#{num}
 	</select>

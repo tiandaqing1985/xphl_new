@@ -56,10 +56,15 @@ public interface IFacHospitalityApplyService
 	public int deleteFacHospitalityApplyByIds(String ids);
 	
 	/**
-	 * 根据差旅编号查询差旅申请详情
+	 * 查询招待费申请
 	 * @param num
 	 * @return
 	 */
 	FacHospitalityApply deatil(String num);
+	
+	public int insertFacReiHospitalityApply(FacHospitalityApply facHospitalityApply);
+	
+	/***查询部门*/
+	public String selectDeptName(Long dept);
 	
 }

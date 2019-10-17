@@ -53,6 +53,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	     select id, num, dept, userId, zd_name, loanId, zd_date, reason, add_user, total_number, standard_amount, amount, application_time, states from fac_hospitality_apply
    	where num=#{num}
 	</select>
+	
+	
+	
+	 
+   <select id="selectDeptName" resultType="com.ruoyi.system.domain.finance.FacHospitalityApply">
+	     select dept_name from  sys_dept WHERE dept_id=#{dept}
+	</select>
+	
+	
+	
+	
+	
+	
+	
     <insert id="insertFacHospitalityApply" parameterType="FacHospitalityApply" useGeneratedKeys="true" keyProperty="id">
         insert into fac_hospitality_apply
 		<trim prefix="(" suffix=")" suffixOverrides=",">

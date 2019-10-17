@@ -58,8 +58,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </where>
     </select>
         
-    <select id="selectAmount" parameterType="double" resultMap="FacLoanRepayApplyResult">
-       select   sum(repayAmount) from fac_loan_repay_apply where  num = #{num} 
+    <select id="selectAmount" resultType="double">
+    
+    select ifNull((select   sum(repayAmount) from fac_loan_repay_apply where  num = #{num} ),0);
+       
     </select>
         
         

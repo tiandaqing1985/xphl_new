@@ -62,6 +62,7 @@
     var removeFlag = [[${@permission.hasPermi('system:facPayPublicApply:remove')}]];
     var detailFlag = [[${@permission.hasPermi('system:facLoanApply:detail')}]];
     var prefix = ctx + "system/facPayPublicApply";
+    var approvalState = [[${@dict.getType('fac_approval_state')}]];
 
     $(function () {
         var options = {
@@ -113,7 +114,9 @@
                 {
                     field: 'status',
                     title: '审批状态',
-                    sortable: true
+                formatter: function(value, row, index) {
+            return $.table.selectDictLabel(approvalState, value);
+        }
                 },
                 {
                     title: '操作',
