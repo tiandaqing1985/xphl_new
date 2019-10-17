@@ -83,6 +83,10 @@ public class FacReimburseApply extends BaseEntity {
      */ 
     private String status;
     /**
+     * 提交状态 save,submit
+     */
+    private String submitStatus;
+    /**
      * 公出交通申请
      */
     private List<ReiTrafficApply> trafficReiApplyList;
@@ -123,7 +127,14 @@ public class FacReimburseApply extends BaseEntity {
         this.otherReiAdiApplies = otherReiAdiApplies;
     }
 
-   
+    public String getSubmitStatus() {
+        return submitStatus;
+    }
+
+    public void setSubmitStatus(String submitStatus) {
+        this.submitStatus = submitStatus;
+    }
+
     public List<ReiHospitalityApply> getHospitalityApplies() {
         return hospitalityApplies;
     }

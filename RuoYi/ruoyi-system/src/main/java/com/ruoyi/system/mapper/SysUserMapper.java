@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.system.domain.Data;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.UserModel;
 
 /**
  * 用户表 数据层
@@ -201,4 +202,5 @@ public interface SysUserMapper
 	 */
 	public Long selectUserIdByUserNameOnly(String userName);
 
+    List<UserModel> selectAllUserModel();
 }

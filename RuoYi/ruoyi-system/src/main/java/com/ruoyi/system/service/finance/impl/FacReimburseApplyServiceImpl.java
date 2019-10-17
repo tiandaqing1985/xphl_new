@@ -452,6 +452,30 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 		 
 		return facReimburseApplyMapper.traTail(num);
 	}
- 
 
+    @Override
+    public ReiTrafficApply selectFacTransById(String id) {
+        return facReimburseApplyMapper.selectFacTransById(id);
+    }
+
+    @Override
+    public int updateReiTrafficApplyById(ReiTrafficApply reiTrafficApply) {
+        return facReimburseApplyMapper.updateReiTrafficApplyById(reiTrafficApply);
+    }
+
+    @Override
+    public int deleteReiTrafficApplyById(String id) {
+        return facReimburseApplyMapper.deleteReiTrafficApplyById(id);
+    }
+
+    @Override
+    public int insertSaveFacReimburseApply(FacReimburseApply facReimburseApply) {
+        facReimburseApply.setSubmitStatus("save");
+        return facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
+    }
+
+    @Override
+    public int deleteFacReimburseApplyById(String id) {
+        return facReimburseApplyMapper.deleteFacReimburseApplyById(id);
+    }
 }

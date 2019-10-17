@@ -5,13 +5,13 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-add">
-        <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
+    <form class="form-horizontal m" id="form-add" th:object="${data}">
+        <input id="transId" name="id" class="form-control-static" type="hidden" th:value="${id}"/>
         <div class="row">
             <div class="form-group ui-sortable-helper col-md-6">
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>日期</label>
                 <div class="col-sm-9">
-                    <input id="ddDate" name="ddDate" class="form-control" type="date" required>
+                    <input id="ddDate" name="ddDate" class="form-control" type="date" value="dadafafaeaf" required>
                 </div>
             </div>
             <div class="form-group col-md-6">
@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>金额</label>
                 <div class="col-sm-9">
-                    <input id="amount" name="amount" class="form-control" type="text" required>
+                    <input id="amount" name="amount" class="form-control" type="text" th:field="*{amount}" required>
                 </div>
             </div>
             <div class="form-group">
@@ -38,7 +38,7 @@
 
                 <div class="col-sm-9">
                     <div class="input-group">
-                        <input id="user" name="user" class="form-control" type="text" required>
+                        <input id="user" name="user" class="form-control" type="text" th:field="*{user}" required>
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
                                 <span class="caret"></span>
@@ -55,13 +55,13 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>出发地</label>
                 <div class="col-sm-9">
-                    <input id="departure" name="departure" class="form-control" type="text" required>
+                    <input id="departure" name="departure" class="form-control" type="text" th:field="*{departure}" required>
                 </div>
             </div>
             <div class="form-group">
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>目的地</label>
                 <div class="col-sm-9">
-                    <input id="target" name="target" class="form-control" type="text" required>
+                    <input id="target" name="target" class="form-control" type="text" th:field="*{target}" required>
                 </div>
             </div>
         </div>
@@ -70,14 +70,14 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>附单据数</label>
                 <div class="col-sm-9">
-                    <input id="documentNum" name="documentNum" class="form-control" type="text" required>
+                    <input id="documentNum" name="documentNum" class="form-control" type="text" th:field="*{documentNum}" required>
                 </div>
             </div>
             <div class="form-group">
                 <div class="form-group">
                     <label class="col-sm-3 control-label"><span style="color: red; ">*</span>目标单位简称</label>
                     <div class="col-sm-9">
-                        <input id="targetUnit" name="targetUnit" class="form-control" type="text" required>
+                        <input id="targetUnit" name="targetUnit" class="form-control" type="text" th:field="*{targetUnit}" required>
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@
                 <div class="form-group">
                         <label class="col-sm-3 control-label"><span style="color: red; ">*</span>事由</label>
                         <div class="col-sm-9">
-                            <textarea id="reason" name="reason" class="form-control" type="text" required></textarea>
+                            <textarea id="reason" name="reason" class="form-control" type="text" th:field="*{reason}" required></textarea>
                         </div>
                     </div>
                 </div>
@@ -96,11 +96,10 @@
 <th:block th:include="include :: bootstrap-suggest-js" />
 <script type="text/javascript">
     var prefix = ctx + "system/facReimburseApply";
-    var num =$("#num").val();
 
     function submitHandler() {
         if ($.validate.form()) {
-            $.operate.save(prefix + "/tranDetail", $('#form-add').serialize());
+            $.operate.save(prefix + "/editTran", $('#form-add').serialize());
         }
     }
 

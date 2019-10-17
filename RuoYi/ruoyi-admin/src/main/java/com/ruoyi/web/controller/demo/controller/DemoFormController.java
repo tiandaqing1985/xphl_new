@@ -2,6 +2,10 @@ package com.ruoyi.web.controller.demo.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.service.ISysUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -145,6 +149,9 @@ public class DemoFormController
         return prefix + "/autocomplete";
     }
 
+    @Autowired
+    private ISysUserService sysUserService;
+
     /**
      * 获取用户数据
      */
@@ -152,10 +159,10 @@ public class DemoFormController
     @ResponseBody
     public AjaxResult userModel()
     {
+        List<SysUser> sysUsers = sysUserService.selectAllUser();
         AjaxResult ajax = new AjaxResult();
-
         ajax.put("code", 200);
-        ajax.put("value", users);
+        ajax.put("value", sysUsers);
         return ajax;
     }
 

@@ -49,6 +49,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="dataScope"     column="data_scope"    />
 		<result property="status"       column="role_status"    />
 	</resultMap>
+
+	<resultMap id="userModelMap" type="UserModel">
+		<result property="userId" column="user_id"/>
+		<result property="userName" column="user_name"/>
+		<result property="deptId" column="dept_id"/>
+		<result property="deptName" column="dept_name"/>
+	</resultMap>
 	
 	<sql id="selectUserVo">
         select  u.user_id, u.dept_id, u.login_name, u.user_name,u.area, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
@@ -60,7 +67,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 left join sys_role r on r.role_id = ur.role_id
 			 LEFT JOIN sys_user_post p on p.user_id = u.user_id
     </sql>
-	
+
+	<select id="selectAllUserModel" resultMap="userModelMap">
+		select u.user_id,u.user_name,d.dept_id,d.dept_name from sys_user u left join sys_dept d on u.dept_id = d.dept_id
+	</select>
+
 	<select id="selectUserList" parameterType="SysUser" resultMap="SysUserResult">
 		select u.user_id, u.dept_id, u.login_name, u.user_name,u.area, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase, d.dept_name from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id

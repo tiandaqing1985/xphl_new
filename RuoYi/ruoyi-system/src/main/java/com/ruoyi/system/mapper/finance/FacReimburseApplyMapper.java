@@ -112,6 +112,11 @@ public interface FacReimburseApplyMapper
 	 * @return
 	 */
 	int AdiBatchInsert(@Param("list") List<FacReiAdiApply> adiApplies);
-	
-	
+
+
+	ReiTrafficApply selectFacTransById(String id);
+
+	int updateReiTrafficApplyById(ReiTrafficApply reiTrafficApply);
+
+    int deleteReiTrafficApplyById(String id);
 }

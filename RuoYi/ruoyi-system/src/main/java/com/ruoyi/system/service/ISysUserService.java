@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.ruoyi.system.domain.Data;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.UserModel;
 
 /**
  * 用户 业务层
@@ -237,4 +238,6 @@ public interface ISysUserService
 	 * @return
 	 */
 	public Long selectUserIdByUserNameOnly(String recipientName);
+
+    List<UserModel> selectAllUserModel();
 }

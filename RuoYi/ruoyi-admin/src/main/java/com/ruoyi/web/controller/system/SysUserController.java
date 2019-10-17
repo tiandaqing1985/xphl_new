@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+
+import com.ruoyi.system.domain.UserModel;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -277,6 +279,20 @@ public class SysUserController extends BaseController
     public String checkEmailUnique(SysUser user)
     {
         return userService.checkEmailUnique(user);
+    }
+
+    /**
+     * 获取用户数据
+     */
+    @GetMapping("/userModel")
+    @ResponseBody
+    public AjaxResult userModel()
+    {
+        List<UserModel> sysUsers = userService.selectAllUserModel();
+        AjaxResult ajax = new AjaxResult();
+        ajax.put("code", 200);
+        ajax.put("value", sysUsers);
+        return ajax;
     }
 
     /**

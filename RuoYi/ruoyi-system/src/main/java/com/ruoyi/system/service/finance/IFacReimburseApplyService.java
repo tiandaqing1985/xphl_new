@@ -66,7 +66,14 @@ public interface IFacReimburseApplyService
      * @return 结果
      */
 	public AjaxResult insertFacReimburseApply(FacReimburseApply facReimburseApply);
-	
+	/**
+     * 新增报销
+     *
+     * @param facReimburseApply 报销信息
+     * @return 结果
+     */
+	public int insertSaveFacReimburseApply(FacReimburseApply facReimburseApply);
+
 	/**
      * 修改报销
      * 
@@ -105,9 +112,13 @@ public interface IFacReimburseApplyService
      * @return 结果
      */
 	public int insertFacreiAdiApply(FacReiAdiApply reiAdiApply);
-	
-	
-	
-	
 
+
+	ReiTrafficApply selectFacTransById(String id);
+
+	int updateReiTrafficApplyById(ReiTrafficApply reiTrafficApply);
+
+    int deleteReiTrafficApplyById(String id);
+
+	int deleteFacReimburseApplyById(String id);
 }
