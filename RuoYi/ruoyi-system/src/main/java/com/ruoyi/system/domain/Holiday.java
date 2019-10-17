@@ -23,6 +23,7 @@ public class Holiday extends BaseEntity
 	private Integer id;
 	/** 员工id */
 	private Long userId;
+	private Long applyId;
 	/** 假期类型（1年假，2调休） */
 	private String holidayType;
 	/** 是否有效（0否 1是） */
@@ -33,12 +34,18 @@ public class Holiday extends BaseEntity
 	private String overdate;
 	/** 年假值（天） */
 	private Double value;
-	/** 申请单id */
-	private Long applyId;
 	/** 备注 */
 	private String holidayDetail;
 	/** 日期 */
 	private Date idate;
+
+	public Long getApplyId() {
+		return applyId;
+	}
+
+	public void setApplyId(Long applyId) {
+		this.applyId = applyId;
+	}
 
 	public void setId(Integer id) 
 	{
@@ -104,17 +111,6 @@ public class Holiday extends BaseEntity
 		return value;
 	}
 
-	public void setApplyId(Long applyId) 
-	{
-		this.applyId = applyId;
-	}
-
-	public Long getApplyId() 
-	{
-		return applyId;
-	}
-	
-
 	public Date getIdate() {
 		return idate;
 	}
@@ -140,7 +136,6 @@ public class Holiday extends BaseEntity
             .append("createdate", getCreatedate())
             .append("overdate", getOverdate())
             .append("value", getValue())
-            .append("applyId", getApplyId())
             .toString();
     }
 }

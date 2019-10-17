@@ -3,6 +3,7 @@ package com.ruoyi.system.service;
 import com.ruoyi.system.domain.Holiday;
 import com.ruoyi.system.domain.RestHoliday;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.UserApply;
 
 import java.util.List;
 
@@ -86,4 +87,15 @@ public interface IHolidayService
 	 */
 	public List<RestHoliday> selectMyRestByUserId(SysUser sysUser);
 	
+	/**
+	 * 根据原申请还原假期和假期使用记录
+	 * @param applyId 申请id
+	 * @param useState 使用状态(1申请中，2已使用，3撤销，4销假，5被销假，6被驳回)
+	 */
+	public void restoreHoliday(Long applyId, String useState);
+	
+	/**
+	 * 更新假期表，生成年假记录表
+	 */
+	public void createHolidayAndRecord(UserApply userApply);
 }

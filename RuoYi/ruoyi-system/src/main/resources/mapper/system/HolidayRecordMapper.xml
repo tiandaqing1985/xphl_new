@@ -9,6 +9,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="holidayId"    column="holiday_id"    />
         <result property="applyId"    column="apply_id"    />
         <result property="value"    column="value"    />
+        <result property="hvalue"    column="hvalue"    />
         <result property="useState"    column="use_state"    />
         <result property="recordHolidayType"    column="holiday_type"    />
         <association property="holiday" column="id" javaType="Holiday" resultMap="HolidayResult"/>
@@ -29,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<sql id="selectHolidayRecordVo">
         SELECT r.id, r.holiday_id, r.apply_id, r.value, r.use_state,
-       		   h.`apply_id`, h.`availability`, h.`createdate`, h.`holiday_type`, h.`overdate`,h.`user_id`, h.`value`
+       		   h.`availability`, h.`createdate`, h.`holiday_type`, h.`overdate`,h.`user_id`, h.`value` hvalue
     	FROM sys_holiday_record r
 			LEFT JOIN sys_holiday h ON r.`holiday_id` = h.`id`
     </sql>
@@ -57,7 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         ELSE 
 		            ''
 		        END)use_state,
-       		   h.`apply_id`, h.`availability`, h.`createdate`, h.`holiday_type`, h.`overdate`,h.`user_id`, h.`value`
+       		    h.`availability`, h.`createdate`, h.`holiday_type`, h.`overdate`,h.`user_id`, h.`value`
     	FROM sys_holiday_record r
 			LEFT JOIN sys_holiday h ON r.`holiday_id` = h.`id`
         <where>  
@@ -115,6 +116,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<delete id="deleteHolidayRecordById" parameterType="Long">
         delete from sys_holiday_record where id = #{id}
+    </delete>
+    
+    <delete id="deleteHolidayRecordByApplyId" parameterType="Long">
+        delete from sys_holiday_record where apply_id = #{applyId}
     </delete>
 	
     <delete id="deleteHolidayRecordByIds" parameterType="String">
