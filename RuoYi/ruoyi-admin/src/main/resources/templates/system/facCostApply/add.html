@@ -19,12 +19,6 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">申请人：</label>
-            <div class="col-sm-8">
-                <input id="UserId" name="UserId" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
             <label class="col-sm-3 control-label">出差时间：</label>
             <div class="col-sm-8">
                 <input id="outTime" name="outTime" class="form-control" type="date">
@@ -43,18 +37,6 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label">预计费用：</label>
-            <div class="col-sm-8">
-                <input id="moneyEs" name="moneyEs" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">出差目的地：</label>
-            <div class="col-sm-8">
-                <input id="toLocal" name="toLocal" class="form-control" type="text">
-            </div>
-        </div>
-        <div class="form-group">
             <label class="col-sm-3 control-label">事由：</label>
             <div class="col-sm-8">
                 <input id="reason" name="reason" class="form-control" type="text">
@@ -67,6 +49,12 @@
             <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
         </div>
 
+        <div class="col-sm-12 select-table table-striped">
+            <a id="addzhusu" class="btn btn-success" onclick="zAdd()">
+                <i class="fa fa-plus"></i> 住宿安排
+            </a>
+            <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+        </div>
 
         <div class="row">
             <div class="col-sm-offset-5 col-sm-10">
@@ -93,84 +81,158 @@
         focusCleanup: true
     });
 
-    function mAdd(id) {
-        //$.table._option.createUrl = prefix + "/tranDetail";
-        $.modal.open("添加" + $.table._option.modalName, $.operate.addUrl(id), undefined, undefined, function (index, layero) {
-            var iframeWin = layero.find('iframe')[0];
-            iframeWin.contentWindow.submitHandler(index, layero);
-            $.table.refresh();
-            $.modal.close();
-        })
+    function mAdd() {
+        $.table._option.id = "bootstrap-table-1";
+        $.table._option.url = prefix + "/querys/" + num;
+        $.modal.open("行程详细信息", "/system/facCostApply/tranDetail?num=" + num);
     }
 
+    function zAdd() {
+        $.table._option.id = "bootstrap-table-2";
+        $.table._option.url = prefix + "/sleep/" + num;
+        $.modal.open("住宿详细信息", "/system/facCostApply/putAdd?num=" + num);
+    }
+
+    var options1 = {
+        id: "bootstrap-table-1",
+        url: prefix + "/querys/" + num,
+        showSearch: false,
+        showRefresh: false,
+        showToggle: false,
+        showColumns: false,
+        modalName: "行程安排",
+        columns: [
+            {
+                checkbox: true
+            },
+            {
+                field: 'id',
+                title: 'id',
+                visible: false
+            },
+            {
+                field: 'num',
+                title: '差旅编号',
+                sortable: true
+            },
+            {
+                field: 'costDate',
+                title: '时间',
+                sortable: true,
+                formatter: function (value, row, index) {
+                    var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                    return newDate;
+                }
+            },
+            {
+                field: 'vehicle',
+                title: '交通工具',
+                sortable: true
+            },
+            {
+                field: 'departure',
+                title: '出发地',
+                sortable: true
+            },
+            {
+                field: 'target',
+                title: '目的地',
+                sortable: true
+            },
+            {
+                field: 'amount',
+                title: '预计金额',
+                sortable: true
+            },
+            {
+                field: 'reason',
+                title: '工作内容',
+                sortable: true
+            },
+            {
+                title: '操作',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    var actions = [];
+                    actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>修改</a> ');
+                    actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
+                    return actions.join('');
+                }
+            }
+
+        ]
+    };
+    var options2 = {
+        id: "bootstrap-table-2",
+        url: prefix + "/sleep/" + num,
+        showSearch: false,
+        showRefresh: false,
+        showToggle: false,
+        showColumns: false,
+        modalName: "住宿安排",
+        columns: [
+            {
+                checkbox: true
+            },
+            {
+                field: 'id',
+                title: 'id',
+                visible: false
+            },
+            {
+                field: 'num',
+                title: '差旅编号',
+                sortable: true
+            },
+            {
+                field: 'city',
+                title: '入住城市',
+                sortable: true
+            },
+            {
+                field: 'entrytime',
+                title: '入店时间',
+                sortable: true
+            },
+            {
+                field: 'shoptime',
+                title: '离店时间',
+                sortable: true
+            },
+            {
+                field: 'number',
+                title: '入住人数',
+                sortable: true
+            },
+            {
+                field: 'details',
+                title: '入住详情',
+                sortable: true
+            },
+            {
+                field: 'money',
+                title: '住宿金额',
+                sortable: true
+            },
+            {
+                title: '操作',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    var actions = [];
+                    actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>修改</a> ');
+                    actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
+                    return actions.join('');
+                }
+            }
+
+        ]
+    };
 
     $(function () {
-        var options = {
-            id: "bootstrap-table-1",
-            url: prefix + "/querys/" + num,
-            createUrl: prefix + "/tranDetail?id=" + num,
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            modalName: "行程安排",
-            columns: [
-                {
-                    checkbox: true
-                },
-                {
-                    field: 'id',
-                    title: 'id',
-                    visible: false
-                },
-                {
-                    field: 'num',
-                    title: '差旅编号',
-                    sortable: true
-                },
-                {
-                    field: 'costDate',
-                    title: '时间',
-                    sortable: true
-                },
-                {
-                    field: 'vehicle',
-                    title: '交通工具',
-                    sortable: true
-                },
-                {
-                    field: 'departure',
-                    title: '出发的',
-                    sortable: true
-                },
-                {
-                    field: 'target',
-                    title: '目的地',
-                    sortable: true
-                },
-                {
-                    field: 'reason',
-                    title: '工作内容',
-                    sortable: true
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>修改</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
-                }
 
-            ]
-        };
-
-        $.table.init(options);
+        $.table.init(options1);
+        $.table.init(options2);
     });
-
-    window.localStorage.setItem('num', num); //存储数据
 
     function submitHandler() {
         debugger

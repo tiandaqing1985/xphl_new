@@ -1,145 +1,159 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('招待费申请列表')" />
+    <th:block th:include="include :: header('招待费申请列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="formId">
-					<div class="select-list">
-						<ul>
-							<li>
-								招待费编号：<input type="text" name="num"/>
-							</li>
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            招待费编号：<input type="text" name="num"/>
+                        </li>
 
-							<li>
-								部门：<input type="text" name="dept"/>
-							</li>
+                        <li>
+                            部门：<input type="text" name="dept"/>
+                        </li>
 
-							<li>
-								申请人：<input type="text" name="userId"/>
-							</li>
+                        <li>
+                            申请人：<input type="text" name="userId"/>
+                        </li>
 
-							<li>
-								项目名称：<input type="text" name="zdName"/>
-							</li>
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
-			
-	        <div class="btn-group-sm" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:facHospitalityApply:add">
-					<i class="fa fa-plus"></i> 添加
-				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:facHospitalityApply:edit">
-					<i class="fa fa-edit"></i> 修改
-				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:facHospitalityApply:remove">
-					<i class="fa fa-remove"></i> 删除
-				</a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:facHospitalityApply:export">
-						<i class="fa fa-download"></i> 导出
-				 </a>
-			</div>
-			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table" data-mobile-responsive="true"></table>
-			</div>
-		</div>
-	</div>
-    <div th:include="include :: footer"></div>
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:facHospitalityApply:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:facHospitalityApply:remove')}]];
-        var prefix = ctx + "system/facHospitalityApply";
-		var prefixs = ctx + "system/facReimburseApply";
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-				exportUrl: prefix + "/export",
-                modalName: "招待费申请",
-		        showExport: true,
-                columns: [{
-		            checkbox: true
-		        },
-				{
-					field : 'id', 
-					title : 'id',
-					visible: false
-				},
-				{
-					field : 'num',
-					title : '招待费编号',
-					sortable: true
-				},
-				{
-					field : 'dept', 
-					title : '部门',
-					sortable: true
-				},
-				{
-					field : 'userId', 
-					title : '申请人',
-					sortable: true
-				},
-				{
-					field : 'zdName', 
-					title : '项目名称',
-					sortable: true
-				},
-				{
-					field : 'applicationTime', 
-					title : '申请时间',
-					sortable: true
-				},
-				{
-					field : 'states', 
-					title : '审批结果',
-					sortable: true
-				},
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
-						actions.push('<a class="btn btn-danger btn-xs ' + detailFlag + '" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>报销</a>');
-						return actions.join('');
-		            }
-		        }]
-            };
-            $.table.init(options);
-        });
+                        <li>
+                            项目名称：<input type="text" name="zdName"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-
-		function f(id) {
-			var options = {
-				title: "",
-				width:800,
-				height:800,
-				url:prefixs+"/addAll?id="+id,
-				skin: 'layui-layer-gray',
-				btn: ['关闭'],
-				yes: function (index, layero) {
-					layer.close(index);
-				}
-			};
-			$.modal.openOptions(options);
-		}
-
-
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" >
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
+               >
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()"
+               >
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()"
+               >
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:facHospitalityApply:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:facHospitalityApply:remove')}]];
+    var prefix = ctx + "system/facHospitalityApply";
+    var prefixs = ctx + "system/facReimburseApply";
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "招待费申请",
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'num',
+                    title: '招待费编号',
+                    sortable: true
+                },
+                {
+                    field: 'dept',
+                    title: '部门',
+                    sortable: true
+                },
+                {
+                    field: 'userId',
+                    title: '申请人',
+                    sortable: true
+                },
+                {
+                    field: 'zdName',
+                    title: '项目名称',
+                    sortable: true
+                },
+                {
+                    field: 'applicationTime',
+                    title: '申请时间',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
+                },
+                {
+                    field: 'amount',
+                    title: '预算金额',
+                    sortable: true
+                },
+                {
+                    field: 'states',
+                    title: '审批结果',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        if (row.states == 1) {
+                            actions.push('<a class="btn btn-danger btn-xs ' + '" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>报销</a>');
+                        }
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
 
 
-    </script>
+    function f(id) {
+        var options = {
+            title: "",
+            width: 800,
+            height: 800,
+            url: prefix + "/reimbuseDetail?id=" + id,
+            skin: 'layui-layer-gray',
+            btn: ['关闭'],
+            yes: function (index, layero) {
+                layer.close(index);
+            }
+        };
+        $.modal.openOptions(options);
+
+    }
+
+</script>
 </body>
 </html>

@@ -49,7 +49,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFacHospitalityApplyVo"/>
         where id = #{id}
     </select>
-        
+        <select id="detail" resultType="com.ruoyi.system.domain.finance.FacHospitalityApply">
+	     select id, num, dept, userId, zd_name, loanId, zd_date, reason, add_user, total_number, standard_amount, amount, application_time, states from fac_hospitality_apply
+   	where num=#{num}
+	</select>
     <insert id="insertFacHospitalityApply" parameterType="FacHospitalityApply" useGeneratedKeys="true" keyProperty="id">
         insert into fac_hospitality_apply
 		<trim prefix="(" suffix=")" suffixOverrides=",">

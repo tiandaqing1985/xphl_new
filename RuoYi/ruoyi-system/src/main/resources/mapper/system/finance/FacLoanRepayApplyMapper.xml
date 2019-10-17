@@ -45,6 +45,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectFacLoanRepayApplyVo"/>
         where id = #{id}
     </select>
+     <select id="selectList" parameterType="FacLoanRepayApply" resultMap="FacLoanRepayApplyResult">
+        <include refid="selectFacLoanRepayApplyVo"/>
+        <where>  
+              and num = #{num}
+         </where>
+    </select>
+     <select id="selectPayer" parameterType="FacLoanRepayApply" resultMap="FacLoanRepayApplyResult">
+        <include refid="selectFacLoanRepayApplyVo"/>
+        <where>  
+              and payer = #{payer}
+         </where>
+    </select>
+        
+    <select id="selectAmount" parameterType="double" resultMap="FacLoanRepayApplyResult">
+       select   sum(repayAmount) from fac_loan_repay_apply where  num = #{num} 
+    </select>
+        
         
     <insert id="insertFacLoanRepayApply" parameterType="FacLoanRepayApply" useGeneratedKeys="true" keyProperty="id">
         insert into fac_loan_repay_apply

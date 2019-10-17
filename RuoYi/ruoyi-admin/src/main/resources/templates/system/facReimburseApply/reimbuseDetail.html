@@ -1,92 +1,102 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
-<head> 
+<head>
     <th:block th:include="include :: header('初始多表格')"/>
-    <th:block th:include="include :: layout-latest-css" />
-    <th:block th:include="include :: ztree-css" />
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
 </head>
 <body class="gray-bg">
 
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-reiadd">
-<div class="container-div">
-    <div class="row">
-        <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
-        <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
-        <input id="userId" name="msg" class="form-control-static" type="hidden" th:value="${userId}"/>
- <div>
-        <h4 class="form-header h4">日常报销申请</h4>
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报销名称：</label>
-                    <div class="col-sm-8">
-                        <input name="name" autocomplete="off" placeholder="XX月份报销" class="form-control" type="text" maxlength="30" >
+        <div class="container-div">
+            <div class="row">
+                <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
+                <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
+                <input id="userId" name="msg" class="form-control-static" type="hidden" th:value="${userId}"/>
+                <input id="dept" name="dept" class="form-control-static" type="hidden" th:value="${dept}"/>
+                <div>
+                    <h4 class="form-header h4">日常报销申请</h4>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报销名称：</label>
+                                <div class="col-sm-8">
+                                    <input name="name" autocomplete="off" placeholder="XX月份报销" class="form-control"
+                                           type="text" maxlength="30">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">&nbsp&nbsp部门：</label>
+                                <div class="col-sm-8">
+                                    <input name="userName" autocomplete="off" placeholder="悦维联动" class="form-control"
+                                           type="text" maxlength="30" readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">&nbsp&nbsp部门：</label>
-                    <div class="col-sm-8">
-                          <input name="userName" autocomplete="off" placeholder="悦维联动" class="form-control" type="text" maxlength="30" readonly="readonly" >
-                    </div>
-                </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">是否冲抵借款：</label>
-                    <div class="col-sm-8">
-                        <input name="phonenumber" autocomplete="off" placeholder="选择冲抵借款" class="form-control" type="text"  >
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label">是否冲抵借款：</label>
+                                <div class="col-sm-8">
+                                    <a id="addzhusu" onclick="zAdd()">
+                                        <i class="fa fa-plus"></i> 冲抵借款
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-4 control-label"></span>报销编号：</label>
+                                <div class="col-sm-8">
+                                    <input name="num" class="form-control" type="text" th:value="${num}"
+                                           readonly="readonly">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 select-table table-striped">
+                        <a class="btn btn-success" onclick="mAdd(1)">
+                            <i class="fa fa-plus"></i> 交通费报销信息
+                        </a>
+                        <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+                    </div>
+                </div>
+
+                <div class="row" id="animation_box">
+                    <div class="col-sm-12 select-table table-striped">
+                        <a class="btn btn-success" onclick="mAdd(2)">
+                            <i class="fa fa-plus"></i> 招待费报销信息
+                        </a>
+                        <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12 select-table table-striped">
+                        <a class="btn btn-success" onclick="mAdd(3)">
+                            <i class="fa fa-plus"></i> 其他费用报销信息
+                        </a>
+                        <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-offset-5 col-sm-10">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i
+                                class="fa fa-check"></i>保 存
+                        </button>&nbsp;
+                        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
+                                class="fa fa-reply-all"></i>关 闭
+                        </button>
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6">
-                <div class="form-group">
-                    <label class="col-sm-4 control-label"></span>报销编号：</label>
-                    <div class="col-sm-8">
-                        <input name="num" class="form-control" type="text"  th:value="${num}"   readonly="readonly">
-                    </div>
-                </div>
-            </div>
-        </div>
- </div>
-        <div class="row">
-        <div class="col-sm-12 select-table table-striped">
-            <a   class="btn btn-success" onclick="mAdd(1)">
-                <i class="fa fa-plus"></i> 交通费报销信息
-            </a>
-            <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
-        </div>
-        </div>
-    
-    <div class="row"  id="animation_box">
-        <div class="col-sm-12 select-table table-striped">
-            <a   class="btn btn-success" onclick="mAdd(2)">
-                <i class="fa fa-plus"></i> 招待费报销信息 1111
-            </a>
-            <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12 select-table table-striped">
-            <a  class="btn btn-success" onclick="mAdd(3)">
-                <i class="fa fa-plus"></i> 其他费用报销信息
-            </a>
-            <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
-        </div>
-    </div>
-        <div class="row">
-            <div class="col-sm-offset-5 col-sm-10">
-                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i class="fa fa-check"></i>保 存</button>&nbsp;
-                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
-            </div>
-        </div>
-</div>
-</form>
+    </form>
 </div>
 
 <div th:include="include :: footer"></div>
@@ -98,30 +108,38 @@
     var num = $("#num").val();
     var msg = $("#msg").val();
     var userId = $("#userId").val();
+    var dept = $("#dept").val();
 
+    function zAdd() {
+        $.modal.open("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
+    }
 
-
-    if(userId = 1 ){
+    if (dept = 256) {
         $("#animation_box").hide();//隐藏
-    }else{
+    } else {
         $("#animation_box").show();//显示
     }
-    function mAdd(id){
-        if(id==1){
-            $.table._option.createUrl = prefix + "/tranDetail" ;
-            $.operate.add();
-        } else  if(id==2){
-            $.table._option.createUrl = prefix + "/addAll";
-            $.operate.add();
-        } else  if(id==3){
-            $.table._option.createUrl = prefix + "/otherDetail";
-            $.operate.add();
+
+    function mAdd(id) {
+        if (id == 1) {
+            $.table._option.id = "bootstrap-table-1";
+            $.table._option.url = prefix + "/addTraDetail";
+            $.modal.open("交通添加", "/system/facReimburseApply/tranDetail?num=" + num);
+        } else if (id == 2) {
+            $.table._option.id = "bootstrap-table-2";
+            $.table._option.url = prefix + "/addAll";
+            $.modal.open("招待费添加", "/system/facReimburseApply/addAll?num=" + num);
+        } else if (id == 3) {
+            $.table._option.id = "bootstrap-table-3";
+            $.table._option.url = prefix + "/otherDetail";
+            $.modal.open("其他添加", "/system/facReimburseApply/otherDetail?num=" + num);
         }
     }
+
     $(function () {
         var options = {
             id: "bootstrap-table-1",
-            createUrl: prefix + "/tranDetail?id="+num,
+            url: prefix + "/addTraDetail",
             showSearch: false,
             showRefresh: false,
             showToggle: false,
@@ -132,33 +150,55 @@
                     checkbox: true
                 },
                 {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                }, {
                     field: 'num',
-                    title: '报销编号'
+                    title: '报销编号',
+                    sortable: true
                 },
                 {
-                    field: 'type',
-                    title: '报销类型'
+                    field: 'ddDate',
+                    title: '日期',
+                    sortable: true
                 },
                 {
-                    field: 'userName',
-                    title: '用户姓名'
+                    field: 'targetUnit',
+                    title: '目标单位简称',
+                    sortable: true
                 },
                 {
                     field: 'amount',
-                    title: '报销金额'
+                    title: '金额',
+                    sortable: true
                 },
                 {
-                    field: 'reimburseTime',
-                    title: '报销时间'
+                    field: 'user',
+                    title: '人员',
+                    sortable: true
                 },
                 {
-                    field: 'status',
-                    title: '审批状态',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(datas, value);
-                    }
+                    field: 'departure',
+                    title: '出发地',
+                    sortable: true
                 },
+                {
+                    field: 'target',
+                    title: '目的地',
+                    sortable: true
+                } ,
+                {
+                    field: 'type',
+                    title: '类型 ',
+                    sortable: true
+                },
+                {
+                    field: 'num',
+                    title: '申请编号',
+                    sortable: true
+                },
+
                 {
                     title: '操作',
                     align: 'center',
@@ -179,7 +219,7 @@
 
         var options = {
             id: "bootstrap-table-2",
-            createUrl: prefix + "/addAll?num=" + num,
+            Url: prefix + "/addAll",
             showSearch: false,
             showRefresh: false,
             showToggle: false,
@@ -217,7 +257,7 @@
                     {
                         field: 'reason',
                         title: '事由'
-                    }, 
+                    },
                     {
                         field: 'documentNum',
                         title: '单据数'
@@ -250,12 +290,12 @@
     $(function () {
         var options = {
             id: "bootstrap-table-3",
-            url: prefix + "/otherDetail?num=" + num,
+            url: prefix + "/otherDetail",
             showSearch: false,
             showRefresh: false,
             showToggle: false,
             showColumns: false,
-            modelName: "行政费用申请",
+            modelName: "其他费用申请",
             columns: [
                 [
                     {
@@ -288,7 +328,7 @@
                     {
                         field: 'reason',
                         title: '事由'
-                    }, 
+                    },
                     {
                         field: 'documentNum',
                         title: '单据数'
@@ -317,11 +357,12 @@
         };
         $.table.init(options);
     });
+
     function submitHandler() {
         debugger;
         if ($.validate.form()) {
             $.operate.save(prefix + "/add", $('#form-reiadd').serialize());
-    }
+        }
     }
 
 </script>

@@ -1,25 +1,32 @@
 package com.ruoyi.system.service.finance.impl;
 
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.enums.FacApplyType;
-import com.ruoyi.common.utils.IdWorker;
-import com.ruoyi.system.domain.finance.*;
-import com.ruoyi.system.mapper.UserApplyMapper;
-import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
-import com.ruoyi.system.mapper.finance.FacReimburseApplyMapper;
-import com.ruoyi.system.service.ISysUserService;
-import com.ruoyi.system.service.finance.ApprovalProcessService;
-import com.ruoyi.system.service.finance.IFacReimburseApplyService;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.math.BigDecimal;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.enums.FacApplyType;
+import com.ruoyi.common.utils.IdWorker;
+import com.ruoyi.system.domain.finance.FacReiAdiApply;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
+import com.ruoyi.system.domain.finance.FacSysUserApproval; 
+import com.ruoyi.system.domain.finance.ReiHospitalityApply;
+import com.ruoyi.system.domain.finance.ReiTrafficApply;
+import com.ruoyi.system.mapper.UserApplyMapper;
+import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
+import com.ruoyi.system.mapper.finance.FacReiAdiApplyMapper;
+import com.ruoyi.system.mapper.finance.FacReimburseApplyMapper;
+import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.system.service.finance.ApprovalProcessService;
+import com.ruoyi.system.service.finance.IFacReimburseApplyService; 
 
 /**
  * 报销 服务层实现
@@ -30,10 +37,7 @@ import java.util.List;
 @Service
 public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
-    /**
-     * 王梦 user_id
-     */
-    private static final Long WANG_MENG = 196L;
+    
 
     private static final String CEO_id = "101";
 
@@ -46,6 +50,8 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
     ApprovalProcessMapper approvalProcessMapper;
     @Autowired
     private UserApplyMapper userApplyMapper;
+    @Autowired
+    private FacReiAdiApplyMapper facReiAdiApplyMapper;
 
     @Autowired
     private FacReimburseApplyMapper facReimburseApplyMapper;
@@ -62,7 +68,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
     }
 
     @Override
-    public FacReimburseApply deatil(String num) {
+    public FacReimburseApply deatil(String num) {  
         FacReimburseApply facReimburseApply = facReimburseApplyMapper
                 .detail(num);
         // 招待费用
@@ -72,10 +78,10 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
             facReimburseApply.setHospitalityApplies(hospitalityApplyList);
         }
         // 行政和其他
-        List<ReiAdiApply> applies = facReimburseApplyMapper.adiTail(num);
-        if (applies != null && applies.size() > 0) {
-            facReimburseApply.setOtherReiAdiApplies(applies);
-        }
+       // List<FacReiAdiApply> applies = facReimburseApplyMapper.adiTail(num);
+      //  if (applies != null && applies.size() > 0) {
+         //   facReimburseApply.setOtherReiAdiApplies(applies);
+      //  }
         // 加班交通申请和公共交通申请
         List<ReiTrafficApply> traTail = facReimburseApplyMapper.traTail(num);
         if (traTail != null && traTail.size() > 0) {
@@ -115,10 +121,8 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
             IdWorker idWorker = new IdWorker(0, 1);
             facReimburseApply.setNum(FacApplyType.REIMBURSE.getIdentification()
                     + idWorker.nextId());
-            facReimburseApply.setReimburseTime(new Date());
-            BigDecimal allApplyAmount = getApplyAmount(facReimburseApply);
-            facReimburseApply.setAmount(allApplyAmount.doubleValue());
-            double num = allApplyAmount.doubleValue();
+            facReimburseApply.setReimburseTime(new Date()); 
+             double num =20 ; 
 
             BigDecimal num1 = new BigDecimal("2000");
 
@@ -170,7 +174,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     } else {
                         // 财务
                         FacSysUserApproval facSysUserApproval1 = new FacSysUserApproval();
-                        facSysUserApproval1.setApprovalId(new Long("154"));
+                        facSysUserApproval1.setApprovalId(new Long("154"));//待改
                         facSysUserApproval1.setApprovalTime(new Date());
                         facSysUserApproval1.setApprovalLevel(2);
                         facSysUserApproval1
@@ -206,7 +210,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                 if (facReimburseApply.getTrafficReiApplyList() != null
                                         && facReimburseApply.getTrafficReiApplyList().get(0).getType().equals("2")) {
                                     center.setCreateTime(new Date());
-                                    center.setApproverId(new Long("196"));
+                                    center.setApproverId(new Long("196"));//待改
                                     level = level + 1;
                                     center.setApprovalLevel(level);
                                     center.setApplyId(
@@ -215,7 +219,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                 }
                                 // 财务
                                 center.setCreateTime(new Date());
-                                center.setApproverId(new Long("154"));
+                                center.setApproverId(new Long("154"));//待改
                                 center.setApprovalLevel(++level);
                                 center.setApplyId(facReimburseApply.getNum());
                                 approvalProcessMapper.insert(center);
@@ -410,73 +414,44 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
         return facReimburseApplyMapper
                 .deleteFacReimburseApplyByIds(Convert.toStrArray(ids));
     }
+ 
+     
+	@Override
+	public int insertFacreiAdiApply(FacReiAdiApply reiAdiApply) {   
+		 List<FacReiAdiApply> reiAdiApplies = new ArrayList<FacReiAdiApply>();
+		 reiAdiApplies.add(reiAdiApply);   
+		 return facReiAdiApplyMapper.insertFacReiAdiApply(reiAdiApply);  
+	}
 
-    /**
-     * 获取总的报销申请金额
-     *
-     * @param facReimburseApply
-     * @return
-     */
-    @Transactional
-    public BigDecimal getApplyAmount(FacReimburseApply facReimburseApply) {
-        BigDecimal allApplyAmount = null;
-        try {
-            allApplyAmount = new BigDecimal(0);
-            // 交通申请
-            if (facReimburseApply.getTrafficReiApplyList() != null
-                    && facReimburseApply.getTrafficReiApplyList().size() > 0) {
-                List<ReiTrafficApply> trafficReiApplyList = facReimburseApply
-                        .getTrafficReiApplyList();
-                for (ReiTrafficApply reiTrafficApply : trafficReiApplyList) {
-                    reiTrafficApply.setDdDate(new Date());
-                    reiTrafficApply
-                            .setApplyUser(facReimburseApply.getLoanUser());
-                    reiTrafficApply.setNum(facReimburseApply.getNum());
-                }
-                System.out.println(trafficReiApplyList);
-                facReimburseApplyMapper.TrafficBatchInsert(trafficReiApplyList);
-                BigDecimal publicTrafficApply = new BigDecimal(
-                        facReimburseApply.getTrafficReiApplyList().stream()
-                                .mapToDouble(ReiTrafficApply::getAmount).sum());
-                allApplyAmount = allApplyAmount.add(publicTrafficApply);
-                // 招待费申请
-            } else if (facReimburseApply.getHospitalityApplies() != null
-                    && facReimburseApply.getHospitalityApplies().size() > 0) {
-                List<ReiHospitalityApply> hospitalityApplies = facReimburseApply
-                        .getHospitalityApplies();
-                for (ReiHospitalityApply hospitalityApply : hospitalityApplies) {
-                    hospitalityApply.setUser(facReimburseApply.getLoanUser());
-                    hospitalityApply.setApplyNum(facReimburseApply.getNum());
-                    hospitalityApply.setDdDate(new Date());
-                }
-                facReimburseApplyMapper.HospBatchInsert(hospitalityApplies);
-                BigDecimal hospApply = new BigDecimal(facReimburseApply
-                        .getHospitalityApplies().stream()
-                        .mapToDouble(ReiHospitalityApply::getAmount).sum());
-                allApplyAmount = allApplyAmount.add(hospApply);
+	@Override
+	public int insertReiTrafficApply(ReiTrafficApply reiTrafficApply) {
+		 List<ReiTrafficApply> reiAdiApplies = new ArrayList<ReiTrafficApply>();
+		 reiAdiApplies.add(reiTrafficApply);  
+		 return facReimburseApplyMapper.TrafficBatchInsert(reiAdiApplies); 
+		   
+	}
 
-            }
-            // 其他费用申请
-            else if (facReimburseApply.getOtherReiAdiApplies() != null
-                    && facReimburseApply.getOtherReiAdiApplies().size() > 0) {
-                List<ReiAdiApply> reiAdiApplies = facReimburseApply.getOtherReiAdiApplies();
-                for (ReiAdiApply reiAdiApply : reiAdiApplies) {
-                    reiAdiApply.setType("2");
-                    reiAdiApply.setApplyNum(facReimburseApply.getNum());
-                    reiAdiApply.setUser(facReimburseApply.getLoanUser());
-                }
-                facReimburseApplyMapper.AdiBatchInsert(reiAdiApplies);
-                BigDecimal otherApply = new BigDecimal(
-                        facReimburseApply.getOtherReiAdiApplies().stream()
-                                .mapToDouble(ReiAdiApply::getAmount).sum());
-                allApplyAmount = allApplyAmount.add(otherApply);
-            }
-        } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus()
-                    .setRollbackOnly();
-            e.printStackTrace();
-        }
-        return allApplyAmount;
-    }
+	@Override
+	public int insertReiHospitalityApply(
+			ReiHospitalityApply reiHospitalityApply) {
+		 List<ReiHospitalityApply> reiAdiApplies = new ArrayList<ReiHospitalityApply>();
+		 reiAdiApplies.add(reiHospitalityApply);  
+		 return facReimburseApplyMapper.HospBatchInsert(reiAdiApplies); 
+		      
+	} 
+
+	@Override
+	public List<FacReiAdiApply> selectFacReiAdiApply(String num) {
+		FacReiAdiApply facReiAdiApply = new FacReiAdiApply();
+		facReiAdiApply.setNum(num);
+		return facReiAdiApplyMapper.selectFacReiAdiApplyList(facReiAdiApply);
+	}
+
+	@Override
+	public List<ReiTrafficApply> selectReiTrafficApply(String num) {
+		 
+		return facReimburseApplyMapper.traTail(num);
+	}
+ 
 
 }

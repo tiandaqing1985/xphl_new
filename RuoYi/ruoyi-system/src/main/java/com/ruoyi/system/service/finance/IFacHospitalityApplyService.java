@@ -4,6 +4,7 @@ package com.ruoyi.system.service.finance;
 
 import java.util.List;
 
+import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacHospitalityApply;
 
 /**
@@ -53,5 +54,12 @@ public interface IFacHospitalityApplyService
      * @return 结果
      */
 	public int deleteFacHospitalityApplyByIds(String ids);
+	
+	/**
+	 * 根据差旅编号查询差旅申请详情
+	 * @param num
+	 * @return
+	 */
+	FacHospitalityApply deatil(String num);
 	
 }

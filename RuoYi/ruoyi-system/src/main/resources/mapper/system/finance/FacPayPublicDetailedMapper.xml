@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.finance.FacPayPublicDetailedMapper">
+    
+    <resultMap type="FacPayPublicDetailed" id="FacPayPublicDetailedResult">
+        <result property="id"    column="id"    />
+        <result property="num"    column="num"    />
+        <result property="name"    column="name"    />
+        <result property="reson"    column="reson"    />
+        <result property="money"    column="money"    />
+        <result property="detail"    column="detail"    />
+    </resultMap>
+	
+	<sql id="selectFacPayPublicDetailedVo">
+        select id, num, name, reson, money, detail from fac_pay_public_detailed
+    </sql>
+	
+    <select id="selectFacPayPublicDetailedList" parameterType="FacPayPublicDetailed" resultMap="FacPayPublicDetailedResult">
+        <include refid="selectFacPayPublicDetailedVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="num != null  and num != '' "> and num = #{num}</if>
+             <if test="name != null  and name != '' "> and name = #{name}</if>
+             <if test="reson != null  and reson != '' "> and reson = #{reson}</if>
+             <if test="money != null "> and money = #{money}</if>
+             <if test="detail != null  and detail != '' "> and detail = #{detail}</if>
+         </where>
+    </select>
+    
+    
+     <select id="selectDetailedList" parameterType="FacPayPublicDetailed" resultMap="FacPayPublicDetailedResult">
+          select id, num, name, reson, money, detail from fac_pay_public_detailed where num = #{num}
+    </select>
+    
+    
+    <select id="selectFacPayPublicDetailedById" parameterType="Long" resultMap="FacPayPublicDetailedResult">
+        <include refid="selectFacPayPublicDetailedVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFacPayPublicDetailed" parameterType="FacPayPublicDetailed" useGeneratedKeys="true" keyProperty="id">
+        insert into fac_pay_public_detailed
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">num,</if>
+			<if test="name != null  and name != ''  ">name,</if>
+			<if test="reson != null  and reson != ''  ">reson,</if>
+			<if test="money != null  ">money,</if>
+			<if test="detail != null  and detail != ''  ">detail,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">#{num},</if>
+			<if test="name != null  and name != ''  ">#{name},</if>
+			<if test="reson != null  and reson != ''  ">#{reson},</if>
+			<if test="money != null  ">#{money},</if>
+			<if test="detail != null  and detail != ''  ">#{detail},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateFacPayPublicDetailed" parameterType="FacPayPublicDetailed">
+        update fac_pay_public_detailed
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null  and num != ''  ">num = #{num},</if>
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="reson != null  and reson != ''  ">reson = #{reson},</if>
+            <if test="money != null  ">money = #{money},</if>
+            <if test="detail != null  and detail != ''  ">detail = #{detail},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteFacPayPublicDetailedById" parameterType="Long">
+        delete from fac_pay_public_detailed where id = #{id}
+    </delete>
+	
+    <delete id="deleteFacPayPublicDetailedByIds" parameterType="String">
+        delete from fac_pay_public_detailed where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

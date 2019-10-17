@@ -1,14 +1,13 @@
 package com.ruoyi.system.domain.finance;
 
-import com.ruoyi.common.utils.DefaultFiled;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import com.ruoyi.common.core.domain.BaseEntity;
-import org.hibernate.validator.constraints.CreditCardNumber;
-
-import javax.validation.constraints.Max;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.common.utils.DefaultFiled;
 
 /**
  * 对公申请表 fac_pay_public_apply

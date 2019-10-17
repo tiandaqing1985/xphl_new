@@ -42,7 +42,7 @@ public class FacUserApprovalController extends BaseController {
 	/**
 	 * 查询财务审批列表
 	 */
-	@RequiresPermissions("system:facUserApproval:list")
+
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(FacUserApproval facUserApproval) {
@@ -57,7 +57,6 @@ public class FacUserApprovalController extends BaseController {
 	/**
 	 * 导出财务审批列表
 	 */
-	@RequiresPermissions("system:facUserApproval:export")
 	@PostMapping("/export")
 	@ResponseBody
 	public AjaxResult export(FacUserApproval facUserApproval) {
@@ -79,7 +78,6 @@ public class FacUserApprovalController extends BaseController {
 	/**
 	 * 新增保存财务审批
 	 */
-	@RequiresPermissions("system:facUserApproval:add")
 	@Log(title = "财务审批", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -103,7 +101,6 @@ public class FacUserApprovalController extends BaseController {
 	/**
 	 * 修改保存财务审批
 	 */
-	@RequiresPermissions("system:facUserApproval:edit")
 	@Log(title = "财务审批", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -115,7 +112,6 @@ public class FacUserApprovalController extends BaseController {
 	/**
 	 * 删除财务审批
 	 */
-	@RequiresPermissions("system:facUserApproval:remove")
 	@Log(title = "财务审批", businessType = BusinessType.DELETE)
 	@PostMapping("/remove")
 	@ResponseBody

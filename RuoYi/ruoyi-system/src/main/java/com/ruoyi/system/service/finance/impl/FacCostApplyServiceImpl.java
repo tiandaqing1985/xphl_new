@@ -11,9 +11,11 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacCostDetailApply;
+import com.ruoyi.system.domain.finance.FacCostPutupApply;
 import com.ruoyi.system.domain.finance.FacSysUserApproval;
 import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
 import com.ruoyi.system.mapper.finance.FacCostApplyMapper;
+import com.ruoyi.system.mapper.finance.FacCostPutupApplyMapper;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCostApplyService;
 
@@ -31,7 +33,8 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 	private ApprovalProcessMapper approvalProcessMapper;
 	@Autowired
 	private ISysUserService iSysUserService;
-	
+	@Autowired
+	private FacCostPutupApplyMapper facCostPutupApplyMapper; 
 	/**
 	 * 查询差旅申请信息
 	 * 
@@ -54,8 +57,7 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 	@Override
 	public List<FacCostApply> selectFacCostApplyList(
 			FacCostApply facCostApply) { 
-		List<FacCostApply> list =  facCostApplyMapper.selectFacCostApplyList(facCostApply); 
-		list.get(0).setFacCostDetail(facCostApplyMapper.adiTail(list.get(0).getNum())); 
+		List<FacCostApply> list =  facCostApplyMapper.selectFacCostApplyList(facCostApply);
 		return list;
 	}
 
@@ -68,6 +70,10 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 	 */
 	@Override
 	public int insertFacCostApply(FacCostApply facCostApply) { 
+		
+		double a=facCostPutupApplyMapper.selectMoney(facCostApply.getNum());
+	 	double b=facCostApplyMapper.selectAmount(facCostApply.getNum());  
+	 	facCostApply.setMoneyEs(a);  
 		facCostApply.setStatus("3");
 		FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
 		facSysUserApproval.setApprovalId(facCostApply.getUserId());
@@ -79,7 +85,7 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 		Long leaderId = iSysUserService.selectApproverIdByApplyerId(facCostApply.getUserId());//所在部门负责人id
 		Long upLeaderId =iSysUserService.selectUpApproverIdByApplyerId(facCostApply.getUserId());//所在部门负责人的上级leader
 		Long approvalId = 0L;//部门负责人id  审批人
-		if(leaderId.equals(facCostApply.getUserId())){	//判断用户是否部门负责人  确定一、二级审批人id
+		if(facCostApply.getUserId().equals(leaderId)){	//判断用户是否部门负责人  确定一、二级审批人id
 			facSysUserApproval.setApproverId(upLeaderId); //一级审批人id	
 			approvalId = upLeaderId; 
 		} 
@@ -148,10 +154,10 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 	public FacCostApply deatil(String num) { 
 		FacCostApply facCostApply = facCostApplyMapper.detail(num);
 			
-			List<FacCostDetailApply> facCostDetailApplyList = facCostApplyMapper.adiTail(num);
-			if (facCostDetailApplyList.size() > 0 && facCostDetailApplyList != null) {
-				facCostApply.setFacCostDetail(facCostDetailApplyList); 
-			}  
+//			List<FacCostDetailApply> facCostDetailApplyList = facCostApplyMapper.adiTail(num);
+//			if (facCostDetailApplyList.size() > 0 && facCostDetailApplyList != null) {
+//				facCostApply.setFacCostDetail(facCostDetailApplyList); 
+//			}  
 		return facCostApply;
 	}
 	
@@ -174,6 +180,12 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 		 
 		return facCostApplyMapper.insertFacCostDetailApply(facCostDetailApply);
 		 
+	}
+
+	@Override
+	public int insertFacCostPutupApply(FacCostPutupApply facCostPutupApply) {
+		// TODO Auto-generated method stub
+		return facCostPutupApplyMapper.insertFacCostPutupApply(facCostPutupApply);
 	}
 	
 	

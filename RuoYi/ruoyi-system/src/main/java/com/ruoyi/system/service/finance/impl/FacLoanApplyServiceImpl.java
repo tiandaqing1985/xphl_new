@@ -63,7 +63,7 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
     @Transactional
     @Override
     public int insertFacLoanApply(FacLoanApply facLoanApply) {
-
+        facLoanApply.setCreateTime(new Date());
         facLoanApply.setApplyStatus("3");
         FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
         facSysUserApproval.setApprovalId(facLoanApply.getLoanUser());
@@ -77,7 +77,7 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
         Long upLeaderId = iSysUserService
                 .selectUpApproverIdByApplyerId(facLoanApply.getLoanUser());// 所在部门负责人的上级leader
         Long approvalId = 0L;// 部门负责人id 审批人
-        if (leaderId.equals(facLoanApply.getLoanUser())) { // 判断用户是否部门负责人
+        if (facLoanApply.getLoanUser().equals(leaderId)) { // 判断用户是否部门负责人
             // 确定一、二级审批人id
             facSysUserApproval.setApproverId(upLeaderId); // 一级审批人id
             approvalId = upLeaderId;

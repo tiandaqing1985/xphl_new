@@ -61,4 +61,6 @@ public interface FacHospitalityApplyMapper
      */
 	public int deleteFacHospitalityApplyByIds(String[] ids);
 	
+	public  FacHospitalityApply detail(String num);
+	
 }

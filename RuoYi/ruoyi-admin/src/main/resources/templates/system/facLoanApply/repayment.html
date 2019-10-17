@@ -31,7 +31,7 @@
             var datas = [[${@dict.getType('sys_normal_disable')}]];
             var num = $("#num").val();
             var msg = $("#msg").val();
-debugger;
+
             $(function () {
                 var options = {
                     id: "bootstrap-table-1",
@@ -68,17 +68,29 @@ debugger;
                         {
                             field: 'createTime',
                             title: '创建时间',
-                            sortable: true
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return  newDate;
+                            }
                         },
                         {
                             field: 'loanTime',
                             title: '借款时间',
-                            sortable: true
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return  newDate;
+                            }
                         },
                         {
                             field: 'repayTime',
                             title: '预计还款时间',
-                            sortable: true
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return  newDate;
+                            }
                         },
                         {
                             field: 'facOperate',
@@ -101,21 +113,15 @@ debugger;
             });
 
             function add(){
-                debugger;
-                alert(num);
-                $.modal.open("还款详细信息", "/system/facLoanApply/repay?num ="+num);
+                $.modal.open("还款详细信息", "/system/facLoanApply/repay?num="+num);
             }
 
-            function toView(a){
-                var url = $.table._option.toViewUrl.replace("{num}",a);
-                $.modal.open("查看申请", url);
-            }
+
 
             $(function() {
                 var options = {
                     id: "bootstrap-table-2",
-                    url: prefix + "/repay?num=" + num,
-                    toViewUrl: prefix + "/repay/{num}",
+                    url: prefix + "/repays?num=" + num,
                     showSearch: false,
                     showRefresh: false,
                     showToggle: false,
@@ -142,7 +148,11 @@ debugger;
                         {
                             field : 'repayTime',
                             title : '还款时间',
-                            sortable: true
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return  newDate;
+                            }
                         },
                         {
                             field : 'repayMethod',

@@ -90,7 +90,7 @@ public class FacReimburseApply extends BaseEntity {
     /**
      * 其他费用报销申请
      */
-    private List<ReiAdiApply> otherReiAdiApplies;
+    private List<FacReiAdiApply> otherReiAdiApplies;
    
     /**
      * 招待费报销申请
@@ -115,11 +115,11 @@ public class FacReimburseApply extends BaseEntity {
     }
 
     
-    public List<ReiAdiApply> getOtherReiAdiApplies() {
+    public List<FacReiAdiApply> getOtherReiAdiApplies() {
         return otherReiAdiApplies;
     }
 
-    public void setOtherReiAdiApplies(List<ReiAdiApply> otherReiAdiApplies) {
+    public void setOtherReiAdiApplies(List<FacReiAdiApply> otherReiAdiApplies) {
         this.otherReiAdiApplies = otherReiAdiApplies;
     }
 

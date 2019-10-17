@@ -1,8 +1,8 @@
 package com.ruoyi.system.mapper.finance;
 
 
-import com.ruoyi.system.domain.finance.FacReimburseApply;
-import com.ruoyi.system.domain.finance.ReiAdiApply;
+import com.ruoyi.system.domain.finance.FacReiAdiApply;
+import com.ruoyi.system.domain.finance.FacReimburseApply; 
 import com.ruoyi.system.domain.finance.ReiHospitalityApply;
 import com.ruoyi.system.domain.finance.ReiTrafficApply;
 import org.apache.ibatis.annotations.Param;
@@ -26,12 +26,7 @@ public interface FacReimburseApplyMapper
 	 */
 	FacReimburseApply detail(String num);
 
-	/**
-	 * 行政和其他申请
-	 * @param num
-	 * @return
-	 */
-	List<ReiAdiApply> adiTail(String num);
+	 
 
 	/**
 	 * 招待报销申请详情
@@ -63,6 +58,7 @@ public interface FacReimburseApplyMapper
      */
 	public List<FacReimburseApply> selectFacReimburseApplyList(FacReimburseApply facReimburseApply);
 	
+	 
 	/**
      * 新增报销
      * 
@@ -115,5 +111,7 @@ public interface FacReimburseApplyMapper
 	 * @param adiApplies
 	 * @return
 	 */
-	int AdiBatchInsert(@Param("list") List<ReiAdiApply> adiApplies);
+	int AdiBatchInsert(@Param("list") List<FacReiAdiApply> adiApplies);
+	
+	
 }

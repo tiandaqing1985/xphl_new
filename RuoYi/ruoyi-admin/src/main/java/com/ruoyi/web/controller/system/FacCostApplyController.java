@@ -21,9 +21,12 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacCostDetailApply;
+import com.ruoyi.system.domain.finance.FacCostPutupApply;
 import com.ruoyi.system.service.finance.IFacCostApplyService;
+import com.ruoyi.system.service.finance.IFacCostPutupApplyService;
 
 /**
  * 差旅申请 信息操作处理
@@ -38,7 +41,10 @@ public class FacCostApplyController extends BaseController {
 
 	@Autowired
 	private IFacCostApplyService facCostApplyService;
-
+	@Autowired
+	private IFacCostPutupApplyService facCostPutupApplyService;
+	
+	
 	@RequiresPermissions("system:facCostApply:view")
 	@GetMapping()
 	public String facCostApply() {
@@ -48,7 +54,7 @@ public class FacCostApplyController extends BaseController {
 	/**
 	 * 查询差旅申请列表
 	 */
-	@RequiresPermissions("system:facCostApply:list")
+
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(FacCostApply facCostApply) {
@@ -57,29 +63,45 @@ public class FacCostApplyController extends BaseController {
 				.selectFacCostApplyList(facCostApply);
 		return getDataTable(list);
 	}
-	
-	
-	
+
 	/**
 	 * 查看行程安排详情
 	 */
 	@PostMapping("/querys/{num}")
 	@ResponseBody
 	public TableDataInfo detail1s(@PathVariable("num") String num) {
-	   startPage();
-	   List<FacCostDetailApply> list = facCostApplyService.deatils(num);
-	   if (list != null) {
+		startPage();
+		List<FacCostDetailApply> list = facCostApplyService.deatils(num);
+		if (list != null) {
 
-	      return getDataTable(list);
-	   } else {
-	      List<String> a = new ArrayList<>();
-	      return getDataTable(a);
-	   }
+			return getDataTable(list);
+		} else {
+			List<String> a = new ArrayList<>();
+			return getDataTable(a);
+		}
+	}
+	
+	/**
+	 * 查看住宿安排详情
+	 */
+	@PostMapping("/sleep/{num}")
+	@ResponseBody
+	public TableDataInfo sleep(@PathVariable("num") String num) {
+		startPage();
+		FacCostPutupApply facCostPutupApply = new FacCostPutupApply();
+		facCostPutupApply.setNum(num);
+		List<FacCostPutupApply> list = facCostPutupApplyService.selectFacCostPutupApplyList(facCostPutupApply);
+		if (list != null) {
+
+			return getDataTable(list);
+		} else {
+			List<String> a = new ArrayList<>();
+			return getDataTable(a);
+		}
 	}
 	/**
 	 * 导出差旅申请列表
 	 */
-	@RequiresPermissions("system:facCostApply:export")
 	@PostMapping("/export")
 	@ResponseBody
 	public AjaxResult export(FacCostApply facCostApply) {
@@ -90,29 +112,27 @@ public class FacCostApplyController extends BaseController {
 		return util.exportExcel(list, "facCostApply");
 	}
 
-
 	/**
 	 * 新增差旅申请
 	 */
 	@GetMapping("/add")
 	public String add(ModelMap mmp) {
-		 IdWorker idWorker = new IdWorker(0, 1);
-	      mmp.put("num", "CL" + idWorker.nextId());
+		IdWorker idWorker = new IdWorker(0, 1);
+		mmp.put("num", "CL" + idWorker.nextId());
 		return prefix + "/add";
 	}
 
 	/**
 	 * 新增保存差旅申请
 	 */
-	@RequiresPermissions("system:facCostApply:add")
 	@Log(title = "差旅申请", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(FacCostApply facCostApply) {
-
+		facCostApply.setUserId(ShiroUtils.getUserId());
 		return toAjax(facCostApplyService.insertFacCostApply(facCostApply));
 	}
-	
+
 	/**
 	 * 修改差旅申请
 	 */
@@ -127,7 +147,6 @@ public class FacCostApplyController extends BaseController {
 	/**
 	 * 修改保存差旅申请
 	 */
-	@RequiresPermissions("system:facCostApply:edit")
 	@Log(title = "差旅申请", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -138,7 +157,6 @@ public class FacCostApplyController extends BaseController {
 	/**
 	 * 删除差旅申请
 	 */
-	@RequiresPermissions("system:facCostApply:remove")
 	@Log(title = "差旅申请", businessType = BusinessType.DELETE)
 	@PostMapping("/remove")
 	@ResponseBody
@@ -163,13 +181,9 @@ public class FacCostApplyController extends BaseController {
 			return getDataTable(a);
 		}
 	}
-
-	
-	
 	/**
 	 * 查看详情
 	 */
-	@RequiresPermissions("system:facCostApply:detail")
 	@GetMapping("/detail")
 	public String detail(@RequestParam("id") Long id, ModelMap map) {
 		FacCostApply facCostApply = new FacCostApply();
@@ -186,12 +200,10 @@ public class FacCostApplyController extends BaseController {
 	 * 行程安排
 	 */
 	@GetMapping("/tranDetail")
-	public String tranDetail() {
-//		FacCostDetailApply facCostDetailApply = new FacCostDetailApply();
-//		facCostDetailApply.setNum(id);
+	public String tranDetail(@RequestParam String num, ModelMap map) {
+		map.put("num",num);
 		return prefix + "/tranDetail";
 	}
-
 	/**
 	 * 行程安排添加
 	 */
@@ -200,7 +212,42 @@ public class FacCostApplyController extends BaseController {
 	@ResponseBody
 	public AjaxResult tranDetailSave(FacCostDetailApply facCostDetailApply) {
 
-		return toAjax(facCostApplyService.insertFacCostDetailApply(facCostDetailApply));
+		return toAjax(facCostApplyService
+				.insertFacCostDetailApply(facCostDetailApply));
+	}
+
+	/**
+	 * 查看详情
+	 */
+	@GetMapping("/putup")
+	public String putup(@RequestParam("id") Long id, ModelMap map) {
+		FacCostApply facCostApply = new FacCostApply();
+		facCostApply.setId(id);
+		List<FacCostApply> facReimburseApplies = facCostApplyService
+				.selectFacCostApplyList(facCostApply);
+		map.put("rid", id);
+		map.put("num", facReimburseApplies.get(0).getNum());
+		map.put("status", facReimburseApplies.get(0).getStatus());
+		return prefix + "/costDetail";
+	}
+
+	/**
+	 * 住宿安排
+	 */
+	@GetMapping("/putAdd")
+	public String putup(@RequestParam String num, ModelMap map) {
+		map.put("num",num);
+		return prefix + "/putAdd";
+	}
+	/**
+	 * 住宿安排添加
+	 */
+	@Log(title = "住宿安排", businessType = BusinessType.INSERT)
+	@PostMapping("/putAdd")
+	@ResponseBody
+	public AjaxResult putup(FacCostPutupApply facCostPutupApply) {
+		return toAjax(
+				facCostApplyService.insertFacCostPutupApply(facCostPutupApply));
 	}
 
 }

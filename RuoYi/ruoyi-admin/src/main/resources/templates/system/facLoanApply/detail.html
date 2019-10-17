@@ -70,17 +70,29 @@ alert(num);
                 {
                     field : 'createTime',
                     title : '创建时间',
-                    sortable: true
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
                 },
                 {
                     field : 'loanTime',
                     title : '借款时间',
-                    sortable: true
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
                 },
                 {
                     field : 'repayTime',
                     title : '预计还款时间',
-                    sortable: true
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
                 },
                 {
                     field : 'facOperate',

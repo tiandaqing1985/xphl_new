@@ -61,5 +61,27 @@ public interface FacLoanRepayApplyMapper
      * @return 结果
      */
 	public int deleteFacLoanRepayApplyByIds(String[] ids);
+	/**
+     * 查询借款还款列表
+     * 
+     * @param facLoanRepayApply 借款还款信息
+     * @return 借款还款集合
+     */
+	public List<FacLoanRepayApply> selectList(String num);
+	/**
+     * 查询借款还款列表
+     * 
+     * @param facLoanRepayApply 借款还款信息
+     * @return 借款还款集合
+     */
+	public List<FacLoanRepayApply> selectPayer(Long payer);
+	/**
+     * 查询借款还款金額
+     * 
+     * @param facLoanRepayApply 借款还款信息
+     * @return 借款还款集合
+     */
+	public double  selectAmount(String num); 
+	
 	
 }

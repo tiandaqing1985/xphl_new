@@ -19,10 +19,12 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.enums.FacApplyType;
+import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
+import com.ruoyi.system.domain.finance.FacPayPublicDetailed;
 import com.ruoyi.system.service.finance.IFacPayPublicApplyService;
 
 /**
@@ -48,7 +50,6 @@ public class FacPayPublicApplyController extends BaseController {
 	/**
 	 * 查询对公申请列表
 	 */
-	@RequiresPermissions("system:facPayPublicApply:list")
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(FacPayPublicApply facPayPublicApply) {
@@ -61,7 +62,6 @@ public class FacPayPublicApplyController extends BaseController {
 	/**
 	 * 导出对公申请列表
 	 */
-	@RequiresPermissions("system:facPayPublicApply:export")
 	@PostMapping("/export")
 	@ResponseBody
 	public AjaxResult export(FacPayPublicApply facPayPublicApply) {
@@ -76,14 +76,15 @@ public class FacPayPublicApplyController extends BaseController {
 	 * 新增对公申请
 	 */
 	@GetMapping("/add")
-	public String add() {
+	public String add(ModelMap mmap) {
+		IdWorker idWorker = new IdWorker(0, 1);
+		mmap.put("num", "DG" + idWorker.nextId());
 		return prefix + "/add";
 	}
 
 	/**
 	 * 新增保存对公申请
 	 */
-	@RequiresPermissions("system:facPayPublicApply:add")
 	@Log(title = "对公申请", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -107,7 +108,6 @@ public class FacPayPublicApplyController extends BaseController {
 	/**
 	 * 修改保存对公申请
 	 */
-	@RequiresPermissions("system:facPayPublicApply:edit")
 	@Log(title = "对公申请", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -119,7 +119,6 @@ public class FacPayPublicApplyController extends BaseController {
 	/**
 	 * 删除对公申请
 	 */
-	@RequiresPermissions("system:facPayPublicApply:remove")
 	@Log(title = "对公申请", businessType = BusinessType.DELETE)
 	@PostMapping("/remove")
 	@ResponseBody
@@ -149,16 +148,55 @@ public class FacPayPublicApplyController extends BaseController {
 	/**
 	 * 查看详情
 	 */
-	@RequiresPermissions("system:facCostApply:detail")
 	@GetMapping("/detail")
 	public String detail(@RequestParam("id") Long id, ModelMap map) {
 		FacPayPublicApply facPayPublicApply = new FacPayPublicApply();
+		facPayPublicApply.setId(id.intValue());
 		List<FacPayPublicApply> facReimburseApplies = facPayPublicApplyService
 				.selectFacPayPublicApplyList(facPayPublicApply);
 		map.put("rid", id);
 		map.put("num", facReimburseApplies.get(0).getNum());
 		map.put("status", facReimburseApplies.get(0).getStatus());
 		return prefix + "/public";
+	}
+
+	/**
+	 * 查看明细
+	 */
+	@PostMapping("/dgtail")
+	@ResponseBody
+	public TableDataInfo dgtail(String num) {
+
+		startPage();
+		List<FacPayPublicDetailed> facPayPublicDetailed = facPayPublicApplyService
+				.dgtail(num);
+		if (facPayPublicDetailed != null) {
+			return getDataTable(facPayPublicDetailed);
+		} else {
+			List<String> a = new ArrayList<>();
+			return getDataTable(a);
+		}
+	}
+
+	/**
+	 * 新增借款申请
+	 */
+	@GetMapping("/offset")
+	public String offset(@RequestParam String num, ModelMap map) {
+		map.put("num", num);
+		return prefix + "/offset";
+	}
+
+	/**
+	 * 新增保存对公申请
+	 */
+	@Log(title = "对公申请", businessType = BusinessType.INSERT)
+	@PostMapping("/addDetail")
+	@ResponseBody
+	public AjaxResult addDetail(FacPayPublicDetailed facPayPublicDetailed) {
+
+		return toAjax(facPayPublicApplyService
+				.insertFacPayPublicDetailed(facPayPublicDetailed));
 	}
 
 }

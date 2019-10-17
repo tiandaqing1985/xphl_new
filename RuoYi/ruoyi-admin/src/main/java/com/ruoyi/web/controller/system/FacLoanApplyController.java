@@ -37,12 +37,13 @@ import com.ruoyi.system.service.finance.IFacLoanRepayApplyService;
 @RequestMapping("/system/facLoanApply")
 public class FacLoanApplyController extends BaseController {
 	private String prefix = "system/facLoanApply";
-
+	private String prefixs = "system/facReimburseApply";
+	
 	@Autowired
 	private IFacLoanApplyService facLoanApplyService;
 	@Autowired
 	private IFacLoanRepayApplyService facLoanRepayApplyService;
-	
+
 	@GetMapping()
 	public String facLoanApply() {
 		return prefix + "/facLoanApply";
@@ -73,7 +74,6 @@ public class FacLoanApplyController extends BaseController {
 		return util.exportExcel(list, "facLoanApply");
 	}
 
-	
 	/**
 	 * 新增借款申请
 	 */
@@ -90,7 +90,8 @@ public class FacLoanApplyController extends BaseController {
 	@ResponseBody
 	public AjaxResult addSave(FacLoanApply facLoanApply) {
 		IdWorker idWorker = new IdWorker(0, 1);
-		facLoanApply.setNum("CL" + idWorker.nextId());
+		facLoanApply.setNum("JK" + idWorker.nextId());
+		facLoanApply.setLoanUser(ShiroUtils.getUserId());
 		return toAjax(facLoanApplyService.insertFacLoanApply(facLoanApply));
 	}
 
@@ -114,7 +115,6 @@ public class FacLoanApplyController extends BaseController {
 	public AjaxResult editSave(FacLoanApply facLoanApply) {
 		return toAjax(facLoanApplyService.updateFacLoanApply(facLoanApply));
 	}
-
 	/**
 	 * 删除借款申请
 	 */
@@ -124,7 +124,6 @@ public class FacLoanApplyController extends BaseController {
 	public AjaxResult remove(String ids) {
 		return toAjax(facLoanApplyService.deleteFacLoanApplyByIds(ids));
 	}
-
 	/**
 	 * 查看借款详情
 	 */
@@ -144,7 +143,6 @@ public class FacLoanApplyController extends BaseController {
 	/**
 	 * 查看详情
 	 */
-	@RequiresPermissions("system:facLostApply:detail")
 	@GetMapping("/detail")
 	public String detail(@RequestParam("id") Long id, ModelMap map) {
 		FacLoanApply facLostApply = new FacLoanApply();
@@ -156,8 +154,7 @@ public class FacLoanApplyController extends BaseController {
 		map.put("status", facReimburseApplies.get(0).getApplyStatus());
 		return prefix + "/detail";
 	}
-	/** 还款 **/ 
-	@RequiresPermissions("system:facLostApply:repayment")
+	/** 还款 **/
 	@GetMapping("/repayment")
 	public String repayment(@RequestParam("id") Long id, ModelMap map) {
 		FacLoanApply facLostApply = new FacLoanApply();
@@ -169,9 +166,6 @@ public class FacLoanApplyController extends BaseController {
 		map.put("status", facReimburseApplies.get(0).getApplyStatus());
 		return prefix + "/repayment";
 	}
-	
-	
-	 
 	/**
 	 * 新增保存还款信息
 	 */
@@ -179,28 +173,75 @@ public class FacLoanApplyController extends BaseController {
 	@PostMapping("/repayment")
 	@ResponseBody
 	public AjaxResult repayment(FacLoanRepayApply facLoanApply) {
-		facLoanApply.setPayer(ShiroUtils.getUserId());	
-		return toAjax(facLoanRepayApplyService.insertFacLoanRepayApply(facLoanApply));
+		facLoanApply.setPayer(ShiroUtils.getUserId());
+		return toAjax(
+				facLoanRepayApplyService.insertFacLoanRepayApply(facLoanApply));
 	}
-	 
- 
 	/**
-	 * 查看借款详情
+	 * 新增借款详情
 	 */
 	@PostMapping("/repay")
 	@ResponseBody
-	public TableDataInfo repay(FacLoanRepayApply facLoanRepayApply) {
+	public AjaxResult repay(FacLoanRepayApply facLoanRepayApply) {
 		startPage();
-        List<FacLoanRepayApply> list = facLoanRepayApplyService.selectFacLoanRepayApplyList(facLoanRepayApply);
-		return getDataTable(list);
+		facLoanRepayApply.setPayer(ShiroUtils.getUserId());
+
+		return toAjax(facLoanRepayApplyService
+				.insertFacLoanRepayApply(facLoanRepayApply));
 	}
-	
 	/**
 	 * 新增借款申请
 	 */
 	@GetMapping("/repay")
-	public String repay(String num, ModelMap map) {
-		map.put("num",num);
+	public String repay(@RequestParam String num, ModelMap map) {
+		map.put("num", num);
 		return prefix + "/repayAdd";
 	}
+
+	/**
+	 * 查看借款详情
+	 */
+	@PostMapping("/repays")
+	@ResponseBody
+	public TableDataInfo repays(String num) {
+		startPage();
+		List<FacLoanRepayApply> list = facLoanRepayApplyService.selectList(num);
+		if (list != null) {
+			return getDataTable(list);
+		} else {
+			List<String> a = new ArrayList<>();
+			return getDataTable(a);
+		}
+	}
+	/**
+	 * 新增借款申请
+	 */
+	@GetMapping("/offset")
+	public String offset(@RequestParam Long payer, ModelMap map) {
+		map.put("payer", payer);
+		return prefix + "/offset";
+	}
+
+	@PostMapping("/offset")
+	@ResponseBody
+	public TableDataInfo offset(Long payer) {
+		startPage();
+		FacLoanApply facLoanApply = new FacLoanApply();
+		facLoanApply.setLoanUser(payer);
+		List<FacLoanApply> list = facLoanApplyService
+				.selectFacLoanApplyList(facLoanApply);
+		return getDataTable(list); 
+	}
+
+	/**
+	 * 新增借款申请
+	 */
+	@GetMapping("/off")
+	public String off(@RequestParam Long id, ModelMap map) {
+		map.put("payer", id);
+		return prefixs + "/off";
+	}
+	
+	
+	
 }

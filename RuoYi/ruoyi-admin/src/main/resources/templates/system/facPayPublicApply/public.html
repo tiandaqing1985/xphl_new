@@ -15,11 +15,14 @@
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
         </div>
+     <h4 class="form-header h4">对公支付明细</h4>
+     <div class="col-sm-12 select-table table-striped">
+         <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+     </div>
 </div>
         <div class="row">
             <div class="col-sm-offset-5 col-sm-10">
                 <button type="button" class="btn btn-sm btn-primary" onclick="f()"><i class="fa fa-check"></i>打 印</button>&nbsp;
-                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关 闭 </button>
             </div>
         </div>
 <div th:include="include :: footer"></div>
@@ -64,11 +67,7 @@
                 {
                     field: 'payeeAccount',
                     title: '收款人账号'
-                },
-                {
-                    field: 'updateTime',
-                    title: '修改时间'
-                },
+                } ,
                 {
                     field: 'status',
                     title: '审批状态'
@@ -77,6 +76,67 @@
         };
         $.table.init(options);
     });
+
+
+
+    $(function () {
+        var options = {
+            id: "bootstrap-table-2",
+            url: prefix + "/dgtail?num=" + num,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            modalName: "对公明细添加",
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : 'id',
+                    visible: false
+                },
+                {
+                    field : 'num',
+                    title : '对公编号',
+                    sortable: true
+                },
+                {
+                    field : 'name',
+                    title : '项目名称',
+                    sortable: true
+                },
+                {
+                    field : 'reson',
+                    title : '付款事由',
+                    sortable: true
+                },
+                {
+                    field : 'money',
+                    title : '付款金额',
+                    sortable: true
+                },
+                {
+                    field : 'detail',
+                    title : '详情',
+                    sortable: true
+                }
+
+            ]
+        };
+
+        $.table.init(options);
+    });
+
+
+
+
+
+
+
+
+
 
     function f(){
         webPrint("bootstrap-table-1");

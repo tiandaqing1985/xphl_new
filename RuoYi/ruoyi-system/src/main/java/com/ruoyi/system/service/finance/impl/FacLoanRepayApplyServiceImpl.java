@@ -57,12 +57,15 @@ public class FacLoanRepayApplyServiceImpl implements IFacLoanRepayApplyService
 	@Override
 	public int insertFacLoanRepayApply(FacLoanRepayApply facLoanRepayApply)
 	{ 	facLoanRepayApply.getRepayAmount();
-		//Double money=facLoanApplyMapper.FacLoanAmount(facLoanRepayApply.getNum());//总欠款额
-	//	List<FacLoanRepayApply> repayApply=facLoanRepayApplyMapper.selectFacLoanRepayApplyList(facLoanRepayApply);
-	//	if(repayApply==null || repayApply.equals("")){
-	//		facLoanRepayApply.setArrears(money-facLoanRepayApply.getRepayAmount());//实际欠款金额（元）
-	//	}else{  
-	//	} 
+		Double money=facLoanApplyMapper.FacLoanAmount(facLoanRepayApply.getNum());//总欠款额
+		List<FacLoanRepayApply> repayApply=facLoanRepayApplyMapper.selectFacLoanRepayApplyList(facLoanRepayApply);
+		if(repayApply==null || repayApply.equals("")){
+			facLoanRepayApply.setArrears(money-facLoanRepayApply.getRepayAmount());//实际欠款金额（元）
+		}else{
+			double s = facLoanRepayApplyMapper.selectAmount(facLoanRepayApply.getNum());
+
+			facLoanRepayApply.setArrears(money-facLoanRepayApply.getRepayAmount());
+		}
 		facLoanRepayApply.setRepayTime(new Date());//还款时间 
 		//facLoanRepayApply.setMethod(method); //财务确认还款金额
 		//facLoanRepayApply.setAmount(amount);//核实后欠款金额
@@ -92,6 +95,17 @@ public class FacLoanRepayApplyServiceImpl implements IFacLoanRepayApplyService
 	public int deleteFacLoanRepayApplyByIds(String ids)
 	{
 		return facLoanRepayApplyMapper.deleteFacLoanRepayApplyByIds(Convert.toStrArray(ids));
+	}
+
+	@Override
+	public List<FacLoanRepayApply> selectList(String num) {
+		 
+		return facLoanRepayApplyMapper.selectList(num);
+	}
+
+	@Override
+	public List<FacLoanRepayApply> selectPayer(Long payer) {
+		return facLoanRepayApplyMapper.selectPayer(payer);
 	}
 	
 }

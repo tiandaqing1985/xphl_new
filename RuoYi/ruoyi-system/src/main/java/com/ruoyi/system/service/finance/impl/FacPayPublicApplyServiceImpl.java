@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.enums.FacApplyType;
-import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
+import com.ruoyi.system.domain.finance.FacPayPublicDetailed;
 import com.ruoyi.system.domain.finance.FacSysUserApproval;
 import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
 import com.ruoyi.system.mapper.finance.FacPayPublicApplyMapper;
+import com.ruoyi.system.mapper.finance.FacPayPublicDetailedMapper;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacPayPublicApplyService;
 
@@ -31,6 +31,8 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 	ApprovalProcessMapper approvalProcessMapper;
 	@Autowired
 	private ISysUserService iSysUserService;
+	@Autowired
+	private FacPayPublicDetailedMapper facPayPublicDetailedMapper;
 
 	/**
 	 * 查询对公申请信息
@@ -69,10 +71,7 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 	public int insertFacPayPublicApply(FacPayPublicApply facPayPublicApply) {
 
 		facPayPublicApply.setStatus("3");
-		IdWorker idWorker = new IdWorker(0, 1);
-		facPayPublicApply.setNum(FacApplyType.PAY_PUBLIC.getIdentification()
-				+ idWorker.nextId());
-		
+
 		FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
 		facSysUserApproval.setApprovalId(facPayPublicApply.getUser());
 		facSysUserApproval.setApprovalTime(new Date());
@@ -85,7 +84,7 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 		Long upLeaderId = iSysUserService
 				.selectUpApproverIdByApplyerId(facPayPublicApply.getUser());// 所在部门负责人的上级leader
 		Long approvalId = 0L;// 部门负责人id 审批人
-		if (leaderId.equals(facPayPublicApply.getUser())) { // 判断用户是否部门负责人
+		if (facPayPublicApply.getUser().equals(leaderId)) { // 判断用户是否部门负责人
 															// 确定一、二级审批人id
 			facSysUserApproval.setApproverId(upLeaderId); // 一级审批人id
 			approvalId = upLeaderId;
@@ -155,8 +154,22 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 
 	@Override
 	public FacPayPublicApply deatil(String num) {
-		FacPayPublicApply facCostApply = facPayPublicApplyMapper.detail(num);  
-	return facCostApply;
+		FacPayPublicApply facCostApply = facPayPublicApplyMapper.detail(num);
+		return facCostApply;
+	}
+
+	@Override
+	public List<FacPayPublicDetailed> dgtail(String num) {
+		return facPayPublicDetailedMapper.selectDetailedList(num);
+
+	}
+
+	@Override
+	public int insertFacPayPublicDetailed(
+			FacPayPublicDetailed facPayPublicDetailed) {
+
+		return facPayPublicDetailedMapper
+				.insertFacPayPublicDetailed(facPayPublicDetailed);
 	}
 
 }

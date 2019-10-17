@@ -5,9 +5,6 @@
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-
-
-
         <form class="form-horizontal m" id="form-facLoanApply-add">
 			<div class="form-group">
 				<label class="col-sm-3 control-label">借款编号：</label>
@@ -47,7 +44,6 @@
 			},
 			focusCleanup: true
 		});
-		
 		function submitHandler() {
 	        if ($.validate.form()) {
 	            $.operate.save(prefix + "/repay", $('#form-facLoanApply-add').serialize());
