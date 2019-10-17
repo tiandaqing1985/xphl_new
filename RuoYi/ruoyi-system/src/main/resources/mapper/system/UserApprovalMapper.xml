@@ -229,8 +229,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          '产检假'
 		         WHEN a.leave_type = 9 THEN
 		          '丧假'
-		         ELSE 
-		            '哺乳假'
+		         WHEN a.leave_type = 10 THEN
+						'哺乳假'	ELSE ''
 		     END)leave_type, a.apply_time,
         	(CASE
 	         WHEN p.approval_state = 1 THEN

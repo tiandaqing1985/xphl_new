@@ -194,8 +194,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          '产检假'
 		         WHEN a.leave_type = 9 THEN
 		          '丧假'
-		         ELSE 
-		            '哺乳假'
+		        WHEN a.leave_type = 10 THEN
+						'哺乳假'	ELSE ''
 		        END)leave_type, a.apply_time,
         		p.approval_id, p.apply_id,
         		 	(
@@ -453,8 +453,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          '产检假'
 		         WHEN a.leave_type = 9 THEN
 		          '丧假'
-		         ELSE 
-		            '哺乳假'
+		         WHEN a.leave_type = 10 THEN
+						'哺乳假'	ELSE ''
 		        END)leave_type, a.apply_time
 		        from sys_user_apply a
 		        LEFT JOIN sys_user_approval app on a.apply_id = app.apply_id
