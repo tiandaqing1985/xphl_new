@@ -82,20 +82,21 @@ public class XzAsstesController extends BaseController {
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(XzAsstes xzAsstes) {
-		startPage();
 		xzAsstes.setSort("1");// 固定资产
 		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
-		
-		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据  
-			
+
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据
+
 		}else{
 			if(ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){  //行政部门leader查看所有
-				
+
 			}else{
 				String region=ShiroUtils.getSysUser().getArea();
 				xzAsstes.setRegion(region);
 			}
 		}
+		xzAsstes.setPurchaseBy(sysUserService.selectUserIdByUserNameOnly(xzAsstes.getPurchaseName()));
+		startPage();
 		List<XzAsstes> list = xzAsstesService.selectXzAsstesList(xzAsstes);
 		return getDataTable(list);
 	}
@@ -106,21 +107,22 @@ public class XzAsstesController extends BaseController {
 	@PostMapping("/handlist")
 	@ResponseBody
 	public TableDataInfo handlist(XzAsstes xzAsstes) {
-		startPage();
 		xzAsstes.setSort("1");// 固定资产
 		xzAsstes.setSubmitType("2");
 		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
-		
-		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据  
-			
+
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据
+
 		}else{
 			if(ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){  //行政部门leader查看所有
-				
+
 			}else{
 				String region=ShiroUtils.getSysUser().getArea();
 				xzAsstes.setRegion(region);
 			}
 		}
+		startPage();
+		xzAsstes.setPurchaseBy(sysUserService.selectUserIdByUserNameOnly(xzAsstes.getPurchaseName()));
 		List<XzAsstes> list = xzAsstesService.selectXzAsstesList(xzAsstes);
 		return getDataTable(list);
 	}
@@ -133,6 +135,7 @@ public class XzAsstesController extends BaseController {
 	public TableDataInfo xzStationeryassetList(XzAsstes xzAsstes) {
 		startPage();
 		xzAsstes.setSort("2");// 办公用品资产
+		xzAsstes.setPurchaseBy(sysUserService.selectUserIdByUserNameOnly(xzAsstes.getPurchaseName()));
 		List<XzAsstes> list = xzAsstesService.selectXzAsstesList(xzAsstes);
 		return getDataTable(list);
 	}
@@ -143,7 +146,6 @@ public class XzAsstesController extends BaseController {
 	@PostMapping("/xzStatisticsList")
 	@ResponseBody
 	public TableDataInfo xzStatisticsList(XzAsstesSta xzAsstesSta) {
-		startPage();
 		/*Long loginUser=ShiroUtils.getUserId();
 		if(loginUser==1 ||ShiroUtils.getLoginName()=="admin" ){
 			//查看全部
@@ -154,16 +156,17 @@ public class XzAsstesController extends BaseController {
 			}
 		}*/
 		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
-		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据  
-			
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103){ //超级管理员 和 任总看所有数据
+
 		}else{
 			if(ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){  //行政部门leader查看所有
-				
+
 			}else{
 				String region=ShiroUtils.getSysUser().getArea();
 				xzAsstesSta.setRegion(region);
 			}
 		}
+		startPage();
 		List<XzAsstesSta> list = xzAsstesService.selectXzStatisticsList(xzAsstesSta);
 		return getDataTable(list);
 	}
@@ -174,6 +177,7 @@ public class XzAsstesController extends BaseController {
 	@PostMapping("/export")
 	@ResponseBody
 	public AjaxResult export(XzAsstes xzAsstes) {
+		xzAsstes.setPurchaseBy(sysUserService.selectUserIdByUserNameOnly(xzAsstes.getPurchaseName()));
 		List<XzAsstes> list = xzAsstesService.selectXzAsstesList(xzAsstes);
 		ExcelUtil<XzAsstes> util = new ExcelUtil<XzAsstes>(XzAsstes.class);
 		return util.exportExcel(list, "xzAsstes");

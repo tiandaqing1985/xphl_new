@@ -11,7 +11,9 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class XzPurchaseResource extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	
+
+	/**  */
+
 	/**  */
 	private Long id;
 	/** 采购单号*/

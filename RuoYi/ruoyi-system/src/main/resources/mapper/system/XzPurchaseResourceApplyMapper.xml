@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="code"    column="code"    />
         <result property="purpose"    column="purpose"    />
+        <result property="purposeComment"    column="purpose_comment"    />
         <result property="applyId"    column="apply_id"    />
         <result property="applyName"    column="apply_name"    />
         <result property="applyUserId"    column="apply_user_id"    />
@@ -52,7 +53,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectXzPurchaseResourceApplyVo">
-        select  pra.id,pra.code,pra.purpose,pra.apply_id,pra.apply_user_id,pra.purchase_user_id,pra.apply_price,sum(pr.actual_price) actual_price,sum(pr.float_price) float_price,
+        select  pra.id,pra.code,pra.purpose,pra.purpose_comment,pra.apply_id,pra.apply_user_id,pra.purchase_user_id,pra.apply_price,sum(pr.actual_price) actual_price,sum(pr.float_price) float_price,
 				pra.sub_time,pra.sub_type,pra.approval_time,pra.approval_status,pra.is_relation,pra.create_by,pra.create_time,pra.update_by,
 				pra.update_time,pr.id,pr.resource_name,
 				pr.resource_count,pr.resource_price,pr.unit,IFNULL(pr.resource_spec,'')as resource_spec,pr.purchase_channel,
@@ -70,6 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
        select  pra.id,
 				pra.code,
 				pra.purpose,
+				pra.purpose_comment,
 				pra.apply_id,
 				pra.apply_user_id,
 				pra.purchase_user_id,
@@ -141,6 +143,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="code != null  and code != ''  ">code,</if>
 			<if test="purpose != null  and purpose != ''  ">purpose,</if>
+			<if test="purposeComment != null  and purposeComment != ''  ">purpose_comment,</if>
 			<if test="applyId != null  and applyId != ''  ">apply_id,</if>
 			<if test="applyUserId != null  ">apply_user_id,</if>
 			<if test="purchaseUserId != null  ">purchase_user_id,</if>
@@ -160,6 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="code != null  and code != ''  ">#{code},</if>
 			<if test="purpose != null  and purpose != ''  ">#{purpose},</if>
+			<if test="purposeComment != null  and purposeComment != ''  ">#{purposeComment},</if>
 			<if test="applyId != null  and applyId != ''  ">#{applyId},</if>
 			<if test="applyUserId != null  ">#{applyUserId},</if>
 			<if test="purchaseUserId != null  ">#{purchaseUserId},</if>

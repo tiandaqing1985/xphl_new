@@ -79,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="subTime != null "> and sub_time = #{subTime}</if>
              <if test="subBy != null  and subBy != '' "> and sub_by = #{subBy}</if>
          </where>
+         order by create_time desc
     </select>
     
     <select id="selectXzOfficeAsstesById" parameterType="Long" resultMap="XzOfficeAsstesResult">

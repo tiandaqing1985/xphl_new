@@ -63,12 +63,35 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join xz_asset_type at on at.id =xa.assets_type 
         left join sys_user u on u.user_id =ar.user_id
 		<where>
+
 			ar.repair_status in (1,2)
-			 <if test="region != null  and region != '' "> and xa.region = #{region}</if>
+			<if test="region != null  and region != '' "> and xa.region = #{region}</if>
 			<if test="assetsCode != null and assetsCode !='' "> and xa.assets_code like concat('%', #{assetsCode}, '%')</if>
 			<if test="assetsName != null and assetsName !='' "> and xa.assets_name like concat('%', #{assetsName}, '%')</if>
 			
 		</where>
+	</select>
+
+	<select id="selectXzAssetRepairHistoryList" parameterType="XzAssetRepair"
+		resultMap="XzAssetRepairResult">
+		select ar.repair_id,	ar.asset_id,	ar.user_id,	ar.repair_time,	ar.problem_context,	ar.handler_id,	ar.handler_time,
+		ar.inspector_id,	ar.repair_status,	ar.repair_context,	ar.remark,	ar.create_by,	ar.create_time,	ar.update_by,
+		ar.update_time,xa.assets_code,xa.assets_name, xa.region,at.name assets_type_name,xa.assets_model,xa.use_status,xa.category,xa.unit ,xa.brand,
+		u.user_name user_name,iu.user_name inspector_Name
+		from xz_asset_repair ar
+		left join xz_personal_asset pa on pa.id=ar.asset_id
+		left join xz_asstes xa on xa.id =pa.asset_id
+        left join xz_asset_type at on at.id =xa.assets_type
+        left join sys_user u on u.user_id =ar.user_id
+        left join sys_user iu on ar.inspector_id = iu.user_id
+		<where>
+
+			<if test="region != null  and region != '' "> and xa.region = #{region}</if>
+			<if test="assetsCode != null and assetsCode !='' "> and xa.assets_code like concat('%', #{assetsCode}, '%')</if>
+			<if test="assetsName != null and assetsName !='' "> and xa.assets_name like concat('%', #{assetsName}, '%')</if>
+
+		</where>
+        order by ar.repair_time desc
 	</select>
 
 	<select id="selectXzAssetRepairById" parameterType="Long"

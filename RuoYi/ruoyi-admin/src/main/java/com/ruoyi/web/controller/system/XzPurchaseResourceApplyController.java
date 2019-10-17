@@ -189,6 +189,7 @@ public class XzPurchaseResourceApplyController extends BaseController
 		XzPurchaseResourceApply xzPurchaseResourceApply=new XzPurchaseResourceApply();
 		xzPurchaseResourceApply.setCode(xz.getCode());
 		xzPurchaseResourceApply.setPurpose(xz.getPurpose());
+		xzPurchaseResourceApply.setPurposeComment(xz.getPurposeComment());
 		xzPurchaseResourceApply.setApplyUserId(ShiroUtils.getUserId());
 		xzPurchaseResourceApply.setPurchaseUserId(ShiroUtils.getUserId());
 		xzPurchaseResourceApply.setCreateBy(ShiroUtils.getUserId().toString());
@@ -208,6 +209,7 @@ public class XzPurchaseResourceApplyController extends BaseController
 		XzPurchaseResourceApply xzPurchaseResourceApply=new XzPurchaseResourceApply();
 		xzPurchaseResourceApply.setCode(xz.getCode());
 		xzPurchaseResourceApply.setPurpose(xz.getPurpose());
+		xzPurchaseResourceApply.setPurposeComment(xz.getPurposeComment());
 		xzPurchaseResourceApply.setApplyUserId(ShiroUtils.getUserId());
 		xzPurchaseResourceApply.setPurchaseUserId(ShiroUtils.getUserId());
 		xzPurchaseResourceApply.setCreateBy(ShiroUtils.getUserId().toString());
@@ -228,6 +230,7 @@ public class XzPurchaseResourceApplyController extends BaseController
 		mmap.put("code",xzPurchaseResourceApply.getCode());
 		mmap.put("region", ShiroUtils.getSysUser().getArea());
 		mmap.put("purpose",xzPurchaseResourceApply.getPurpose());
+		mmap.put("purposeComment",xzPurchaseResourceApply.getPurposeComment());
 		mmap.put("typeList", xzResourceTypeService.selectXzResourceTypeByAll());
 		mmap.put("userName",ShiroUtils.getSysUser().getUserName());
 	    return prefix + "/purResDetail";

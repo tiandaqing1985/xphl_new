@@ -39,6 +39,16 @@ function edit(id) {
 						</div>
 					</div>
 			</div>
+			<div class="row">
+				<div class="col-sm-6">
+					<div class="form-group">
+						<label class="col-sm-4 control-label">用途说明：</label>
+						<div class="col-sm-8">
+							<textarea id="purposeComment" name="purposeComment" class="form-control" th:text="*{purposeComment}"></textarea>
+						</div>
+					</div>
+				</div>
+			</div>
 	 	</form>
 		<form class="form-horizontal m" id="form-xzPurchaseResource-add">
 		 <input id="code" name="code" class="form-control-static" type="hidden" th:value="${code}"/>

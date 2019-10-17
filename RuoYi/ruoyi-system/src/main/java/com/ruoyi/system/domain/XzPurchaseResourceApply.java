@@ -46,11 +46,21 @@ public class XzPurchaseResourceApply extends BaseEntity
 	private String isRelation;
 	/** 采购用途 */
 	private String purpose;
+	/** 采购用途描述 */
+	private String purposeComment;
 	/** 采购物资列表*/
 	private List<XzPurchaseResource> xzPurchaseResource;
 	private XzPurchaseApproval xzPurchaseApproval;
 
-	public void setId(Long id) 
+	public String getPurposeComment() {
+		return purposeComment;
+	}
+
+	public void setPurposeComment(String purposeComment) {
+		this.purposeComment = purposeComment;
+	}
+
+	public void setId(Long id)
 	{
 		this.id = id;
 	}

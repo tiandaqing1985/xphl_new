@@ -58,5 +58,11 @@ public interface XzAssetRepairMapper
      * @return 结果
      */
 	public int deleteXzAssetRepairByIds(String[] repairIds);
-	
+
+	/**
+	 * 查询维修历史
+	 * @param xzAssetRepair
+	 * @return
+	 */
+	public List<XzAssetRepair> selectXzAssetRepairHistoryList(XzAssetRepair xzAssetRepair);
 }

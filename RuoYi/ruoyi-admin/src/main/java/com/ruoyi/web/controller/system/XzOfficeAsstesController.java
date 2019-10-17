@@ -68,15 +68,15 @@ public class XzOfficeAsstesController extends BaseController {
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(XzOfficeAsstes xzOfficeAsstes) {
-		startPage();
 		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
-		
-		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){ //超级管理员 和 任总 行政部门leader看所有数据  
+
+		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){ //超级管理员 和 任总 行政部门leader看所有数据
 			xzOfficeAsstes.setRegion(xzOfficeAsstes.getRegion());
 		}else{
 			String region=ShiroUtils.getSysUser().getArea();
 			xzOfficeAsstes.setRegion(region);
 		}
+		startPage();
 		List<XzOfficeAsstes> list = xzOfficeAsstesService.selectXzOfficeAsstesList(xzOfficeAsstes);
 		return getDataTable(list);
 	}

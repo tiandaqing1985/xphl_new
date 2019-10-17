@@ -138,4 +138,8 @@ public class XzAssetRepairServiceImpl implements IXzAssetRepairService {
 		return xzAssetRepairMapper.deleteXzAssetRepairByIds(Convert.toStrArray(ids));
 	}
 
+	@Override
+	public List<XzAssetRepair> selectXzAssetRepairHistoryList(XzAssetRepair xzAssetRepair) {
+		return xzAssetRepairMapper.selectXzAssetRepairHistoryList(xzAssetRepair);
+	}
 }

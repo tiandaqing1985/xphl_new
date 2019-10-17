@@ -1,7 +1,10 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,10 +43,19 @@ public class XzPersonalAssetController extends BaseController {
 	@Autowired
 	private IXzAsstesService xzAsstesService;
 
+	@Autowired
+	private ISysUserService sysUserService;
+
 	@RequiresPermissions("system:xzPersonalAsset:view")
 	@GetMapping()
 	public String xzPersonalAsset() {
 		return prefix + "/xzPersonalAsset";
+	}
+
+	@RequiresPermissions("system:xzPersonalAssetQuery:view")
+	@GetMapping("/queryByName")
+	public String queryXzPersonalAsset() {
+		return prefix + "/xzPersonalAssetQuery";
 	}
 
 	/**
@@ -59,6 +71,22 @@ public class XzPersonalAssetController extends BaseController {
 		}else{
 			xzPersonalAsset.setUserId(ShiroUtils.getUserId());
 		}
+		List<XzPersonalAsset> list = xzPersonalAssetService.selectXzPersonalAssetList(xzPersonalAsset);
+		return getDataTable(list);
+	}
+	/**
+	 * 查询个人资产列表
+	 */
+	@PostMapping("/queryList")
+	@ResponseBody
+	public TableDataInfo queryList(String name) {
+		Long aLong = sysUserService.selectUserIdByUserNameOnly(name);
+		XzPersonalAsset xzPersonalAsset = new XzPersonalAsset();
+		xzPersonalAsset.setUserId(aLong);
+		if(aLong==null){
+			return getDataTable(new ArrayList<>());
+		}
+		startPage();
 		List<XzPersonalAsset> list = xzPersonalAssetService.selectXzPersonalAssetList(xzPersonalAsset);
 		return getDataTable(list);
 	}
@@ -154,7 +182,7 @@ public class XzPersonalAssetController extends BaseController {
 			asset.setId(assetId);
 			asset.setUseTime(new Date());
 			asset.setUseBy(userId);
-			String str=xzAsstesService.updateXzAsstesByAssetId(asset);
+			String str = xzAsstesService.updateXzAsstesByAssetId(asset);
 			
 			return success(str);
 		}else{

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('个人资产列表')" />
+	<script type="text/javascript">
+	/* 管理员可通过此查询所有人 名下的资产 */
+	function allDraw() {
+			$.operate.post(prefix + "/allDraw");
+	}
+	
+	function draw(assetId) {
+		$.operate.post(prefix + "/draw", { "assetId": assetId});
+	}
+	
+	function toReturn(id){
+		var url = $.table._option.toReturnUrl.replace("{id}",id);
+		$.modal.open("资产归还", url);
+	}
+	
+	function toRepair(id){
+		var url = $.table._option.toRepairUrl.replace("{id}",id);
+		$.modal.open("资产报修登记", url);
+	}
+	</script>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								查询姓名：<input type="text" id="assetName" name="name"/>
+							</li>
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<!-- <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:xzPersonalAsset:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:xzPersonalAsset:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:xzPersonalAsset:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>  -->
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:xzPersonalAsset:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:xzPersonalAsset:remove')}]];
+        var prefix = ctx + "system/xzPersonalAsset";
+
+        var region = [[${@dict.getType('xz_assets_region')}]];
+        var brand = [[${@dict.getType('xz_assets_brand')}]];
+        var useStatus = [[${@dict.getType('xz_assets_useStatus')}]];
+        var assetsStatus = [[${@dict.getType('xz_assets_assetsStatus')}]];
+        $(function() {
+            var options = {
+                url: prefix + "/queryList",
+                toReturnUrl: "/system/xzAssetReturn/add/{id}",
+                toRepairUrl: "/system/xzAssetRepair/add/{id}",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "个人资产",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '',
+					visible: false
+				},
+				{
+					field : 'xzAsstes.assetsCode', 
+					title : '资产编码',
+					sortable: true
+				},
+				{
+					field : 'xzAsstes.assetsName', 
+					title : '产资名称',
+					sortable: true
+				},
+				
+				{
+					field : 'assetTypeName', 
+					title : '资产类型',
+					sortable: true
+				},
+				{
+					field : 'xzAsstes.brand', 
+					title : '品牌',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(brand, value);
+					}
+				},
+				{
+					field : 'xzAsstes.assetsModel', 
+					title : '资产型号',
+					sortable: true
+				},
+				{
+					field : 'xzAsstes.region', 
+					title : '地域',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(region, value);
+					}
+				},
+				{
+					field : 'assetStatus', 
+					title : '使用状态',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(useStatus, value);
+					}
+				},
+				{
+					field : 'xzAsstes.useTime', 
+					title : '领用时间',
+					sortable: true
+				}]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

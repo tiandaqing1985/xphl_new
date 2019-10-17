@@ -50,5 +50,6 @@ public interface IXzAssetRepairService
      * @return 结果
      */
 	public int deleteXzAssetRepairByIds(String ids);
-	
+
+    public List<XzAssetRepair> selectXzAssetRepairHistoryList(XzAssetRepair xzAssetRepair);
 }
