@@ -119,9 +119,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
             facReimburseApply.setType("日常报销");
             IdWorker idWorker = new IdWorker(0, 1);
-            facReimburseApply.setNum(FacApplyType.REIMBURSE.getIdentification()
-                    + idWorker.nextId());
-            facReimburseApply.setReimburseTime(new Date()); 
+            facReimburseApply.setReimburseTime(new Date());
              double num =20 ; 
 
             BigDecimal num1 = new BigDecimal("2000");
