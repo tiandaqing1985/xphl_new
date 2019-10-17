@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <th:block th:include="include :: header('初始多表格')"/>
+    <th:block th:include="include :: layout-latest-css" />
+    <th:block th:include="include :: ztree-css" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
+        <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
+
+
+ <div>
+        <h4 class="form-header h4">招待详细信息</h4>
+   
+
+        <div class="col-sm-12 select-table table-striped">
+
+            <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+        </div>
+ 
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "system/facCostApply";
+    var datas = [[${@dict.getType('sys_normal_disable')}]];
+    var num = $("#num").val();
+    var msg = $("#msg").val();
+
+    $(function () {
+        var options = {
+            id: "bootstrap-table-1",
+            url: prefix + "/detail?num="+num,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            modalName: "招待详细信息",
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field: 'num',
+                    title: '差旅编号'
+                },
+                {
+                    field: 'bus_name',
+                    title: '项目名称'
+                },
+                {
+                    field: 'outTime',
+                    title: '出差时间'
+                },
+                {
+                    field: 'backTimeEs',
+                    title: '预计返回时间'
+                },
+                {
+                    field: 'outMan',
+                    title: '出差人员'
+                },
+                {
+                    field: 'moneyEs',
+                    title: '预计费用'
+                },
+                {
+                    field: 'toLocal',
+                    title: '出差目的地'
+                },
+                {
+                    field: 'reason',
+                    title: '事由'
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+
+</script>
+</body>
+</html>

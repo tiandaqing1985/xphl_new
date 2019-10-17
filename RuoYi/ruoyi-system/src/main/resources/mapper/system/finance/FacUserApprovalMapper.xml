@@ -3,7 +3,8 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.finance.FacUserApprovalMapper">
-    
+   
+      
     <resultMap type="FacUserApproval" id="FacUserApprovalResult">
         <result property="approvalId"    column="approval_id"    />
         <result property="applyId"    column="apply_id"    />
@@ -23,8 +24,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
     <select id="selectFacUserApprovalList" parameterType="FacUserApproval" resultMap="FacUserApprovalResult">
         <include refid="selectFacUserApprovalVo"/>
-        <where>  
-            <if test="approvalId != null "> and approval_id = #{approvalId}</if>
+        <where>   
+             <if test="approvalId != null "> and approval_id = #{approvalId}</if>
              <if test="applyId != null  and applyId != '' "> and apply_id = #{applyId}</if>
              <if test="approvalState != null  and approvalState != '' "> and approval_state = #{approvalState}</if>
              <if test="approverId != null "> and approver_id = #{approverId}</if>
@@ -36,7 +37,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="applicantId != null "> and applicant_id = #{applicantId}</if>
          </where>
     </select>
+     
+    <select id="selectEndFacUserApprovalList" parameterType="FacUserApproval" resultMap="FacUserApprovalResult">
+         select approval_id, apply_id, approval_state, approver_id, approval_time, approval_sight, approval_level, opi, create_time, applicant_id from fac_sys_user_approval where approval_state in (1,2) AND applicant_id =  #{applicantId}  
+    </select> 
     
+    <select id="selectApplicantIdList" parameterType="FacUserApproval" resultMap="FacUserApprovalResult">
+         SELECT approval_id, apply_id, approval_state, approver_id, approval_time, approval_sight,approval_level, opi, create_time, applicant_id FROM fac_sys_user_approval WHERE   applicant_id =  #{applicantId}  
+    </select> 
+	 
+  <select id="selectApproverIdList" parameterType="FacUserApproval" resultMap="FacUserApprovalResult">
+         SELECT approval_id, apply_id, approval_state, approver_id, approval_time, approval_sight, approval_level, opi, create_time, applicant_id FROM fac_sys_user_approval WHERE  approver_id =  #{approverId}  
+   </select>
+     
     <select id="selectFacUserApprovalById" parameterType="Long" resultMap="FacUserApprovalResult">
         <include refid="selectFacUserApprovalVo"/>
         where approval_id = #{approvalId}

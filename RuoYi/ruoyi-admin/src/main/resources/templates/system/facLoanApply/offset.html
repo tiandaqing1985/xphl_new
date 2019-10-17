@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('初始多表格')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <input id="payer" name="payer" class="form-control-static" type="hidden" th:value="${payer}"/>
+        <div>
+            <h4 class="form-header h4">选择冲抵</h4>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "system/facLoanApply";
+    var datas = [[${@dict.getType('sys_normal_disable')}]];
+    var payer = $("#payer").val();
+
+    $(function () {
+        var options = {
+            id: "bootstrap-table-1",
+            url: prefix + "/offset?payer="+payer,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            modalName: "借款申请",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field : 'id',
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'num',
+                    title : '借款编号',
+                    sortable: true
+                },
+                {
+                    field : 'loanName',
+                    title : '借款名称',
+                    sortable: true
+                },
+                {
+                    field : 'amount',
+                    title : '借款金额',
+                    sortable: true
+                },
+                {
+                    field : 'loanUser',
+                    title : '借款人',
+                    sortable: true
+                },
+                {
+                    field : 'createTime',
+                    title : '创建时间',
+                    sortable: true
+                },
+                {
+                    field : 'loanTime',
+                    title : '借款时间',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
+                },
+                {
+                    field : 'repayTime',
+                    title : '预计还款时间',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
+                },
+                {
+                    field : 'facOperate',
+                    title : '单据状态',
+                    sortable: true
+                },
+                {
+                    field : 'reason',
+                    title : '借款事由',
+                    sortable: true
+                },
+                {
+                    field : 'applyStatus',
+                    title : '申请人操作',
+                    sortable: true
+                }
+                 ,
+                 {
+                    title: '操作',
+                    align: 'center',
+                     formatter: function (value, row, index) {
+                         var actions = [];
+                         if (status == 0) {
+                             actions.push('<a class="btn btn-success btn-xs' + '" href="javascript:void(0)" onclick="add(\'' + row.id + '\')"><i class="fa fa-remove"></i>还款</a>');
+                         }
+                         return actions.join('');
+                     }
+                }
+                ]
+        };
+        $.table.init(options);
+    });
+
+    function add(id) {
+        var options = {
+            title: "借款申请详情",
+            width:800,
+            height:800,
+            url:prefix+"/off?id="+id,
+            skin: 'layui-layer-gray',
+            btn: ['关闭'],
+            yes: function (index, layero) {
+                layer.close(index);
+            }
+        };
+        $.modal.openOptions(options);
+    }
+</script>
+
+</body>
+</html>

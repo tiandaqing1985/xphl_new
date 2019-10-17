@@ -44,7 +44,7 @@ public class FacCollectDetaApplyController extends BaseController
 	/**
 	 * 查询团建明细列表
 	 */
-	@RequiresPermissions("system:facCollectDetaApply:list")
+
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(FacCollectDetaApply facCollectDetaApply)
@@ -58,7 +58,6 @@ public class FacCollectDetaApplyController extends BaseController
 	/**
 	 * 导出团建明细列表
 	 */
-	@RequiresPermissions("system:facCollectDetaApply:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(FacCollectDetaApply facCollectDetaApply)
@@ -80,7 +79,6 @@ public class FacCollectDetaApplyController extends BaseController
 	/**
 	 * 新增保存团建明细
 	 */
-	@RequiresPermissions("system:facCollectDetaApply:add")
 	@Log(title = "团建明细", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
@@ -103,7 +101,6 @@ public class FacCollectDetaApplyController extends BaseController
 	/**
 	 * 修改保存团建明细
 	 */
-	@RequiresPermissions("system:facCollectDetaApply:edit")
 	@Log(title = "团建明细", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -115,7 +112,6 @@ public class FacCollectDetaApplyController extends BaseController
 	/**
 	 * 删除团建明细
 	 */
-	@RequiresPermissions("system:facCollectDetaApply:remove")
 	@Log(title = "团建明细", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody

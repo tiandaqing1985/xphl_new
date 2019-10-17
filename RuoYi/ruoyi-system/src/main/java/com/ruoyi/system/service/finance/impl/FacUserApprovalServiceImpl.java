@@ -2,7 +2,7 @@ package com.ruoyi.system.service.finance.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service; 
-import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.core.text.Convert; 
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
@@ -77,6 +77,24 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService
 	public int deleteFacUserApprovalByIds(String ids)
 	{
 		return facUserApprovalMapper.deleteFacUserApprovalByIds(Convert.toStrArray(ids));
+	}
+
+	@Override
+	public List<FacUserApproval> selectEndFacUserApprovalList(
+			FacUserApproval facUserApproval) {
+		  return facUserApprovalMapper.selectEndFacUserApprovalList(facUserApproval);
+	}
+
+	@Override
+	public List<FacUserApproval> selectApplicantIdList(
+			FacUserApproval facUserApproval) {
+		 return facUserApprovalMapper.selectApplicantIdList(facUserApproval);
+	}
+
+	@Override
+	public List<FacUserApproval> selectApproverIdList(
+			FacUserApproval facUserApproval) {
+		 return facUserApprovalMapper.selectApproverIdList(facUserApproval);
 	}
 	
 }

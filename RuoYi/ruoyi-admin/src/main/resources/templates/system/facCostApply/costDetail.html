@@ -20,7 +20,11 @@
 
             <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
             <h4 class="form-header h4">行程安排详细信息</h4>
+            <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
+            <div>
+            <h4 class="form-header h4">住宿安排详细信息</h4>
             <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+            </div>
         </div>
  
 </div>
@@ -31,7 +35,6 @@
     var num = $("#num").val();
     var msg = $("#msg").val();
 
-alert(num);
 
     $(function () {
         var options = {
@@ -72,10 +75,6 @@ alert(num);
                     title: '预计费用'
                 },
                 {
-                    field: 'toLocal',
-                    title: '出差目的地'
-                },
-                {
                     field: 'reason',
                     title: '事由'
                 }
@@ -87,13 +86,67 @@ alert(num);
     $(function () {
         var options = {
             id: "bootstrap-table-2",
-            url: prefix + "/querys?num="+num,
+            url: prefix + "/sleep/"+num,
             createUrl: prefix + "/tranDetail?id="+num,
             showSearch: false,
             showRefresh: false,
             showToggle: false,
             showColumns: false,
             modalName: "行程安排详细信息",
+            columns: [
+                {
+                    checkbox: true
+                } ,
+                {
+                    field : 'num',
+                    title : '差旅编号',
+                    sortable: true
+                },
+                {
+                    field : 'city',
+                    title : '入住城市',
+                    sortable: true
+                },
+                {
+                    field : 'entrytime',
+                    title : '入店时间',
+                    sortable: true
+                },
+                {
+                    field : 'shoptime',
+                    title : '离店时间',
+                    sortable: true
+                },
+                {
+                    field : 'number',
+                    title : '入住人数',
+                    sortable: true
+                },
+                {
+                    field : 'details',
+                    title : '入住详情',
+                    sortable: true
+                },
+                {
+                    field : 'money',
+                    title : '住宿金额',
+                    sortable: true
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+
+
+    $(function () {
+        var options = {
+            id: "bootstrap-table-3",
+            url: prefix + "/querys/"+num,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            modalName: "住宿安排详细信息",
             columns: [
                 {
                     checkbox: true
@@ -130,7 +183,6 @@ alert(num);
         };
         $.table.init(options);
     });
-
 
 </script>
 </body>

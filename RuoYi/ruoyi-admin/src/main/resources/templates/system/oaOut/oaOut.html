@@ -11,47 +11,50 @@
 		$.modal.open("查看申请", url);
 	}
 	function takeBack(outId){
-		$.ajax({
-			type:"post",
-			url:prefix+"/ifTakeback",
-			data:{"outId":outId},
-			dataType:"json",
-			success:function(result){
-				if(result == "0"){
-					var data = { "outId": outId };
-		     	    $.operate.submit(prefix+"/takeBack", "post", "json", data);
+		if(confirm("确认撤回吗？")){
+			$.ajax({
+				type:"post",
+				url:prefix+"/ifTakeback",
+				data:{"outId":outId},
+				dataType:"json",
+				success:function(result){
+					if(result == "0"){
+						var data = { "outId": outId };
+			     	    $.operate.submit(prefix+"/takeBack", "post", "json", data);
+					}
+					else{
+						$.modal.alertWarning("不能执行此操作");
+					}
+				},
+				error:function(){
+					$.modal.alertWarning("请联系管理员");
 				}
-				else{
-					$.modal.alertWarning("不能执行此操作");
-				}
-			},
-			error:function(){
-				$.modal.alertWarning("请联系管理员");
-			}
-		});
-		
+			});
+		}
 	}
 	function del(outId){
-		$.ajax({
-			type:"post",
-			url:prefix+"/ifTakeback",
-			data:{"outId":outId},
-			dataType:"json",
-			success:function(result){
-				if(result == "0"){
-					var data = { "ids": outId };
-		     	    $.operate.submit(prefix+"/remove", "post", "json", data);
+		if(confirm("确认删除吗？")){
+			$.ajax({
+				type:"post",
+				url:prefix+"/ifTakeback",
+				data:{"outId":outId},
+				dataType:"json",
+				success:function(result){
+					if(result == "0"){
+						var data = { "ids": outId };
+			     	    $.operate.submit(prefix+"/remove", "post", "json", data);
+					}
+					else{
+						$.modal.alertWarning("不能执行此操作");
+					}
+				},
+				error:function(){
+					$.modal.alertWarning("请联系管理员");
 				}
-				else{
-					$.modal.alertWarning("不能执行此操作");
-				}
-			},
-			error:function(){
-				$.modal.alertWarning("请联系管理员");
-			}
-		});
-		
+			});
+		}
 	}
+	
 	function edit(outId){
 		$.ajax({
 			type:"post",

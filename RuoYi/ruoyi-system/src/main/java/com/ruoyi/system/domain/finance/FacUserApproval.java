@@ -10,10 +10,9 @@ import java.util.Date;
  * @author ruoyi
  * @date 2019-09-27
  */
-public class FacUserApproval extends BaseEntity
-{
+public class FacUserApproval extends BaseEntity {
 	private static final long serialVersionUID = 1L;
-	
+
 	/** 审批记录ID */
 	private Long approvalId;
 	/** 申请编号 */
@@ -33,100 +32,82 @@ public class FacUserApproval extends BaseEntity
 	/** 申请人ID */
 	private Long applicantId;
 
-	public void setApprovalId(Long approvalId) 
-	{
+	public Long getApprovalId() {
+		return approvalId;
+	}
+
+	public void setApprovalId(Long approvalId) {
 		this.approvalId = approvalId;
 	}
 
-	public Long getApprovalId() 
-	{
-		return approvalId;
-	}
-	public void setApplyId(String applyId) 
-	{
+	public void setApplyId(String applyId) {
 		this.applyId = applyId;
 	}
 
-	public String getApplyId() 
-	{
+	public String getApplyId() {
 		return applyId;
 	}
-	public void setApprovalState(String approvalState) 
-	{
+	public void setApprovalState(String approvalState) {
 		this.approvalState = approvalState;
 	}
 
-	public String getApprovalState() 
-	{
+	public String getApprovalState() {
 		return approvalState;
 	}
-	public void setApproverId(Long approverId) 
-	{
+	public void setApproverId(Long approverId) {
 		this.approverId = approverId;
 	}
 
-	public Long getApproverId() 
-	{
+	public Long getApproverId() {
 		return approverId;
 	}
-	public void setApprovalTime(Date approvalTime) 
-	{
+	public void setApprovalTime(Date approvalTime) {
 		this.approvalTime = approvalTime;
 	}
 
-	public Date getApprovalTime() 
-	{
+	public Date getApprovalTime() {
 		return approvalTime;
 	}
-	public void setApprovalSight(String approvalSight) 
-	{
+	public void setApprovalSight(String approvalSight) {
 		this.approvalSight = approvalSight;
 	}
 
-	public String getApprovalSight() 
-	{
+	public String getApprovalSight() {
 		return approvalSight;
 	}
-	public void setApprovalLevel(Integer approvalLevel) 
-	{
+	public void setApprovalLevel(Integer approvalLevel) {
 		this.approvalLevel = approvalLevel;
 	}
 
-	public Integer getApprovalLevel() 
-	{
+	public Integer getApprovalLevel() {
 		return approvalLevel;
 	}
-	public void setOpi(String opi) 
-	{
+	public void setOpi(String opi) {
 		this.opi = opi;
 	}
 
-	public String getOpi() 
-	{
+	public String getOpi() {
 		return opi;
 	}
-	public void setApplicantId(Long applicantId) 
-	{
-		this.applicantId = applicantId;
-	}
 
-	public Long getApplicantId() 
-	{
+	public Long getApplicantId() {
 		return applicantId;
 	}
 
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("approvalId", getApprovalId())
-            .append("applyId", getApplyId())
-            .append("approvalState", getApprovalState())
-            .append("approverId", getApproverId())
-            .append("approvalTime", getApprovalTime())
-            .append("approvalSight", getApprovalSight())
-            .append("approvalLevel", getApprovalLevel())
-            .append("opi", getOpi())
-            .append("createTime", getCreateTime())
-            .append("applicantId", getApplicantId())
-            .toString();
-    }
+	public void setApplicantId(Long applicantId) {
+		this.applicantId = applicantId;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+				.append("approvalId", getApprovalId())
+				.append("applyId", getApplyId())
+				.append("approvalState", getApprovalState())
+				.append("approverId", getApproverId())
+				.append("approvalTime", getApprovalTime())
+				.append("approvalSight", getApprovalSight())
+				.append("approvalLevel", getApprovalLevel())
+				.append("opi", getOpi()).append("createTime", getCreateTime())
+				.append("applicantId", getApplicantId()).toString();
+	}
 }

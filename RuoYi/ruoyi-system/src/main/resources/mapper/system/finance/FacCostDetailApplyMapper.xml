@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.finance.FacCostDetailApplyMapper">
+    
+    <resultMap type="FacCostDetailApply" id="FacCostDetailApplyResult">
+        <result property="id"    column="id"    />
+        <result property="num"    column="num"    />
+        <result property="costDate"    column="cost_date"    />
+        <result property="vehicle"    column="vehicle"    />
+        <result property="departure"    column="departure"    />
+        <result property="target"    column="target"    />
+        <result property="amount"    column="amount"    />
+        <result property="reason"    column="reason"    />
+    </resultMap>
+	
+	<sql id="selectFacCostDetailApplyVo">
+        select id, num, cost_date, vehicle, departure, target, amount, reason from fac_cost_detail_apply
+    </sql>
+	
+    <select id="selectFacCostDetailApplyList" parameterType="FacCostDetailApply" resultMap="FacCostDetailApplyResult">
+        <include refid="selectFacCostDetailApplyVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="num != null  and num != '' "> and num = #{num}</if>
+             <if test="costDate != null "> and cost_date = #{costDate}</if>
+             <if test="vehicle != null  and vehicle != '' "> and vehicle = #{vehicle}</if>
+             <if test="departure != null  and departure != '' "> and departure = #{departure}</if>
+             <if test="target != null  and target != '' "> and target = #{target}</if>
+             <if test="amount != null "> and amount = #{amount}</if>
+             <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
+         </where>
+    </select>
+    
+    <select id="selectFacCostDetailApplyById" parameterType="Long" resultMap="FacCostDetailApplyResult">
+        <include refid="selectFacCostDetailApplyVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFacCostDetailApply" parameterType="FacCostDetailApply" useGeneratedKeys="true" keyProperty="id">
+        insert into fac_cost_detail_apply
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">num,</if>
+			<if test="costDate != null  ">cost_date,</if>
+			<if test="vehicle != null  and vehicle != ''  ">vehicle,</if>
+			<if test="departure != null  and departure != ''  ">departure,</if>
+			<if test="target != null  and target != ''  ">target,</if>
+			<if test="amount != null  ">amount,</if>
+			<if test="reason != null  and reason != ''  ">reason,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">#{num},</if>
+			<if test="costDate != null  ">#{costDate},</if>
+			<if test="vehicle != null  and vehicle != ''  ">#{vehicle},</if>
+			<if test="departure != null  and departure != ''  ">#{departure},</if>
+			<if test="target != null  and target != ''  ">#{target},</if>
+			<if test="amount != null  ">#{amount},</if>
+			<if test="reason != null  and reason != ''  ">#{reason},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateFacCostDetailApply" parameterType="FacCostDetailApply">
+        update fac_cost_detail_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null  and num != ''  ">num = #{num},</if>
+            <if test="costDate != null  ">cost_date = #{costDate},</if>
+            <if test="vehicle != null  and vehicle != ''  ">vehicle = #{vehicle},</if>
+            <if test="departure != null  and departure != ''  ">departure = #{departure},</if>
+            <if test="target != null  and target != ''  ">target = #{target},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="reason != null  and reason != ''  ">reason = #{reason},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteFacCostDetailApplyById" parameterType="Long">
+        delete from fac_cost_detail_apply where id = #{id}
+    </delete>
+	
+    <delete id="deleteFacCostDetailApplyByIds" parameterType="String">
+        delete from fac_cost_detail_apply where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

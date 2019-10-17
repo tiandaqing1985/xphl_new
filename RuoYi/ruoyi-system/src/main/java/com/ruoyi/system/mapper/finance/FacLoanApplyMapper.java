@@ -68,5 +68,11 @@ public interface FacLoanApplyMapper
 	 */
 	List<FacLoanApply> detail(String num);
 	  
-	
+	 
+		/**
+		 * 借款申请
+		 * @param num
+		 * @return
+		 */
+	public	Double FacLoanAmount(String num);
 }

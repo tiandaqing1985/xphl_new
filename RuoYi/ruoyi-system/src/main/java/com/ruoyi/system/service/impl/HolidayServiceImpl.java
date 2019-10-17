@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ruoyi.system.mapper.HolidayMapper;
+import com.ruoyi.system.mapper.HolidayRecordMapper;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.domain.Holiday;
+import com.ruoyi.system.domain.HolidayRecord;
 import com.ruoyi.system.domain.RestHoliday;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
@@ -44,6 +46,8 @@ public class HolidayServiceImpl implements IHolidayService
     private SysUserMapper userMapper;
     @Autowired
     private SysUserRoleMapper userRoleMapper;
+	@Autowired
+	private HolidayRecordMapper holidayRecordMapper;
     
 	/**
      * 查询假期信息
@@ -276,5 +280,126 @@ public class HolidayServiceImpl implements IHolidayService
 	@Override
 	public List<RestHoliday> selectMyRestByUserId(SysUser sysUser) {
 		return holidayMapper.selectMyRestByUserId(sysUser);
+	}
+
+	@Override
+	public void restoreHoliday(Long applyId, String useState) {
+		
+		HolidayRecord holidayRecord = new HolidayRecord();
+		holidayRecord.setApplyId(applyId);
+		List<HolidayRecord> hList = holidayRecordMapper.selectHolidayRecordList(holidayRecord);
+
+		if(useState != null){
+			holidayRecord.setUseState(useState);//使用状态(1申请中，2已使用，3撤销，4销假，5被销假，6被驳回)
+			holidayRecordMapper.updateHolidayRecordByApplyId(holidayRecord);	
+		}
+		
+		//根据年假使用记录表中value值修改假期表value值
+		for(HolidayRecord h : hList){
+			Holiday h1 = new Holiday();
+			h1.setId(h.getHolidayId());
+			//查询假期表中value值
+			Holiday h2 = holidayMapper.selectHolidayById(h.getHolidayId());
+			h1.setValue(h.getValue()+h2.getValue());//将假期表和假期记录表中value值相加
+			holidayMapper.updateHoliday(h1);
+		}				
+
+	}
+
+	@Override
+	public void createHolidayAndRecord(UserApply userApply) {
+		double timelength = userApply.getTimelength();
+		//是年假
+		Holiday holiday = new Holiday();
+		if(userApply.getLeaveType().equals("1")){
+			//查找登录用户下所有有效年假
+			holiday.setUserId(userApply.getUserId());//申请人id
+			holiday.setHolidayType("1");//类型为年假假期
+			holiday.setAvailability("1");//有效
+			List<Holiday> holidayList = holidayMapper.selectHolidayList(holiday);
+			Double tl = timelength;
+			for(Holiday holiday1 : holidayList){
+				if(holiday1.getValue() != 0.0){
+					//请假的天数比检索的到的第一条假期余额大的时候
+					if(tl >= holiday1.getValue()){
+						tl = tl - holiday1.getValue();
+						//每一条假期信息申请后 新增一条使用记录
+						HolidayRecord holidayRecord = new HolidayRecord();
+						holidayRecord.setHolidayId(holiday1.getId());
+						holidayRecord.setApplyId(userApply.getApplyId());
+						holidayRecord.setValue(holiday1.getValue());
+						holidayRecord.setUseState("1");//假期使用状态是申请中
+						holidayRecordMapper.insertHolidayRecord(holidayRecord);
+						//把假期
+						Holiday holiday2 = new Holiday();
+						holiday2.setId(holiday1.getId());
+						holiday2.setValue(0.0);
+						holidayMapper.updateHoliday(holiday2);
+						if(tl == 0.0){
+							break;
+						}
+					}
+					else{
+						HolidayRecord holidayRecord = new HolidayRecord();
+						holidayRecord.setHolidayId(holiday1.getId());
+						holidayRecord.setApplyId(userApply.getApplyId());
+						holidayRecord.setValue(tl);
+						holidayRecord.setUseState("1");
+						holidayRecordMapper.insertHolidayRecord(holidayRecord);
+						
+						Holiday holiday2 = new Holiday();
+						holiday2.setId(holiday1.getId());
+						holiday2.setValue(holiday1.getValue() - tl);
+						holidayMapper.updateHoliday(holiday2);
+						break;
+					}
+				}
+			}
+		}
+		//是调休
+		if(userApply.getLeaveType().equals("2")){
+			//查找登录用户下所有有效调休
+			holiday.setUserId(userApply.getUserId());
+			holiday.setHolidayType("2");
+			holiday.setAvailability("1");
+			List<Holiday> holidayList = holidayMapper.selectHolidayList(holiday);
+			Double tl = timelength*8;
+			for(Holiday holiday1 : holidayList){
+				if(holiday1.getValue() != 0.0){
+					if(tl >= holiday1.getValue()){
+						tl = tl - holiday1.getValue();
+						HolidayRecord holidayRecord = new HolidayRecord();
+						holidayRecord.setHolidayId(holiday1.getId());
+						holidayRecord.setApplyId(userApply.getApplyId());
+						holidayRecord.setValue(holiday1.getValue());
+						holidayRecord.setUseState("1");
+						holidayRecordMapper.insertHolidayRecord(holidayRecord);
+						
+						Holiday holiday2 = new Holiday();
+						holiday2.setId(holiday1.getId());
+						holiday2.setValue(0.0);
+						holidayMapper.updateHoliday(holiday2);
+						if(tl == 0.0){
+							break;
+						}
+					}
+					else{
+						HolidayRecord holidayRecord = new HolidayRecord();
+						holidayRecord.setHolidayId(holiday1.getId());
+						holidayRecord.setApplyId(userApply.getApplyId());
+						holidayRecord.setValue(tl);
+						holidayRecord.setUseState("1");
+						holidayRecordMapper.insertHolidayRecord(holidayRecord);
+						
+						Holiday holiday2 = new Holiday();
+						holiday2.setId(holiday1.getId());
+						holiday2.setValue(holiday1.getValue() - tl);
+						holidayMapper.updateHoliday(holiday2);
+						break;
+					}
+				}
+			}
+		}
+
 	}
 }

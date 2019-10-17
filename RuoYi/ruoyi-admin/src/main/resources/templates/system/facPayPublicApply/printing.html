@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <th:block th:include="include :: header('初始多表格')"/>
+    <th:block th:include="include :: layout-latest-css" />
+    <th:block th:include="include :: ztree-css" />
+</head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="from-detail" th:object="${xzPurchaseResourceApply}">
+        <input id="id" name="id" th:field="*{id}" type="hidden">
+        <h4 class="form-header h4">对公支付申请</h4>
+        <div>
+            <table id="tab" border="1" style="width:100%;">
+                <tr>
+                    <th colspan="6">审批单</th>
+                </tr>
+                <tr>
+                    <th>用途</th>
+                    <td colspan="5">[[${xzPurchaseResourceApply.purpose}]]</td>
+                </tr>
+                <tr>
+                    <th>部门名称</th>
+                    <td colspan="2">[[${#dates.format(xzPurchaseResourceApply.subTime, 'yyyy-MM-dd')}]]</td>
+                    <th>申请人</th>
+                    <td colspan="2">[[${xzPurchaseResourceApply.applyUserName}]]</td>
+                    <th>申请日期</th>
+                    <td colspan="2">[[${#dates.format(xzPurchaseResourceApply.subTime, 'yyyy-MM-dd')}]]</td>
+                </tr>
+                <tr>
+                    <th>付款项目</th>
+                    <td colspan="2">[[${#dates.format(xzPurchaseResourceApply.subTime, 'yyyy-MM-dd')}]]</td>
+                    <th>申请金额</th>
+                    <td colspan="2">[[${xzPurchaseResourceApply.applyUserName}]]</td>
+                    <th>发票状态</th>
+                    <td colspan="2">[[${#dates.format(xzPurchaseResourceApply.subTime, 'yyyy-MM-dd')}]]</td>
+                    <th>提交发票时间/预计回票时间</th>
+                    <td colspan="2">[[${#dates.format(xzPurchaseResourceApply.subTime, 'yyyy-MM-dd')}]]</td>
+
+                </tr>
+                <tr>
+                    <th>备注</th>
+                    <td colspan="2">[[${#dates.format(xzPurchaseResourceApply.subTime, 'yyyy-MM-dd')}]]</td>
+                </tr>
+                <tr>
+                    <th>收款人户名</th>
+                    <td colspan="2">[[${#dates.format(xzPurchaseResourceApply.subTime, 'yyyy-MM-dd')}]]</td>
+                    <th>收款人账号</th>
+                    <td colspan="2">[[${xzPurchaseResourceApply.applyUserName}]]</td>
+                    <th>收款人开户行</th>
+                    <td colspan="2">[[${#dates.format(xzPurchaseResourceApply.subTime, 'yyyy-MM-dd')}]]</td>
+                </tr>
+                </table>
+        </div>
+    </form>
+</div>
+<div class="row">
+    <div class="col-sm-offset-5 col-sm-10">
+        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i class="fa fa-reply-all"></i>关闭</button>
+
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "system/xzPurchaseResourceApply";
+    $("#from-detail").validate({
+        rules:{
+            xxxx:{
+                required:true,
+            },
+        },
+        focusCleanup: true
+    });
+    $(function() {
+        //展示数据
+        debugger;
+        var dataSum=[[${xzPurchaseResourceApply.xzPurchaseApproval}]];
+        var data =[[${xzPurchaseResourceApply.xzPurchaseResource}]];
+        var str = "";//定义用于拼接的字符串
+        var sum=0;
+    });
+
+
+    function f(){
+        webPrint("bootstrap-table-1");
+    }
+    function webPrint(objId){
+        var printContent=document.getElementById(objId).innerHTML;//获得需要打印内容的HTML代码
+
+        printWindow=window.open('','_blank');
+
+        printWindow.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <title></title><style>@page{margin-bottom:0mm;margin-top:2mm}</style></head><body>');
+
+        //这里是向新建的窗口写入HTML的head信息，可引入自己的js和css，以供打印时样式与网页中显示的一致
+
+        printWindow.document.write('<div style="width:100%; height:100%;">'+printContent+"</div>");
+
+        //这里向新建的窗体中写入BODY的内容，注意，外边加的额外DIV是有必要的，它里面CSS可以控制打印时不会出现空白页
+
+        printWindow.document.write("</body></html>");//这里向新建的窗体写入HTML的结束标记
+
+        printWindow.document.close();//关闭新建窗口的文档输出流，否则下面的打印语句无效
+
+        printWindow.print();//打印当前新建窗口中的内容
+
+        printWindow.close();//关闭新建的窗口
+    }
+
+
+</script>
+</body>
+</html>

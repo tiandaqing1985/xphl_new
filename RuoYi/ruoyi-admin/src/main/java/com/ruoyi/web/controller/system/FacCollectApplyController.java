@@ -15,7 +15,9 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCollectApply;
 import com.ruoyi.system.service.finance.IFacCollectApplyService;
 
@@ -44,7 +46,7 @@ public class FacCollectApplyController extends BaseController
 	/**
 	 * 查询团建申请列表
 	 */
-	@RequiresPermissions("system:facCollectApply:list")
+
 	@PostMapping("/list")
 	@ResponseBody
 	public TableDataInfo list(FacCollectApply facCollectApply)
@@ -58,7 +60,6 @@ public class FacCollectApplyController extends BaseController
 	/**
 	 * 导出团建申请列表
 	 */
-	@RequiresPermissions("system:facCollectApply:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(FacCollectApply facCollectApply)
@@ -72,20 +73,23 @@ public class FacCollectApplyController extends BaseController
 	 * 新增团建申请
 	 */
 	@GetMapping("/add")
-	public String add()
-	{
+	public String add(ModelMap mmp) {
+		IdWorker idWorker = new IdWorker(0, 1);
+		mmp.put("num", "TJ" + idWorker.nextId());
+		mmp.put("deptName",ShiroUtils.getDeptId());
 	    return prefix + "/add";
 	}
 	
 	/**
 	 * 新增保存团建申请
 	 */
-	@RequiresPermissions("system:facCollectApply:add")
 	@Log(title = "团建申请", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(FacCollectApply facCollectApply)
 	{		
+		facCollectApply.setApplicant(ShiroUtils.getUserId());
+		facCollectApply.setDeptName(""+ShiroUtils.getDeptId()); 
 		return toAjax(facCollectApplyService.insertFacCollectApply(facCollectApply));
 	}
 
@@ -103,7 +107,6 @@ public class FacCollectApplyController extends BaseController
 	/**
 	 * 修改保存团建申请
 	 */
-	@RequiresPermissions("system:facCollectApply:edit")
 	@Log(title = "团建申请", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
@@ -115,7 +118,6 @@ public class FacCollectApplyController extends BaseController
 	/**
 	 * 删除团建申请
 	 */
-	@RequiresPermissions("system:facCollectApply:remove")
 	@Log(title = "团建申请", businessType = BusinessType.DELETE)
 	@PostMapping( "/remove")
 	@ResponseBody

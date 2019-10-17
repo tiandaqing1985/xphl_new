@@ -2,17 +2,14 @@ package com.ruoyi.system.domain.finance;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import com.ruoyi.common.core.domain.BaseEntity; 
-
+import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
-import java.util.List;
-import java.math.BigDecimal;
 
 /**
  * 差旅申请表 fac_cost_apply
  * 
  * @author ruoyi
- * @date 2019-09-02
+ * @date 2019-10-15
  */
 public class FacCostApply extends BaseEntity {
 	private static final long serialVersionUID = 1L;
@@ -29,25 +26,23 @@ public class FacCostApply extends BaseEntity {
 	private Date backTimeEs;
 	/** 出差人员 */
 	private String outMan;
-	/** 申请人 */
-	private long userId;
 	/** 预计费用 */
-	private BigDecimal moneyEs;
+	private Double moneyEs;
 	/** 出差目的地 */
 	private String toLocal;
-	/** 审批状态 */
-	private String status;
 	/** 事由 */
 	private String reason;
-	/**差旅申请详细列表*/
-	private List<FacCostDetailApply> facCostDetail;
+	/** 审批状态(1同意，2驳回 ，3未操作) */
+	private String status;
+	/** 申请人 */
+	private Long userId;
 
-	public List<FacCostDetailApply> getFacCostDetail() {
-		return facCostDetail;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setFacCostDetail(List<FacCostDetailApply> facCostDetail) {
-		this.facCostDetail = facCostDetail;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public void setId(Long id) {
@@ -92,28 +87,11 @@ public class FacCostApply extends BaseEntity {
 	public String getOutMan() {
 		return outMan;
 	}
-
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
-	}
-
-	public void setMoneyEs(BigDecimal moneyEs) {
+	public void setMoneyEs(Double moneyEs) {
 		this.moneyEs = moneyEs;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
-	public BigDecimal getMoneyEs() {
+	public Double getMoneyEs() {
 		return moneyEs;
 	}
 	public void setToLocal(String toLocal) {
@@ -130,14 +108,21 @@ public class FacCostApply extends BaseEntity {
 	public String getReason() {
 		return reason;
 	}
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public String getStatus() {
+		return status;
+	}
 
 	public String toString() {
 		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
 				.append("id", getId()).append("num", getNum())
 				.append("busName", getBusName()).append("outTime", getOutTime())
-				.append("backTimeEs", getBackTimeEs())
+				.append("backTimeEs", getBackTimeEs()).append("userId", getUserId())
 				.append("outMan", getOutMan()).append("moneyEs", getMoneyEs())
 				.append("toLocal", getToLocal()).append("reason", getReason())
-				.toString();
+				.append("status", getStatus()).toString();
 	}
 }

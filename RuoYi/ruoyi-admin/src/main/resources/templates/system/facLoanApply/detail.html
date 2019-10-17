@@ -10,8 +10,6 @@
     <div class="row">
         <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
         <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
-
-
  <div>
         <h4 class="form-header h4">借款信息</h4>
    
@@ -19,14 +17,13 @@
         <div class="col-sm-12 select-table table-striped">
 
             <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
-            <h4 class="form-header h4">借款详细信息</h4>
-            <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+
         </div>
  
 </div>
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
-    var prefix = ctx + "system/facCostApply";
+    var prefix = ctx + "system/facLoanApply";
     var datas = [[${@dict.getType('sys_normal_disable')}]];
     var num = $("#num").val();
     var msg = $("#msg").val();
@@ -36,13 +33,12 @@ alert(num);
     $(function () {
         var options = {
             id: "bootstrap-table-1",
-            url: prefix + "/query?num="+num,
-            createUrl: prefix + "/tranDetail?id="+num,
+            url: prefix + "/querys?num="+num,
             showSearch: false,
             showRefresh: false,
             showToggle: false,
             showColumns: false,
-            modalName: "差旅详细信息",
+            modalName: "借款详细信息",
             columns: [
                 {
                     checkbox: true
@@ -74,17 +70,29 @@ alert(num);
                 {
                     field : 'createTime',
                     title : '创建时间',
-                    sortable: true
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
                 },
                 {
                     field : 'loanTime',
                     title : '借款时间',
-                    sortable: true
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
                 },
                 {
                     field : 'repayTime',
                     title : '预计还款时间',
-                    sortable: true
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
                 },
                 {
                     field : 'facOperate',
@@ -106,52 +114,6 @@ alert(num);
         $.table.init(options);
     });
 
-    $(function () {
-        var options = {
-            id: "bootstrap-table-2",
-            url: prefix + "/querys?num="+num,
-            createUrl: prefix + "/tranDetail?id="+num,
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            modalName: "借款详细信息",
-            columns: [
-                {
-                    checkbox: true
-                },
-                {
-                    field: 'num',
-                    title: '差旅编号'
-                },
-                {
-                    field: 'costDate',
-                    title: '时间'
-                },
-                {
-                    field: 'vehicle',
-                    title: '交通工具'
-                },
-                {
-                    field: 'departure',
-                    title: '出发地'
-                },
-                {
-                    field: 'target',
-                    title: '目的地'
-                },
-                {
-                    field: 'amount',
-                    title: '预算金额'
-                },
-                {
-                    field: 'reason',
-                    title: '事由'
-                }
-            ]
-        };
-        $.table.init(options);
-    });
 
 
 </script>

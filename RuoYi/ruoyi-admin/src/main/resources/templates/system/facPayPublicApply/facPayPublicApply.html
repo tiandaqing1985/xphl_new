@@ -1,173 +1,149 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('对公申请列表')" />
+    <th:block th:include="include :: header('对公申请列表')"/>
 </head>
 <body class="gray-bg">
-     <div class="container-div">
-		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="formId">
-					<div class="select-list">
-						<ul>
-<!--							<li>-->
-<!--								申请编号：<input type="text" name="num"/>-->
-<!--							</li>-->
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
 
-<!--							<li>-->
-<!--								申请名称：<input type="text" name="name"/>-->
-<!--							</li>-->
+                        <li>
+                            申请人id：<input type="text" name="user"/>
+                        </li>
 
-							<li>
-								申请人：<input type="text" name="userName"/>
-							</li>
+                        <li>
+                            收款人：<input type="text" name="payee"/>
+                        </li>
 
-<!--							<li>-->
-<!--								是否有发票：<input type="text" name="weatherInvoice"/>-->
-<!--							</li>-->
+                        <li>
+                            收款人开户行：<input type="text" name="payeeBank"/>
+                        </li>
 
-<!--							<li>-->
-<!--								提交时间：<input type="text" name="createTime"/>-->
-<!--							</li>-->
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
 
-<!--							<li>-->
-<!--								付款金额：<input type="text" name="amount"/>-->
-<!--							</li>-->
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <a class="btn btn-success" onclick="$.operate.add()" >
+                <i class="fa fa-plus"></i> 添加
+            </a>
+            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
+               >
+                <i class="fa fa-edit"></i> 修改
+            </a>
+            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()"
+               >
+                <i class="fa fa-remove"></i> 删除
+            </a>
+            <a class="btn btn-warning" onclick="$.table.exportExcel()"
+               >
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:facPayPublicApply:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:facPayPublicApply:remove')}]];
+    var detailFlag = [[${@permission.hasPermi('system:facLoanApply:detail')}]];
+    var prefix = ctx + "system/facPayPublicApply";
 
-<!--							<li>-->
-<!--								收款人：<input type="text" name="payee"/>-->
-<!--							</li>-->
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "对公申请",
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'num',
+                    title: '申请编号',
+                    sortable: true
+                },
+                {
+                    field: 'name',
+                    title: '申请名称',
+                    sortable: true
+                },
+                {
+                    field: 'user',
+                    title: '申请人id',
+                    sortable: true
+                },
+                {
+                    field: 'amount',
+                    title: '付款金额',
+                    sortable: true
+                },
+                {
+                    field: 'payee',
+                    title: '收款人',
+                    sortable: true
+                },
+                {
+                    field: 'payeeAccount',
+                    title: '收款人账号',
+                    sortable: true
+                } ,
+                {
+                    field: 'status',
+                    title: '审批状态',
+                    sortable: true
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
 
-<!--							<li>-->
-<!--								收款人开户行：<input type="text" name="payeeBank"/>-->
-<!--							</li>-->
-
-<!--							<li>-->
-<!--								收款人账号：<input type="text" name="payeeAccount"/>-->
-<!--							</li>-->
-
-<!--							<li>-->
-<!--								备注：<input type="text" name="remarks"/>-->
-<!--							</li>-->
-
-<!--							<li>-->
-<!--								修改时间：<input type="text" name="updateTime"/>-->
-<!--							</li>-->
-
-<!--							<li>-->
-<!--								审批状态：<input type="text" name="status"/>-->
-<!--							</li>-->
-
-<!--							<li>-->
-<!--								操作状态：<input type="text" name="oprTime"/>-->
-<!--							</li>-->
-
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
-			
-	        <div class="btn-group-sm" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:facPayPublicApply:add">
-					<i class="fa fa-plus"></i> 新增对公支付申请
-				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:facPayPublicApply:edit">
-					<i class="fa fa-edit"></i> 修改
-				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:facPayPublicApply:remove">
-					<i class="fa fa-remove"></i> 删除
-				</a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:facPayPublicApply:export">
-						<i class="fa fa-download"></i> 导出
-				 </a>
-			</div>
-			<div class="col-sm-12 select-table table-striped">
-				<table id="bootstrap-table" data-mobile-responsive="true"></table>
-			</div>
-		</div>
-	</div>
-    <div th:include="include :: footer"></div>
-    <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:facPayPublicApply:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:facPayPublicApply:remove')}]];
-        var prefix = ctx + "system/facPayPublicApply";
-
-        $(function() {
-            var options = {
-                url: prefix + "/list",
-                createUrl: prefix + "/add",
-                updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-				exportUrl: prefix + "/export",
-                modalName: "对公申请",
-		        showExport: true,
-                columns: [{
-		            checkbox: true
-		        },
-				{
-					field : 'num', 
-					title : '申请编号',
-					sortable: true
-				},
-				{
-					field : 'name', 
-					title : '申请名称',
-					sortable: true
-				},
-				{
-					field : 'userName',
-					title : '申请人',
-					sortable: true
-				},
-				{
-					field : 'weatherInvoice', 
-					title : '是否有发票',
-					sortable: true
-				},
-				{
-					field : 'createTime', 
-					title : '提交时间',
-					sortable: true
-				},
-				{
-					field : 'amount', 
-					title : '付款金额',
-					sortable: true
-				},
-				{
-					field : 'deptName',
-					title : '部门',
-					sortable: true
-				},
-				{
-					field : 'status', 
-					title : '审批状态',
-					sortable: true
-				},
-				{
-					field : 'oprTime', 
-					title : '操作状态',
-					sortable: true
-				},
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-						var actions = [];
-		            	if (row.status!=null){
-							actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.num + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-						}
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
-            };
-            $.table.init(options);
-        });
-    </script>
+    function f(id) {
+        var options = {
+            title: "对公详情",
+            width: 800,
+            height: 800,
+            url: prefix + "/detail?id=" + id,
+            skin: 'layui-layer-gray',
+            btn: ['关闭'],
+            yes: function (index, layero) {
+                layer.close(index);
+            }
+        };
+        $.modal.openOptions(options);
+    }
+</script>
 </body>
 </html>

@@ -1,26 +1,25 @@
 package com.ruoyi.system.mapper.finance;
-
-
-import com.ruoyi.system.domain.finance.FacPayPublicApply;
-import org.apache.ibatis.annotations.Param;
+ 
 
 import java.util.List;
+
+import com.ruoyi.system.domain.finance.FacPayPublicApply;	
 
 /**
  * 对公申请 数据层
  * 
  * @author ruoyi
- * @date 2019-08-01
+ * @date 2019-10-10
  */
 public interface FacPayPublicApplyMapper 
 {
 	/**
      * 查询对公申请信息
      * 
-     * @param 对公申请
+     * @param id 对公申请ID
      * @return 对公申请信息
      */
-	 FacPayPublicApply selectFacPayPublicApplyById(@Param("num") String num);
+	public FacPayPublicApply selectFacPayPublicApplyById(Integer id);
 	
 	/**
      * 查询对公申请列表
@@ -61,5 +60,13 @@ public interface FacPayPublicApplyMapper
      * @return 结果
      */
 	public int deleteFacPayPublicApplyByIds(String[] ids);
+	
+	/**
+	 * 对公详细信息汇总
+	 * @param num
+	 * @return
+	 */
+	FacPayPublicApply detail(String num);
+
 	
 }

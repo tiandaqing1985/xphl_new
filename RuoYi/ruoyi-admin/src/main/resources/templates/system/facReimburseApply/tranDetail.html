@@ -11,19 +11,15 @@
             <div class="form-group ui-sortable-helper col-md-6">
                 <label class="col-sm-3 control-label">日期</label>
                 <div class="col-sm-9">
-                    <div class="form-group">
-                        <div class="input-group date"> <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                            <input type="text" class="form-control" value="2018-04-20">
-                        </div>
-                    </div>
+                    <input id="ddDate" name="ddDate" class="form-control" type="date">
                 </div>
             </div>
             <div class="form-group col-md-6">
                 <label class="col-sm-3 control-label">类别</label>
                 <div class="col-sm-9">
                     <select id="type" name="type">
-                        <option value="1">公出交通费用申请</option>
-                        <option value="2">加班交通费用申请</option>
+                        <option value="公出">公出交通费用申请</option>
+                        <option value="加班">加班交通费用申请</option>
                     </select>
                 </div>
             </div>
@@ -90,33 +86,12 @@
     var prefix = ctx + "system/facReimburseApply";
     var num =$("#num").val();
 
-
     function submitHandler() {
         if ($.validate.form()) {
-            var data = $("#form-add").serializeArray();
-            var num = $.form.selectCheckeds("num");
-            var type = $.form.selectCheckeds("type");
-            var amount = $.form.selectCheckeds("amount");
-            var user = $.form.selectCheckeds("user");
-            var departure = $.form.selectCheckeds("departure");
-            var target = $.form.selectCheckeds("target");
-            var documentNum = $.form.selectCheckeds("documentNum");
-            var targetUnit = $.form.selectCheckeds("targetUnit");
-            var reason = $.form.selectCheckeds("reason");
-            data.push({"name": "num", "value": num});
-            data.push({"name": "type", "value": type});
-            data.push({"name": "amount", "value": amount});
-            data.push({"name": "user", "value": user});
-            data.push({"name": "departure", "value": departure});
-            data.push({"name": "target", "value": target});
-            data.push({"name": "documentNum", "value": documentNum});
-            data.push({"name": "targetUnit", "value": targetUnit});
-            data.push({"name": "reason", "value": reason});
-            window.localStorage.setItem('param',JSON.stringify(data))  //存储数据
-            $.modal.close();
+            $.operate.save(prefix + "/tranDetail", $('#form-add').serialize());
         }
-
     }
+
 </script>
 </body>
 </html>

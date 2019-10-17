@@ -1,8 +1,10 @@
 package com.ruoyi.system.service.finance.impl;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service; 
+import org.springframework.stereotype.Service;
+
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.system.domain.finance.FacCollectApply;
 import com.ruoyi.system.mapper.finance.FacCollectApplyMapper;
@@ -19,7 +21,7 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService
 {
 	@Autowired
 	private FacCollectApplyMapper facCollectApplyMapper;
-
+   
 	/**
      * 查询团建申请信息
      * 
@@ -53,6 +55,7 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService
 	@Override
 	public int insertFacCollectApply(FacCollectApply facCollectApply)
 	{
+		
 	    return facCollectApplyMapper.insertFacCollectApply(facCollectApply);
 	}
 	

@@ -10,6 +10,8 @@ import com.ruoyi.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service; 
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.system.domain.finance.FacCostApply;
+import com.ruoyi.system.domain.finance.FacCostDetailApply;
 import com.ruoyi.system.domain.finance.FacHospitalityApply;
 import com.ruoyi.system.mapper.finance.FacHospitalityApplyMapper;
 import com.ruoyi.system.service.finance.IFacHospitalityApplyService;
@@ -63,7 +65,7 @@ public class FacHospitalityApplyServiceImpl implements IFacHospitalityApplyServi
 	@Override
 	public int insertFacHospitalityApply(FacHospitalityApply facHospitalityApply)
 	{
-		facHospitalityApply.setStates("3");
+		facHospitalityApply.setStates(3L);
 		FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
 		facSysUserApproval.setApprovalId(facHospitalityApply.getUserId());
 		facSysUserApproval.setApprovalTime(new Date());
@@ -76,7 +78,7 @@ public class FacHospitalityApplyServiceImpl implements IFacHospitalityApplyServi
 		Long upLeaderId = iSysUserService
 				.selectUpApproverIdByApplyerId(facHospitalityApply.getUserId());// 所在部门负责人的上级leader
 		Long approvalId = 0L;// 部门负责人id 审批人
-		if (leaderId.equals(facHospitalityApply.getUserId())) { // 判断用户是否部门负责人
+		if (facHospitalityApply.getUserId().equals(leaderId)) { // 判断用户是否部门负责人
 															// 确定一、二级审批人id
 			facSysUserApproval.setApproverId(upLeaderId); // 一级审批人id
 			approvalId = upLeaderId;
@@ -87,7 +89,7 @@ public class FacHospitalityApplyServiceImpl implements IFacHospitalityApplyServi
 		approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
 		if (facHospitalityApply.getUserId() == 103
 				|| facHospitalityApply.getUserId() == 101) {
-			facHospitalityApply.setStates("1");
+			facHospitalityApply.setStates(1L);
 			return facHospitalityApplyMapper.insertFacHospitalityApply(facHospitalityApply);
 					 
 		}
@@ -138,5 +140,11 @@ public class FacHospitalityApplyServiceImpl implements IFacHospitalityApplyServi
 	{
 		return facHospitalityApplyMapper.deleteFacHospitalityApplyByIds(Convert.toStrArray(ids));
 	}
-	
+
+	@Override
+	public FacHospitalityApply deatil(String num) {
+		FacHospitalityApply facHospitalityApply = facHospitalityApplyMapper.detail(num);  
+	return facHospitalityApply;
+	}
+	 
 }

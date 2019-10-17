@@ -210,11 +210,13 @@
 			
 				//alert(restlength);
 				
-				if(leaveType == "10"){
+				/* if(leaveType == "10"){
 					datelength = 1.0;
 				}else{
 					datelength = Datelength(starttime, endtime, timeapart1, timeapart2)-restlength;
-				}
+				} */
+				
+				datelength = Datelength(starttime, endtime, timeapart1, timeapart2)-restlength;
 				
 				$("#timelength").val(datelength);
 				
@@ -257,7 +259,7 @@
 				else{
 					if(leaveType == "1"){  //年假
 						if(datelength >3){
-							if(DateDiff(getNowFormatDate(),$("#starttime").val())-restlength < 2){
+							if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 2){
 								p01.innerText="超过3天的年假需提前2天提交申请";
 								$("#p01").css("color","red");
 								flag = false;
@@ -265,7 +267,7 @@
 							}
 						}
 						else if (datelength >1){
-							if(DateDiff(getNowFormatDate(),$("#starttime").val()) -restlength < 1){
+							if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 1){
 								p01.innerText="超过1天的年假需提前提交申请";
 								$("#p01").css("color","red");
 								flag = false;
@@ -288,7 +290,7 @@
 						}
 					}
 					else if(leaveType == "5"){ //婚假
-						if(DateDiff(getNowFormatDate(),$("#starttime").val()) -restlength < 7){
+						if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 7){
 							p01.innerText="婚假需提前一周提交申请";
 							$("#p01").css("color","red");
 							flag = false;
@@ -313,7 +315,7 @@
 						}
 					}
 					else if(leaveType == "6"){//产假 
-						if(DateDiff(getNowFormatDate(),$("#starttime").val()) - restlength < 15){
+						if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 15){
 							p01.innerText="产假需提前15天提交申请";
 							$("#p01").css("color","red");
 							flag = false;

@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 public class FacHospitalityApply extends BaseEntity
 {
 	private static final long serialVersionUID = 1L;
-	
 	/** id */
 	private Long id;
 	/** 招待费编号 */
@@ -37,13 +36,13 @@ public class FacHospitalityApply extends BaseEntity
 	/** 总人数 */
 	private String totalNumber;
 	/** 招待费标准 */
-	private BigDecimal standardAmount;
+	private Double standardAmount;
 	/** 预算金额 */
-	private BigDecimal amount;
+	private Double amount;
 	/** 申请时间 */
 	private Date applicationTime;
 	/** 审批结果 */
-	private String states;
+	private Long states;
 
 	public void setId(Long id) 
 	{
@@ -135,21 +134,21 @@ public class FacHospitalityApply extends BaseEntity
 	{
 		return totalNumber;
 	}
-	public void setStandardAmount(BigDecimal standardAmount) 
+	public void setStandardAmount(Double standardAmount) 
 	{
 		this.standardAmount = standardAmount;
 	}
 
-	public BigDecimal getStandardAmount() 
+	public Double getStandardAmount() 
 	{
 		return standardAmount;
 	}
-	public void setAmount(BigDecimal amount) 
+	public void setAmount(Double amount) 
 	{
 		this.amount = amount;
 	}
 
-	public BigDecimal getAmount() 
+	public Double getAmount() 
 	{
 		return amount;
 	}
@@ -162,14 +161,14 @@ public class FacHospitalityApply extends BaseEntity
 	{
 		return applicationTime;
 	}
-	 
-
-    public String getStates() {
-		return states;
+	public void setStates(Long states) 
+	{
+		this.states = states;
 	}
 
-	public void setStates(String states) {
-		this.states = states;
+	public Long getStates() 
+	{
+		return states;
 	}
 
 	public String toString() {

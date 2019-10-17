@@ -13,39 +13,15 @@
 							<li>
 								申请编号：<input type="text" name="applyId"/>
 							</li>
-
-							<li>
-								审批意见：<input type="text" name="approvalState"/>
-							</li>
-
 							<li>
 								审批人ID：<input type="text" name="approverId"/>
 							</li>
-
 							<li>
 								审批操作时间：<input type="text" name="approvalTime"/>
 							</li>
-
-							<li>
-								可见性（1可见 0不可见）：<input type="text" name="approvalSight"/>
-							</li>
-
-							<li>
-								审批等级：<input type="text" name="approvalLevel"/>
-							</li>
-
-							<li>
-								审批意见：<input type="text" name="opi"/>
-							</li>
-
 							<li>
 								创建时间：<input type="text" name="createTime"/>
 							</li>
-
-							<li>
-								申请人ID：<input type="text" name="applicantId"/>
-							</li>
-
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -56,16 +32,16 @@
 			</div>
 			
 	        <div class="btn-group-sm" id="toolbar" role="group">
-				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:facUserApproval:add">
-					<i class="fa fa-plus"></i> 添加
-				</a>
-				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:facUserApproval:edit">
+<!--				<a class="btn btn-success" onclick="$.operate.add()" >-->
+<!--					<i class="fa fa-plus"></i> 添加-->
+<!--				</a>-->
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" >
 					<i class="fa fa-edit"></i> 修改
 				</a>
-				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:facUserApproval:remove">
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" >
 					<i class="fa fa-remove"></i> 删除
 				</a>
-				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:facUserApproval:export">
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" >
 						<i class="fa fa-download"></i> 导出
 				 </a>
 			</div>
@@ -79,10 +55,10 @@
         var editFlag = [[${@permission.hasPermi('system:facUserApproval:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:facUserApproval:remove')}]];
         var prefix = ctx + "system/facUserApproval";
-
+		var approvalState = [[${@dict.getType('fac_approval_state')}]];
         $(function() {
             var options = {
-                url: prefix + "/list",
+                url: prefix + "/endfacUserApproval",
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
@@ -104,8 +80,10 @@
 				},
 				{
 					field : 'approvalState', 
-					title : '审批意见（1同意，2驳回 ，3未操作）',
-					sortable: true
+					title : '审批',
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(approvalState, value);
+					}
 				},
 				{
 					field : 'approverId', 
@@ -115,11 +93,6 @@
 				{
 					field : 'approvalTime', 
 					title : '审批操作时间',
-					sortable: true
-				},
-				{
-					field : 'approvalSight', 
-					title : '可见性（1可见 0不可见）',
 					sortable: true
 				},
 				{
