@@ -56,6 +56,7 @@ public class FacLoanApplyController extends BaseController {
 	@ResponseBody
 	public TableDataInfo list(FacLoanApply facLoanApply) {
 		startPage();
+		facLoanApply.setLoanUser(ShiroUtils.getUserId());
 		List<FacLoanApply> list = facLoanApplyService
 				.selectFacLoanApplyList(facLoanApply);
 		return getDataTable(list);

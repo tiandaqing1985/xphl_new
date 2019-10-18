@@ -52,6 +52,7 @@ public class FacCollectApplyController extends BaseController
 	public TableDataInfo list(FacCollectApply facCollectApply)
 	{
 		startPage();
+		facCollectApply.setApplicant(ShiroUtils.getUserId());
         List<FacCollectApply> list = facCollectApplyService.selectFacCollectApplyList(facCollectApply);
 		return getDataTable(list);
 	}

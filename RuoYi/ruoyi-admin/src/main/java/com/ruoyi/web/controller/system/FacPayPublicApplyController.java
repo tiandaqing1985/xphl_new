@@ -54,6 +54,7 @@ public class FacPayPublicApplyController extends BaseController {
 	@ResponseBody
 	public TableDataInfo list(FacPayPublicApply facPayPublicApply) {
 		startPage();
+		facPayPublicApply.setUser(ShiroUtils.getUserId());
 		List<FacPayPublicApply> list = facPayPublicApplyService
 				.selectFacPayPublicApplyList(facPayPublicApply);
 		return getDataTable(list);

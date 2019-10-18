@@ -70,8 +70,7 @@ public interface IFacReimburseApplyService
      * @param facReimburseApply 报销信息
      * @return 结果
      */
-	public AjaxResult insertFacReimburseApply(FacReimburseApply facReimburseApply);
-	public AjaxResult insertFacReimburse(FacReimburseApply facReimburseApply);
+	public AjaxResult insertFacReimburseApply(FacReimburseApply facReimburseApply); 
 	/**
      * 新增报销
      *

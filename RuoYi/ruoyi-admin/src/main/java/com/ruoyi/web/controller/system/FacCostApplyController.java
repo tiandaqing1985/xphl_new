@@ -59,6 +59,7 @@ public class FacCostApplyController extends BaseController {
 	@ResponseBody
 	public TableDataInfo list(FacCostApply facCostApply) {
 		startPage();
+		facCostApply.setUserId(ShiroUtils.getUserId());
 		List<FacCostApply> list = facCostApplyService
 				.selectFacCostApplyList(facCostApply);
 		return getDataTable(list);

@@ -105,10 +105,18 @@ public class ShiroUtils {
 		String s = sdf.format(new Date());
 		try {
 			return sdf.parse(s);
-		} catch (ParseException e) { 
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
+	/**
+	 * 获取前时间无时分生成id
+	 */
+
+	public static String getDateId() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); 
+		return sdf.format(new Date());
+	}
 }

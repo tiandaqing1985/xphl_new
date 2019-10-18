@@ -48,6 +48,7 @@ public class FacHospitalityApplyController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacHospitalityApply facHospitalityApply) {
         startPage();
+        facHospitalityApply.setUserId(ShiroUtils.getUserId());
         List<FacHospitalityApply> list = facHospitalityApplyService.selectFacHospitalityApplyList(facHospitalityApply);
         return getDataTable(list);
     }
