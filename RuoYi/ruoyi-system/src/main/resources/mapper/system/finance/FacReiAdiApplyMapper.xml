@@ -45,8 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 
-	<select id="selectAmount" resultType="double">
-
+	<select id="selectAmount" resultType="double"> 
 		select ifNull((select
 		sum(amount) from fac_rei_adi_apply where num
 		=#{num}),0);

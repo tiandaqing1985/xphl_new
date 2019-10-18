@@ -41,14 +41,25 @@ public class FacSysUserApproval {
 	@DefaultFiled(date = "date")
 	private Date createTime;
 
+	private Double amount;
+
+	public Double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
+
 	@Override
 	public String toString() {
 		return "FacSysUserApproval{" + "approvalId=" + approvalId
 				+ ", applyId='" + applyId + '\'' + ", approvalState='"
-				+ approvalState + '\'' + ", approverId=" + approverId
-				+ ", approvalSight='" + approvalSight + '\'' + ", approvalTime="
-				+ approvalTime + ", approvalLevel=" + approvalLevel + ", opi='"
-				+ opi + '\'' + ", createTime=" + createTime + '}';
+				+ ",amount" + approvalState + '\'' + ", approverId="
+				+ approverId + ", approvalSight='" + approvalSight + '\''
+				+ ", approvalTime=" + approvalTime + ", approvalLevel="
+				+ approvalLevel + ", opi='" + opi + '\'' + ", createTime="
+				+ createTime + '}';
 	}
 
 	public String getOpi() {

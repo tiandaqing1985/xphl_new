@@ -3,28 +3,35 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.finance.ApprovalProcessMapper">
-    <insert id="insert" parameterType="com.ruoyi.system.domain.finance.FacSysUserApproval">
-        insert into fac_sys_user_approval
-        <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="applyId != null  ">apply_id,</if>
-            <if test="approvalState != null  and approvalState != ''  ">approval_state,</if>
-            <if test="approverId != null  ">approver_id,</if>
-            <if test="approvalTime != null  ">approval_time,</if>
-            <if test="approvalSight != null  and approvalSight != ''  ">approval_sight,</if>
-            <if test="approvalLevel != null  ">approval_level,</if>
-            <if test="createTime != null  ">create_time,</if>
-        </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="applyId != null  ">#{applyId},</if>
-            <if test="approvalState != null  and approvalState != ''  ">#{approvalState},</if>
-            <if test="approverId != null  ">#{approverId},</if>
-            <if test="approvalTime != null  ">#{approvalTime},</if>
-            <if test="approvalSight != null  and approvalSight != ''  ">#{approvalSight},</if>
-            <if test="approvalLevel != null  ">#{approvalLevel},</if>
-            <if test="createTime != null  ">#{createTime},</if>
-        </trim>
-    </insert>
+     
 
+ <insert id="insert" parameterType="FacUserApproval" useGeneratedKeys="true" keyProperty="approvalId">
+        insert into fac_sys_user_approval
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="applyId != null  and applyId != ''  ">apply_id,</if>
+			<if test="approvalState != null  and approvalState != ''  ">approval_state,</if>
+			<if test="approverId != null  ">approver_id,</if>
+			<if test="approvalTime != null  ">approval_time,</if>
+			<if test="approvalSight != null  and approvalSight != ''  ">approval_sight,</if>
+			<if test="approvalLevel != null  ">approval_level,</if>
+			<if test="opi != null  and opi != ''  ">opi,</if>
+			<if test="createTime != null  ">create_time,</if>
+			<if test="applicantId != null  ">applicant_id,</if>
+			<if test="amount != null  ">amount,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="applyId != null  and applyId != ''  ">#{applyId},</if>
+			<if test="approvalState != null  and approvalState != ''  ">#{approvalState},</if>
+			<if test="approverId != null  ">#{approverId},</if>
+			<if test="approvalTime != null  ">#{approvalTime},</if>
+			<if test="approvalSight != null  and approvalSight != ''  ">#{approvalSight},</if>
+			<if test="approvalLevel != null  ">#{approvalLevel},</if>
+			<if test="opi != null  and opi != ''  ">#{opi},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+			<if test="applicantId != null  ">#{applicantId},</if>
+			<if test="amount != null  ">#{amount},</if>
+         </trim>
+    </insert>
 
     <select id="querySecondLevelDept" resultType="com.ruoyi.system.domain.finance.DeptUser">
        SELECT

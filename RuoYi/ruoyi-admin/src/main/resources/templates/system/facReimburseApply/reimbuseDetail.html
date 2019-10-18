@@ -68,7 +68,7 @@
                     </div>
                 </div>
 
-                <div class="row" id="animation_box">
+                <div class="row" id="zdf">
                     <div class="col-sm-12 select-table table-striped">
                         <a class="btn btn-success" onclick="mAdd(2)">
                             <i class="fa fa-plus"></i> 招待费报销信息
@@ -116,10 +116,10 @@
         $.modal.open("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
     }
 
-    if (dept = 256) {
-        $("#animation_box").hide();//隐藏
+    if (dept = 10) {
+        $("#zdf").hide();//隐藏
     } else {
-        $("#animation_box").show();//显示
+        $("#zdf").show();//显示
     }
 
     function mAdd(id) {

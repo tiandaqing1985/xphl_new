@@ -31,6 +31,34 @@ public class FacUserApproval extends BaseEntity {
 	private String opi;
 	/** 申请人ID */
 	private Long applicantId;
+	private Double amount;
+	private String applicantName;
+	private String approverName;
+
+
+	public Double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
+
+	public String getApplicantName() {
+		return applicantName;
+	}
+
+	public void setApplicantName(String applicantName) {
+		this.applicantName = applicantName;
+	}
+
+	public String getApproverName() {
+		return approverName;
+	}
+
+	public void setApproverName(String approverName) {
+		this.approverName = approverName;
+	}
 
 	public Long getApprovalId() {
 		return approvalId;

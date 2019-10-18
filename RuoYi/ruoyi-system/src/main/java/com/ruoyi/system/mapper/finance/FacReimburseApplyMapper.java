@@ -58,7 +58,7 @@ public interface FacReimburseApplyMapper
      */
 	public List<FacReimburseApply> selectFacReimburseApplyList(FacReimburseApply facReimburseApply);
 	
-	 
+	public List<ReiHospitalityApply> selectReiHospitalityApplyList(ReiHospitalityApply reiHospitalityApply);
 	/**
      * 新增报销
      * 
@@ -111,11 +111,19 @@ public interface FacReimburseApplyMapper
 	 * @param adiApplies
 	 * @return
 	 */
-	int AdiBatchInsert(@Param("list") List<FacReiAdiApply> adiApplies);
 	
-	public double selectAdiAmount(String num);
-	
+ 
+
+//	int AdiBatchInsert(@Param("list") List<FacReiAdiApply> adiApplies);
+
 	public double selectTraAmount(String num);
-	
-	
+
+	public double selectHospAmount(String num);
+
+
+	ReiTrafficApply selectFacTransById(String id);
+
+	int updateReiTrafficApplyById(ReiTrafficApply reiTrafficApply);
+
+	int deleteReiTrafficApplyById(String id);
 }

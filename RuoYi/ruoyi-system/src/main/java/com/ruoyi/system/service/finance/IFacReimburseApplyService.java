@@ -42,6 +42,11 @@ public interface IFacReimburseApplyService
      */
 	public List<FacReimburseApply> selectFacReimburseApplyList(FacReimburseApply facReimburseApply);
 	
+	
+	
+	public List<ReiHospitalityApply> selectReiHospitalityApplyList(ReiHospitalityApply reiHospitalityApply);
+	
+	
 	/**
      * 查询其他报销列表
      * 
@@ -66,6 +71,7 @@ public interface IFacReimburseApplyService
      * @return 结果
      */
 	public AjaxResult insertFacReimburseApply(FacReimburseApply facReimburseApply);
+	public AjaxResult insertFacReimburse(FacReimburseApply facReimburseApply);
 	/**
      * 新增报销
      *
@@ -121,4 +127,6 @@ public interface IFacReimburseApplyService
     int deleteReiTrafficApplyById(String id);
 
 	int deleteFacReimburseApplyById(String id);
+	
+	Long selectRole(long uesrId);
 }

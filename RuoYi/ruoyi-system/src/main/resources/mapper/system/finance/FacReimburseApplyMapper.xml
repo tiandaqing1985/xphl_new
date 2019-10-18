@@ -61,6 +61,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by a.create_time desc
     </select>
     
+    <select id="selectReiHospitalityApplyList" parameterType="com.ruoyi.system.domain.finance.ReiHospitalityApply" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
+        select * from  fac_rei_hospitality_apply
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="ddDate != null "> and dd_date = #{ddDate}</if>
+             <if test="amount != null "> and amount = #{amount}</if>
+             <if test="addUser != null  and addUser != '' "> and add_user = #{addUser}</if>
+             <if test="documentNum != null "> and document_num = #{documentNum}</if>
+             <if test="location != null  and location != '' "> and location = #{location}</if>
+             <if test="targetUnit != null  and targetUnit != '' "> and target_unit = #{targetUnit}</if>
+             <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
+             <if test="num != null  and num != '' "> and num = #{num}</if>
+             <if test="status != null  and status != '' "> and status = #{status}</if>
+             <if test="applyNum != null  and applyNum != '' "> and apply_num = #{applyNum}</if>
+             <if test="user != null "> and user = #{user}</if>
+         </where>
+    </select>
+     
+    
     <select id="selectFacReimburseApplyById" parameterType="String" resultMap="FacReimburseApplyResult">
         <include refid="selectFacReimburseApplyVo"/>
         where id = #{id}
@@ -134,6 +153,20 @@ SELECT
     <delete id="deleteReiTrafficApplyById" parameterType="String">
         delete from fac_traffic_rei_apply where id = #{param1}
     </delete>
+
+
+<select id="selectTraAmount" resultType="double"> 
+		select ifNull((select
+		sum(amount) from fac_traffic_rei_apply where num
+		=#{num}),0);
+	</select>
+	
+	
+<select id="selectHospAmount" resultType="double"> 
+		select ifNull((select
+		sum(amount) from fac_rei_hospitality_apply where num
+		=#{num}),0);
+	</select>
 
     <insert id="insertFacReimburseApply" parameterType="FacReimburseApply" useGeneratedKeys="true" keyProperty="id">
         insert into fac_reimburse_apply

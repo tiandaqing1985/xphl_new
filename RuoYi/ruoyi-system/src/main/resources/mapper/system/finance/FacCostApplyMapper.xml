@@ -36,6 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="status != null  and status != '' "> and status = #{status}</if>
              <if test="userId != null  and userId != '' "> and user_id = #{userId}</if>
          </where>
+         order by id desc
     </select>
     
 	<select id="detail" resultType="com.ruoyi.system.domain.finance.FacCostApply">
