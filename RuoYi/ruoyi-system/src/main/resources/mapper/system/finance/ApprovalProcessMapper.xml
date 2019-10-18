@@ -37,14 +37,14 @@
        SELECT
         a.user_name as userName,c.user_id as userId,b.`dept_id` as deptId,
         b.parent_id as parentId,b.dept_name as deptName
-FROM
-  sys_user AS a
-  LEFT JOIN sys_dept AS b
-    ON a.`dept_id` = b.`dept_id`
-  LEFT JOIN sys_user AS c
-    ON b.`leader` = c.`user_name`
-    AND b.`dept_id` = a.`dept_id`
-WHERE   1=1 and  <if test="userId != null">a.`user_id`= #{userId} </if>;
+        FROM
+          sys_user AS a
+          LEFT JOIN sys_dept AS b
+            ON a.`dept_id` = b.`dept_id`
+          LEFT JOIN sys_user AS c
+            ON b.`leader` = c.`user_name`
+            AND b.`dept_id` = a.`dept_id`
+        WHERE   1=1 and  <if test="userId != null">a.`user_id`= #{userId} </if>;
     </select>
     <select id="queryFirstLevelDept" resultType="com.ruoyi.system.domain.finance.DeptUser">
 SELECT
@@ -57,15 +57,15 @@ FROM
     ON a.`dept_id` = b.`dept_id`
 WHERE a.`dept_id` = #{deptId}   </select>
     <select id="queryRoleName" resultType="java.lang.String">
-SELECT
-  c.`role_name`
-FROM
-  sys_user AS a
-  LEFT JOIN sys_user_role AS b
-    ON a.`user_id` = b.user_id
-  LEFT JOIN sys_role AS c
-    ON b.`role_id` = c.`role_id`
-WHERE a.user_id = #{userId}
+        SELECT
+        c.`role_name`
+        FROM
+        sys_user AS a
+        LEFT JOIN sys_user_role AS b
+        ON a.`user_id` = b.user_id
+        LEFT JOIN sys_role AS c
+        ON b.`role_id` = c.`role_id`
+        WHERE a.user_id = #{userId}
     </select>
     <select id="queryHighDeptLeaderId" resultType="java.lang.Long">
         SELECT

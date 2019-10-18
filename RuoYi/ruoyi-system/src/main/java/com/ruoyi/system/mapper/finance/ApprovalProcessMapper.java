@@ -6,6 +6,8 @@ import com.ruoyi.system.domain.finance.DeptUser;
 import com.ruoyi.system.domain.finance.FacSysUserApproval;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 
 public interface ApprovalProcessMapper {
 
@@ -19,7 +21,7 @@ public interface ApprovalProcessMapper {
       * @param userId
       * @return
       */
-     String queryRoleName(@Param("userId") Long userId);
+     List<String> queryRoleName(@Param("userId") Long userId);
 
      Long queryHighDeptLeaderId(@Param("userId") Long userId);
 

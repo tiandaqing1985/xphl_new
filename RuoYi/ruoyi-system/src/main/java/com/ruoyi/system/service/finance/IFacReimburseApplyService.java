@@ -2,6 +2,7 @@ package com.ruoyi.system.service.finance;
 
 
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.finance.FacReiAdiApply;
 import com.ruoyi.system.domain.finance.FacReimburseApply; 
 import com.ruoyi.system.domain.finance.ReiHospitalityApply;
@@ -127,5 +128,9 @@ public interface IFacReimburseApplyService
 
 	int deleteFacReimburseApplyById(String id);
 	
-	Long selectRole(long uesrId);
+	List<Long> selectRole(long uesrId);
+
+    void updateFacReimburseApplyByNum(FacReimburseApply facReimburseApply);
+
+    List<FacReimburseApply> selectFacReimburseApplyListByCreateBy(List<SysUser> sysUsersList);
 }

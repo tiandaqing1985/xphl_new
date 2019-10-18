@@ -101,6 +101,15 @@ public class FacReimburseApply extends BaseEntity {
      */
     private List<ReiHospitalityApply> hospitalityApplies;
 
+    private String approveName;
+
+    public String getApproveName() {
+        return approveName;
+    }
+
+    public void setApproveName(String approveName) {
+        this.approveName = approveName;
+    }
 
     public String getUserName() {
         return userName;

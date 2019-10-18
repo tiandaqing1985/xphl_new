@@ -58,6 +58,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and a.name = #{name}
         </if>
         <if test="id!=null">and a.id = #{id}</if>
+        <if test="num!=null and num!=''"> and a.num=#{num}</if>
+        <if test="createBy!=null and createBy!=''">and a.create_by=#{createBy}</if>
         order by a.create_time desc
     </select>
     
@@ -185,6 +187,7 @@ SELECT
 			<if test="passTime != null  ">pass_time,</if>
 			<if test="type != null  and type != ''  ">type,</if>
 			<if test="submitStatus!=null and submitStatus!=''">submit_status,</if>
+			<if test="createBy != null and createBy !=''">create_by,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null  and id != ''  ">#{id},</if>
@@ -201,6 +204,7 @@ SELECT
 			<if test="passTime != null  ">#{passTime},</if>
 			<if test="type != null  and type != ''  ">#{type},</if>
             <if test="submitStatus!=null and submitStatus!=''">#{submitStatus},</if>
+            <if test="createBy!=null and createBy!=''">#{createBy},</if>
          </trim>
     </insert>
 
@@ -220,7 +224,26 @@ SELECT
             (#{item.ddDate}, #{item.amount}, #{item.addUser}, #{item.user}, #{item.documentNum}, #{item.location}, #{item.targetUnit},#{item.reason},#{item.num})
         </foreach>
     </insert>
-      
+
+    <update id="updateFacReimburseApplyByNum" parameterType="FacReimburseApply">
+        update fac_reimburse_apply
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="loanUser != null  ">loan_user = #{loanUser},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="reimburseTime != null  ">reimburse_time = #{reimburseTime},</if>
+            <if test="facOperate != null  and facOperate != ''  ">fac_operate = #{facOperate},</if>
+            <if test="reason != null  and reason != ''  ">reason = #{reason},</if>
+            <if test="applyStatus != null  and applyStatus != ''  ">apply_status = #{applyStatus},</if>
+            <if test="updateTime != null  ">update_time = #{updateTime},</if>
+            <if test="passTime != null  ">pass_time = #{passTime},</if>
+            <if test="type != null  and type != ''  ">type = #{type},</if>
+            <if test="status != null and status !=''">status = #{status},</if>
+        </trim>
+        where num = #{num}
+    </update>
+    
     <update id="updateFacReimburseApply" parameterType="FacReimburseApply">
         update fac_reimburse_apply
         <trim prefix="SET" suffixOverrides=",">
@@ -269,5 +292,37 @@ SELECT
             #{id}
         </foreach>
     </delete>
-    
+
+    <select id="selectFacReimburseApplyListByCreateBy" parameterType="List" resultMap="FacReimburseApplyResult">
+        SELECT
+        a.id,
+        a.num,
+        a.name,
+        c.`dept_name` ,
+        a.`type`,
+        a.amount,
+        a.reason,
+        b.user_name,
+        a.`create_time`,
+        a.pass_time,
+        a.`fac_operate`,
+        a.`status`,
+        a.reimburse_time,
+        a.update_time,
+        a.apply_status,
+        a.submit_status
+        FROM
+        fac_reimburse_apply AS a
+        LEFT JOIN sys_user AS b
+        ON a.loan_user = b.user_id
+        LEFT JOIN sys_dept AS c
+        ON c.dept_id = b.dept_id
+        where a.create_by in
+            <foreach collection="list" item="item" separator="," open="(" close=")">
+                #{item.userId}
+            </foreach>
+
+        order by a.create_time desc
+    </select>
+
 </mapper>

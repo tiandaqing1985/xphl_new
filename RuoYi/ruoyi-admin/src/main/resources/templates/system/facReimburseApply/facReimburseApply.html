@@ -97,6 +97,11 @@
                     sortable: true
                 },
                 {
+                    field: 'approveName',
+                    title: '审批人',
+                    sortable: true
+                },
+                {
                     field: 'reimburseTime',
                     title: '报销时间',
                     sortable: true,
@@ -105,25 +110,25 @@
                         return  newDate;
                     }
                 },
-                {
-                    field: 'updateTime',
-                    title: '修改时间',
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                        return  newDate;
-                    }
-                },
-                {
-                    field: 'passTime',
-                    title: '核票通过时间',
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                        return  newDate;
-                    }
-
-                },
+                // {
+                //     field: 'updateTime',
+                //     title: '修改时间',
+                //     sortable: true,
+                //     formatter: function (value, row, index) {
+                //         var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                //         return  newDate;
+                //     }
+                // },
+                // {
+                //     field: 'passTime',
+                //     title: '核票通过时间',
+                //     sortable: true,
+                //     formatter: function (value, row, index) {
+                //         var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                //         return  newDate;
+                //     }
+                //
+                // },
                 {
                     field: 'type',
                     title: '类型',
@@ -133,6 +138,17 @@
                     field: 'status',
                     title: '审批状态',
                     sortable: true,
+                    formatter: function (value, row, index) {
+                        if(value==1){
+                            return "审批成功";
+                        }else if(value==2){
+                            return "驳回";
+                        }else if(value==3){
+                            return "审批中";
+                        } else{
+                            return "待审批";
+                        }
+                    }
 
                 },
                 {
@@ -143,9 +159,19 @@
                         if(row.submitStatus=='save'){
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
                         }
+                        if(row.status==1){
+                            //审批成功
+                        }else if(row.status==2){
+                            //审批失败
 
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        }else if(row.status==3){
+
+                        }else
+                        {
+                            //待审批
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        }
                         actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
                         return actions.join('');
                     }

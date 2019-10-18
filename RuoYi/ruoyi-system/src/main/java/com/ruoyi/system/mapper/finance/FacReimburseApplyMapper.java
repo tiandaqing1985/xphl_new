@@ -1,6 +1,7 @@
 package com.ruoyi.system.mapper.finance;
 
 
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.finance.FacReiAdiApply;
 import com.ruoyi.system.domain.finance.FacReimburseApply; 
 import com.ruoyi.system.domain.finance.ReiHospitalityApply;
@@ -74,7 +75,9 @@ public interface FacReimburseApplyMapper
      * @return 结果
      */
 	public int updateFacReimburseApply(FacReimburseApply facReimburseApply);
-	
+
+	public int updateFacReimburseApplyByNum(FacReimburseApply facReimburseApply);
+
 	/**
      * 删除报销
      * 
@@ -126,4 +129,6 @@ public interface FacReimburseApplyMapper
 	int updateReiTrafficApplyById(ReiTrafficApply reiTrafficApply);
 
 	int deleteReiTrafficApplyById(String id);
+
+	List<FacReimburseApply> selectFacReimburseApplyListByCreateBy(List<SysUser> sysUsersList);
 }

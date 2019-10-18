@@ -68,7 +68,7 @@
                     </div>
                 </div>
 
-                <div class="row" id="zdf">
+                <div class="row" id="zdf" style="display: none">
                     <div class="col-sm-12 select-table table-striped">
                         <a class="btn btn-success" onclick="mAdd(2)">
                             <i class="fa fa-plus"></i> 招待费报销信息
@@ -116,12 +116,6 @@
         $.modal.open("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
     }
 
-    if (dept = 10) {
-        $("#zdf").hide();//隐藏
-    } else {
-        $("#zdf").show();//显示
-    }
-
     function mAdd(id) {
         if (id == 1) {
             $.table._option.id = "bootstrap-table-1";
@@ -160,6 +154,10 @@
     }
 
     $(function () {
+        if (dept == 10) {
+            $("#zdf").attr("style","display:block;");//显示div
+        }
+
         var options = {
             id: "bootstrap-table-1",
             url: prefix + "/addTraDetail",

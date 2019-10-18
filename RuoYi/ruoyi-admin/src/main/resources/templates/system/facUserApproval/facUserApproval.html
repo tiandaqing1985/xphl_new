@@ -92,7 +92,13 @@
                     field: 'applyId',
                     title: '申请编号',
                     sortable: true
-                }, {
+                },
+                {
+                    field: 'name',
+                    title: '审批项目名称',
+                    sortable: true
+                },
+                {
                     field: 'amount',
                     title: '审批总金额',
                     sortable: true
@@ -123,11 +129,6 @@
                         var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                         return newDate;
                     }
-                },
-                {
-                    field: 'approvalLevel',
-                    title: '审批等级',
-                    sortable: true
                 },
                 {
                     field: 'opi',

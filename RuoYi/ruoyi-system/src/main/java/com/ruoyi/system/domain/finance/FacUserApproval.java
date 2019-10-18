@@ -34,7 +34,16 @@ public class FacUserApproval extends BaseEntity {
 	private Double amount;
 	private String applicantName;
 	private String approverName;
+	//报销名称
+	private String name;
 
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public Double getAmount() {
 		return amount;

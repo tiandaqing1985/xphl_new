@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.service.ISysDeptService;
+import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.core.text.Convert;
@@ -12,6 +14,7 @@ import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 财务审批 服务层实现
@@ -23,6 +26,8 @@ import com.ruoyi.system.service.finance.IFacUserApprovalService;
 public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 	@Autowired
 	private FacUserApprovalMapper facUserApprovalMapper;
+	@Autowired
+	private IFacReimburseApplyService facReimburseApplyService;
 
 	@Autowired
 	ISysUserService iSysUserService;
@@ -73,8 +78,13 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 	 * @return 结果
 	 */
 	@Override
-	public int updateFacUserApproval(FacUserApproval facUserApproval) { 
-		
+	public int updateFacUserApproval(FacUserApproval facUserApproval) {
+
+	    FacReimburseApply facReimburseApply = new FacReimburseApply();
+	    facReimburseApply.setNum(facUserApproval.getApplyId());
+        facReimburseApply.setStatus("3");
+        facReimburseApplyService.updateFacReimburseApplyByNum(facReimburseApply);
+
 		facUserApproval.setApprovalTime(new Date());
 		facUserApprovalMapper.updateFacUserApproval(facUserApproval);
 		SysUser sysUser = iSysUserService.selectUserById(facUserApproval.getApproverId());
@@ -82,6 +92,8 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 		if(sysDept.getParentId()==0){
 			return 1;
 		}
+
+
 		Long leaderId = null;
 		if(sysDept.getLeader().equals(sysUser.getUserName())){
 			sysDept = sysDeptService.selectDeptById(sysDept.getParentId());
@@ -99,7 +111,11 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 
 		FacUserApproval facUserApproval2 = facUserApprovalMapper
 				.selectEndFacUserApprovalList(fac);
-
+        if(facUserApproval2==null){
+			facReimburseApply.setStatus("1");
+			facReimburseApplyService.updateFacReimburseApplyByNum(facReimburseApply);
+			return 1;
+		}
 		facUserApproval2.setApprovalSight("1");
 
 		return facUserApprovalMapper.updateFacUserApproval(facUserApproval2);

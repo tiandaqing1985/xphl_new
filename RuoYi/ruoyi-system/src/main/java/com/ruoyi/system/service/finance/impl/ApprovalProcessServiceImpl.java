@@ -15,6 +15,7 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.List;
 
 
 /**
@@ -37,9 +38,13 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
         //查询2级部门leader id
         try {
             //判断用户角色
-            String roleName = approvalProcessMapper.queryRoleName(facReimburseApply.getUser());
+            String roleName="";
+            List<String> queryRoleName = approvalProcessMapper.queryRoleName(facReimburseApply.getUser());
+            for(String name:queryRoleName){
+                roleName = roleName+","+name;
+            }
             //判断是否是coo
-            if ("COO".equals(roleName)) {
+            if (roleName.contains("COO")) {
                 FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
                 facSysUserApproval.setApprovalLevel(1);
                 facSysUserApproval.setApprovalSight("0");
@@ -48,7 +53,7 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
                 approvalProcessMapper.insert(facSysUserApproval);
             }
 
-            if (("员工").equals(roleName)) {
+            if (roleName.contains("员工")) {
                 DeptUser sysDept = approvalProcessMapper.querySecondLevelDept(facReimburseApply.getUser());
                 if ((sysDept.getDeptName().contains("财务") || sysDept.getDeptName().contains("人力资源")) && ((new BigDecimal("2000").compareTo(facReimburseApply.getAmount()) < 1))) {
                     FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
