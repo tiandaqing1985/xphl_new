@@ -226,7 +226,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 							boolean isRenshi = false;
 							for(SysRole role:sysRoles){
 								if(role.isFlag()){
-									if(role.getRoleId().equals(13)){
+									if(role.getRoleId()==13){
 										//是否财务
 										isCaywu = true;
 									}else if(role.getRoleId().equals(6)||role.getRoleId().equals(3)){
@@ -238,7 +238,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
 							facReimburseApply.setStatus("3");
 
-							if (isCaywu) { // 如果是审批人是 coo
+							if (centerId.get(i).intValue() == 103) { // 如果是审批人是 coo
 								// 直接结束
 
 								// 财务
