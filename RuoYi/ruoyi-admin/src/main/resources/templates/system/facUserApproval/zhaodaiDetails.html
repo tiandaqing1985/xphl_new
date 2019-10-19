@@ -1,172 +1,150 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="include :: header('新增招待费申请')" />
+    <th:block th:include="include :: header('初始多表格')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
 </head>
-<body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-facHospitalityApply-add">
-
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">部门：</label>
-				<div class="col-sm-8">
-					<input id="dept" name="dept" class="form-control" type="text"  th:value="${dept}" required>
-				</div>
-			</div>
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">项目名称：</label>
-				<div class="col-sm-8">
-					<input id="zdName" name="zdName" class="form-control" type="text" required>
-				</div>
-			</div>
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">己方人员：</label>
-				<div class="col-sm-8">
-					<div class="input-group">
-						<input id="loanId" name="loanId" class="form-control" type="text" required>
-						<div class="input-group-btn">
-							<button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
-								<span class="caret"></span>
-							</button>
-							<ul class="dropdown-menu dropdown-menu-right" role="menu">
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">招待时间：</label>
-				<div class="col-sm-8">
-					<input id="zdDate" name="zdDate" class="form-control" type="date" required>
-				</div>
-			</div>
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">招待事由：</label>
-				<div class="col-sm-8">
-					<input id="reason" name="reason" class="form-control" type="text" required>
-				</div>
-			</div>
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">对方人员：</label>
-				<div class="col-sm-8">
-					<input id="addUser" name="addUser" class="form-control" type="text" required>
-				</div>
-			</div>
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">总人数：</label>
-				<div class="col-sm-8">
-					<input id="totalNumber" name="totalNumber" class="form-control" type="text" required>
-				</div>
-			</div>
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">招待费标准：</label>
-				<div class="col-sm-8">
-					<input id="standardAmount" name="standardAmount" class="form-control" type="text" required>
-				</div>
-			</div>
-			<div class="form-group">	
-				<label class="col-sm-3 control-label">预算金额：</label>
-				<div class="col-sm-8">
-					<input id="amount" name="amount" class="form-control" type="text" required>
-				</div>
-			</div>
-		</form>
-		<form class="form-horizontal m" id="form-facUserApproval-edit" th:object="${facUserApproval}">
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="form-group" id="div-reiadd">
-						<label class="col-sm-4 control-label"></span>审批意见：</label>
-						<div class="col-sm-8">
-							<input id="opi" name="opi" class="form-control" type="text">
-							<input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
-							<input id="approverId" name="approverId" class="form-control-static" type="hidden"
-								   th:value="${userId}">
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-offset-5 col-sm-10">
-					<button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
-							class="fa fa-check"></i>同意
-					</button>&nbsp;
-					<button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
-							class="fa fa-check"></i>驳回
-					</button>&nbsp;
-					<button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
-							class="fa fa-reply-all"></i>关 闭
-					</button>
-				</div>
-			</div>
-
-		</form>
-	</div>
-    <div th:include="include::footer"></div>
-	<th:block th:include="include :: bootstrap-suggest-js" />
-	<script type="text/javascript">
-		var prefix = ctx + "system/facHospitalityApply"
-		var dept = $("#dept").val();
-		$("#form-facHospitalityApply-add").validate({
-			rules:{
-				xxxx:{
-					required:true,
-				},
-			},
-			focusCleanup: true
-		});
-		
-
-		var testBsSuggest = $("#loanId").bsSuggest({
-			url: ctx + "system/user/userModel",
-			showBtn: false,
-			idField: "userName",
-			keyField: "userId",
-			effectiveFields: ["deptName","userName"],
-			hideOnSelect: true
-		}).on('onDataRequestSuccess', function (e, result) {
-			console.log('onDataRequestSuccess: ', result);
-		}).on('onSetSelectValue', function (e, keyword) {
-			console.log('onSetSelectValue: ', keyword);
-		}).on('onUnsetSelectValue', function (e) {
-			console.log("onUnsetSelectValue");
-		});
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
+        <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
 
 
+        <div>
+            <h4 class="form-header h4">招待详细信息</h4>
 
-		function mSave(url, data, callback) {
-			var config = {
-				url: url,
-				type: "post",
-				dataType: "json",
-				data: data,
-				beforeSend: function () {
-					$.modal.loading("正在处理中，请稍后...");
-					$.modal.disable();
-				},
-				success: function (result) {
-					if (typeof callback == "function") {
-						callback(result);
-					}
-					$.modal.closeLoading();
-					$.modal.enable();
-					alert(result.msg);
-					$.modal.closeTab();
-				}
-			};
-			$.ajax(config)
-		}
 
-		function submitHandler(index) {
-			if ($.validate.form()) {
-				//index为1表示同意
-				if (index == 1) {
-					mSave(prefixs + "/edit", $('#form-facUserApproval-edit').serialize());
-				} else {
-					mSave(prefixs + "/editnot", $('#form-facUserApproval-edit').serialize());
-				}
-			}
-		}
+            <div class="col-sm-12 select-table table-striped">
 
-	</script>
+                <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+            </div>
+
+        </div>
+
+
+        <form class="form-horizontal m" id="form-facUserApproval-edit" th:object="${facUserApproval}">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group" id="div-reiadd">
+                        <label class="col-sm-4 control-label"></span>审批意见：</label>
+                        <div class="col-sm-8">
+                            <input id="opi" name="opi" class="form-control" type="text">
+                            <input id="applyId" name="applyId" class="form-control-static" type="hidden"
+                                   th:value="${num}">
+                            <input id="approverId" name="approverId" class="form-control-static" type="hidden"
+                                   th:value="${userId}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-offset-5 col-sm-10">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
+                            class="fa fa-check"></i>同意
+                    </button>&nbsp;
+                    <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
+                            class="fa fa-check"></i>驳回
+                    </button>&nbsp;
+                </div>
+            </div>
+
+        </form>
+
+        <div th:include="include :: footer"></div>
+        <script th:inline="javascript">
+            var prefix = ctx + "system/facCostApply";
+            var num = $("#num").val();
+            var msg = $("#msg").val();
+            var userId = $("#userId").val();
+            var dept = $("#dept").val();
+            var prefixs = ctx + "system/facUserApproval";
+
+            $(function () {
+                var options = {
+                    id: "bootstrap-table-1",
+                    url: prefix + "/detail?num=" + num,
+                    showSearch: false,
+                    showRefresh: false,
+                    showToggle: false,
+                    showColumns: false,
+                    modalName: "招待详细信息",
+                    columns: [
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field: 'num',
+                            title: '差旅编号'
+                        },
+                        {
+                            field: 'bus_name',
+                            title: '项目名称'
+                        },
+                        {
+                            field: 'outTime',
+                            title: '出差时间'
+                        },
+                        {
+                            field: 'backTimeEs',
+                            title: '预计返回时间'
+                        },
+                        {
+                            field: 'outMan',
+                            title: '出差人员'
+                        },
+                        {
+                            field: 'moneyEs',
+                            title: '预计费用'
+                        },
+                        {
+                            field: 'toLocal',
+                            title: '出差目的地'
+                        },
+                        {
+                            field: 'reason',
+                            title: '事由'
+                        }
+                    ]
+                };
+                $.table.init(options);
+            });
+
+
+            function mSave(url, data, callback) {
+                var config = {
+                    url: url,
+                    type: "post",
+                    dataType: "json",
+                    data: data,
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                        $.modal.disable();
+                    },
+                    success: function (result) {
+                        if (typeof callback == "function") {
+                            callback(result);
+                        }
+                        $.modal.closeLoading();
+                        $.modal.enable();
+                        alert(result.msg);
+                        $.modal.closeTab();
+                    }
+                };
+                $.ajax(config)
+            }
+
+            function submitHandler(index) {
+                if ($.validate.form()) {
+                    //index为1表示同意
+                    if (index == 1) {
+                        mSave(prefixs + "/edit", $('#form-facUserApproval-edit').serialize());
+                    } else {
+                        mSave(prefixs + "/editnot", $('#form-facUserApproval-edit').serialize());
+                    }
+                }
+            }
+        </script>
 </body>
 </html>

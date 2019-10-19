@@ -39,9 +39,17 @@ public class FacLoanApply extends BaseEntity
 	private Date createTime;
 	/**更改时间*/
 	private Date updateTime;
-	
-	
+	/** 借款人姓名 */
+	private String userName;
 	 
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 	public Long getId() {
 		return id;
 	}

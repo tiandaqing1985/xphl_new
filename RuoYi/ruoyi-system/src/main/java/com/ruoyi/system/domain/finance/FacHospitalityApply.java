@@ -1,10 +1,11 @@
 package com.ruoyi.system.domain.finance;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.ruoyi.common.core.domain.BaseEntity;
-import java.util.Date;
-import java.math.BigDecimal;
 
 /**
  * 招待费申请表 fac_hospitality_apply
@@ -12,8 +13,7 @@ import java.math.BigDecimal;
  * @author ruoyi
  * @date 2019-09-06
  */
-public class FacHospitalityApply extends BaseEntity
-{
+public class FacHospitalityApply extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	/** id */
 	private Long id;
@@ -43,150 +43,127 @@ public class FacHospitalityApply extends BaseEntity
 	private Date applicationTime;
 	/** 审批结果 */
 	private Long states;
+	/** 申请人姓名 */
+	private String userIdName;
 
-	public void setId(Long id) 
-	{
+	public String getUserIdName() {
+		return userIdName;
+	}
+
+	public void setUserIdName(String userIdName) {
+		this.userIdName = userIdName;
+	}
+
+	public void setId(Long id) {
 		this.id = id;
 	}
 
-	public Long getId() 
-	{
+	public Long getId() {
 		return id;
 	}
-	public void setNum(String num) 
-	{
+	public void setNum(String num) {
 		this.num = num;
 	}
 
-	public String getNum() 
-	{
+	public String getNum() {
 		return num;
 	}
-	public void setDept(String dept) 
-	{
+	public void setDept(String dept) {
 		this.dept = dept;
 	}
 
-	public String getDept() 
-	{
+	public String getDept() {
 		return dept;
 	}
-	public void setUserId(Long userId) 
-	{
+	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
 
-	public Long getUserId() 
-	{
+	public Long getUserId() {
 		return userId;
 	}
-	public void setZdName(String zdName) 
-	{
+	public void setZdName(String zdName) {
 		this.zdName = zdName;
 	}
 
-	public String getZdName() 
-	{
+	public String getZdName() {
 		return zdName;
 	}
-	public void setLoanId(Long loanId) 
-	{
+	public void setLoanId(Long loanId) {
 		this.loanId = loanId;
 	}
 
-	public Long getLoanId() 
-	{
+	public Long getLoanId() {
 		return loanId;
 	}
-	public void setZdDate(Date zdDate) 
-	{
+	public void setZdDate(Date zdDate) {
 		this.zdDate = zdDate;
 	}
 
-	public Date getZdDate() 
-	{
+	public Date getZdDate() {
 		return zdDate;
 	}
-	public void setReason(String reason) 
-	{
+	public void setReason(String reason) {
 		this.reason = reason;
 	}
 
-	public String getReason() 
-	{
+	public String getReason() {
 		return reason;
 	}
-	public void setAddUser(String addUser) 
-	{
+	public void setAddUser(String addUser) {
 		this.addUser = addUser;
 	}
 
-	public String getAddUser() 
-	{
+	public String getAddUser() {
 		return addUser;
 	}
-	public void setTotalNumber(String totalNumber) 
-	{
+	public void setTotalNumber(String totalNumber) {
 		this.totalNumber = totalNumber;
 	}
 
-	public String getTotalNumber() 
-	{
+	public String getTotalNumber() {
 		return totalNumber;
 	}
-	public void setStandardAmount(Double standardAmount) 
-	{
+	public void setStandardAmount(Double standardAmount) {
 		this.standardAmount = standardAmount;
 	}
 
-	public Double getStandardAmount() 
-	{
+	public Double getStandardAmount() {
 		return standardAmount;
 	}
-	public void setAmount(Double amount) 
-	{
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
-	public Double getAmount() 
-	{
+	public Double getAmount() {
 		return amount;
 	}
-	public void setApplicationTime(Date applicationTime) 
-	{
+	public void setApplicationTime(Date applicationTime) {
 		this.applicationTime = applicationTime;
 	}
 
-	public Date getApplicationTime() 
-	{
+	public Date getApplicationTime() {
 		return applicationTime;
 	}
-	public void setStates(Long states) 
-	{
+	public void setStates(Long states) {
 		this.states = states;
 	}
 
-	public Long getStates() 
-	{
+	public Long getStates() {
 		return states;
 	}
 
 	public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("num", getNum())
-            .append("dept", getDept())
-            .append("userId", getUserId())
-            .append("zdName", getZdName())
-            .append("loanId", getLoanId())
-            .append("zdDate", getZdDate())
-            .append("reason", getReason())
-            .append("addUser", getAddUser())
-            .append("totalNumber", getTotalNumber())
-            .append("standardAmount", getStandardAmount())
-            .append("amount", getAmount())
-            .append("applicationTime", getApplicationTime())
-            .append("states", getStates())
-            .toString();
-    }
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+				.append("id", getId()).append("num", getNum())
+				.append("dept", getDept()).append("userId", getUserId())
+				.append("zdName", getZdName()).append("loanId", getLoanId())
+				.append("zdDate", getZdDate()).append("reason", getReason())
+				.append("addUser", getAddUser())
+				.append("totalNumber", getTotalNumber())
+				.append("standardAmount", getStandardAmount())
+				.append("amount", getAmount())
+				.append("applicationTime", getApplicationTime())
+				.append("states", getStates()).toString();
+	}
 }

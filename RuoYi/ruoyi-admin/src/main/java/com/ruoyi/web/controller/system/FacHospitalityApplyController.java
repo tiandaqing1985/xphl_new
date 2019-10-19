@@ -9,6 +9,9 @@ import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacHospitalityApply;
+import com.ruoyi.system.domain.finance.FacLoanApply;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacHospitalityApplyService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,140 +32,160 @@ import java.util.List;
 @Controller
 @RequestMapping("/system/facHospitalityApply")
 public class FacHospitalityApplyController extends BaseController {
-    private String prefix = "system/facHospitalityApply";
+	private String prefix = "system/facHospitalityApply";
 
-    @Autowired
-    private IFacHospitalityApplyService facHospitalityApplyService;
+	@Autowired
+	private IFacHospitalityApplyService facHospitalityApplyService;
+	@Autowired
+	private ISysUserService sysUserService;
 
-    @RequiresPermissions("system:facHospitalityApply:view")
-    @GetMapping()
-    public String facHospitalityApply() {
-        return prefix + "/facHospitalityApply";
-    }
+	@RequiresPermissions("system:facHospitalityApply:view")
+	@GetMapping()
+	public String facHospitalityApply() {
+		return prefix + "/facHospitalityApply";
+	}
 
-    /**
-     * 查询招待费申请列表
-     */
+	/**
+	 * 查询招待费申请列表
+	 */
 
-    @PostMapping("/list")
-    @ResponseBody
-    public TableDataInfo list(FacHospitalityApply facHospitalityApply) {
-        startPage();
-        facHospitalityApply.setUserId(ShiroUtils.getUserId());
-        List<FacHospitalityApply> list = facHospitalityApplyService.selectFacHospitalityApplyList(facHospitalityApply);
-        return getDataTable(list);
-    }
+	@PostMapping("/list")
+	@ResponseBody
+	public TableDataInfo list(FacHospitalityApply facHospitalityApply) {
+		startPage();
+		facHospitalityApply.setUserId(ShiroUtils.getUserId());
+		List<FacHospitalityApply> list = facHospitalityApplyService
+				.selectFacHospitalityApplyList(facHospitalityApply);
 
+		for (FacHospitalityApply v : list) {
+			v.setUserIdName(
+					sysUserService.selectUserById(v.getUserId()).getUserName());
+			facHospitalityApply.setUserIdName(v.getUserIdName());
+		}
 
-    /**
-     * 导出招待费申请列表
-     */
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(FacHospitalityApply facHospitalityApply) {
-        List<FacHospitalityApply> list = facHospitalityApplyService.selectFacHospitalityApplyList(facHospitalityApply);
-        ExcelUtil<FacHospitalityApply> util = new ExcelUtil<FacHospitalityApply>(FacHospitalityApply.class);
-        return util.exportExcel(list, "facHospitalityApply");
-    }
+		return getDataTable(list);
+	}
 
-    /**
-     * 新增招待费申请
-     */
-    @GetMapping("/add")
-    public String add() {
-        return prefix + "/add";
-    }
+	/**
+	 * 导出招待费申请列表
+	 */
+	@PostMapping("/export")
+	@ResponseBody
+	public AjaxResult export(FacHospitalityApply facHospitalityApply) {
+		List<FacHospitalityApply> list = facHospitalityApplyService
+				.selectFacHospitalityApplyList(facHospitalityApply);
+		ExcelUtil<FacHospitalityApply> util = new ExcelUtil<FacHospitalityApply>(
+				FacHospitalityApply.class);
+		return util.exportExcel(list, "facHospitalityApply");
+	}
 
-    /**
-     * 新增保存招待费申请
-     */
-    @Log(title = "招待费申请", businessType = BusinessType.INSERT)
-    @PostMapping("/add")
-    @ResponseBody
-    public AjaxResult addSave(FacHospitalityApply facHospitalityApply) {
-        IdWorker idWorker = new IdWorker(0, 1);
-        facHospitalityApply.setNum("ZD" + idWorker.nextId());
-        facHospitalityApply.setUserId(ShiroUtils.getUserId());
-        facHospitalityApply.setApplicationTime(new Date());
-        facHospitalityApply.setAmount(facHospitalityApply.getStandardAmount()*Double.valueOf(facHospitalityApply.getTotalNumber()));//获取预计金额
-        return toAjax(facHospitalityApplyService.insertFacHospitalityApply(facHospitalityApply));
-    }
+	/**
+	 * 新增招待费申请
+	 */
+	@GetMapping("/add")
+	public String add(ModelMap mmp) {
+		mmp.put("dept", ShiroUtils.getSysUser().getDept().getDeptName());
+		return prefix + "/add";
+	}
 
-    /**
-     * 修改招待费申请
-     */
-    @GetMapping("/edit/{id}")
-    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
-        FacHospitalityApply facHospitalityApply = facHospitalityApplyService.selectFacHospitalityApplyById(id);
-        mmap.put("facHospitalityApply", facHospitalityApply);
-        return prefix + "/edit";
-    }
+	/**
+	 * 新增保存招待费申请
+	 */
+	@Log(title = "招待费申请", businessType = BusinessType.INSERT)
+	@PostMapping("/add")
+	@ResponseBody
+	public AjaxResult addSave(FacHospitalityApply facHospitalityApply) {
+		
+		
+		
+		IdWorker idWorker = new IdWorker(0, 1);
+		facHospitalityApply.setNum("ZD" + idWorker.nextId());
+		facHospitalityApply.setUserId(ShiroUtils.getUserId());
+		facHospitalityApply.setApplicationTime(new Date());
+		facHospitalityApply.setAmount(facHospitalityApply.getStandardAmount()
+				* Double.valueOf(facHospitalityApply.getTotalNumber()));// 获取预计金额
+		return toAjax(facHospitalityApplyService
+				.insertFacHospitalityApply(facHospitalityApply));
+	}
 
-    /**
-     * 修改保存招待费申请
-     */
-    @Log(title = "招待费申请", businessType = BusinessType.UPDATE)
-    @PostMapping("/edit")
-    @ResponseBody
-    public AjaxResult editSave(FacHospitalityApply facHospitalityApply) {
-        return toAjax(facHospitalityApplyService.updateFacHospitalityApply(facHospitalityApply));
-    }
+	/**
+	 * 修改招待费申请
+	 */
+	@GetMapping("/edit/{id}")
+	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+		FacHospitalityApply facHospitalityApply = facHospitalityApplyService
+				.selectFacHospitalityApplyById(id);
+		mmap.put("facHospitalityApply", facHospitalityApply);
+		return prefix + "/edit";
+	}
 
-    /**
-     * 删除招待费申请
-     */
-    @Log(title = "招待费申请", businessType = BusinessType.DELETE)
-    @PostMapping("/remove")
-    @ResponseBody
-    public AjaxResult remove(String ids) {
-        return toAjax(facHospitalityApplyService.deleteFacHospitalityApplyByIds(ids));
-    }
+	/**
+	 * 修改保存招待费申请
+	 */
+	@Log(title = "招待费申请", businessType = BusinessType.UPDATE)
+	@PostMapping("/edit")
+	@ResponseBody
+	public AjaxResult editSave(FacHospitalityApply facHospitalityApply) {
+		return toAjax(facHospitalityApplyService
+				.updateFacHospitalityApply(facHospitalityApply));
+	}
 
-    /**
-     * 查看详情
-     */
-    @GetMapping("/detail")
-    public String detail(@RequestParam("id") Long id, ModelMap map) {
-        FacHospitalityApply facHospitalityApply = new FacHospitalityApply();
-        facHospitalityApply.setId(id);
-        List<FacHospitalityApply> facReimburseApplies = facHospitalityApplyService
-                .selectFacHospitalityApplyList(facHospitalityApply);
-        map.put("rid", id);
-        map.put("num", facReimburseApplies.get(0).getNum());
-        return prefix + "/detail";
-    }
+	/**
+	 * 删除招待费申请
+	 */
+	@Log(title = "招待费申请", businessType = BusinessType.DELETE)
+	@PostMapping("/remove")
+	@ResponseBody
+	public AjaxResult remove(String ids) {
+		return toAjax(
+				facHospitalityApplyService.deleteFacHospitalityApplyByIds(ids));
+	}
 
-    /**
-     * 查看行程安排详情
-     */
-    @PostMapping("/detail")
-    @ResponseBody
-    public TableDataInfo detail1(String num) {
-        startPage();
-        FacHospitalityApply facHospitalityApply = facHospitalityApplyService.deatil(num);
-        if (facHospitalityApply != null) {
-            List<FacHospitalityApply> facReimburseApplies = new ArrayList<>();
-            facReimburseApplies.add(facHospitalityApply);
-            return getDataTable(facReimburseApplies);
-        } else {
-            List<String> a = new ArrayList<>();
-            return getDataTable(a);
-        }
-    }
+	/**
+	 * 查看详情
+	 */
+	@GetMapping("/detail")
+	public String detail(@RequestParam("id") Long id, ModelMap map) {
+		FacHospitalityApply facHospitalityApply = new FacHospitalityApply();
+		facHospitalityApply.setId(id);
+		List<FacHospitalityApply> facReimburseApplies = facHospitalityApplyService
+				.selectFacHospitalityApplyList(facHospitalityApply);
+		map.put("rid", id);
+		map.put("num", facReimburseApplies.get(0).getNum());
+		return prefix + "/detail";
+	}
 
+	/**
+	 * 查看行程安排详情
+	 */
+	@PostMapping("/detail")
+	@ResponseBody
+	public TableDataInfo detail1(@RequestParam("num") String num) {
+		startPage();
+		FacHospitalityApply facHospitalityApply = facHospitalityApplyService
+				.deatil(num);
+		if (facHospitalityApply != null) {
+			List<FacHospitalityApply> facReimburseApplies = new ArrayList<>();
+			facReimburseApplies.add(facHospitalityApply);
+			return getDataTable(facReimburseApplies);
+		} else {
+			List<String> a = new ArrayList<>();
+			return getDataTable(a);
+		}
+	}
 
-    /**
-     * 新增报销申请
-     */
-    @GetMapping("/reimbuseDetail")
-    public String reimbuseDetail(@RequestParam("id") Long id, ModelMap map) {  
-    	  FacHospitalityApply facHospitalityApply =  facHospitalityApplyService.selectFacHospitalityApplyById(id);
-    	  map.put("amount",facHospitalityApply.getAmount());
-    	  IdWorker idWorker = new IdWorker(0, 1); 
-    	  map.put("num", "BX"+idWorker.nextId());
-    	  
-        return prefix + "/reimbuseDetail";
-    }
+	/**
+	 * 新增报销申请
+	 */
+	@GetMapping("/reimbuseDetail")
+	public String reimbuseDetail(@RequestParam("id") Long id, ModelMap map) {
+		FacHospitalityApply facHospitalityApply = facHospitalityApplyService
+				.selectFacHospitalityApplyById(id);
+		map.put("amount", facHospitalityApply.getAmount());
+		IdWorker idWorker = new IdWorker(0, 1);
+		map.put("num", "BX" + idWorker.nextId());
 
+		return prefix + "/reimbuseDetail";
+	}
 
 }

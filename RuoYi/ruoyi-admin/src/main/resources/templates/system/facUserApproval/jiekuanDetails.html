@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('初始多表格')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
+        <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
+        <div>
+            <h4 class="form-header h4">借款信息</h4>
+
+
+            <div class="col-sm-12 select-table table-striped">
+
+                <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+<form class="form-horizontal m" id="form-facUserApproval-edit" th:object="${facUserApproval}">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="form-group" id="div-reiadd">
+                <label class="col-sm-4 control-label"></span>审批意见：</label>
+                <div class="col-sm-8">
+                    <input id="opi" name="opi" class="form-control" type="text">
+                    <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
+                    <input id="approverId" name="approverId" class="form-control-static" type="hidden"
+                           th:value="${userId}">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
+                    class="fa fa-check"></i>同意
+            </button>&nbsp;
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
+                    class="fa fa-check"></i>驳回
+            </button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
+                    class="fa fa-reply-all"></i>关 闭
+            </button>
+        </div>
+    </div>
+
+</form>
+</div>
+<div th:include="include::footer"></div>
+
+
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = ctx + "system/facLoanApply";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+        var num = $("#num").val();
+        var msg = $("#msg").val();
+        var prefixs = ctx + "system/facUserApproval";
+
+        $(function () {
+            var options = {
+                id: "bootstrap-table-1",
+                url: prefix + "/querys?num=" + num,
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                modalName: "借款详细信息",
+                columns: [
+                    {
+                        checkbox: true
+                    }, {
+                        field: 'id',
+                        title: 'ID',
+                        visible: false
+                    },
+                    {
+                        field: 'num',
+                        title: '借款编号',
+                        sortable: true
+                    },
+                    {
+                        field: 'loanName',
+                        title: '借款名称',
+                        sortable: true
+                    },
+                    {
+                        field: 'amount',
+                        title: '借款金额',
+                        sortable: true
+                    },
+                    {
+                        field: 'loanUser',
+                        title: '借款人',
+                        sortable: true
+                    },
+                    {
+                        field: 'createTime',
+                        title: '创建时间',
+                        sortable: true,
+                        formatter: function (value, row, index) {
+                            var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                            return newDate;
+                        }
+                    },
+                    {
+                        field: 'loanTime',
+                        title: '借款时间',
+                        sortable: true,
+                        formatter: function (value, row, index) {
+                            var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                            return newDate;
+                        }
+                    },
+                    {
+                        field: 'repayTime',
+                        title: '预计还款时间',
+                        sortable: true,
+                        formatter: function (value, row, index) {
+                            var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                            return newDate;
+                        }
+                    },
+                    {
+                        field: 'facOperate',
+                        title: '单据状态',
+                        sortable: true
+                    },
+                    {
+                        field: 'reason',
+                        title: '借款事由',
+                        sortable: true
+                    },
+                    {
+                        field: 'applyStatus',
+                        title: '申请人操作',
+                        sortable: true
+                    }
+                ]
+            };
+            $.table.init(options);
+        });
+
+    $("#form-facLoanApply-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    function mSave(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+                $.modal.disable();
+            },
+            success: function (result) {
+                if (typeof callback == "function") {
+                    callback(result);
+                }
+                $.modal.closeLoading();
+                $.modal.enable();
+                alert(result.msg);
+                $.modal.closeTab();
+            }
+        };
+        $.ajax(config)
+    }
+
+    function submitHandler(index) {
+        if ($.validate.form()) {
+            //index为1表示同意
+            if (index == 1) {
+                mSave(prefixs + "/edit", $('#form-facUserApproval-edit').serialize());
+            } else {
+                mSave(prefixs + "/editnot", $('#form-facUserApproval-edit').serialize());
+            }
+        }
+    }
+</script>
+</body>
+</html>

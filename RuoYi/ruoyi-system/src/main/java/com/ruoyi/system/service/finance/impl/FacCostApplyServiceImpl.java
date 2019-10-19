@@ -77,12 +77,14 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 		facCostApply.setMoneyEs(a+b);
 		facCostApply.setStatus("3");
 		FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
+		facSysUserApproval.setAmount(a+b);
 		facSysUserApproval.setApprovalId(facCostApply.getUserId());
 		facSysUserApproval.setApprovalTime(new Date());
 		facSysUserApproval.setApprovalLevel(1);
 		facSysUserApproval.setApplicantId(facCostApply.getUserId());
 		facSysUserApproval.setApprovalState("3");
 		facSysUserApproval.setApprovalSight("1");
+		facSysUserApproval.setApplyId(facCostApply.getNum());
 		Long leaderId = iSysUserService
 				.selectApproverIdByApplyerId(facCostApply.getUserId());// 所在部门负责人id
 		Long upLeaderId = iSysUserService
@@ -108,19 +110,25 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 		LinkedList<Long> centerId = (LinkedList<Long>) iSysUserService
 				.selectCenterIdByUserId(approvalId);
 		if (centerId != null && centerId.size() > 0) {
-			centerId.remove(approverId2);
+			 if(approverId2.equals(facCostApply.getUserId())){
+	                centerId.remove(approverId2);
+	            }
+	             
 			for (int i = centerId.size() - 1; i >= 0; i--) {
 				FacSysUserApproval center = new FacSysUserApproval();// 中心负责人
 				center.setApproverId(centerId.get(i));// 审批人ID
 				center.setApprovalLevel(++level);// 审批等级
 				center.setApplyId(facSysUserApproval.getApplyId()); // 申请人ID
 				center.setApprovalState("3");
-				center.setApprovalSight("1");// 可见性
+				center.setApprovalSight("0");// 可见性
+				center.setApplicantId(facCostApply.getUserId());
+				center.setAmount(facCostApply.getMoneyEs());
 				center.setCreateTime(new Date());// 创建时间
+				approvalProcessMapper.insert(center);
 				if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
 					return facCostApplyMapper.insertFacCostApply(facCostApply);
 				}
-				approvalProcessMapper.insert(center);
+
 			}
 		}
 		return facCostApplyMapper.insertFacCostApply(facCostApply);

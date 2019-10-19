@@ -81,6 +81,8 @@ public class FacHospitalityApplyServiceImpl
 		facSysUserApproval.setApplicantId(facHospitalityApply.getUserId());
 		facSysUserApproval.setApprovalState("3");
 		facSysUserApproval.setApprovalSight("1");
+		facSysUserApproval.setAmount(facHospitalityApply.getAmount());
+		facSysUserApproval.setApplyId(facHospitalityApply.getNum());
 		Long leaderId = iSysUserService
 				.selectApproverIdByApplyerId(facHospitalityApply.getUserId());// 所在部门负责人id
 		Long upLeaderId = iSysUserService
@@ -108,20 +110,25 @@ public class FacHospitalityApplyServiceImpl
 		LinkedList<Long> centerId = (LinkedList<Long>) iSysUserService
 				.selectCenterIdByUserId(approvalId);
 		if (centerId != null && centerId.size() > 0) {
-			centerId.remove(approverId2);
+			if (approverId2.equals(facHospitalityApply.getLoanId())) {
+				centerId.remove(approverId2);
+			}
 			for (int i = centerId.size() - 1; i >= 0; i--) {
 				FacSysUserApproval center = new FacSysUserApproval();// 中心负责人
 				center.setApproverId(centerId.get(i));// 审批人ID
 				center.setApprovalLevel(++level);// 审批等级
-				center.setApplyId(facSysUserApproval.getApplyId()); // 申请人ID
+				center.setApplyId(facHospitalityApply.getNum()); // 申请人ID
 				center.setApprovalState("3");
 				center.setApprovalSight("0");// 可见性
 				center.setCreateTime(new Date());// 创建时间
+				center.setApplicantId(facHospitalityApply.getLoanId());
+				center.setAmount(facHospitalityApply.getAmount());
+				approvalProcessMapper.insert(center);
 				if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
 					return facHospitalityApplyMapper
 							.insertFacHospitalityApply(facHospitalityApply);
 				}
-				approvalProcessMapper.insert(center);
+				
 			}
 		}
 		return facHospitalityApplyMapper

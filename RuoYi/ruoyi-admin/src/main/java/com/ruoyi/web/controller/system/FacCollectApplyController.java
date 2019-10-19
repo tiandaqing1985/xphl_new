@@ -19,7 +19,11 @@ import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCollectApply;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
+import com.ruoyi.system.domain.finance.FacUserApproval;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCollectApplyService;
+import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 
 /**
  * 团建申请 信息操作处理
@@ -29,47 +33,64 @@ import com.ruoyi.system.service.finance.IFacCollectApplyService;
  */
 @Controller
 @RequestMapping("/system/facCollectApply")
-public class FacCollectApplyController extends BaseController
-{
-    private String prefix = "system/facCollectApply";
-	
+public class FacCollectApplyController extends BaseController {
+	private String prefix = "system/facCollectApply";
+
 	@Autowired
 	private IFacCollectApplyService facCollectApplyService;
-	
+	@Autowired
+	private ISysUserService sysUserService;
+	@Autowired
+	private IFacReimburseApplyService facReimburseApplyService;
+
 	@RequiresPermissions("system:facCollectApply:view")
 	@GetMapping()
-	public String facCollectApply()
-	{
-	    return prefix + "/facCollectApply";
+	public String facCollectApply() {
+		return prefix + "/facCollectApply";
 	}
-	
+
 	/**
 	 * 查询团建申请列表
 	 */
 
 	@PostMapping("/list")
 	@ResponseBody
-	public TableDataInfo list(FacCollectApply facCollectApply)
-	{
+	public TableDataInfo list(FacCollectApply facCollectApply) {
 		startPage();
 		facCollectApply.setApplicant(ShiroUtils.getUserId());
-        List<FacCollectApply> list = facCollectApplyService.selectFacCollectApplyList(facCollectApply);
+		List<FacCollectApply> list = facCollectApplyService
+				.selectFacCollectApplyList(facCollectApply);
+
+		for (FacCollectApply v : list) {
+			v.setApplicantName(sysUserService.selectUserById(v.getApplicant())
+					.getUserName());
+		}
+
 		return getDataTable(list);
 	}
-	
-	
+
+	@PostMapping("/listId")
+	@ResponseBody
+	public TableDataInfo listId(FacCollectApply facCollectApply) {
+		startPage();
+		List<FacCollectApply> list = facCollectApplyService
+				.selectFacCollectApplyList(facCollectApply);
+		return getDataTable(list);
+	}
+
 	/**
 	 * 导出团建申请列表
 	 */
-    @PostMapping("/export")
-    @ResponseBody
-    public AjaxResult export(FacCollectApply facCollectApply)
-    {
-    	List<FacCollectApply> list = facCollectApplyService.selectFacCollectApplyList(facCollectApply);
-        ExcelUtil<FacCollectApply> util = new ExcelUtil<FacCollectApply>(FacCollectApply.class);
-        return util.exportExcel(list, "facCollectApply");
-    }
-	
+	@PostMapping("/export")
+	@ResponseBody
+	public AjaxResult export(FacCollectApply facCollectApply) {
+		List<FacCollectApply> list = facCollectApplyService
+				.selectFacCollectApplyList(facCollectApply);
+		ExcelUtil<FacCollectApply> util = new ExcelUtil<FacCollectApply>(
+				FacCollectApply.class);
+		return util.exportExcel(list, "facCollectApply");
+	}
+
 	/**
 	 * 新增团建申请
 	 */
@@ -77,54 +98,52 @@ public class FacCollectApplyController extends BaseController
 	public String add(ModelMap mmp) {
 		IdWorker idWorker = new IdWorker(0, 1);
 		mmp.put("num", "TJ" + idWorker.nextId());
-		mmp.put("deptName",ShiroUtils.getDeptId());
-	    return prefix + "/add";
+		mmp.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
+		return prefix + "/add";
 	}
-	
+
 	/**
 	 * 新增保存团建申请
 	 */
 	@Log(title = "团建申请", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public AjaxResult addSave(FacCollectApply facCollectApply)
-	{		
+	public AjaxResult addSave(FacCollectApply facCollectApply) {
 		facCollectApply.setApplicant(ShiroUtils.getUserId());
-		facCollectApply.setDeptName(""+ShiroUtils.getDeptId()); 
-		return toAjax(facCollectApplyService.insertFacCollectApply(facCollectApply));
+		return toAjax(
+				facCollectApplyService.insertFacCollectApply(facCollectApply));
 	}
 
 	/**
 	 * 修改团建申请
 	 */
 	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Long id, ModelMap mmap)
-	{
-		FacCollectApply facCollectApply = facCollectApplyService.selectFacCollectApplyById(id);
+	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+		FacCollectApply facCollectApply = facCollectApplyService
+				.selectFacCollectApplyById(id);
 		mmap.put("facCollectApply", facCollectApply);
-	    return prefix + "/edit";
+		return prefix + "/edit";
 	}
-	
+
 	/**
 	 * 修改保存团建申请
 	 */
 	@Log(title = "团建申请", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
-	public AjaxResult editSave(FacCollectApply facCollectApply)
-	{		
-		return toAjax(facCollectApplyService.updateFacCollectApply(facCollectApply));
+	public AjaxResult editSave(FacCollectApply facCollectApply) {
+		return toAjax(
+				facCollectApplyService.updateFacCollectApply(facCollectApply));
 	}
-	
+
 	/**
 	 * 删除团建申请
 	 */
 	@Log(title = "团建申请", businessType = BusinessType.DELETE)
-	@PostMapping( "/remove")
+	@PostMapping("/remove")
 	@ResponseBody
-	public AjaxResult remove(String ids)
-	{		
+	public AjaxResult remove(String ids) {
 		return toAjax(facCollectApplyService.deleteFacCollectApplyByIds(ids));
 	}
-	
+
 }

@@ -3,23 +3,23 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.finance.FacCostApplyMapper">
-	<resultMap type="FacCostApply" id="FacCostApplyResult">
-		<result property="id" column="id" />
-		<result property="num" column="num" />
-		<result property="busName" column="bus_name" />
-		<result property="outTime" column="out_time" />
-		<result property="backTimeEs" column="back_time_es" />
-		<result property="outMan" column="out_man" />
-		<result property="moneyEs" column="money_es" />
-		<result property="toLocal" column="to_local" />
-		<result property="reason" column="reason" />
-		<result property="status" column="status" />
-	</resultMap>
+	 <resultMap type="FacCostApply" id="FacCostApplyResult">
+        <result property="id"    column="id"    />
+        <result property="num"    column="num"    />
+        <result property="busName"    column="bus_name"    />
+        <result property="outTime"    column="out_time"    />
+        <result property="backTimeEs"    column="back_time_es"    />
+        <result property="outMan"    column="out_man"    />
+        <result property="moneyEs"    column="money_es"    />
+        <result property="toLocal"    column="to_local"    />
+        <result property="reason"    column="reason"    />
+        <result property="status"    column="status"    />
+        <result property="userId"    column="user_id"    />
+    </resultMap>
+	
 	<sql id="selectFacCostApplyVo">
-		select id, num, bus_name, out_time, back_time_es, out_man,
-		money_es,
-		to_local, reason,status from fac_cost_apply
-	</sql>
+        select id, num, bus_name, out_time, back_time_es, out_man, money_es, to_local, reason, status, user_id from fac_cost_apply
+    </sql>
 	
     <select id="selectFacCostApplyList" parameterType="FacCostApply" resultMap="FacCostApplyResult">
         <include refid="selectFacCostApplyVo"/>
@@ -34,18 +34,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="toLocal != null  and toLocal != '' "> and to_local = #{toLocal}</if>
              <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
              <if test="status != null  and status != '' "> and status = #{status}</if>
-             <if test="userId != null  and userId != '' "> and user_id = #{userId}</if>
+             <if test="userId != null "> and user_id = #{userId}</if>
          </where>
-         order by id desc
+           order by id desc
     </select>
-    
+	
+     
 	<select id="detail" resultType="com.ruoyi.system.domain.finance.FacCostApply">
-		select a.id, a.num, a.bus_name,
-		a.out_time, a.back_time_es, a.out_man,
-		a.money_es,
-		a.to_local, a.reason,a.user_id
-		from fac_cost_apply a
-		where a.num=#{num}
+	 select id, num, bus_name, out_time, back_time_es, out_man, money_es, to_local, reason, status, user_id from fac_cost_apply
+		where  num=#{num}
 	</select>
 	<select id="adiTail" resultType="com.ruoyi.system.domain.finance.FacCostDetailApply">
 		SELECT
@@ -94,7 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="toLocal != null  and toLocal != ''  ">#{toLocal},</if>
 			<if test="reason != null  and reason != ''  ">#{reason},</if>
 			<if test="status != null  and status != ''  ">#{status},</if>
-			<if test="userId != null  and userId != '' ">user_id,</if>
+			<if test="userId != null  and userId != '' ">#{userId},</if>
 		</trim>
 	</insert>
 

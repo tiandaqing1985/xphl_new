@@ -24,8 +24,12 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacLoanApply;
 import com.ruoyi.system.domain.finance.FacLoanRepayApply;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
+import com.ruoyi.system.domain.finance.FacUserApproval;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacLoanApplyService;
 import com.ruoyi.system.service.finance.IFacLoanRepayApplyService;
+import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 
 /**
  * 借款申请 信息操作处理
@@ -43,7 +47,10 @@ public class FacLoanApplyController extends BaseController {
 	private IFacLoanApplyService facLoanApplyService;
 	@Autowired
 	private IFacLoanRepayApplyService facLoanRepayApplyService;
-
+	@Autowired
+	private ISysUserService sysUserService;
+	@Autowired
+	private IFacReimburseApplyService facReimburseApplyService;
 	@GetMapping()
 	public String facLoanApply() {
 		return prefix + "/facLoanApply";
@@ -59,6 +66,14 @@ public class FacLoanApplyController extends BaseController {
 		facLoanApply.setLoanUser(ShiroUtils.getUserId());
 		List<FacLoanApply> list = facLoanApplyService
 				.selectFacLoanApplyList(facLoanApply);
+		
+		for (FacLoanApply v : list) {
+			v.setUserName(sysUserService.selectUserById(v.getLoanUser()).getUserName());  
+			facLoanApply.setUserName(v.getUserName());
+		}
+		
+		 
+		
 		return getDataTable(list);
 	}
 

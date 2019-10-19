@@ -64,14 +64,16 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
     @Override
     public int insertFacLoanApply(FacLoanApply facLoanApply) {
         facLoanApply.setCreateTime(new Date());
-        facLoanApply.setApplyStatus("3");
+        facLoanApply.setApplyStatus("4");
+        
         FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
-        facSysUserApproval.setApprovalId(facLoanApply.getLoanUser());
-        facSysUserApproval.setApprovalTime(new Date());
+        facSysUserApproval.setApplyId(facLoanApply.getNum());
+        facSysUserApproval.setApprovalId(facLoanApply.getLoanUser()); 
         facSysUserApproval.setApprovalLevel(1);
         facSysUserApproval.setApplicantId(facLoanApply.getLoanUser());
         facSysUserApproval.setApprovalState("3");
         facSysUserApproval.setApprovalSight("1");
+        facSysUserApproval.setAmount(facLoanApply.getAmount());
         Long leaderId = iSysUserService
                 .selectApproverIdByApplyerId(facLoanApply.getLoanUser());// 所在部门负责人id
         Long upLeaderId = iSysUserService
@@ -97,8 +99,12 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
         LinkedList<Long> centerId = (LinkedList<Long>) iSysUserService
                 .selectCenterIdByUserId(approvalId);
         if (centerId != null && centerId.size() > 0) {
-            centerId.remove(approverId2);
-            for (int i = centerId.size() - 1; i >= 0; i--) {
+            if(approverId2.equals(facLoanApply.getLoanUser())){
+                centerId.remove(approverId2);
+            }
+             
+
+            for (int i = centerId.size()-1; i >= 0; i--) {
                 FacSysUserApproval center = new FacSysUserApproval();// 中心负责人
                 center.setApproverId(centerId.get(i));// 审批人ID
                 center.setApprovalLevel(++level);// 审批等级
@@ -106,10 +112,13 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
                 center.setApprovalState("3");
                 center.setApprovalSight("0");// 可见性
                 center.setCreateTime(new Date());// 创建时间
+                center.setApplyId(facLoanApply.getNum()); 
+                center.setAmount(facLoanApply.getAmount());
+                center.setApplicantId(facLoanApply.getLoanUser());
+                approvalProcessMapper.insert(center);
                 if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
                     return facLoanApplyMapper.insertFacLoanApply(facLoanApply);
-                }
-                approvalProcessMapper.insert(center);
+                } 
             }
         }
         return facLoanApplyMapper.insertFacLoanApply(facLoanApply);

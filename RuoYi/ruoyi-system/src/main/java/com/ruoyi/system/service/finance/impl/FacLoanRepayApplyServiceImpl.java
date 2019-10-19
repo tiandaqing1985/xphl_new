@@ -63,12 +63,15 @@ public class FacLoanRepayApplyServiceImpl implements IFacLoanRepayApplyService
 			facLoanRepayApply.setArrears(money-facLoanRepayApply.getRepayAmount());//实际欠款金额（元）
 		}else{
 			double s = facLoanRepayApplyMapper.selectAmount(facLoanRepayApply.getNum());
-			facLoanRepayApply.setArrears(money-facLoanRepayApply.getRepayAmount());
+			facLoanRepayApply.setArrears(money- s);
 		}
 		facLoanRepayApply.setRepayTime(new Date());//还款时间 
 		//facLoanRepayApply.setMethod(method); //财务确认还款金额
 		//facLoanRepayApply.setAmount(amount);//核实后欠款金额
-		facLoanRepayApply.setStates("3");//还款状态 
+		facLoanRepayApply.setStates("还款中");//还款状态
+			if(facLoanRepayApply.getArrears()<= 0){
+				facLoanRepayApply.setStates("已还清");//还款状态
+				}
 	    return facLoanRepayApplyMapper.insertFacLoanRepayApply(facLoanRepayApply);
 	}
 	

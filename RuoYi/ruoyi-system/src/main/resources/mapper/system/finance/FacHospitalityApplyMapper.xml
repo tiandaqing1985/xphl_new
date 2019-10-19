@@ -43,6 +43,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="applicationTime != null "> and application_time = #{applicationTime}</if>
              <if test="states != null "> and states = #{states}</if>
          </where>
+          order by id desc
     </select>
     
     <select id="selectFacHospitalityApplyById" parameterType="Long" resultMap="FacHospitalityApplyResult">

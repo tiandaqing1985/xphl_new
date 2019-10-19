@@ -116,11 +116,12 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 				center.setCreateTime(new Date());// 创建时间
 				center.setApplyId(facPayPublicApply.getNum());
 				center.setAmount(facPayPublicApply.getAmount());
+				approvalProcessMapper.insert(center);
 				if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
 					return facPayPublicApplyMapper
 							.insertFacPayPublicApply(facPayPublicApply);
 				}
-				approvalProcessMapper.insert(center);
+				
 			}
 		} 
 		return facPayPublicApplyMapper
