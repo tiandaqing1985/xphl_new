@@ -7,8 +7,10 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ public class FacUserApprovalController extends BaseController {
 	private IFacUserApprovalService facUserApprovalService;
 	@Autowired
 	private ISysUserService sysUserService;
+	@Autowired
+	private IFacReimburseApplyService facReimburseApplyService;
 
 	@RequiresPermissions("system:facUserApproval:view")
 	@GetMapping()
@@ -54,10 +58,14 @@ public class FacUserApprovalController extends BaseController {
 		List<FacUserApproval> list = facUserApprovalService
 				.selectFacUserApprovalList(facUserApproval);
 		for (FacUserApproval v : list) {
-			v.setApplicantName(sysUserService.selectUserById(v.getApplicantId())
-					.getUserName());
-			v.setApproverName(sysUserService.selectUserById(v.getApproverId())
-					.getUserName());
+			v.setApplicantName(sysUserService.selectUserById(v.getApplicantId()).getUserName());
+			v.setApproverName(sysUserService.selectUserById(v.getApproverId()).getUserName());
+			FacReimburseApply facReimburseApply = new FacReimburseApply();
+			facReimburseApply.setNum(v.getApplyId());
+			List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
+			if(facReimburseApplies.size()>0){
+				v.setName(facReimburseApplies.get(0).getName());
+			}
 		}
 		return getDataTable(list);
 	}
