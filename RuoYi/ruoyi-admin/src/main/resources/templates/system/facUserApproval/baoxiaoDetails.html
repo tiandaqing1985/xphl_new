@@ -22,7 +22,7 @@
                                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报销名称：</label>
                                 <div class="col-sm-8">
                                     <input name="name" autocomplete="off" placeholder="XX月份报销" class="form-control"
-                                           type="text" maxlength="30" th:value="${name}" required>
+                                           type="text" maxlength="30" th:value="${name}" readonly required>
                                 </div>
                             </div>
                         </div>
@@ -51,26 +51,26 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 select-table table-striped">
-                        <a class="btn btn-success" onclick="mAdd(1)">
-                            <i class="fa fa-plus"></i> 交通费报销信息
-                        </a>
+<!--                        <a class="btn btn-success" onclick="mAdd(1)">-->
+<!--                            <i class="fa fa-plus"></i> 交通费报销信息-->
+<!--                        </a>-->
                         <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
                     </div>
                 </div>
 
                 <div class="row" id="zdf">
                     <div class="col-sm-12 select-table table-striped">
-                        <a class="btn btn-success" onclick="mAdd(2)">
-                            <i class="fa fa-plus"></i> 招待费报销信息
-                        </a>
+<!--                        <a class="btn btn-success" onclick="mAdd(2)">-->
+<!--                            <i class="fa fa-plus"></i> 招待费报销信息-->
+<!--                        </a>-->
                         <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 select-table table-striped">
-                        <a class="btn btn-success" onclick="mAdd(3)">
-                            <i class="fa fa-plus"></i> 其他费用报销信息
-                        </a>
+<!--                        <a class="btn btn-success" onclick="mAdd(3)">-->
+<!--                            <i class="fa fa-plus"></i> 其他费用报销信息-->
+<!--                        </a>-->
                         <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
                     </div>
                 </div>
@@ -177,6 +177,15 @@
             showColumns: false,
             modalName: "报销申请添加",
             columns: [
+                [
+                        {
+                            title: '交通费报销信息',
+                            align: 'center',
+                            colspan: 9,
+                        }
+
+                ],
+                [
                 {
                     checkbox: true
                 },
@@ -226,6 +235,7 @@
                 }
 
             ]
+                ]
         };
 
         $.table.init(options);

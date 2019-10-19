@@ -80,42 +80,67 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 	@Override
 	public int updateFacUserApproval(FacUserApproval facUserApproval) {
 
-	    FacReimburseApply facReimburseApply = new FacReimburseApply();
-	    facReimburseApply.setNum(facUserApproval.getApplyId());
-        facReimburseApply.setStatus("3");
-        facReimburseApplyService.updateFacReimburseApplyByNum(facReimburseApply); 
+        FacReimburseApply facReimburseApply = new FacReimburseApply();
+        facReimburseApply.setNum(facUserApproval.getApplyId());
+		//更新当前审批步骤中的状态
 		facUserApproval.setApprovalTime(new Date());
 		facUserApprovalMapper.updateFacUserApproval(facUserApproval);
-		SysUser sysUser = iSysUserService.selectUserById(facUserApproval.getApproverId());
-		SysDept sysDept = sysDeptService.selectDeptById(sysUser.getDeptId());
-		if(sysDept.getParentId()==0){
-			return 1;
-		} 
-		Long leaderId = null;
-		if(sysDept.getLeader().equals(sysUser.getUserName())){
-			sysDept = sysDeptService.selectDeptById(sysDept.getParentId());
-			SysUser selectVO = new SysUser();
-			selectVO.setUserName(sysDept.getLeader());
-			selectVO.setDeptId(sysDept.getDeptId());
-			List<SysUser> sysUsers = iSysUserService.selectUserList(selectVO);
-			leaderId = sysUsers.get(0).getUserId();
-		}
+        //若是审批通过
+        if(facUserApproval.getApprovalState().equals("1")){
+            //审批状态为审批中
+            facReimburseApply.setStatus("3");
+            //查询下一个审批步骤
+			FacUserApproval nextFac = new FacUserApproval();
+			nextFac.setApplyId(facUserApproval.getApplyId());
+			nextFac.setApprovalLevel(facUserApproval.getApprovalLevel()+1);
+			List<FacUserApproval> approvals = facUserApprovalMapper.selectFacUserApprovalList(nextFac);
+			//若无下一步则审批成功，否则审批中
+			if(approvals.size()==0){
+				facReimburseApply.setStatus("1");
+			}else{
+				FacUserApproval next = approvals.get(0);
+				next.setApprovalSight("1");
+				facUserApprovalMapper.updateFacUserApproval(next);
+			}
+        }else{
+            //审批状态为失败
+			facReimburseApply.setStatus("2");
+        }
 
-		FacUserApproval fac =new  FacUserApproval();
+        //将当前审批状态改为审批中
+		facReimburseApplyService.updateFacReimburseApplyByNum(facReimburseApply);
 
-		fac.setApproverId(leaderId);
-		fac.setApplyId(facUserApproval.getApplyId());
 
-		FacUserApproval facUserApproval2 = facUserApprovalMapper
-				.selectEndFacUserApprovalList(fac);
-        if(facUserApproval2==null){
-			facReimburseApply.setStatus("1");
-			facReimburseApplyService.updateFacReimburseApplyByNum(facReimburseApply);
-			return 1;
-		}
-		facUserApproval2.setApprovalSight("1");
+//		SysUser sysUser = iSysUserService.selectUserById(facUserApproval.getApproverId());
+//		SysDept sysDept = sysDeptService.selectDeptById(sysUser.getDeptId());
+//		if(sysDept.getParentId()==0){
+//			return 1;
+//		}
+//		Long leaderId = null;
+//		if(sysDept.getLeader().equals(sysUser.getUserName())){
+//			sysDept = sysDeptService.selectDeptById(sysDept.getParentId());
+//			SysUser selectVO = new SysUser();
+//			selectVO.setUserName(sysDept.getLeader());
+//			selectVO.setDeptId(sysDept.getDeptId());
+//			List<SysUser> sysUsers = iSysUserService.selectUserList(selectVO);
+//			leaderId = sysUsers.get(0).getUserId();
+//		}
+//
+//		FacUserApproval fac =new  FacUserApproval();
+//
+//		fac.setApproverId(leaderId);
+//		fac.setApplyId(facUserApproval.getApplyId());
+//
+//		FacUserApproval facUserApproval2 = facUserApprovalMapper
+//				.selectEndFacUserApprovalList(fac);
+//        if(facUserApproval2==null){
+//			facReimburseApply.setStatus("1");
+//			facReimburseApplyService.updateFacReimburseApplyByNum(facReimburseApply);
+//			return 1;
+//		}
+//		facUserApproval2.setApprovalSight("1");
 
-		return facUserApprovalMapper.updateFacUserApproval(facUserApproval2);
+		return 1;
 	}
 
 	/**

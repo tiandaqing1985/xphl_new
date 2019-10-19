@@ -11,12 +11,22 @@
                 <div class="select-list">
                     <ul>
                         <li>
-                            报销人：<input type="text" name="userName"/>
+                            报销人：
+                            <div class="col-sm-9">
+                            <input id="loanUser" type="text" name="loanUser"/>
+                            <div class="input-group-btn" style="float: right">
+                                <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                </ul>
+                            </div>
+                            </div>
                         </li>
 
-                        <li>
-                            类型：<input type="text" name="type"/>
-                        </li>
+<!--                        <li>-->
+<!--                            类型：<input type="text" name="type"/>-->
+<!--                        </li>-->
 
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -30,7 +40,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.addTab()">
+            <a class="btn btn-success" onclick="$.modal.open('日常报销申请','facReimburseApply/add')">
                 <i class="fa fa-plus"></i> 日常报销申请
             </a>
             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
@@ -52,6 +62,7 @@
     </div>
 </div>
 <div th:include="include :: footer"></div>
+<th:block th:include="include :: bootstrap-suggest-js" />
 <script th:inline="javascript">
     var editFlag = [[${@permission.hasPermi('system:facReimburseApply:edit')}]];
     var removeFlag = [[${@permission.hasPermi('system:facReimburseApply:remove')}]];
@@ -226,6 +237,22 @@
         };
         $.modal.openOptions(options);
     }
+
+    var testBsSuggest = $("#loanUser").bsSuggest({
+        url: ctx + "system/user/userModel",
+        showBtn: false,
+        idField: "userName",
+        keyField: "userId",
+        effectiveFields: ["deptName","userName"],
+        multiWord: true,
+        hideOnSelect: true
+    }).on('onDataRequestSuccess', function (e, result) {
+        console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword) {
+        console.log('onSetSelectValue: ', keyword);
+    }).on('onUnsetSelectValue', function (e) {
+        console.log("onUnsetSelectValue");
+    });
 
 </script>
 </body>

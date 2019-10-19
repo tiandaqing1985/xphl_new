@@ -98,7 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null  ">create_time = #{createTime},</if>
             <if test="applicantId != null  ">applicant_id = #{applicantId},</if>
         </trim>
-        where approval_id = #{approvalId}
+        where approval_id = #{approvalId} and approval_level = #{approvalLevel}
     </update>
 
 	<delete id="deleteFacUserApprovalById" parameterType="Long">

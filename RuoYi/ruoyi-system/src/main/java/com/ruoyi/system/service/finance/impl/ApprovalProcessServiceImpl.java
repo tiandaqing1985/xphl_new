@@ -303,4 +303,13 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
 		return null;
 	}
 
+    @Override
+    public void insert(FacSysUserApproval facSysUserApproval) {
+        if(facSysUserApproval.getApprovalLevel()==1){
+            facSysUserApproval.setApprovalSight("1");
+        }else{
+            facSysUserApproval.setApprovalSight("0");
+        }
+        approvalProcessMapper.insert(facSysUserApproval);
+    }
 }

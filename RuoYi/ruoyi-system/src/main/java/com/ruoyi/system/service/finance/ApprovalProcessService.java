@@ -2,6 +2,7 @@ package com.ruoyi.system.service.finance;
 
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
 import com.ruoyi.system.domain.finance.FacReimburseApply;
+import com.ruoyi.system.domain.finance.FacSysUserApproval;
 
 
 /**
@@ -18,5 +19,5 @@ public interface ApprovalProcessService {
     public  String   initialize(Object o);
 
 
-
+    void insert(FacSysUserApproval facSysUserApproval);
 }

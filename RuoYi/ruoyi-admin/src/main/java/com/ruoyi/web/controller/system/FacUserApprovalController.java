@@ -108,13 +108,23 @@ public class FacUserApprovalController extends BaseController {
 	@GetMapping("/edit/{approvalId}")
 	public String edit(@PathVariable("approvalId") Long approvalId,
 			ModelMap map) {
+
 		FacUserApproval facUserApproval = facUserApprovalService
 				.selectFacUserApprovalById(approvalId);
+
+		FacReimburseApply facReimburseApply = new FacReimburseApply();
+		facReimburseApply.setNum(facUserApproval.getApplyId());
+		List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
+		if(facReimburseApplies.size()>0){
+			facUserApproval.setName(facReimburseApplies.get(0).getName());
+		}
+
 		map.put("facUserApproval", facUserApproval);
 		map.put("num",facUserApproval.getApplyId());
 		map.put("msg", "1");
 		map.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
 		map.put("userId", ShiroUtils.getUserId());
+		map.put("name",facUserApproval.getName());
 		String nums=facUserApproval.getApplyId().substring(0,2);
 		if (nums.equals("BX")) {
 			return prefix + "/baoxiaoDetails";

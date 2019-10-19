@@ -60,6 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="id!=null">and a.id = #{id}</if>
         <if test="num!=null and num!=''"> and a.num=#{num}</if>
         <if test="createBy!=null and createBy!=''">and a.create_by=#{createBy}</if>
+        <if test="loanUser!=null and loanUser!=''">and a.loan_user=#{loanUser}</if>
         order by a.create_time desc
     </select>
     

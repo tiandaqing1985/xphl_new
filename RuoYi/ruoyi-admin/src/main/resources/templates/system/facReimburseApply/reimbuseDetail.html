@@ -95,6 +95,7 @@
                         <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
                                 class="fa fa-reply-all"></i>关 闭
                         </button>
+
                     </div>
                 </div>
             </div>
@@ -102,7 +103,7 @@
 </div>
 
 <div th:include="include :: footer"></div>
-
+</body>
 <script th:inline="javascript">
 
     var prefix = ctx + "system/facReimburseApply";
@@ -115,7 +116,9 @@
     function zAdd() {
         $.modal.open("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
     }
-
+    function closeItem() {
+        $.modal.close();
+    }
     function mAdd(id) {
         if (id == 1) {
             $.table._option.id = "bootstrap-table-1";
@@ -396,8 +399,8 @@
                 }
                 $.modal.closeLoading();
                 $.modal.enable();
-                alert(result.msg);
-                $.modal.closeTab();
+                $.modal.msg(result.msg);
+                $.modal.close();
             }
         };
         $.ajax(config)
@@ -408,9 +411,10 @@
             //index为1表示保存
             if(index==1){
                 mSave(prefix + "/addSave", $('#form-reiadd').serialize());
-            }else{
+            }else if(index==2){
                 mSave(prefix + "/addSubmit", $('#form-reiadd').serialize());
             }
+            $.modal.close();
         }
     }
 
