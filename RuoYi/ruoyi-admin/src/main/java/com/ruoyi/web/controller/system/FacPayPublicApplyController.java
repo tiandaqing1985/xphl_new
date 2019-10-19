@@ -25,6 +25,8 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
 import com.ruoyi.system.domain.finance.FacPayPublicDetailed;
+import com.ruoyi.system.domain.finance.FacUserApproval;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacPayPublicApplyService;
 
 /**
@@ -40,7 +42,8 @@ public class FacPayPublicApplyController extends BaseController {
 
 	@Autowired
 	private IFacPayPublicApplyService facPayPublicApplyService;
-
+	@Autowired
+	private ISysUserService sysUserService;
 	@RequiresPermissions("system:facPayPublicApply:view")
 	@GetMapping()
 	public String facPayPublicApply() {
@@ -56,7 +59,10 @@ public class FacPayPublicApplyController extends BaseController {
 		startPage();
 		facPayPublicApply.setUser(ShiroUtils.getUserId());
 		List<FacPayPublicApply> list = facPayPublicApplyService
-				.selectFacPayPublicApplyList(facPayPublicApply);
+				.selectFacPayPublicApplyList(facPayPublicApply); 
+		 for (FacPayPublicApply v : list) {
+	            v.setUserName(sysUserService.selectUserById(v.getUser()).getUserName()); 
+	        } 
 		return getDataTable(list);
 	}
 

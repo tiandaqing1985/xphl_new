@@ -1,6 +1,5 @@
 package com.ruoyi.system.domain.finance;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -42,7 +41,7 @@ public class FacPayPublicApply extends BaseEntity {
     /**
      * 付款金额
      */
-    private BigDecimal amount;
+    private Double amount;
     /**
      * 收款人
      */
@@ -128,17 +127,17 @@ public class FacPayPublicApply extends BaseEntity {
 
     public String getWeatherInvoice() {
         return weatherInvoice;
-    }
+    } 
 
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
+    public Double getAmount() {
+		return amount;
+	}
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
 
-    public void setPayee(String payee) {
+	public void setPayee(String payee) {
         this.payee = payee;
     }
 

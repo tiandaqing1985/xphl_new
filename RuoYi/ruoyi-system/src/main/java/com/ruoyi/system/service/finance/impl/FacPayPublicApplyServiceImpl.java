@@ -68,10 +68,8 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 	 * @return 结果
 	 */
 	@Override
-	public int insertFacPayPublicApply(FacPayPublicApply facPayPublicApply) {
-
-		facPayPublicApply.setStatus("3");
-
+	public int insertFacPayPublicApply(FacPayPublicApply facPayPublicApply) { 
+		facPayPublicApply.setStatus("3"); 
 		FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
 		facSysUserApproval.setApprovalId(facPayPublicApply.getUser());
 		facSysUserApproval.setApprovalTime(new Date());
@@ -79,6 +77,8 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 		facSysUserApproval.setApplicantId(facPayPublicApply.getUser());
 		facSysUserApproval.setApprovalState("3");
 		facSysUserApproval.setApprovalSight("1");
+		facSysUserApproval.setApplyId(facPayPublicApply.getNum());
+		facSysUserApproval.setAmount(facPayPublicApply.getAmount());
 		Long leaderId = iSysUserService
 				.selectApproverIdByApplyerId(facPayPublicApply.getUser());// 所在部门负责人id
 		Long upLeaderId = iSysUserService
@@ -114,14 +114,15 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 				center.setApprovalState("3");
 				center.setApprovalSight("0");// 可见性
 				center.setCreateTime(new Date());// 创建时间
+				center.setApplyId(facPayPublicApply.getNum());
+				center.setAmount(facPayPublicApply.getAmount());
 				if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
 					return facPayPublicApplyMapper
 							.insertFacPayPublicApply(facPayPublicApply);
 				}
 				approvalProcessMapper.insert(center);
 			}
-		}
-
+		} 
 		return facPayPublicApplyMapper
 				.insertFacPayPublicApply(facPayPublicApply);
 	}

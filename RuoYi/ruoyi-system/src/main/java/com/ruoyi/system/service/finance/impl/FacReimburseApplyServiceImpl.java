@@ -1,30 +1,32 @@
 package com.ruoyi.system.service.finance.impl;
 
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.utils.IdWorker;
-import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.domain.SysUser;
-import com.ruoyi.system.domain.SysUserRole;
-import com.ruoyi.system.domain.finance.*;
-import com.ruoyi.system.mapper.SysUserRoleMapper;
-import com.ruoyi.system.mapper.UserApplyMapper;
-import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
-import com.ruoyi.system.mapper.finance.FacReiAdiApplyMapper;
-import com.ruoyi.system.mapper.finance.FacReimburseApplyMapper;
-import com.ruoyi.system.service.ISysRoleService;
-import com.ruoyi.system.service.ISysUserService;
-import com.ruoyi.system.service.finance.ApprovalProcessService;
-import com.ruoyi.system.service.finance.IFacReimburseApplyService;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.IdWorker;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.finance.FacReiAdiApply;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
+import com.ruoyi.system.domain.finance.FacSysUserApproval;
+import com.ruoyi.system.domain.finance.ReiHospitalityApply;
+import com.ruoyi.system.domain.finance.ReiTrafficApply;
+import com.ruoyi.system.mapper.SysUserRoleMapper;
+import com.ruoyi.system.mapper.UserApplyMapper;
+import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
+import com.ruoyi.system.mapper.finance.FacReiAdiApplyMapper;
+import com.ruoyi.system.mapper.finance.FacReimburseApplyMapper;
+import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.system.service.finance.ApprovalProcessService;
+import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 
 /**
  * 报销 服务层实现
@@ -51,11 +53,9 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
 	@Autowired
 	private FacReimburseApplyMapper facReimburseApplyMapper;
-	
+
 	@Autowired
 	private SysUserRoleMapper sysUserRoleMapper;
-	@Autowired
-	private ISysRoleService sysRoleService;
 
 	/**
 	 * 查询报销信息
@@ -117,9 +117,9 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 			center.setApplicantId(facReimburseApply.getLoanUser());
 			center.setApplyId(facReimburseApply.getNum());
 			center.setApplicantId(facReimburseApply.getLoanUser());
-			
-			
-			
+
+
+
 			facReimburseApply.setType("日常报销");
 			facReimburseApply.setApplyStatus("1");
 
@@ -145,18 +145,16 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
 			// 报销审批流开始
 			if (("1").equals(facReimburseApply.getApplyStatus())) {
-				String roleName="";
-				List<String> queryRoleName = approvalProcessMapper.queryRoleName(facReimburseApply.getLoanUser());
-				for(String name:queryRoleName){
-					roleName = roleName+","+name.trim().toLowerCase();
-				}
-				if (roleName.contains("ceo")) {
+				String roleName = approvalProcessMapper
+						.queryRoleName(facReimburseApply.getLoanUser()).trim()
+						.toLowerCase();
+				if ("ceo".equals(roleName)) {
 					// 是ceo 直接通过
 					facReimburseApply.setStatus("3");
 					facReimburseApplyMapper
 							.insertFacReimburseApply(facReimburseApply);
 					// 如果为coo申请 交给ceo审批
-				} else if (roleName.contains("coo")) {
+				} else if ("coo".equals(roleName)) {
 					facReimburseApply.setStatus("0");
 					facReimburseApplyMapper
 							.insertFacReimburseApply(facReimburseApply);
@@ -180,153 +178,234 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 								.setApplyId(facReimburseApply.getNum());
 						approvalProcessMapper.insert(facSysUserApproval2);
 						// 财务
-//						FacSysUserApproval facSysUserApproval1 = new FacSysUserApproval();
-//						facSysUserApproval1.setApprovalId(new Long("154"));// 审批id为财务
-//						facSysUserApproval1.setApprovalTime(new Date());
-//						facSysUserApproval1.setApprovalLevel(3);
-//						facSysUserApproval1
-//								.setApplyId(facReimburseApply.getNum());
-//						approvalProcessMapper.insert(facSysUserApproval);
+						FacSysUserApproval facSysUserApproval1 = new FacSysUserApproval();
+						facSysUserApproval1.setApprovalId(new Long("154"));// 审批id为财务
+						facSysUserApproval1.setApprovalTime(new Date());
+						facSysUserApproval1.setApprovalLevel(3);
+						facSysUserApproval1
+								.setApplyId(facReimburseApply.getNum());
+						approvalProcessMapper.insert(facSysUserApproval);
 					} else {
 						// 财务
-//						FacSysUserApproval facSysUserApproval1 = new FacSysUserApproval();
-//						facSysUserApproval1.setApprovalId(new Long("154"));// 待改
-//						facSysUserApproval1.setApprovalTime(new Date());
-//						facSysUserApproval1.setApprovalLevel(2);
-//						facSysUserApproval1
-//								.setApplyId(facReimburseApply.getNum());
-//						approvalProcessMapper.insert(facSysUserApproval);
+						FacSysUserApproval facSysUserApproval1 = new FacSysUserApproval();
+						facSysUserApproval1.setApprovalId(new Long("154"));// 待改
+						facSysUserApproval1.setApprovalTime(new Date());
+						facSysUserApproval1.setApprovalLevel(2);
+						facSysUserApproval1
+								.setApplyId(facReimburseApply.getNum());
+						approvalProcessMapper.insert(facSysUserApproval);
+					}
+				} else if (("部门leader").equals(roleName)) {
+					// 获取该申请人下的所有领导
+					LinkedList<Long> centerId = (LinkedList<Long>) iSysUserService
+							.selectCenterIdByUserId(
+									facReimburseApply.getLoanUser());
+					if (centerId != null && centerId.size() > 0) {
+						for (int i = centerId.size() - 1; i >= 0; i--) {
+							if (centerId.get(i)
+									.equals(facReimburseApply.getLoanUser())) {
+								centerId.remove(centerId.get(i));
+							}
+							// FacSysUserApproval center = new
+							// FacSysUserApproval();// 中心负责人
+							center.setCreateTime(new Date());
+							center.setApproverId(centerId.get(i));
+							level = level + 1;
+							center.setApprovalLevel(level);
+							center.setApplyId(facReimburseApply.getNum());
+							center.setApprovalSight("1");
+							approvalProcessMapper.insert(center);
+							facReimburseApply.setStatus("0");
+							facReimburseApplyMapper
+									.insertFacReimburseApply(facReimburseApply);
+							// 如果是审批人是 coo 直接结束
+							if (center.getApproverId() == 103) {
+								// 如果含有加班申请 人事审批
+								if (facReimburseApply
+										.getTrafficReiApplyList() != null&&facReimburseApply.getTrafficReiApplyList().size()!=0
+										&& facReimburseApply
+												.getTrafficReiApplyList().get(0)
+												.getType().equals("2")) {
+									center.setCreateTime(new Date());
+									center.setApproverId(new Long("253"));// 待改
+									level = level + 1;
+									center.setApprovalLevel(level);
+									center.setApplyId(
+											facReimburseApply.getNum());
+									center.setApprovalSight("1");
+									approvalProcessMapper.insert(center);
+								}
+								// 财务
+								center.setCreateTime(new Date());
+								center.setApproverId(new Long("154"));// 待改
+								center.setApprovalLevel(++level);
+								center.setApplyId(facReimburseApply.getNum());
+								center.setApprovalSight("1");
+								approvalProcessMapper.insert(center);
+								return AjaxResult.success();
+							} else if (center.getApproverId() == 110) {// 财务审批规则
+
+								if (num <= 2000.00) {
+									facReimburseApply.setStatus("3");
+									facReimburseApplyMapper
+											.insertFacReimburseApply(
+													facReimburseApply);
+								} else if (num > 2000.00 && num <= 10000.00) {
+									facReimburseApply.setStatus("0");
+									facReimburseApplyMapper
+											.insertFacReimburseApply(
+													facReimburseApply);
+									FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
+									facSysUserApproval
+											.setApprovalId(new Long(194));
+									facSysUserApproval
+											.setApprovalTime(new Date());
+									facSysUserApproval.setApprovalLevel(1);
+									facSysUserApproval.setApplyId(
+											facReimburseApply.getNum());
+									approvalProcessMapper
+											.insert(facSysUserApproval);
+								}
+							} else if (center.getApproverId() == 216) {// 人事审批规则
+
+								if (num <= 2000.00) {
+									facReimburseApply.setStatus("3");
+									facReimburseApplyMapper
+											.insertFacReimburseApply(
+													facReimburseApply);
+								} else if (num > 2000.00 && num <= 10000.00) {
+									facReimburseApply.setStatus("0");
+									facReimburseApplyMapper
+											.insertFacReimburseApply(
+													facReimburseApply);
+									FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
+									facSysUserApproval
+											.setApprovalId(new Long(194));
+									facSysUserApproval
+											.setApprovalTime(new Date());
+									facSysUserApproval.setApprovalLevel(1);
+									facSysUserApproval.setApplyId(
+											facReimburseApply.getNum());
+									approvalProcessMapper
+											.insert(facSysUserApproval);
+								}
+							} else if (center.getApproverId() == 194) {// 到韩总处
+								if (num <= 10000.00) {
+									facReimburseApply.setStatus("3");
+									facReimburseApplyMapper
+											.insertFacReimburseApply(
+													facReimburseApply);
+								}
+							}
+						}
+
 					}
 				}
 				// 普通员工
 				else {
-					if (!roleName.contains("部门leader")){
-						// 获得直属领导
-						center.setApproverId(leaderId);
-						center.setApprovalLevel(1);
-						center.setApplyId(facReimburseApply.getNum());
-						center.setCreateTime(new Date());
-						center.setApprovalSight("1");
-						approvalProcessMapper.insert(center);
-					}else{
-						level=0;
-					}
+					// 获得直属领导
+					center.setApproverId(leaderId);
+					center.setApprovalLevel(++level);
+					center.setApplyId(facReimburseApply.getNum());
+					center.setCreateTime(new Date());
+					center.setApprovalSight("1");
+					approvalProcessMapper.insert(center);
 
 					// 获取该申请人下的所有领导
-					LinkedList<Long> centerId = (LinkedList<Long>) iSysUserService.selectCenterIdByUserId(facReimburseApply.getLoanUser());
-
+					LinkedList<Long> centerId = (LinkedList<Long>) iSysUserService
+							.selectCenterIdByUserId(
+									facReimburseApply.getLoanUser());
+					// 如果含有加班申请 人事审批
+					if (facReimburseApply.getTrafficReiApplyList() != null&&facReimburseApply.getTrafficReiApplyList().size()!=0
+							&& facReimburseApply.getTrafficReiApplyList().get(0)
+									.getType().equals("加班")) {
+						center.setCreateTime(new Date());
+						center.setApproverId(new Long("253"));
+						level = level + 1;
+						center.setApprovalLevel(level);
+						center.setApplyId(facReimburseApply.getNum());
+						approvalProcessMapper.insert(center);
+					}
 					if (centerId != null && centerId.size() > 0) {
 						for (int i = centerId.size() - 1; i >= 0; i--) {
-							boolean flg = false;
-							if (centerId.get(i).equals(facReimburseApply.getLoanUser())) {
+							if (centerId.get(i)
+									.equals(facReimburseApply.getLoanUser())) {
 								centerId.remove(centerId.get(i));
 							}
-							List<SysRole> sysRoles = sysRoleService.selectRolesByUserId(centerId.get(i));
-							boolean isCaywu = false;
-							boolean isRenshi = false;
-							for(SysRole role:sysRoles){
-								if(role.isFlag()){
-									if(role.getRoleId().equals(13)){
-										//是否财务
-										isCaywu = true;
-									}else if(role.getRoleId().equals(6)||role.getRoleId().equals(3)){
-										//是否人事
-										isRenshi = true;
-									}
-								}
-							}
 
-							facReimburseApply.setStatus("3");
-
-							if (isCaywu) { // 如果是审批人是 coo
-								// 直接结束
-
-								// 财务
-//								center.setCreateTime(new Date());
-//								center.setApproverId(new Long("154"));
-//								center.setApprovalLevel(++level);
-//								center.setApplyId(facReimburseApply.getNum());
-//								center.setApprovalSight("0");
-//								approvalProcessMapper.insert(center);
-								facReimburseApplyMapper.insertFacReimburseApply(
-										facReimburseApply);
-								flg = true;
-							} else if (isCaywu) {// 财务审批规则
-
-								if (num <= 2000.00) {
-									facReimburseApply.setStatus("3");
-									facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
-									return AjaxResult.success();
-								} else if (num > 2000.00 && num <= 10000.00) {
-									FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
-									facSysUserApproval.setApprovalId(new Long(194));
-									facSysUserApproval.setApprovalTime(new Date());
-									facSysUserApproval.setApprovalLevel(1);
-									facSysUserApproval.setApplyId(facReimburseApply.getNum());
-									facSysUserApproval.setApprovalSight("1");
-									approvalProcessMapper.insert(facSysUserApproval);
-									facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
-									flg = true;
-								}
-
-							} else if (isRenshi) {// 人事审批规则
-
-								if (num <= 2000.00) {
-									facReimburseApply.setStatus("3");
-									facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
-									return AjaxResult.success();
-								} else if (num > 2000.00 && num <= 10000.00) {
-									facReimburseApply.setStatus("0");
-									facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
-									FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
-									facSysUserApproval.setApprovalId(new Long(194));
-									facSysUserApproval.setApprovalTime(new Date());
-									facSysUserApproval.setApprovalLevel(1);
-									facSysUserApproval.setApprovalSight("1");
-									facSysUserApproval.setApplyId(facReimburseApply.getNum());
-									approvalProcessMapper.insert(facSysUserApproval);
-									flg = true;
-								}
-
-							} else if (centerId.get(i).intValue() == 194) {// 到韩总处
-
-								if (num <= 10000.00) {
-									facReimburseApply.setStatus("3");
-									facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
-									flg = true;
-								}
-
-							}
 							center.setApproverId(centerId.get(i));
 							center.setApprovalLevel(++level);
 							center.setApplyId(facReimburseApply.getNum());
 							center.setCreateTime(new Date());
-							if(center.getApprovalLevel()==1){
-								center.setApprovalSight("1");
-							}else{
-								center.setApprovalSight("0");
-							}
 							approvalProcessMapper.insert(center);
-							if(i==(centerId.size()-1)){
-								// 如果含有加班申请 人事审批
-								if (facReimburseApply.getTrafficReiApplyList() != null&&facReimburseApply.getTrafficReiApplyList().size()!=0
-										&& facReimburseApply.getTrafficReiApplyList().get(0)
-										.getType().equals("加班")) {
-									center.setCreateTime(new Date());
-									center.setApproverId(new Long("253"));
-									level = level + 1;
-									center.setApprovalLevel(level);
-									center.setApplyId(facReimburseApply.getNum());
-									if(center.getApprovalLevel()==1){
-										center.setApprovalSight("1");
-									}else{
-										center.setApprovalSight("0");
-									}
-									approvalProcessMapper.insert(center);
-								}
-							}
-							if(flg){
+
+							facReimburseApply.setStatus("0");
+
+							if (center.getApproverId() == 103) { // 如果是审批人是 coo
+								// 直接结束
+
+								// 财务
+								center.setCreateTime(new Date());
+								center.setApproverId(new Long("154"));
+								center.setApprovalLevel(++level);
+								center.setApplyId(facReimburseApply.getNum());
+								approvalProcessMapper.insert(center);
+								facReimburseApplyMapper.insertFacReimburseApply(
+										facReimburseApply);
 								return AjaxResult.success();
+							} else if (center.getApproverId() == 110) {// 财务审批规则
+
+								if (num <= 2000.00) {
+									facReimburseApply.setStatus("3");
+									facReimburseApplyMapper
+											.insertFacReimburseApply(
+													facReimburseApply);
+								} else if (num > 2000.00 && num <= 10000.00) {
+									facReimburseApply.setStatus("0");
+									facReimburseApplyMapper
+											.insertFacReimburseApply(
+													facReimburseApply);
+									FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
+									facSysUserApproval
+											.setApprovalId(new Long(194));
+									facSysUserApproval
+											.setApprovalTime(new Date());
+									facSysUserApproval.setApprovalLevel(1);
+									facSysUserApproval.setApplyId(
+											facReimburseApply.getNum());
+									approvalProcessMapper
+											.insert(facSysUserApproval);
+								}
+							} else if (center.getApproverId() == 216) {// 人事审批规则
+
+								if (num <= 2000.00) {
+									facReimburseApply.setStatus("3");
+									facReimburseApplyMapper
+											.insertFacReimburseApply(
+													facReimburseApply);
+								} else if (num > 2000.00 && num <= 10000.00) {
+									facReimburseApply.setStatus("0");
+									facReimburseApplyMapper
+											.insertFacReimburseApply(
+													facReimburseApply);
+									FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
+									facSysUserApproval
+											.setApprovalId(new Long(194));
+									facSysUserApproval
+											.setApprovalTime(new Date());
+									facSysUserApproval.setApprovalLevel(1);
+									facSysUserApproval.setApplyId(
+											facReimburseApply.getNum());
+									approvalProcessMapper
+											.insert(facSysUserApproval);
+								}
+							} else if (center.getApproverId() == 194) {// 到韩总处
+								if (num <= 10000.00) {
+									facReimburseApply.setStatus("3");
+									facReimburseApplyMapper
+											.insertFacReimburseApply(
+													facReimburseApply);
+								}
 							}
 						}
 
@@ -346,7 +425,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
 	}
 
- 
+
 	/**
 	 * 修改报销
 	 *
@@ -447,29 +526,19 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 	}
 
 	@Override
-	public List<Long> selectRole(long uesrId) {
+	public Long selectRole(long uesrId) {
 		SysUser sysUserRole = new SysUser();
 		sysUserRole.setUserId(uesrId);
-		return	sysUserRoleMapper.selectRoleIdByUserId(sysUserRole);
-		 
+		return	sysUserRoleMapper.selectRoleIdByUserId(sysUserRole).get(0);
+
 	}
 
 	@Override
 	public List<ReiHospitalityApply> selectReiHospitalityApplyList(
 			ReiHospitalityApply reiHospitalityApply) {
-		 
+
 		return facReimburseApplyMapper
 				.selectReiHospitalityApplyList(reiHospitalityApply);
 	}
 
-
-    @Override
-    public void updateFacReimburseApplyByNum(FacReimburseApply facReimburseApply) {
-        facReimburseApplyMapper.updateFacReimburseApplyByNum(facReimburseApply);
-    }
-
-	@Override
-	public List<FacReimburseApply> selectFacReimburseApplyListByCreateBy(List<SysUser> sysUsersList) {
-		return facReimburseApplyMapper.selectFacReimburseApplyListByCreateBy(sysUsersList);
-	}
 }
