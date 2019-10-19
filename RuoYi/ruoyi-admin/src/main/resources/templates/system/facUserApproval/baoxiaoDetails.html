@@ -8,11 +8,11 @@
 <body class="gray-bg">
 
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-reiadd">
+    <form class="form-horizontal m" id="form-reiadd" th:object="${facUserApproval}">
         <div class="container-div">
             <div class="row">
                 <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
-                <input id="userId" name="msg" class="form-control-static" type="hidden" th:value="${userId}"/>
+                <input id="userId" name="userId" class="form-control-static" type="hidden" th:value="${userId}"/>
                 <input id="dept" name="dept" class="form-control-static" type="hidden" th:value="${dept}"/>
                 <div>
                     <h4 class="form-header h4">日常报销申请</h4>
@@ -31,23 +31,13 @@
                                 <label class="col-sm-4 control-label">&nbsp&nbsp部门：</label>
                                 <div class="col-sm-8">
                                     <input name="userName" autocomplete="off" placeholder="悦维联动" class="form-control"
-                                           type="text" maxlength="30" readonly="readonly" th:value="${deptName}">
+                                           type="text" maxlength="30" readonly="readonly" th:value="${deptName}" >
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label class="col-sm-4 control-label">是否冲抵借款：</label>
-                                <div class="col-sm-8">
-                                    <a id="addzhusu" onclick="zAdd()">
-                                        <i class="fa fa-plus"></i> 冲抵借款
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"></span>报销编号：</label>
@@ -84,20 +74,37 @@
                         <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-sm-offset-5 col-sm-10">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
-                                class="fa fa-check"></i>保 存
-                        </button>&nbsp;
-                        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
-                                class="fa fa-check"></i>提 交
-                        </button>&nbsp;
-                        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
-                                class="fa fa-reply-all"></i>关 闭
-                        </button>
+            </div>
+        </div>
+    </form>
+    <form class="form-horizontal m" id="form-facUserApproval-edit" th:object="${facUserApproval}">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group" id="div-reiadd">
+                    <label class="col-sm-4 control-label"></span>审批意见：</label>
+                    <div class="col-sm-8">
+                        <input id="opi" name="opi" class="form-control" type="text">
+                        <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
+                        <input id="approverId" name="approverId" class="form-control-static" type="hidden"
+                               th:value="${userId}">
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-offset-5 col-sm-10">
+                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
+                        class="fa fa-check"></i>同意
+                </button>&nbsp;
+                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
+                        class="fa fa-check"></i>驳回
+                </button>&nbsp;
+                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
+                        class="fa fa-reply-all"></i>关 闭
+                </button>
+            </div>
+        </div>
+
     </form>
 </div>
 
@@ -111,10 +118,10 @@
     var msg = $("#msg").val();
     var userId = $("#userId").val();
     var dept = $("#dept").val();
-
-    function zAdd() {
-        $.modal.open("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
-    }
+    var prefixs = ctx + "system/facUserApproval";
+    // function zAdd() {
+    //     $.modal.open("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
+    // }
 
     if (dept = 10) {
         $("#zdf").hide();//隐藏
@@ -126,34 +133,35 @@
         if (id == 1) {
             $.table._option.id = "bootstrap-table-1";
             $.table._option.url = prefix + "/addTraDetail";
-            $.modal.open("交通添加", "/system/facReimburseApply/tranDetail?num=" + num);
+            //  $.modal.open("交通添加", "/system/facReimburseApply/tranDetail?num=" + num);
         } else if (id == 2) {
             $.table._option.id = "bootstrap-table-2";
             $.table._option.url = prefix + "/addAll";
-            $.modal.open("招待费添加", "/system/facReimburseApply/addAll?num=" + num);
+            //   $.modal.open("招待费添加", "/system/facReimburseApply/addAll?num=" + num);
         } else if (id == 3) {
             $.table._option.id = "bootstrap-table-3";
             $.table._option.url = prefix + "/otherDetail";
-            $.modal.open("其他添加", "/system/facReimburseApply/otherDetail?num=" + num);
+            //    $.modal.open("其他添加", "/system/facReimburseApply/otherDetail?num=" + num);
         }
     }
-    function mEdit(index,id){
-        if(index==1){
+
+    function mEdit(index, id) {
+        if (index == 1) {
             $.table._option.id = "bootstrap-table-1";
             $.table._option.url = prefix + "/addTraDetail";
             $.table._option.modalName = "交通报销信息";
             $.table._option.updateUrl = prefix + "/editTran/{id}";
-        }else if(index==2){
+        } else if (index == 2) {
             $.table._option.updateUrl = prefix + "/editTran/{id}";
         }
         $.operate.edit(id);
     }
 
-    function mRemove(index,id){
-        if(index==1){
+    function mRemove(index, id) {
+        if (index == 1) {
             $.table._option.modalName = "交通报销信息";
             $.table._option.removeUrl = prefix + "/removeTran";
-        }else if(index==2){
+        } else if (index == 2) {
             $.table._option.removeUrl = prefix + "/removeTran";
         }
         $.operate.remove(id);
@@ -210,21 +218,11 @@
                     field: 'target',
                     title: '目的地',
                     sortable: true
-                } ,
+                },
                 {
                     field: 'type',
                     title: '类型 ',
                     sortable: true
-                },
-                {
-                    title: '操作',
-                    align: 'center',
-                    formatter: function (value, row, index) {
-                        var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="mEdit(1,\'' + row.id + '\')"><i class="fa fa-edit"></i>修改</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="mRemove(1,\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
-                        return actions.join('');
-                    }
                 }
 
             ]
@@ -289,18 +287,7 @@
                             return $.table.selectDictLabel(datas, value);
                         }
                     },
-                    {
-                        title: '操作',
-                        align: 'center',
-                        formatter: function (value, row, index) {
-                            var actions = [];
-                            if (status == 0) {
-                                actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>修改</a> ');
-                                actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
-                            }
-                            return actions.join('');
-                        }
-                    }]]
+                   ]]
         };
         $.table.init(options);
     });
@@ -359,7 +346,7 @@
                         formatter: function (value, row, index) {
                             return $.table.selectDictLabel(datas, value);
                         }
-                    } ]]
+                    }]]
         };
         $.table.init(options);
     });
@@ -389,11 +376,11 @@
 
     function submitHandler(index) {
         if ($.validate.form()) {
-            //index为1表示保存
-            if(index==1){
-                mSave(prefix + "/addSave", $('#form-reiadd').serialize());
-            }else{
-                mSave(prefix + "/addSubmit", $('#form-reiadd').serialize());
+            //index为1表示同意
+            if (index == 1) {
+                mSave(prefixs + "/edit", $('#form-facUserApproval-edit').serialize());
+            } else {
+                mSave(prefixs + "/editnot", $('#form-facUserApproval-edit').serialize());
             }
         }
     }

@@ -83,17 +83,14 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 	    FacReimburseApply facReimburseApply = new FacReimburseApply();
 	    facReimburseApply.setNum(facUserApproval.getApplyId());
         facReimburseApply.setStatus("3");
-        facReimburseApplyService.updateFacReimburseApplyByNum(facReimburseApply);
-
+        facReimburseApplyService.updateFacReimburseApplyByNum(facReimburseApply); 
 		facUserApproval.setApprovalTime(new Date());
 		facUserApprovalMapper.updateFacUserApproval(facUserApproval);
 		SysUser sysUser = iSysUserService.selectUserById(facUserApproval.getApproverId());
 		SysDept sysDept = sysDeptService.selectDeptById(sysUser.getDeptId());
 		if(sysDept.getParentId()==0){
 			return 1;
-		}
-
-
+		} 
 		Long leaderId = null;
 		if(sysDept.getLeader().equals(sysUser.getUserName())){
 			sysDept = sysDeptService.selectDeptById(sysDept.getParentId());
@@ -154,4 +151,5 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 		return null;
 	}
 
+	 
 }

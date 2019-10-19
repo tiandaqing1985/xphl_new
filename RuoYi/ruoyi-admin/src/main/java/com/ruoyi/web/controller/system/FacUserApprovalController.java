@@ -99,10 +99,14 @@ public class FacUserApprovalController extends BaseController {
 	 */
 	@GetMapping("/edit/{approvalId}")
 	public String edit(@PathVariable("approvalId") Long approvalId,
-			ModelMap mmap) {
+			ModelMap map) {
 		FacUserApproval facUserApproval = facUserApprovalService
 				.selectFacUserApprovalById(approvalId);
-		mmap.put("facUserApproval", facUserApproval);
+		map.put("facUserApproval", facUserApproval);
+		map.put("num",facUserApproval.getApplyId());
+		map.put("msg", "1");
+		map.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
+		map.put("userId", ShiroUtils.getUserId());
 		String nums=facUserApproval.getApplyId().substring(0,2);
 		if (nums.equals("BX")) {
 			return prefix + "/baoxiaoDetails";
@@ -128,11 +132,32 @@ public class FacUserApprovalController extends BaseController {
 	@Log(title = "财务审批", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
-	public AjaxResult editSave(FacUserApproval facUserApproval) {
+	public AjaxResult editSave(FacUserApproval facUserApproval) { 
+		List<FacUserApproval> list = facUserApprovalService
+				.selectFacUserApprovalList(facUserApproval);
+		FacUserApproval fac=list.get(0);
+		fac.setApprovalState("1");
+		return toAjax(
+				facUserApprovalService.updateFacUserApproval(fac));
+	}
+
+
+	/**
+	 * 修改保存驳回财务审批
+	 */
+	@Log(title = "财务审批", businessType = BusinessType.UPDATE)
+	@PostMapping("/editnot")
+	@ResponseBody
+	public AjaxResult editNot(FacUserApproval facUserApproval) { 
+		List<FacUserApproval> list = facUserApprovalService
+				.selectFacUserApprovalList(facUserApproval);
+		FacUserApproval fac=list.get(0);
+		fac.setApprovalState("2");
 		return toAjax(
 				facUserApprovalService.updateFacUserApproval(facUserApproval));
 	}
-
+	
+	
 	/**
 	 * 删除财务审批
 	 */

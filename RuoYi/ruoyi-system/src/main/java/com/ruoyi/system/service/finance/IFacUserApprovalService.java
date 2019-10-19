@@ -19,6 +19,8 @@ public interface IFacUserApprovalService {
 	 * @return 财务审批信息
 	 */
 	public FacUserApproval selectFacUserApprovalById(Long approvalId);
+	
+	 
 
 	/**
 	 * 查询财务审批列表

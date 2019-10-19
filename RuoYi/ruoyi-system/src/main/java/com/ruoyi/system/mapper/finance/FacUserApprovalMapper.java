@@ -96,5 +96,5 @@ public interface FacUserApprovalMapper {
 	 * @return 结果
 	 */
 	public int deleteFacUserApprovalByIds(String[] approvalIds);
-
+	 
 }

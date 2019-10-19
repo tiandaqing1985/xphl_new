@@ -33,6 +33,9 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
     @Transactional
     @Override
     public String initializeProcessPublic(FacPayPublicApply facReimburseApply) {
+		return null;
+    	
+    	/***
 
         //财务，人事 << 2000 审批流
         //查询2级部门leader id
@@ -282,8 +285,22 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
             System.out.println(e.getMessage());
             e.printStackTrace();
             return "审批失败";
-        }
-
+        }**/
+    
     }
+
+
+	@Override
+	public String initializeProcess(FacReimburseApply facReimburseApply) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public String initialize(Object o) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

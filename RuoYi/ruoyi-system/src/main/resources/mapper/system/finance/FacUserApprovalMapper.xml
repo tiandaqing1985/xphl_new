@@ -36,8 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="opi != null  and opi != '' "> and opi = #{opi}</if>
              <if test="createTime != null "> and create_time = #{createTime}</if>
              <if test="applicantId != null "> and applicant_id = #{applicantId}</if>
-              <if test="amount != null "> and amount = #{amount}</if> 
-             order by  create_time desc
+              <if test="amount != null "> and amount = #{amount}</if>  
          </where>
     </select>
      
