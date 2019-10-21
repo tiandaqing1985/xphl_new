@@ -79,7 +79,7 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 		double a = facCostPutupApplyMapper.selectMoney(facCostApply.getNum());
 		double b = facCostApplyMapper.selectAmount(facCostApply.getNum());
 		facCostApply.setMoneyEs(a+b);
-		facCostApply.setStatus("3");
+		facCostApply.setStatus("4");
 		FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
 		facSysUserApproval.setAmount(a+b);
 		facSysUserApproval.setApprovalId(facCostApply.getUserId());
@@ -204,38 +204,33 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 		// TODO Auto-generated method stub
 		return facCostPutupApplyMapper
 				.insertFacCostPutupApply(facCostPutupApply);
-	}
-
+	} 
 	@Override
 	public FacCostDetailApply selectFacCostDetailApplyById(Long id) {
 		// TODO Auto-generated method stub
 		return facCostDetailApplyMapper.selectFacCostDetailApplyById(id);
-	}
-
+	} 
 	@Override
 	public FacCostPutupApply selectFacCostPutupApplyById(Long id) {
 		// TODO Auto-generated method stub
 		return facCostPutupApplyMapper.selectFacCostPutupApplyById(id);
-	}
-
+	} 
 	@Override
 	public int updateFacCostDetailApply(FacCostDetailApply facCostDetailApply) {
 		// TODO Auto-generated method stub
 		return facCostDetailApplyMapper.updateFacCostDetailApply(facCostDetailApply);
-	}
-
+	} 
 	@Override
 	public int deleteFacCostDetailApplyByIds(String ids) {
 		return facCostDetailApplyMapper
 				.deleteFacCostDetailApplyByIds(Convert.toStrArray(ids));
-	}
-
+	} 
 	@Override
 	public int insertApply(FacCostApply facCostApply) {
 		double a = facCostPutupApplyMapper.selectMoney(facCostApply.getNum());
 		double b = facCostApplyMapper.selectAmount(facCostApply.getNum());
 		facCostApply.setMoneyEs(a+b);
-		facCostApply.setStatus("3");
+		facCostApply.setStatus("5");
 		return facCostApplyMapper.insertFacCostApply(facCostApply);
 	}
 

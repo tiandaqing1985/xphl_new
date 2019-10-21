@@ -39,8 +39,11 @@ public interface FacUserApprovalMapper {
 	 * @return 财务审批集合
 	 */
 	public  FacUserApproval  selectEndFacUserApprovalList(
-			FacUserApproval facUserApproval);
-
+			FacUserApproval facUserApproval); 
+	
+	public   FacUserApproval  selectApprovaIdlList(
+			FacUserApproval facUserApproval);  
+	
 	/**
 	 * 查询财务审批列表  ----->  我的申请
 	 * 

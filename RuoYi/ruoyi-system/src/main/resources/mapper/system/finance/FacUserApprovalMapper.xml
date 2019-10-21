@@ -55,10 +55,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		#{approverId} and
 		approval_state='3' and apply_id = #{applyId} order by
 		create_time desc
-	</select>
+	</select> 
 
-
-
+	<select id="selectApprovaIdlList" parameterType="FacUserApproval"
+		resultMap="FacUserApprovalResult">  
+	select * from fac_sys_user_approval where approval_level = (select max(approval_level) from fac_sys_user_approval where applicant_id=#{applicantId} AND apply_id= #{applyId} ) AND applicant_id=#{applicantId} AND apply_id= #{applyId}
+	 </select>
+ 
 
 	<select id="selectApplicantIdList" parameterType="FacUserApproval"
 		resultMap="FacUserApprovalResult">

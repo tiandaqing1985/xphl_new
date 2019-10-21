@@ -216,7 +216,7 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 
 	@Override
 	public int insertApply(FacPayPublicApply facPayPublicApply) {
-		facPayPublicApply.setStatus("3");
+		facPayPublicApply.setStatus("5");
 		return facPayPublicApplyMapper
 				.insertFacPayPublicApply(facPayPublicApply);
 	}

@@ -59,10 +59,10 @@
         <div class="row">
             <div class="col-sm-offset-5 col-sm-10">
                 <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
-                        class="fa fa-check"></i>保 存
+                        class="fa fa-check"></i>提 交
                 </button>&nbsp;
                 <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
-                        class="fa fa-check"></i>提 交
+                        class="fa fa-check"></i>保 存
                 </button>&nbsp;
                 <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
                         class="fa fa-reply-all"></i>关 闭
@@ -310,19 +310,17 @@
 
     function submitHandler(id) {
         debugger
-        if (id = 1) {
+        if (id == 1) {
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-facCostApply-add').serialize());
             }
             $.operate.successCallback();
-            window.location.reload();
             $.modal.close();
         } else {
             if ($.validate.form()) {
                 $.operate.save(prefix + "/addSove", $('#form-facCostApply-add').serialize());
             }
             $.operate.successCallback();
-            window.location.reload();
             $.modal.close();
         }
     }

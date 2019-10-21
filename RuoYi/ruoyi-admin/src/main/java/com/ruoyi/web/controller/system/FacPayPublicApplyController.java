@@ -22,7 +22,6 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.finance.FacLoanApply;
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
 import com.ruoyi.system.domain.finance.FacPayPublicDetailed;
 import com.ruoyi.system.service.ISysUserService;
@@ -97,10 +96,26 @@ public class FacPayPublicApplyController extends BaseController {
 	@ResponseBody
 	public AjaxResult addSave(FacPayPublicApply facPayPublicApply) {
 		facPayPublicApply.setUser(ShiroUtils.getUserId());
+		if(facPayPublicApply.getId() == null){
+			 
+            // 直接添加
+            IdWorker idWorker = new IdWorker(0, 1);
+            facPayPublicApply.setNum("JK" + idWorker.nextId());
+            facPayPublicApply.setUser(ShiroUtils.getUserId());
+        } else {
+            // 更新
+        	facPayPublicApply = facPayPublicApplyService.selectFacPayPublicApplyById(facPayPublicApply.getId());
+        	facPayPublicApplyService.deleteFacPayPublicApplyByIds (facPayPublicApply.getId()+"");
+        }   
 		return toAjax(facPayPublicApplyService
 				.insertFacPayPublicApply(facPayPublicApply));
-	}
-
+	} 
+	
+	
+ 
+	
+	
+	
 	/**
 	 * 修改对公申请
 	 */
@@ -218,7 +233,7 @@ public class FacPayPublicApplyController extends BaseController {
     @PostMapping("/addSove")
     @ResponseBody
     public AjaxResult addSove(FacPayPublicApply FacPayPublicApply) throws Exception {
-         
+    	FacPayPublicApply.setUser(ShiroUtils.getUserId());
         return toAjax(facPayPublicApplyService.insertApply( FacPayPublicApply));
 
     }

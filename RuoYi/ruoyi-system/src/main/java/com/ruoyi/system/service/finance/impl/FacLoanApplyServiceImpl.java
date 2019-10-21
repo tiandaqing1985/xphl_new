@@ -162,7 +162,7 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
 	@Override
 	public int insertApply(FacLoanApply facLoanApply) {
 		facLoanApply.setCreateTime(new Date());
-		facLoanApply.setApplyStatus("4");
+		facLoanApply.setApplyStatus("5");
 		return facLoanApplyMapper.insertFacLoanApply(facLoanApply);
 	}
 

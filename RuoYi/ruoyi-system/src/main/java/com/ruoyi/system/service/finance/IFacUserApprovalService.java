@@ -19,8 +19,6 @@ public interface IFacUserApprovalService {
 	 * @return 财务审批信息
 	 */
 	public FacUserApproval selectFacUserApprovalById(Long approvalId);
-	
-	 
 
 	/**
 	 * 查询财务审批列表
@@ -42,8 +40,10 @@ public interface IFacUserApprovalService {
 	public List<FacUserApproval> selectEndFacUserApprovalList(
 			FacUserApproval facUserApproval);
 
+	public FacUserApproval selectApproval(String  num,Long userId);
+
 	/**
-	 * 查询财务审批列表  --我的申请
+	 * 查询财务审批列表 --我的申请
 	 * 
 	 * @param facUserApproval
 	 *            财务审批信息
@@ -53,7 +53,7 @@ public interface IFacUserApprovalService {
 			FacUserApproval facUserApproval);
 
 	/**
-	 * 查询财务审批列表  --我的审批
+	 * 查询财务审批列表 --我的审批
 	 * 
 	 * @param facUserApproval
 	 *            财务审批信息

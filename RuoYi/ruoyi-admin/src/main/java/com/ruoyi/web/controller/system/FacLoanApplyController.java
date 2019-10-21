@@ -114,8 +114,7 @@ public class FacLoanApplyController extends BaseController {
     @Log(title = "借款申请", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(FacLoanApply facLoanApply) throws Exception {
-
+    public AjaxResult addSave(FacLoanApply facLoanApply) throws Exception { 
         if (facLoanApply.getId() == null) {
             // 直接添加
             IdWorker idWorker = new IdWorker(0, 1);
@@ -125,8 +124,7 @@ public class FacLoanApplyController extends BaseController {
             // 更新
             facLoanApply = facLoanApplyService.selectFacLoanApplyById(facLoanApply.getId() + "");
             facLoanApplyService.deleteFacLoanApplyByIds(facLoanApply.getId() + "");
-        }
-
+        } 
         return toAjax(facLoanApplyService.insertFacLoanApply(facLoanApply));
 
     }
@@ -291,9 +289,10 @@ public class FacLoanApplyController extends BaseController {
         mmp.put("userName", ShiroUtils.getSysUser().getUserName());
         mmp.put("userId", ShiroUtils.getUserId());
         mmp.put("deptId", ShiroUtils.getDeptId());
-        mmp.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
-        FacLoanRepayApply facLoanRepayApply = facLoanRepayApplyService.selectFacLoanRepayApplyById(id);
-        mmp.put("JKnum", facLoanRepayApply.getNum());
+        mmp.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName()); 
+
+        FacLoanApply facLoanApply = facLoanApplyService.selectFacLoanApplyById(id+"");
+        mmp.put("JKnum", facLoanApply.getNum());
         List<Long> longs = facReimburseApplyService.selectRole(ShiroUtils.getUserId());
         for (Long l : longs) {
             if (l == 10 || l == 9) {

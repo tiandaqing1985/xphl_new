@@ -125,12 +125,19 @@ public class FacCostApplyController extends BaseController {
 	@ResponseBody
 	public AjaxResult addSave(FacCostApply facCostApply) {
 		facCostApply.setUserId(ShiroUtils.getUserId());
+		if(facCostApply.getId() == null){
+			 
+	            // 直接添加
+	            IdWorker idWorker = new IdWorker(0, 1);
+	            facCostApply.setNum("JK" + idWorker.nextId());
+	            facCostApply.setUserId(ShiroUtils.getUserId());
+	        } else {
+	            // 更新
+	        	facCostApply = facCostApplyService.selectFacCostApplyById (facCostApply.getId());
+	        	facCostApplyService.deleteFacCostApplyByIds (facCostApply.getId()+"");
+	        }  
 		return toAjax(facCostApplyService.insertFacCostApply(facCostApply));
-	}
-
-	
-	
-
+	} 
     /**
      * 新增保存 
      *
@@ -141,18 +148,8 @@ public class FacCostApplyController extends BaseController {
     @ResponseBody
     public AjaxResult addSove(FacCostApply facCostApply) throws Exception {
     	facCostApply.setUserId(ShiroUtils.getUserId());
-		return toAjax(facCostApplyService.insertApply(facCostApply));
-
-    }
-	
-	
-	
-	
-	
-	
-	
-	
-	
+		return toAjax(facCostApplyService.insertApply(facCostApply)); 
+    } 
 	/**
 	 * 修改差旅申请
 	 */
