@@ -23,10 +23,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="userName"    column="user_name"    />
         <result property="applyStatus"    column="apply_status"    />
         <result property="submitStatus" column="submit_status"/>
+         <result property="JKnum" column="JKnum"/>
+        
     </resultMap>
 	
 	<sql id="selectFacReimburseApplyVo">
-        select submit_status,id, num, name, amount, loan_user, create_time, reimburse_time, fac_operate, reason, apply_status, update_time, pass_time, type from fac_reimburse_apply
+        select submit_status,id, num, name, amount, loan_user, create_time, reimburse_time, fac_operate, reason, apply_status, update_time, pass_time,JKnum, type from fac_reimburse_apply
     </sql>
 	
     <select id="selectFacReimburseApplyList" parameterType="FacReimburseApply" resultMap="FacReimburseApplyResult">
@@ -47,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
            a.update_time,
           a.apply_status,
           a.submit_status
+          a.JKnum
     FROM
       fac_reimburse_apply AS a
       LEFT JOIN sys_user AS b
@@ -189,6 +192,7 @@ SELECT
 			<if test="type != null  and type != ''  ">type,</if>
 			<if test="submitStatus!=null and submitStatus!=''">submit_status,</if>
 			<if test="createBy != null and createBy !=''">create_by,</if>
+			<if test="JKnum != null and JKnum !=''">JKnum,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null  and id != ''  ">#{id},</if>
@@ -206,6 +210,7 @@ SELECT
 			<if test="type != null  and type != ''  ">#{type},</if>
             <if test="submitStatus!=null and submitStatus!=''">#{submitStatus},</if>
             <if test="createBy!=null and createBy!=''">#{createBy},</if>
+             <if test="JKnum!=null and JKnum!=''">#{JKnum},</if>
          </trim>
     </insert>
 
@@ -311,7 +316,8 @@ SELECT
         a.reimburse_time,
         a.update_time,
         a.apply_status,
-        a.submit_status
+        a.submit_status,
+        a.JKnum
         FROM
         fac_reimburse_apply AS a
         LEFT JOIN sys_user AS b

@@ -11,12 +11,18 @@
         <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
         <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
         <div>
-            <h4 class="form-header h4">借款信息</h4>
+
 
 
             <div class="col-sm-12 select-table table-striped">
 
                 <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+                <h4 class="form-header h4">借款信息</h4>
+                <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
+                <div>
+                    <h4 class="form-header h4">还款信息</h4>
+                    <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+                </div>
 
             </div>
 
@@ -107,6 +113,100 @@
                 };
                 $.table.init(options);
             });
+
+
+
+
+            $(function() {
+                var options = {
+                    id: "bootstrap-table-2",
+                    url: prefix + "/repays?num=" + num,
+                    showSearch: false,
+                    showRefresh: false,
+                    showToggle: false,
+                    showColumns: false,
+                    modalName: "还款详细信息",
+                    columns: [{
+                        checkbox: true
+                    },
+                        {
+                            field : 'id',
+                            title : 'id',
+                            visible: false
+                        },
+                        {
+                            field : 'num',
+                            title : '借款编号',
+                            sortable: true
+                        },
+                        {
+                            field : 'payer',
+                            title : '还款人',
+                            sortable: true
+                        },
+                        {
+                            field : 'repayTime',
+                            title : '还款时间',
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return  newDate;
+                            }
+                        },
+                        {
+                            field : 'repayMethod',
+                            title : '还款方式',
+                            sortable: true
+                        },
+                        {
+                            field : 'repayAmount',
+                            title : '还款金额（元）',
+                            sortable: true
+                        },
+                        {
+                            field : 'arrears',
+                            title : '实际欠款金额（元）',
+                            sortable: true
+                        },
+                        {
+                            field : 'voucher',
+                            title : '还款凭证',
+                            sortable: true
+                        },
+                        {
+                            field : 'method',
+                            title : '财务确认还款金额',
+                            sortable: true
+                        },
+                        {
+                            field : 'amount',
+                            title : '核实后欠款金额',
+                            sortable: true
+                        },
+                        {
+                            field : 'states',
+                            title : '还款状态',
+                            sortable: true
+                        },
+                        {
+                            field : 'remarks',
+                            title : '备注',
+                            sortable: true
+                        } ]
+                };
+                $.table.init(options);
+            });
+
+
+
+
+
+
+
+
+
+
+
 
 
         </script>

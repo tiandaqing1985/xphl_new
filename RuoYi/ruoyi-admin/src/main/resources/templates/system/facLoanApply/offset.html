@@ -106,7 +106,7 @@
                      formatter: function (value, row, index) {
                          var actions = [];
                          if (status == 0) {
-                             actions.push('<a class="btn btn-success btn-xs' + '" href="javascript:void(0)" onclick="add(\'' + row.id + '\')"><i class="fa fa-remove"></i>还款</a>');
+                             actions.push('<a class="btn btn-success btn-xs' + '" href="javascript:void(0)" onclick="add(\'' + row.num + '\')"><i class="fa fa-remove"></i>还款</a>');
                          }
                          return actions.join('');
                      }
@@ -122,7 +122,7 @@
             title: "借款申请详情",
             width:800,
             height:800,
-            url:prefix+"/off?id="+id,
+            url:prefix+"/off?num="+num,
             skin: 'layui-layer-gray',
             btn: ['关闭'],
             yes: function (index, layero) {

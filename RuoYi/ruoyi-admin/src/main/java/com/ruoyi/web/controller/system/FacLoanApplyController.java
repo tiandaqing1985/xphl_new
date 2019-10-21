@@ -289,8 +289,7 @@ public class FacLoanApplyController extends BaseController {
         mmp.put("userName", ShiroUtils.getSysUser().getUserName());
         mmp.put("userId", ShiroUtils.getUserId());
         mmp.put("deptId", ShiroUtils.getDeptId());
-        mmp.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName()); 
-
+        mmp.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());  
         FacLoanApply facLoanApply = facLoanApplyService.selectFacLoanApplyById(id+"");
         mmp.put("JKnum", facLoanApply.getNum());
         List<Long> longs = facReimburseApplyService.selectRole(ShiroUtils.getUserId());
