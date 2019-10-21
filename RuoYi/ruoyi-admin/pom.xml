@@ -111,14 +111,18 @@
 		    <artifactId>httpclient</artifactId>
 		    <version>4.3.5</version>
 		</dependency>
-      		
-		 <dependency>
-            <groupId>ruoyi</groupId>
-            <artifactId>com.ruoyi</artifactId>
-            <version>3.4</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/src/main/resources/lib/taobao-sdk-java-auto_1479188381469-20190719.jar</systemPath>
+        <dependency>
+            <groupId>com.taobao</groupId>
+            <artifactId>dingding</artifactId>
+            <version>1.0</version>
         </dependency>
+<!--		 <dependency>-->
+<!--            <groupId>ruoyi</groupId>-->
+<!--            <artifactId>com.ruoyi</artifactId>-->
+<!--            <version>3.4</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${project.basedir}/src/main/resources/lib/taobao-sdk-java-auto_1479188381469-20190719.jar</systemPath>-->
+<!--        </dependency>-->
 <!--         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>

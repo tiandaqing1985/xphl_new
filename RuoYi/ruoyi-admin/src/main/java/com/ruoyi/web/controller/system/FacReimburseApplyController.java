@@ -186,6 +186,7 @@ public class FacReimburseApplyController extends BaseController {
 		map.put("deptName", facReimburseApplies.get(0).getDeptName());
 		map.put("name", facReimburseApplies.get(0).getName());
 		map.put("userName", facReimburseApplies.get(0).getUserName());
+		map.put("date", facReimburseApplies.get(0).getPassTime());
 		return prefix + "/detail";
 	}
 	/**
@@ -309,20 +310,28 @@ public class FacReimburseApplyController extends BaseController {
 		return facReimburseApplyService
 				.insertFacReimburseApply(facReimburseApply);
 	}
-	
-	
-	
-	
+
+
+
 	/**
 	 * 新增招待费用
 	 */
 	@Log(title = "招待费报销", businessType = BusinessType.INSERT)
 	@PostMapping("/addAll")
 	@ResponseBody
-	public AjaxResult addAllSave(FacReimburseApply facReimburseApply) {
+	public TableDataInfo addAllSave(FacReimburseApply facReimburseApply) {
 		facReimburseApply.setLoanUser(ShiroUtils.getUserId());
-		return facReimburseApplyService
-				.insertFacReimburseApply(facReimburseApply);
+		ReiHospitalityApply reiHospitalityApply = new ReiHospitalityApply();
+		reiHospitalityApply.setNum(facReimburseApply.getNum());
+		List<ReiHospitalityApply> list = facReimburseApplyService
+				.selectReiHospitalityApplyList(reiHospitalityApply);
+		for (ReiHospitalityApply v : list) {
+			SysUser applicant = sysUserService.selectUserById(v.getUser());
+			if (applicant != null) {
+				v.setUserName(sysUserService.selectUserById(v.getUser()).getUserName());
+			}
+		}
+		return getDataTable(list);
 	}
 	/**
 	 * 招待费用报销
@@ -333,7 +342,20 @@ public class FacReimburseApplyController extends BaseController {
 		return prefix + "/addAll";
 	}
 
-	 
+	/**
+	 * 新增其他报销
+	 */
+	@Log(title = "招待费报销", businessType = BusinessType.INSERT)
+	@PostMapping("/addAllSave")
+	@ResponseBody
+	public AjaxResult addAllSave2(ReiHospitalityApply reiHospitalityApply) {
+
+		reiHospitalityApply.setUser(ShiroUtils.getUserId());
+		return toAjax(
+				facReimburseApplyService.insertFacreiHospitalityApply(reiHospitalityApply));
+	}
+
+
 	/**
 	 * 查询报销列表
 	 */

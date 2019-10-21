@@ -160,23 +160,10 @@
             };
             $.table.init(options);
         });
+
 		function f(id) {
-			var options = {
-				title: "差旅费用申请详情",
-				width:800,
-				height:800,
-				url:prefix+"/detail?id="+id,
-				skin: 'layui-layer-gray',
-				btn: ['关闭'],
-				yes: function (index, layero) {
-					layer.close(index);
-				}
-			};
-			$.modal.openOptions(options);
+			$.modal.openTab("编辑" + $.table._option.modalName, prefix + "/detail?id=" + id);
 		}
-
-
-
 
 		function submitHandler(id) {
 			//index为1表示保存
@@ -205,10 +192,6 @@
 			};
 			$.ajax(config)
 		}
-
-
-
-
 
 
 	</script>
