@@ -33,7 +33,7 @@ public class FacCollectApply extends BaseEntity {
 	private Date startDate;
 	/** 结束日期 */
 	private Date endDate;
-	/** 团建项目 */
+	/** 团建名称 */
 	private String leagueProject;
 	/** 参与人 */
 	private String participants;

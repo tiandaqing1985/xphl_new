@@ -92,7 +92,12 @@
                                 var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                                 return newDate;
                             }
-                        } ,
+                        },
+                        {
+                            field: 'facOperate',
+                            title: '单据状态',
+                            sortable: true
+                        },
                         {
                             field: 'reason',
                             title: '借款事由',
@@ -100,8 +105,8 @@
                         },
                         {
                             field: 'applyStatus',
-                            title: '审批状态',
-                            sortable: true,
+                            title: '申请人操作',
+                            sortable: true
                         }
                     ]
                 };

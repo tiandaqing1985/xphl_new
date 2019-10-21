@@ -15,89 +15,94 @@
                 </div>
             </div>
             <div class="form-group col-md-6">
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>类别</label>
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>出行类别</label>
                 <div class="col-sm-9">
+                    <!--                    <select id="type" name="type">-->
+                    <!--                        <option value="公出">公出交通费用申请</option>-->
+                    <!--                        <option value="加班">加班交通费用申请</option>-->
+                    <!--                    </select>-->
+                    <!--                </div>-->
                     <select id="type" name="type">
-                        <option value="公出">公出交通费用申请</option>
-                        <option value="加班">加班交通费用申请</option>
+                    <label><input    type="radio" name="type" value="公出">公出交通费用申请</label>
+                    <label><input    type="radio" name="type" value="加班">加班交通费用申请</label>
                     </select>
                 </div>
-            </div>
-        </div>
 
-        <div class="col-md-6">
-            <div class="form-group">
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>金额</label>
-                <div class="col-sm-9">
-                    <input id="amount" name="amount" class="form-control" type="text" required>
-                </div>
             </div>
-            <div class="form-group">
 
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>人员</label>
-
-                <div class="col-sm-9">
-                    <div class="input-group">
-                        <input id="user" name="user" class="form-control" type="text" required>
-                        <div class="input-group-btn">
-                            <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="form-group">
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>出发地</label>
-                <div class="col-sm-9">
-                    <input id="departure" name="departure" class="form-control" type="text" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>目的地</label>
-                <div class="col-sm-9">
-                    <input id="target" name="target" class="form-control" type="text" required>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="form-group">
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>附单据数</label>
-                <div class="col-sm-9">
-                    <input id="documentNum" name="documentNum" class="form-control" type="text" required>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-group">
-                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>目标单位简称</label>
-                    <div class="col-sm-9">
-                        <input id="targetUnit" name="targetUnit" class="form-control" type="text" required>
-                    </div>
-                </div>
-            </div>
-        </div>
             <div class="col-md-6">
                 <div class="form-group">
-                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>事由</label>
-                        <div class="col-sm-9">
-                            <textarea id="reason" name="reason" class="form-control" type="text" required></textarea>
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>金额</label>
+                    <div class="col-sm-9">
+                        <input id="amount" name="amount" class="form-control" type="text" required>
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>人员</label>
+
+                    <div class="col-sm-9">
+                        <div class="input-group">
+                            <input id="user" name="user" class="form-control" type="text" required>
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>出发地</label>
+                    <div class="col-sm-9">
+                        <input id="departure" name="departure" class="form-control" type="text" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>目的地</label>
+                    <div class="col-sm-9">
+                        <input id="target" name="target" class="form-control" type="text" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>附单据数</label>
+                    <div class="col-sm-9">
+                        <input id="documentNum" name="documentNum" class="form-control" type="text" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>目标单位简称</label>
+                        <div class="col-sm-9">
+                            <input id="targetUnit" name="targetUnit" class="form-control" type="text" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>事由</label>
+                    <div class="col-sm-9">
+                        <textarea id="reason" name="reason" class="form-control" type="text" required></textarea>
+                    </div>
+                </div>
+            </div>
     </form>
 </div>
 <div th:include="include::footer"></div>
-<th:block th:include="include :: bootstrap-suggest-js" />
-<th:block th:include="include :: bootstrap-select-js" />
+<th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script type="text/javascript">
     var prefix = ctx + "system/facReimburseApply";
-    var num =$("#num").val();
+    var num = $("#num").val();
 
     function submitHandler() {
         if ($.validate.form()) {
@@ -110,7 +115,7 @@
         showBtn: false,
         idField: "userName",
         keyField: "userName",
-        effectiveFields: ["deptName","userName"],
+        effectiveFields: ["deptName", "userName"],
         multiWord: true,
         hideOnSelect: true
     }).on('onDataRequestSuccess', function (e, result) {

@@ -68,8 +68,8 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 	 * @return 结果
 	 */
 	@Override
-	public int insertFacPayPublicApply(FacPayPublicApply facPayPublicApply) { 
-		facPayPublicApply.setStatus("3"); 
+	public int insertFacPayPublicApply(FacPayPublicApply facPayPublicApply) {
+		facPayPublicApply.setStatus("3");
 		FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
 		facSysUserApproval.setApprovalId(facPayPublicApply.getUser());
 		facSysUserApproval.setApprovalTime(new Date());
@@ -79,6 +79,7 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 		facSysUserApproval.setApprovalSight("1");
 		facSysUserApproval.setApplyId(facPayPublicApply.getNum());
 		facSysUserApproval.setAmount(facPayPublicApply.getAmount());
+		facSysUserApproval.setProjectName(facPayPublicApply.getName());
 		Long leaderId = iSysUserService
 				.selectApproverIdByApplyerId(facPayPublicApply.getUser());// 所在部门负责人id
 		Long upLeaderId = iSysUserService
@@ -116,14 +117,15 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 				center.setCreateTime(new Date());// 创建时间
 				center.setApplyId(facPayPublicApply.getNum());
 				center.setAmount(facPayPublicApply.getAmount());
+				center.setProjectName(facPayPublicApply.getName());
 				approvalProcessMapper.insert(center);
 				if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
 					return facPayPublicApplyMapper
 							.insertFacPayPublicApply(facPayPublicApply);
 				}
-				
+
 			}
-		} 
+		}
 		return facPayPublicApplyMapper
 				.insertFacPayPublicApply(facPayPublicApply);
 	}
@@ -162,7 +164,7 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 
 	@Override
 	public List<FacPayPublicDetailed> dgtail(String num) {
-		return facPayPublicDetailedMapper.selectDetailedList(num); 
+		return facPayPublicDetailedMapper.selectDetailedList(num);
 	}
 
 	@Override
@@ -171,6 +173,52 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 
 		return facPayPublicDetailedMapper
 				.insertFacPayPublicDetailed(facPayPublicDetailed);
+	}
+
+	/**
+	 * 修改对公明细
+	 * 
+	 * @param facPayPublicDetailed
+	 *            对公明细信息
+	 * @return 结果
+	 */
+	@Override
+	public int updateFacPayPublicDetailed(
+			FacPayPublicDetailed facPayPublicDetailed) {
+		return facPayPublicDetailedMapper
+				.updateFacPayPublicDetailed(facPayPublicDetailed);
+	}
+
+	/**
+	 * 删除对公明细对象
+	 * 
+	 * @param ids
+	 *            需要删除的数据ID
+	 * @return 结果
+	 */
+	@Override
+	public int deleteFacPayPublicDetailedByIds(String ids) {
+		return facPayPublicDetailedMapper
+				.deleteFacPayPublicDetailedByIds(Convert.toStrArray(ids));
+	}
+
+	/**
+	 * 查询对公明细信息
+	 * 
+	 * @param id
+	 *            对公明细ID
+	 * @return 对公明细信息
+	 */
+	@Override
+	public FacPayPublicDetailed selectFacPayPublicDetailedById(Long id) {
+		return facPayPublicDetailedMapper.selectFacPayPublicDetailedById(id);
+	}
+
+	@Override
+	public int insertApply(FacPayPublicApply facPayPublicApply) {
+		facPayPublicApply.setStatus("3");
+		return facPayPublicApplyMapper
+				.insertFacPayPublicApply(facPayPublicApply);
 	}
 
 }

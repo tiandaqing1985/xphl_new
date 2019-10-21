@@ -18,6 +18,7 @@
 			<if test="createTime != null  ">create_time,</if>
 			<if test="applicantId != null  ">applicant_id,</if>
 			<if test="amount != null  ">amount,</if>
+			<if test="projectName != null  and projectName != ''  ">projectName,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="applyId != null  and applyId != ''  ">#{applyId},</if>
@@ -30,6 +31,7 @@
 			<if test="createTime != null  ">#{createTime},</if>
 			<if test="applicantId != null  ">#{applicantId},</if>
 			<if test="amount != null  ">#{amount},</if>
+			<if test="projectName != null  and projectName != ''  ">#{projectName},</if>
          </trim>
     </insert>
 

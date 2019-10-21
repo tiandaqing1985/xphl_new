@@ -99,9 +99,6 @@
                 <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
                         class="fa fa-check"></i>驳回
                 </button>&nbsp;
-                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
-                        class="fa fa-reply-all"></i>关 闭
-                </button>
             </div>
         </div>
 
@@ -392,6 +389,7 @@
             } else {
                 mSave(prefixs + "/editnot", $('#form-facUserApproval-edit').serialize());
             }
+            $.modal.close();
         }
     }
 

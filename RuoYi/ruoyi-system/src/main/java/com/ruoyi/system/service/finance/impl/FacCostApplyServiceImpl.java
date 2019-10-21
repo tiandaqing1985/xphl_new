@@ -1,13 +1,5 @@
 package com.ruoyi.system.service.finance.impl;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacCostDetailApply;
@@ -15,9 +7,17 @@ import com.ruoyi.system.domain.finance.FacCostPutupApply;
 import com.ruoyi.system.domain.finance.FacSysUserApproval;
 import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
 import com.ruoyi.system.mapper.finance.FacCostApplyMapper;
+import com.ruoyi.system.mapper.finance.FacCostDetailApplyMapper;
 import com.ruoyi.system.mapper.finance.FacCostPutupApplyMapper;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCostApplyService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * 差旅申请 服务层实现
@@ -35,6 +35,10 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 	private ISysUserService iSysUserService;
 	@Autowired
 	private FacCostPutupApplyMapper facCostPutupApplyMapper;
+	
+	@Autowired
+	private FacCostDetailApplyMapper facCostDetailApplyMapper;
+	
 	/**
 	 * 查询差旅申请信息
 	 * 
@@ -85,6 +89,8 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 		facSysUserApproval.setApprovalState("3");
 		facSysUserApproval.setApprovalSight("1");
 		facSysUserApproval.setApplyId(facCostApply.getNum());
+		facSysUserApproval.setProjectName(facCostApply.getBusName());
+		
 		Long leaderId = iSysUserService
 				.selectApproverIdByApplyerId(facCostApply.getUserId());// 所在部门负责人id
 		Long upLeaderId = iSysUserService
@@ -124,6 +130,8 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 				center.setApplicantId(facCostApply.getUserId());
 				center.setAmount(facCostApply.getMoneyEs());
 				center.setCreateTime(new Date());// 创建时间
+				center.setProjectName(facCostApply.getBusName());
+				
 				approvalProcessMapper.insert(center);
 				if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
 					return facCostApplyMapper.insertFacCostApply(facCostApply);
@@ -196,6 +204,39 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 		// TODO Auto-generated method stub
 		return facCostPutupApplyMapper
 				.insertFacCostPutupApply(facCostPutupApply);
+	}
+
+	@Override
+	public FacCostDetailApply selectFacCostDetailApplyById(Long id) {
+		// TODO Auto-generated method stub
+		return facCostDetailApplyMapper.selectFacCostDetailApplyById(id);
+	}
+
+	@Override
+	public FacCostPutupApply selectFacCostPutupApplyById(Long id) {
+		// TODO Auto-generated method stub
+		return facCostPutupApplyMapper.selectFacCostPutupApplyById(id);
+	}
+
+	@Override
+	public int updateFacCostDetailApply(FacCostDetailApply facCostDetailApply) {
+		// TODO Auto-generated method stub
+		return facCostDetailApplyMapper.updateFacCostDetailApply(facCostDetailApply);
+	}
+
+	@Override
+	public int deleteFacCostDetailApplyByIds(String ids) {
+		return facCostDetailApplyMapper
+				.deleteFacCostDetailApplyByIds(Convert.toStrArray(ids));
+	}
+
+	@Override
+	public int insertApply(FacCostApply facCostApply) {
+		double a = facCostPutupApplyMapper.selectMoney(facCostApply.getNum());
+		double b = facCostApplyMapper.selectAmount(facCostApply.getNum());
+		facCostApply.setMoneyEs(a+b);
+		facCostApply.setStatus("3");
+		return facCostApplyMapper.insertFacCostApply(facCostApply);
 	}
 
 }

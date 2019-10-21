@@ -40,6 +40,18 @@ public interface IFacPayPublicApplyService {
 	public int insertFacPayPublicApply(FacPayPublicApply facPayPublicApply);
 
 	/**
+	 * 新增保存
+	 * 
+	 * @param facPayPublicApply
+	 *            对公申请信息
+	 * @return 结果
+	 */ 
+	
+	public int insertApply(FacPayPublicApply facPayPublicApply);
+	
+	
+	
+	/**
 	 * 修改对公申请
 	 * 
 	 * @param facPayPublicApply
@@ -85,4 +97,28 @@ public interface IFacPayPublicApplyService {
 	public int insertFacPayPublicDetailed(
 			FacPayPublicDetailed facPayPublicDetailed);
 
+	/**
+     * 查询对公明细信息
+     * 
+     * @param id 对公明细ID
+     * @return 对公明细信息
+     */
+	public FacPayPublicDetailed selectFacPayPublicDetailedById(Long id);
+
+	/**
+     * 修改对公明细
+     * 
+     * @param facPayPublicDetailed 对公明细信息
+     * @return 结果
+     */
+	public int updateFacPayPublicDetailed(FacPayPublicDetailed facPayPublicDetailed);
+		
+	/**
+     * 删除对公明细信息
+     * 
+     * @param ids 需要删除的数据ID
+     * @return 结果
+     */
+	public int deleteFacPayPublicDetailedByIds(String ids);
+	
 }

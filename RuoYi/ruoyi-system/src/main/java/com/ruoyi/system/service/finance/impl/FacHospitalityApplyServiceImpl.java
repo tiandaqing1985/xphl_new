@@ -83,6 +83,7 @@ public class FacHospitalityApplyServiceImpl
 		facSysUserApproval.setApprovalSight("1");
 		facSysUserApproval.setAmount(facHospitalityApply.getAmount());
 		facSysUserApproval.setApplyId(facHospitalityApply.getNum());
+		facSysUserApproval.setProjectName(facHospitalityApply.getZdName());
 		Long leaderId = iSysUserService
 				.selectApproverIdByApplyerId(facHospitalityApply.getUserId());// 所在部门负责人id
 		Long upLeaderId = iSysUserService
@@ -186,6 +187,13 @@ public class FacHospitalityApplyServiceImpl
 	public String selectDeptName(Long dept) {
 		 
 		return facHospitalityApplyMapper.selectDeptName(dept);
+	}
+
+	@Override
+	public int insertApply(FacHospitalityApply facHospitalityApply) {
+		facHospitalityApply.setStates(3L);
+		return facHospitalityApplyMapper
+				.insertFacHospitalityApply(facHospitalityApply);
 	}
 
 }

@@ -135,7 +135,7 @@ SELECT
          WHERE a.`num` =#{num}
     </select>
 
-    <select id="selectFacTransById" resultType="com.ruoyi.system.domain.finance.ReiTrafficApply" parameterType="String">
+    <select id="selectFacTransById" resultType="com.ruoyi.system.domain.finance.ReiTrafficApply" >
         SELECT
         a.id,
         a.`dd_date` AS ddDate,
@@ -153,7 +153,7 @@ SELECT
          WHERE a.id = #{param1}
     </select>
 
-    <delete id="deleteReiTrafficApplyById" parameterType="String">
+    <delete id="deleteReiTrafficApplyById" >
         delete from fac_traffic_rei_apply where id = #{param1}
     </delete>
 

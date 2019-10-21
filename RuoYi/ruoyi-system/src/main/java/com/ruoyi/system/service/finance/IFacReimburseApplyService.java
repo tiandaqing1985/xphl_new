@@ -48,6 +48,10 @@ public interface IFacReimburseApplyService
 	public List<ReiHospitalityApply> selectReiHospitalityApplyList(ReiHospitalityApply reiHospitalityApply);
 	
 	
+	
+	
+	public double selectDouble(String num);
+	
 	/**
      * 查询其他报销列表
      * 
@@ -120,11 +124,11 @@ public interface IFacReimburseApplyService
 	public int insertFacreiAdiApply(FacReiAdiApply reiAdiApply);
 
 
-	ReiTrafficApply selectFacTransById(String id);
+	ReiTrafficApply selectFacTransById(long id);
 
 	int updateReiTrafficApplyById(ReiTrafficApply reiTrafficApply);
 
-    int deleteReiTrafficApplyById(String id);
+    int deleteReiTrafficApplyById(String ids);
 
 	int deleteFacReimburseApplyById(String id);
 	
@@ -133,4 +137,6 @@ public interface IFacReimburseApplyService
     void updateFacReimburseApplyByNum(FacReimburseApply facReimburseApply);
 
     List<FacReimburseApply> selectFacReimburseApplyListByCreateBy(List<SysUser> sysUsersList);
+
+ 
 }

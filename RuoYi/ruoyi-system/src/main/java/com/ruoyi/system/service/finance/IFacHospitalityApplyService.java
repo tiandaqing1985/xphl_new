@@ -40,6 +40,18 @@ public interface IFacHospitalityApplyService
 	public int insertFacHospitalityApply(FacHospitalityApply facHospitalityApply);
 	
 	/**
+     * 新增保存
+     * 
+     * @param facHospitalityApply 招待费申请信息
+     * @return 结果
+     */
+	 
+	public int insertApply(FacHospitalityApply facHospitalityApply);
+	
+	
+	
+	
+	/**
      * 修改招待费申请
      * 
      * @param facHospitalityApply 招待费申请信息

@@ -14,241 +14,255 @@ import java.util.List;
  * @date 2019-07-31
  */
 public class FacReimburseApply extends BaseEntity {
-    private static final long serialVersionUID = 1L;
-    /**
-     * ID
-     */
-    private String id;
-    /**
-     *
-     */
-    private String num;
-    /**
-     * 报销名称
-     */
-    private String name;
-    /**
-     * 报销人名称
-     */
-    private  String userName;
-    /**
-     * 公司名称
-     */
-    private String companyName;
-    /**
-     * 部门名称
-     */
-    private String deptName;
-    /**
-     * 报销金额
-     */
-    private Double amount;
-    /**
-     * 报销人
-     */
-    private Long loanUser;
-    /**
-     * 报销时间
-     */
-    @JsonFormat(pattern = "yyyy-MM-DD")
-    private Date reimburseTime;
-    /**
-     * 财务操作
-     */
-    private String facOperate;
-    /**
-     * 借款事由
-     */
-    private String reason;
-    /**
-     * 申请人操作
-     */
-    private String applyStatus;
-    /**
-     *修改时间 
-     * */
-    private Date updateTime;
-    
-    /**
-     * 核票通过时间
-     */
-    private Date passTime;
-    /**
-     * 类型
-     */
-    @DefaultFiled(msg = "type")
-    private String type;
-    /**
-     * 状态
-     */ 
-    private String status;
-    /**
-     * 提交状态 save,submit
-     */
-    private String submitStatus;
-    /**
-     * 公出交通申请
-     */
-    private List<ReiTrafficApply> trafficReiApplyList;
+	private static final long serialVersionUID = 1L;
+	/**
+	 * ID
+	 */
+	private Long id;
+	/**
+	 *
+	 */
+	private String num;
+	/**
+	 * 报销名称
+	 */
+	private String name;
+	/**
+	 * 报销人名称
+	 */
+	private String userName;
+	/**
+	 * 公司名称
+	 */
+	private String companyName;
+	/**
+	 * 部门名称
+	 */
+	private String deptName;
+	/**
+	 * 报销金额
+	 */
+	private Double amount;
+	/**
+	 * 报销人
+	 */
+	private Long loanUser;
+	/**
+	 * 报销时间
+	 */
+	@JsonFormat(pattern = "yyyy-MM-DD")
+	private Date reimburseTime;
+	/**
+	 * 财务操作
+	 */
+	private String facOperate;
+	/**
+	 * 借款事由
+	 */
+	private String reason;
+	/**
+	 * 申请人操作
+	 */
+	private String applyStatus;
+	/**
+	 * 修改时间
+	 */
+	private Date updateTime;
 
-    /**
-     * 其他费用报销申请
-     */
-    private List<FacReiAdiApply> otherReiAdiApplies;
-   
-    /**
-     * 招待费报销申请
-     */
-    private List<ReiHospitalityApply> hospitalityApplies;
+	/**
+	 * 核票通过时间
+	 */
+	private Date passTime;
+	/**
+	 * 类型
+	 */
+	@DefaultFiled(msg = "type")
+	private String type;
+	/**
+	 * 状态
+	 */
+	private String status;
+	
+	
+	private String JKnum;
+	
+	
+	/**
+	 * 提交状态 save,submit
+	 */
+	private String submitStatus;
+	/**
+	 * 公出交通申请
+	 */
+	private List<ReiTrafficApply> trafficReiApplyList;
 
-    private String approveName;
+	/**
+	 * 其他费用报销申请
+	 */
+	private List<FacReiAdiApply> otherReiAdiApplies;
 
-    public String getApproveName() {
-        return approveName;
-    }
+	/**
+	 * 招待费报销申请
+	 */
+	private List<ReiHospitalityApply> hospitalityApplies;
 
-    public void setApproveName(String approveName) {
-        this.approveName = approveName;
-    }
+	private String approveName;
 
-    public String getUserName() {
-        return userName;
-    }
+	public String getApproveName() {
+		return approveName;
+	}
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	public void setApproveName(String approveName) {
+		this.approveName = approveName;
+	}
 
-    public List<ReiTrafficApply> getTrafficReiApplyList() {
-        return trafficReiApplyList;
-    }
+	public String getUserName() {
+		return userName;
+	}
 
-    public void setTrafficReiApplyList(List<ReiTrafficApply> trafficReiApplyList) {
-        this.trafficReiApplyList = trafficReiApplyList;
-    }
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
-    
-    public List<FacReiAdiApply> getOtherReiAdiApplies() {
-        return otherReiAdiApplies;
-    }
+	public List<ReiTrafficApply> getTrafficReiApplyList() {
+		return trafficReiApplyList;
+	}
 
-    public void setOtherReiAdiApplies(List<FacReiAdiApply> otherReiAdiApplies) {
-        this.otherReiAdiApplies = otherReiAdiApplies;
-    }
+	public void setTrafficReiApplyList(
+			List<ReiTrafficApply> trafficReiApplyList) {
+		this.trafficReiApplyList = trafficReiApplyList;
+	}
 
-    public String getSubmitStatus() {
-        return submitStatus;
-    }
+	public List<FacReiAdiApply> getOtherReiAdiApplies() {
+		return otherReiAdiApplies;
+	}
 
-    public void setSubmitStatus(String submitStatus) {
-        this.submitStatus = submitStatus;
-    }
+	public void setOtherReiAdiApplies(List<FacReiAdiApply> otherReiAdiApplies) {
+		this.otherReiAdiApplies = otherReiAdiApplies;
+	}
 
-    public List<ReiHospitalityApply> getHospitalityApplies() {
-        return hospitalityApplies;
-    }
+	public String getSubmitStatus() {
+		return submitStatus;
+	}
 
-    public void setHospitalityApplies(List<ReiHospitalityApply> hospitalityApplies) {
-        this.hospitalityApplies = hospitalityApplies;
-    }
+	public void setSubmitStatus(String submitStatus) {
+		this.submitStatus = submitStatus;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getJKnum() {
+		return JKnum;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setJKnum(String jKnum) {
+		JKnum = jKnum;
+	}
 
-    public String getNum() {
-        return num;
-    }
+	public List<ReiHospitalityApply> getHospitalityApplies() {
+		return hospitalityApplies;
+	}
 
-    public void setNum(String num) {
-        this.num = num;
-    }
+	public void setHospitalityApplies(
+			List<ReiHospitalityApply> hospitalityApplies) {
+		this.hospitalityApplies = hospitalityApplies;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public String getCompanyName() {
-        return companyName;
-    }
+	public String getNum() {
+		return num;
+	}
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
+	public void setNum(String num) {
+		this.num = num;
+	}
 
-    public String getDeptName() {
-        return deptName;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public Double getAmount() {
-        return amount;
-    }
+	public String getCompanyName() {
+		return companyName;
+	}
 
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
 
-    public Long getLoanUser() {
-        return loanUser;
-    }
+	public String getDeptName() {
+		return deptName;
+	}
 
-    public void setLoanUser(Long loanUser) {
-        this.loanUser = loanUser;
-    }
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
 
-    public Date getReimburseTime() {
-        return reimburseTime;
-    }
+	public Double getAmount() {
+		return amount;
+	}
 
-    public void setReimburseTime(Date reimburseTime) {
-        this.reimburseTime = reimburseTime;
-    }
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
 
-    public String getFacOperate() {
-        return facOperate;
-    }
+	public Long getLoanUser() {
+		return loanUser;
+	}
 
-    public void setFacOperate(String facOperate) {
-        this.facOperate = facOperate;
-    }
+	public void setLoanUser(Long loanUser) {
+		this.loanUser = loanUser;
+	}
 
-    public String getReason() {
-        return reason;
-    }
+	public Date getReimburseTime() {
+		return reimburseTime;
+	}
 
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
+	public void setReimburseTime(Date reimburseTime) {
+		this.reimburseTime = reimburseTime;
+	}
 
-    public String getApplyStatus() {
-        return applyStatus;
-    }
+	public String getFacOperate() {
+		return facOperate;
+	}
 
-    public void setApplyStatus(String applyStatus) {
-        this.applyStatus = applyStatus;
-    }
+	public void setFacOperate(String facOperate) {
+		this.facOperate = facOperate;
+	}
 
-    public Date getPassTime() {
-        return passTime;
-    }
+	public String getReason() {
+		return reason;
+	}
 
-    public void setPassTime(Date passTime) {
-        this.passTime = passTime;
-    }
+	public void setReason(String reason) {
+		this.reason = reason;
+	}
 
-    public Date getUpdateTime() {
+	public String getApplyStatus() {
+		return applyStatus;
+	}
+
+	public void setApplyStatus(String applyStatus) {
+		this.applyStatus = applyStatus;
+	}
+
+	public Date getPassTime() {
+		return passTime;
+	}
+
+	public void setPassTime(Date passTime) {
+		this.passTime = passTime;
+	}
+
+	public Date getUpdateTime() {
 		return updateTime;
 	}
 
@@ -257,18 +271,18 @@ public class FacReimburseApply extends BaseEntity {
 	}
 
 	public String getType() {
-        return type;
-    }
+		return type;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public String getStatus() {
-        return status;
-    }
+	public String getStatus() {
+		return status;
+	}
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

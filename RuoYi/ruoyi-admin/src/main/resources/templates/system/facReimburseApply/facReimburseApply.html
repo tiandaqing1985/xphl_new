@@ -24,10 +24,6 @@
                             </div>
                         </li>
 
-<!--                        <li>-->
-<!--                            类型：<input type="text" name="type"/>-->
-<!--                        </li>-->
-
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
@@ -40,7 +36,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.modal.open('日常报销申请','facReimburseApply/add')">
+            <a class="btn btn-success" onclick="$.modal.openTab('日常报销申请','system/facReimburseApply/add')">
                 <i class="fa fa-plus"></i> 日常报销申请
             </a>
             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
@@ -63,10 +59,9 @@
 </div>
 <div th:include="include :: footer"></div>
 <th:block th:include="include :: bootstrap-suggest-js" />
+<th:block th:include="include :: bootstrap-select-js" />
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('system:facReimburseApply:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('system:facReimburseApply:remove')}]];
-    var detailFlag = [[${@permission.hasPermi('system:facReimburseApply:detail')}]];
+
     var prefix = ctx + "system/facReimburseApply";
 
     $(function () {
@@ -109,7 +104,7 @@
                 },
                 {
                     field: 'approveName',
-                    title: '审批人',
+                    title: '当前审批人',
                     sortable: true
                 },
                 {
@@ -121,25 +116,6 @@
                         return  newDate;
                     }
                 },
-                // {
-                //     field: 'updateTime',
-                //     title: '修改时间',
-                //     sortable: true,
-                //     formatter: function (value, row, index) {
-                //         var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                //         return  newDate;
-                //     }
-                // },
-                // {
-                //     field: 'passTime',
-                //     title: '核票通过时间',
-                //     sortable: true,
-                //     formatter: function (value, row, index) {
-                //         var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                //         return  newDate;
-                //     }
-                //
-                // },
                 {
                     field: 'type',
                     title: '类型',
@@ -196,6 +172,28 @@
         $.modal.openTab("编辑" + $.table._option.modalName, prefix + "/add?id="+num);
     }
 
+
+    function f(id) {
+
+
+        $.modal.openTab("编辑" + $.table._option.modalName, prefix + "/detail?id=" + id);
+
+
+        // var options = {
+        //     title: "报销费用申请详情",
+        //     width: 800,
+        //     height: 800,
+        //     url: prefix + "/detail?id=" + id,
+        //     skin: 'layui-layer-gray',
+        //     btn: ['关闭'],
+        //     yes: function (index, layero) {
+        //         layer.close(index);
+        //     }
+        // };
+        // $.modal.openOptions(options);
+    }
+
+
     function mSave(url, data, callback) {
         var config = {
             url: url,
@@ -223,20 +221,6 @@
         mSave(prefix + "/addSubmit", {"id":id});
     }
 
-    function f(id) {
-        var options = {
-            title: "报销费用申请详情",
-            width: 800,
-            height: 800,
-            url: prefix + "/detail?id=" + id,
-            skin: 'layui-layer-gray',
-            btn: ['关闭'],
-            yes: function (index, layero) {
-                layer.close(index);
-            }
-        };
-        $.modal.openOptions(options);
-    }
 
     var testBsSuggest = $("#loanUser").bsSuggest({
         url: ctx + "system/user/userModel",
@@ -253,6 +237,7 @@
     }).on('onUnsetSelectValue', function (e) {
         console.log("onUnsetSelectValue");
     });
+
 
 </script>
 </body>

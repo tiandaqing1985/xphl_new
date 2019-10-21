@@ -12,7 +12,17 @@
                     <ul>
 
                         <li>
-                            申请人id：<input type="text" name="user"/>
+                            申请人 ：
+                            <div class="col-sm-9">
+                                <input id="user" type="text" name="user"/>
+                                <div class="input-group-btn" style="float: right">
+                                    <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                    </ul>
+                                </div>
+                            </div>
                         </li>
 
                         <li>
@@ -35,7 +45,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.add()" >
+            <a class="btn btn-success" onclick="$.operate.addTab()" >
                 <i class="fa fa-plus"></i> 添加
             </a>
             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
@@ -57,10 +67,11 @@
     </div>
 </div>
 <div th:include="include :: footer"></div>
+<div th:include="include :: footer"></div>
+<th:block th:include="include :: bootstrap-suggest-js" />
+<th:block th:include="include :: bootstrap-select-js" />
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('system:facPayPublicApply:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('system:facPayPublicApply:remove')}]];
-    var detailFlag = [[${@permission.hasPermi('system:facLoanApply:detail')}]];
+
     var prefix = ctx + "system/facPayPublicApply";
     var approvalState = [[${@dict.getType('fac_approval_state')}]];
 
@@ -147,6 +158,23 @@
         };
         $.modal.openOptions(options);
     }
+
+
+    var testBsSuggest = $("#user").bsSuggest({
+        url: ctx + "system/user/userModel",
+        showBtn: false,
+        idField: "userName",
+        keyField: "userId",
+        effectiveFields: ["deptName","userName"],
+        multiWord: true,
+        hideOnSelect: true
+    }).on('onDataRequestSuccess', function (e, result) {
+        console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword) {
+        console.log('onSetSelectValue: ', keyword);
+    }).on('onUnsetSelectValue', function (e) {
+        console.log("onUnsetSelectValue");
+    });
 </script>
 </body>
 </html>

@@ -116,10 +116,14 @@
     function zAdd() {
         $.modal.open("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
     }
+
     function closeItem() {
         $.modal.close();
+
     }
-    function mAdd(id) {
+
+
+    function mAdd(id){
         if (id == 1) {
             $.table._option.id = "bootstrap-table-1";
             $.table._option.url = prefix + "/addTraDetail";
@@ -134,23 +138,24 @@
             $.modal.open("其他添加", "/system/facReimburseApply/otherDetail?num=" + num);
         }
     }
-    function mEdit(index,id){
-        if(index==1){
+
+    function mEdit(index, id) {
+        if (index == 1) {
             $.table._option.id = "bootstrap-table-1";
             $.table._option.url = prefix + "/addTraDetail";
             $.table._option.modalName = "交通报销信息";
             $.table._option.updateUrl = prefix + "/editTran/{id}";
-        }else if(index==2){
+        } else if (index == 2) {
             $.table._option.updateUrl = prefix + "/editTran/{id}";
         }
         $.operate.edit(id);
     }
 
-    function mRemove(index,id){
-        if(index==1){
+    function mRemove(index, id) {
+        if (index == 1) {
             $.table._option.modalName = "交通报销信息";
             $.table._option.removeUrl = prefix + "/removeTran";
-        }else if(index==2){
+        } else if (index == 2) {
             $.table._option.removeUrl = prefix + "/removeTran";
         }
         $.operate.remove(id);
@@ -158,7 +163,7 @@
 
     $(function () {
         if (dept == 10) {
-            $("#zdf").attr("style","display:block;");//显示div
+            $("#zdf").attr("style", "display:block;");//显示div
         }
 
         var options = {
@@ -211,25 +216,19 @@
                     field: 'target',
                     title: '目的地',
                     sortable: true
-                } ,
+                },
                 {
                     field: 'type',
                     title: '类型 ',
                     sortable: true
                 },
-                // {
-                //     field: 'num',
-                //     title: '申请编号',
-                //     sortable: true
-                // },
-
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="mEdit(1,\'' + row.id + '\')"><i class="fa fa-edit"></i>修改</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="mRemove(1,\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="mEdit(1,\'' + row.id + '\')"><i class  = "fa fa-edit" > < /i>修改</a > ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="mRemove(1,\'' + row.id + '\')"><i class  = "fa fa-remove" > < /i>删除</  a > ');
                         return actions.join('');
                     }
                 }
@@ -408,16 +407,17 @@
 
     function submitHandler(index) {
         if ($.validate.form()) {
-            //index为1表示保存
-            if(index==1){
+//index为1表示保存
+            if (index == 1) {
                 mSave(prefix + "/addSave", $('#form-reiadd').serialize());
-            }else if(index==2){
+            } else if (index == 2) {
                 mSave(prefix + "/addSubmit", $('#form-reiadd').serialize());
             }
+
             $.modal.close();
         }
     }
 
 </script>
 </body>
-</html>
+< /html>

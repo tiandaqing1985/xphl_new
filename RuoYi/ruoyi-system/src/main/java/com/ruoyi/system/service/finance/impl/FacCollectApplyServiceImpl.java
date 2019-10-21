@@ -73,6 +73,7 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
 		facSysUserApproval.setApprovalState("3");
 		facSysUserApproval.setApprovalSight("1");
 		facSysUserApproval.setApplyId(facCollectApply.getNum());
+		facSysUserApproval.setProjectName(facCollectApply.getLeagueProject());
 		Long leaderId = iSysUserService
 				.selectApproverIdByApplyerId(facCollectApply.getApplicant());// 所在部门负责人id
 		Long upLeaderId = iSysUserService
@@ -101,7 +102,6 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
 			if (approverId2.equals(facCollectApply.getApplicant())) {
 				centerId.remove(approverId2);
 			}
-
 			for (int i = centerId.size() - 1; i >= 0; i--) {
 				FacSysUserApproval center = new FacSysUserApproval();// 中心负责人
 				center.setApproverId(centerId.get(i));// 审批人ID
@@ -112,6 +112,8 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
 				center.setApplicantId(facCollectApply.getApplicant());
 				center.setAmount(facCollectApply.getAmount());
 				center.setCreateTime(new Date());// 创建时间
+				center.setApplyId(facCollectApply.getNum());
+				center.setProjectName(facCollectApply.getLeagueProject());
 				approvalProcessMapper.insert(center);
 				if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
 					return facCollectApplyMapper

@@ -4,20 +4,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.ruoyi.system.domain.SysDept;
-import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.domain.SysUser;
-import com.ruoyi.system.domain.finance.*;
-import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
-import com.ruoyi.system.service.ISysDeptService;
-import com.ruoyi.system.service.ISysRoleService;
-import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
@@ -27,6 +24,20 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.finance.FacLoanRepayApply;
+import com.ruoyi.system.domain.finance.FacReiAdiApply;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
+import com.ruoyi.system.domain.finance.FacUserApproval;
+import com.ruoyi.system.domain.finance.ReiHospitalityApply;
+import com.ruoyi.system.domain.finance.ReiTrafficApply;
+import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
+import com.ruoyi.system.service.ISysDeptService;
+import com.ruoyi.system.service.ISysRoleService;
+import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.system.service.finance.IFacLoanRepayApplyService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 
 /**
@@ -50,7 +61,8 @@ public class FacReimburseApplyController extends BaseController {
 	private ISysDeptService sysDeptService;
 	@Autowired
 	private ISysRoleService sysRoleService;
-
+    @Autowired
+    private IFacLoanRepayApplyService facLoanRepayApplyService;
 	@RequiresPermissions("system:facReimburseApply:view")
 	@GetMapping()
 	public String facReimburseApply() {
@@ -163,7 +175,7 @@ public class FacReimburseApplyController extends BaseController {
 	 * 查看详情
 	 */
 	@GetMapping("/detail")
-	public String detail(@RequestParam("id") String id, ModelMap map) {
+	public String detail(@RequestParam("id") Long id, ModelMap map) {
 		FacReimburseApply facReimburseApply = new FacReimburseApply();
 		facReimburseApply.setId(id);
 		List<FacReimburseApply> facReimburseApplies = facReimburseApplyService
@@ -178,12 +190,13 @@ public class FacReimburseApplyController extends BaseController {
 	}
 	/**
 	 * 新增报销
+	 * @throws Exception 
 	 */
 	@GetMapping("/add")
-	public String add(ModelMap mmp, String id) {
+	public String add(ModelMap mmp, Long id) throws Exception {
 		if (id == null) {
 			IdWorker idWorker = new IdWorker(0, 1);
-			mmp.put("num", "BX" + idWorker.nextId());
+			mmp.put("num", "BX" +idWorker.nextId());
 		} else {
 			FacReimburseApply facReimburseApply = new FacReimburseApply();
 			facReimburseApply.setId(id);
@@ -221,9 +234,9 @@ public class FacReimburseApplyController extends BaseController {
 		facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
 		if (facReimburseApply.getId() != null) {
 			FacReimburseApply fac = facReimburseApplyService
-					.selectFacReimburseApplyById(facReimburseApply.getId());
+					.selectFacReimburseApplyById(facReimburseApply.getId()+"");
 			facReimburseApplyService
-					.deleteFacReimburseApplyById(facReimburseApply.getId());
+					.deleteFacReimburseApplyById(facReimburseApply.getId()+"");
 			facReimburseApply.setUpdateTime(new Date());
 			facReimburseApply.setCreateTime(fac.getCreateTime());
 		} else {
@@ -248,11 +261,11 @@ public class FacReimburseApplyController extends BaseController {
 		} else {
 			// 更新
 			facReimburseApply = facReimburseApplyService
-					.selectFacReimburseApplyById(facReimburseApply.getId());
+					.selectFacReimburseApplyById(facReimburseApply.getId()+"");
 			facReimburseApply.setLoanUser(ShiroUtils.getUserId());
 			facReimburseApply.setUpdateTime(new Date());
 			facReimburseApplyService
-					.deleteFacReimburseApplyById(facReimburseApply.getId());
+					.deleteFacReimburseApplyById(facReimburseApply.getId()+"");
 			facReimburseApply.setId(null);
 			facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
 		}
@@ -260,6 +273,46 @@ public class FacReimburseApplyController extends BaseController {
 		return facReimburseApplyService
 				.insertFacReimburseApply(facReimburseApply);
 	}
+	
+	
+	/**
+	 * 新增提交报销
+	 */
+	@Log(title = "报销", businessType = BusinessType.INSERT)
+	@PostMapping("/addSubmit2")
+	@ResponseBody
+	@Transactional
+	public AjaxResult addSubmit2(FacReimburseApply facReimburseApply) {
+		if (facReimburseApply.getId() == null) {
+			// 直接添加
+			facReimburseApply.setLoanUser(ShiroUtils.getUserId());
+			facReimburseApply.setCreateTime(new Date());
+			facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
+		} else {
+			// 更新
+			facReimburseApply = facReimburseApplyService
+					.selectFacReimburseApplyById(facReimburseApply.getId()+"");
+			facReimburseApply.setLoanUser(ShiroUtils.getUserId());
+			facReimburseApply.setUpdateTime(new Date());
+			facReimburseApplyService
+					.deleteFacReimburseApplyById(facReimburseApply.getId()+"");
+			facReimburseApply.setId(null);
+			facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
+		}
+		facReimburseApply.setSubmitStatus("submit"); 
+		FacLoanRepayApply facLoanRepayApply= new FacLoanRepayApply();   
+		facLoanRepayApply.setNum(facReimburseApply.getJKnum());
+		facLoanRepayApply.setPayer(ShiroUtils.getUserId());
+		facLoanRepayApply.setRepayAmount(facReimburseApplyService.selectDouble(facReimburseApply.getNum())); 
+		facLoanRepayApply.setRepayMethod("冲抵");
+		facLoanRepayApplyService.insertFacLoanRepayApply(facLoanRepayApply);
+		return facReimburseApplyService
+				.insertFacReimburseApply(facReimburseApply);
+	}
+	
+	
+	
+	
 	/**
 	 * 新增招待费用
 	 */
@@ -439,9 +492,9 @@ public class FacReimburseApplyController extends BaseController {
 	 * 修改报销
 	 */
 	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") String id, ModelMap mmap) {
+	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
 		FacReimburseApply facReimburseApply = facReimburseApplyService
-				.selectFacReimburseApplyById(id);
+				.selectFacReimburseApplyById(id+"");
 		mmap.put("fac", facReimburseApply);
 		return prefix + "/edit";
 	}
@@ -450,7 +503,7 @@ public class FacReimburseApplyController extends BaseController {
 	 * 修改报销
 	 */
 	@GetMapping("/editTran/{id}")
-	public String editTran(@PathVariable("id") String id, ModelMap mmap) {
+	public String editTran(@PathVariable("id") Long id, ModelMap mmap) {
 		ReiTrafficApply facReimburseApply = facReimburseApplyService
 				.selectFacTransById(id);
 		mmap.put("data", facReimburseApply);

@@ -139,7 +139,6 @@ public class SysUserServiceImpl implements ISysUserService
     public SysUser selectUserById(Long userId)
     {
     	SysUser user = userMapper.selectUserById(userId);
-    	System.out.println(user.toString());
         return userMapper.selectUserById(userId);
     }
 

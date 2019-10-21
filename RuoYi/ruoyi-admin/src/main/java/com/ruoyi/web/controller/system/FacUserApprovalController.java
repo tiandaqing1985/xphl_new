@@ -1,5 +1,20 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ruoyi.system.domain.SysUser;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -12,13 +27,6 @@ import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * 财务审批 信息操作处理
@@ -58,13 +66,13 @@ public class FacUserApprovalController extends BaseController {
 		List<FacUserApproval> list = facUserApprovalService
 				.selectFacUserApprovalList(facUserApproval);
 		for (FacUserApproval v : list) {
-			v.setApplicantName(sysUserService.selectUserById(v.getApplicantId()).getUserName());
-			v.setApproverName(sysUserService.selectUserById(v.getApproverId()).getUserName());
-			FacReimburseApply facReimburseApply = new FacReimburseApply();
-			facReimburseApply.setNum(v.getApplyId());
-			List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
-			if(facReimburseApplies.size()>0){
-				v.setName(facReimburseApplies.get(0).getName());
+			SysUser applicant = sysUserService.selectUserById(v.getApplicantId());
+			SysUser approver = sysUserService.selectUserById(v.getApproverId());
+			if(applicant!=null){
+				v.setApplicantName(sysUserService.selectUserById(v.getApplicantId()).getUserName());
+			}
+			if(approver!=null){
+				v.setApproverName(sysUserService.selectUserById(v.getApproverId()).getUserName());
 			}
 		}
 		return getDataTable(list);
@@ -114,18 +122,19 @@ public class FacUserApprovalController extends BaseController {
 
 		FacReimburseApply facReimburseApply = new FacReimburseApply();
 		facReimburseApply.setNum(facUserApproval.getApplyId());
-		List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
-		if(facReimburseApplies.size()>0){
+		List<FacReimburseApply> facReimburseApplies = facReimburseApplyService
+				.selectFacReimburseApplyList(facReimburseApply);
+		if (facReimburseApplies.size() > 0) {
 			facUserApproval.setName(facReimburseApplies.get(0).getName());
 		}
 
 		map.put("facUserApproval", facUserApproval);
-		map.put("num",facUserApproval.getApplyId());
+		map.put("num", facUserApproval.getApplyId());
 		map.put("msg", "1");
 		map.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
 		map.put("userId", ShiroUtils.getUserId());
-		map.put("name",facUserApproval.getName());
-		String nums=facUserApproval.getApplyId().substring(0,2);
+		map.put("name", facUserApproval.getName());
+		String nums = facUserApproval.getApplyId().substring(0, 2);
 		if (nums.equals("BX")) {
 			return prefix + "/baoxiaoDetails";
 		} else if (nums.equals("JK")) {
@@ -150,15 +159,82 @@ public class FacUserApprovalController extends BaseController {
 	@Log(title = "财务审批", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
-	public AjaxResult editSave(FacUserApproval facUserApproval) { 
+	public AjaxResult editSave(FacUserApproval facUserApproval) {
 		List<FacUserApproval> list = facUserApprovalService
 				.selectFacUserApprovalList(facUserApproval);
-		FacUserApproval fac=list.get(0);
+		FacUserApproval fac = list.get(0);
 		fac.setApprovalState("1");
-		return toAjax(
-				facUserApprovalService.updateFacUserApproval(fac));
+		return toAjax(facUserApprovalService.updateFacUserApproval(fac));
 	}
 
+	/**
+	 * 查看借款详情
+	 */
+	@PostMapping("/querys")
+	@ResponseBody
+	public TableDataInfo detail1s(String num) {
+		startPage();
+		FacUserApproval facUserApproval = new FacUserApproval();
+		facUserApproval.setApplyId(num);
+		facUserApproval.setApplicantId(ShiroUtils.getUserId());
+
+		List<FacUserApproval> list = facUserApprovalService
+				.selectFacUserApprovalList(facUserApproval);
+		if (list != null) {
+
+			return getDataTable(list);
+		} else {
+			List<String> a = new ArrayList<>();
+			return getDataTable(a);
+		}
+	}
+	/**
+	 * 查看详情
+	 */
+	@GetMapping("/detail")
+	public String detail(@RequestParam("approvalId") Long approvalId,
+			ModelMap map) {
+
+		FacUserApproval facUserApproval = facUserApprovalService
+				.selectFacUserApprovalById(approvalId);
+
+		FacReimburseApply facReimburseApply = new FacReimburseApply();
+		facReimburseApply.setNum(facUserApproval.getApplyId());
+		List<FacReimburseApply> facReimburseApplies = facReimburseApplyService
+				.selectFacReimburseApplyList(facReimburseApply);
+		if (facReimburseApplies.size() > 0) {
+			facUserApproval.setName(facReimburseApplies.get(0).getName());
+		}
+
+		map.put("facUserApproval", facUserApproval);
+		map.put("num", facUserApproval.getApplyId());
+		map.put("msg", "1");
+		map.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
+		map.put("userId", ShiroUtils.getUserId());
+		map.put("name", facUserApproval.getName());
+
+		map.put("opi", facUserApproval.getOpi());
+
+		map.put("approvalState", facUserApproval.getApprovalState());
+
+		String nums = facUserApproval.getApplyId().substring(0, 2);
+		if (nums.equals("BX")) {
+			return prefix + "/baoxiao";
+		} else if (nums.equals("JK")) {
+			return prefix + "/jiekuan";
+		} else if (nums.equals("CL")) {
+			return prefix + "/chailv";
+		} else if (nums.equals("HK")) {
+			return prefix + "/huankuan";
+		} else if (nums.equals("DG")) {
+			return prefix + "/duigong";
+		} else if (nums.equals("TJ")) {
+			return prefix + "/tuanjian";
+		} else {
+			return prefix + "/zhaodai";
+		}
+
+	}
 
 	/**
 	 * 修改保存驳回财务审批
@@ -166,16 +242,15 @@ public class FacUserApprovalController extends BaseController {
 	@Log(title = "财务审批", businessType = BusinessType.UPDATE)
 	@PostMapping("/editnot")
 	@ResponseBody
-	public AjaxResult editNot(FacUserApproval facUserApproval) { 
+	public AjaxResult editNot(FacUserApproval facUserApproval) {
 		List<FacUserApproval> list = facUserApprovalService
 				.selectFacUserApprovalList(facUserApproval);
-		FacUserApproval fac=list.get(0);
+		FacUserApproval fac = list.get(0);
 		fac.setApprovalState("2");
 		return toAjax(
 				facUserApprovalService.updateFacUserApproval(facUserApproval));
 	}
-	
-	
+
 	/**
 	 * 删除财务审批
 	 */

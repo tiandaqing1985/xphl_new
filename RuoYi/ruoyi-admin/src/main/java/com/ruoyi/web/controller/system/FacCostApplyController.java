@@ -1,19 +1,5 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -27,6 +13,14 @@ import com.ruoyi.system.domain.finance.FacCostDetailApply;
 import com.ruoyi.system.domain.finance.FacCostPutupApply;
 import com.ruoyi.system.service.finance.IFacCostApplyService;
 import com.ruoyi.system.service.finance.IFacCostPutupApplyService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 差旅申请 信息操作处理
@@ -134,6 +128,31 @@ public class FacCostApplyController extends BaseController {
 		return toAjax(facCostApplyService.insertFacCostApply(facCostApply));
 	}
 
+	
+	
+
+    /**
+     * 新增保存 
+     *
+     * @throws Exception
+     */
+    @Log(title = "差旅申请", businessType = BusinessType.INSERT)
+    @PostMapping("/addSove")
+    @ResponseBody
+    public AjaxResult addSove(FacCostApply facCostApply) throws Exception {
+    	facCostApply.setUserId(ShiroUtils.getUserId());
+		return toAjax(facCostApplyService.insertApply(facCostApply));
+
+    }
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 修改差旅申请
 	 */
@@ -251,4 +270,94 @@ public class FacCostApplyController extends BaseController {
 				facCostApplyService.insertFacCostPutupApply(facCostPutupApply));
 	}
 
+	
+	
+	
+	
+	
+	
+	/**
+	 * 修改交通
+	 */
+	@GetMapping("/editTra/{id}")
+	public String editTran(@PathVariable("id") Long id, ModelMap mmap) {  
+		FacCostDetailApply facCostDetailApply = facCostApplyService
+				.selectFacCostDetailApplyById(id);
+		mmap.put("facCostDetailApply", facCostDetailApply);
+		return prefix + "/editTra";
+	} 
+	/**
+	 * 修改住宿
+	 */
+	@GetMapping("/editput/{id}")
+	public String editPut(@PathVariable("id") Long id, ModelMap mmap) {  
+		FacCostPutupApply facCostPutupApply =facCostApplyService.selectFacCostPutupApplyById(id);  
+		mmap.put("facCostPutupApply", facCostPutupApply);
+		return prefix + "/editPut";
+	}
+	
+	
+	
+	/**
+	 * 修改保存差旅交通申请详细列 
+	 */
+ 
+	@Log(title = "差旅申请详细列 ", businessType = BusinessType.UPDATE)
+	@PostMapping("/editTra")
+	@ResponseBody
+	public AjaxResult editSave(FacCostDetailApply facCostDetailApply)
+	{		
+		return toAjax(facCostApplyService.updateFacCostDetailApply(facCostDetailApply));
+	}  
+
+	/**
+	 * 修改保存差旅住宿
+	 */
+	 
+	@Log(title = "差旅住宿", businessType = BusinessType.UPDATE)
+	@PostMapping("/editPut")
+	@ResponseBody
+	public AjaxResult editSave(FacCostPutupApply facCostPutupApply)
+	{		
+		return toAjax(facCostPutupApplyService.updateFacCostPutupApply(facCostPutupApply));
+	}
+	
+	
+	
+	
+
+	/**
+	 * 删除差旅住宿
+	 */
+	 
+	@Log(title = "差旅住宿", businessType = BusinessType.DELETE)
+	@PostMapping( "/removeTra")
+	@ResponseBody
+	public AjaxResult removeTra(String ids)
+	{		
+		return toAjax(facCostPutupApplyService.deleteFacCostPutupApplyByIds(ids));
+	}
+	
+	
+	
+	
+	/**
+	 * 删除差旅申请详细列 
+	 */
+	 
+	@Log(title = "差旅申请详细列 ", businessType = BusinessType.DELETE)
+	@PostMapping( "/removePut")
+	@ResponseBody
+	public AjaxResult removePut(String ids)
+	{		
+		return toAjax(facCostApplyService.deleteFacCostDetailApplyByIds(ids));
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }

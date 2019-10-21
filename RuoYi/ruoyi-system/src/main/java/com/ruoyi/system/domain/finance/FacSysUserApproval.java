@@ -43,6 +43,16 @@ public class FacSysUserApproval {
 
 	private Double amount;
 
+	private String projectName;
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
+	}
+
 	public Double getAmount() {
 		return amount;
 	}

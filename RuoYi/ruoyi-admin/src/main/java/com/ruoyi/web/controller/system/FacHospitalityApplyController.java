@@ -1,5 +1,20 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -8,20 +23,10 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacHospitalityApply;
-import com.ruoyi.system.domain.finance.FacLoanApply;
-import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacHospitalityApplyService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 招待费申请 信息操作处理
@@ -90,11 +95,12 @@ public class FacHospitalityApplyController extends BaseController {
 
 	/**
 	 * 新增保存招待费申请
+	 * @throws Exception 
 	 */
 	@Log(title = "招待费申请", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public AjaxResult addSave(FacHospitalityApply facHospitalityApply) {
+	public AjaxResult addSave(FacHospitalityApply facHospitalityApply) throws Exception {
 		
 		
 		
@@ -108,6 +114,40 @@ public class FacHospitalityApplyController extends BaseController {
 				.insertFacHospitalityApply(facHospitalityApply));
 	}
 
+	
+	
+
+
+    /**
+     * 新增保存 
+     *
+     * @throws Exception
+     */
+    @Log(title = "差旅申请", businessType = BusinessType.INSERT)
+    @PostMapping("/addSove")
+    @ResponseBody
+    public AjaxResult addSove(FacHospitalityApply facHospitalityApply) throws Exception { 
+		IdWorker idWorker = new IdWorker(0, 1);
+		facHospitalityApply.setNum("ZD" + idWorker.nextId());
+		facHospitalityApply.setUserId(ShiroUtils.getUserId());
+		facHospitalityApply.setApplicationTime(new Date());
+		facHospitalityApply.setAmount(facHospitalityApply.getStandardAmount()
+				* Double.valueOf(facHospitalityApply.getTotalNumber()));// 获取预计金额
+		return toAjax(facHospitalityApplyService
+				.insertApply(facHospitalityApply));
+	}
+		 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 修改招待费申请
 	 */

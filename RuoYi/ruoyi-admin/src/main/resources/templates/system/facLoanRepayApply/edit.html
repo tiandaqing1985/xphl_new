@@ -52,6 +52,8 @@
 		</form>
     </div>
     <div th:include="include::footer"></div>
+	<th:block th:include="include :: bootstrap-suggest-js" />
+	<th:block th:include="include :: bootstrap-select-js" />
     <script type="text/javascript">
 		var prefix = ctx + "system/facLoanRepayApply";
 		$("#form-facLoanRepayApply-edit").validate({

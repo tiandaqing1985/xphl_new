@@ -19,13 +19,12 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.enums.FacApplyType;
 import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.finance.FacLoanApply;
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
 import com.ruoyi.system.domain.finance.FacPayPublicDetailed;
-import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacPayPublicApplyService;
 
@@ -81,9 +80,10 @@ public class FacPayPublicApplyController extends BaseController {
 
 	/**
 	 * 新增对公申请
+	 * @throws Exception 
 	 */
 	@GetMapping("/add")
-	public String add(ModelMap mmap) {
+	public String add(ModelMap mmap) throws Exception { 
 		IdWorker idWorker = new IdWorker(0, 1);
 		mmap.put("num", "DG" + idWorker.nextId());
 		return prefix + "/add";
@@ -204,6 +204,60 @@ public class FacPayPublicApplyController extends BaseController {
 
 		return toAjax(facPayPublicApplyService
 				.insertFacPayPublicDetailed(facPayPublicDetailed));
+	}
+	
+	
+	
+	
+	 /**
+     * 新增保存 
+     *
+     * @throws Exception
+     */
+    @Log(title = "借款申请", businessType = BusinessType.INSERT)
+    @PostMapping("/addSove")
+    @ResponseBody
+    public AjaxResult addSove(FacPayPublicApply FacPayPublicApply) throws Exception {
+         
+        return toAjax(facPayPublicApplyService.insertApply( FacPayPublicApply));
+
+    }
+
+	
+	/**
+	 * 修改对公明细
+	 */
+	@GetMapping("/editPub/{id}")
+	public String editPub(@PathVariable("id") Long id, ModelMap mmap)
+	{
+		FacPayPublicDetailed facPayPublicDetailed = facPayPublicApplyService.selectFacPayPublicDetailedById(id);
+		mmap.put("facPayPublicDetailed", facPayPublicDetailed);
+	    return prefix + "/edit";
+	}
+	
+	/**
+	 * 修改保存对公明细
+	 */
+
+	@Log(title = "对公明细", businessType = BusinessType.UPDATE)
+	@PostMapping("/editPub")
+	@ResponseBody
+	public AjaxResult editPubSave(FacPayPublicDetailed facPayPublicDetailed)
+	{		
+		return toAjax(facPayPublicApplyService.updateFacPayPublicDetailed(facPayPublicDetailed));
+	}
+	
+
+	/**
+	 * 删除对公明细
+	 */
+
+	@Log(title = "对公明细", businessType = BusinessType.DELETE)
+	@PostMapping( "/removePub")
+	@ResponseBody
+	public AjaxResult removepub(String ids)
+	{		
+		return toAjax(facPayPublicApplyService.deleteFacPayPublicDetailedByIds(ids));
 	}
 
 }

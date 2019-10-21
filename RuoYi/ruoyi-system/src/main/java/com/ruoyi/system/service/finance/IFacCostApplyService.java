@@ -21,6 +21,12 @@ public interface IFacCostApplyService {
 	 * @return 差旅申请信息
 	 */
 	public FacCostApply selectFacCostApplyById(Long id);
+	
+	
+	
+	public FacCostDetailApply selectFacCostDetailApplyById(Long id);
+	
+	public FacCostPutupApply selectFacCostPutupApplyById(Long id);
 
 	/**
 	 * 查询差旅申请列表
@@ -39,7 +45,17 @@ public interface IFacCostApplyService {
 	 * @return 结果
 	 */
 	public int insertFacCostApply(FacCostApply facCostApply);
-
+	/**
+	 * 新增保存
+	 * 
+	 * @param facCostApply
+	 *            差旅申请信息
+	 * @return 结果
+	 */
+	
+	public int insertApply(FacCostApply facCostApply);
+	
+	
 	/**
 	 * 新增差旅详情
 	 *
@@ -60,6 +76,10 @@ public interface IFacCostApplyService {
 
 	public int insertFacCostPutupApply(FacCostPutupApply facCostPutupApply);
  
+	
+	
+	
+	
 	/**
 	 * 修改差旅申请
 	 * 
@@ -69,6 +89,19 @@ public interface IFacCostApplyService {
 	 */
 	public int updateFacCostApply(FacCostApply facCostApply);
 
+	
+	
+	public int updateFacCostDetailApply(FacCostDetailApply facCostDetailApply);
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 删除差旅申请信息
 	 * 
@@ -77,6 +110,9 @@ public interface IFacCostApplyService {
 	 * @return 结果
 	 */
 	public int deleteFacCostApplyByIds(String ids);
+	
+	
+	public int 	deleteFacCostDetailApplyByIds(String ids);
 
 	/**
 	 * 根据差旅编号查询差旅申请详情
