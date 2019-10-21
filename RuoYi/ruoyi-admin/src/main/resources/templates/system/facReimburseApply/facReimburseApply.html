@@ -150,7 +150,6 @@
                             //审批成功
                         }else if(row.status==2){
                             //审批失败
-
                         }else if(row.status==3){
 
                         }else
@@ -158,8 +157,11 @@
                             //待审批
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+
                         }
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
+                        if(row.submitStatus=="submit"){
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
+                        }
                         return actions.join('');
                     }
                 }]
@@ -175,7 +177,6 @@
 
     function f(id) {
         $.modal.openTab("编辑" + $.table._option.modalName, prefix + "/detail?id=" + id);
-
     }
 
 

@@ -93,19 +93,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
      
     <select id="detail" resultType="com.ruoyi.system.domain.finance.FacReimburseApply">
         SELECT
-  a.num,
-  a.`name`,
-  a.type,
-  a.`amount`,
-  b.`user_name` AS userName,
-  a.`status` ,
-  a.`reimburse_time` AS reimburesTime,
-  a.`create_time` AS createTime
-FROM
-  fac_reimburse_apply AS a
-  LEFT JOIN sys_user AS b
-    ON a.`loan_user` = b.`user_id`
- where a.num=#{num}
+          a.num,
+          a.`name`,
+          a.type,
+          a.`amount`,
+          b.`user_name` AS userName,
+          a.`status`,
+          a.`reimburse_time` AS reimburesTime,
+          a.`create_time` AS createTime
+        FROM
+          fac_reimburse_apply AS a
+          LEFT JOIN sys_user AS b
+            ON a.`loan_user` = b.`user_id`
+         where a.num=#{num}
     </select>
     
     <select id="hosTail" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">

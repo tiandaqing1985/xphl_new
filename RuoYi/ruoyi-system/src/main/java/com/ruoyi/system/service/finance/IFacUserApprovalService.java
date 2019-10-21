@@ -88,5 +88,4 @@ public interface IFacUserApprovalService {
 	 * @return 结果
 	 */
 	public int deleteFacUserApprovalByIds(String ids);
-
 }
