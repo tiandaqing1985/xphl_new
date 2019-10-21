@@ -281,7 +281,7 @@ public class FacLoanApplyController extends BaseController {
      * 新增借款申请
      */
     @GetMapping("/off")
-    public String off(@RequestParam Long id, ModelMap mmp) {
+    public String off(@RequestParam String id, ModelMap mmp) {
 
         IdWorker idWorker = new IdWorker(0, 1);
         mmp.put("num", "BX" + idWorker.nextId());
