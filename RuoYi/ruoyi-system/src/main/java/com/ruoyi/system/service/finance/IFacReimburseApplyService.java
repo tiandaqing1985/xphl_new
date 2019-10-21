@@ -48,7 +48,7 @@ public interface IFacReimburseApplyService
 	public List<ReiHospitalityApply> selectReiHospitalityApplyList(ReiHospitalityApply reiHospitalityApply);
 	
 	
-	
+	public int insertFacreiHospitalityApply(ReiHospitalityApply reiHospitalityApply);
 	
 	public double selectDouble(String num);
 	

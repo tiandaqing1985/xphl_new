@@ -238,73 +238,137 @@
 
     $(function () {
 
-        var options = {
-            id: "bootstrap-table-2",
-            Url: prefix + "/addAll",
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            modelName: "招待费用信息",
-            columns: [
-                [
-                    {
-                        title: '招待费用信息',
-                        align: 'center',
-                        colspan: 8,
-                    }
 
-                ],
-                [{
+
+        $(function() {
+            var options = {
+                id: "bootstrap-table-2",
+                url: prefix + "/addAll",
+                modalName: "招待费报销申请",
+                showExport: true,
+                columns: [{
                     checkbox: true
                 },
                     {
-                        field: 'id',
-                        title: 'id',
+                        field : 'id',
+                        title : 'ID',
                         visible: false
                     },
                     {
-                        field: 'ddDate',
-                        title: '日期'
+                        field : 'ddDate',
+                        title : '日期',
+                        sortable: true
                     },
                     {
-                        field: 'amount',
-                        title: '金额'
+                        field : 'amount',
+                        title : '金额',
+                        sortable: true
                     },
                     {
-                        field: 'project',
-                        title: '报销科目'
+                        field : 'addUser',
+                        title : '参加人',
+                        sortable: true
                     },
                     {
-                        field: 'reason',
-                        title: '事由'
+                        field : 'documentNum',
+                        title : '单据数',
+                        sortable: true
                     },
                     {
-                        field: 'documentNum',
-                        title: '单据数'
+                        field : 'location',
+                        title : '地点',
+                        sortable: true
                     },
                     {
-                        field: 'status',
-                        title: '用户状态',
-                        visible: false,
-                        align: 'center',
-                        formatter: function (value, row, index) {
-                            return $.table.selectDictLabel(datas, value);
-                        }
+                        field : 'targetUnit',
+                        title : '目标单位简称',
+                        sortable: true
+                    },
+                    {
+                        field : 'reason',
+                        title : '事由',
+                        sortable: true
+                    },
+                    {
+                        field : 'num',
+                        title : '报销编号',
+                        sortable: true
+                    },
+                    {
+                        field : 'status',
+                        title : '审批状态',
+                        sortable: true
+                    },
+                    {
+                        field : 'applyNum',
+                        title : '申请编号',
+                        sortable: true
+                    },
+                    {
+                        field : 'user',
+                        title : '申请人',
+                        sortable: true
                     },
                     {
                         title: '操作',
                         align: 'center',
-                        formatter: function (value, row, index) {
+                        formatter: function(value, row, index) {
                             var actions = [];
-                            if (status == 0) {
-                                actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>修改</a> ');
-                                actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
-                            }
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                             return actions.join('');
                         }
-                    }]]
-        };
+                    }]
+            };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         $.table.init(options);
     });
 

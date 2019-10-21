@@ -12,7 +12,6 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.finance.FacReiAdiApply;
@@ -491,6 +490,16 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
     public List<FacReimburseApply> selectFacReimburseApplyListByCreateBy(List<SysUser> sysUsersList) {
         return facReimburseApplyMapper.selectFacReimburseApplyListByCreateBy(sysUsersList);
     }
+
+	@Override
+	public int insertFacreiHospitalityApply(
+			ReiHospitalityApply reiHospitalityApply) {
+
+		List<ReiHospitalityApply> list = new ArrayList<>();
+		list.add(reiHospitalityApply);
+		
+		return facReimburseApplyMapper.HospBatchInsert(list);
+	}
 
 	
 
