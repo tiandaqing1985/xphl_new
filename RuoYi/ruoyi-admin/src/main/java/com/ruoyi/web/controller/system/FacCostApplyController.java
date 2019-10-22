@@ -127,8 +127,6 @@ public class FacCostApplyController extends BaseController {
 		facCostApply.setUserId(ShiroUtils.getUserId());
 		if(facCostApply.getId() == null){ 
 	            // 直接添加
-	            IdWorker idWorker = new IdWorker(0, 1);
-	            facCostApply.setNum("CL" + idWorker.nextId());
 	            facCostApply.setUserId(ShiroUtils.getUserId());
 	        } else {
 	            // 更新
@@ -270,12 +268,6 @@ public class FacCostApplyController extends BaseController {
 		return toAjax(
 				facCostApplyService.insertFacCostPutupApply(facCostPutupApply));
 	}
-
-	
-	
-	
-	
-	
 	
 	/**
 	 * 修改交通
