@@ -22,6 +22,8 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.finance.FacCostApply;
+import com.ruoyi.system.domain.finance.FacLoanApply;
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
 import com.ruoyi.system.domain.finance.FacPayPublicDetailed;
 import com.ruoyi.system.service.ISysUserService;
@@ -29,7 +31,7 @@ import com.ruoyi.system.service.finance.IFacPayPublicApplyService;
 
 /**
  * 对公申请 信息操作处理
- * 
+ *
  * @author ruoyi
  * @date 2019-10-10
  */
@@ -57,10 +59,10 @@ public class FacPayPublicApplyController extends BaseController {
 		startPage();
 		facPayPublicApply.setUser(ShiroUtils.getUserId());
 		List<FacPayPublicApply> list = facPayPublicApplyService
-				.selectFacPayPublicApplyList(facPayPublicApply); 
+				.selectFacPayPublicApplyList(facPayPublicApply);
 		 for (FacPayPublicApply v : list) {
-	            v.setUserName(sysUserService.selectUserById(v.getUser()).getUserName()); 
-	        } 
+	            v.setUserName(sysUserService.selectUserById(v.getUser()).getUserName());
+	        }
 		return getDataTable(list);
 	}
 
@@ -79,10 +81,10 @@ public class FacPayPublicApplyController extends BaseController {
 
 	/**
 	 * 新增对公申请
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@GetMapping("/add")
-	public String add(ModelMap mmap) throws Exception { 
+	public String add(ModelMap mmap) throws Exception {
 		IdWorker idWorker = new IdWorker(0, 1);
 		mmap.put("num", "DG" + idWorker.nextId());
 		return prefix + "/add";
@@ -97,7 +99,7 @@ public class FacPayPublicApplyController extends BaseController {
 	public AjaxResult addSave(FacPayPublicApply facPayPublicApply) {
 		facPayPublicApply.setUser(ShiroUtils.getUserId());
 		if(facPayPublicApply.getId() == null){
-			 
+
             // 直接添加
             IdWorker idWorker = new IdWorker(0, 1);
             facPayPublicApply.setNum("JK" + idWorker.nextId());
@@ -106,16 +108,16 @@ public class FacPayPublicApplyController extends BaseController {
             // 更新
         	facPayPublicApply = facPayPublicApplyService.selectFacPayPublicApplyById(facPayPublicApply.getId());
         	facPayPublicApplyService.deleteFacPayPublicApplyByIds (facPayPublicApply.getId()+"");
-        }   
+        }
 		return toAjax(facPayPublicApplyService
 				.insertFacPayPublicApply(facPayPublicApply));
-	} 
-	
-	
- 
-	
-	
-	
+	}
+
+
+
+
+
+
 	/**
 	 * 修改对公申请
 	 */
@@ -220,12 +222,12 @@ public class FacPayPublicApplyController extends BaseController {
 		return toAjax(facPayPublicApplyService
 				.insertFacPayPublicDetailed(facPayPublicDetailed));
 	}
-	
-	
-	
-	
+
+
+
+
 	 /**
-     * 新增保存 
+     * 新增保存
      *
      * @throws Exception
      */
@@ -233,7 +235,7 @@ public class FacPayPublicApplyController extends BaseController {
     @PostMapping("/addSove")
     @ResponseBody
     public AjaxResult addSove(FacPayPublicApply FacPayPublicApply) throws Exception {
-    	FacPayPublicApply.setUser(ShiroUtils.getUserId());
+
         return toAjax(facPayPublicApplyService.insertApply( FacPayPublicApply));
 
     }
@@ -247,7 +249,7 @@ public class FacPayPublicApplyController extends BaseController {
 	{
 		FacPayPublicDetailed facPayPublicDetailed = facPayPublicApplyService.selectFacPayPublicDetailedById(id);
 		mmap.put("facPayPublicDetailed", facPayPublicDetailed);
-	    return prefix + "/edit";
+	    return prefix + "/editPub";
 	}
 	
 	/**

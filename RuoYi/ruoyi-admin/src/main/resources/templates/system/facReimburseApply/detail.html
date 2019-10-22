@@ -1,270 +1,271 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="include :: header('初始多表格')"/>
-	<th:block th:include="include :: layout-latest-css" />
-	<th:block th:include="include :: ztree-css" />
+    <th:block th:include="include :: header('初始多表格')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
-	<div class="row">
+    <div class="row">
 
-		<input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
+        <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
 
-		<div>
-			<h4 class="form-header h4">日常报销申请</h4>
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label class="col-sm-4 control-label"><span style="color: red; ">*</span>报销名称：</label>
-						<div class="col-sm-8">
-							<input name="name" autocomplete="off" placeholder="XX月份报销" class="form-control" type="text" maxlength="30" th:value="*{name}" readonly >
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label class="col-sm-4 control-label">&nbsp&nbsp部门：</label>
-						<div class="col-sm-8">
-							<input name="userName" autocomplete="off" placeholder="悦维联动" class="form-control" type="text" maxlength="30" th:value="*{deptName}" readonly="readonly" >
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label class="col-sm-4 control-label"><span style="color: red; ">*</span>日期：</label>
-						<div class="col-sm-8">
-							<input id="createTime" class="form-control date" name="createTime" readonly required>
-						</div>
-					</div>
-				</div>
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label class="col-sm-4 control-label"><span style="color: red; ">*</span>报销人：</label>
-						<div class="col-sm-8">
-							<input name="password" placeholder="请输入报销人" autocomplete="off" class="form-control"  th:value="*{userName}" type="text"  readonly required>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="row">
+        <div>
+            <h4 class="form-header h4">日常报销申请</h4>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报销名称：</label>
+                        <div class="col-sm-8">
+                            <input name="name" autocomplete="off" placeholder="XX月份报销" class="form-control" type="text"
+                                   maxlength="30" th:value="*{name}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">&nbsp&nbsp部门：</label>
+                        <div class="col-sm-8">
+                            <input name="userName" autocomplete="off" placeholder="悦维联动" class="form-control"
+                                   type="text" maxlength="30" th:value="*{deptName}" readonly="readonly">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>日期：</label>
+                        <div class="col-sm-8">
+                            <input id="createTime" class="form-control date" name="createTime" readonly required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报销人：</label>
+                        <div class="col-sm-8">
+                            <input name="password" placeholder="请输入报销人" autocomplete="off" class="form-control"
+                                   th:value="*{userName}" type="text" readonly required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
 
-				<div class="col-sm-6">
-					<div class="form-group">
-						<label class="col-sm-4 control-label"></span>借款编号：</label>
-						<div class="col-sm-8">
-							<input id="num" name="num" class="form-control" type="text" th:value="${num}" readonly required/>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-		<div class="col-sm-12 select-table table-striped">
-
-			<h4 class="form-header h4">交通费报销信息</h4>
-			<table id="bootstrap-table-1" data-mobile-responsive="true"></table>
-		</div>
-
-		<div class="row">
-			<div class="col-sm-12 select-table table-striped">
-
-				<h4 class="form-header h4">招待费报销信息</h4>
-				<table id="bootstrap-table-2" data-mobile-responsive="true"></table>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-12 select-table table-striped">
-
-				<h4 class="form-header h4">其他费用报销信息</h4>
-				<table id="bootstrap-table-3" data-mobile-responsive="true"></table>
-			</div>
-		</div>
-
-	</div>
-	<div th:include="include :: footer"></div>
-	<script th:inline="javascript">
-		var prefix = ctx + "system/facReimburseApply";
-		var datas = [[${@dict.getType('sys_normal_disable')}]];
-		var num = $("#num").val();
-		var msg = $("#msg").val();
-
-		if ("1" == msg) {
-			document.getElementById("addAll").style.visibility = "hidden";
-			document.getElementById("addAll1").style.visibility = "hidden";
-			document.getElementById("addAll2").style.visibility = "hidden";
-		}
-
-		$(function () {
-			var options = {
-				id: "bootstrap-table-1",
-				url: prefix + "/addTraDetail?num="+num,
-				showSearch: false,
-				showRefresh: false,
-				showToggle: false,
-				showColumns: false,
-				modalName: "报销申请添加",
-				columns: [
-					{
-						checkbox: true
-					},
-					{
-						field: 'num',
-						title: '报销编号'
-					},
-					{
-						field: 'type',
-						title: '报销类型'
-					},
-					{
-						field: 'userName',
-						title: '用户姓名'
-					},
-					{
-						field: 'amount',
-						title: '报销金额'
-					},
-					{
-						field: 'reimburseTime',
-						title: '报销时间'
-					},
-					{
-						field: 'status',
-						title: '审批状态',
-						align: 'center',
-						formatter: function (value, row, index) {
-							return $.table.selectDictLabel(datas, value);
-						}
-					}
-				]
-			};
-
-			$.table.init(options);
-		});
-
-		$(function () {
-
-			var options = {
-				id: "bootstrap-table-2",
-				url: prefix + "/hospDetail?num="+num,
-				showSearch: false,
-				showRefresh: false,
-				showToggle: false,
-				showColumns: false,
-				modelName: "招待费用信息",
-				columns: [
-					[
-						{
-							title: '招待费用信息',
-							align: 'center',
-							colspan: 8,
-						}
-
-					],
-					[{
-						checkbox: true
-					},
-						{
-							field: 'id',
-							title: 'id',
-							visible: false
-						},
-						{
-							field: 'ddDate',
-							title: '日期'
-						},
-						{
-							field: 'amount',
-							title: '金额'
-						},
-						{
-							field: 'project',
-							title: '报销科目'
-						},
-						{
-							field: 'reason',
-							title: '事由'
-						},
-						{
-							field: 'documentNum',
-							title: '单据数'
-						},
-						{
-							field: 'status',
-							title: '用户状态',
-							visible: false,
-							align: 'center',
-							formatter: function (value, row, index) {
-								return $.table.selectDictLabel(datas, value);
-							}
-						}
-					]]
-			};
-			$.table.init(options);
-		});
-
-		$(function () {
-			var options = {
-				id: "bootstrap-table-3",
-				url: prefix + "/otherDetail?num="+num,
-				showSearch: false,
-				showRefresh: false,
-				showToggle: false,
-				showColumns: false,
-				modelName: "其他费用申请",
-				columns: [
-					[
-						{
-							title: '其他费用报销信息',
-							align: 'center',
-							colspan: 8,
-						}
-					],
-					[{
-						checkbox: true
-					},
-						{
-							field: 'id',
-							title: 'id',
-							visible: false
-						},
-						{
-							field: 'ddDate',
-							title: '日期'
-						},
-						{
-							field: 'amount',
-							title: '金额'
-						},
-						{
-							field: 'project',
-							title: '报销科目'
-						},
-						{
-							field: 'reason',
-							title: '事由'
-						},
-						{
-							field: 'documentNum',
-							title: '单据数'
-						},
-						{
-							field: 'status',
-							title: '用户状态',
-							visible: false,
-							align: 'center',
-							formatter: function (value, row, index) {
-								return $.table.selectDictLabel(datas, value);
-							}
-						} ]]
-			};
-			$.table.init(options);
-		});
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"></span>借款编号：</label>
+                        <div class="col-sm-8">
+                            <input id="num" name="num" class="form-control" type="text" th:value="${num}" readonly
+                                   required/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
 
-	</script>
+        <div>
+
+            <h4 class="form-header h4">交通费报销信息</h4>
+            <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+        </div>
+
+        <div>
+
+            <h4 class="form-header h4">招待费报销信息</h4>
+            <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+        </div>
+
+        <div>
+            <h4 class="form-header h4">其他费用报销信息</h4>
+            <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
+        </div>
+
+
+    </div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = ctx + "system/facReimburseApply";
+        var datas = [[${@dict.getType('sys_normal_disable')}]];
+        var num = $("#num").val();
+        var msg = $("#msg").val();
+
+        if ("1" == msg) {
+            document.getElementById("addAll").style.visibility = "hidden";
+            document.getElementById("addAll1").style.visibility = "hidden";
+            document.getElementById("addAll2").style.visibility = "hidden";
+        }
+
+        $(function () {
+            var options = {
+                id: "bootstrap-table-1",
+                url: prefix + "/addTraDetail?num=" + num,
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                modalName: "报销申请添加",
+                columns: [
+                    {
+                        checkbox: true
+                    },
+                    {
+                        field: 'num',
+                        title: '报销编号'
+                    },
+                    {
+                        field: 'type',
+                        title: '报销类型'
+                    },
+                    {
+                        field: 'userName',
+                        title: '用户姓名'
+                    },
+                    {
+                        field: 'amount',
+                        title: '报销金额'
+                    },
+                    {
+                        field: 'reimburseTime',
+                        title: '报销时间'
+                    },
+                    {
+                        field: 'status',
+                        title: '审批状态',
+                        align: 'center',
+                        formatter: function (value, row, index) {
+                            return $.table.selectDictLabel(datas, value);
+                        }
+                    }
+                ]
+            };
+
+            $.table.init(options);
+        });
+
+        $(function () {
+
+            var options = {
+                id: "bootstrap-table-2",
+                url: prefix + "/hospDetail?num=" + num,
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                modelName: "招待费用信息",
+                columns: [
+                    [
+                        {
+                            title: '招待费用信息',
+                            align: 'center',
+                            colspan: 8,
+                        }
+
+                    ],
+                    [{
+                        checkbox: true
+                    },
+                        {
+                            field: 'id',
+                            title: 'id',
+                            visible: false
+                        },
+                        {
+                            field: 'ddDate',
+                            title: '日期'
+                        },
+                        {
+                            field: 'amount',
+                            title: '金额'
+                        },
+                        {
+                            field: 'project',
+                            title: '报销科目'
+                        },
+                        {
+                            field: 'reason',
+                            title: '事由'
+                        },
+                        {
+                            field: 'documentNum',
+                            title: '单据数'
+                        },
+                        {
+                            field: 'status',
+                            title: '用户状态',
+                            visible: false,
+                            align: 'center',
+                            formatter: function (value, row, index) {
+                                return $.table.selectDictLabel(datas, value);
+                            }
+                        }
+                    ]]
+            };
+            $.table.init(options);
+        });
+
+        $(function () {
+            var options = {
+                id: "bootstrap-table-3",
+                url: prefix + "/otherDetail?num=" + num,
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                modelName: "其他费用申请",
+                columns: [
+                    [
+                        {
+                            title: '其他费用报销信息',
+                            align: 'center',
+                            colspan: 8,
+                        }
+                    ],
+                    [{
+                        checkbox: true
+                    },
+                        {
+                            field: 'id',
+                            title: 'id',
+                            visible: false
+                        },
+                        {
+                            field: 'ddDate',
+                            title: '日期'
+                        },
+                        {
+                            field: 'amount',
+                            title: '金额'
+                        },
+                        {
+                            field: 'project',
+                            title: '报销科目'
+                        },
+                        {
+                            field: 'reason',
+                            title: '事由'
+                        },
+                        {
+                            field: 'documentNum',
+                            title: '单据数'
+                        },
+                        {
+                            field: 'status',
+                            title: '用户状态',
+                            visible: false,
+                            align: 'center',
+                            formatter: function (value, row, index) {
+                                return $.table.selectDictLabel(datas, value);
+                            }
+                        }]]
+            };
+            $.table.init(options);
+        });
+
+
+    </script>
 </body>
 </html>
