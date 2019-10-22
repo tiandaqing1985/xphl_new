@@ -41,13 +41,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
      
 	<select id="detail" resultType="com.ruoyi.system.domain.finance.FacCostApply">
-	 select id, num, busName, outTime, backTimeEs, outMan, moneyEs, toLocal, reason, status, userId from fac_cost_apply
+	 select * from fac_cost_apply
 		where  num=#{num}
 	</select>
 	<select id="adiTail" resultType="com.ruoyi.system.domain.finance.FacCostDetailApply">
-		SELECT
-		a.id, a.num ,
-		a.costDate,a.vehicle , a.departure, a.target , a.amount , a.reason
+		SELECT a.*
 		FROM
 		fac_cost_detail_apply AS a
 		WHERE a.num =#{num}
@@ -101,7 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into fac_cost_detail_apply
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="num != null  and num != ''  ">num,</if>
-			<if test="costDate != null  ">cost_date,</if>
+			<if test="costDate != null  ">costDate,</if>
 			<if test="vehicle != null  and vehicle != ''  ">vehicle,</if>
 			<if test="departure != null  and departure != ''  ">departure,</if>
 			<if test="target != null  and target != ''  ">target,</if>

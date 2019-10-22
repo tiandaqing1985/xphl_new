@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="FacCostDetailApply" id="FacCostDetailApplyResult">
         <result property="id"    column="id"    />
         <result property="num"    column="num"    />
-        <result property="costDate"    column="cost_date"    />
+        <result property="costDate"    column="costDate"    />
         <result property="vehicle"    column="vehicle"    />
         <result property="departure"    column="departure"    />
         <result property="target"    column="target"    />
@@ -16,7 +16,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectFacCostDetailApplyVo">
-        select id, num, cost_date, vehicle, departure, target, amount, reason from fac_cost_detail_apply
+        select id, num, costDate, vehicle, departure, target, amount, reason from fac_cost_detail_apply
     </sql>
 	
     <select id="selectFacCostDetailApplyList" parameterType="FacCostDetailApply" resultMap="FacCostDetailApplyResult">
@@ -24,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="id != null "> and id = #{id}</if>
              <if test="num != null  and num != '' "> and num = #{num}</if>
-             <if test="costDate != null "> and cost_date = #{costDate}</if>
+             <if test="costDate != null "> and costDate = #{costDate}</if>
              <if test="vehicle != null  and vehicle != '' "> and vehicle = #{vehicle}</if>
              <if test="departure != null  and departure != '' "> and departure = #{departure}</if>
              <if test="target != null  and target != '' "> and target = #{target}</if>
@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into fac_cost_detail_apply
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="num != null  and num != ''  ">num,</if>
-			<if test="costDate != null  ">cost_date,</if>
+			<if test="costDate != null  ">costDate,</if>
 			<if test="vehicle != null  and vehicle != ''  ">vehicle,</if>
 			<if test="departure != null  and departure != ''  ">departure,</if>
 			<if test="target != null  and target != ''  ">target,</if>
@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update fac_cost_detail_apply
         <trim prefix="SET" suffixOverrides=",">
             <if test="num != null  and num != ''  ">num = #{num},</if>
-            <if test="costDate != null  ">cost_date = #{costDate},</if>
+            <if test="costDate != null  ">costDate = #{costDate},</if>
             <if test="vehicle != null  and vehicle != ''  ">vehicle = #{vehicle},</if>
             <if test="departure != null  and departure != ''  ">departure = #{departure},</if>
             <if test="target != null  and target != ''  ">target = #{target},</if>

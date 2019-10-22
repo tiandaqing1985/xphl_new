@@ -173,9 +173,10 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 
 	@Override
 	public FacCostApply deatil(String num) {
-		FacCostApply facCostApply = facCostApplyMapper.detail(num);
-
-		return facCostApply;
+		FacCostApply facCostApply = new FacCostApply();
+		facCostApply.setNum(num);
+		List<FacCostApply>	list =	facCostApplyMapper.selectFacCostApplyList(facCostApply);
+		return list.get(0);
 	}
 
 	@Override
