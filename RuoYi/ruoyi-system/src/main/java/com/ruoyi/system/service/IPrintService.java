@@ -6,4 +6,6 @@ public interface IPrintService {
     String previewDuigongzhifu(String num);
 
     String previewBaoxiaoDetail(String num);
+
+    String previewjiekuan(String num);
 }

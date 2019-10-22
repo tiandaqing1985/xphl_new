@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('打印')" />
+</head>
+<body class="white-bg">
+    <div>
+        <button type="button" class="btn btn-w-m btn-primary" onclick="show(1)" th:text="${btn1}"></button>
+        <button type="button" class="btn btn-w-m btn-primary" onclick="show(2)" th:text="${btn2}"></button>
+        <div id="content">
+
+        </div>
+	</div>
+    <div th:include="include::footer"></div>
+    <script th:inline="javascript">
+
+        $(function () {
+            show(1);
+        })
+
+        function show(id) {
+            var num = [[${num}]];
+            var type1 = [[${type1}]];
+            var type2 = [[${type2}]];
+            var url = "";
+            if(id==1){
+                url = "/system/print/preview?type="+type1+"&num="+num;
+            }else if(id==2){
+                url = "/system/print/preview?type="+type2+"&num="+num;
+            }
+            var config = {
+                url: url,
+                type: "get",
+                dataType: "html",
+                async: false,
+                data: "",
+                success: function(result) {
+                    $("#content").html(result);
+                }
+            };
+            $.ajax(config)
+        }
+	</script>
+</body>
+</html>
