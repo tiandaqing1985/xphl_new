@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -21,6 +22,7 @@ import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCollectApply;
+import com.ruoyi.system.domain.finance.FacHospitalityApply;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCollectApplyService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
@@ -103,6 +105,16 @@ public class FacCollectApplyController extends BaseController {
 		return prefix + "/add";
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 新增保存团建申请
 	 */
@@ -110,11 +122,40 @@ public class FacCollectApplyController extends BaseController {
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(FacCollectApply facCollectApply) {
-		facCollectApply.setApplicant(ShiroUtils.getUserId());
+		IdWorker idWorker = new IdWorker(0, 1);
+		facCollectApply.setNum("TJ" + idWorker.nextId());
+		facCollectApply.setApplicant(ShiroUtils.getUserId()); 
+		if (facCollectApply.getId() == null) {
+			// 直接添加
+			facCollectApply.setNum("CL" + idWorker.nextId()); 
+		} else {
+			// 更新
+			facCollectApply = facCollectApplyService
+					.selectFacCollectApplyById(facCollectApply.getId());
+			facCollectApplyService.deleteFacCollectApplyByIds(
+					facCollectApply.getId() + "");
+		} 
 		return toAjax(
 				facCollectApplyService.insertFacCollectApply(facCollectApply));
 	}
-
+ 
+    /**
+     * 新增保存 
+     *
+     * @throws Exception
+     */
+    @Log(title = "差旅申请", businessType = BusinessType.INSERT)
+    @PostMapping("/addSove")
+    @ResponseBody
+    public AjaxResult addSove(FacCollectApply facCollectApply) throws Exception { 
+		IdWorker idWorker = new IdWorker(0, 1);
+		facCollectApply.setNum("TJ" + idWorker.nextId());	
+		facCollectApply.setApplicant(ShiroUtils.getUserId()); 
+		return toAjax(facCollectApplyService
+				.insertApply(facCollectApply));
+	}
+		  
+	
 	/**
 	 * 修改团建申请
 	 */

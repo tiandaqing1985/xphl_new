@@ -125,11 +125,10 @@ public class FacCostApplyController extends BaseController {
 	@ResponseBody
 	public AjaxResult addSave(FacCostApply facCostApply) {
 		facCostApply.setUserId(ShiroUtils.getUserId());
-		if(facCostApply.getId() == null){
-			 
+		if(facCostApply.getId() == null){ 
 	            // 直接添加
 	            IdWorker idWorker = new IdWorker(0, 1);
-	            facCostApply.setNum("JK" + idWorker.nextId());
+	            facCostApply.setNum("CL" + idWorker.nextId());
 	            facCostApply.setUserId(ShiroUtils.getUserId());
 	        } else {
 	            // 更新
@@ -209,7 +208,12 @@ public class FacCostApplyController extends BaseController {
 				.selectFacCostApplyList(facCostApply);
 		map.put("rid", id);
 		map.put("num", facReimburseApplies.get(0).getNum());
-		map.put("status", facReimburseApplies.get(0).getStatus());
+		map.put("busName", facReimburseApplies.get(0).getBusName());
+		map.put("outTime", facReimburseApplies.get(0).getOutTime());
+		map.put("backTimeEs", facReimburseApplies.get(0).getBackTimeEs());
+		map.put("userName", ShiroUtils.getSysUser().getUserName());
+		map.put("moneyEs", facReimburseApplies.get(0).getMoneyEs()); 
+		
 		return prefix + "/costDetail";
 	}
 
@@ -292,8 +296,7 @@ public class FacCostApplyController extends BaseController {
 		mmap.put("facCostPutupApply", facCostPutupApply);
 		return prefix + "/editPut";
 	}
-	
-	
+	 
 	
 	/**
 	 * 修改保存差旅交通申请详细列 
@@ -319,9 +322,7 @@ public class FacCostApplyController extends BaseController {
 		return toAjax(facCostPutupApplyService.updateFacCostPutupApply(facCostPutupApply));
 	}
 	
-	
-	
-	
+	 
 
 	/**
 	 * 删除差旅住宿
@@ -335,9 +336,7 @@ public class FacCostApplyController extends BaseController {
 		return toAjax(facCostPutupApplyService.deleteFacCostPutupApplyByIds(ids));
 	}
 	
-	
-	
-	
+	 
 	/**
 	 * 删除差旅申请详细列 
 	 */
@@ -350,11 +349,5 @@ public class FacCostApplyController extends BaseController {
 		return toAjax(facCostApplyService.deleteFacCostDetailApplyByIds(ids));
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+	 
 }

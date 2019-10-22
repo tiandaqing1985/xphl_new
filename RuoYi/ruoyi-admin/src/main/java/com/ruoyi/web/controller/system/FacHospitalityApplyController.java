@@ -23,7 +23,6 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacHospitalityApply;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacHospitalityApplyService;
@@ -95,59 +94,57 @@ public class FacHospitalityApplyController extends BaseController {
 
 	/**
 	 * 新增保存招待费申请
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	@Log(title = "招待费申请", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public AjaxResult addSave(FacHospitalityApply facHospitalityApply) throws Exception {
-		
-		
-		
+	public AjaxResult addSave(FacHospitalityApply facHospitalityApply)
+			throws Exception {
+
 		IdWorker idWorker = new IdWorker(0, 1);
 		facHospitalityApply.setNum("ZD" + idWorker.nextId());
 		facHospitalityApply.setUserId(ShiroUtils.getUserId());
 		facHospitalityApply.setApplicationTime(new Date());
 		facHospitalityApply.setAmount(facHospitalityApply.getStandardAmount()
 				* Double.valueOf(facHospitalityApply.getTotalNumber()));// 获取预计金额
+
+		if (facHospitalityApply.getId() == null) {
+			// 直接添加
+			facHospitalityApply.setNum("CL" + idWorker.nextId());
+			facHospitalityApply.setUserId(ShiroUtils.getUserId());
+		} else {
+			// 更新
+			facHospitalityApply = facHospitalityApplyService
+					.selectFacHospitalityApplyById(facHospitalityApply.getId());
+			facHospitalityApplyService.deleteFacHospitalityApplyByIds(
+					facHospitalityApply.getId() + "");
+		}
 		return toAjax(facHospitalityApplyService
 				.insertFacHospitalityApply(facHospitalityApply));
 	}
 
-	
-	
-
-
-    /**
-     * 新增保存 
-     *
-     * @throws Exception
-     */
-    @Log(title = "差旅申请", businessType = BusinessType.INSERT)
-    @PostMapping("/addSove")
-    @ResponseBody
-    public AjaxResult addSove(FacHospitalityApply facHospitalityApply) throws Exception { 
+	/**
+	 * 新增保存
+	 *
+	 * @throws Exception
+	 */
+	@Log(title = "差旅申请", businessType = BusinessType.INSERT)
+	@PostMapping("/addSove")
+	@ResponseBody
+	public AjaxResult addSove(FacHospitalityApply facHospitalityApply)
+			throws Exception {
 		IdWorker idWorker = new IdWorker(0, 1);
 		facHospitalityApply.setNum("ZD" + idWorker.nextId());
 		facHospitalityApply.setUserId(ShiroUtils.getUserId());
 		facHospitalityApply.setApplicationTime(new Date());
 		facHospitalityApply.setAmount(facHospitalityApply.getStandardAmount()
 				* Double.valueOf(facHospitalityApply.getTotalNumber()));// 获取预计金额
-		return toAjax(facHospitalityApplyService
-				.insertApply(facHospitalityApply));
+		return toAjax(
+				facHospitalityApplyService.insertApply(facHospitalityApply));
 	}
-		 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * 修改招待费申请
 	 */

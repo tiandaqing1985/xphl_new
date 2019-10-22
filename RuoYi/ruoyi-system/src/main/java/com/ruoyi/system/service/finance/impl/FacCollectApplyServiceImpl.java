@@ -151,4 +151,10 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
 				.deleteFacCollectApplyByIds(Convert.toStrArray(ids));
 	}
 
+	@Override
+	public int insertApply(FacCollectApply facCollectApply) {
+		// TODO Auto-generated method stub
+		return facCollectApplyMapper.insertFacCollectApply(facCollectApply);
+	}
+
 }

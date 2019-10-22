@@ -36,6 +36,9 @@ public interface IFacCollectApplyService
      */
 	public int insertFacCollectApply(FacCollectApply facCollectApply);
 	
+	
+	public int insertApply(FacCollectApply facCollectApply);
+	
 	/**
      * 修改团建申请
      * 
