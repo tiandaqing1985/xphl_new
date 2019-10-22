@@ -32,7 +32,18 @@ public class FacCostDetailApply extends BaseEntity
 	/** 工作内容 */
 	private String reason;
 
-	public void setId(Long id) 
+	//住宿费，打印时用
+	private double zsf;
+
+	public double getZsf() {
+		return zsf;
+	}
+
+	public void setZsf(double zsf) {
+		this.zsf = zsf;
+	}
+
+	public void setId(Long id)
 	{
 		this.id = id;
 	}

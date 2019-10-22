@@ -17,12 +17,20 @@ public class PrintController {
 
     @GetMapping("/view")
     public String view(String num, String type, ModelMap map) {
-        map.put("num",num);
-        map.put("type1",type);
-        if(type.equals("baoxiao")){
-            map.put("btn1","报销单");
-            map.put("btn2","报销单明细");
-            map.put("type2","baoxiaoDetail");
+        map.put("num", num);
+        map.put("type1", type);
+        if (type.equals("baoxiao")) {
+
+            map.put("btn1", "报销单");
+            map.put("btn2", "报销单明细");
+            map.put("type2", "baoxiaoDetail");
+
+        } else if (type.equals("duigong")) {
+
+            map.put("btn1", "对公申请");
+            map.put("btn2", "申请明细");
+            map.put("type2", "duigongDetail");
+
         }
         return "system/print/printview";
 
@@ -30,20 +38,28 @@ public class PrintController {
 
     @GetMapping("/preview")
     @ResponseBody
-    public String previewPrint(String num,String type) {
+    public String previewPrint(String num, String type) {
 
-        if(type==null){
+        if (type == null) {
             return "参数不正确";
         }
-        if(type.equals("baoxiao")){
+        if (type.equals("baoxiao")) {
             return printService.previewBaoxiao(num);
-        }else if(type.equals("baoxiaoDetail")){
+        } else if (type.equals("baoxiaoDetail")) {
             return printService.previewBaoxiaoDetail(num);
-        }else if(type.equals("jiekuan")){
+        } else if (type.equals("jiekuan")) {
             return printService.previewjiekuan(num);
-        }else if(type.equals("chuchai")){
+        } else if (type.equals("chuchai")) {
             return printService.previewchucai(num);
-        }else{
+        } else if (type.equals("duigong")) {
+            return printService.previewduigong(num);
+        } else if (type.equals("duigongDetail")) {
+            return printService.previewDuigongzhifuDetail(num);
+        } else if (type.equals("tuanjian")) {
+            return printService.previewTuanjian(num);
+        } else if (type.equals("zhaodaifei")) {
+            return printService.previewZhaodaifei(num);
+        } else {
             return "参数不正确";
         }
 

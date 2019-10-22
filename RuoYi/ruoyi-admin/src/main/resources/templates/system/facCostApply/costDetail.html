@@ -28,11 +28,103 @@
             </div>
 
         </div>
+        <div>
+            <button type="button" class="btn btn-w-m btn-primary" onclick="print(2)">打印</button>
+        </div>
         <div th:include="include :: footer"></div>
         <script th:inline="javascript">
             var prefix = ctx + "system/facCostApply";
             var num = $("#num").val();
             var msg = $("#msg").val();
+
+            function print(id) {
+                // $.modal.openTab("编辑" + $.table._option.modalName, prefix + "/detail?id=" + id);
+                var width;
+                var height;
+                if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+                    width = 'auto';
+                    height = 'auto';
+                }
+                var index = layer.open({
+                    type: 2,
+                    area: [width, height],
+                    fix: false,
+                    //不固定
+                    maxmin: true,
+                    shade: 0.3,
+                    title: "打印预览",
+                    content: "/system/print/preview?type=chuchai&num="+num,
+                    // content: "/system/print/view?type=jiekuan&num="+id,
+                    btn: ['打印', '关闭'],
+                    // 弹层外区域关闭
+                    shadeClose: true,
+                    yes: function () {
+                        var html1 = "";
+                        var html2 = "";
+                        var config = {
+                            url: "/system/print/preview?type=chuchai&num="+num,
+                            type: "get",
+                            dataType: "html",
+                            async: false,
+                            data: "",
+                            success: function(result) {
+                                html1 = html1+result;
+                            }
+                        };
+                        $.ajax(config)
+                        // config = {
+                        //     url: "/system/print/preview?type=baoxiaoDetail&num="+id,
+                        //     type: "get",
+                        //     dataType: "html",
+                        //     async: false,
+                        //     data: "",
+                        //     success: function(result) {
+                        //         html2 = html2+result;
+                        //     }
+                        // };
+                        // $.ajax(config)
+
+                        // var printContent=document.getElementById(objId).innerHTML;//获得需要打印内容的HTML代码
+
+                        printWindow=window.open('','_blank');
+                        printWindow.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <title></title><style>@page{margin-bottom:0mm;margin-top:2mm}</style></head><body>');
+
+                        //这里是向新建的窗口写入HTML的head信息，可引入自己的js和css，以供打印时样式与网页中显示的一致
+
+                        printWindow.document.write('<div style="page-break-after:always; width:100%; height:100%;">'+html1+'</div>');
+
+                        //这里向新建的窗体中写入BODY的内容，注意，外边加的额外DIV是有必要的，它里面CSS可以控制打印时不会出现空白页
+
+                        printWindow.document.write("</body></html>");//这里向新建的窗体写入HTML的结束标记
+
+                        ////////////////
+                        ///////////////
+                        // printWindow.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <title></title><style>@page{margin-bottom:0mm;margin-top:2mm}</style></head><body>');
+                        //
+                        // //这里是向新建的窗口写入HTML的head信息，可引入自己的js和css，以供打印时样式与网页中显示的一致
+                        //
+                        // printWindow.document.write('<div style="page-break-after:always; width:100%; height:100%;">'+html2+'</div>');
+                        //
+                        // //这里向新建的窗体中写入BODY的内容，注意，外边加的额外DIV是有必要的，它里面CSS可以控制打印时不会出现空白页
+                        //
+                        // printWindow.document.write("</body></html>");//这里向新建的窗体写入HTML的结束标记
+
+
+
+
+
+                        printWindow.document.close();//关闭新建窗口的文档输出流，否则下面的打印语句无效
+
+                        printWindow.print();//打印当前新建窗口中的内容
+
+                        printWindow.close();//关闭新建的窗口
+                    },
+                    cancel: function(index) {
+                        return true;
+                    }
+                });
+                layer.full(index);
+            }
 
             $(function () {
                 var options = {

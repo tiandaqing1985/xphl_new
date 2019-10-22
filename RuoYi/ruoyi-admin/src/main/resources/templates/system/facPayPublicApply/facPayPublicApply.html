@@ -204,7 +204,8 @@
                 layer.close(index);
             }
         };
-        $.modal.openOptions(options);
+        var index = $.modal.openOptions(options);
+        layer.full(index);
     }
 
 
