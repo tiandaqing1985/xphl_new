@@ -247,8 +247,9 @@ public class FacUserApprovalController extends BaseController {
 				.selectFacUserApprovalList(facUserApproval);
 		FacUserApproval fac = list.get(0);
 		fac.setApprovalState("2");
+		fac.setApproverId(ShiroUtils.getUserId());
 		return toAjax(
-				facUserApprovalService.updateFacUserApproval(facUserApproval));
+				facUserApprovalService.updateFacUserApproval(fac));
 	}
 
 	/**

@@ -180,6 +180,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                 facSysUserApproval.setApprovalLevel(level++);
                 facSysUserApproval.setApplyId(facReimburseApply.getNum());
                 facSysUserApproval.setProjectName(facReimburseApply.getName());
+                facSysUserApproval.setApprovalState("3");
                 approvalProcessService.insert(facSysUserApproval);
                 // 为加班申请增加人事审批
                 if (facReimburseApply.getTrafficReiApplyList() != null && facReimburseApply.getTrafficReiApplyList().get(0).getType().equals("2")) {
@@ -190,7 +191,8 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     facSysUserApproval2.setApprovalTime(new Date());
                     facSysUserApproval2.setApprovalLevel(level++);
                     facSysUserApproval2.setApplyId(facReimburseApply.getNum());
-                    facSysUserApproval.setProjectName(facReimburseApply.getName());
+                    facSysUserApproval2.setProjectName(facReimburseApply.getName());
+                    facSysUserApproval2.setApprovalState("3");
                     approvalProcessService.insert(facSysUserApproval2);
                 } else {
                 }
@@ -500,8 +502,6 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 		
 		return facReimburseApplyMapper.HospBatchInsert(list);
 	}
-
-	
 
 	 
 }
