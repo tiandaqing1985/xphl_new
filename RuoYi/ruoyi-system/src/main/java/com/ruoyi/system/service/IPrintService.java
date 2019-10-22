@@ -8,4 +8,6 @@ public interface IPrintService {
     String previewBaoxiaoDetail(String num);
 
     String previewjiekuan(String num);
+
+    String previewchucai(String num);
 }

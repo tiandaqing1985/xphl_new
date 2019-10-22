@@ -41,6 +41,8 @@ public class PrintController {
             return printService.previewBaoxiaoDetail(num);
         }else if(type.equals("jiekuan")){
             return printService.previewjiekuan(num);
+        }else if(type.equals("chuchai")){
+            return printService.previewchucai(num);
         }else{
             return "参数不正确";
         }
