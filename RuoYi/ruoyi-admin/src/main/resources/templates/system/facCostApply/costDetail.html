@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
-<head> 
+<head>
     <th:block th:include="include :: header('初始多表格')"/>
-    <th:block th:include="include :: layout-latest-css" />
-    <th:block th:include="include :: ztree-css" />
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -12,178 +12,217 @@
         <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
 
 
- <div>
-        <h4 class="form-header h4">差旅详细信息</h4>
-   
-
-        <div class="col-sm-12 select-table table-striped">
+        <div>
+            <h4 class="form-header h4">差旅详细信息</h4>
 
             <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
-            <h4 class="form-header h4">行程安排详细信息</h4>
-            <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
-            <div>
-            <h4 class="form-header h4">住宿安排详细信息</h4>
-            <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+            <div class="col-sm-12 select-table table-striped">
+
+                <h4 class="form-header h4">行程安排详细信息</h4>
+                <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
             </div>
+            <div></div>
+            <div>
+                <h4 class="form-header h4">住宿安排详细信息</h4>
+                <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+            </div>
+
         </div>
- 
-</div>
-<div th:include="include :: footer"></div>
-<script th:inline="javascript">
-    var prefix = ctx + "system/facCostApply";
-    var datas = [[${@dict.getType('sys_normal_disable')}]];
-    var num = $("#num").val();
-    var msg = $("#msg").val();
+        <div th:include="include :: footer"></div>
+        <script th:inline="javascript">
+            var prefix = ctx + "system/facCostApply";
+            var num = $("#num").val();
+            var msg = $("#msg").val();
+
+            $(function () {
+                var options = {
+                    id: "bootstrap-table-1",
+                    url: prefix + "/query?num=" + num,
+                    showSearch: false,
+                    showRefresh: false,
+                    showToggle: false,
+                    showColumns: false,
+                    modalName: "差旅详细信息",
+                    columns: [
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field : 'id',
+                            title : 'ID',
+                            visible: false
+                        },
+                        {
+                            field : 'num',
+                            title : '出差编号'
+                        },
+                        {
+                            field : 'busName',
+                            title : '项目名称'
+                        },
+                        {
+                            field : 'outTime',
+                            title : '出差时间',
+                            formatter: function (value, row, index) {
+                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return  newDate;
+                            }
+                        },
+                        {
+                            field : 'backTimeEs',
+                            title : '预计返回时间',
+                            formatter: function (value, row, index) {
+                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return  newDate;
+                            }
+                        },
+                        {
+                            field : 'outMan',
+                            title : '出差人员'
+                        },
+                        {
+                            field : 'moneyEs',
+                            title : '预计费用'
+                        } ,
+                        {
+                            field : 'status',
+                            title : '审批状态',
+                            formatter: function (value, row, index) {
+                                if (value == 1) {
+                                    return "审批成功";
+                                } else if (value == 2) {
+                                    return "驳回";
+                                } else if (value == 3) {
+                                    return "审批中";
+                                } else if (value == 5) {
+                                    return "待提交";
+                                } else {
+                                    return "待审批";
+                                }
+                            }
+                        },
+                        {
+                            field: 'reason',
+                            title: '事由'
+                        }
+                    ]
+                };
+                $.table.init(options);
+            });
+
+            $(function () {
+                var options = {
+                    id: "bootstrap-table-2",
+                    url: prefix + "/sleep/" + num,
+                    createUrl: prefix + "/tranDetail?id=" + num,
+                    showSearch: false,
+                    showRefresh: false,
+                    showToggle: false,
+                    showColumns: false,
+                    modalName: "住宿安排详细信息",
+                    columns: [
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field: 'num',
+                            title: '差旅编号',
+                            sortable: true
+                        },
+                        {
+                            field: 'city',
+                            title: '入住城市',
+                            sortable: true
+                        },
+                        {
+                            field: 'entrytime',
+                            title: '入店时间',
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return  newDate;
+                            }
+                        },
+                        {
+                            field: 'shoptime',
+                            title: '离店时间',
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return  newDate;
+                            }
+                        },
+                        {
+                            field: 'number',
+                            title: '入住人数',
+                            sortable: true
+                        },
+                        {
+                            field: 'details',
+                            title: '入住详情',
+                            sortable: true
+                        },
+                        {
+                            field: 'money',
+                            title: '住宿金额',
+                            sortable: true
+                        }
+                    ]
+                };
+                $.table.init(options);
+            });
 
 
-    $(function () {
-        var options = {
-            id: "bootstrap-table-1",
-            url: prefix + "/query?num="+num,
-            createUrl: prefix + "/tranDetail?id="+num,
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            modalName: "差旅详细信息",
-            columns: [
-                {
-                    checkbox: true
-                },
-                {
-                    field: 'num',
-                    title: '差旅编号'
-                },
-                {
-                    field: 'bus_name',
-                    title: '项目名称'
-                },
-                {
-                    field: 'outTime',
-                    title: '出差时间'
-                },
-                {
-                    field: 'backTimeEs',
-                    title: '预计返回时间'
-                },
-                {
-                    field: 'outMan',
-                    title: '出差人员'
-                },
-                {
-                    field: 'moneyEs',
-                    title: '预计费用'
-                },
-                {
-                    field: 'reason',
-                    title: '事由'
-                }
-            ]
-        };
-        $.table.init(options);
-    });
+            $(function () {
+                var options = {
+                    id: "bootstrap-table-3",
+                    url: prefix + "/querys/" + num,
+                    showSearch: false,
+                    showRefresh: false,
+                    showToggle: false,
+                    showColumns: false,
+                    modalName: "行程安排详细信息",
+                    columns: [
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field: 'num',
+                            title: '差旅编号'
+                        },
+                        {
+                            field: 'costDate',
+                            title: '时间',
+                            formatter: function (value, row, index) {
+                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return  newDate;
+                            }
+                        },
+                        {
+                            field: 'vehicle',
+                            title: '交通工具'
+                        },
+                        {
+                            field: 'departure',
+                            title: '出发地'
+                        },
+                        {
+                            field: 'target',
+                            title: '目的地'
+                        },
+                        {
+                            field: 'amount',
+                            title: '预算金额'
+                        },
+                        {
+                            field: 'reason',
+                            title: '事由'
+                        }
+                    ]
+                };
+                $.table.init(options);
+            });
 
-    $(function () {
-        var options = {
-            id: "bootstrap-table-2",
-            url: prefix + "/sleep/"+num,
-            createUrl: prefix + "/tranDetail?id="+num,
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            modalName: "行程安排详细信息",
-            columns: [
-                {
-                    checkbox: true
-                } ,
-                {
-                    field : 'num',
-                    title : '差旅编号',
-                    sortable: true
-                },
-                {
-                    field : 'city',
-                    title : '入住城市',
-                    sortable: true
-                },
-                {
-                    field : 'entrytime',
-                    title : '入店时间',
-                    sortable: true
-                },
-                {
-                    field : 'shoptime',
-                    title : '离店时间',
-                    sortable: true
-                },
-                {
-                    field : 'number',
-                    title : '入住人数',
-                    sortable: true
-                },
-                {
-                    field : 'details',
-                    title : '入住详情',
-                    sortable: true
-                },
-                {
-                    field : 'money',
-                    title : '住宿金额',
-                    sortable: true
-                }
-            ]
-        };
-        $.table.init(options);
-    });
-
-
-    $(function () {
-        var options = {
-            id: "bootstrap-table-3",
-            url: prefix + "/querys/"+num,
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            modalName: "住宿安排详细信息",
-            columns: [
-                {
-                    checkbox: true
-                },
-                {
-                    field: 'num',
-                    title: '差旅编号'
-                },
-                {
-                    field: 'costDate',
-                    title: '时间'
-                },
-                {
-                    field: 'vehicle',
-                    title: '交通工具'
-                },
-                {
-                    field: 'departure',
-                    title: '出发地'
-                },
-                {
-                    field: 'target',
-                    title: '目的地'
-                },
-                {
-                    field: 'amount',
-                    title: '预算金额'
-                },
-                {
-                    field: 'reason',
-                    title: '事由'
-                }
-            ]
-        };
-        $.table.init(options);
-    });
-
-</script>
+        </script>
 </body>
 </html>

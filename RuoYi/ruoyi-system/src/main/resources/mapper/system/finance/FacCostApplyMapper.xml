@@ -41,13 +41,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
      
 	<select id="detail" resultType="com.ruoyi.system.domain.finance.FacCostApply">
-	 select id, num, bus_name, out_time, back_time_es, out_man, money_es, to_local, reason, status, user_id from fac_cost_apply
+	 select id, num, busName, outTime, backTimeEs, outMan, moneyEs, toLocal, reason, status, userId from fac_cost_apply
 		where  num=#{num}
 	</select>
 	<select id="adiTail" resultType="com.ruoyi.system.domain.finance.FacCostDetailApply">
 		SELECT
 		a.id, a.num ,
-		a.cost_date,a.vehicle , a.departure, a.target , a.amount , a.reason
+		a.costDate,a.vehicle , a.departure, a.target , a.amount , a.reason
 		FROM
 		fac_cost_detail_apply AS a
 		WHERE a.num =#{num}
