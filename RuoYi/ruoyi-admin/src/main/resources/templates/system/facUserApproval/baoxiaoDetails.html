@@ -379,6 +379,10 @@
             }
         };
         $.ajax(config)
+        $.modal.closeTab();
+        $.operate.successCallback();
+        window.location.reload();
+        $.modal.close();
     }
 
     function submitHandler(index) {

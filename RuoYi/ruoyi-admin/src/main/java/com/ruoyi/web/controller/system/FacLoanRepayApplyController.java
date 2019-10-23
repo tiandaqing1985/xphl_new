@@ -19,7 +19,9 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.system.domain.finance.FacLoanApply;
 import com.ruoyi.system.domain.finance.FacLoanRepayApply;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacLoanRepayApplyService;
 
 /**
@@ -33,7 +35,8 @@ import com.ruoyi.system.service.finance.IFacLoanRepayApplyService;
 public class FacLoanRepayApplyController extends BaseController
 {
     private String prefix = "system/facLoanRepayApply";
-	
+    @Autowired
+    private ISysUserService sysUserService;
 	@Autowired
 	private IFacLoanRepayApplyService facLoanRepayApplyService;
 	
@@ -53,6 +56,10 @@ public class FacLoanRepayApplyController extends BaseController
 	{
 		startPage();
         List<FacLoanRepayApply> list = facLoanRepayApplyService.selectFacLoanRepayApplyList(facLoanRepayApply);
+        
+        for (FacLoanRepayApply v : list) { 
+        v.setPayerName(sysUserService.selectUserById(v.getPayer()).getUserName());
+        }
 		return getDataTable(list);
 	}
 	

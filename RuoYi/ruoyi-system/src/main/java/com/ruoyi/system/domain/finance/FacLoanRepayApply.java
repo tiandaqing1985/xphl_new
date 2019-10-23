@@ -39,6 +39,15 @@ public class FacLoanRepayApply extends BaseEntity
 	private String states;
 	/** 备注 */
 	private String remarks;
+	private String payerName;
+	
+	public String getPayerName() {
+		return payerName;
+	}
+
+	public void setPayerName(String payerName) {
+		this.payerName = payerName;
+	}
 
 	public void setId(Long id) 
 	{

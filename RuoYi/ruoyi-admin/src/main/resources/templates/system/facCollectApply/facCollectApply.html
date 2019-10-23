@@ -37,12 +37,6 @@
             <a class="btn btn-success" onclick="$.operate.addTab()">
                 <i class="fa fa-plus"></i> 添加
             </a>
-            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
-                <i class="fa fa-remove"></i> 删除
-            </a>
             <a class="btn btn-warning" onclick="$.table.exportExcel()">
                 <i class="fa fa-download"></i> 导出
             </a>
@@ -182,16 +176,6 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-
-
-
-
-
-
-
-
-
-
                         if(row.status==1){
                             //审批成功
                         }else if(row.status==2){
@@ -218,6 +202,34 @@
         $.table.init(options);
     });
 
+
+    function submitHandler(id) {
+        //index为1表示保存
+        mSave(prefix + "/add", {"id":id});
+    }
+
+    function mSave(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+                $.modal.disable();
+            },
+            success: function (result) {
+                if (typeof callback == "function") {
+                    callback(result);
+                }
+                $.modal.closeLoading();
+                $.modal.enable();
+                $.modal.msg(result.msg);
+                $.modal.close();
+            }
+        };
+        $.ajax(config)
+    }
 
     function f(id) {
         $.modal.openTab("编辑" + $.table._option.modalName, prefix + "/detail?id=" + id);

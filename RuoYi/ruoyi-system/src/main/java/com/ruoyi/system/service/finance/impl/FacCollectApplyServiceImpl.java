@@ -59,11 +59,11 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
 	 * 
 	 * @param facCollectApply
 	 *            团建申请信息
-	 * @return 结果
+	 * @return 结果   
 	 */
 	@Override
 	public int insertFacCollectApply(FacCollectApply facCollectApply) {
-
+		facCollectApply.setStatus("1");
 		FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
 		facSysUserApproval.setAmount(facCollectApply.getAmount());
 		facSysUserApproval.setApprovalId(facCollectApply.getApplicant());
