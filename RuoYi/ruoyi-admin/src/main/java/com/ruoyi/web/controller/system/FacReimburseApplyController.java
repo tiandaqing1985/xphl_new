@@ -32,6 +32,7 @@ import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.domain.finance.ReiHospitalityApply;
 import com.ruoyi.system.domain.finance.ReiTrafficApply;
+import com.ruoyi.system.mapper.finance.FacReiAdiApplyMapper;
 import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysRoleService;
@@ -66,6 +67,9 @@ public class FacReimburseApplyController extends BaseController {
 	@Autowired
 	private IFacUserApprovalService facUserApprovalService;
 
+	@Autowired
+	private FacReiAdiApplyMapper facReiAdiApplyMapper;
+
 	@GetMapping()
 	public String facReimburseApply() {
 		return prefix + "/facReimburseApply";
@@ -98,7 +102,7 @@ public class FacReimburseApplyController extends BaseController {
 					if (facUserApprovals.size() > 0) {
 						SysUser sysUser = sysUserService.selectUserById(
 								facUserApprovals.get(0).getApproverId());
-						if(sysUser!=null){
+						if (sysUser != null) {
 							facReimburseApply1
 									.setApproveName(sysUser.getUserName());
 						}
@@ -283,10 +287,7 @@ public class FacReimburseApplyController extends BaseController {
 		return facReimburseApplyService
 				.insertFacReimburseApply(facReimburseApply);
 	}
-	
-	
-	
-	
+
 	/**
 	 * 新增提交报销
 	 */
@@ -313,27 +314,10 @@ public class FacReimburseApplyController extends BaseController {
 			facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
 		}
 		facReimburseApply.setSubmitStatus("submit");
-		
-		
-		
-		
+
 		return facReimburseApplyService
 				.insertFacReimburseApply(facReimburseApply);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	/**
 	 * 新增提交报销
@@ -625,21 +609,21 @@ public class FacReimburseApplyController extends BaseController {
 	 */
 	@GetMapping("/editQi/{id}")
 	public String editQi(@PathVariable("id") Long id, ModelMap mmap) {
-		ReiTrafficApply facReimburseApply = facReimburseApplyService
-				.selectFacTransById(id);
-		mmap.put("data", facReimburseApply);
-		return prefix + "/editZhao";
+
+		FacReiAdiApply facReiAdiApply = facReiAdiApplyMapper
+				.selectFacReiAdiApplyById(id); 
+		mmap.put("data", facReiAdiApply);
+		return prefix + "/editQi";
 	}
 	/**
 	 * 修改报销
 	 */
 	@PostMapping("/editQi")
 	@ResponseBody
-	public AjaxResult editQiSave(ReiTrafficApply reiTrafficApply) {
-		return toAjax(facReimburseApplyService
-				.updateReiTrafficApplyById(reiTrafficApply));
-	}
-
+	public AjaxResult editQiSave(FacReiAdiApply facReiAdiApply) {
+		return toAjax(facReiAdiApplyMapper
+				.updateFacReiAdiApply(facReiAdiApply) );
+	} 
 	/**
 	 * 删除报销
 	 */

@@ -191,7 +191,10 @@
 
     function submitHandler(id) {
         //index为1表示保存
+        debugger
         mSave(prefix + "/add", {"id":id});
+        $.operate.successCallback();
+        $.modal.close();
     }
 
     function mSave(url, data, callback) {

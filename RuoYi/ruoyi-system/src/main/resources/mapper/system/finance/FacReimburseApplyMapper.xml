@@ -141,7 +141,7 @@ SELECT
     <select id="selectFacTransById" resultType="com.ruoyi.system.domain.finance.ReiTrafficApply" >
         SELECT
         a.id,
-        a.`ddDate` AS ddDate,
+        a.`dd_date` AS ddDate,
         a.`target_unit` AS targetUnit,
         a.amount,
         a.target,
@@ -151,7 +151,7 @@ SELECT
         a.`document_num` AS documentNum,
         a.`apply_user` AS applyUser,
         a.user,
-        a.num
+        a.num 
         FROM fac_traffic_rei_apply   AS a
          WHERE a.id = #{param1}
     </select>
