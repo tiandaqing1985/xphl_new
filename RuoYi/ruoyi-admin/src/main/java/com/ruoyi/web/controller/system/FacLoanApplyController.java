@@ -307,12 +307,7 @@ public class FacLoanApplyController extends BaseController {
                 v.setApprovalStatus("--");
             }
         }
-        
-        
-        
-        
-        
-        
+
         
         
         return getDataTable(list);

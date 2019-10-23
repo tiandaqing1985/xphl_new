@@ -98,8 +98,10 @@ public class FacReimburseApplyController extends BaseController {
 					if (facUserApprovals.size() > 0) {
 						SysUser sysUser = sysUserService.selectUserById(
 								facUserApprovals.get(0).getApproverId());
-						facReimburseApply1
-								.setApproveName(sysUser.getUserName());
+						if(sysUser!=null){
+							facReimburseApply1
+									.setApproveName(sysUser.getUserName());
+						}
 					}
 
 					FacUserApproval name = facUserApprovalService
@@ -281,6 +283,57 @@ public class FacReimburseApplyController extends BaseController {
 		return facReimburseApplyService
 				.insertFacReimburseApply(facReimburseApply);
 	}
+	
+	
+	
+	
+	/**
+	 * 新增提交报销
+	 */
+	@Log(title = "报销", businessType = BusinessType.INSERT)
+	@PostMapping("/addSubmits")
+	@ResponseBody
+	@Transactional
+	public AjaxResult addSubmits(FacReimburseApply facReimburseApply) {
+		if (facReimburseApply.getId() == null) {
+			// 直接添加
+			facReimburseApply.setLoanUser(ShiroUtils.getUserId());
+			facReimburseApply.setCreateTime(new Date());
+			facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
+		} else {
+			// 更新
+			facReimburseApply = facReimburseApplyService
+					.selectFacReimburseApplyById(
+							facReimburseApply.getId() + "");
+			facReimburseApply.setLoanUser(ShiroUtils.getUserId());
+			facReimburseApply.setUpdateTime(new Date());
+			facReimburseApplyService.deleteFacReimburseApplyById(
+					facReimburseApply.getId() + "");
+			facReimburseApply.setId(null);
+			facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
+		}
+		facReimburseApply.setSubmitStatus("submit");
+		
+		
+		
+		
+		return facReimburseApplyService
+				.insertFacReimburseApply(facReimburseApply);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * 新增提交报销

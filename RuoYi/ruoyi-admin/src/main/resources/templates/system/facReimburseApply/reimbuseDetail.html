@@ -119,8 +119,10 @@
     }
 
     function closeItem() {
+        $.modal.closeTab();
+        $.operate.successCallback();
+        window.location.reload();
         $.modal.close();
-
     }
 
 
@@ -428,6 +430,7 @@
                 $.modal.enable();
                 $.modal.msg(result.msg);
                 $.modal.close();
+                $.modal.closeTab();
             }
         };
         $.ajax(config)
@@ -441,7 +444,8 @@
             } else if (index == 2) {
                 mSave(prefix + "/addSubmit", $('#form-reiadd').serialize());
             }
-
+            $.operate.successCallback();
+            window.location.reload();
             $.modal.close();
         }
     }

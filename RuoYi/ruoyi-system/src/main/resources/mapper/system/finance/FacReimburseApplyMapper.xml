@@ -71,16 +71,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select * from  fac_rei_hospitality_apply
         <where>  
             <if test="id != null "> and id = #{id}</if>
-             <if test="ddDate != null "> and dd_date = #{ddDate}</if>
+             <if test="ddDate != null "> and ddDate = #{ddDate}</if>
              <if test="amount != null "> and amount = #{amount}</if>
-             <if test="addUser != null  and addUser != '' "> and add_user = #{addUser}</if>
+             <if test="addUser != null  and addUser != '' "> and addUser = #{addUser}</if>
              <if test="documentNum != null "> and document_num = #{documentNum}</if>
              <if test="location != null  and location != '' "> and location = #{location}</if>
              <if test="targetUnit != null  and targetUnit != '' "> and target_unit = #{targetUnit}</if>
              <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
              <if test="num != null  and num != '' "> and num = #{num}</if>
              <if test="status != null  and status != '' "> and status = #{status}</if>
-             <if test="applyNum != null  and applyNum != '' "> and apply_num = #{applyNum}</if>
+             <if test="applyNum != null  and applyNum != '' "> and applyNum = #{applyNum}</if>
              <if test="user != null "> and user = #{user}</if>
          </where>
     </select>
@@ -110,10 +110,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="hosTail" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
 SELECT
-  a.`dd_date` AS ddDate,
+  a.`ddDate` AS ddDate,
   a.`target_unit` AS targetUnit,
   a.`amount`,
-  a.`add_user` AS addUser,
+  a.`addUser` AS addUser,
   a.`location`,
   a.`reason`,
   a.`document_num` AS aocumentNum
@@ -141,7 +141,7 @@ SELECT
     <select id="selectFacTransById" resultType="com.ruoyi.system.domain.finance.ReiTrafficApply" >
         SELECT
         a.id,
-        a.`dd_date` AS ddDate,
+        a.`ddDate` AS ddDate,
         a.`target_unit` AS targetUnit,
         a.amount,
         a.target,
@@ -229,7 +229,7 @@ SELECT
         </foreach>
     </insert>
     <insert id="HospBatchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO fac_rei_hospitality_apply (dd_date, amount, add_user, user, document_num, location, target_unit,
+        INSERT INTO fac_rei_hospitality_apply (ddDate, amount, addUser, user, document_num, location, target_unit,
         reason,num)
         VALUES
         <foreach collection="list" item="item" separator=",">
