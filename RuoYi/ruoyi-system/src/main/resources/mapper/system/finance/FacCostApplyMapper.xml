@@ -15,10 +15,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="reason"    column="reason"    />
         <result property="status"    column="status"    />
         <result property="userId"    column="user_id"    />
+        <result property="applicationTime"    column="applicationTime"    />
     </resultMap>
 	
 	<sql id="selectFacCostApplyVo">
-        select id, num, bus_name, out_time, back_time_es, out_man, money_es, to_local, reason, status, user_id from fac_cost_apply
+        select id, num, bus_name, out_time, back_time_es, out_man, money_es, to_local, reason, status, user_id,applicationTime from fac_cost_apply
     </sql>
 	
     <select id="selectFacCostApplyList" parameterType="FacCostApply" resultMap="FacCostApplyResult">
@@ -35,6 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
              <if test="status != null  and status != '' "> and status = #{status}</if>
              <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="applicationTime != null "> and applicationTime = #{applicationTime}</if>
          </where>
            order by id desc
     </select>
@@ -78,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="reason != null  and reason != ''  ">reason,</if>
 			<if test="status != null  and status != ''  ">status,</if>
 			<if test="userId != null  and userId != '' ">user_id,</if>
+			<if test="applicationTime != null ">applicationTime,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="num != null  and num != ''  ">#{num},</if>
@@ -90,6 +93,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="reason != null  and reason != ''  ">#{reason},</if>
 			<if test="status != null  and status != ''  ">#{status},</if>
 			<if test="userId != null  and userId != '' ">#{userId},</if>
+			<if test="applicationTime != null">#{applicationTime},</if>
+			
 		</trim>
 	</insert>
 
@@ -128,6 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="toLocal != null  and toLocal != ''  ">to_local = #{toLocal},</if>
 			<if test="reason != null  and reason != ''  ">reason = #{reason},</if>
 			<if test="userId != null  and userId != '' ">user_id = #{userId},</if>
+			<if test="applicationTime != null ">user_id = #{applicationTime},</if>
 		</trim>
 		where id = #{id}
 	</update>

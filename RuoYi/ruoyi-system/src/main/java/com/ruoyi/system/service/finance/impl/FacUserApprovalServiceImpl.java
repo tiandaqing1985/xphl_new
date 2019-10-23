@@ -176,13 +176,34 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 	}
 
 	@Override
-	public FacUserApproval selectApproval(String  num,Long userId) {  
-		FacUserApproval facUserApproval=new FacUserApproval();
+	public FacUserApproval selectApproval(String num, Long userId) {
+		FacUserApproval facUserApproval = new FacUserApproval();
 		facUserApproval.setApplyId(num);
-		facUserApproval.setApplicantId(userId); 
-		facUserApproval.setApprovalSight("1");   
-		return facUserApprovalMapper
-				.selectApprovaIdlList(facUserApproval);  
-	}
+		facUserApproval.setApplicantId(userId);
+		facUserApproval.setApprovalSight("1");
+		FacUserApproval facUserApproval2 = new FacUserApproval();
+		facUserApproval2.setApplyId(num);
+		facUserApproval2.setApplicantId(userId);
+		facUserApproval2.setApprovalSight("1");
+		facUserApproval2.setApprovalState("3");
+		FacUserApproval facUserApproval3;
 
+	List<FacUserApproval>	list=facUserApprovalMapper
+				.selectFacUserApprovalList(facUserApproval2);
+
+		if(list!=null&&list.size()>0){
+			  facUserApproval3 = list.get(0);
+		}
+		else{
+			  facUserApproval3 = null;
+		}
+		if (facUserApproval3 != null) {
+			return facUserApproval3;
+		} else {
+
+			FacUserApproval FacUserApproval5= facUserApprovalMapper.selectApprovaIdlList(facUserApproval);
+
+			return FacUserApproval5;
+		}
+	}
 }

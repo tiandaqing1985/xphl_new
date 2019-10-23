@@ -14,16 +14,16 @@
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
             </div>
-            <div class="row">
-                <div class="col-sm-offset-5 col-sm-10">
-                    <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i
-                            class="fa fa-check"></i>还 款
-                    </button>&nbsp;
-                    <button type="button" class="btn btn-sm btn-danger" onclick="$.modal.closeTab();"><i
-                            class="fa fa-reply-all"></i>关 闭
-                    </button>
-                </div>
-            </div>
+<!--            <div class="row">-->
+<!--                <div class="col-sm-offset-5 col-sm-10">-->
+<!--                    <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i-->
+<!--                            class="fa fa-check"></i>还 款-->
+<!--                    </button>&nbsp;-->
+<!--                    <button type="button" class="btn btn-sm btn-danger" onclick="$.modal.closeTab();"><i-->
+<!--                            class="fa fa-reply-all"></i>关 闭-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </div>-->
         </div>
     </div>
 </div>
@@ -65,14 +65,18 @@
                     sortable: true
                 },
                 {
-                    field: 'loanUser',
+                    field: 'userName',
                     title: '借款人',
                     sortable: true
                 },
                 {
                     field: 'createTime',
                     title: '创建时间',
-                    sortable: true
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
+                    }
                 },
                 {
                     field: 'loanTime',
@@ -91,34 +95,42 @@
                         var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                         return newDate;
                     }
-                },
-                {
-                    field: 'facOperate',
-                    title: '单据状态',
-                    sortable: true
-                },
+                } ,
                 {
                     field: 'reason',
                     title: '借款事由',
                     sortable: true
                 },
                 {
-                    field: 'applyStatus',
-                    title: '申请人操作',
+                    field: 'approver',
+                    title: '当前审批人',
                     sortable: true
+                },{
+                    field: 'approvalStatus',
+                    title: '当前审批状态',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return "审批成功";
+                        } else if (value == 2) {
+                            return "驳回";
+                        }   else {
+                            return "待审批";
+                        }
+                    }
                 }
-                // ,
-                // {
-                //     title: '操作',
-                //     align: 'center',
-                //     formatter: function (value, row, index) {
-                //         var actions = [];
-                //         if (status == 0) {
-                //             actions.push('<a class="btn btn-success btn-xs' + '" href="javascript:void(0)" onclick="add(\'' + row.id + '\')"><i class="fa fa-remove"></i>还款</a>');
-                //         }
-                //         return actions.join('');
-                //     }
-                // }
+                ,
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if (row.approvalStatus == 1) {
+                            actions.push('<a class="btn btn-success btn-xs' + '" href="javascript:void(0)" onclick="add(\'' + row.id + '\')"><i class="fa fa-remove"></i>还款</a>');
+                        }
+                        return actions.join('');
+                    }
+                }
             ]
         };
         $.table.init(options);

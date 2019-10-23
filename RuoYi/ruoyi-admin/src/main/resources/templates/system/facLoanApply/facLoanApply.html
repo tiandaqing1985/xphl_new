@@ -34,12 +34,6 @@
             <a class="btn btn-success" onclick="$.operate.addTab()">
                 <i class="fa fa-plus"></i> 添加
             </a>
-            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()">
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()">
-                <i class="fa fa-remove"></i> 删除
-            </a>
             <a class="btn btn-warning" onclick="$.table.exportExcel()">
                 <i class="fa fa-download"></i> 导出
             </a>
@@ -127,11 +121,24 @@
                     field: 'approver',
                     title: '当前审批人',
                     sortable: true
+                },{
+                    field: 'approvalStatus',
+                    title: '当前审批状态',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return "审批成功";
+                        } else if (value == 2) {
+                            return "驳回";
+                        }   else {
+                            return "待审批";
+                        }
+                    }
                 },
                 {
                     field: 'applyStatus',
                     title: '审批操作',
-                    sortable: true,
+                    visible: false,
                     formatter: function (value, row, index) {
                         if (value == 1) {
                             return "审批成功";
@@ -155,7 +162,7 @@
 
 
 
-                        if(row.applyStatus==1){
+                        if(row.approvalStatus==1){
                             //审批成功
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="d(\'' + row.id + '\')"><i class="fa fa-remove"></i>还款</a>');
                         }else if(row.applyStatus==2){
@@ -163,8 +170,6 @@
 
                         }else if(row.applyStatus==3){
                              //待审批
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 
                         }else if(row.applyStatus==5){
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
@@ -174,9 +179,6 @@
 
                         }else
                         {
-                            //待审批
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 
                         }
 

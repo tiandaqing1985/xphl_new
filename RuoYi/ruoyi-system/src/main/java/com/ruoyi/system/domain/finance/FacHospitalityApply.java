@@ -26,7 +26,7 @@ public class FacHospitalityApply extends BaseEntity {
 	/** 项目名称 */
 	private String zdName;
 	/** 己方人员 */
-	private Long loanId;
+	private String loanId;
 	/** 招待时间 */
 	private Date zdDate;
 	/** 招待事由 */
@@ -45,6 +45,27 @@ public class FacHospitalityApply extends BaseEntity {
 	private Long states;
 	/** 申请人姓名 */
 	private String userIdName;
+
+	/** 审批人姓名 **/
+	private String approver;
+
+	private String approvalStatus;
+
+	public String getApprover() {
+		return approver;
+	}
+
+	public void setApprover(String approver) {
+		this.approver = approver;
+	}
+
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
 
 	public String getUserIdName() {
 		return userIdName;
@@ -89,13 +110,15 @@ public class FacHospitalityApply extends BaseEntity {
 	public String getZdName() {
 		return zdName;
 	}
-	public void setLoanId(Long loanId) {
+
+	public String getLoanId() {
+		return loanId;
+	}
+
+	public void setLoanId(String loanId) {
 		this.loanId = loanId;
 	}
 
-	public Long getLoanId() {
-		return loanId;
-	}
 	public void setZdDate(Date zdDate) {
 		this.zdDate = zdDate;
 	}

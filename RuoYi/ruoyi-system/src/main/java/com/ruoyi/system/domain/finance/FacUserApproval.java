@@ -36,7 +36,17 @@ public class FacUserApproval extends BaseEntity {
 	private String approverName;
 	//报销名称
 	private String name;
-	private String projectName;
+	private String projectName; 
+	private String states;
+	
+	
+	public String getStates() {
+		return states;
+	}
+
+	public void setStates(String states) {
+		this.states = states;
+	}
 
 	public String getProjectName() {
 		return projectName;

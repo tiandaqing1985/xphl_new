@@ -82,11 +82,9 @@ public class FacReimburseApply extends BaseEntity {
 	 * 状态
 	 */
 	private String status;
-	
-	
+
 	private String JKnum;
-	
-	
+
 	/**
 	 * 提交状态 save,submit
 	 */
@@ -107,6 +105,27 @@ public class FacReimburseApply extends BaseEntity {
 	private List<ReiHospitalityApply> hospitalityApplies;
 
 	private String approveName;
+
+	/** 审批人姓名 **/
+	private String approver;
+
+	private String approvalStatus;
+
+	public String getApprover() {
+		return approver;
+	}
+
+	public void setApprover(String approver) {
+		this.approver = approver;
+	}
+
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
 
 	public String getApproveName() {
 		return approveName;

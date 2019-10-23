@@ -11,8 +11,13 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacCostDetailApply;
 import com.ruoyi.system.domain.finance.FacCostPutupApply;
+import com.ruoyi.system.domain.finance.FacLoanApply;
+import com.ruoyi.system.domain.finance.FacUserApproval;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCostApplyService;
 import com.ruoyi.system.service.finance.IFacCostPutupApplyService;
+import com.ruoyi.system.service.finance.IFacUserApprovalService;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +25,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,8 +43,11 @@ public class FacCostApplyController extends BaseController {
 	private IFacCostApplyService facCostApplyService;
 	@Autowired
 	private IFacCostPutupApplyService facCostPutupApplyService;
-	
-	
+	@Autowired
+	private IFacUserApprovalService facUserApprovalService;
+	@Autowired
+	private ISysUserService sysUserService;
+
 	@RequiresPermissions("system:facCostApply:view")
 	@GetMapping()
 	public String facCostApply() {
@@ -56,6 +65,21 @@ public class FacCostApplyController extends BaseController {
 		facCostApply.setUserId(ShiroUtils.getUserId());
 		List<FacCostApply> list = facCostApplyService
 				.selectFacCostApplyList(facCostApply);
+
+		for (FacCostApply v : list) {
+
+			FacUserApproval name = facUserApprovalService
+					.selectApproval(v.getNum(), v.getUserId());
+			if (name != null) {
+				v.setApprover(sysUserService
+						.selectUserById(name.getApproverId()).getUserName());
+				v.setApprovalStatus(name.getApprovalState());
+			} else {
+				v.setApprover("--");
+				v.setApprovalStatus("--");
+			}
+		}
+
 		return getDataTable(list);
 	}
 
@@ -75,7 +99,7 @@ public class FacCostApplyController extends BaseController {
 			return getDataTable(a);
 		}
 	}
-	
+
 	/**
 	 * 查看住宿安排详情
 	 */
@@ -85,7 +109,8 @@ public class FacCostApplyController extends BaseController {
 		startPage();
 		FacCostPutupApply facCostPutupApply = new FacCostPutupApply();
 		facCostPutupApply.setNum(num);
-		List<FacCostPutupApply> list = facCostPutupApplyService.selectFacCostPutupApplyList(facCostPutupApply);
+		List<FacCostPutupApply> list = facCostPutupApplyService
+				.selectFacCostPutupApplyList(facCostPutupApply);
 		if (list != null) {
 
 			return getDataTable(list);
@@ -125,28 +150,34 @@ public class FacCostApplyController extends BaseController {
 	@ResponseBody
 	public AjaxResult addSave(FacCostApply facCostApply) {
 		facCostApply.setUserId(ShiroUtils.getUserId());
-		if(facCostApply.getId() == null){ 
-	            // 直接添加
-	            facCostApply.setUserId(ShiroUtils.getUserId());
-	        } else {
-	            // 更新
-	        	facCostApply = facCostApplyService.selectFacCostApplyById (facCostApply.getId());
-	        	facCostApplyService.deleteFacCostApplyByIds (facCostApply.getId()+"");
-	        }  
+		facCostApply.setApplicationTime(new Date());
+		if (facCostApply.getId() == null) {
+			// 直接添加
+			IdWorker idWorker = new IdWorker(0, 1);
+			facCostApply.setNum("CL" + idWorker.nextId());
+			facCostApply.setUserId(ShiroUtils.getUserId());
+		} else {
+			// 更新
+			facCostApply = facCostApplyService
+					.selectFacCostApplyById(facCostApply.getId());
+			facCostApplyService
+					.deleteFacCostApplyByIds(facCostApply.getId() + "");
+		}
 		return toAjax(facCostApplyService.insertFacCostApply(facCostApply));
-	} 
-    /**
-     * 新增保存 
-     *
-     * @throws Exception
-     */
-    @Log(title = "差旅申请", businessType = BusinessType.INSERT)
-    @PostMapping("/addSove")
-    @ResponseBody
-    public AjaxResult addSove(FacCostApply facCostApply) throws Exception {
-    	facCostApply.setUserId(ShiroUtils.getUserId());
-		return toAjax(facCostApplyService.insertApply(facCostApply)); 
-    } 
+	}
+	/**
+	 * 新增保存
+	 *
+	 * @throws Exception
+	 */
+	@Log(title = "差旅申请", businessType = BusinessType.INSERT)
+	@PostMapping("/addSove")
+	@ResponseBody
+	public AjaxResult addSove(FacCostApply facCostApply) throws Exception {
+		facCostApply.setUserId(ShiroUtils.getUserId());
+		facCostApply.setApplicationTime(new Date());
+		return toAjax(facCostApplyService.insertApply(facCostApply));
+	}
 	/**
 	 * 修改差旅申请
 	 */
@@ -210,8 +241,8 @@ public class FacCostApplyController extends BaseController {
 		map.put("outTime", facReimburseApplies.get(0).getOutTime());
 		map.put("backTimeEs", facReimburseApplies.get(0).getBackTimeEs());
 		map.put("userName", ShiroUtils.getSysUser().getUserName());
-		map.put("moneyEs", facReimburseApplies.get(0).getMoneyEs()); 
-		
+		map.put("moneyEs", facReimburseApplies.get(0).getMoneyEs());
+
 		return prefix + "/costDetail";
 	}
 
@@ -220,7 +251,7 @@ public class FacCostApplyController extends BaseController {
 	 */
 	@GetMapping("/tranDetail")
 	public String tranDetail(@RequestParam String num, ModelMap map) {
-		map.put("num",num);
+		map.put("num", num);
 		return prefix + "/tranDetail";
 	}
 	/**
@@ -255,7 +286,7 @@ public class FacCostApplyController extends BaseController {
 	 */
 	@GetMapping("/putAdd")
 	public String putup(@RequestParam String num, ModelMap map) {
-		map.put("num",num);
+		map.put("num", num);
 		return prefix + "/putAdd";
 	}
 	/**
@@ -268,78 +299,74 @@ public class FacCostApplyController extends BaseController {
 		return toAjax(
 				facCostApplyService.insertFacCostPutupApply(facCostPutupApply));
 	}
-	
+
 	/**
 	 * 修改交通
 	 */
 	@GetMapping("/editTra/{id}")
-	public String editTran(@PathVariable("id") Long id, ModelMap mmap) {  
+	public String editTran(@PathVariable("id") Long id, ModelMap mmap) {
 		FacCostDetailApply facCostDetailApply = facCostApplyService
 				.selectFacCostDetailApplyById(id);
 		mmap.put("facCostDetailApply", facCostDetailApply);
 		return prefix + "/editTra";
-	} 
+	}
 	/**
 	 * 修改住宿
 	 */
-	@GetMapping("/editput/{id}")
-	public String editPut(@PathVariable("id") Long id, ModelMap mmap) {  
-		FacCostPutupApply facCostPutupApply =facCostApplyService.selectFacCostPutupApplyById(id);  
+	@GetMapping("/editPut/{id}")
+	public String editPut(@PathVariable("id") Long id, ModelMap mmap) {
+		FacCostPutupApply facCostPutupApply = facCostApplyService
+				.selectFacCostPutupApplyById(id);
 		mmap.put("facCostPutupApply", facCostPutupApply);
 		return prefix + "/editPut";
 	}
-	 
-	
+
 	/**
-	 * 修改保存差旅交通申请详细列 
+	 * 修改保存差旅交通申请详细列
 	 */
- 
+
 	@Log(title = "差旅申请详细列 ", businessType = BusinessType.UPDATE)
 	@PostMapping("/editTra")
 	@ResponseBody
-	public AjaxResult editSave(FacCostDetailApply facCostDetailApply)
-	{		
-		return toAjax(facCostApplyService.updateFacCostDetailApply(facCostDetailApply));
-	}  
+	public AjaxResult editSave(FacCostDetailApply facCostDetailApply) {
+		return toAjax(facCostApplyService
+				.updateFacCostDetailApply(facCostDetailApply));
+	}
 
 	/**
 	 * 修改保存差旅住宿
 	 */
-	 
+
 	@Log(title = "差旅住宿", businessType = BusinessType.UPDATE)
 	@PostMapping("/editPut")
 	@ResponseBody
-	public AjaxResult editSave(FacCostPutupApply facCostPutupApply)
-	{		
-		return toAjax(facCostPutupApplyService.updateFacCostPutupApply(facCostPutupApply));
+	public AjaxResult editSave(FacCostPutupApply facCostPutupApply) {
+		return toAjax(facCostPutupApplyService
+				.updateFacCostPutupApply(facCostPutupApply));
 	}
-	
-	 
 
 	/**
 	 * 删除差旅住宿
 	 */
-	 
+
 	@Log(title = "差旅住宿", businessType = BusinessType.DELETE)
-	@PostMapping( "/removeTra")
+	@PostMapping("/removeTra")
 	@ResponseBody
-	public AjaxResult removeTra(String ids)
-	{		
-		return toAjax(facCostPutupApplyService.deleteFacCostPutupApplyByIds(ids));
+	public AjaxResult removeTra(String ids) {
+		return toAjax(
+				facCostPutupApplyService.deleteFacCostPutupApplyByIds(ids));
 	}
-	
-	 
+
 	/**
-	 * 删除差旅申请详细列 
+	 * 删除差旅申请详细列
 	 */
-	 
+
 	@Log(title = "差旅申请详细列 ", businessType = BusinessType.DELETE)
-	@PostMapping( "/removePut")
+	@PostMapping("/removePut")
 	@ResponseBody
-	public AjaxResult removePut(String ids)
-	{		
-		return toAjax(facCostApplyService.deleteFacCostDetailApplyByIds(ids));
+	public AjaxResult removePut(String ids) {
+		return toAjax(
+				facCostPutupApplyService.deleteFacCostPutupApplyByIds(ids));
 	}
-	
-	 
+
 }

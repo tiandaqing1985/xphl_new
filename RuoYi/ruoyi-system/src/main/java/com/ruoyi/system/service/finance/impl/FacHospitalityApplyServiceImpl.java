@@ -111,7 +111,7 @@ public class FacHospitalityApplyServiceImpl
 		LinkedList<Long> centerId = (LinkedList<Long>) iSysUserService
 				.selectCenterIdByUserId(approvalId);
 		if (centerId != null && centerId.size() > 0) {
-			if (approverId2.equals(facHospitalityApply.getLoanId())) {
+			if (approverId2.equals(facHospitalityApply.getUserId())) {
 				centerId.remove(approverId2);
 			}
 			for (int i = centerId.size() - 1; i >= 0; i--) {
@@ -122,7 +122,7 @@ public class FacHospitalityApplyServiceImpl
 				center.setApprovalState("3");
 				center.setApprovalSight("0");// 可见性
 				center.setCreateTime(new Date());// 创建时间
-				center.setApplicantId(facHospitalityApply.getLoanId());
+				center.setApplicantId(facHospitalityApply.getUserId());
 				center.setAmount(facHospitalityApply.getAmount());
 				approvalProcessMapper.insert(center);
 				if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
@@ -191,7 +191,7 @@ public class FacHospitalityApplyServiceImpl
 
 	@Override
 	public int insertApply(FacHospitalityApply facHospitalityApply) {
-		facHospitalityApply.setStates(3L);
+		facHospitalityApply.setStates(5L);
 		return facHospitalityApplyMapper
 				.insertFacHospitalityApply(facHospitalityApply);
 	}

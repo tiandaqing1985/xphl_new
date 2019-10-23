@@ -160,6 +160,12 @@ SELECT
         delete from fac_traffic_rei_apply where id = #{param1}
     </delete>
 
+ <delete id="deleteZhaodaiById" >
+        delete from fac_rei_hospitality_apply where id = #{param1}
+    </delete>
+
+
+
 
 <select id="selectTraAmount" resultType="double"> 
 		select ifNull((select

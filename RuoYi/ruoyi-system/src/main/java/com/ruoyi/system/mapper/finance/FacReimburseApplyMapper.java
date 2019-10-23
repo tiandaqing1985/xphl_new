@@ -130,5 +130,9 @@ public interface FacReimburseApplyMapper
 
 	int deleteReiTrafficApplyById(String id);
 
+	
+	int deleteZhaodaiById(String id);
+	
+	
 	List<FacReimburseApply> selectFacReimburseApplyListByCreateBy(List<SysUser> sysUsersList);
 }

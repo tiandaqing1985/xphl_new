@@ -11,10 +11,9 @@ import java.util.Date;
  * @author ruoyi
  * @date 2019-07-30
  */
-public class FacLoanApply extends BaseEntity
-{
+public class FacLoanApply extends BaseEntity {
 	private static final long serialVersionUID = 1L;
-	
+
 	/** ID */
 	private Long id;
 	/** 借款编号 */
@@ -35,13 +34,33 @@ public class FacLoanApply extends BaseEntity
 	private String reason;
 	/** 申请人操作 */
 	private String applyStatus;
-	/**创建时间*/
+	/** 创建时间 */
 	private Date createTime;
-	/**更改时间*/
+	/** 更改时间 */
 	private Date updateTime;
 	/** 借款人姓名 */
 	private String userName;
-	 
+	/** 审批人姓名 **/
+	private String approver;
+
+	private String approvalStatus;
+
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+
+	public String getApprover() {
+		return approver;
+	}
+
+	public void setApprover(String approver) {
+		this.approver = approver;
+	}
+
 	public String getUserName() {
 		return userName;
 	}
@@ -58,33 +77,27 @@ public class FacLoanApply extends BaseEntity
 		this.id = id;
 	}
 
-	public void setNum(String num) 
-	{
+	public void setNum(String num) {
 		this.num = num;
 	}
 
-	public String getNum() 
-	{
+	public String getNum() {
 		return num;
 	}
-	public void setLoanName(String loanName) 
-	{
+	public void setLoanName(String loanName) {
 		this.loanName = loanName;
 	}
 
-	public String getLoanName() 
-	{
+	public String getLoanName() {
 		return loanName;
 	}
-	public void setAmount(Double amount) 
-	{
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
-	public Double getAmount() 
-	{
+	public Double getAmount() {
 		return amount;
-	} 
+	}
 
 	public Long getLoanUser() {
 		return loanUser;
@@ -94,53 +107,43 @@ public class FacLoanApply extends BaseEntity
 		this.loanUser = loanUser;
 	}
 
-	public void setLoanTime(Date loanTime) 
-	{
+	public void setLoanTime(Date loanTime) {
 		this.loanTime = loanTime;
 	}
 
-	public Date getLoanTime() 
-	{
+	public Date getLoanTime() {
 		return loanTime;
 	}
-	public void setRepayTime(Date repayTime) 
-	{
+	public void setRepayTime(Date repayTime) {
 		this.repayTime = repayTime;
 	}
 
-	public Date getRepayTime() 
-	{
+	public Date getRepayTime() {
 		return repayTime;
 	}
-	public void setFacOperate(String facOperate) 
-	{
+	public void setFacOperate(String facOperate) {
 		this.facOperate = facOperate;
 	}
 
-	public String getFacOperate() 
-	{
+	public String getFacOperate() {
 		return facOperate;
 	}
-	public void setReason(String reason) 
-	{
+	public void setReason(String reason) {
 		this.reason = reason;
 	}
 
-	public String getReason() 
-	{
+	public String getReason() {
 		return reason;
 	}
-	public void setApplyStatus(String applyStatus) 
-	{
+	public void setApplyStatus(String applyStatus) {
 		this.applyStatus = applyStatus;
 	}
 
-	public String getApplyStatus() 
-	{
+	public String getApplyStatus() {
 		return applyStatus;
 	}
 
-    public Date getCreateTime() {
+	public Date getCreateTime() {
 		return createTime;
 	}
 
@@ -156,22 +159,18 @@ public class FacLoanApply extends BaseEntity
 		this.updateTime = updateTime;
 	}
 
-	
 	public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("num", getNum())
-            .append("loanName", getLoanName())
-            .append("amount", getAmount())
-            .append("loanUser", getLoanUser())
-            .append("createTime", getCreateTime())
-            .append("loanTime", getLoanTime())
-            .append("repayTime", getRepayTime())
-            .append("facOperate", getFacOperate())
-            .append("reason", getReason())
-            .append("applyStatus", getApplyStatus())
-            .append("createTime", getCreateTime())
-            .append("updateTime", getUpdateTime())
-            .toString();
-    }
+		return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+				.append("id", getId()).append("num", getNum())
+				.append("loanName", getLoanName()).append("amount", getAmount())
+				.append("loanUser", getLoanUser())
+				.append("createTime", getCreateTime())
+				.append("loanTime", getLoanTime())
+				.append("repayTime", getRepayTime())
+				.append("facOperate", getFacOperate())
+				.append("reason", getReason())
+				.append("applyStatus", getApplyStatus())
+				.append("createTime", getCreateTime())
+				.append("updateTime", getUpdateTime()).toString();
+	}
 }

@@ -88,8 +88,34 @@ public class FacPayPublicApply extends BaseEntity {
      * 是否提交申请
      */
     private  String wetherSave;
+    
+    
+    
+    
+    /** 审批人姓名 **/
+	private String approver;
 
-    public void setId(Integer id) {
+	private String approvalStatus;
+    
+    
+
+    public String getApprover() {
+		return approver;
+	}
+
+	public void setApprover(String approver) {
+		this.approver = approver;
+	}
+
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+
+	public void setId(Integer id) {
         this.id = id;
     }
 

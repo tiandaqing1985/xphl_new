@@ -22,10 +22,11 @@ import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCollectApply;
-import com.ruoyi.system.domain.finance.FacHospitalityApply;
+import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCollectApplyService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
+import com.ruoyi.system.service.finance.IFacUserApprovalService;
 
 /**
  * 团建申请 信息操作处理
@@ -44,6 +45,9 @@ public class FacCollectApplyController extends BaseController {
 	private ISysUserService sysUserService;
 	@Autowired
 	private IFacReimburseApplyService facReimburseApplyService;
+
+	@Autowired
+	private IFacUserApprovalService facUserApprovalService;
 
 	@RequiresPermissions("system:facCollectApply:view")
 	@GetMapping()
@@ -66,6 +70,17 @@ public class FacCollectApplyController extends BaseController {
 		for (FacCollectApply v : list) {
 			v.setApplicantName(sysUserService.selectUserById(v.getApplicant())
 					.getUserName());
+
+			FacUserApproval name = facUserApprovalService
+					.selectApproval(v.getNum(), v.getApplicant());
+			if (name != null) {
+				v.setApprover(sysUserService
+						.selectUserById(name.getApproverId()).getUserName());
+				v.setApprovalStatus(name.getApprovalState());
+			} else {
+				v.setApprover("--");
+				v.setApprovalStatus("--");
+			}
 		}
 
 		return getDataTable(list);
@@ -95,26 +110,17 @@ public class FacCollectApplyController extends BaseController {
 
 	/**
 	 * 新增团建申请
-	 * @throws Exception 
+	 * 
+	 * @throws Exception
 	 */
 	@GetMapping("/add")
-	public String add(ModelMap mmp) throws Exception { 
+	public String add(ModelMap mmp) throws Exception {
 		IdWorker idWorker = new IdWorker(0, 1);
-		mmp.put("num", "TJ" + idWorker.nextId()); 
+		mmp.put("num", "TJ" + idWorker.nextId());
 		mmp.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
 		return prefix + "/add";
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * 新增保存团建申请
 	 */
@@ -123,39 +129,39 @@ public class FacCollectApplyController extends BaseController {
 	@ResponseBody
 	public AjaxResult addSave(FacCollectApply facCollectApply) {
 		IdWorker idWorker = new IdWorker(0, 1);
-		facCollectApply.setNum("TJ" + idWorker.nextId());
-		facCollectApply.setApplicant(ShiroUtils.getUserId()); 
+		facCollectApply.setApplicationTime(new Date());
+		facCollectApply.setApplicant(ShiroUtils.getUserId());
 		if (facCollectApply.getId() == null) {
 			// 直接添加
-			facCollectApply.setNum("CL" + idWorker.nextId()); 
+			facCollectApply.setNum("TJ" + idWorker.nextId());
 		} else {
 			// 更新
 			facCollectApply = facCollectApplyService
 					.selectFacCollectApplyById(facCollectApply.getId());
-			facCollectApplyService.deleteFacCollectApplyByIds(
-					facCollectApply.getId() + "");
-		} 
+			facCollectApplyService
+					.deleteFacCollectApplyByIds(facCollectApply.getId() + "");
+		}
 		return toAjax(
 				facCollectApplyService.insertFacCollectApply(facCollectApply));
 	}
- 
-    /**
-     * 新增保存 
-     *
-     * @throws Exception
-     */
-    @Log(title = "差旅申请", businessType = BusinessType.INSERT)
-    @PostMapping("/addSove")
-    @ResponseBody
-    public AjaxResult addSove(FacCollectApply facCollectApply) throws Exception { 
+
+	/**
+	 * 新增保存
+	 *
+	 * @throws Exception
+	 */
+	@Log(title = "差旅申请", businessType = BusinessType.INSERT)
+	@PostMapping("/addSove")
+	@ResponseBody
+	public AjaxResult addSove(FacCollectApply facCollectApply)
+			throws Exception {
 		IdWorker idWorker = new IdWorker(0, 1);
-		facCollectApply.setNum("TJ" + idWorker.nextId());	
-		facCollectApply.setApplicant(ShiroUtils.getUserId()); 
-		return toAjax(facCollectApplyService
-				.insertApply(facCollectApply));
+		facCollectApply.setNum("TJ" + idWorker.nextId());
+		facCollectApply.setApplicant(ShiroUtils.getUserId());
+		facCollectApply.setApplicationTime(new Date());
+		return toAjax(facCollectApplyService.insertApply(facCollectApply));
 	}
-		  
-	
+
 	/**
 	 * 修改团建申请
 	 */
@@ -163,6 +169,9 @@ public class FacCollectApplyController extends BaseController {
 	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
 		FacCollectApply facCollectApply = facCollectApplyService
 				.selectFacCollectApplyById(id);
+		 
+		facCollectApply.setApplicantName(sysUserService.selectUserById(facCollectApply.getApplicant())
+					.getUserName());
 		mmap.put("facCollectApply", facCollectApply);
 		return prefix + "/edit";
 	}

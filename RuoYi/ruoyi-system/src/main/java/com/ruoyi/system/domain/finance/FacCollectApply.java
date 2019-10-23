@@ -1,10 +1,11 @@
 package com.ruoyi.system.domain.finance;
 
+import java.util.Date;
+
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+
 import com.ruoyi.common.core.domain.BaseEntity;
-import java.util.Date;
-import java.math.BigDecimal;
 
 /**
  * 团建申请表 fac_collect_apply
@@ -48,6 +49,29 @@ public class FacCollectApply extends BaseEntity {
 	/** 备注 */
 	private String remarks;
 	private String applicantName;
+
+	/** 审批人姓名 **/
+	private String approver;
+
+	private String approvalStatus;
+	
+	
+	
+	public String getApprover() {
+		return approver;
+	}
+
+	public void setApprover(String approver) {
+		this.approver = approver;
+	}
+
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
 
 	public String getApplicantName() {
 		return applicantName;

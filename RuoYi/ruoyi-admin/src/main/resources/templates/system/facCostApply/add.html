@@ -233,9 +233,10 @@
                 title: '操作',
                 align: 'center',
                 formatter: function (value, row, index) {
+                    var actions = [];
 
-                     actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="mEdit(2,\'' + row.id + '\')"><i class="fa fa-edit"></i>修改</a> ');
-                     actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="mRemove(2,\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                    actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="mEdit(2,\'' + row.id + '\')"><i class="fa fa-edit"></i>修改</a> ');
+                    actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="mRemove(2,\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                     return actions.join('');
                 }
             }
@@ -252,7 +253,6 @@
             $.table._option.updateUrl = prefix + "/editTra/{id}";
         }else if(index==2){
             $.table._option.id = "bootstrap-table-2";
-            $.table._option.url = prefix + "/addTraDetail";
             $.table._option.modalName = "住宿安排";
             $.table._option.updateUrl = prefix + "/editPut/{id}";
         }

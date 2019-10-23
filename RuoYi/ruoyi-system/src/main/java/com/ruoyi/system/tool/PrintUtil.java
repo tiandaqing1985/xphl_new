@@ -20,7 +20,8 @@ public class PrintUtil {
             Configuration cfg = new Configuration();
             cfg.setDefaultEncoding("UTF-8");
             // 设定去哪里读取相应的ftl模板文件
-            cfg.setDirectoryForTemplateLoading(new File(path + File.separator + "templates" + File.separator + "printModel"));
+           cfg.setDirectoryForTemplateLoading(new File(path + File.separator + "templates" + File.separator + "printModel"));
+            //            cfg.setDirectoryForTemplateLoading(new File("/root/caiwu/model"));
 //            cfg.setDirectoryForTemplateLoading(new File("G:\\testdmeo\\模板"));
             //获取模板（template）
             Template template = cfg.getTemplate(name);

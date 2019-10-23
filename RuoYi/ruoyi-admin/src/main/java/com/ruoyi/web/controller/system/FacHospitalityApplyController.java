@@ -24,8 +24,10 @@ import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacHospitalityApply;
+import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacHospitalityApplyService;
+import com.ruoyi.system.service.finance.IFacUserApprovalService;
 
 /**
  * 招待费申请 信息操作处理
@@ -42,7 +44,9 @@ public class FacHospitalityApplyController extends BaseController {
 	private IFacHospitalityApplyService facHospitalityApplyService;
 	@Autowired
 	private ISysUserService sysUserService;
-
+	@Autowired
+	private IFacUserApprovalService facUserApprovalService;
+	
 	@RequiresPermissions("system:facHospitalityApply:view")
 	@GetMapping()
 	public String facHospitalityApply() {
@@ -59,14 +63,20 @@ public class FacHospitalityApplyController extends BaseController {
 		startPage();
 		facHospitalityApply.setUserId(ShiroUtils.getUserId());
 		List<FacHospitalityApply> list = facHospitalityApplyService
-				.selectFacHospitalityApplyList(facHospitalityApply);
-
+				.selectFacHospitalityApplyList(facHospitalityApply); 
 		for (FacHospitalityApply v : list) {
 			v.setUserIdName(
-					sysUserService.selectUserById(v.getUserId()).getUserName());
-			facHospitalityApply.setUserIdName(v.getUserIdName());
-		}
-
+					sysUserService.selectUserById(v.getUserId()).getUserName());  
+			 FacUserApproval name=facUserApprovalService.selectApproval(v.getNum(), v.getUserId());
+	            if(name!=null){
+	                v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
+	                v.setApprovalStatus(name.getApprovalState());
+	                
+	            }else{
+	                v.setApprover("--");
+	                v.setApprovalStatus("--");
+	            }  
+		} 
 		return getDataTable(list);
 	}
 

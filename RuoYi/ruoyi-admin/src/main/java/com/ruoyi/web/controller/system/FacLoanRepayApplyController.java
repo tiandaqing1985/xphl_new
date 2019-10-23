@@ -111,7 +111,13 @@ public class FacLoanRepayApplyController extends BaseController
 		facLoanRepayApply.setMethod(facLoanRepayApply.getRepayAmount()); 
 		facLoanRepayApply.setAmount(facLoanRepayApply.getArrears()-facLoanRepayApply.getRepayAmount());
 		facLoanRepayApply.setRepayTime(new Date());
-		facLoanRepayApply.setStates("还款中");
+		
+		if(facLoanRepayApply.getAmount()>0){
+			facLoanRepayApply.setStates("还款中");
+		}else{
+			facLoanRepayApply.setStates("还款结束");
+		} 
+		facLoanRepayApply.setVoucher("1");
 		return toAjax(facLoanRepayApplyService.updateFacLoanRepayApply(facLoanRepayApply));
 	}
 	

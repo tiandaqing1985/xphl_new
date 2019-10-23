@@ -154,6 +154,7 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
 	@Override
 	public int insertApply(FacCollectApply facCollectApply) {
 		// TODO Auto-generated method stub
+		facCollectApply.setStatus("5");
 		return facCollectApplyMapper.insertFacCollectApply(facCollectApply);
 	}
 

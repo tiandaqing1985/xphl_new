@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('初始多表格')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
+        <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
+        <div>
+
+
+
+            <div class="col-sm-12 select-table table-striped">
+
+                <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+                <h4 class="form-header h4">借款信息</h4>
+                <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
+                <div>
+                    <h4 class="form-header h4">还款信息</h4>
+                    <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+                </div>
+
+            </div>
+
+        </div>
+        <div th:include="include :: footer"></div>
+        <script th:inline="javascript">
+            var prefix = ctx + "system/facLoanApply";
+            var datas = [[${@dict.getType('sys_normal_disable')}]];
+            var num = $("#num").val();
+            var msg = $("#msg").val();
+
+
+            $(function () {
+                var options = {
+                    id: "bootstrap-table-1",
+                    url: prefix + "/querys?num=" + num,
+                    showSearch: false,
+                    showRefresh: false,
+                    showToggle: false,
+                    showColumns: false,
+                    modalName: "借款详细信息",
+                    columns: [
+                        {
+                            checkbox: true
+                        }, {
+                            field: 'id',
+                            title: 'ID',
+                            visible: false
+                        },
+                        {
+                            field: 'num',
+                            title: '借款编号',
+                            sortable: true
+                        },
+                        {
+                            field: 'loanName',
+                            title: '借款名称',
+                            sortable: true
+                        },
+                        {
+                            field: 'amount',
+                            title: '借款金额',
+                            sortable: true
+                        },
+                        {
+                            field: 'loanUser',
+                            title: '借款人',
+                            sortable: true
+                        },
+                        {
+                            field: 'createTime',
+                            title: '创建时间',
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                        },
+                        {
+                            field: 'loanTime',
+                            title: '借款时间',
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                        },
+                        {
+                            field: 'repayTime',
+                            title: '预计还款时间',
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                        } ,
+                        {
+                            field: 'reason',
+                            title: '借款事由',
+                            sortable: true
+                        },
+                        {
+                            field: 'applyStatus',
+                            title: '审批状态',
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                if (value == 1) {
+                                    return "审批成功";
+                                } else if (value == 2) {
+                                    return "驳回";
+                                } else if (value == 3) {
+                                    return "审批中";
+                                } else if (value == 5) {
+                                    return "待提交";
+                                } else {
+                                    return "待审批";
+                                }
+                            }
+                        }
+                    ]
+                };
+                $.table.init(options);
+            });
+
+
+
+
+            $(function() {
+                var options = {
+                    id: "bootstrap-table-2",
+                    url: prefix + "/repays?num=" + num,
+                    showSearch: false,
+                    showRefresh: false,
+                    showToggle: false,
+                    showColumns: false,
+                    modalName: "还款详细信息",
+                    columns: [{
+                        checkbox: true
+                    },
+                        {
+                            field : 'id',
+                            title : 'id',
+                            visible: false
+                        },
+                        {
+                            field : 'num',
+                            title : '借款编号',
+                            sortable: true
+                        },
+                        {
+                            field : 'payer',
+                            title : '还款人',
+                            sortable: true
+                        },
+                        {
+                            field : 'repayTime',
+                            title : '还款时间',
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return  newDate;
+                            }
+                        },
+                        {
+                            field : 'repayMethod',
+                            title : '还款方式',
+                            sortable: true
+                        },
+                        {
+                            field : 'repayAmount',
+                            title : '还款金额（元）',
+                            sortable: true
+                        },
+                        {
+                            field : 'arrears',
+                            title : '实际欠款金额（元）',
+                            sortable: true
+                        },
+                        {
+                            field : 'voucher',
+                            title : '还款凭证',
+                            sortable: true
+                        },
+                        {
+                            field : 'method',
+                            title : '财务确认还款金额',
+                            sortable: true
+                        },
+                        {
+                            field : 'amount',
+                            title : '核实后欠款金额',
+                            sortable: true
+                        },
+                        {
+                            field : 'states',
+                            title : '还款状态',
+                            sortable: true
+                        },
+                        {
+                            field : 'remarks',
+                            title : '备注',
+                            sortable: true
+                        } ]
+                };
+                $.table.init(options);
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </script>
+</body>
+</html>

@@ -447,6 +447,14 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
     }
 
     @Override
+    public int deleteFacReiAdiApplyByIds(long id) {
+        return facReiAdiApplyMapper.deleteFacReiAdiApplyById(id);
+    }
+    
+    
+    
+    
+    @Override
     public int insertSaveFacReimburseApply(
             FacReimburseApply facReimburseApply) {
         facReimburseApply.setSubmitStatus("save");
@@ -457,6 +465,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
         double c = facReimburseApplyMapper
                 .selectTraAmount(facReimburseApply.getNum());
         facReimburseApply.setAmount(a + b + c);
+        facReimburseApply.setStatus("5");
         return facReimburseApplyMapper
                 .insertFacReimburseApply(facReimburseApply);
     }
@@ -501,6 +510,12 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 		list.add(reiHospitalityApply);
 		
 		return facReimburseApplyMapper.HospBatchInsert(list);
+	}
+
+	@Override
+	public int deleteZhaodaiById(String ids) {
+		// TODO Auto-generated method stub
+		return facReimburseApplyMapper.deleteZhaodaiById(ids);
 	}
 
 	 

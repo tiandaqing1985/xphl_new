@@ -1,21 +1,14 @@
 package com.ruoyi.system.service.finance.impl;
 
-import com.ruoyi.common.enums.FacApplyType;
-import com.ruoyi.common.utils.FinanceAddHelper;
-import com.ruoyi.system.domain.finance.DeptUser;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
 import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.FacSysUserApproval;
 import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
 import com.ruoyi.system.service.finance.ApprovalProcessService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
-
-import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.util.List;
 
 
 /**

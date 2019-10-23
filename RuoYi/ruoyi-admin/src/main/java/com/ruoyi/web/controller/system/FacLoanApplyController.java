@@ -1,5 +1,18 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -10,17 +23,12 @@ import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacLoanApply;
 import com.ruoyi.system.domain.finance.FacLoanRepayApply;
+import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacLoanApplyService;
 import com.ruoyi.system.service.finance.IFacLoanRepayApplyService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.ruoyi.system.service.finance.IFacUserApprovalService;
 
 /**
  * 借款申请 信息操作处理
@@ -41,8 +49,11 @@ public class FacLoanApplyController extends BaseController {
     @Autowired
     private ISysUserService sysUserService;
     @Autowired
-    private IFacReimburseApplyService facReimburseApplyService;
-
+    private IFacReimburseApplyService facReimburseApplyService; 
+	@Autowired
+	private IFacUserApprovalService facUserApprovalService;
+    
+    
     @GetMapping()
     public String facLoanApply() {
         return prefix + "/facLoanApply";
@@ -57,14 +68,21 @@ public class FacLoanApplyController extends BaseController {
         startPage();
         facLoanApply.setLoanUser(ShiroUtils.getUserId());
         List<FacLoanApply> list = facLoanApplyService
-                .selectFacLoanApplyList(facLoanApply);
-
+                .selectFacLoanApplyList(facLoanApply); 
         for (FacLoanApply v : list) {
             v.setUserName(sysUserService.selectUserById(v.getLoanUser()).getUserName());
-            facLoanApply.setUserName(v.getUserName());
+            FacUserApproval name=facUserApprovalService.selectApproval(v.getNum(), v.getLoanUser());
+            if(name!=null){
+                v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
+                v.setApprovalStatus(name.getApprovalState());
+                if(name.getStates()!=null){
+                	v.setApplyStatus(name.getStates());	
+                } 
+            }else{
+                v.setApprover("--");
+                v.setApprovalStatus("--");
+            }
         }
-
-
         return getDataTable(list);
     }
 
@@ -274,6 +292,29 @@ public class FacLoanApplyController extends BaseController {
         facLoanApply.setLoanUser(payer);
         List<FacLoanApply> list = facLoanApplyService
                 .selectFacLoanApplyList(facLoanApply);
+        
+        for (FacLoanApply v : list) {
+            v.setUserName(sysUserService.selectUserById(v.getLoanUser()).getUserName());
+            FacUserApproval name=facUserApprovalService.selectApproval(v.getNum(), v.getLoanUser());
+            if(name!=null){
+                v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
+                v.setApprovalStatus(name.getApprovalState());
+                if(name.getStates()!=null){
+                	v.setApplyStatus(name.getStates());	
+                } 
+            }else{
+                v.setApprover("--");
+                v.setApprovalStatus("--");
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
         return getDataTable(list);
     }
 
