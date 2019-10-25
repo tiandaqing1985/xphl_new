@@ -20,7 +20,6 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDept;
@@ -38,6 +37,7 @@ import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacLoanRepayApplyService;
+import com.ruoyi.system.service.finance.IFacNumberTableService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
 
@@ -69,7 +69,8 @@ public class FacReimburseApplyController extends BaseController {
 
 	@Autowired
 	private FacReiAdiApplyMapper facReiAdiApplyMapper;
-
+	@Autowired
+	private IFacNumberTableService facNumberTableService;
 	@GetMapping()
 	public String facReimburseApply() {
 		return prefix + "/facReimburseApply";
@@ -217,8 +218,8 @@ public class FacReimburseApplyController extends BaseController {
 	@GetMapping("/add")
 	public String add(ModelMap mmp, Long id) throws Exception {
 		if (id == null) {
-			IdWorker idWorker = new IdWorker(0, 1);
-			mmp.put("num", "BX" + idWorker.nextId());
+			 
+			mmp.put("num",facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
 		} else {
 			FacReimburseApply facReimburseApply = new FacReimburseApply();
 			facReimburseApply.setId(id);

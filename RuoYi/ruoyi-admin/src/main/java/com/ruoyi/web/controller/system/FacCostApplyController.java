@@ -1,11 +1,25 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCostApply;
@@ -15,16 +29,8 @@ import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCostApplyService;
 import com.ruoyi.system.service.finance.IFacCostPutupApplyService;
+import com.ruoyi.system.service.finance.IFacNumberTableService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * 差旅申请 信息操作处理
@@ -46,6 +52,8 @@ public class FacCostApplyController extends BaseController {
 	@Autowired
 	private ISysUserService sysUserService;
 
+	@Autowired
+	private IFacNumberTableService facNumberTableService;
 	@RequiresPermissions("system:facCostApply:view")
 	@GetMapping()
 	public String facCostApply() {
@@ -142,9 +150,8 @@ public class FacCostApplyController extends BaseController {
 	 * 新增差旅申请
 	 */
 	@GetMapping("/add")
-	public String add(ModelMap mmp) {
-		IdWorker idWorker = new IdWorker(0, 1);
-		mmp.put("num", "CL" + idWorker.nextId());
+	public String add(ModelMap mmp) { 
+		mmp.put("num", facNumberTableService.getNum("CL", ShiroUtils.getDateId()));
 		return prefix + "/add";
 	}
 
@@ -159,8 +166,8 @@ public class FacCostApplyController extends BaseController {
 		facCostApply.setApplicationTime(new Date());
 		if (facCostApply.getId() == null) {
 			// 直接添加
-			IdWorker idWorker = new IdWorker(0, 1);
-			facCostApply.setNum("CL" + idWorker.nextId());
+			 
+			facCostApply.setNum(facNumberTableService.getNum("CL", ShiroUtils.getDateId()));
 			facCostApply.setUserId(ShiroUtils.getUserId());
 		} else {
 			// 更新

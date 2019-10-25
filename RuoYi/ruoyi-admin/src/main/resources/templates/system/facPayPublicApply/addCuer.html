@@ -182,17 +182,13 @@
 
 
     function submitHandler() {
-
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-facPayPublicApply-add').serialize());
             }
             $.operate.successCallback();
             window.location.reload();
             $.modal.close();
-
     }
-
-
 
 </script>
 </body>

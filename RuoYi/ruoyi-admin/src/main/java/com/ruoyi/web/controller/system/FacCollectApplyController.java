@@ -1,27 +1,32 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.Date;
+import java.util.List;
+
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCollectApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCollectApplyService;
+import com.ruoyi.system.service.finance.IFacNumberTableService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * 团建申请 信息操作处理
@@ -43,6 +48,11 @@ public class FacCollectApplyController extends BaseController {
 
 	@Autowired
 	private IFacUserApprovalService facUserApprovalService;
+	
+	@Autowired
+	private IFacNumberTableService facNumberTableService;
+	
+	
 
 	@RequiresPermissions("system:facCollectApply:view")
 	@GetMapping()
@@ -118,8 +128,7 @@ public class FacCollectApplyController extends BaseController {
 	 */
 	@GetMapping("/add")
 	public String add(ModelMap mmp) throws Exception {
-		IdWorker idWorker = new IdWorker(0, 1);
-		mmp.put("num", "TJ" + idWorker.nextId());
+		mmp.put("num", facNumberTableService.getNum("TJ", ShiroUtils.getDateId()));  
 		mmp.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
 		return prefix + "/add";
 	}
@@ -131,12 +140,11 @@ public class FacCollectApplyController extends BaseController {
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(FacCollectApply facCollectApply) {
-		IdWorker idWorker = new IdWorker(0, 1);
 		facCollectApply.setApplicationTime(new Date());
 		facCollectApply.setApplicant(ShiroUtils.getUserId());
 		if (facCollectApply.getId() == null) {
 			// 直接添加
-			facCollectApply.setNum("TJ" + idWorker.nextId());
+			
 		} else {
 			// 更新
 			facCollectApply = facCollectApplyService
@@ -158,8 +166,8 @@ public class FacCollectApplyController extends BaseController {
 	@ResponseBody
 	public AjaxResult addSove(FacCollectApply facCollectApply)
 			throws Exception {
-		IdWorker idWorker = new IdWorker(0, 1);
-		facCollectApply.setNum("TJ" + idWorker.nextId());
+		 
+		facCollectApply.setNum(facNumberTableService.getNum("TJ", ShiroUtils.getDateId()));
 		facCollectApply.setApplicant(ShiroUtils.getUserId());
 		facCollectApply.setApplicationTime(new Date());
 		return toAjax(facCollectApplyService.insertApply(facCollectApply));

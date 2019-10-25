@@ -1,11 +1,23 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacLoanApply;
@@ -14,15 +26,9 @@ import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacLoanApplyService;
 import com.ruoyi.system.service.finance.IFacLoanRepayApplyService;
+import com.ruoyi.system.service.finance.IFacNumberTableService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 借款申请 信息操作处理
@@ -46,7 +52,8 @@ public class FacLoanApplyController extends BaseController {
     private IFacReimburseApplyService facReimburseApplyService;
     @Autowired
     private IFacUserApprovalService facUserApprovalService;
-
+	@Autowired
+	private IFacNumberTableService facNumberTableService;
 
     @GetMapping()
     public String facLoanApply() {
@@ -116,8 +123,8 @@ public class FacLoanApplyController extends BaseController {
     @PostMapping("/addSove")
     @ResponseBody
     public AjaxResult addSove(FacLoanApply facLoanApply) throws Exception {
-        IdWorker idWorker = new IdWorker(0, 1);
-        facLoanApply.setNum("JK" + idWorker.nextId());
+      
+        facLoanApply.setNum(facNumberTableService.getNum("JK", ShiroUtils.getDateId()));
         facLoanApply.setLoanUser(ShiroUtils.getUserId());
         return toAjax(facLoanApplyService.insertApply(facLoanApply));
 
@@ -135,8 +142,8 @@ public class FacLoanApplyController extends BaseController {
     public AjaxResult addSave(FacLoanApply facLoanApply) throws Exception {
         if (facLoanApply.getId() == null) {
             // 直接添加
-            IdWorker idWorker = new IdWorker(0, 1);
-            facLoanApply.setNum("JK" + idWorker.nextId());
+            
+            facLoanApply.setNum(facNumberTableService.getNum("JK", ShiroUtils.getDateId()));
             facLoanApply.setLoanUser(ShiroUtils.getUserId());
         } else {
             // 更新
@@ -324,8 +331,8 @@ public class FacLoanApplyController extends BaseController {
     @GetMapping("/off")
     public String off(@RequestParam String id, ModelMap mmp) {
 
-        IdWorker idWorker = new IdWorker(0, 1);
-        mmp.put("num", "BX" + idWorker.nextId());
+        
+        mmp.put("num", facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
         mmp.put("msg", "1");
         mmp.put("userName", ShiroUtils.getSysUser().getUserName());
         mmp.put("userId", ShiroUtils.getUserId());

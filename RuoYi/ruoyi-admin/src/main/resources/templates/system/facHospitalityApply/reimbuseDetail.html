@@ -182,11 +182,18 @@
     }
 
     function submitHandler(index) {
+        debugger
         if ($.validate.form()) {
 //index为1表示保存
-                mSave(prefix + "/addSubmits", $('#form-reiadd').serialize());
-
+            if (index == 1) {
+                mSave(prefix + "/addSave", $('#form-reiadd').serialize());
+            } else if (index == 2) {
+                mSave(prefix + "/addSubmit", $('#form-reiadd').serialize());
+            }
+            $.operate.successCallback();
+            window.location.reload();
             $.modal.close();
+            $.modal.closeAll();
         }
     }
 

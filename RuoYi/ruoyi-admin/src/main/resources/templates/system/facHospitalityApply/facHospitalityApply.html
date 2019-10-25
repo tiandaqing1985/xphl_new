@@ -148,7 +148,7 @@
 
                         if (row.approvalStatus == 1) {
                             //审批成功
-                            if(row.states == 3){
+                            if(row.states != 4){
                                 actions.push('<a class="btn btn-danger btn-xs ' + '" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>报销</a>');
                              }
                         } else if (row.states == 2) {
