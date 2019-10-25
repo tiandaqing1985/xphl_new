@@ -60,17 +60,17 @@
         focusCleanup: true
     });
 
-    function mAdd() {
-        $.table._option.id = "bootstrap-table-1";
-        $.table._option.url = prefix + "/querys/" + num;
-        $.modal.open("行程详细信息", "/system/facCostApply/tranDetail?num=" + num);
-    }
-
-    function zAdd() {
-        $.table._option.id = "bootstrap-table-2";
-        $.table._option.url = prefix + "/sleep/" + num;
-        $.modal.open("住宿详细信息", "/system/facCostApply/putAdd?num=" + num);
-    }
+    // function mAdd() {
+    //     $.table._option.id = "bootstrap-table-1";
+    //     $.table._option.url = prefix + "/querys/" + num;
+    //     $.modal.open("行程详细信息", "/system/facCostApply/tranDetail?num=" + num);
+    // }
+    //
+    // function zAdd() {
+    //     $.table._option.id = "bootstrap-table-2";
+    //     $.table._option.url = prefix + "/sleep/" + num;
+    //     $.modal.open("住宿详细信息", "/system/facCostApply/putAdd?num=" + num);
+    // }
 
     var options1 = {
         id: "bootstrap-table-1",
@@ -127,17 +127,17 @@
                 field: 'reason',
                 title: '工作内容',
                 sortable: true
-            },
-            {
-                title: '操作',
-                align: 'center',
-                formatter: function (value, row, index) {
-                    var actions = [];
-                    actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>修改</a> ');
-                    actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
-                    return actions.join('');
-                }
             }
+            // {
+            //     title: '操作',
+            //     align: 'center',
+            //     formatter: function (value, row, index) {
+            //         var actions = [];
+            //         actions.push('<a class="btn btn-success btn-xs" href="#"><i class="fa fa-edit"></i>修改</a> ');
+            //         actions.push('<a class="btn btn-danger btn-xs" href="#"><i class="fa fa-remove"></i>删除</a>');
+            //         return actions.join('');
+            //     }
+            // }
 
         ]
     };

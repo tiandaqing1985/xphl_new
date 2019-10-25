@@ -48,16 +48,16 @@
             <a class="btn btn-success" onclick="$.operate.addTab()" >
                 <i class="fa fa-plus"></i> 添加
             </a>
-            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
-               >
-                <i class="fa fa-edit"></i> 修改
+            <a class="btn btn-success" onclick="cyAdd()">
+                <i class="fa fa-edit"></i> 添加常用收款
             </a>
-            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()"
-               >
-                <i class="fa fa-remove"></i> 删除
+
+            <a class="btn btn-success" onclick="cyUser()">
+                <i class="fa fa-edit"></i> 使用常用收款
             </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()"
-               >
+
+
+            <a class="btn btn-warning" onclick="$.table.exportExcel()">
                 <i class="fa fa-download"></i> 导出
             </a>
         </div>
@@ -73,7 +73,16 @@
 <script th:inline="javascript">
 
     var prefix = ctx + "system/facPayPublicApply";
-    var approvalState = [[${@dict.getType('fac_approval_state')}]];
+
+
+    function cyAdd() {
+        $.modal.open("常用收款", "/system/facPayPublicApply/addCo");
+    }
+
+
+    function cyUser() {
+        $.modal.open("使用常用", " /system/facCommonlyApply");
+    }
 
     $(function () {
         var options = {
@@ -203,6 +212,8 @@
     function submitHandler(id) {
         //index为1表示保存
         mSave(prefix + "/add", {"id":id});
+        $.modal.close();
+        $.modal.closeTab();
     }
 
     function f(id) {

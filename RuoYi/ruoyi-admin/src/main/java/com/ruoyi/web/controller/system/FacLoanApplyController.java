@@ -1,18 +1,5 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -29,6 +16,13 @@ import com.ruoyi.system.service.finance.IFacLoanApplyService;
 import com.ruoyi.system.service.finance.IFacLoanRepayApplyService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 借款申请 信息操作处理
@@ -49,11 +43,11 @@ public class FacLoanApplyController extends BaseController {
     @Autowired
     private ISysUserService sysUserService;
     @Autowired
-    private IFacReimburseApplyService facReimburseApplyService; 
-	@Autowired
-	private IFacUserApprovalService facUserApprovalService;
-    
-    
+    private IFacReimburseApplyService facReimburseApplyService;
+    @Autowired
+    private IFacUserApprovalService facUserApprovalService;
+
+
     @GetMapping()
     public String facLoanApply() {
         return prefix + "/facLoanApply";
@@ -68,17 +62,23 @@ public class FacLoanApplyController extends BaseController {
         startPage();
         facLoanApply.setLoanUser(ShiroUtils.getUserId());
         List<FacLoanApply> list = facLoanApplyService
-                .selectFacLoanApplyList(facLoanApply); 
+                .selectFacLoanApplyList(facLoanApply);
         for (FacLoanApply v : list) {
             v.setUserName(sysUserService.selectUserById(v.getLoanUser()).getUserName());
-            FacUserApproval name=facUserApprovalService.selectApproval(v.getNum(), v.getLoanUser());
-            if(name!=null){
-                v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
-                v.setApprovalStatus(name.getApprovalState());
-                if(name.getStates()!=null){
-                	v.setApplyStatus(name.getStates());	
-                } 
-            }else{
+            FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getLoanUser());
+            if (name != null) {
+
+                if(name.getApproverId()!=null){
+                    v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
+                }
+                v.setApprovalStatus(name.getApprovalState()); 
+                if (name.getStates() != null) {
+                    v.setApplyStatus(name.getStates());
+                }
+                if(ShiroUtils.getUserId()==103&&ShiroUtils.getUserId()==101){
+                	v.setApprovalStatus("1");
+				}   
+            } else {
                 v.setApprover("--");
                 v.setApprovalStatus("--");
             }
@@ -132,7 +132,7 @@ public class FacLoanApplyController extends BaseController {
     @Log(title = "借款申请", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
-    public AjaxResult addSave(FacLoanApply facLoanApply) throws Exception { 
+    public AjaxResult addSave(FacLoanApply facLoanApply) throws Exception {
         if (facLoanApply.getId() == null) {
             // 直接添加
             IdWorker idWorker = new IdWorker(0, 1);
@@ -142,7 +142,7 @@ public class FacLoanApplyController extends BaseController {
             // 更新
             facLoanApply = facLoanApplyService.selectFacLoanApplyById(facLoanApply.getId() + "");
             facLoanApplyService.deleteFacLoanApplyByIds(facLoanApply.getId() + "");
-        } 
+        }
         return toAjax(facLoanApplyService.insertFacLoanApply(facLoanApply));
 
     }
@@ -292,24 +292,29 @@ public class FacLoanApplyController extends BaseController {
         facLoanApply.setLoanUser(payer);
         List<FacLoanApply> list = facLoanApplyService
                 .selectFacLoanApplyList(facLoanApply);
-        
+
         for (FacLoanApply v : list) {
             v.setUserName(sysUserService.selectUserById(v.getLoanUser()).getUserName());
-            FacUserApproval name=facUserApprovalService.selectApproval(v.getNum(), v.getLoanUser());
-            if(name!=null){
-                v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
+            FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getLoanUser());
+            if (name != null) {
+                if (name.getApproverId() != null) {
+                    String approid = sysUserService.selectUserById(name.getApproverId()).getUserName();
+
+                    if (approid != null) {
+                        v.setApprover(approid);
+                    }
+                }
                 v.setApprovalStatus(name.getApprovalState());
-                if(name.getStates()!=null){
-                	v.setApplyStatus(name.getStates());	
-                } 
-            }else{
+                if (name.getStates() != null) {
+                    v.setApplyStatus(name.getStates());
+                }
+            } else {
                 v.setApprover("--");
                 v.setApprovalStatus("--");
             }
         }
 
-        
-        
+
         return getDataTable(list);
     }
 
@@ -325,8 +330,8 @@ public class FacLoanApplyController extends BaseController {
         mmp.put("userName", ShiroUtils.getSysUser().getUserName());
         mmp.put("userId", ShiroUtils.getUserId());
         mmp.put("deptId", ShiroUtils.getDeptId());
-        mmp.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());  
-        FacLoanApply facLoanApply = facLoanApplyService.selectFacLoanApplyById(id+"");
+        mmp.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
+        FacLoanApply facLoanApply = facLoanApplyService.selectFacLoanApplyById(id + "");
         mmp.put("JKnum", facLoanApply.getNum());
         List<Long> longs = facReimburseApplyService.selectRole(ShiroUtils.getUserId());
         for (Long l : longs) {

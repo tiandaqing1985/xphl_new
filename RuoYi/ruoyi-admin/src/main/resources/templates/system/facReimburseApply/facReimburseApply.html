@@ -39,14 +39,14 @@
             <a class="btn btn-success" onclick="$.modal.openTab('日常报销申请','system/facReimburseApply/add')">
                 <i class="fa fa-plus"></i> 日常报销申请
             </a>
-            <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"
-            >
-                <i class="fa fa-edit"></i> 修改
-            </a>
-            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()"
-            >
-                <i class="fa fa-remove"></i> 删除
-            </a>
+<!--             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"-->
+<!--            >-->
+<!--                <i class="fa fa-edit"></i> 修改-->
+<!--            </a>-->
+<!--            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()"-->
+<!--            >-->
+<!--                <i class="fa fa-remove"></i> 删除-->
+<!--            </a>-->
             <a class="btn btn-warning" onclick="$.table.exportExcel()"
             >
                 <i class="fa fa-download"></i> 导出
@@ -287,7 +287,11 @@
     }
     function submitHandler(id) {
             //index为1表示保存
+        debugger;
         mSave(prefix + "/addSubmit", {"id":id});
+        $.modal.close();
+        $.modal.closeTab();
+        $.operate.successTabCallback();
     }
 
 

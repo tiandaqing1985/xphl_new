@@ -106,30 +106,31 @@ public class FacReimburseApplyController extends BaseController {
 							facReimburseApply1
 									.setApproveName(sysUser.getUserName());
 						}
-					}
-
+					} 
 					FacUserApproval name = facUserApprovalService
 							.selectApproval(facReimburseApply1.getNum(),
 									facReimburseApply1.getLoanUser());
-					if (name != null) {
-						facReimburseApply1.setApprover(sysUserService
-								.selectUserById(name.getApproverId())
-								.getUserName());
-						facReimburseApply1
-								.setApprovalStatus(name.getApprovalState());
+					if (name != null) { 
+						if(name.getApproverId()!=null){
+							facReimburseApply1.setApprover(sysUserService
+									.selectUserById(name.getApproverId())
+									.getUserName());
+						} 
+						facReimburseApply1.setApprovalStatus(name.getApprovalState());
+						if(ShiroUtils.getUserId()==103&&ShiroUtils.getUserId()==101){
+							facReimburseApply1.setApprovalStatus("1");
+						}  
 						if (name.getStates() != null) {
 							facReimburseApply1.setApplyStatus(name.getStates());
 						}
 					} else {
 						facReimburseApply1.setApprover("--");
 						facReimburseApply1.setApprovalStatus("--");
-					}
-
+					} 
 				}
 				return getDataTable(list);
 			}
-		}
-
+		} 
 		// 查询自己的
 		facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
 		startPage();
@@ -144,18 +145,28 @@ public class FacReimburseApplyController extends BaseController {
 			List<FacUserApproval> facUserApprovals = facUserApprovalMapper
 					.selectFacUserApprovalList(facUserApproval);
 			if (facUserApprovals.size() > 0) {
-				SysUser sysUser = sysUserService.selectUserById(
-						facUserApprovals.get(0).getApproverId());
-				facReimburseApply1.setApproveName(sysUser.getUserName());
+
+				if(facUserApprovals.get(0).getApproverId()!=null){
+					SysUser sysUser = sysUserService.selectUserById(
+							facUserApprovals.get(0).getApproverId());
+					facReimburseApply1.setApproveName(sysUser.getUserName());
+				}
 			}
 
 			FacUserApproval name = facUserApprovalService.selectApproval(
 					facReimburseApply1.getNum(),
 					facReimburseApply1.getLoanUser());
 			if (name != null) {
-				facReimburseApply1.setApprover(sysUserService
-						.selectUserById(name.getApproverId()).getUserName());
+
+				if(name.getApproverId()!=null){
+					facReimburseApply1.setApprover(sysUserService
+							.selectUserById(name.getApproverId()).getUserName());
+				} 
 				facReimburseApply1.setApprovalStatus(name.getApprovalState());
+				if(ShiroUtils.getUserId()==103&&ShiroUtils.getUserId()==101){
+					facReimburseApply1.setApprovalStatus("1");
+				} 
+			
 				if (name.getStates() != null) {
 					facReimburseApply1.setApplyStatus(name.getStates());
 				}
@@ -589,9 +600,9 @@ public class FacReimburseApplyController extends BaseController {
 	 */
 	@GetMapping("/editZhao/{id}")
 	public String editZhao(@PathVariable("id") Long id, ModelMap mmap) {
-		ReiTrafficApply facReimburseApply = facReimburseApplyService
-				.selectFacTransById(id);
-		mmap.put("data", facReimburseApply);
+		ReiHospitalityApply ReiHospitalityApply = facReimburseApplyService
+				.selectFacHostById(id);
+		mmap.put("facReiHospitalityApply", ReiHospitalityApply);
 		return prefix + "/editZhao";
 	}
 	/**
@@ -612,7 +623,7 @@ public class FacReimburseApplyController extends BaseController {
 
 		FacReiAdiApply facReiAdiApply = facReiAdiApplyMapper
 				.selectFacReiAdiApplyById(id); 
-		mmap.put("data", facReiAdiApply);
+		mmap.put("facReiAdiApply", facReiAdiApply);
 		return prefix + "/editQi";
 	}
 	/**
@@ -647,8 +658,8 @@ public class FacReimburseApplyController extends BaseController {
 	 */
 	@PostMapping("/removeQi")
 	@ResponseBody
-	public AjaxResult removeQi(long id) {
-		return toAjax(facReimburseApplyService.deleteFacReiAdiApplyByIds(id));
+	public AjaxResult removeQi(String id) {
+		return toAjax(facReimburseApplyService.deleteFacReiAdiApplyByIds(Long.valueOf(id)));
 	}
 
 	/**

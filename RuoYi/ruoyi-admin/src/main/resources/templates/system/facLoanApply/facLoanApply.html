@@ -193,8 +193,9 @@
         //index为1表示保存
         debugger
         mSave(prefix + "/add", {"id":id});
-        $.operate.successCallback();
+
         $.modal.close();
+        $.modal.closeTab();
     }
 
     function mSave(url, data, callback) {

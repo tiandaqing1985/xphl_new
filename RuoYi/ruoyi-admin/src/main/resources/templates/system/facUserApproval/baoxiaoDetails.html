@@ -359,6 +359,7 @@
     });
 
     function mSave(url, data, callback) {
+        debugger
         var config = {
             url: url,
             type: "post",
@@ -376,16 +377,31 @@
                 $.modal.enable();
                 alert(result.msg);
                 $.modal.closeTab();
+                $.modal.closeTab();
+                $.modal.closeAll();
+                $.modal.close();
             }
         };
         $.ajax(config)
+        $.modal.msgReload("保存成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+        $.operate.successCallback();
         $.modal.closeTab();
         $.operate.successCallback();
         window.location.reload();
         $.modal.close();
     }
 
+
+
+    function refreshParent() {
+        window.opener.location.href = window.opener.location.href;
+        window.close();
+    }
+
+
+
     function submitHandler(index) {
+
         if ($.validate.form()) {
             //index为1表示同意
             if (index == 1) {
@@ -393,6 +409,8 @@
             } else {
                 mSave(prefixs + "/editnot", $('#form-facUserApproval-edit').serialize());
             }
+            $.modal.closeTab();
+            $.modal.closeAll();
             $.modal.close();
         }
     }

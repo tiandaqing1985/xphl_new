@@ -11,13 +11,11 @@ import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacCostDetailApply;
 import com.ruoyi.system.domain.finance.FacCostPutupApply;
-import com.ruoyi.system.domain.finance.FacLoanApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCostApplyService;
 import com.ruoyi.system.service.finance.IFacCostPutupApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +28,7 @@ import java.util.List;
 
 /**
  * 差旅申请 信息操作处理
- * 
+ *
  * @author ruoyi
  * @date 2019-09-02
  */
@@ -71,9 +69,16 @@ public class FacCostApplyController extends BaseController {
 			FacUserApproval name = facUserApprovalService
 					.selectApproval(v.getNum(), v.getUserId());
 			if (name != null) {
-				v.setApprover(sysUserService
-						.selectUserById(name.getApproverId()).getUserName());
+				if (name.getApproverId() != null) {
+					v.setApprover(
+							sysUserService.selectUserById(name.getApproverId())
+									.getUserName());
+				}
 				v.setApprovalStatus(name.getApprovalState());
+				if (ShiroUtils.getUserId() == 103
+						&& ShiroUtils.getUserId() == 101) {
+					v.setApprovalStatus("1");
+				}
 			} else {
 				v.setApprover("--");
 				v.setApprovalStatus("--");
@@ -119,6 +124,7 @@ public class FacCostApplyController extends BaseController {
 			return getDataTable(a);
 		}
 	}
+
 	/**
 	 * 导出差旅申请列表
 	 */
@@ -165,6 +171,7 @@ public class FacCostApplyController extends BaseController {
 		}
 		return toAjax(facCostApplyService.insertFacCostApply(facCostApply));
 	}
+
 	/**
 	 * 新增保存
 	 *
@@ -178,6 +185,7 @@ public class FacCostApplyController extends BaseController {
 		facCostApply.setApplicationTime(new Date());
 		return toAjax(facCostApplyService.insertApply(facCostApply));
 	}
+
 	/**
 	 * 修改差旅申请
 	 */
@@ -226,6 +234,7 @@ public class FacCostApplyController extends BaseController {
 			return getDataTable(a);
 		}
 	}
+
 	/**
 	 * 查看详情
 	 */
@@ -254,6 +263,7 @@ public class FacCostApplyController extends BaseController {
 		map.put("num", num);
 		return prefix + "/tranDetail";
 	}
+
 	/**
 	 * 行程安排添加
 	 */
@@ -289,6 +299,7 @@ public class FacCostApplyController extends BaseController {
 		map.put("num", num);
 		return prefix + "/putAdd";
 	}
+
 	/**
 	 * 住宿安排添加
 	 */
@@ -310,6 +321,7 @@ public class FacCostApplyController extends BaseController {
 		mmap.put("facCostDetailApply", facCostDetailApply);
 		return prefix + "/editTra";
 	}
+
 	/**
 	 * 修改住宿
 	 */
@@ -349,12 +361,12 @@ public class FacCostApplyController extends BaseController {
 	 * 删除差旅住宿
 	 */
 
-	@Log(title = "差旅住宿", businessType = BusinessType.DELETE)
+	@Log(title = "差旅", businessType = BusinessType.DELETE)
 	@PostMapping("/removeTra")
 	@ResponseBody
-	public AjaxResult removeTra(String ids) {
+	public AjaxResult removeTra(String id) {
 		return toAjax(
-				facCostPutupApplyService.deleteFacCostPutupApplyByIds(ids));
+				facCostApplyService.deleteFacCostDetailApplyByIds(id));
 	}
 
 	/**
@@ -364,9 +376,9 @@ public class FacCostApplyController extends BaseController {
 	@Log(title = "差旅申请详细列 ", businessType = BusinessType.DELETE)
 	@PostMapping("/removePut")
 	@ResponseBody
-	public AjaxResult removePut(String ids) {
+	public AjaxResult removePut(String id) {
 		return toAjax(
-				facCostPutupApplyService.deleteFacCostPutupApplyByIds(ids));
+				facCostPutupApplyService.deleteFacCostPutupApplyByIds(id));
 	}
 
 }

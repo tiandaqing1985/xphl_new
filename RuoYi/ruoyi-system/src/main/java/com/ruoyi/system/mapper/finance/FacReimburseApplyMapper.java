@@ -124,8 +124,16 @@ public interface FacReimburseApplyMapper
 	public double selectHospAmount(String num);
 
 
+	public String  selectsysuser(Long id); 
+	
+	
+	
+	
 	ReiTrafficApply selectFacTransById(long id);
 
+
+	ReiHospitalityApply selectFacHostById(long id);
+	
 	int updateReiTrafficApplyById(ReiTrafficApply reiTrafficApply);
 
 	int deleteReiTrafficApplyById(String id);

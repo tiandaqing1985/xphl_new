@@ -8,13 +8,14 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.IdWorker;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.finance.FacCommonlyApply;
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
 import com.ruoyi.system.domain.finance.FacPayPublicDetailed;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.system.service.finance.IFacCommonlyApplyService;
 import com.ruoyi.system.service.finance.IFacPayPublicApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
-
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +43,10 @@ public class FacPayPublicApplyController extends BaseController {
 	private ISysUserService sysUserService;
 	@Autowired
 	private IFacUserApprovalService facUserApprovalService;
+
+	@Autowired
+	private IFacCommonlyApplyService facCommonlyApplyService;
+
 	@RequiresPermissions("system:facPayPublicApply:view")
 	@GetMapping()
 	public String facPayPublicApply() {
@@ -65,9 +70,16 @@ public class FacPayPublicApplyController extends BaseController {
 			FacUserApproval name = facUserApprovalService
 					.selectApproval(v.getNum(), v.getUser());
 			if (name != null) {
-				v.setApprover(sysUserService
-						.selectUserById(name.getApproverId()).getUserName());
+				if (name.getApproverId() != null) {
+					v.setApprover(
+							sysUserService.selectUserById(name.getApproverId())
+									.getUserName());
+				}
 				v.setApprovalStatus(name.getApprovalState());
+				if (ShiroUtils.getUserId() == 103
+						&& ShiroUtils.getUserId() == 101) {
+					v.setApprovalStatus("1");
+				}
 			} else {
 				v.setApprover("--");
 				v.setApprovalStatus("--");
@@ -100,6 +112,46 @@ public class FacPayPublicApplyController extends BaseController {
 		IdWorker idWorker = new IdWorker(0, 1);
 		mmap.put("num", "DG" + idWorker.nextId());
 		return prefix + "/add";
+	}
+
+	/**
+	 * 新增对公常显
+	 */
+	@GetMapping("/addCo")
+	public String add() {
+		return prefix + "/addCo";
+	}
+
+	
+	
+	@GetMapping("/cyUser")
+	public String cyUser() {
+		return prefix + "/cyUser";
+	} 
+ 
+	/**
+	 * 修改对公常显
+	 */
+	@GetMapping("/addCuer/{id}")
+	public String edit(@PathVariable("id") Long id, ModelMap mmap)
+	{
+		IdWorker idWorker = new IdWorker(0, 1);
+		mmap.put("num", "DG" + idWorker.nextId());
+		FacCommonlyApply facCommonlyApply = facCommonlyApplyService.selectFacCommonlyApplyById(id);
+		mmap.put("facCommonlyApply", facCommonlyApply);
+	    return prefix + "/addCuer";
+	} 
+	
+	/**
+	 * 新增保存对公常显
+	 */
+ 
+	@Log(title = "对公常显", businessType = BusinessType.INSERT)
+	@PostMapping("/addCo")
+	@ResponseBody
+	public AjaxResult addSave(FacCommonlyApply facCommonlyApply) {
+		return toAjax(facCommonlyApplyService
+				.insertFacCommonlyApply(facCommonlyApply));
 	}
 
 	/**

@@ -38,13 +38,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-6">
-                    <div class="form-group">
-                        <label class="col-sm-4 control-label"></span>审批结果：</label>
-                        <div class="col-sm-8">
-                            <input id="approvalState" name="approvalState" class="form-control" type="text"  th:value="${approvalState}">
-                        </div>
-                    </div>
+                <div class="col-sm-offset-5 col-sm-10">
+                    <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
+                            class="fa fa-check"></i>同意
+                    </button>&nbsp;
+                    <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
+                            class="fa fa-check"></i>驳回
+                    </button>&nbsp;
+
                 </div>
             </div>
         </form>
@@ -61,7 +62,7 @@
             $(function () {
                 var options = {
                     id: "bootstrap-table-1",
-                    url: prefix + "/detail?num=" + num,
+                    url: prefix + "/detail?num="+num,
                     showSearch: false,
                     showRefresh: false,
                     showToggle: false,
@@ -81,11 +82,21 @@
                         },
                         {
                             field: 'outTime',
-                            title: '出差时间'
+                            title: '出差时间',
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                            
                         },
                         {
                             field: 'backTimeEs',
-                            title: '预计返回时间'
+                            title: '预计返回时间',
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                            
                         },
                         {
                             field: 'outMan',

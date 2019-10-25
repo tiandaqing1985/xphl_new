@@ -206,6 +206,8 @@
     function submitHandler(id) {
         //index为1表示保存
         mSave(prefix + "/add", {"id":id});
+        $.modal.close();
+        $.modal.closeTab();
     }
 
     function mSave(url, data, callback) {

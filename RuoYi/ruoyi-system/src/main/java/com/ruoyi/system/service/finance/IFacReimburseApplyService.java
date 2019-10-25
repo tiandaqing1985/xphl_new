@@ -105,7 +105,7 @@ public interface IFacReimburseApplyService {
 	 */
 	public int deleteFacReimburseApplyByIds(String ids);
 
-	public int deleteFacReiAdiApplyByIds(long id);
+	public int deleteFacReiAdiApplyByIds(Long id);
 	/**
 	 * 新增交通报销
 	 * 
@@ -133,7 +133,7 @@ public interface IFacReimburseApplyService {
 	public int insertFacreiAdiApply(FacReiAdiApply reiAdiApply);
 
 	ReiTrafficApply selectFacTransById(long id);
-
+	ReiHospitalityApply selectFacHostById(long id);
 	int updateReiTrafficApplyById(ReiTrafficApply reiTrafficApply);
 
 	int deleteReiTrafficApplyById(String ids);

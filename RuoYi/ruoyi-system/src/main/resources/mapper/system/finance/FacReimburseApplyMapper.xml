@@ -83,8 +83,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="applyNum != null  and applyNum != '' "> and applyNum = #{applyNum}</if>
              <if test="user != null "> and user = #{user}</if>
          </where>
-    </select>
-     
+    </select>  
+    <select id="selectsysuser"   resultType="String"> 
+       select area from  sys_user where user_id = #{id}
+    </select> 
     
     <select id="selectFacReimburseApplyById" parameterType="String" resultMap="FacReimburseApplyResult">
         <include refid="selectFacReimburseApplyVo"/>
@@ -155,6 +157,14 @@ SELECT
         FROM fac_traffic_rei_apply   AS a
          WHERE a.id = #{param1}
     </select>
+    
+     <select id="selectFacHostById" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply" >
+          select id, ddDate, amount, addUser, document_num, location, target_unit, reason, num, status, applyNum, user from fac_rei_hospitality_apply 
+           
+         WHERE  id = #{param1}
+    </select>
+    
+    
 
     <delete id="deleteReiTrafficApplyById" >
         delete from fac_traffic_rei_apply where id = #{param1}
@@ -182,8 +192,7 @@ SELECT
 
     <insert id="insertFacReimburseApply" parameterType="FacReimburseApply" useGeneratedKeys="true" keyProperty="id">
         insert into fac_reimburse_apply
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="id != null  and id != ''  ">id,</if>
+		<trim prefix="(" suffix=")" suffixOverrides=","> 
 			<if test="num != null  and num != ''  ">num,</if>
 			<if test="name != null  and name != ''  ">name,</if>
 			<if test="amount != null  ">amount,</if>
@@ -200,8 +209,7 @@ SELECT
 			<if test="createBy != null and createBy !=''">create_by,</if>
 			<if test="JKnum != null and JKnum !=''">JKnum,</if>
          </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="id != null  and id != ''  ">#{id},</if>
+        <trim prefix="values (" suffix=")" suffixOverrides=","> 
 			<if test="num != null  and num != ''  ">#{num},</if>
 			<if test="name != null  and name != ''  ">#{name},</if>
 			<if test="amount != null  ">#{amount},</if>

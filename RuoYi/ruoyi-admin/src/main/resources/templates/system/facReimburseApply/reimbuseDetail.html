@@ -118,13 +118,14 @@
         $.modal.openTab("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
     }
 
-    function closeItem() {
-        $.modal.closeTab();
-        $.operate.successCallback();
-        window.location.reload();
-        $.modal.close();
-    }
-
+    // function closeItem() {
+    //     debugger
+    //     $.modal.closeAll;
+    //  //   $.operate.successCallback();
+    //     window.location.reload();
+    //   //  $.modal.close();
+    //  //   $.modal.closeTab();
+    // }
 
     function mAdd(id) {
         if (id == 1) {
@@ -164,10 +165,10 @@
             $.table._option.removeUrl = prefix + "/removeTran";
         } else if (index == 2) {
             $.table._option.modalName = "招待报销信息";
-            $.table._option.removeUrl = prefix + "/removeZhao";
+            $.table._option.removeUrl = prefix + "/removeZhao?id="+id;
         }else{
             $.table._option.modalName = "其他报销信息";
-            $.table._option.removeUrl = prefix + "/removeQi";
+            $.table._option.removeUrl = prefix + "/removeQi?id="+id;
         }
         $.operate.remove(id);
     }
@@ -296,18 +297,8 @@
                     sortable: true
                 },
                 {
-                    field: 'documentNum',
-                    title: '单据数',
-                    sortable: true
-                },
-                {
                     field: 'location',
                     title: '地点',
-                    sortable: true
-                },
-                {
-                    field: 'targetUnit',
-                    title: '目标单位简称',
                     sortable: true
                 },
                 {
@@ -424,6 +415,7 @@
     }
 
     function submitHandler(index) {
+        debugger
         if ($.validate.form()) {
 //index为1表示保存
             if (index == 1) {
@@ -434,6 +426,7 @@
             $.operate.successCallback();
             window.location.reload();
             $.modal.close();
+            $.modal.closeAll();
         }
     }
 

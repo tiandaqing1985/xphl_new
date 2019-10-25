@@ -15,13 +15,7 @@
 							</li>
 							<li>
 								审批人ID：<input type="text" name="approverId"/>
-							</li>
-							<li>
-								审批操作时间：<input type="text" name="approvalTime"/>
-							</li>
-							<li>
-								创建时间：<input type="text" name="createTime"/>
-							</li>
+							</li> 
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -93,7 +87,11 @@
 				{
 					field : 'approvalTime', 
 					title : '审批操作时间',
-					sortable: true
+					sortable: true,
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
+                    }
 				},
 				{
 					field : 'approvalLevel', 
@@ -108,7 +106,11 @@
 				{
 					field : 'createTime', 
 					title : '创建时间',
-					sortable: true
+					sortable: true,
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
+                    }
 				},
 				{
 					field : 'applicantId', 

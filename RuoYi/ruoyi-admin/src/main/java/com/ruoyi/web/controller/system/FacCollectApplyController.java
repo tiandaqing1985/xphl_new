@@ -1,18 +1,5 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.Date;
-import java.util.List;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -27,10 +14,18 @@ import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCollectApplyService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * 团建申请 信息操作处理
- * 
+ *
  * @author ruoyi
  * @date 2019-09-03
  */
@@ -74,9 +69,17 @@ public class FacCollectApplyController extends BaseController {
 			FacUserApproval name = facUserApprovalService
 					.selectApproval(v.getNum(), v.getApplicant());
 			if (name != null) {
-				v.setApprover(sysUserService
-						.selectUserById(name.getApproverId()).getUserName());
+
+				if (name.getApproverId() != null) {
+					v.setApprover(
+							sysUserService.selectUserById(name.getApproverId())
+									.getUserName());
+				}
 				v.setApprovalStatus(name.getApprovalState());
+				if (ShiroUtils.getUserId() == 103
+						&& ShiroUtils.getUserId() == 101) {
+					v.setApprovalStatus("1");
+				}
 			} else {
 				v.setApprover("--");
 				v.setApprovalStatus("--");
@@ -110,7 +113,7 @@ public class FacCollectApplyController extends BaseController {
 
 	/**
 	 * 新增团建申请
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@GetMapping("/add")
@@ -169,9 +172,9 @@ public class FacCollectApplyController extends BaseController {
 	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
 		FacCollectApply facCollectApply = facCollectApplyService
 				.selectFacCollectApplyById(id);
-		 
-		facCollectApply.setApplicantName(sysUserService.selectUserById(facCollectApply.getApplicant())
-					.getUserName());
+
+		facCollectApply.setApplicantName(sysUserService
+				.selectUserById(facCollectApply.getApplicant()).getUserName());
 		mmap.put("facCollectApply", facCollectApply);
 		return prefix + "/edit";
 	}

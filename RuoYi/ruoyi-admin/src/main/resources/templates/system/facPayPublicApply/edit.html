@@ -77,10 +77,6 @@
 			},
 			focusCleanup: true
 		});
-
-
-
-
 		$(function () {
 			var options = {
 				id: "bootstrap-table-1",
@@ -144,17 +140,11 @@
 			$.table.init(options);
 		});
 
-
-
-
-
-
-
-
-
-
-
-
+		function submitHandler() {
+			if ($.validate.form()) {
+				$.operate.save(prefix + "/edit", $('#form-facPayPublicApply-edit').serialize());
+			}
+		}
 
 
 	</script>

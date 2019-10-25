@@ -32,17 +32,11 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">审批操作时间：</label>
             <div class="col-sm-8">
-                <input id="approvalTime" name="approvalTime" th:field="*{approvalTime}" class="form-control"
-                       type="text">
+                <input id="approvalTime" name="approvalTime" class="time-input" th:value="${#facUserApproval.format(facUserApproval.approvalTime,'yyyy-MM-dd')}" required
+                       >
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">可见性（1可见 0不可见）：</label>
-            <div class="col-sm-8">
-                <input id="approvalSight" name="approvalSight" th:field="*{approvalSight}" class="form-control"
-                       type="text">
-            </div>
-        </div>
+        
         <div class="form-group">
             <label class="col-sm-3 control-label">审批等级：</label>
             <div class="col-sm-8">
@@ -59,7 +53,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label">创建时间：</label>
             <div class="col-sm-8">
-                <input id="createTime" name="createTime" th:field="*{createTime}" class="form-control" type="text">
+                <input id="createTime" name="createTime" class="time-input" th:value="${#facUserApproval.format(facUserApproval.createTime,'yyyy-MM-dd')}" required>
             </div>
         </div>
         <div class="form-group">
@@ -70,7 +64,9 @@
         </div>
     </form>
 </div>
-<div th:include="include::footer"></div>
+<div th:include="include::footer"></div> 
+<th:block th:include="include :: bootstrap-suggest-js" />
+<th:block th:include="include :: bootstrap-select-js"/>
 <script type="text/javascript">
     var prefix = ctx + "system/facUserApproval";
     $("#form-facUserApproval-edit").validate({

@@ -5,7 +5,7 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-facPayPublicApply-add">
+    <form class="form-horizontal m" id="form-facPayPublicApply-add"  th:object="${facCommonlyApply}">
         <div class="form-group">
             <label class="col-sm-3 control-label">对公编号：</label>
             <div class="col-sm-8">
@@ -13,44 +13,45 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>申请名称：</label>
+            <label class="col-sm-3 control-label">申请名称：</label>
             <div class="col-sm-8">
                 <input id="name" name="name" class="form-control" type="text"  required>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>是否有发票：</label>
+            <label class="col-sm-3 control-label">是否有发票：</label>
             <div class="col-sm-8">
                 <label><input    type="radio" name="weatherInvoice" value="有发票" checked>有发票</label>
                 <label><input    type="radio" name="weatherInvoice" value="暂无发票">暂无发票</label>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>付款金额：</label>
+            <label class="col-sm-3 control-label">付款金额：</label>
             <div class="col-sm-8">
                 <input id="amount" name="amount" class="form-control" type="text"  required>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人：</label>
+            <label class="col-sm-3 control-label">收款人：</label>
             <div class="col-sm-8">
-                <input id="payee" name="payee" class="form-control" type="text"  required>
+
+                <input id="payee" name="payee"   th:value="${facCommonlyApply.name}" class="form-control" type="text"  required>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人开户行：</label>
+            <label class="col-sm-3 control-label">收款人开户行：</label>
             <div class="col-sm-8">
-                <input id="payeeBank" name="payeeBank" class="form-control" type="text"  required>
+                <input id="payeeBank" name="payeeBank" class="form-control"  th:value="${facCommonlyApply.userName}" type="text"  required>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人账号：</label>
+            <label class="col-sm-3 control-label">收款人账号：</label>
             <div class="col-sm-8">
-                <input id="payeeAccount" name="payeeAccount" class="form-control" type="text"  required>
+                <input id="payeeAccount" name="payeeAccount"  th:value="${facCommonlyApply.number}"  class="form-control" type="text"  required>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>备注：</label>
+            <label class="col-sm-3 control-label">备注：</label>
             <div class="col-sm-8">
                 <input id="remarks" name="remarks" class="form-control" type="text"  required>
             </div>
@@ -62,19 +63,19 @@
             </a>
             <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
         </div>
-        <div class="row">
-            <div class="col-sm-offset-5 col-sm-10">
-                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
-                        class="fa fa-check"></i>提 交
-                </button>&nbsp;
-                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
-                        class="fa fa-check"></i>保 存
-                </button>&nbsp;
-                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
-                        class="fa fa-reply-all"></i>关 闭
-                </button>
-            </div>
-        </div>
+<!--        <div class="row">-->
+<!--            <div class="col-sm-offset-5 col-sm-10">-->
+<!--                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i-->
+<!--                        class="fa fa-check"></i>提 交-->
+<!--                </button>&nbsp;-->
+<!--                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i-->
+<!--                        class="fa fa-check"></i>保 存-->
+<!--                </button>&nbsp;-->
+<!--                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i-->
+<!--                        class="fa fa-reply-all"></i>关 闭-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </div>-->
     </form>
 </div>
 <div th:include="include::footer"></div>
@@ -161,25 +162,35 @@
     });
 
 
-    function submitHandler(id) {
-        debugger
-        if (id == 1) {
+    // function submitHandler(id) {
+    //     debugger
+    //     if (id == 1) {
+    //         if ($.validate.form()) {
+    //             $.operate.save(prefix + "/add", $('#form-facPayPublicApply-add').serialize());
+    //         }
+    //         $.operate.successCallback();
+    //         window.location.reload();
+    //         $.modal.close();
+    //     } else {
+    //         if ($.validate.form()) {
+    //             $.operate.save(prefix + "/addSove", $('#form-facPayPublicApply-add').serialize());
+    //         }
+    //         $.operate.successCallback();
+    //         $.modal.close();
+    //     }
+    // }
+
+
+    function submitHandler() {
+
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-facPayPublicApply-add').serialize());
             }
             $.operate.successCallback();
             window.location.reload();
             $.modal.close();
-        } else {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/addSove", $('#form-facPayPublicApply-add').serialize());
-            }
-            $.operate.successCallback();
-            $.modal.close();
-        }
+
     }
-
-
 
 
 

@@ -52,11 +52,19 @@
                 },
                 {
                     field: 'outTime',
-                    title: '出差时间'
+                    title: '出差时间',
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
+                    }
                 },
                 {
                     field: 'backTimeEs',
-                    title: '预计返回时间'
+                    title: '预计返回时间',
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
+                    }
                 },
                 {
                     field: 'outMan',
