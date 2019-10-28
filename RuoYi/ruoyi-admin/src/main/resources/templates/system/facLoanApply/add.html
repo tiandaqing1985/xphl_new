@@ -38,20 +38,20 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-offset-5 col-sm-10">
-                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
-                        class="fa fa-check"></i>提 交
-                </button>&nbsp;
-                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
-                        class="fa fa-check"></i>保 存
-                </button>&nbsp;
-                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
-                        class="fa fa-reply-all"></i>关 闭
-                </button>
+                       <div class="col-sm-offset-5 col-sm-10">
+            <!--                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i-->
+            <!--                        class="fa fa-check"></i>提 交-->
+            <!--                </button>&nbsp;-->
+            <button type="button" class="btn btn-sm btn-primary" onclick="sub()"><i
+                    class="fa fa-check"></i>保 存
+            </button>&nbsp;
+            <!--                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i-->
+            <!--                        class="fa fa-reply-all"></i>关 闭-->
+            <!--                </button>-->
 
-            </div>
         </div>
-    </form>
+</div>
+</form>
 </div>
 <div th:include="include::footer"></div>
 <th:block th:include="include :: bootstrap-suggest-js"/>
@@ -66,24 +66,25 @@
         },
         focusCleanup: true
     });
-    function submitHandler(id) {
 
-        if (id == 1) {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-facLoanApply-add').serialize());
-            }
-            $.operate.successCallback();
+    function submitHandler() {
+        debugger
 
-            $.modal.close();
-        } else {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/addSove", $('#form-facLoanApply-add').serialize());
-            }
-            $.operate.successCallback();
-
-            $.modal.close();
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-facLoanApply-add').serialize());
         }
+        //$.operate.successCallback();
+        $.modal.close();
     }
+
+    function sub() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/addSove", $('#form-facLoanApply-add').serialize());
+        }
+        $.modal.close();
+    }
+
+
 </script>
 </body>
 </html>

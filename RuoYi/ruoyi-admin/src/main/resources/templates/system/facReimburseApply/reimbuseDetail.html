@@ -86,15 +86,15 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-offset-5 col-sm-10">
-                        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
+                        <!--                        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i-->
+                        <!--                                class="fa fa-check"></i>保 存-->
+                        <!--                        </button> -->
+                        <button type="button" class="btn btn-sm btn-primary" onclick="sub()"><i
                                 class="fa fa-check"></i>保 存
                         </button>&nbsp;
-                        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
-                                class="fa fa-check"></i>提 交
-                        </button>&nbsp;
-                        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
-                                class="fa fa-reply-all"></i>关 闭
-                        </button>
+                        <!--                        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i-->
+                        <!--                                class="fa fa-reply-all"></i>关 闭-->
+                        <!--                        </button>-->
 
                     </div>
                 </div>
@@ -117,16 +117,6 @@
     function zAdd() {
         $.modal.openTab("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
     }
-
-    // function closeItem() {
-    //     debugger
-    //     $.modal.closeAll;
-    //  //   $.operate.successCallback();
-    //     window.location.reload();
-    //   //  $.modal.close();
-    //  //   $.modal.closeTab();
-    // }
-
     function mAdd(id) {
         if (id == 1) {
             $.table._option.id = "bootstrap-table-1";
@@ -152,7 +142,7 @@
         } else if (index == 2) {
             $.table._option.modalName = "招待报销信息";
             $.table._option.updateUrl = prefix + "/editZhao/{id}";
-        }  else{
+        } else {
             $.table._option.modalName = "其他报销信息";
             $.table._option.updateUrl = prefix + "/editQi/{id}";
         }
@@ -165,10 +155,10 @@
             $.table._option.removeUrl = prefix + "/removeTran";
         } else if (index == 2) {
             $.table._option.modalName = "招待报销信息";
-            $.table._option.removeUrl = prefix + "/removeZhao?id="+id;
-        }else{
+            $.table._option.removeUrl = prefix + "/removeZhao?id=" + id;
+        } else {
             $.table._option.modalName = "其他报销信息";
-            $.table._option.removeUrl = prefix + "/removeQi?id="+id;
+            $.table._option.removeUrl = prefix + "/removeQi?id=" + id;
         }
         $.operate.remove(id);
     }
@@ -336,56 +326,56 @@
             modelName: "其他费用申请",
             columns: [
 
-                    {
-                        field: 'id',
-                        title: 'id',
-                        visible: false
-                    },
-                    {
-                        field: 'ddDate',
-                        title: '日期',
-                        formatter: function (value, row, index) {
-                            var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                            return newDate;
-                        }
-                    },
-                    {
-                        field: 'amount',
-                        title: '金额'
-                    },
-                    {
-                        field: 'project',
-                        title: '报销科目'
-                    },
-                    {
-                        field: 'reason',
-                        title: '事由'
-                    },
-                    {
-                        field: 'documentNum',
-                        title: '单据数'
-                    },
-                    {
-                        field: 'status',
-                        title: '用户状态',
-                        visible: false,
-                        align: 'center',
-                        formatter: function (value, row, index) {
-                            return $.table.selectDictLabel(datas, value);
-                        }
-                    },
-
-                    {
-                        title: '操作',
-                        align: 'center',
-                        formatter: function (value, row, index) {
-                            var actions = [];
-                                actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="mEdit(3,\'' + row.id + '\')"><i class  = "fa fa-edit" > </i>修改</a> ');
-                                actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="mRemove(3,\'' + row.id + '\')"><i class  = "fa fa-remove" > </i>删除</a > ');
-                             return actions.join('');
-                        }
+                {
+                    field: 'id',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'ddDate',
+                    title: '日期',
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
                     }
-                    ]
+                },
+                {
+                    field: 'amount',
+                    title: '金额'
+                },
+                {
+                    field: 'project',
+                    title: '报销科目'
+                },
+                {
+                    field: 'reason',
+                    title: '事由'
+                },
+                {
+                    field: 'documentNum',
+                    title: '单据数'
+                },
+                {
+                    field: 'status',
+                    title: '用户状态',
+                    visible: false,
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="mEdit(3,\'' + row.id + '\')"><i class  = "fa fa-edit" > </i>修改</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="mRemove(3,\'' + row.id + '\')"><i class  = "fa fa-remove" > </i>删除</a > ');
+                        return actions.join('');
+                    }
+                }
+            ]
         };
         $.table.init(options);
     });
@@ -414,20 +404,18 @@
         $.ajax(config)
     }
 
-    function submitHandler(index) {
+    function submitHandler() {
         debugger
         if ($.validate.form()) {
-//index为1表示保存
-            if (index == 1) {
-                mSave(prefix + "/addSave", $('#form-reiadd').serialize());
-            } else if (index == 2) {
-                mSave(prefix + "/addSubmit", $('#form-reiadd').serialize());
-            }
-            $.operate.successCallback();
-            window.location.reload();
-            $.modal.close();
-            $.modal.closeAll();
+            //index为1表示保存
+
+            $.operate.save(prefix + "/addSubmit", $('#form-reiadd').serialize());
+
         }
+    }
+
+    function sub() {
+        $.operate.save(prefix + "/addSave", $('#form-reiadd').serialize());
     }
 
 </script>

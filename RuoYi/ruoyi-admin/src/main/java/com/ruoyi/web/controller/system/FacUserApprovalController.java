@@ -113,7 +113,6 @@ public class FacUserApprovalController extends BaseController {
 
         FacUserApproval facUserApproval = facUserApprovalService
                 .selectFacUserApprovalById(approvalId);
-
         FacReimburseApply facReimburseApply = new FacReimburseApply();
         facReimburseApply.setNum(facUserApproval.getApplyId());
         List<FacReimburseApply> facReimburseApplies = facReimburseApplyService
@@ -147,6 +146,38 @@ public class FacUserApprovalController extends BaseController {
 
     }
 
+
+    /**
+     * 修改财务审批
+     */
+    @GetMapping("/editSa/{approvalId}")
+    public String editSa(@PathVariable("approvalId") Long approvalId,
+                         ModelMap map) {
+
+        FacUserApproval facUserApproval = facUserApprovalService
+                .selectFacUserApprovalById(approvalId);
+        map.put("facUserApproval", facUserApproval);
+        map.put("approvalId", facUserApproval.getApprovalId());
+        return prefix + "/editSa";
+
+    }
+
+
+    /**
+     * 修改保存财务审批
+     */
+    @Log(title = "财务审批", businessType = BusinessType.UPDATE)
+    @PostMapping("/editSa")
+    @ResponseBody
+    public AjaxResult editSa(FacUserApproval facUserApproval) {
+        FacUserApproval fac = facUserApprovalService
+                .selectFacUserApprovalById(facUserApproval.getApprovalId());
+        fac.setApprovalState(facUserApproval.getApprovalState());
+        fac.setOpi(facUserApproval.getOpi());
+        return toAjax(facUserApprovalService.updateFacUserApproval(fac));
+    }
+
+
     /**
      * 修改保存财务审批
      */
@@ -161,10 +192,11 @@ public class FacUserApprovalController extends BaseController {
         List<FacUserApproval> list = facUserApprovalService
                 .selectFacUserApprovalList(facUser);
         FacUserApproval fac = list.get(0);
-        fac.setApprovalState("1");
+        fac.setApprovalState(facUserApproval.getApprovalState());
         fac.setOpi(facUserApproval.getOpi());
         return toAjax(facUserApprovalService.updateFacUserApproval(fac));
     }
+
 
     /**
      * 查看借款详情

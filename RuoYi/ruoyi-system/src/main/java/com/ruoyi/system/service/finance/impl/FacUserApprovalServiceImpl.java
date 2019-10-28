@@ -109,37 +109,6 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 		// 将当前审批状态改为审批中
 		facReimburseApplyService
 				.updateFacReimburseApplyByNum(facReimburseApply);
-
-		// SysUser sysUser =
-		// iSysUserService.selectUserById(facUserApproval.getApproverId());
-		// SysDept sysDept = sysDeptService.selectDeptById(sysUser.getDeptId());
-		// if(sysDept.getParentId()==0){
-		// return 1;
-		// }
-		// Long leaderId = null;
-		// if(sysDept.getLeader().equals(sysUser.getUserName())){
-		// sysDept = sysDeptService.selectDeptById(sysDept.getParentId());
-		// SysUser selectVO = new SysUser();
-		// selectVO.setUserName(sysDept.getLeader());
-		// selectVO.setDeptId(sysDept.getDeptId());
-		// List<SysUser> sysUsers = iSysUserService.selectUserList(selectVO);
-		// leaderId = sysUsers.get(0).getUserId();
-		// }
-		//
-		// FacUserApproval fac =new FacUserApproval();
-		//
-		// fac.setApproverId(leaderId);
-		// fac.setApplyId(facUserApproval.getApplyId());
-		//
-		// FacUserApproval facUserApproval2 = facUserApprovalMapper
-		// .selectEndFacUserApprovalList(fac);
-		// if(facUserApproval2==null){
-		// facReimburseApply.setStatus("1");
-		// facReimburseApplyService.updateFacReimburseApplyByNum(facReimburseApply);
-		// return 1;
-		// }
-		// facUserApproval2.setApprovalSight("1");
-
 		return 1;
 	}
 

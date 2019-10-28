@@ -87,6 +87,10 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
 			facSysUserApproval.setApproverId(leaderId);
 			approvalId = leaderId;
 		}
+		if(facCollectApply.getApplicant() == 103
+				|| facCollectApply.getApplicant() == 101){
+			facSysUserApproval.setApproverId(101L);
+		}
 		approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
 		if (facCollectApply.getApplicant() == 103
 				|| facCollectApply.getApplicant() == 101) {

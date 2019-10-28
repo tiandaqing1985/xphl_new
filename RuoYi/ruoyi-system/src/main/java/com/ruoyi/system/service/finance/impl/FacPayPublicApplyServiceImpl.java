@@ -93,6 +93,10 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 			facSysUserApproval.setApproverId(leaderId);
 			approvalId = leaderId;
 		}
+		if(facPayPublicApply.getUser() == 103
+				|| facPayPublicApply.getUser() == 101){
+			facSysUserApproval.setApproverId(101L);
+		}
 		approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
 		if (facPayPublicApply.getUser() == 103
 				|| facPayPublicApply.getUser() == 101) {

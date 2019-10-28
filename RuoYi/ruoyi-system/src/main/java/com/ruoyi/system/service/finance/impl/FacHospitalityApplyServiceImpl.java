@@ -97,6 +97,10 @@ public class FacHospitalityApplyServiceImpl
 			facSysUserApproval.setApproverId(leaderId);
 			approvalId = leaderId;
 		}
+		if(facHospitalityApply.getUserId() == 103
+				|| facHospitalityApply.getUserId() == 101){
+			facSysUserApproval.setApproverId(101L);
+		}
 		approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
 		if (facHospitalityApply.getUserId() == 103
 				|| facHospitalityApply.getUserId() == 101) {

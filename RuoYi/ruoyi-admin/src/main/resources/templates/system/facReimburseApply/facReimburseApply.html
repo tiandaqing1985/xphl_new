@@ -36,17 +36,9 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.modal.openTab('日常报销申请','system/facReimburseApply/add')">
+            <a class="btn btn-success" onclick="$.modal.openFull('日常报销申请','facReimburseApply/add')">
                 <i class="fa fa-plus"></i> 日常报销申请
             </a>
-<!--             <a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()"-->
-<!--            >-->
-<!--                <i class="fa fa-edit"></i> 修改-->
-<!--            </a>-->
-<!--            <a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()"-->
-<!--            >-->
-<!--                <i class="fa fa-remove"></i> 删除-->
-<!--            </a>-->
             <a class="btn btn-warning" onclick="$.table.exportExcel()"
             >
                 <i class="fa fa-download"></i> 导出
@@ -153,9 +145,7 @@
 
                         }else
                         {
-                            //待审批
-                          //  actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                         //   actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            //  actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                          }
                         if(row.submitStatus=="submit"){
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-detail"></i>查看</a>');
@@ -285,16 +275,12 @@
         };
         $.ajax(config)
     }
+
     function submitHandler(id) {
             //index为1表示保存
         debugger;
-        mSave(prefix + "/addSubmit", {"id":id});
-        $.modal.close();
-        $.modal.closeTab();
-        $.operate.successTabCallback();
+        $.operate.save(prefix + "/addSubmit", {"id":id});
     }
-
-
     var testBsSuggest = $("#loanUser").bsSuggest({
         url: ctx + "system/user/userModel",
         showBtn: false,

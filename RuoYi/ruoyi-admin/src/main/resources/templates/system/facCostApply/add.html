@@ -27,7 +27,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>预计返回时间：</label>
             <div class="col-sm-8">
-                <input id="backTimeEs" name="backTimeEs" class="time-input" required >
+                <input id="backTimeEs" name="backTimeEs" class="time-input" required>
             </div>
         </div>
         <div class="form-group">
@@ -58,23 +58,23 @@
 
         <div class="row">
             <div class="col-sm-offset-5 col-sm-10">
-                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
-                        class="fa fa-check"></i>提 交
-                </button>&nbsp;
-                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
+                <!--                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i-->
+                <!--                        class="fa fa-check"></i>提 交-->
+                <!--                </button>&nbsp;-->
+                <button type="button" class="btn btn-sm btn-primary" onclick="sub()"><i
                         class="fa fa-check"></i>保 存
                 </button>&nbsp;
-                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
-                        class="fa fa-reply-all"></i>关 闭
-                </button>
+                <!--                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i-->
+                <!--                        class="fa fa-reply-all"></i>关 闭-->
+                <!--                </button>-->
 
             </div>
         </div>
     </form>
 </div>
 <div th:include="include::footer"></div>
-<th:block th:include="include :: bootstrap-suggest-js" />
-<th:block th:include="include :: bootstrap-select-js" />
+<th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script type="text/javascript">
     var prefix = ctx + "system/facCostApply"
     var num = $("#num").val();
@@ -245,13 +245,13 @@
     };
 
 
-    function mEdit(index,id){
-        if(index==1){
+    function mEdit(index, id) {
+        if (index == 1) {
             $.table._option.id = "bootstrap-table-1";
             $.table._option.url = prefix + "/addTraDetail";
             $.table._option.modalName = "行程安排";
             $.table._option.updateUrl = prefix + "/editTra/{id}";
-        }else if(index==2){
+        } else if (index == 2) {
             $.table._option.id = "bootstrap-table-2";
             $.table._option.modalName = "住宿安排";
             $.table._option.updateUrl = prefix + "/editPut/{id}";
@@ -259,17 +259,16 @@
         $.operate.edit(id);
     }
 
-    function mRemove(index,id){
-        if(index==1){
+    function mRemove(index, id) {
+        if (index == 1) {
             $.table._option.modalName = "行程安排";
-            $.table._option.removeUrl = prefix + "/removeTra?id="+id;
-        }else if(index==2){
+            $.table._option.removeUrl = prefix + "/removeTra?id=" + id;
+        } else if (index == 2) {
             $.table._option.modalName = "住宿安排";
-            $.table._option.removeUrl = prefix + "/removePut?id="+id;
+            $.table._option.removeUrl = prefix + "/removePut?id=" + id;
         }
         $.operate.remove(id);
     }
-
 
 
     $(function () {
@@ -279,34 +278,20 @@
     });
 
 
-
-
-
-    function submitHandler(id) {
+    function submitHandler() {
         debugger
-        if (id == 1) {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-facCostApply-add').serialize());
-            }
-            $.operate.successCallback();
-            $.modal.close();
-        } else {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/addSove", $('#form-facCostApply-add').serialize());
-            }
-            $.operate.successCallback();
-            $.modal.close();
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-facCostApply-add').serialize());
+
         }
     }
 
+    function sub() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/addSove", $('#form-facCostApply-add').serialize());
+        }
 
-
-
-
-
-
-
-
+    }
 
 
     var testBsSuggest = $("#loanUser").bsSuggest({
@@ -314,7 +299,7 @@
         showBtn: false,
         idField: "userName",
         keyField: "userId",
-        effectiveFields: ["deptName","userName"],
+        effectiveFields: ["deptName", "userName"],
         multiWord: true,
         hideOnSelect: true
     }).on('onDataRequestSuccess', function (e, result) {

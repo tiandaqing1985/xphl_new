@@ -135,10 +135,9 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="zAdd(\'' + row.approvalId + '\')"><i class="fa fa-edit"></i>审批</a> ');
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="zAdd(\'' + row.approvalId + '\')"><i class="fa fa-edit"></i>审 批</a> ');
 
-                        //    actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.approvalId + '\')"><i class="fa fa-edit"></i>审批</a> ');
-
+                         // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="sAdd(\'' + row.approvalId + '\')"><i class="fa fa-edit"></i>审批</a> ');
                         //actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.approvalId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
@@ -148,11 +147,15 @@
     });
 
     function zAdd(id) {
-        $.modal.openTab("审批", "/system/facUserApproval/edit/" + id);
-      //  $.modal.close();
-      //  $.modal.closeTab();
+        $.modal.openFull("审批", "/system/facUserApproval/edit/" + id);
 
     }
+
+    function sAdd(id) {
+        $.modal.open("审批", "/system/facUserApproval/editSa/" + id);
+
+    }
+
 
 
     var testBsSuggest = $("#applicantId").bsSuggest({

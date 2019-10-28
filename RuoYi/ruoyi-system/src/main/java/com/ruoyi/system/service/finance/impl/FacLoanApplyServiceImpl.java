@@ -91,6 +91,10 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
 			facSysUserApproval.setApproverId(leaderId);
 			approvalId = leaderId;
 		}
+		if(facLoanApply.getLoanUser() == 103
+				|| facLoanApply.getLoanUser() == 101){
+			facSysUserApproval.setApproverId(101L);
+		}
 		approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
 		if (facLoanApply.getLoanUser() == 103
 				|| facLoanApply.getLoanUser() == 101) {

@@ -19,34 +19,33 @@
                 <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
             </div>
         </div>
-<form class="form-horizontal m" id="form-facUserApproval-edit" th:object="${facUserApproval}">
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="form-group" id="div-reiadd">
-                <label class="col-sm-4 control-label"></span>审批意见：</label>
-                <div class="col-sm-8">
-                    <input id="opi" name="opi" class="form-control" type="text">
-                    <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
-                    <input id="approverId" name="approverId" class="form-control-static" type="hidden"
-                           th:value="${userId}">
+        <form class="form-horizontal m" id="form-facUserApproval-edit" th:object="${facUserApproval}">
+
+                <div class="col-sm-6">
+                    <div  class="form-group"  >
+                        <div class="col-sm-4 control-label">
+                            <label class="radio-box">
+                                <input type="radio" checked value="1" name="approvalState" style="position: absolute; opacity: 0;">
+                                同意</label>
+                            <label class="radio-box">
+                                <input type="radio" value="2" name="approvalState" style="position: absolute; opacity: 0;">
+                                驳回</label>
+                        </div>
+                    </div>
+                    <div class="form-group" >
+                        <label class="col-sm-4 control-label"></span>审批意见：</label>
+                        <div class="col-sm-8">
+                            <input id="opi" name="opi" class="form-control" type="text">
+                            <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
+                            <input id="approverId" name="approverId" class="form-control-static" type="hidden"
+                                   th:value="${userId}">
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-offset-5 col-sm-10">
-            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
-                    class="fa fa-check"></i>同意
-            </button>&nbsp;
-            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
-                    class="fa fa-check"></i>驳回
-            </button>&nbsp;
 
-        </div>
-    </div>
+        </form>
 
-</form>
-</div>
+    </div>
 <div th:include="include::footer"></div>
 
 
@@ -151,40 +150,50 @@
         focusCleanup: true
     });
 
-    function mSave(url, data, callback) {
-        var config = {
-            url: url,
-            type: "post",
-            dataType: "json",
-            data: data,
-            beforeSend: function () {
-                $.modal.loading("正在处理中，请稍后...");
-                $.modal.disable();
-            },
-            success: function (result) {
-                if (typeof callback == "function") {
-                    callback(result);
+        function mSave(url, data, callback) {
+            debugger
+            var config = {
+                url: url,
+                type: "post",
+                dataType: "json",
+                data: data,
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                    $.modal.disable();
+                },
+                success: function (result) {
+                    if (typeof callback == "function") {
+                        callback(result);
+                    }
+                    $.modal.closeLoading();
+                    $.modal.enable();
+                    alert(result.msg);
+                    $.modal.closeTab();
+                    $.modal.closeTab();
+                    $.modal.closeAll();
+                    $.modal.close();
                 }
-                $.modal.closeLoading();
-                $.modal.enable();
-                alert(result.msg);
-                $.modal.closeTab();
-            }
-        };
-        $.ajax(config)
-    }
-
-    function submitHandler(index) {
-        if ($.validate.form()) {
-            //index为1表示同意
-            if (index == 1) {
-                mSave(prefixs + "/edit", $('#form-facUserApproval-edit').serialize());
-            } else {
-                mSave(prefixs + "/editnot", $('#form-facUserApproval-edit').serialize());
-            }
+            };
+            $.ajax(config)
+            $.modal.msgReload("保存成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+            $.operate.successCallback();
+            $.modal.closeTab();
+            $.operate.successCallback();
+            window.location.reload();
             $.modal.close();
         }
-    }
-</script>
+
+
+        function submitHandler() {
+        debugger
+
+            if ($.validate.form()) {
+
+                mSave(prefixs + "/edit", $('#form-facUserApproval-edit').serialize());
+
+            }
+        }
+
+    </script>
 </body>
 </html>
