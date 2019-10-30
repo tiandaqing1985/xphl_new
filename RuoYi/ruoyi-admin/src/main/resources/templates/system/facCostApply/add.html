@@ -57,16 +57,16 @@
         </div>
 
         <div class="row">
-            <div class="col-sm-offset-5 col-sm-10">
-                <!--                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i-->
-                <!--                        class="fa fa-check"></i>提 交-->
-                <!--                </button>&nbsp;-->
-                <button type="button" class="btn btn-sm btn-primary" onclick="sub()"><i
-                        class="fa fa-check"></i>保 存
-                </button>&nbsp;
-                <!--                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i-->
-                <!--                        class="fa fa-reply-all"></i>关 闭-->
-                <!--                </button>-->
+         <div class="col-sm-offset-5 col-sm-10">
+<!--                                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler()"><i-->
+<!--                                        class="fa fa-check"></i>提 交-->
+<!--                                </button>&nbsp;-->
+<!--                <button type="button" class="btn btn-sm btn-primary" onclick="sub()"><i-->
+<!--                        class="fa fa-check"></i>保 存-->
+<!--                </button>&nbsp;-->
+<!--                                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i-->
+<!--                                        class="fa fa-reply-all"></i>关 闭-->
+<!--                                </button> -->
 
             </div>
         </div>
@@ -78,7 +78,6 @@
 <script type="text/javascript">
     var prefix = ctx + "system/facCostApply"
     var num = $("#num").val();
-
     $("#form-facCostApply-add").validate({
         rules: {
             xxxx: {
@@ -87,19 +86,16 @@
         },
         focusCleanup: true
     });
-
     function mAdd() {
         $.table._option.id = "bootstrap-table-1";
         $.table._option.url = prefix + "/querys/" + num;
         $.modal.open("行程详细信息", "/system/facCostApply/tranDetail?num=" + num);
     }
-
     function zAdd() {
         $.table._option.id = "bootstrap-table-2";
         $.table._option.url = prefix + "/sleep/" + num;
         $.modal.open("住宿详细信息", "/system/facCostApply/putAdd?num=" + num);
     }
-
     var options1 = {
         id: "bootstrap-table-1",
         url: prefix + "/querys/" + num,
@@ -280,40 +276,21 @@
 
 //这是添加页面
     function submitHandler() {
-        debugger
         if ($.validate.form()) {
             $.operate.save(prefix + "/add", $('#form-facCostApply-add').serialize());
 
         }
     }
-
     function sub() {
+        debugger
         if ($.validate.form()) {
             $.operate.save(prefix + "/addSove", $('#form-facCostApply-add').serialize());
         }
     }
 
 
-    // laydate.render({
-    //     elem: '#outTime'
-    //     ,min: 0
-    //     ,max: 190
-    // });
-    debugger
-    $("#outTime").attr("placeholder","请选择以后的时间");
+    $("#outTime").attr("placeholder","请选择"+getNowFormatDate()+"及以后的时间");
 
-   // $("#outTime").attr("placeholder",formatDate);
-
-    var formatDate = function (date) {
-        var y = date.getFullYear();
-        var m = date.getMonth() + 1;
-        m = m < 10 ? '0' + m : m;
-        var d = date.getDate();
-        d = d < 10 ? ('0' + d) : d;
-        return y + '-' + m + '-' + d;
-    };
-
-    $("#outTime").attr("placeholder",getNowFormatDate());
 
     function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式  
         debugger

@@ -30,7 +30,7 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-<!--         <a class="btn btn-success" onclick="$.operate.addFull()">-->
+<!--            <a class="btn btn-success" onclick="$.operate.addTab()">-->
              <a class="btn btn-success" onclick="add()">
                 <i class="fa fa-plus"></i> 添加
             </a>
@@ -205,38 +205,36 @@
             btn: ['提交','保存','关闭'],
             // 弹层外区域关闭
             shadeClose: true,
-            yes: function () {
+            yes: function (index,layero) {
                 var config = {
                     url: "/system/facCostApply/add",
                     type: "post",
                     dataType: "json",
                     contentType : "application/x-www-form-urlencoded;charset=UTF-8",
                     async: false,
-                    data: $('#form-facCostApply-add').serialize(),
-                    success: function(result) {
-                        // if (typeof callback == "function") {
-                        //     callback(result);
-                        // }
-                        // $.operate.successCallback(result);
-                        console.log(result)
+                    data:'',
+                    success: function() {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                         iframeWin.submitHandler();
+                        layer.close(index);
                     }
                 };
                 $.ajax(config)
             },
-            btn2: function  () {
+            btn2: function (index,layero) {
                 var config = {
-                    url: "/system/facCostApply/addSove",
+                    url: "/system/facCostApply/add",
                     type: "post",
                     dataType: "json",
                     contentType : "application/x-www-form-urlencoded;charset=UTF-8",
                     async: false,
-                    data: $('#form-facCostApply-add').serialize(),
-                    success: function(result) {
-                        console.log(result)
-                        // if (typeof callback == "function") {
-                        //     callback(result);
-                        // }
-                        // $.operate.successCallback(result);
+                    data:'',
+                    success: function() {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.sub();
+                        layer.close(index);
                     }
                 };
                 $.ajax(config)
@@ -247,29 +245,6 @@
         });
         layer.full(index);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -288,11 +263,6 @@
         var currentdate = year + seperator1 + month + seperator1 + strDate;
         return currentdate;
     };
-
-
-
-
-
 
 
     function mSave(url, data, callback) {
