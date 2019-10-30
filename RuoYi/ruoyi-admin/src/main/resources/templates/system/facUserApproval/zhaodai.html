@@ -37,17 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-offset-5 col-sm-10">
-                    <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
-                            class="fa fa-check"></i>同意
-                    </button>&nbsp;
-                    <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
-                            class="fa fa-check"></i>驳回
-                    </button>&nbsp;
 
-                </div>
-            </div>
         </form>
         <div th:include="include :: footer"></div>
         <script th:inline="javascript">
@@ -148,7 +138,7 @@
                         }
                         $.modal.closeLoading();
                         $.modal.enable();
-                        alert(result.msg);
+                        
                         $.modal.closeTab();
                     }
                 };

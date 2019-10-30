@@ -53,7 +53,7 @@ public class FacHospitalityApplyController extends BaseController {
 	@Autowired
 	private IFacNumberTableService facNumberTableService;
 
-	@RequiresPermissions("system:facHospitalityApply:view")
+	//@RequiresPermissions("system:facHospitalityApply:view")
 	@GetMapping()
 	public String facHospitalityApply() {
 		return prefix + "/facHospitalityApply";
@@ -246,6 +246,7 @@ public class FacHospitalityApplyController extends BaseController {
 		map.put("amount", facHospitalityApply.getAmount());
 		 String num=facNumberTableService.getNum("BX", ShiroUtils.getDateId());
 		map.put("num", num);
+		map.put("name", facHospitalityApply.getZdName());
 		ReiHospitalityApply reiHospitalityApply = new ReiHospitalityApply();
 		reiHospitalityApply.setDdDate(facHospitalityApply.getZdDate());
 		reiHospitalityApply.setAmount(facHospitalityApply.getAmount());

@@ -40,7 +40,7 @@ public class FacLoanRepayApplyController extends BaseController
 	@Autowired
 	private IFacLoanRepayApplyService facLoanRepayApplyService;
 	
-	@RequiresPermissions("system:facLoanRepayApply:view")
+	//@RequiresPermissions("system:facLoanRepayApply:view")
 	@GetMapping()
 	public String facLoanRepayApply()
 	{

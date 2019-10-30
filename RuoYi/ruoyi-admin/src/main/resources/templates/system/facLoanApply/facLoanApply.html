@@ -162,6 +162,8 @@
                         if(row.approvalStatus==1){
                             //审批成功
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="d(\'' + row.id + '\')"><i class="fa fa-remove"></i>还款</a>');
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-remove"></i>查看</a>');
+
                         }else if(row.applyStatus==2){
                             //审批失败
 
@@ -179,7 +181,6 @@
 
                         }
 
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-remove"></i>查看</a>');
 
                         return actions.join('');
                     }
@@ -220,7 +221,7 @@
                 }
                 $.modal.closeLoading();
                 $.modal.enable();
-                alert(result.msg);
+                
                 $.modal.closeTab();
                 $.modal.closeTab();
                 $.modal.closeAll();

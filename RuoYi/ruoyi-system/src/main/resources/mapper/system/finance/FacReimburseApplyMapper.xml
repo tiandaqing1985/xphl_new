@@ -130,7 +130,7 @@ SELECT
         a.amount,
         a.target,
         a.`departure`,
-        a.`type`,
+        a.type,
         a.`reason`,
         a.`document_num` AS documentNum,
         a.`apply_user` AS applyUser,

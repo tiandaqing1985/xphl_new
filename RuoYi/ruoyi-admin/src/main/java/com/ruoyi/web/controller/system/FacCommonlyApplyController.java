@@ -77,6 +77,23 @@ public class FacCommonlyApplyController extends BaseController
 	 
 	
 	
+	
+	/**
+	 * 新增对公常显
+	 */
+	@GetMapping("/detail")
+	public String detail()
+	{
+	    return prefix + "/detail";
+	}
+	 
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 新增保存对公常显
 	 */

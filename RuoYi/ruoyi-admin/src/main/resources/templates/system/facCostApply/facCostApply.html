@@ -30,9 +30,11 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.addFull()">
+<!--         <a class="btn btn-success" onclick="$.operate.addFull()">-->
+             <a class="btn btn-success" onclick="add()">
                 <i class="fa fa-plus"></i> 添加
             </a>
+
             <a class="btn btn-warning" onclick="$.table.exportExcel()">
                 <i class="fa fa-download"></i> 导出
             </a>
@@ -146,10 +148,11 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
 
-                        if (row.status == 1) {
+                        if (row.approvalStatus == 1) {
                             //审批成功
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
+
                         } else if (row.status == 2) {
                             //审批失败
                         } else if (row.status == 3) {
@@ -182,6 +185,115 @@
         $.modal.close();
         $.modal.closeTab();
     }
+
+    function add() {
+        var width;
+        var height;
+        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+            width = 'auto';
+            height = 'auto';
+        }
+        var index = layer.open({
+            type: 2,
+            area: [width, height],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "提交预览",
+            content: "/system/facCostApply/add",
+            btn: ['提交','保存','关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function () {
+                var config = {
+                    url: "/system/facCostApply/add",
+                    type: "post",
+                    dataType: "json",
+                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+                    async: false,
+                    data: $('#form-facCostApply-add').serialize(),
+                    success: function(result) {
+                        // if (typeof callback == "function") {
+                        //     callback(result);
+                        // }
+                        // $.operate.successCallback(result);
+                        console.log(result)
+                    }
+                };
+                $.ajax(config)
+            },
+            btn2: function  () {
+                var config = {
+                    url: "/system/facCostApply/addSove",
+                    type: "post",
+                    dataType: "json",
+                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+                    async: false,
+                    data: $('#form-facCostApply-add').serialize(),
+                    success: function(result) {
+                        console.log(result)
+                        // if (typeof callback == "function") {
+                        //     callback(result);
+                        // }
+                        // $.operate.successCallback(result);
+                    }
+                };
+                $.ajax(config)
+            },
+            cancel: function(index) {
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    };
+
+
+
+
+
+
 
     function mSave(url, data, callback) {
         var config = {

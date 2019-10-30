@@ -5,7 +5,12 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-facPayPublicApply-add">
+    <form class="form-horizontal m" id="form-facPayPublicApply-add" >
+        <div class="form-group">
+            <a id="cy" class="btn btn-success" onclick="cy()">
+                <i class="fa fa-plus"></i> 常用收款人
+            </a>
+        </div>
         <div class="form-group">
             <label class="col-sm-3 control-label">对公编号：</label>
             <div class="col-sm-8">
@@ -13,46 +18,57 @@
             </div>
         </div>
         <div class="form-group">
+            <label class="col-sm-3 control-label">付款单位：</label>
+            <div class="col-sm-8">
+                <select id="unit" name="unit">
+                    <option value="新普互联（北京）科技有限公司" >新普互联（北京）科技有限公司</option>
+                    <option value="普菲特（海南）科技有限公司">普菲特（海南）科技有限公司</option>
+                    <option value="新疆普菲特网络科技有限公司">新疆普菲特网络科技有限公司</option>
+                    <option value="上海优寰网络科技有限公司">上海优寰网络科技有限公司</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>申请名称：</label>
             <div class="col-sm-8">
-                <input id="name" name="name" class="form-control" type="text"  required>
+                <input id="name" name="name" class="form-control" type="text" required>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>是否有发票：</label>
             <div class="col-sm-8">
-                <label><input    type="radio" name="weatherInvoice" value="有发票" checked>有发票</label>
-                <label><input    type="radio" name="weatherInvoice" value="暂无发票">暂无发票</label>
+                <label><input type="radio" name="weatherInvoice" value="有发票" checked>有发票</label>
+                <label><input type="radio" name="weatherInvoice" value="暂无发票">暂无发票</label>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>付款金额：</label>
             <div class="col-sm-8">
-                <input id="amount" name="amount" class="form-control" type="text"  required>
+                <input id="amount" name="amount" class="form-control" type="text" required>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人：</label>
             <div class="col-sm-8">
-                <input id="payee" name="payee" class="form-control" type="text"  required>
+                <input id="payee" name="payee" class="form-control" type="text" required>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人开户行：</label>
             <div class="col-sm-8">
-                <input id="payeeBank" name="payeeBank" class="form-control" type="text"  required>
+                <input id="payeeBank" name="payeeBank" class="form-control" type="text" required>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人账号：</label>
             <div class="col-sm-8">
-                <input id="payeeAccount" name="payeeAccount" class="form-control" type="text"  required>
+                <input id="payeeAccount" name="payeeAccount" class="form-control" type="text" required>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>备注：</label>
+            <label class="col-sm-3 control-label"><span style="color: red; "></span>备注：</label>
             <div class="col-sm-8">
-                <input id="remarks" name="remarks" class="form-control" type="text"  required>
+                <input id="remarks" name="remarks" class="form-control" type="text">
             </div>
         </div>
 
@@ -64,22 +80,22 @@
         </div>
         <div class="row">
             <div class="col-sm-offset-5 col-sm-10">
-<!--                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i-->
-<!--                        class="fa fa-check"></i>提 交-->
-<!--                </button>&nbsp;-->
+                <!--                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i-->
+                <!--                        class="fa fa-check"></i>提 交-->
+                <!--                </button>&nbsp;-->
                 <button type="button" class="btn btn-sm btn-primary" onclick="sub()"><i
                         class="fa fa-check"></i>保 存
                 </button>&nbsp;
-<!--                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i-->
-<!--                        class="fa fa-reply-all"></i>关 闭-->
-<!--                </button>-->
+                <!--                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i-->
+                <!--                        class="fa fa-reply-all"></i>关 闭-->
+                <!--                </button>-->
             </div>
         </div>
     </form>
 </div>
 <div th:include="include::footer"></div>
-<th:block th:include="include :: bootstrap-suggest-js" />
-<th:block th:include="include :: bootstrap-select-js" />
+<th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script type="text/javascript">
     var prefix = ctx + "system/facPayPublicApply"
     var num = $("#num").val();
@@ -97,6 +113,16 @@
         $.modal.open("对公明细", "/system/facPayPublicApply/offset?num=" + num);
     }
 
+
+
+    function cy(){
+        $.modal.openFull("常用收款", "/system/facCommonlyApply/detail");
+    }
+
+
+
+
+
     $(function () {
         var options = {
             id: "bootstrap-table-1",
@@ -113,33 +139,33 @@
                     checkbox: true
                 },
                 {
-                    field : 'id',
-                    title : 'id',
+                    field: 'id',
+                    title: 'id',
                     visible: false
                 },
                 {
-                    field : 'num',
-                    title : '对公编号',
+                    field: 'num',
+                    title: '对公编号',
                     sortable: true
                 },
                 {
-                    field : 'name',
-                    title : '项目名称',
+                    field: 'name',
+                    title: '项目名称',
                     sortable: true
                 },
                 {
-                    field : 'reson',
-                    title : '付款事由',
+                    field: 'reson',
+                    title: '付款事由',
                     sortable: true
                 },
                 {
-                    field : 'money',
-                    title : '付款金额',
+                    field: 'money',
+                    title: '付款金额',
                     sortable: true
                 },
                 {
-                    field : 'detail',
-                    title : '详情',
+                    field: 'detail',
+                    title: '详情',
                     sortable: true
                 }
                 ,
@@ -163,11 +189,12 @@
 
     function submitHandler() {
         debugger
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-facPayPublicApply-add').serialize());
-            }
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/add", $('#form-facPayPublicApply-add').serialize());
+        }
     }
-    function sub(){
+
+    function sub() {
         if ($.validate.form()) {
             $.operate.save(prefix + "/addSove", $('#form-facPayPublicApply-add').serialize());
         }

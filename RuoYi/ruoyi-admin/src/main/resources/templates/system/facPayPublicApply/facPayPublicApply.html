@@ -112,6 +112,11 @@
                     sortable: true
                 },
                 {
+                    field: 'unit',
+                    title: '付款单位',
+                    sortable: true
+                },
+                {
                     field: 'userName',
                     title: '申请人',
                     sortable: true
@@ -171,14 +176,8 @@
                     align: 'center',
                     formatter: function (value, row, index) {
                         var actions = [];
-
-
-
-
-
-
-                        if(row.status==1){
-                            //审批成功
+                        if(row.approvalStatus==1){
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-remove"></i>查看</a>');
 
                         }else if(row.status==2){
                             //审批失败
@@ -196,7 +195,6 @@
                         {
 
                         }
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-remove"></i>查看</a>');
 
 
 

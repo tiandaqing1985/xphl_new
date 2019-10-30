@@ -40,7 +40,7 @@ public class FacUserApprovalController extends BaseController {
     @Autowired
     private IFacReimburseApplyService facReimburseApplyService;
 
-    @RequiresPermissions("system:facUserApproval:view")
+   // @RequiresPermissions("system:facUserApproval:view")
     @GetMapping()
     public String facUserApproval() {
         return prefix + "/facUserApproval";
@@ -127,7 +127,9 @@ public class FacUserApprovalController extends BaseController {
         map.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
         map.put("userId", ShiroUtils.getUserId());
         map.put("name", facUserApproval.getName());
-        String nums = facUserApproval.getApplyId().substring(0, 2);
+        map.put("userName", facUserApproval.getName());
+        
+       String nums = facUserApproval.getApplyId().substring(0, 2);
         if (nums.equals("BX")) {
             return prefix + "/baoxiaoDetails";
         } else if (nums.equals("JK")) {

@@ -139,7 +139,8 @@
 
                         if (row.approvalStatus == 1) {
                             //审批成功
-                            if(row.states != 4){
+                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-detail"></i>查看</a>');
+                             if(row.states != 4){
                                 actions.push('<a class="btn btn-danger btn-xs ' + '" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>报销</a>');
                              }
                         } else if (row.states == 2) {
@@ -157,7 +158,6 @@
                         } else {
 
                         }
-                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-detail"></i>查看</a>');
 
 
                         return actions.join('');
@@ -170,9 +170,14 @@
 
     function submitHandler(id) {
         //index为1表示保存
-        mSave(prefix + "/add", {"id": id});
-    }
+        $.operate.save(prefix + "/add", {"id": id});
+        $.modal.close();
+        $.modal.closeTab();
 
+    }
+    function call(){
+        $.operate.save(prefix);
+    }
 
 
     function mSave(url, data, callback) {

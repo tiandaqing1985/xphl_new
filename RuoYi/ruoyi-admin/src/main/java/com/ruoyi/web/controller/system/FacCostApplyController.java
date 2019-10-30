@@ -53,8 +53,7 @@ public class FacCostApplyController extends BaseController {
 	private ISysUserService sysUserService;
 
 	@Autowired
-	private IFacNumberTableService facNumberTableService;
-	@RequiresPermissions("system:facCostApply:view")
+	private IFacNumberTableService facNumberTableService; 
 	@GetMapping()
 	public String facCostApply() {
 		return prefix + "/facCostApply";
@@ -161,13 +160,10 @@ public class FacCostApplyController extends BaseController {
 	@Log(title = "差旅申请", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public AjaxResult addSave(FacCostApply facCostApply) {
+	public AjaxResult adSave(FacCostApply facCostApply) {
 		facCostApply.setUserId(ShiroUtils.getUserId());
 		facCostApply.setApplicationTime(new Date());
-		if (facCostApply.getId() == null) {
-			// 直接添加
-			 
-			facCostApply.setNum(facNumberTableService.getNum("CL", ShiroUtils.getDateId()));
+		if (facCostApply.getId() == null) {   
 			facCostApply.setUserId(ShiroUtils.getUserId());
 		} else {
 			// 更新

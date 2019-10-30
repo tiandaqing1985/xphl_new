@@ -2,6 +2,8 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.service.finance.IFacNumberTableService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,8 +37,10 @@ public class FacCollectDetaApplyController extends BaseController
 	
 	@Autowired
 	private IFacCollectDetaApplyService facCollectDetaApplyService;
-	
-	@RequiresPermissions("system:facCollectDetaApply:view")
+
+	@Autowired
+	private IFacNumberTableService facNumberTableService;
+
 	@GetMapping()
 	public String facCollectDetaApply()
 	{
@@ -85,7 +89,9 @@ public class FacCollectDetaApplyController extends BaseController
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(FacCollectDetaApply facCollectDetaApply)
-	{		
+	{
+		facCollectDetaApply.setNum(facNumberTableService.getNum("CL", ShiroUtils.getDateId()));
+
 		return toAjax(facCollectDetaApplyService.insertFacCollectDetaApply(facCollectDetaApply));
 	}
 

@@ -17,12 +17,9 @@
             <div class="form-group col-md-6">
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>出行类别</label>
                 <div class="col-sm-9">
-
                     <label><input    type="radio" name="type" value="公出" checked>公出交通费用申请</label>
                     <label><input    type="radio" name="type" value="加班">加班交通费用申请</label>
-
-                </div>
-
+                 </div>
             </div>
 
             <div class="col-md-6">
@@ -86,10 +83,11 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label"><span style="color: red; ">*</span>事由</label>
                     <div class="col-sm-9">
-                        <textarea id="reason" name="reason" class="form-control" type="text" required></textarea>
+                        <textarea id="reason" name="reason"  class="form-control" type="text" required></textarea>
                     </div>
                 </div>
             </div>
+        </div>
     </form>
 </div>
 <div th:include="include::footer"></div>
@@ -104,6 +102,16 @@
             $.operate.save(prefix + "/tranDetail", $('#form-add').serialize());
         }
     }
+
+    $(function () {
+        $("input[type='radio']").on("click",function () {
+            if($("input[name='type']:checked").val()=="加班"){
+                $("#reason").attr("placeholder","详细写明加班内容");
+            }else{
+                $("#reason").attr("placeholder","");
+            }
+        })
+    })
 
     var testBsSuggest = $("#user").bsSuggest({
         url: ctx + "system/user/userModel",

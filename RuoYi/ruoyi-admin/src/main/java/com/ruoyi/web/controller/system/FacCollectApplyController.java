@@ -54,7 +54,7 @@ public class FacCollectApplyController extends BaseController {
 	
 	
 
-	@RequiresPermissions("system:facCollectApply:view")
+	//@RequiresPermissions("system:facCollectApply:view")
 	@GetMapping()
 	public String facCollectApply() {
 		return prefix + "/facCollectApply";

@@ -57,7 +57,7 @@ public class FacPayPublicApplyController extends BaseController {
 	@Autowired
 	private IFacNumberTableService facNumberTableService;
 	
-	@RequiresPermissions("system:facPayPublicApply:view")
+	//@RequiresPermissions("system:facPayPublicApply:view")
 	@GetMapping()
 	public String facPayPublicApply() {
 		return prefix + "/facPayPublicApply";

@@ -90,7 +90,7 @@ public class FacPayPublicApply extends BaseEntity {
     private  String wetherSave;
     
     
-    
+    private  String  unit;
     
     /** 审批人姓名 **/
 	private String approver;
@@ -99,7 +99,15 @@ public class FacPayPublicApply extends BaseEntity {
     
     
 
-    public String getApprover() {
+    public String getUnit() {
+		return unit;
+	}
+
+	public void setUnit(String unit) {
+		this.unit = unit;
+	}
+
+	public String getApprover() {
 		return approver;
 	}
 

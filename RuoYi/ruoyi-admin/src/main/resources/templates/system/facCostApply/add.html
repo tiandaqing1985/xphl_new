@@ -21,13 +21,13 @@
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>出差时间：</label>
             <div class="col-sm-8">
-                <input id="outTime" name="outTime" class="time-input" required>
+                <input id="outTime" name="outTime" class="time-input"required>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>预计返回时间：</label>
             <div class="col-sm-8">
-                <input id="backTimeEs" name="backTimeEs" class="time-input" required>
+                <input id="backTimeEs" name="backTimeEs" class="time-input"  required>
             </div>
         </div>
         <div class="form-group">
@@ -37,9 +37,9 @@
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>事由：</label>
+            <label class="col-sm-3 control-label"><span style="color: red; "></span>事由：</label>
             <div class="col-sm-8">
-                <input id="reason" name="reason" class="form-control" type="text" required>
+                <input id="reason" name="reason" class="form-control" type="text">
             </div>
         </div>
         <div class="col-sm-12 select-table table-striped">
@@ -78,6 +78,7 @@
 <script type="text/javascript">
     var prefix = ctx + "system/facCostApply"
     var num = $("#num").val();
+
     $("#form-facCostApply-add").validate({
         rules: {
             xxxx: {
@@ -277,7 +278,7 @@
         $.table.init(options2);
     });
 
-
+//这是添加页面
     function submitHandler() {
         debugger
         if ($.validate.form()) {
@@ -290,8 +291,60 @@
         if ($.validate.form()) {
             $.operate.save(prefix + "/addSove", $('#form-facCostApply-add').serialize());
         }
-
     }
+
+
+    // laydate.render({
+    //     elem: '#outTime'
+    //     ,min: 0
+    //     ,max: 190
+    // });
+    debugger
+    $("#outTime").attr("placeholder","请选择以后的时间");
+
+   // $("#outTime").attr("placeholder",formatDate);
+
+    var formatDate = function (date) {
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? '0' + m : m;
+        var d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        return y + '-' + m + '-' + d;
+    };
+
+    $("#outTime").attr("placeholder",getNowFormatDate());
+
+    function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式  
+        debugger
+        var  aDate,  oDate1,  oDate2,  iDays
+        aDate  =  sDate1.split("-")
+        oDate1  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])    //转换为12-18-2006格式  
+        aDate  =  sDate2.split("-")
+        oDate2  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])
+        iDays  =  parseInt(Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数  
+        return  iDays
+    };
+
+
+
+    function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    };
+
+
 
 
     var testBsSuggest = $("#loanUser").bsSuggest({
