@@ -72,6 +72,7 @@ public class OaOutController extends BaseController
 	{
 		startPage();
 		oaOut.setUserId(ShiroUtils.getUserId());
+//		oaOut.setApprovalId(ShiroUtils.getUserId());
 		oaOut.setApprovalSight("1");
         List<OutApproval> list = oaOutService.selectMyOutApprovalList(oaOut);
 		return getDataTable(list);
@@ -85,6 +86,7 @@ public class OaOutController extends BaseController
 	public TableDataInfo unApprovalList(OaOut oaOut)
 	{
 		startPage();
+//		oaOut.setUserId(ShiroUtils.getUserId());
 		oaOut.setApprovalId(ShiroUtils.getUserId());
 		oaOut.setApprovalState("3");//审批状态（1同意，2驳回 ，3未操作）
 		oaOut.setApprovalSight("1");
@@ -107,6 +109,7 @@ public class OaOutController extends BaseController
 	public TableDataInfo myApprovalList(OaOut oaOut)
 	{
 		startPage();
+//		oaOut.setUserId(ShiroUtils.getUserId());
 		oaOut.setApprovalId(ShiroUtils.getUserId());
 		oaOut.setApprovalState("4");//审批状态（1同意，2驳回 ，3未操作）
         List<OutApproval> list = oaOutService.selectOutApprovalList(oaOut);
@@ -127,7 +130,9 @@ public class OaOutController extends BaseController
 	public TableDataInfo allList(OaOut oaOut)
 	{
 		startPage();
+//		oaOut.setUserId(ShiroUtils.getUserId());
 		oaOut.setApprovalId(ShiroUtils.getUserId());
+		oaOut.setRemark("查询申请记录");
 		oaOut.setApprovalSight("1");
         List<OutApproval> list = oaOutService.selectOutApprovalList(oaOut);
 		return getDataTable(list);
@@ -142,8 +147,10 @@ public class OaOutController extends BaseController
 	{
 		boolean showFlag = false;
 		SysUser user = iSysUserService.selectUserById(ShiroUtils.getUserId());
-		user.setRoleId(3L);
-		Long personnelId = iSysRoleService.selectUserIdByRoleId(user);//查询人事id
+		SysUser user2 = new SysUser();
+		user2.setRoleId(3L);
+		user2.setArea(user.getArea());
+		Long personnelId = iSysRoleService.selectUserIdByRoleId(user2);//查询人事id
 		if(personnelId.equals(ShiroUtils.getUserId())){
 			showFlag = true;
 		}

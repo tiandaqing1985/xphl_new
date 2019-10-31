@@ -187,6 +187,16 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 		user.setRoleId(3L);//人事专员
 		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id
 
+		//查看数据权限
+		SysUser user3 = new SysUser();
+		user3.setUserId(queryConditions.getUserId());
+		user3.setRoleId(15L);
+		Long id = userRoleMapper.selectUserIdByRoleId(user3);//具备查看数据权限的用户id
+		if(id != null){
+			queryConditions.setUserId(1L);
+			return userApprovalMapper.selectQueryConditionsList(queryConditions);
+		}
+		
 			//人事专员
 		if(hrId != null && user.getUserId().longValue()==hrId.longValue()){
 			queryConditions.setUserId(1L);

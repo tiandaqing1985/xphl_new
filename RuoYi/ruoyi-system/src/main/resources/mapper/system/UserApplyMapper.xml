@@ -488,7 +488,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="timeapart1 != null  and timeapart1 != ''  ">#{timeapart1},</if>
 			<if test="timeapart2 != null  and timeapart2 != ''  ">#{timeapart2},</if>
 			<if test="timeapart3 != null  and timeapart3 != ''  ">#{timeapart3},</if>
-			<if test="timelength != null  ">#{timelength},</if>
+			<if test="timelength != null  ">#{timelength,jdbcType=FLOAT},</if>
 			<if test="applyType != null  and applyType != ''  ">#{applyType},</if>
 			<if test="applyState != null  and applyState != ''  ">#{applyState},</if>
 			<if test="details != null  and details != ''  ">#{details},</if>

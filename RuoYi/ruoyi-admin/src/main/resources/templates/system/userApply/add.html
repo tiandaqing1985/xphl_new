@@ -315,12 +315,12 @@
 						}
 					}
 					else if(leaveType == "6"){//产假 
-						if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 15){
+						 if(DateDiff(getNowFormatDate(),$("#starttime").val()) < 15){
 							p01.innerText="产假需提前15天提交申请";
 							$("#p01").css("color","red");
 							flag = false;
 							return;
-						}
+						} 
 					
 						//是否提交证明附件
 						if(proveFlag){
@@ -397,9 +397,13 @@
 							 if(result == "0"){
 								 passFlag = true;
 							}
-							else{
+							else if(result == "1"){
 								passFlag = false;
 								$.modal.alertWarning("您还未通过试用一期，暂不能申请年假!");
+								return;
+							}else{
+								passFlag = false;
+								$.modal.alertWarning("本月通过试用一期的员工请于下月1号以后提交年假申请，本月不能申请年假!");
 								return;
 							}
 						},

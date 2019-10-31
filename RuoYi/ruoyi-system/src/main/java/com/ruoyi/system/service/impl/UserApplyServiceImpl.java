@@ -172,14 +172,20 @@ public class UserApplyServiceImpl implements IUserApplyService
 		personnel.setApprovalLevel(++level);
 		SysUser user = userMapper.selectUserById(userApply.getUserId());
 		
-		user.setRoleId(6L);//人事总监
-		user.setArea("1");
-		Long hrId = iSysRoleService.selectUserIdByRoleId(user);//人事总监id
+		SysUser user2 = new SysUser();
+		user2.setRoleId(6L);//人事总监
+		user2.setArea("1");
+		Long hrId = iSysRoleService.selectUserIdByRoleId(user2);//人事总监id
+		
+		SysUser user3 = new SysUser();
+		user3.setRoleId(3L);//人事
+		user3.setArea(user.getArea());
 		
 		//当前用户的上级是人事leader，不进行人事总监审批
 		if(upLeaderId.longValue() != hrId.longValue() && approvalId.longValue() != hrId.longValue()){//审批人是否是人事总监
-			//分区域分配人事审批人
-			personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user));
+			//人事总监审批
+//			personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user3));
+			personnel.setApproverId(hrId);
 			userApprovalMapper.insertUserApproval(personnel);	
 		}
 		
@@ -748,16 +754,17 @@ public class UserApplyServiceImpl implements IUserApplyService
 		else{
 			userApproval.setApproverId(leaderId);
 		}
-		userApproval.getApproverId();
 		userApprovalMapper.insertUserApproval(userApproval);
 		
 		//人事审批
 		UserApproval personnel = new UserApproval();
 		personnel.setApplyId(userApply.getApplyId());
 		personnel.setApprovalLevel(2);
-		SysUser user = userMapper.selectUserById(userApply.getUserId());
-		user.setRoleId(3L);
-		personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user));
+		SysUser user = userMapper.selectUserById(userApply.getUserId());//根据申请人查询区域
+		SysUser user2 = new SysUser();//当前区域hr
+		user2.setArea(user.getArea());
+		user2.setRoleId(3L);
+		personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user2));
 		userApprovalMapper.insertUserApproval(personnel);
 	
 		return 1;
@@ -829,12 +836,39 @@ public class UserApplyServiceImpl implements IUserApplyService
 	public String ifPass(Long userId) {
 		//试用一期内员工不可请年假
 		SysUser user = userMapper.selectUserById(userId);
-		if(user.getFirstphase().after(new Date())){
-			return "1";
+		Date today = new Date();
+		Date nextMon = null;
+		try {
+			nextMon = getDate(user.getFirstphase());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return "0";
+		if(user.getFirstphase().after(today)){
+			return "1";
+		}else if(today.before(nextMon)){
+			return "2";
+		}else{
+			return "0";
+		}
 	}
+	
+	/**
+	 * 得到下个月1号的时间
+	 */
+	private Date getDate(Date today) throws ParseException {
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+		Calendar c = Calendar.getInstance();
+		c.setTime(today);
+		int month = c.get(Calendar.MONTH);
+		int year = c.get(Calendar.YEAR);
+			
+		c.set(year, month+1, 1);
 
+		String nextDay = s.format(c.getTime());
+		
+		return s.parse(nextDay);
+	}
 	/* *
 	 * 修改申请
 	 */

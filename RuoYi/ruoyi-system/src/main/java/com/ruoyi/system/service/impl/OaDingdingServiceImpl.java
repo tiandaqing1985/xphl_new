@@ -77,7 +77,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 	@Override
 	public List<Dingding> selectOaDingdingList(Dingding ding)
 	{
-		if(ding.getUserId() == 1 || ding.getUserId() == 222L){//admin用户
+		if(ding.getUserId() == 1){//admin用户
 			ding.setUserId(1L);
 			return oaDingdingMapper.selectDingData(ding);
 		}
@@ -106,6 +106,18 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		//查询当前用户的角色id
 		List<Long> roleIdList = userRoleMapper.selectRoleIdByUserId(user);
 		
+		//查看数据权限
+		SysUser user4 = new SysUser();
+		user4.setUserId(ding.getUserId());
+		user4.setRoleId(15L);
+		Long id = userRoleMapper.selectUserIdByRoleId(user4);//具备查看数据权限的用户id
+		if(id != null){
+			ding.setUserId(1L);
+			ding.setArea(null);
+			return oaDingdingMapper.selectDingData(ding);
+		}
+		
+		
 		//人事总监
 		SysUser user2 = new SysUser();
 		user2.setRoleId(6L);//人事总监
@@ -115,8 +127,10 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 			return oaDingdingMapper.selectDingData(ding);
 		}
 		
-		user.setRoleId(3L);//人事专员
-		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id
+		SysUser user3 = new SysUser();
+		user3.setRoleId(3L);//人事专员
+		user3.setArea(user.getArea());
+		Long hrId = userRoleMapper.selectUserIdByRoleId(user3);//人事专员id
 		SysDept dept = deptMapper.selectDeptByUserId(ding.getUserId());//查询用户所在部门
 
 			//人事专员
@@ -283,7 +297,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 						oaDingdingMapper.updateOaDingDingByTime(ding);	
 					}else if(timepart1.equals("1") && timepart2.equals("1")){//上午 starttime - starttime 15:00
 						Date startDate = startTime;//打卡标准值：15点前
-						Date endDate = getWorkDate(startTime,15);
+						Date endDate = getWorkDate(endTime,15);
 						System.out.println("\n 11"+startDate+"  "+endDate+"\n");
 						
 						Dingding ding = new Dingding();

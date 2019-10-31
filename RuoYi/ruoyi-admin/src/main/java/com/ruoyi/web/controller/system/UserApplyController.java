@@ -113,8 +113,10 @@ public class UserApplyController extends BaseController
 	{
 		boolean showFlag = false;
 		SysUser user = iSysUserService.selectUserById(ShiroUtils.getUserId());
-		user.setRoleId(3L);
-		Long personnelId = iSysRoleService.selectUserIdByRoleId(user);//查询人事id
+		SysUser user2 = new SysUser();
+		user2.setRoleId(3L);
+		user2.setArea(user.getArea());
+		Long personnelId = iSysRoleService.selectUserIdByRoleId(user2);//查询人事id
 		if(personnelId.equals(ShiroUtils.getUserId())){
 			showFlag = true;
 		}
