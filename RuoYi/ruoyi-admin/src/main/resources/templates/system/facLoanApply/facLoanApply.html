@@ -1,5 +1,10 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<style>
+    .select-list li .time-input {
+        display: inline;
+    }
+</style>
 <head>
     <th:block th:include="include :: header('借款申请列表')"/>
 </head>
@@ -17,7 +22,7 @@
                             借款名称：<input type="text" name="loanName"/>
                         </li>
                         <li>
-                            借款时间：<input class="time-input" name="loanTime" />
+                            借款时间：<input class="time-input" name="loanTime"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
@@ -29,9 +34,8 @@
                 </div>
             </form>
         </div>
-
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.addFull()">
+            <a class="btn btn-success" onclick="add()">
                 <i class="fa fa-plus"></i> 添加
             </a>
             <a class="btn btn-warning" onclick="$.table.exportExcel()">
@@ -44,8 +48,8 @@
     </div>
 </div>
 <div th:include="include :: footer"></div>
-<th:block th:include="include :: bootstrap-suggest-js" />
-<th:block th:include="include :: bootstrap-select-js" />
+<th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
     var prefix = ctx + "system/facLoanApply";
     $(function () {
@@ -121,7 +125,7 @@
                     field: 'approver',
                     title: '当前审批人',
                     sortable: true
-                },{
+                }, {
                     field: 'approvalStatus',
                     title: '当前审批状态',
                     sortable: true,
@@ -130,7 +134,7 @@
                             return "审批成功";
                         } else if (value == 2) {
                             return "驳回";
-                        }   else {
+                        } else {
                             return "待审批";
                         }
                     }
@@ -159,29 +163,23 @@
                     formatter: function (value, row, index) {
                         var actions = [];
 
-                        if(row.approvalStatus==1){
+                        if (row.approvalStatus == 1) {
                             //审批成功
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="d(\'' + row.id + '\')"><i class="fa fa-remove"></i>还款</a>');
-                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-remove"></i>查看</a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-remove"></i>查看</a>');
 
-                        }else if(row.applyStatus==2){
+                        } else if (row.applyStatus == 2) {
                             //审批失败
-
-                        }else if(row.applyStatus==3){
-                             //待审批
-
-                        }else if(row.applyStatus==5){
+                        } else if (row.applyStatus == 3) {
+                            //待审批
+                        } else if (row.applyStatus == 5) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
                             //待审批
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
-
-                        }else
-                        {
+                        } else {
 
                         }
-
-
                         return actions.join('');
                     }
                 }]
@@ -189,20 +187,15 @@
         $.table.init(options);
     });
 
-
     function submitHandler(id) {
         //index为1表示保存
         debugger
-        $.operate.save(prefix + "/add", {"id":id});
-
+        $.operate.save(prefix + "/add", {"id": id});
     }
 
-
-    function sub(id){
-        prefix + "/add", {"id":id};
+    function sub(id) {
+        prefix + "/add", {"id": id};
     }
-
-
 
     function mSave(url, data, callback) {
         debugger
@@ -221,7 +214,7 @@
                 }
                 $.modal.closeLoading();
                 $.modal.enable();
-                
+
                 $.modal.closeTab();
                 $.modal.closeTab();
                 $.modal.closeAll();
@@ -236,7 +229,6 @@
         window.location.reload();
         $.modal.close();
     }
-
 
     function f(id) {
         var options = {
@@ -253,6 +245,106 @@
         $.modal.openOptions(options);
     }
 
+    function add() {
+        var width;
+        var height;
+        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+            width = 'auto';
+            height = 'auto';
+        }
+        var index = layer.open({
+            type: 2,
+            area: [width, height],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "提交预览",
+            content: "/system/facLoanApply/add",
+            btn: ['提交', '保存', '关闭'],
+            // 弹层外区域关闭
+            shadeClose: false,
+            yes: function (index, layero) {
+                var config = {
+                    type: "post",
+                    dataType: "json",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    async: false,
+                    data: '',
+                    success: function (data) {
+                        console.log(data)
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.submitHandler();
+                        layer.close(index);
+                    }
+                };
+
+
+                var result = window.frames[0].document.getElementById("amount").value;
+                var result2 = window.frames[0].document.getElementById("loanTime").value;
+                var result3 = window.frames[0].document.getElementById("repayTime").value;
+                var result4 = window.frames[0].document.getElementById("loanName").value;
+                var result5 = window.frames[0].document.getElementById("reason").value;
+
+                if (result == '') {
+                    layer.msg("请填写金额")
+                } else if (result2 == '') {
+                    layer.msg("请填写借款时间")
+                } else if (result3 == '') {
+                    layer.msg("请填写还款时间")
+                } else if (result4 == '') {
+                    layer.msg("请填写借款名称")
+                } else if (result5 == '') {
+                    layer.msg("请填写借款事由")
+                } else {
+                    $.ajax(config);
+                    window.location.reload();
+                }
+
+
+            },
+            btn2: function (index, layero) {
+                var config = {
+                    type: "post",
+                    dataType: "json",
+                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                    async: false,
+                    data: '',
+                    success: function () {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.sub();
+                        layer.close(index);
+                    }
+                };
+                var result = window.frames[0].document.getElementById("amount").value;
+                var result2 = window.frames[0].document.getElementById("loanTime").value;
+                var result3 = window.frames[0].document.getElementById("repayTime").value;
+                var result4 = window.frames[0].document.getElementById("loanName").value;
+                var result5 = window.frames[0].document.getElementById("reason").value;
+
+                if (result == '') {
+                    layer.msg("请填写金额")
+                } else if (result2 == '') {
+                    layer.msg("请填写借款时间")
+                } else if (result3 == '') {
+                    layer.msg("请填写还款时间")
+                } else if (result4 == '') {
+                    layer.msg("请填写借款名称")
+                } else if (result5 == '') {
+                    layer.msg("请填写借款事由")
+                } else {
+                    $.ajax(config);
+                    window.location.reload();
+                }
+            },
+            cancel: function (index) {
+                return true;
+            }
+        });
+        layer.full(index);
+    }
 
     function d(id) {
         var options = {
@@ -274,7 +366,7 @@
         showBtn: false,
         idField: "userName",
         keyField: "userName",
-        effectiveFields: ["deptName","userName"],
+        effectiveFields: ["deptName", "userName"],
         multiWord: true,
         hideOnSelect: true
     }).on('onDataRequestSuccess', function (e, result) {
@@ -301,7 +393,7 @@
             maxmin: true,
             shade: 0.3,
             title: "打印预览",
-            content: "/system/print/preview?type=jiekuan&num="+id,
+            content: "/system/print/preview?type=jiekuan&num=" + id,
             // content: "/system/print/view?type=jiekuan&num="+id,
             btn: ['打印', '关闭'],
             // 弹层外区域关闭
@@ -310,24 +402,20 @@
                 var html1 = "";
                 var html2 = "";
                 var config = {
-                    url: "/system/print/preview?type=jiekuan&num="+id,
+                    url: "/system/print/preview?type=jiekuan&num=" + id,
                     type: "get",
                     dataType: "html",
                     async: false,
                     data: "",
-                    success: function(result) {
-                        html1 = html1+result;
+                    success: function (result) {
+                        html1 = html1 + result;
                     }
                 };
                 $.ajax(config)
-
-                printWindow=window.open('','_blank');
+                printWindow = window.open('', '_blank');
                 printWindow.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <title></title><style>@page{margin-bottom:0mm;margin-top:2mm}</style></head><body>');
-
                 //这里是向新建的窗口写入HTML的head信息，可引入自己的js和css，以供打印时样式与网页中显示的一致
-
-                printWindow.document.write('<div style="page-break-after:always; width:100%; height:100%;">'+html1+'</div>');
-
+                printWindow.document.write('<div style="page-break-after:always; width:100%; height:100%;">' + html1 + '</div>');
                 //这里向新建的窗体中写入BODY的内容，注意，外边加的额外DIV是有必要的，它里面CSS可以控制打印时不会出现空白页
 
                 printWindow.document.write("</body></html>");//这里向新建的窗体写入HTML的结束标记
@@ -338,13 +426,12 @@
 
                 printWindow.close();//关闭新建的窗口
             },
-            cancel: function(index) {
+            cancel: function (index) {
                 return true;
             }
         });
         layer.full(index);
     }
-
 </script>
 </body>
 </html>

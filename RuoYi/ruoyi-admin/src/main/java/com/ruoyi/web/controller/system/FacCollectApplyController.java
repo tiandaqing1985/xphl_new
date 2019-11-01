@@ -3,7 +3,6 @@ package com.ruoyi.web.controller.system;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -21,6 +20,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCollectApply;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCollectApplyService;
@@ -105,6 +105,11 @@ public class FacCollectApplyController extends BaseController {
 		startPage();
 		List<FacCollectApply> list = facCollectApplyService
 				.selectFacCollectApplyList(facCollectApply);
+		for (FacCollectApply v : list) {
+			v.setApplicantName(sysUserService.selectUserById(v.getApplicant())
+					.getUserName()); 
+		}
+		 
 		return getDataTable(list);
 	}
 
@@ -133,6 +138,34 @@ public class FacCollectApplyController extends BaseController {
 		return prefix + "/add";
 	}
 
+	
+	/**
+	 * 新增团建申请
+	 *
+	 * @throws Exception
+	 */
+	@GetMapping("/baoxiao") 
+	public String Bao(String id, ModelMap mmap)
+	{
+		FacCollectApply facCollectApply = facCollectApplyService
+				.selectFacCollectApplyById(Long.valueOf(id)); 
+		FacReimburseApply facReimburseApply = new FacReimburseApply();
+		facReimburseApply.setNum(facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
+		facReimburseApply.setName(facCollectApply.getLeagueProject());//报销名
+		facReimburseApply.setAmount(facCollectApply.getAmount());
+		facReimburseApply.setLoanUser(facCollectApply.getApplicant());
+		facReimburseApply.setCreateTime(ShiroUtils.getDate());
+		facReimburseApply.setReimburseTime(facCollectApply.getStartDate()); 
+		facReimburseApply.setReason(facCollectApply.getActivityForm()); 
+		facReimburseApply.setType("团建报销");   
+		facReimburseApply.setJKnum(facCollectApply.getNum());
+		mmap.put("facReimburseApply", facReimburseApply);
+		return prefix + "/baoxiao";
+	}
+	
+	
+	
+	
 	/**
 	 * 新增保存团建申请
 	 */

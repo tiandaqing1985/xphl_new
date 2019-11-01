@@ -1,5 +1,15 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<style>
+    .select-list li .time-input{
+        display:inline;
+    }
+    .select-list ul li div{
+        float:none;
+        display:inline;
+    }
+</style>
+
 <head>
     <th:block th:include="include :: header('对公申请列表')"/>
 </head>
@@ -13,7 +23,7 @@
 
                         <li>
                             申请人 ：
-                            <div class="col-sm-9">
+                            <div>
                                 <input id="user" type="text" name="user"/>
                                 <div class="input-group-btn" style="float: right">
                                     <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
@@ -45,16 +55,16 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.operate.addFull()" >
+            <a class="btn btn-success" onclick="add()" >
                 <i class="fa fa-plus"></i> 添加
             </a>
             <a class="btn btn-success" onclick="cyAdd()">
                 <i class="fa fa-edit"></i> 添加常用收款
             </a>
 
-            <a class="btn btn-success" onclick="cyUser()">
-                <i class="fa fa-edit"></i> 使用常用收款
-            </a>
+<!--            <a class="btn btn-success" onclick="cyUser()">-->
+<!--                <i class="fa fa-edit"></i> 使用常用收款-->
+<!--            </a>-->
 
 
             <a class="btn btn-warning" onclick="$.table.exportExcel()">
@@ -177,7 +187,7 @@
                     formatter: function (value, row, index) {
                         var actions = [];
                         if(row.approvalStatus==1){
-                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-remove"></i>查看</a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-remove"></i>查看</a>');
 
                         }else if(row.status==2){
                             //审批失败
@@ -213,6 +223,108 @@
         $.modal.close();
         $.modal.closeTab();
     }
+
+
+    function add() {
+        var width;
+        var height;
+        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+            width = 'auto';
+            height = 'auto';
+        }
+        var index = layer.open({
+            type: 2,
+            area: [width, height],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "提交预览",
+            content: "/system/facPayPublicApply/add",
+            btn: ['提交','保存','关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function (index,layero) {
+                var config = {
+
+                    type: "post",
+                    dataType: "json",
+                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+                    async: false,
+                    data:'',
+                    success: function() {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.submitHandler();
+                        layer.close(index);
+                    }
+                };
+                var result = window.frames[0].document.getElementById("name").value;
+                var result2 = window.frames[0].document.getElementById("amount").value;
+                var result3 = window.frames[0].document.getElementById("payee").value;
+                var result4 = window.frames[0].document.getElementById("payeeBank").value;
+                var result5 = window.frames[0].document.getElementById("payeeAccount").value;
+
+
+                if (result == '') {
+                    layer.msg("请填写申请名称")
+                } else if (result2 == '') {
+                    layer.msg("请填写付款金额")
+                } else if (result3 == '') {
+                    layer.msg("请填写收款人")
+                } else if (result4 == '') {
+                    layer.msg("请填写收款人开户行")
+                }  else if (result5 == '') {
+                    layer.msg("请填写收款人账号")
+                }else {
+                    $.ajax(config);
+                    window.location.reload();
+                }
+            },
+            btn2: function (index,layero) {
+                var config = {
+                    type: "post",
+                    dataType: "json",
+                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+                    async: false,
+                    data:'',
+                    success: function() {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.sub();
+                        layer.close(index);
+                    }
+                };
+                var result = window.frames[0].document.getElementById("name").value;
+                var result2 = window.frames[0].document.getElementById("amount").value;
+                var result3 = window.frames[0].document.getElementById("payee").value;
+                var result4 = window.frames[0].document.getElementById("payeeBank").value;
+                var result5 = window.frames[0].document.getElementById("payeeAccount").value;
+
+                if (result == '') {
+                    layer.msg("请填写申请名称")
+                } else if (result2 == '') {
+                    layer.msg("请填写付款金额")
+                } else if (result3 == '') {
+                    layer.msg("请填写收款人")
+                } else if (result4 == '') {
+                    layer.msg("请填写收款人开户行")
+                }  else if (result5 == '') {
+                    layer.msg("请填写收款人账号")
+                }else {
+                    $.ajax(config);
+                    window.location.reload();
+                }
+            },
+            cancel: function(index) {
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+
+
+
 
     function f(id) {
         var options = {

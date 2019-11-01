@@ -64,8 +64,20 @@ public class ReiTrafficApply {
     private String num;
 
     private String status;
+    /**
+     * 是否超额
+     * */
+    private String excess; 
+    
+    public String getExcess() {
+		return excess;
+	}
 
-    public String getStatus() {
+	public void setExcess(String excess) {
+		this.excess = excess;
+	}
+
+	public String getStatus() {
         return status;
     }
 

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -131,7 +130,7 @@ public class FacHospitalityApplyController extends BaseController {
 
 		if (facHospitalityApply.getId() == null) {
 			// 直接添加
-			facHospitalityApply.setNum("ZD" +facNumberTableService.getNum("ZD", ShiroUtils.getDateId()));
+			facHospitalityApply.setNum(facNumberTableService.getNum("ZD", ShiroUtils.getDateId()));
 			facHospitalityApply.setUserId(ShiroUtils.getUserId());
 			facHospitalityApply.setApplicationTime(new Date());
 			facHospitalityApply
@@ -159,7 +158,7 @@ public class FacHospitalityApplyController extends BaseController {
 	public AjaxResult addSove(FacHospitalityApply facHospitalityApply)
 			throws Exception {
 		 
-		facHospitalityApply.setNum("ZD" +facNumberTableService.getNum("ZD", ShiroUtils.getDateId()));
+		facHospitalityApply.setNum(facNumberTableService.getNum("ZD", ShiroUtils.getDateId()));
 		facHospitalityApply.setUserId(ShiroUtils.getUserId());
 		facHospitalityApply.setApplicationTime(new Date());
 		facHospitalityApply.setAmount(facHospitalityApply.getStandardAmount()
@@ -246,7 +245,8 @@ public class FacHospitalityApplyController extends BaseController {
 		map.put("amount", facHospitalityApply.getAmount());
 		 String num=facNumberTableService.getNum("BX", ShiroUtils.getDateId());
 		map.put("num", num);
-		map.put("name", facHospitalityApply.getZdName());
+		map.put("name", facHospitalityApply.getZdName()); 
+		map.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
 		ReiHospitalityApply reiHospitalityApply = new ReiHospitalityApply();
 		reiHospitalityApply.setDdDate(facHospitalityApply.getZdDate());
 		reiHospitalityApply.setAmount(facHospitalityApply.getAmount());

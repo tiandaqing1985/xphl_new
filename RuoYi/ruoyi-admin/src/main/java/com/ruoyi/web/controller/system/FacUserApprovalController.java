@@ -316,10 +316,14 @@ public class FacUserApprovalController extends BaseController {
                 .selectApplicantIdList(facUserApproval);
 
         for (FacUserApproval v : list) {
-            v.setApplicantName(sysUserService.selectUserById(v.getApplicantId())
-                    .getUserName());
-            v.setApproverName(sysUserService.selectUserById(v.getApproverId())
-                    .getUserName());
+            SysUser applicant = sysUserService.selectUserById(v.getApplicantId());
+            SysUser approver = sysUserService.selectUserById(v.getApproverId());
+            if (applicant != null) {
+                v.setApplicantName(sysUserService.selectUserById(v.getApplicantId()).getUserName());
+            }
+            if (approver != null) {
+                v.setApproverName(sysUserService.selectUserById(v.getApproverId()).getUserName());
+            }
         }
 
         return getDataTable(list);

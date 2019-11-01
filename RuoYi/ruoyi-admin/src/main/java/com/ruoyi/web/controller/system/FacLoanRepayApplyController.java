@@ -103,6 +103,7 @@ public class FacLoanRepayApplyController extends BaseController
 	public String edit(@PathVariable("id") Long id, ModelMap mmap)
 	{
 		FacLoanRepayApply facLoanRepayApply = facLoanRepayApplyService.selectFacLoanRepayApplyById(id);
+		facLoanRepayApply.setPayerName(sysUserService.selectUserById(facLoanRepayApply.getPayer()).getUserName());
 		mmap.put("facLoanRepayApply", facLoanRepayApply);
 	    return prefix + "/edit";
 	}

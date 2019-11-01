@@ -496,7 +496,17 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
 	@Override
 	public List<ReiTrafficApply> selectReiTrafficApply(String num) {
-
+		List<ReiTrafficApply> list=	 facReimburseApplyMapper.traTail(num);
+		for( ReiTrafficApply rei:list ){ 
+			if(rei.getType().equals("加班")){
+				
+			}else{
+				
+			} 
+		}
+		
+		
+		
 		return facReimburseApplyMapper.traTail(num);
 	}
 
@@ -590,6 +600,12 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 	@Override
 	public ReiHospitalityApply selectFacHostById(long id) {
 		return facReimburseApplyMapper.selectFacHostById(id);
+	}
+
+	@Override
+	public int insertApply(FacReimburseApply facReimburseApply) {
+		
+		return 	facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
 	}
 
 }

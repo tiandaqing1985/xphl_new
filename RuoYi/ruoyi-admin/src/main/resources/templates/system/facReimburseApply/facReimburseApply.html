@@ -1,5 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<style>
+    .select-list ul li div{
+        float:none;
+        display:inline;
+    }
+</style>
 <head>
     <th:block th:include="include :: header('报销列表')"/>
 </head>
@@ -23,7 +29,6 @@
                             </div>
                             </div>
                         </li>
-
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
@@ -34,9 +39,8 @@
                 </div>
             </form>
         </div>
-
         <div class="btn-group-sm" id="toolbar" role="group">
-            <a class="btn btn-success" onclick="$.modal.openFull('日常报销申请','facReimburseApply/add')">
+            <a class="btn btn-success" onclick="add()">
                 <i class="fa fa-plus"></i> 日常报销申请
             </a>
             <a class="btn btn-warning" onclick="$.table.exportExcel()"
@@ -149,7 +153,7 @@
                             //  pt:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                          }
                         if(row.submitStatus=="submit"){
-                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-detail"></i>查看</a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-detail"></i>查看</a>');
                         }
                         return actions.join('');
                     }
@@ -162,6 +166,80 @@
     function mEdit(num){
         $.modal.openTab("编辑" + $.table._option.modalName, prefix + "/add?id="+num);
     }
+
+
+    function add() {
+        var width;
+        var height;
+        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+            width = 'auto';
+            height = 'auto';
+        }
+        var index = layer.open({
+            type: 2,
+            area: [width, height],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "提交预览",
+            content: "/system/facReimburseApply/add",
+            btn: ['提交','保存','关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function (index,layero) {
+                var config = {
+
+                    type: "post",
+                    dataType: "json",
+                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+                    async: false,
+                    data:'',
+                    success: function() {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.submitHandler();
+                        layer.close(index);
+                    }
+                };
+                $.ajax(config)
+            },
+            btn2: function (index,layero) {
+                var config = {
+                    type: "post",
+                    dataType: "json",
+                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
+                    async: false,
+                    data:'',
+                    success: function() {
+                        var body = layer.getChildFrame('body', index);
+                        var iframeWin = window[layero.find('iframe')[0]['name']];
+                        iframeWin.sub();
+                        layer.close(index);
+                    }
+                };
+                $.ajax(config)
+            },
+            cancel: function(index) {
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     function print(id) {

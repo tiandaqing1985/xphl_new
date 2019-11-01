@@ -151,7 +151,7 @@
 
                         if (row.approvalStatus == 1) {
                             //审批成功
-                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
 
                         } else if (row.status == 2) {
                             //审批失败
@@ -207,7 +207,7 @@
             shadeClose: true,
             yes: function (index,layero) {
                 var config = {
-                    url: "/system/facCostApply/add",
+
                     type: "post",
                     dataType: "json",
                     contentType : "application/x-www-form-urlencoded;charset=UTF-8",
@@ -220,11 +220,27 @@
                         layer.close(index);
                     }
                 };
-                $.ajax(config)
+                var result = window.frames[0].document.getElementById("busName").value;
+                var result2 = window.frames[0].document.getElementById("outTime").value;
+                var result3 = window.frames[0].document.getElementById("backTimeEs").value;
+                var result4 = window.frames[0].document.getElementById("outMan").value;
+
+                if (result == '') {
+                    layer.msg("请填写项目名称")
+                } else if (result2 == '') {
+                    layer.msg("请填写出差时间")
+                } else if (result3 == '') {
+                    layer.msg("请填写预计返回时间")
+                } else if (result4 == '') {
+                    layer.msg("请填写出差人员")
+                }  else {
+                    $.ajax(config);
+                    window.location.reload();
+                }
+
             },
             btn2: function (index,layero) {
                 var config = {
-                    url: "/system/facCostApply/add",
                     type: "post",
                     dataType: "json",
                     contentType : "application/x-www-form-urlencoded;charset=UTF-8",
@@ -237,7 +253,23 @@
                         layer.close(index);
                     }
                 };
-                $.ajax(config)
+                var result = window.frames[0].document.getElementById("busName").value;
+                var result2 = window.frames[0].document.getElementById("outTime").value;
+                var result3 = window.frames[0].document.getElementById("backTimeEs").value;
+                var result4 = window.frames[0].document.getElementById("outMan").value;
+
+                if (result == '') {
+                    layer.msg("请填写项目名称")
+                } else if (result2 == '') {
+                    layer.msg("请填写出差时间")
+                } else if (result3 == '') {
+                    layer.msg("请填写预计返回时间")
+                } else if (result4 == '') {
+                    layer.msg("请填写出差人员")
+                }  else {
+                    $.ajax(config);
+                    window.location.reload();
+                }
             },
             cancel: function(index) {
                 return true;

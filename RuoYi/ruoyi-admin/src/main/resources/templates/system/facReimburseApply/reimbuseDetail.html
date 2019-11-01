@@ -86,36 +86,23 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-offset-5 col-sm-10">
-                        <!--                        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i-->
-                        <!--                                class="fa fa-check"></i>保 存-->
-                        <!--                        </button> -->
-                        <button type="button" class="btn btn-sm btn-primary" onclick="sub()"><i
-                                class="fa fa-check"></i>保 存
-                        </button>&nbsp;
-                        <!--                        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i-->
-                        <!--                                class="fa fa-reply-all"></i>关 闭-->
-                        <!--                        </button>-->
-
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </div>
-
 <div th:include="include :: footer"></div>
 </body>
 <script th:inline="javascript">
-
     var prefix = ctx + "system/facReimburseApply";
     var datas = [[${@dict.getType('sys_normal_disable')}]];
     var num = $("#num").val();
     var msg = $("#msg").val();
     var userId = $("#userId").val();
     var dept = $("#dept").val();
-
     function zAdd() {
-        $.modal.openTab("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
+        $.modal.openFull("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
     }
     function mAdd(id) {
         if (id == 1) {
@@ -132,7 +119,6 @@
             $.modal.open("其他添加", "/system/facReimburseApply/otherDetail?num=" + num);
         }
     }
-
     function mEdit(index, id) {
         if (index == 1) {
             $.table._option.id = "bootstrap-table-1";
@@ -148,7 +134,6 @@
         }
         $.operate.edit(id);
     }
-
     function mRemove(index, id) {
         if (index == 1) {
             $.table._option.modalName = "交通报销信息";
@@ -162,12 +147,10 @@
         }
         $.operate.remove(id);
     }
-
     $(function () {
         if (dept == 10) {
             $("#zdf").attr("style", "display:block;");//显示div
         }
-
         var options = {
             id: "bootstrap-table-1",
             url: prefix + "/addTraDetail",
@@ -227,6 +210,18 @@
                     field: 'type',
                     title: '类型 ',
                     sortable: true
+                },{
+                    field: 'excess',
+                    title: '是否超额 ',
+                    visible: false,
+                    formatter: function (value, row, index) {
+                        if(value==1){
+                            return excess();
+                        }else {
+
+                        }
+
+                    }
                 },
                 {
                     title: '操作',
@@ -244,6 +239,12 @@
 
         $.table.init(options);
     });
+
+    function excess(){
+        alert("超出额度");
+    }
+
+
 
     $(function () {
         var options = {
