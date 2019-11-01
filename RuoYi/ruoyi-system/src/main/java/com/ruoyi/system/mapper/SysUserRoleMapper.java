@@ -66,7 +66,7 @@ public interface SysUserRoleMapper
      * 根据角色id查询用户id
      */
     public Long selectUserIdByRoleId(SysUser user);
-    
+
     /**
      * 根据用户id查询角色id
      * @param user

@@ -105,10 +105,13 @@ public class OaOutServiceImpl implements IOaOutService
 		    return 1;
 		}
 		
-		user.setRoleId(6L);//人事总监
-		user.setArea(null);
-		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事总监id	
+		SysUser user2 = new SysUser();
+		user2.setRoleId(6L);//人事总监
+		Long hrId = userRoleMapper.selectUserIdByRoleId(user2);//人事总监id	
 		
+		if(upLeaderId.longValue() == hrId.longValue()){
+			return 1;
+		}
 		
 //		//当前用户的leader是人事总监时，只需要leader审批
 //		if(approvalId.longValue() == hrId.longValue()){
@@ -230,7 +233,8 @@ public class OaOutServiceImpl implements IOaOutService
 	@Override
 	public List<OutApproval> selectOutApprovalList(OaOut oaOut) {
 		//admin查看全部
-		if(oaOut.getUserId() != null && oaOut.getUserId().longValue() == 1L){
+		if(oaOut.getApprovalId() != null && oaOut.getApprovalId().longValue() == 1L){
+			oaOut.setApprovalId(null);
 			return oaOutMapper.selectOutApprovalList(oaOut);
 
 		}
@@ -243,7 +247,9 @@ public class OaOutServiceImpl implements IOaOutService
 		Long chiefId = userRoleMapper.selectUserIdByRoleId(user2);//人事总监id
 		if(user.getUserId() != null && chiefId.longValue() == user.getUserId().longValue()){
 			oaOut.setUserId(1L);
-			oaOut.setApprovalId(null);
+			if(oaOut.getRemark() != null){
+				oaOut.setApprovalId(null);
+			}
 			return oaOutMapper.selectOutApprovalList(oaOut);
 		}
 		
@@ -266,10 +272,25 @@ public class OaOutServiceImpl implements IOaOutService
 		user.setRoleId(3L);//人事专员
 		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id
 
+		if(oaOut.getRemark() != null){
+			//查看数据权限
+			SysUser user3 = new SysUser();
+			user3.setUserId(oaOut.getApprovalId());
+			user3.setRoleId(15L);
+			Long id = userRoleMapper.selectUserIdByRoleId(user3);//具备查看数据权限的用户id
+			if(id != null){
+				oaOut.setUserId(1L);
+				oaOut.setApprovalId(null);
+				return oaOutMapper.selectOutApprovalList(oaOut);
+			}
+		}
 			//人事专员
 		if(hrId != null && user.getUserId().longValue()==hrId.longValue()){
-			oaOut.setUserId(1L);
-			oaOut.setApprovalId(null);
+			if(oaOut.getRemark() != null){
+				oaOut.setUserId(1L);
+				oaOut.setApprovalId(null);
+				return oaOutMapper.selectOutApprovalList(oaOut);
+			}
 			return oaOutMapper.selectOutApprovalList(oaOut);
 			
 		}else if(hrId != null && user.getUserId().longValue()!=hrId.longValue() && user.getUserId().longValue() == upLeaderId.longValue()){

@@ -108,7 +108,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			LEFT JOIN sys_user us ON us.user_id = app.approval_id 
 			LEFT JOIN sys_dept d ON USER.dept_id = d.dept_id
         <where>  
-        	 us.`status`=0 and USER.`status`=0
             <if test="outId != null"> and ou.out_id = #{outId}</if>
              <if test="userId != null and userId != 1L"> and ou.user_id = #{userId}</if>
              <if test="approvalId != null "> and app.approval_id=#{approvalId}</if>
@@ -117,7 +116,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="approvalState != null and approvalState == 4"> and app.approval_state in(1,2)</if>
              <if test="state != null and state != ''"> and ou.state = #{state}</if>
              <if test="createDate != null and  createDate != ''"> and ou.create_date = #{createDate}</if>
-             <if test="applyerName != null and applyerName!=''"> and USER.user_name = #{applyerName}</if>
+             <if test="applyerName != null and applyerName!=''"> and USER.user_name  LIKE CONCAT('%',#{applyerName},'%') </if>
              <if test="deptName != null and deptName != ''"> and d.dept_name = #{deptName}</if>
              <if test="params.starttime != null and params.starttime != ''"><!-- 开始时间检索 -->
 				AND date_format(ou.starttime,'%y%m%d') &gt;= date_format(#{params.starttime},'%y%m%d')

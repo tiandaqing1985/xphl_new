@@ -1,5 +1,6 @@
 package com.ruoyi.system.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
@@ -29,6 +30,8 @@ public class Dingding extends BaseEntity
     private String area;
     
 	/** 打卡日期 */
+
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd") //出参
 	private Date workDate;
 	
 	/** 星期几 */

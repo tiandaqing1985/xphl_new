@@ -327,6 +327,7 @@ public class EmailTask {
 
 			if(cList.size() == 0 && list.size() == 0) continue;
 
+			System.out.println("\n"+"审批人："+user.getUserName()+"\n");
 			EmailSend es = new EmailSend();
 			 try {
 				 if(cList.size() != 0 || list.size() != 0){
@@ -334,6 +335,7 @@ public class EmailTask {
 
 						es.sendMail(user.getEmail(), null,
 //				  		es.sendMail("wugaofang@perfect-cn.cn", null,
+//				  				"审批提醒",user.getUserName()+"  "+
 								"审批提醒",
 								"您的人事OA系统中有未审批的申请，烦请尽快完成审批。谢谢 ！！<br/><br/> OA系统登陆网址："+
 								"<a href=\"\\192.168.88.191\"\">http://192.168.88.191/</a>", 

@@ -46,10 +46,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 select ro.user_id from sys_user_role ro
 			 LEFT JOIN sys_user us on ro.user_id = us.user_id
 		 <where>
+		 	<if test="userId != null">and ro.user_id=#{userId}</if>
 		 	<if test="roleId != null">and ro.role_id=#{roleId}</if>
 		 	<if test="area != null and area !=''">and us.area=#{area}</if>
 		 </where>
-	</select>
+	</select>		
 	
 	<select id="selectRoleIdByUserId" parameterType="SysUser" resultType="Long">
 		 SELECT
