@@ -151,7 +151,8 @@
 
                         if (row.approvalStatus == 1) {
                             //审批成功
-                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
+                            actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="baoxiao(\'' + row.id + '\')"> </i>报销</a> ');
 
                         } else if (row.status == 2) {
                             //审批失败
@@ -161,7 +162,7 @@
                         } else if (row.status == 5) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
                             //待审批
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 
                         } else {
@@ -179,11 +180,12 @@
     }
 
     function submitHandler(id) {
-        //index为1表示保存
-        debugger
-        mSave(prefix + "/add", {"id": id});
-        $.modal.close();
-        $.modal.closeTab();
+        $.modal.open("保存", "/system/facCostApply/addSave?id=" + id);
+    }
+
+    function  baoxiao(id){
+        $.modal.open("报销添加", "/system/facCostApply/baoxiao?id=" + id);
+        //  $.modal.open("报销添加", "/system/facCostApply/baoxiaoEdit?id=" + id);
     }
 
     function add() {
@@ -270,6 +272,7 @@
                     $.ajax(config);
                     window.location.reload();
                 }
+                return false;
             },
             cancel: function(index) {
                 return true;

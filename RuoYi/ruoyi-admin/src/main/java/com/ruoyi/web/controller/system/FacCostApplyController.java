@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -22,14 +21,17 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.finance.FacCollectApply;
 import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacCostDetailApply;
 import com.ruoyi.system.domain.finance.FacCostPutupApply;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCostApplyService;
 import com.ruoyi.system.service.finance.IFacCostPutupApplyService;
 import com.ruoyi.system.service.finance.IFacNumberTableService;
+import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
 
 /**
@@ -51,7 +53,8 @@ public class FacCostApplyController extends BaseController {
 	private IFacUserApprovalService facUserApprovalService;
 	@Autowired
 	private ISysUserService sysUserService;
-
+	@Autowired
+	private IFacReimburseApplyService facReimburseApplyService;
 	@Autowired
 	private IFacNumberTableService facNumberTableService; 
 	@GetMapping()
@@ -112,6 +115,37 @@ public class FacCostApplyController extends BaseController {
 		}
 	}
 
+	@GetMapping("/addSave")
+	public String addSave(String id, ModelMap map) {
+		map.put("id",id);
+		return prefix + "/addSave";
+	} 
+	
+
+	/**
+	 * 新增团建申请
+	 *
+	 * @throws Exception
+	 */
+	@GetMapping("/baoxiao") 
+	public String Bao(String id, ModelMap mmap)
+	{
+		FacCostApply facCostApply = facCostApplyService
+				.selectFacCostApplyById(Long.valueOf(id)); 
+		FacReimburseApply facReimburseApply = new FacReimburseApply();
+		facReimburseApply.setNum(facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
+		facReimburseApply.setName(facCostApply.getBusName());//报销名
+		facReimburseApply.setAmount(facCostApply.getMoneyEs());
+		facReimburseApply.setLoanUser(facCostApply.getUserId());
+		facReimburseApply.setCreateTime(ShiroUtils.getDate());
+		facReimburseApply.setReimburseTime(facCostApply.getApplicationTime()); 
+		facReimburseApply.setReason(facCostApply.getReason()); 
+		facReimburseApply.setType("差旅报销");   
+		facReimburseApply.setJKnum(facCostApply.getNum());
+		mmap.put("facReimburseApply", facReimburseApply);
+		return prefix + "/baoxiao";
+	}
+	
 	/**
 	 * 查看住宿安排详情
 	 */
@@ -383,5 +417,47 @@ public class FacCostApplyController extends BaseController {
 		return toAjax(
 				facCostPutupApplyService.deleteFacCostPutupApplyByIds(id));
 	}
+//	/**
+//	 * 修改保存团建申请
+//	 */
+//	@Log(title = "差旅申请", businessType = BusinessType.UPDATE)
+//	@PostMapping("/addEdit")
+//	@ResponseBody
+//	public AjaxResult addEdit(FacCostApply facCostApply) {
+//		FacCostApply facCostApplys = facCostApplyService.selectFacCostApplyById(facCostApply.getId());
+//				
+//		FacReimburseApply facReimburseApply = new FacReimburseApply();
+//		facReimburseApply.setNum(facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
+//		facReimburseApply.setName(facCostApply.getLeagueProject());//报销名
+//		facReimburseApply.setAmount(facCostApply.getAmount());
+//		facReimburseApply.setLoanUser(facCostApply.getApplicant());
+//		facReimburseApply.setCreateTime(ShiroUtils.getDate());
+//		facReimburseApply.setReimburseTime(facCostApply.getStartDate()); 
+//		facReimburseApply.setReason(facCostApply.getActivityForm()); 
+//		facReimburseApply.setType("差旅报销");   
+//		facReimburseApply.setJKnum(facCostApply.getNum());
+//		facReimburseApply.setName(facCostApply.getLeagueProject());
+//		facReimburseApply.setLoanUser(ShiroUtils.getUserId());
+//		facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
+//		facCostApply.setStatus("6");
+//		 if(facCostApply.getAmount()<=facCostApplys.getAmount()){
+//			 //不需要二次审批 
+//			 facReimburseApply.setStatus("1");
+//			 facReimburseApply.setSubmitStatus("submit"); 
+//			 facReimburseApplyService.insertApply(facReimburseApply); 
+//		 }else{
+//			 //需要二次审批 
+//			 facCollectApply.setNum(facNumberTableService.getNum("CL", ShiroUtils.getDateId())); 
+//			 facCollectApply.setApplicant(ShiroUtils.getUserId()); 
+//			 facCollectApply.setLeagueProject(facCollectApplys.getLeagueProject());
+//			 facCollectApply.setApplicationTime(facCollectApplys.getApplicationTime());
+//			 FacCollectApply fac=facCollectApply;
+//			 fac.setStatus("1");
+//			 facCollectApplyService.insertFacCollectApply(fac);  
+//		 }  
+//		return toAjax(
+//				facCollectApplyService.updateFacCollectApply(facCollectApply));
+//	}
+//	
 
 }

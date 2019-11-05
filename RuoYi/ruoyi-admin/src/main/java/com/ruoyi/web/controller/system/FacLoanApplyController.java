@@ -113,7 +113,12 @@ public class FacLoanApplyController extends BaseController {
     public String add() {
         return prefix + "/add";
     }
-
+    @GetMapping("/addSave")
+	public String addSave(String id, ModelMap map) {
+		map.put("id",id);
+		return prefix + "/addSave";
+	} 
+	
     /**
      * 新增保存借款申请
      *

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增招待费申请')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-facCollectApply-add">
+        <input id="id" name="id" class="form-control-static" type="hidden" th:value="${id}">
+        是否提交数据
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/facCollectApply"
+    var dept = $("#dept").val();
+    var id = $("#id").val();
+    $("#form-facCollectApply-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+
+        $.operate.save(prefix + "/add", {"id": id});
+    }
+    // $(function(){
+    //     // $('iframe').css('height','100%')
+    //     $('.layui-layer-iframe').css('height','100%')
+    //
+    // })
+</script>
+</body>
+</html>

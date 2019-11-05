@@ -125,7 +125,8 @@
                     field: 'approver',
                     title: '当前审批人',
                     sortable: true
-                }, {
+                },
+                {
                     field: 'approvalStatus',
                     title: '当前审批状态',
                     sortable: true,
@@ -165,7 +166,7 @@
 
                         if (row.approvalStatus == 1) {
                             //审批成功
-                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="d(\'' + row.id + '\')"><i class="fa fa-remove"></i>还款</a>');
+                            actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="d(\'' + row.id + '\')"><i class="fa fa-remove"></i>还款</a>');
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-remove"></i>查看</a>');
 
                         } else if (row.applyStatus == 2) {
@@ -173,9 +174,9 @@
                         } else if (row.applyStatus == 3) {
                             //待审批
                         } else if (row.applyStatus == 5) {
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
+                            actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
                             //待审批
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         } else {
 
@@ -188,10 +189,42 @@
     });
 
     function submitHandler(id) {
-        //index为1表示保存
-        debugger
-        $.operate.save(prefix + "/add", {"id": id});
+        $.modal.open("保存", "/system/facLoanApply/addSave?id=" + id);
+
     }
+    // 保存信息 刷新表格
+    // save: function(url, data, callback) {
+    //     var config = {
+    //         url: url,
+    //         type: "post",
+    //         dataType: "json",
+    //         data: data,
+    //         beforeSend: function () {
+    //             $.modal.loading("正在处理中，请稍后...");
+    //             $.modal.disable();
+    //         },
+    //         success: function(result) {
+    //             if (typeof callback == "function") {
+    //                 callback(result);
+    //             }
+    //             $.operate.successCallback(result);
+    //         }
+    //     };
+    //     $.ajax(config)
+    // }
+
+    // remove: function(id) {
+    //     $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
+    //         var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
+    //         if($.table._option.type == table_type.bootstrapTreeTable) {
+    //             $.operate.get(url);
+    //         } else {
+    //             var data = { "ids": id };
+    //             $.operate.submit(url, "post", "json", data);
+    //         }
+    //     });
+    //
+    // },
 
     function sub(id) {
         prefix + "/add", {"id": id};
@@ -275,6 +308,9 @@
                         console.log(data)
                         var body = layer.getChildFrame('body', index);
                         var iframeWin = window[layero.find('iframe')[0]['name']];
+                        console.log(iframeWin.submitHandler)
+                        console.log($.operate.save)
+                        console.log($.operate.successCallback)
                         iframeWin.submitHandler();
                         layer.close(index);
                     }
@@ -299,9 +335,8 @@
                     layer.msg("请填写借款事由")
                 } else {
                     $.ajax(config);
-                    window.location.reload();
+                    // window.location.reload();
                 }
-
 
             },
             btn2: function (index, layero) {
@@ -314,6 +349,9 @@
                     success: function () {
                         var body = layer.getChildFrame('body', index);
                         var iframeWin = window[layero.find('iframe')[0]['name']];
+                        console.log(iframeWin.submitHandler)
+                        console.log($.operate.save)
+                        console.log($.operate.successCallback)
                         iframeWin.sub();
                         layer.close(index);
                     }
@@ -325,7 +363,8 @@
                 var result5 = window.frames[0].document.getElementById("reason").value;
 
                 if (result == '') {
-                    layer.msg("请填写金额")
+                    layer.msg("请填写金额");
+                    //return false;我在看啊看
                 } else if (result2 == '') {
                     layer.msg("请填写借款时间")
                 } else if (result3 == '') {
@@ -338,6 +377,7 @@
                     $.ajax(config);
                     window.location.reload();
                 }
+                return false;                           //按钮默认点击不关闭（适合“保存”按钮）
             },
             cancel: function (index) {
                 return true;
@@ -417,7 +457,6 @@
                 //这里是向新建的窗口写入HTML的head信息，可引入自己的js和css，以供打印时样式与网页中显示的一致
                 printWindow.document.write('<div style="page-break-after:always; width:100%; height:100%;">' + html1 + '</div>');
                 //这里向新建的窗体中写入BODY的内容，注意，外边加的额外DIV是有必要的，它里面CSS可以控制打印时不会出现空白页
-
                 printWindow.document.write("</body></html>");//这里向新建的窗体写入HTML的结束标记
 
                 printWindow.document.close();//关闭新建窗口的文档输出流，否则下面的打印语句无效

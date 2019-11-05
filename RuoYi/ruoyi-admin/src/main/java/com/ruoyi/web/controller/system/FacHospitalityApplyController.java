@@ -114,6 +114,14 @@ public class FacHospitalityApplyController extends BaseController {
 		return prefix + "/add";
 	}
 
+	@GetMapping("/addSave")
+	public String addSave(String id, ModelMap map) {
+		map.put("id",id);
+		return prefix + "/addSave";
+	} 
+	
+	
+
 	/**
 	 * 新增保存招待费申请
 	 *

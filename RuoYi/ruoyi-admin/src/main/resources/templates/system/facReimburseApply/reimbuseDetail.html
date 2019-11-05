@@ -21,7 +21,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报销名称：</label>
                                 <div class="col-sm-8">
-                                    <input name="name" autocomplete="off" placeholder="XX月份报销" class="form-control"
+                                    <input name="name" id="name" autocomplete="off" placeholder="XX月份报销" class="form-control"
                                            type="text" maxlength="30" th:value="${name}" required>
                                 </div>
                             </div>
@@ -213,14 +213,14 @@
                 },{
                     field: 'excess',
                     title: '是否超额 ',
-                    visible: false,
+                    visible: true,
                     formatter: function (value, row, index) {
                         if(value==1){
-                            return excess();
+                            layer.msg("已超出额度");
+                            return  "超额";
                         }else {
-
+                            return  "未超额";
                         }
-
                     }
                 },
                 {
@@ -240,9 +240,7 @@
         $.table.init(options);
     });
 
-    function excess(){
-        alert("超出额度");
-    }
+
 
 
 
@@ -406,7 +404,7 @@
     }
 
     function submitHandler() {
-        debugger
+
         if ($.validate.form()) {
             //index为1表示保存
 

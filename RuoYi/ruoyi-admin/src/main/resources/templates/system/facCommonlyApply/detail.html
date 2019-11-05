@@ -51,7 +51,7 @@
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                       actions.push('<a class="btn btn-danger btn-xs  " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-remove"></i>使用</a>');
+                       actions.push('<a class="btn btn-success btn-xs  " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-edit"></i>使用</a>');
                         return actions.join('');
                     }
                 }]
@@ -59,7 +59,22 @@
         $.table.init(options);
     });
     function f(id) {
-        $.modal.openFull("使用常用", "/system/facPayPublicApply/addCuer/"+id);
+        // $.modal.openFull("使用常用", "/system/facPayPublicApply/addCuer/"+id);
+        console.log($('table tbody tr td:eq(1)').text());
+        console.log($('table tbody tr td:eq(2)').text());
+        console.log($('table tbody tr td:eq(3)').text());
+        var name = $('table tbody tr td:eq(1)').text();
+        var number = $('table tbody tr td:eq(2)').text();
+        var userName=$('table tbody tr td:eq(3)').text();
+        console.log(parent.document.getElementById("payee"))
+        parent.document.getElementById("payee").value = name
+        parent.document.getElementById("payeeBank").value=number
+        parent.document.getElementById("payeeAccount").value=userName
+
+        $.modal.close();
+        $('#payee').val(name);
+
+
     }
 
 </script>

@@ -67,26 +67,12 @@
                 <input id="remarks" name="remarks" class="form-control" type="text" >
             </div>
         </div>
-
         <div class="col-sm-12 select-table table-striped">
             <a id="addzhusu" class="btn btn-success" onclick="zAdd()">
                 <i class="fa fa-plus"></i> 对公明细
             </a>
             <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
         </div>
-<!--        <div class="row">-->
-<!--            <div class="col-sm-offset-5 col-sm-10">-->
-<!--                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i-->
-<!--                        class="fa fa-check"></i>提 交-->
-<!--                </button>&nbsp;-->
-<!--                <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i-->
-<!--                        class="fa fa-check"></i>保 存-->
-<!--                </button>&nbsp;-->
-<!--                <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i-->
-<!--                        class="fa fa-reply-all"></i>关 闭-->
-<!--                </button>-->
-<!--            </div>-->
-<!--        </div>-->
     </form>
 </div>
 <div th:include="include::footer"></div>
@@ -171,27 +157,6 @@
 
         $.table.init(options);
     });
-
-
-    // function submitHandler(id) {
-    //     debugger
-    //     if (id == 1) {
-    //         if ($.validate.form()) {
-    //             $.operate.save(prefix + "/add", $('#form-facPayPublicApply-add').serialize());
-    //         }
-    //         $.operate.successCallback();
-    //         window.location.reload();
-    //         $.modal.close();
-    //     } else {
-    //         if ($.validate.form()) {
-    //             $.operate.save(prefix + "/addSove", $('#form-facPayPublicApply-add').serialize());
-    //         }
-    //         $.operate.successCallback();
-    //         $.modal.close();
-    //     }
-    // }
-
-
     function submitHandler() {
             if ($.validate.form()) {
                 $.operate.save(prefix + "/add", $('#form-facPayPublicApply-add').serialize());
@@ -200,7 +165,6 @@
             window.location.reload();
             $.modal.close();
     }
-
 </script>
 </body>
 </html>

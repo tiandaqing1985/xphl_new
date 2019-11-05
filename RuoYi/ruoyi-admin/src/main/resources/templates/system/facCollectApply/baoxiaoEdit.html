@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改团建申请')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-facCollectApply-edit" th:object="${facCollectApply}">
+            <input id="id" name="id" th:field="*{id}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">团建费编号：</label>
+				<div class="col-sm-8">
+					<input id="num" name="num" th:field="*{num}" class="form-control" type="text" readonly>
+				</div>
+			</div>
+
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">所属部门：</label>
+				<div class="col-sm-8">
+					<input id="deptName" name="deptName" th:field="*{deptName}" class="form-control" type="text" readonly>
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">申请金额：</label>
+				<div class="col-sm-8">
+					<input id="amount" name="amount"  th:field="*{amount}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">开始日期：</label>
+				<div class="col-sm-8">
+					<input id="startDate" name="startDate" th:value="${#dates.format(facCollectApply.startDate,'yyyy-MM-dd')}" class="time-input" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">结束日期：</label>
+				<div class="col-sm-8">
+					<input id="endDate" name="endDate" th:value="${#dates.format(facCollectApply.endDate,'yyyy-MM-dd')}" class="time-input" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">参与人：</label>
+				<div class="col-sm-8">
+					<input id="participants" name="participants" th:field="*{participants}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">参与人数：</label>
+				<div class="col-sm-8">
+					<input id="parNumber" name="parNumber" th:field="*{parNumber}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">活动地点：</label>
+				<div class="col-sm-8">
+					<input id="activityPlace" name="activityPlace" th:field="*{activityPlace}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">活动形式：</label>
+				<div class="col-sm-8">
+					<input id="activityForm" name="activityForm" th:field="*{activityForm}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">备注：</label>
+				<div class="col-sm-8">
+					<input id="remarks" name="remarks" th:field="*{remarks}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+	<th:block th:include="include :: bootstrap-suggest-js" />
+	<th:block th:include="include :: bootstrap-select-js" />
+    <script type="text/javascript">
+		var prefix = ctx + "system/facCollectApply";
+		$("#form-facCollectApply-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/addEdit", $('#form-facCollectApply-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

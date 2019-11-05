@@ -127,6 +127,13 @@
         console.log("onUnsetSelectValue");
     });
 
+    $('#standardAmount').bind('input propertychange', function() {
+        $('#amount').val(Number($('#standardAmount').val())*Number($('#totalNumber').val()))
+    });
+    $('#totalNumber').bind('input propertychange', function() {
+
+        $('#amount').val(Number($('#standardAmount').val())*Number($('#totalNumber').val()))
+    });
 </script>
 </body>
 </html>

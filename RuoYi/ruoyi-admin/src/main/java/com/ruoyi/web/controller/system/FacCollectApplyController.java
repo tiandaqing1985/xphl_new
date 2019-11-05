@@ -51,8 +51,7 @@ public class FacCollectApplyController extends BaseController {
 	
 	@Autowired
 	private IFacNumberTableService facNumberTableService;
-	
-	
+ 
 
 	//@RequiresPermissions("system:facCollectApply:view")
 	@GetMapping()
@@ -137,7 +136,13 @@ public class FacCollectApplyController extends BaseController {
 		mmp.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
 		return prefix + "/add";
 	}
-
+	
+	@GetMapping("/addSave")
+	public String addSave(String id, ModelMap map) {
+		map.put("id",id);
+		return prefix + "/addSave";
+	} 
+	
 	
 	/**
 	 * 新增团建申请
@@ -163,8 +168,71 @@ public class FacCollectApplyController extends BaseController {
 		return prefix + "/baoxiao";
 	}
 	
-	
-	
+	/**
+	 * 新增团建申请
+	 *
+	 * @throws Exception
+	 */
+	@GetMapping("/baoxiaoEdit") 
+	public String Baoxiao(String id, ModelMap mmap)
+	{
+		FacCollectApply facCollectApply = facCollectApplyService
+				.selectFacCollectApplyById(Long.valueOf(id)); 
+		FacReimburseApply facReimburseApply = new FacReimburseApply();
+		facReimburseApply.setNum(facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
+		facReimburseApply.setName(facCollectApply.getLeagueProject());//报销名
+		facReimburseApply.setAmount(facCollectApply.getAmount());
+		facReimburseApply.setLoanUser(facCollectApply.getApplicant());
+		facReimburseApply.setCreateTime(ShiroUtils.getDate());
+		facReimburseApply.setReimburseTime(facCollectApply.getStartDate()); 
+		facReimburseApply.setReason(facCollectApply.getActivityForm()); 
+		facReimburseApply.setType("团建报销");   
+		facReimburseApply.setJKnum(facCollectApply.getNum());
+		mmap.put("facReimburseApply", facReimburseApply);
+		mmap.put("facCollectApply", facCollectApply);
+		return prefix + "/baoxiaoEdit";
+	}
+	/**
+	 * 修改保存团建申请
+	 */
+	@Log(title = "团建申请", businessType = BusinessType.UPDATE)
+	@PostMapping("/addEdit")
+	@ResponseBody
+	public AjaxResult addEdit(FacCollectApply facCollectApply) {
+		FacCollectApply facCollectApplys = facCollectApplyService
+				.selectFacCollectApplyById(facCollectApply.getId());
+		FacReimburseApply facReimburseApply = new FacReimburseApply();
+		facReimburseApply.setNum(facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
+		facReimburseApply.setName(facCollectApply.getLeagueProject());//报销名
+		facReimburseApply.setAmount(facCollectApply.getAmount());
+		facReimburseApply.setLoanUser(facCollectApply.getApplicant());
+		facReimburseApply.setCreateTime(ShiroUtils.getDate());
+		facReimburseApply.setReimburseTime(facCollectApply.getStartDate()); 
+		facReimburseApply.setReason(facCollectApply.getActivityForm()); 
+		facReimburseApply.setType("团建报销");   
+		facReimburseApply.setJKnum(facCollectApply.getNum());
+		facReimburseApply.setName(facCollectApplys.getLeagueProject());
+		facReimburseApply.setLoanUser(ShiroUtils.getUserId());
+		facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
+		facCollectApply.setStatus("6");
+		 if(facCollectApply.getAmount()<=facCollectApplys.getAmount()){
+			 //不需要二次审批 
+			 facReimburseApply.setStatus("1");
+			 facReimburseApply.setSubmitStatus("submit"); 
+			 facReimburseApplyService.insertApply(facReimburseApply); 
+		 }else{
+			 //需要二次审批 
+			 facCollectApply.setNum(facNumberTableService.getNum("TJ", ShiroUtils.getDateId())); 
+			 facCollectApply.setApplicant(ShiroUtils.getUserId()); 
+			 facCollectApply.setLeagueProject(facCollectApplys.getLeagueProject());
+			 facCollectApply.setApplicationTime(facCollectApplys.getApplicationTime());
+			 FacCollectApply fac=facCollectApply;
+			 fac.setStatus("1");
+			 facCollectApplyService.insertFacCollectApply(fac);  
+		 }  
+		return toAjax(
+				facCollectApplyService.updateFacCollectApply(facCollectApply));
+	}
 	
 	/**
 	 * 新增保存团建申请

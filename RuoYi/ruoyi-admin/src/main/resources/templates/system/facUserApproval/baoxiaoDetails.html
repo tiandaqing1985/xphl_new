@@ -49,7 +49,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" id="jtf">
                     <div class="col-sm-12 select-table table-striped">
 <!--                        <a class="btn btn-success" onclick="mAdd(1)">-->
 <!--                            <i class="fa fa-plus"></i> 交通费报销信息-->
@@ -66,7 +66,7 @@
                         <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" id="qtf">
                     <div class="col-sm-12 select-table table-striped">
 <!--                        <a class="btn btn-success" onclick="mAdd(3)">-->
 <!--                            <i class="fa fa-plus"></i> 其他费用报销信息-->
@@ -118,11 +118,22 @@
     //     $.modal.open("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
     // }
 
-    if (dept = 10) {
+    if (dept == 10) {
         $("#zdf").hide();//隐藏
     } else {
         $("#zdf").show();//显示
     }
+
+    if (userId == 253 || userId == 257) {
+        $("#qtf").hide();//隐藏
+        $("#zdf").hide();//隐藏
+    } else {
+        $("#qtf").show();//显示
+
+    }
+
+
+
 
     function mAdd(id) {
         if (id == 1) {
@@ -165,7 +176,7 @@
     $(function () {
         var options = {
             id: "bootstrap-table-1",
-            url: prefix + "/addTraDetail",
+            url: prefix + "/lookTraDetail",
             showSearch: false,
             showRefresh: false,
             showToggle: false,
@@ -176,7 +187,7 @@
                         {
                             title: '交通费报销信息',
                             align: 'center',
-                            colspan: 10,
+                            colspan: 11,
                         }
 
                 ],
@@ -231,6 +242,18 @@
                     field: 'type',
                     title: '类型 ',
                     sortable: true
+                },{
+                    field: 'excess',
+                    title: '是否超额 ',
+                    visible: true,
+                    formatter: function (value, row, index) {
+                        if(value==1){
+                            layer.msg("已超出额度");
+                            return  "超额";
+                        }else {
+                            return  "未超额";
+                        }
+                    }
                 }
 
             ]
@@ -241,7 +264,6 @@
     });
 
     $(function () {
-
         var options = {
             id: "bootstrap-table-2",
             Url: prefix + "/addAll",
@@ -385,7 +407,7 @@
                 }
                 $.modal.closeLoading();
                 $.modal.enable();
-                
+
                 $.modal.closeTab();
                 $.modal.closeTab();
                 $.modal.closeAll();

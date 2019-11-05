@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -150,6 +149,13 @@ public class FacPayPublicApplyController extends BaseController {
 		mmap.put("facCommonlyApply", facCommonlyApply);
 	    return prefix + "/addCuer";
 	} 
+	
+	@GetMapping("/addSave")
+	public String addSave(String id, ModelMap map) {
+		map.put("id",id);
+		return prefix + "/addSave";
+	} 
+	
 	
 	/**
 	 * 新增保存对公常显

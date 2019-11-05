@@ -551,6 +551,38 @@ public class FacReimburseApplyController extends BaseController {
 	}
 
 	/**
+	 * 查看交通费报销申请详情
+	 */
+	@PostMapping("/lookTraDetail")
+	@ResponseBody
+	public TableDataInfo LookTraDetail(String num) {
+		startPage();
+		List<ReiTrafficApply> facReimburseApply = facReimburseApplyService
+				.selectReiTrafficApply(num);
+		Long user = ShiroUtils.getUserId(); 
+		if (facReimburseApply != null) { 
+			for (int i = 0; i < facReimburseApply.size(); i++) {
+				if (user == 253 || user == 257) {
+					if (facReimburseApply.get(i).getType().equals("公出")) {
+						facReimburseApply.remove(i);
+					}
+				}
+				double amount = facTrafficReiApplyMapper
+						.selectAmount(facReimburseApply.get(i).getApplyUser());
+				if (amount > 800) {
+					facReimburseApply.get(i).setExcess("1");
+				} else {
+					facReimburseApply.get(i).setExcess("0");
+				}
+			}
+			return getDataTable(facReimburseApply); 
+		} else {
+			List<String> a = new ArrayList<>();
+			return getDataTable(a);
+		}
+	}
+
+	/**
 	 * 查看其他报销费申请详情
 	 */
 
@@ -570,6 +602,12 @@ public class FacReimburseApplyController extends BaseController {
 		}
 	}
 
+	@GetMapping("/addSave")
+	public String addSave(String id, ModelMap map) {
+		map.put("id", id);
+		return prefix + "/addSave";
+	}
+
 	/**
 	 * 修改保存报销
 	 */
@@ -580,7 +618,6 @@ public class FacReimburseApplyController extends BaseController {
 		return toAjax(facReimburseApplyService
 				.updateFacReimburseApply(facReimburseApply));
 	}
-
 	/**
 	 * 修改报销
 	 */
@@ -588,10 +625,17 @@ public class FacReimburseApplyController extends BaseController {
 	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
 		FacReimburseApply facReimburseApply = facReimburseApplyService
 				.selectFacReimburseApplyById(id + "");
-		mmap.put("fac", facReimburseApply);
+		mmap.put("facReimburseApply", facReimburseApply);
+		mmap.put("name",facReimburseApply.getName());
+		mmap.put("num",facReimburseApply.getNum()); 
+		mmap.put("msg", "1");
+		mmap.put("userName", ShiroUtils.getSysUser().getUserName());
+		mmap.put("userId", ShiroUtils.getUserId());
+		mmap.put("deptId", ShiroUtils.getDeptId());
+		mmap.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());  
+		mmap.put("id",id);
 		return prefix + "/edit";
 	}
-
 	/**
 	 * 修改报销
 	 */
@@ -693,20 +737,15 @@ public class FacReimburseApplyController extends BaseController {
 			return error(e.getMessage());
 		}
 	}
-
 	/**
-	 *  保存团建申请报销
+	 * 保存团建申请报销
 	 */
 	@Log(title = "团建申请报销", businessType = BusinessType.UPDATE)
 	@PostMapping("/baoxiao")
 	@ResponseBody
 	public AjaxResult editSave1(FacReimburseApply facReimburseApply) {
 		facReimburseApply.setLoanUser(ShiroUtils.getUserId());
-		
-		return toAjax(
-				facReimburseApplyService.insertApply(facReimburseApply));
+		facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
+		return toAjax(facReimburseApplyService.insertApply(facReimburseApply));
 	}
-
-	  
-	
 }
