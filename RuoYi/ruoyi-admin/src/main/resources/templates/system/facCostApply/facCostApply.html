@@ -152,8 +152,9 @@
                         if (row.approvalStatus == 1) {
                             //审批成功
                             actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="baoxiao(\'' + row.id + '\')"> </i>报销</a> ');
-
+                            if(row.status==4) {
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="baoxiao(\'' + row.id + '\')"> </i>报销</a> ');
+                            }
                         } else if (row.status == 2) {
                             //审批失败
                         } else if (row.status == 3) {
@@ -184,8 +185,8 @@
     }
 
     function  baoxiao(id){
-        $.modal.open("报销添加", "/system/facCostApply/baoxiao?id=" + id);
-        //  $.modal.open("报销添加", "/system/facCostApply/baoxiaoEdit?id=" + id);
+        //  $.modal.open("报销添加", "/system/facCostApply/baoxiao?id=" + id);
+         $.modal.open("报销添加", "/system/facCostApply/baoxiaoEdit?id=" + id);
     }
 
     function add() {

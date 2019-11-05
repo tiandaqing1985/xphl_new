@@ -203,7 +203,7 @@ SELECT
 			<if test="reason != null  and reason != ''  ">reason,</if>
 			<if test="applyStatus != null  and applyStatus != ''  ">apply_status,</if>
 			<if test="updateTime != null  ">update_time,</if>
-			<if test="passTime != null  ">pass_time,</if>
+			<if test="passTime != null  ">pass_time,</if> 
 			<if test="type != null  and type != ''  ">type,</if>
 			<if test="submitStatus!=null and submitStatus!=''">submit_status,</if>
 			<if test="createBy != null and createBy !=''">create_by,</if>
@@ -221,7 +221,7 @@ SELECT
 			<if test="applyStatus != null  and applyStatus != ''  ">#{applyStatus},</if>
 			<if test="updateTime != null  ">#{updateTime},</if>
 			<if test="passTime != null  ">#{passTime},</if>
-			<if test="type != null  and type != ''  ">#{type},</if>
+			<if test="type != null  and type != ''  ">#{type},</if> 
             <if test="submitStatus!=null and submitStatus!=''">#{submitStatus},</if>
             <if test="createBy!=null and createBy!=''">#{createBy},</if>
              <if test="JKnum!=null and JKnum!=''">#{JKnum},</if>

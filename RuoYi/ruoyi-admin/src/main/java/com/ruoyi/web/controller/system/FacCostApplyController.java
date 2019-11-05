@@ -56,7 +56,7 @@ public class FacCostApplyController extends BaseController {
 	@Autowired
 	private IFacReimburseApplyService facReimburseApplyService;
 	@Autowired
-	private IFacNumberTableService facNumberTableService; 
+	private IFacNumberTableService facNumberTableService;
 	@GetMapping()
 	public String facCostApply() {
 		return prefix + "/facCostApply";
@@ -117,35 +117,34 @@ public class FacCostApplyController extends BaseController {
 
 	@GetMapping("/addSave")
 	public String addSave(String id, ModelMap map) {
-		map.put("id",id);
+		map.put("id", id);
 		return prefix + "/addSave";
-	} 
-	
+	}
 
 	/**
 	 * 新增团建申请
 	 *
 	 * @throws Exception
 	 */
-	@GetMapping("/baoxiao") 
-	public String Bao(String id, ModelMap mmap)
-	{
+	@GetMapping("/baoxiao")
+	public String Bao(String id, ModelMap mmap) {
 		FacCostApply facCostApply = facCostApplyService
-				.selectFacCostApplyById(Long.valueOf(id)); 
+				.selectFacCostApplyById(Long.valueOf(id));
 		FacReimburseApply facReimburseApply = new FacReimburseApply();
-		facReimburseApply.setNum(facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
-		facReimburseApply.setName(facCostApply.getBusName());//报销名
+		facReimburseApply.setNum(
+				facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
+		facReimburseApply.setName(facCostApply.getBusName());// 报销名
 		facReimburseApply.setAmount(facCostApply.getMoneyEs());
 		facReimburseApply.setLoanUser(facCostApply.getUserId());
 		facReimburseApply.setCreateTime(ShiroUtils.getDate());
-		facReimburseApply.setReimburseTime(facCostApply.getApplicationTime()); 
-		facReimburseApply.setReason(facCostApply.getReason()); 
-		facReimburseApply.setType("差旅报销");   
+		facReimburseApply.setReimburseTime(facCostApply.getApplicationTime());
+		facReimburseApply.setReason(facCostApply.getReason());
+		facReimburseApply.setType("差旅报销");
 		facReimburseApply.setJKnum(facCostApply.getNum());
 		mmap.put("facReimburseApply", facReimburseApply);
 		return prefix + "/baoxiao";
 	}
-	
+
 	/**
 	 * 查看住宿安排详情
 	 */
@@ -183,8 +182,9 @@ public class FacCostApplyController extends BaseController {
 	 * 新增差旅申请
 	 */
 	@GetMapping("/add")
-	public String add(ModelMap mmp) { 
-		mmp.put("num", facNumberTableService.getNum("CL", ShiroUtils.getDateId()));
+	public String add(ModelMap mmp) {
+		mmp.put("num",
+				facNumberTableService.getNum("CL", ShiroUtils.getDateId()));
 		return prefix + "/add";
 	}
 
@@ -197,7 +197,7 @@ public class FacCostApplyController extends BaseController {
 	public AjaxResult adSave(FacCostApply facCostApply) {
 		facCostApply.setUserId(ShiroUtils.getUserId());
 		facCostApply.setApplicationTime(new Date());
-		if (facCostApply.getId() == null) {   
+		if (facCostApply.getId() == null) {
 			facCostApply.setUserId(ShiroUtils.getUserId());
 		} else {
 			// 更新
@@ -402,8 +402,7 @@ public class FacCostApplyController extends BaseController {
 	@PostMapping("/removeTra")
 	@ResponseBody
 	public AjaxResult removeTra(String id) {
-		return toAjax(
-				facCostApplyService.deleteFacCostDetailApplyByIds(id));
+		return toAjax(facCostApplyService.deleteFacCostDetailApplyByIds(id));
 	}
 
 	/**
@@ -417,47 +416,82 @@ public class FacCostApplyController extends BaseController {
 		return toAjax(
 				facCostPutupApplyService.deleteFacCostPutupApplyByIds(id));
 	}
-//	/**
-//	 * 修改保存团建申请
-//	 */
-//	@Log(title = "差旅申请", businessType = BusinessType.UPDATE)
-//	@PostMapping("/addEdit")
-//	@ResponseBody
-//	public AjaxResult addEdit(FacCostApply facCostApply) {
-//		FacCostApply facCostApplys = facCostApplyService.selectFacCostApplyById(facCostApply.getId());
-//				
-//		FacReimburseApply facReimburseApply = new FacReimburseApply();
-//		facReimburseApply.setNum(facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
-//		facReimburseApply.setName(facCostApply.getLeagueProject());//报销名
-//		facReimburseApply.setAmount(facCostApply.getAmount());
-//		facReimburseApply.setLoanUser(facCostApply.getApplicant());
-//		facReimburseApply.setCreateTime(ShiroUtils.getDate());
-//		facReimburseApply.setReimburseTime(facCostApply.getStartDate()); 
-//		facReimburseApply.setReason(facCostApply.getActivityForm()); 
-//		facReimburseApply.setType("差旅报销");   
-//		facReimburseApply.setJKnum(facCostApply.getNum());
-//		facReimburseApply.setName(facCostApply.getLeagueProject());
-//		facReimburseApply.setLoanUser(ShiroUtils.getUserId());
-//		facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
-//		facCostApply.setStatus("6");
-//		 if(facCostApply.getAmount()<=facCostApplys.getAmount()){
-//			 //不需要二次审批 
-//			 facReimburseApply.setStatus("1");
-//			 facReimburseApply.setSubmitStatus("submit"); 
-//			 facReimburseApplyService.insertApply(facReimburseApply); 
-//		 }else{
-//			 //需要二次审批 
-//			 facCollectApply.setNum(facNumberTableService.getNum("CL", ShiroUtils.getDateId())); 
-//			 facCollectApply.setApplicant(ShiroUtils.getUserId()); 
-//			 facCollectApply.setLeagueProject(facCollectApplys.getLeagueProject());
-//			 facCollectApply.setApplicationTime(facCollectApplys.getApplicationTime());
-//			 FacCollectApply fac=facCollectApply;
-//			 fac.setStatus("1");
-//			 facCollectApplyService.insertFacCollectApply(fac);  
-//		 }  
-//		return toAjax(
-//				facCollectApplyService.updateFacCollectApply(facCollectApply));
-//	}
-//	
+	
+	/**
+	 * 新增团建申请
+	 *
+	 * @throws Exception
+	 */
+	@GetMapping("/baoxiaoEdit") 
+	public String Baoxiao(String id, ModelMap mmap)
+	{
+		FacCostApply facCostApply = facCostApplyService
+				.selectFacCostApplyById( Long.valueOf(id).longValue());
+		mmap.put("facCostApply", facCostApply);
+		return prefix + "/baoxiaoEdit";
+	} 
+	
+	/**
+	 * 修改保存团建申请
+	 */
+	@Log(title = "差旅申请", businessType = BusinessType.UPDATE)
+	@PostMapping("/addEdit")
+	@ResponseBody
+	public AjaxResult addEdit(FacCostApply facCostApply) {
+		FacCostApply facCostApplys = facCostApplyService
+				.selectFacCostApplyById(facCostApply.getId());
+		FacReimburseApply facReimburseApply = new FacReimburseApply();
+		facReimburseApply.setNum(
+				facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
+		facReimburseApply.setName(facCostApply.getBusName());// 报销名
+		facReimburseApply.setAmount(facCostApply.getMoneyEs());
+		facReimburseApply.setLoanUser(facCostApply.getUserId());
+		facReimburseApply.setCreateTime(ShiroUtils.getDate());
+		facReimburseApply.setReimburseTime(facCostApplys.getApplicationTime());
+		facReimburseApply.setReason(facCostApply.getReason());
+		facReimburseApply.setType("差旅报销");
+		facReimburseApply.setJKnum(facCostApply.getNum());
+		facReimburseApply.setLoanUser(ShiroUtils.getUserId());
+		facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
+		facCostApply.setStatus("6");
+		if (facCostApply.getMoneyEs() <= facCostApplys.getMoneyEs()) {
+			// 不需要二次审批
+			facReimburseApply.setStatus("1");
+			facReimburseApply.setSubmitStatus("submit");
+			facReimburseApplyService.insertApply(facReimburseApply);
+		} else {
+			// 需要二次审批
+			facCostApply.setNum(
+					facNumberTableService.getNum("CL", ShiroUtils.getDateId()));
+			facCostApply.setUserId(ShiroUtils.getUserId());
+			facCostApply.setBusName(facCostApplys.getBusName());
+			facCostApply.setApplicationTime(facCostApplys.getApplicationTime());
+			FacCostApply fac = facCostApply;
+			fac.setStatus("1");
+			List<FacCostDetailApply> list = facCostApplyService
+					.deatils(facCostApplys.getNum());
+			if (list != null) {
+				for (int i = 0; i < list.size(); i++) {
+					list.get(i).setNum(facCostApply.getNum());
+					facCostApplyService.insertFacCostDetailApply(list.get(i));
+				}
+			}
+
+			FacCostPutupApply facCostPutupApply = new FacCostPutupApply();
+			facCostPutupApply.setNum(facCostApplys.getNum());
+			List<FacCostPutupApply> putList = facCostPutupApplyService
+					.selectFacCostPutupApplyList(facCostPutupApply);
+
+			if (putList != null) {
+				for (int i = 0; i < putList.size(); i++) {
+					putList.get(i).setNum(facCostApply.getNum());
+					facCostApplyService.insertFacCostPutupApply(putList.get(i));
+				}
+			}
+
+			facCostApplyService.insertFacCostApply(fac);
+		}
+		return toAjax(facCostApplyService.updateFacCostApply(facCostApply));
+	}
 
 }

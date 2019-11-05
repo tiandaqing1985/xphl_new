@@ -97,6 +97,11 @@ public class FacReimburseApplyController extends BaseController {
 						.selectFacReimburseApplyList(facReimburseApply);
 				FacUserApproval facUserApproval = null;
 				for (FacReimburseApply facReimburseApply1 : list) {
+					if(facReimburseApply1.getType().equals("日常报销")){
+						
+					}else{
+						facReimburseApply1.setStatus("1");
+					}
 					facUserApproval = new FacUserApproval();
 					facUserApproval.setApprovalSight("1");
 					facUserApproval.setApplyId(facReimburseApply1.getNum());
@@ -144,6 +149,11 @@ public class FacReimburseApplyController extends BaseController {
 				.selectFacReimburseApplyList(facReimburseApply);
 		FacUserApproval facUserApproval = null;
 		for (FacReimburseApply facReimburseApply1 : list) {
+			if(facReimburseApply1.getType().equals("日常报销")){
+				
+			}else{
+				facReimburseApply1.setStatus("1");
+			}
 			facUserApproval = new FacUserApproval();
 			facUserApproval.setApprovalSight("1");
 			facUserApproval.setApplyId(facReimburseApply1.getNum());

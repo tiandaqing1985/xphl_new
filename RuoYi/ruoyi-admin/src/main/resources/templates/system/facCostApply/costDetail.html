@@ -177,23 +177,6 @@
                             title : '预计费用'
                         } ,
                         {
-                            field : 'status',
-                            title : '审批状态',
-                            formatter: function (value, row, index) {
-                                if (value == 1) {
-                                    return "审批成功";
-                                } else if (value == 2) {
-                                    return "驳回";
-                                } else if (value == 3) {
-                                    return "审批中";
-                                } else if (value == 5) {
-                                    return "待提交";
-                                } else {
-                                    return "待审批";
-                                }
-                            }
-                        },
-                        {
                             field: 'reason',
                             title: '事由'
                         }
