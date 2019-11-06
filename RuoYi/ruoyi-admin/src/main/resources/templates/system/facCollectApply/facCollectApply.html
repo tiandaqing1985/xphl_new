@@ -59,6 +59,8 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            facCollectApplyDetailUrl: "/system/facCollectApply/detail/{id}",
+            onClickRow: onClickRow,
             modalName: "团建申请",
             showExport: true,
             columns: [{
@@ -206,7 +208,11 @@
         $.modal.open("报销添加", "/system/facCollectApply/baoxiaoEdit?id=" + id);
     }
 
+    function onClickRow(row, $element){
+        var url = $.table._option.facCollectApplyDetailUrl.replace("{id}",row.id);
+        $.modal.open("详情", url);
 
+    }
 
     function add() {
         var width;

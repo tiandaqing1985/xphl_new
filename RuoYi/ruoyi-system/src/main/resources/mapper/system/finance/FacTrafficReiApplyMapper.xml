@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<resultMap type="FacTrafficReiApply" id="FacTrafficReiApplyResult">
 		<result property="id" column="id" />
-		<result property="ddDate" column="dd_date" />
+		<result property="ddDate" column="ddDate" />
 		<result property="targetUnit" column="targetUnit" />
 		<result property="amount" column="amount" />
 		<result property="user" column="user" />
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 
 	<sql id="selectFacTrafficReiApplyVo">
-		select id, dd_date, targetUnit, amount, user, departure,
+		select id, ddDate, targetUnit, amount, user, departure,
 		target,
 		apply_user, document_num, reason, type, num, status from
 		fac_traffic_rei_apply
@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<include refid="selectFacTrafficReiApplyVo" />
 		<where>
 			<if test="id != null "> and id = #{id}</if>
-			<if test="ddDate != null "> and dd_date = #{ddDate}</if>
+			<if test="ddDate != null "> and ddDate = #{ddDate}</if>
 			<if test="targetUnit != null  and targetUnit != '' "> and targetUnit = #{targetUnit}</if>
 			<if test="amount != null "> and amount = #{amount}</if>
 			<if test="user != null  and user != '' "> and user = #{user}</if>
@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		from
 		fac_traffic_rei_apply
 		where
-		date_format(dd_date, '%y %m') = date_format(date_sub(curdate(),
+		date_format(ddDate, '%y %m') = date_format(date_sub(curdate(),
 		interval 0 month),'%y %m') and apply_user = #{applyUser}),0); 
 	</select>
   
@@ -67,7 +67,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into fac_traffic_rei_apply
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="ddDate != null  ">dd_date,</if>
+			<if test="ddDate != null  ">ddDate,</if>
 			<if test="targetUnit != null  and targetUnit != ''  ">targetUnit,</if>
 			<if test="amount != null  ">amount,</if>
 			<if test="user != null  and user != ''  ">user,</if>
@@ -99,7 +99,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateFacTrafficReiApply" parameterType="FacTrafficReiApply">
 		update fac_traffic_rei_apply
 		<trim prefix="SET" suffixOverrides=",">
-			<if test="ddDate != null  ">dd_date = #{ddDate},</if>
+			<if test="ddDate != null  ">ddDate = #{ddDate},</if>
 			<if test="targetUnit != null  and targetUnit != ''  ">targetUnit = #{targetUnit},</if>
 			<if test="amount != null  ">amount = #{amount},</if>
 			<if test="user != null  and user != ''  ">user = #{user},</if>

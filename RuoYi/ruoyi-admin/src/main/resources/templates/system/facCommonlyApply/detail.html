@@ -68,8 +68,8 @@
         var userName=$('table tbody tr td:eq(3)').text();
         console.log(parent.document.getElementById("payee"))
         parent.document.getElementById("payee").value = name
-        parent.document.getElementById("payeeBank").value=number
-        parent.document.getElementById("payeeAccount").value=userName
+        parent.document.getElementById("payeeAccount").value=number
+        parent.document.getElementById("payeeBank").value=userName
 
         $.modal.close();
         $('#payee').val(name);

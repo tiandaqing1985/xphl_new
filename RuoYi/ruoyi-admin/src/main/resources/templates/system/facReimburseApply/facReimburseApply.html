@@ -8,6 +8,10 @@
     .select-list li .time-input {
         display: inline;
     }
+    #type{
+        display:inline-block;
+        padding:0;
+    }
 </style>
 <head>
     <th:block th:include="include :: header('报销列表')"/>
@@ -36,7 +40,13 @@
                             </div>
                         </li>
                         <li>
-                            类型： <input type="text" name="type"/>
+                            类型： <!-- <input type="text" name="type"/> 这个需要改-->
+                            <select id="type" name="type" class="form-control">
+                                <option value="">-- 请选择 --</option>
+                                <option value="日常报销">日常报销</option>
+                                <option value="团建报销">团建报销</option>
+                                <option value="差旅报销">差旅报销</option>
+                            </select>
                         </li>
                         <li>
                             申请时间：<input class="time-input" name="reimburseTime"/>

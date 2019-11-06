@@ -238,12 +238,11 @@ public class FacPayPublicApplyController extends BaseController {
 		startPage();
 		FacPayPublicApply facCostApply = facPayPublicApplyService.deatil(num);
 		if (facCostApply != null) {
+			FacPayPublicApply facCostApplys = facPayPublicApplyService.selectFacPayPublicApplyById(facCostApply.getId());
 			List<FacPayPublicApply> facReimburseApplies = new ArrayList<>();
-			facReimburseApplies.add(facCostApply);
-
+			facReimburseApplies.add(facCostApplys);
 			facCostApply.setUserName(sysUserService
-					.selectUserById(facCostApply.getUser()).getUserName());
-
+					.selectUserById(facCostApplys.getUser()).getUserName());
 			return getDataTable(facReimburseApplies);
 		} else {
 			List<String> a = new ArrayList<>();
@@ -266,6 +265,22 @@ public class FacPayPublicApplyController extends BaseController {
 		return prefix + "/public";
 	}
 
+	/**
+	 * 查看详情
+	 */
+	@GetMapping("/dgDetail/{id}")
+	public String dgDetail(@PathVariable("id") Integer id, ModelMap map) { 
+		FacPayPublicApply facPayPublicApply = new FacPayPublicApply();
+		facPayPublicApply.setId(id.intValue());
+		List<FacPayPublicApply> facReimburseApplies = facPayPublicApplyService
+				.selectFacPayPublicApplyList(facPayPublicApply);
+		map.put("rid", id);
+		map.put("num", facReimburseApplies.get(0).getNum());
+		map.put("status", facReimburseApplies.get(0).getStatus());
+		return prefix + "/dgDetail";
+	}
+
+	
 	/**
 	 * 查看明细
 	 */
@@ -299,8 +314,7 @@ public class FacPayPublicApplyController extends BaseController {
 	@Log(title = "对公申请", businessType = BusinessType.INSERT)
 	@PostMapping("/addDetail")
 	@ResponseBody
-	public AjaxResult addDetail(FacPayPublicDetailed facPayPublicDetailed) {
-
+	public AjaxResult addDetail(FacPayPublicDetailed facPayPublicDetailed) { 
 		return toAjax(facPayPublicApplyService
 				.insertFacPayPublicDetailed(facPayPublicDetailed));
 	}

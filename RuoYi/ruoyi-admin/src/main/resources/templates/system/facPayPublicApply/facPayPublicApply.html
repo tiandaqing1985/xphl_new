@@ -101,6 +101,8 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            facPayPublicApplyDetailUrl: "/system/facPayPublicApply/dgDetail/{id}",
+            onClickRow: onClickRow,
             modalName: "对公申请",
             showExport: true,
             columns: [{
@@ -213,6 +215,12 @@
     });
     function submitHandler(id) {
         $.modal.open("保存", "/system/facPayPublicApply/addSave?id=" + id);
+
+    }
+
+    function onClickRow(row, $element){
+        var url = $.table._option.facPayPublicApplyDetailUrl.replace("{id}",row.id);
+        $.modal.open("详情", url);
 
     }
 

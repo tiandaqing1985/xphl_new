@@ -608,4 +608,11 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 		return 	facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
 	}
 
+	@Override
+	public int updateFacReiHospitalityApply(
+			ReiHospitalityApply reiHospitalityApply) {
+		return  facReimburseApplyMapper.updateFacReiHospitalityApply(reiHospitalityApply);
+		
+	}
+
 }

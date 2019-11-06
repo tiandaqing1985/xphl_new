@@ -46,12 +46,9 @@
 </div>
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
-    var editFlag = [[${@permission.hasPermi('system:facHospitalityApply:edit')}]];
-    var removeFlag = [[${@permission.hasPermi('system:facHospitalityApply:remove')}]];
     var prefix = ctx + "system/facHospitalityApply";
     var prefixs = ctx + "system/facReimburseApply";
     var approvalState = [[${@dict.getType('fac_approval_state')}]];
-
 
     $(function () {
         var options = {
@@ -60,6 +57,8 @@
             updateUrl: prefix + "/edit/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            facHospitalityApplyDetailUrl: "/system/facHospitalityApply/detail/{id}",
+            onClickRow: onClickRow,
             modalName: "招待费申请",
             showExport: true,
             columns: [{
@@ -176,10 +175,11 @@
     }
 
 
+    function onClickRow(row, $element){
+        var url = $.table._option.facHospitalityApplyDetailUrl.replace("{id}",row.id);
+        $.modal.open("详情", url);
 
-
-
-
+    }
 
     function call(){
         $.operate.save(prefix);
@@ -357,19 +357,6 @@
                     }
                 };
                 $.ajax(config)
-                // config = {
-                //     url: "/system/print/preview?type=baoxiaoDetail&num="+id,
-                //     type: "get",
-                //     dataType: "html",
-                //     async: false,
-                //     data: "",
-                //     success: function(result) {
-                //         html2 = html2+result;
-                //     }
-                // };
-                // $.ajax(config)
-
-                // var printContent=document.getElementById(objId).innerHTML;//获得需要打印内容的HTML代码
 
                 printWindow = window.open('', '_blank');
                 printWindow.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <title></title><style>@page{margin-bottom:0mm;margin-top:2mm}</style></head><body>');
@@ -382,17 +369,6 @@
 
                 printWindow.document.write("</body></html>");//这里向新建的窗体写入HTML的结束标记
 
-                ////////////////
-                ///////////////
-                // printWindow.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <title></title><style>@page{margin-bottom:0mm;margin-top:2mm}</style></head><body>');
-                //
-                // //这里是向新建的窗口写入HTML的head信息，可引入自己的js和css，以供打印时样式与网页中显示的一致
-                //
-                // printWindow.document.write('<div style="page-break-after:always; width:100%; height:100%;">'+html2+'</div>');
-                //
-                // //这里向新建的窗体中写入BODY的内容，注意，外边加的额外DIV是有必要的，它里面CSS可以控制打印时不会出现空白页
-                //
-                // printWindow.document.write("</body></html>");//这里向新建的窗体写入HTML的结束标记
 
 
                 printWindow.document.close();//关闭新建窗口的文档输出流，否则下面的打印语句无效

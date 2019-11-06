@@ -304,6 +304,18 @@
                     field: 'userName',
                     title: '申请人',
                     sortable: true
+                },{
+                    field: 'excess',
+                    title: '是否超额 ',
+                    visible: true,
+                    formatter: function (value, row, index) {
+                        if(value==1){
+                            layer.msg("已超出额度");
+                            return  "超额";
+                        }else {
+                            return  "未超额";
+                        }
+                    }
                 },
                 {
                     title: '操作',

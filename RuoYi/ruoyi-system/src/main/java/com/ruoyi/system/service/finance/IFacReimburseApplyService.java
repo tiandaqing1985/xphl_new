@@ -149,6 +149,8 @@ public interface IFacReimburseApplyService {
 	List<Long> selectRole(long uesrId);
 
 	void updateFacReimburseApplyByNum(FacReimburseApply facReimburseApply);
+	
+	int  updateFacReiHospitalityApply(ReiHospitalityApply reiHospitalityApply);
 
 	List<FacReimburseApply> selectFacReimburseApplyListByCreateBy(
 			List<SysUser> sysUsersList);

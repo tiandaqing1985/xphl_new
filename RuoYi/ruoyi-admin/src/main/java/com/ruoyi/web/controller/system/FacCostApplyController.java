@@ -368,6 +368,21 @@ public class FacCostApplyController extends BaseController {
 		return prefix + "/editTra";
 	}
 
+	
+	
+	
+	
+	@GetMapping("/clDetail/{id}")
+	public String clDetail(@PathVariable("id") Long id, ModelMap map) {
+		FacCostApply facCostApply = new FacCostApply();
+		facCostApply.setId(id);
+		List<FacCostApply> facReimburseApplies = facCostApplyService
+				.selectFacCostApplyList(facCostApply);
+		map.put("rid", id);
+		map.put("num", facReimburseApplies.get(0).getNum());
+		map.put("status", facReimburseApplies.get(0).getStatus());
+		return prefix + "/clDetail";
+	}
 	/**
 	 * 修改住宿
 	 */

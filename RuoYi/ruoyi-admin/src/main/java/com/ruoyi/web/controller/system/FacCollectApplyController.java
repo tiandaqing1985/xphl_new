@@ -1,5 +1,6 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +21,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCollectApply;
+import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
@@ -310,4 +312,32 @@ public class FacCollectApplyController extends BaseController {
 		return toAjax(facCollectApplyService.deleteFacCollectApplyByIds(ids));
 	}
 
+	
+	
+	@GetMapping("/detail/{id}")
+	public String Detail(@PathVariable("id") Long id, ModelMap map) { 
+		map.put("id", id); 
+		return prefix + "/detail";
+	}
+	
+	/**
+	 * 查看行程安排详情
+	 */
+	@PostMapping("/query")
+	@ResponseBody
+	public TableDataInfo detail1(Long id) {
+		startPage();
+		FacCollectApply facCollectApply =facCollectApplyService.selectFacCollectApplyById(id); 
+		if (facCollectApply != null) {
+			List<FacCollectApply> facReimburseApplies = new ArrayList<>();
+			facReimburseApplies.add(facCollectApply);
+			return getDataTable(facReimburseApplies);
+		} else {
+			List<String> a = new ArrayList<>();
+			return getDataTable(a);
+		}
+	}
+	
+	
+	
 }

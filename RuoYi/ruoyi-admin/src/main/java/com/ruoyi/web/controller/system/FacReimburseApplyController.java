@@ -32,6 +32,7 @@ import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.domain.finance.ReiHospitalityApply;
 import com.ruoyi.system.domain.finance.ReiTrafficApply;
 import com.ruoyi.system.mapper.finance.FacReiAdiApplyMapper;
+import com.ruoyi.system.mapper.finance.FacReimburseApplyMapper;
 import com.ruoyi.system.mapper.finance.FacTrafficReiApplyMapper;
 import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
 import com.ruoyi.system.service.ISysDeptService;
@@ -74,6 +75,9 @@ public class FacReimburseApplyController extends BaseController {
 	private FacTrafficReiApplyMapper facTrafficReiApplyMapper;
 	@Autowired
 	private IFacNumberTableService facNumberTableService;
+	
+	@Autowired
+	private  FacReimburseApplyMapper facReimburseApplyMapper;
 
 	@GetMapping()
 	public String facReimburseApply() {
@@ -423,18 +427,14 @@ public class FacReimburseApplyController extends BaseController {
 			if (applicant != null) {
 				v.setUserName(sysUserService.selectUserById(v.getUser())
 						.getUserName());
+			}  
+			double amount = facReimburseApplyMapper.selectHospitailAmount(v.getUser());
+			if (amount > 3000) {
+				v.setExcess("1");
+			} else {
+				v.setExcess("0");
 			} 
-			SysUser user = ShiroUtils.getSysUser();
-			SysDept sysDept = sysDeptService.selectDeptById(user.getDeptId());
-			List<SysRole> sysRoles = sysRoleService
-					.selectRolesByUserId(user.getUserId());
-//			for (SysRole sysRole : sysRoles) {
-//				if (sysRole.isFlag() && sysRole.getRoleId() == 13) {
-//				}
-//				}
-			
-		}
-		
+		} 
 		return getDataTable(list);
 	}
 
@@ -723,9 +723,9 @@ public class FacReimburseApplyController extends BaseController {
 	 */
 	@PostMapping("/editZhao")
 	@ResponseBody
-	public AjaxResult editZhaoSave(ReiTrafficApply reiTrafficApply) {
+	public AjaxResult editZhaoSave(ReiHospitalityApply reiHospitalityApply) {
 		return toAjax(facReimburseApplyService
-				.updateReiTrafficApplyById(reiTrafficApply));
+				.updateFacReiHospitalityApply(reiHospitalityApply));
 	}
 
 	/**

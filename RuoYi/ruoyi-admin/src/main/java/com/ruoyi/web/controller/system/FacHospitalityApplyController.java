@@ -212,13 +212,13 @@ public class FacHospitalityApplyController extends BaseController {
 	/**
 	 * 查看详情
 	 */
-	@GetMapping("/detail")
-	public String detail(@RequestParam("id") Long id, ModelMap map) {
+	@GetMapping("/detail/{id}")
+	public String detail(@PathVariable("id") Long id, ModelMap map) {
 		FacHospitalityApply facHospitalityApply = new FacHospitalityApply();
 		facHospitalityApply.setId(id);
 		List<FacHospitalityApply> facReimburseApplies = facHospitalityApplyService
 				.selectFacHospitalityApplyList(facHospitalityApply);
-		map.put("rid", id);
+		map.put("id", id);
 		map.put("num", facReimburseApplies.get(0).getNum());
 		return prefix + "/detail";
 	}

@@ -60,6 +60,8 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             modalName: "借款申请",
+            facLoanApplyDetailUrl: "/system/facLoanApply/jkDetail/{id}",
+            onClickRow: onClickRow,
             showExport: true,
             columns: [{
                 checkbox: true
@@ -192,39 +194,32 @@
         $.modal.open("保存", "/system/facLoanApply/addSave?id=" + id);
 
     }
-    // 保存信息 刷新表格
-    // save: function(url, data, callback) {
-    //     var config = {
-    //         url: url,
-    //         type: "post",
-    //         dataType: "json",
-    //         data: data,
-    //         beforeSend: function () {
-    //             $.modal.loading("正在处理中，请稍后...");
-    //             $.modal.disable();
-    //         },
-    //         success: function(result) {
-    //             if (typeof callback == "function") {
-    //                 callback(result);
-    //             }
-    //             $.operate.successCallback(result);
-    //         }
-    //     };
-    //     $.ajax(config)
-    // }
 
-    // remove: function(id) {
-    //     $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
-    //         var url = $.common.isEmpty(id) ? $.table._option.removeUrl : $.table._option.removeUrl.replace("{id}", id);
-    //         if($.table._option.type == table_type.bootstrapTreeTable) {
-    //             $.operate.get(url);
-    //         } else {
-    //             var data = { "ids": id };
-    //             $.operate.submit(url, "post", "json", data);
-    //         }
-    //     });
-    //
-    // },
+    function onClickRow(row, $element){
+        var url = $.table._option.facLoanApplyDetailUrl.replace("{id}",row.id);
+        $.modal.open("详情", url);
+
+    }
+
+    function f(id) {
+        var options = {
+            title: "借款申请详情",
+            width: 800,
+            height: 800,
+            url: prefix + "/detail?id=" + id,
+            skin: 'layui-layer-gray',
+            btn: ['关闭'],
+            yes: function (index, layero) {
+                layer.close(index);
+            }
+        };
+        $.modal.openOptions(options);
+    }
+
+
+
+
+
 
     function sub(id) {
         prefix + "/add", {"id": id};
@@ -263,20 +258,7 @@
         $.modal.close();
     }
 
-    function f(id) {
-        var options = {
-            title: "借款申请详情",
-            width: 800,
-            height: 800,
-            url: prefix + "/detail?id=" + id,
-            skin: 'layui-layer-gray',
-            btn: ['关闭'],
-            yes: function (index, layero) {
-                layer.close(index);
-            }
-        };
-        $.modal.openOptions(options);
-    }
+
 
     function add() {
         var width;

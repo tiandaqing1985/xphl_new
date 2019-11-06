@@ -221,7 +221,25 @@ public class FacLoanApplyController extends BaseController {
         map.put("status", facReimburseApplies.get(0).getApplyStatus());
         return prefix + "/detail";
     }
-
+    /**
+     * 修改借款申请
+     */
+    @GetMapping("/jkDetail/{id}")
+    public String jkDetail(@PathVariable("id") Long id, ModelMap map) {
+    	  FacLoanApply facLostApply = new FacLoanApply();
+          facLostApply.setId(id);
+          List<FacLoanApply> facReimburseApplies = facLoanApplyService
+                  .selectFacLoanApplyList(facLostApply);
+          map.put("rid", id);
+          map.put("num", facReimburseApplies.get(0).getNum());
+          map.put("status", facReimburseApplies.get(0).getApplyStatus());
+          return prefix + "/detail";
+    }
+    
+    
+    
+    
+    
     /**
      * 还款
      **/
