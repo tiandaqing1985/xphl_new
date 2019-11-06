@@ -218,7 +218,7 @@ public class FacCollectApplyController extends BaseController {
 		 if(facCollectApply.getAmount()<=facCollectApplys.getAmount()){
 			 //不需要二次审批 
 			 facReimburseApply.setStatus("1");
-			 facReimburseApply.setSubmitStatus("submit"); 
+			 facReimburseApply.setSubmitStatus("submit");  
 			 facReimburseApplyService.insertApply(facReimburseApply); 
 		 }else{
 			 //需要二次审批 
@@ -243,6 +243,7 @@ public class FacCollectApplyController extends BaseController {
 	public AjaxResult addSave(FacCollectApply facCollectApply) {
 		facCollectApply.setApplicationTime(new Date());
 		facCollectApply.setApplicant(ShiroUtils.getUserId());
+		facCollectApply.setDeptCompany("新普互联（北京）科技有限公司");
 		if (facCollectApply.getId() == null) {
 			// 直接添加
 			

@@ -8,6 +8,8 @@ public interface IPrintService {
     String previewjiekuan(String num);
 
     String previewchucai(String num);
+    
+    String previewchucaiBX(String num);
 
     String previewduigong(String num);
 
@@ -15,5 +17,9 @@ public interface IPrintService {
 
     String previewTuanjian(String num);
 
-    String previewZhaodaifei(String num);
+    String previewTuanjianBX(String num);
+    
+    String previewZhaodaifei(String num); 
+    
+    String previewZhaodaifeiBX(String num);
 }

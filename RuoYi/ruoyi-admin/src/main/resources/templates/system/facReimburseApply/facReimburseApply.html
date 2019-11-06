@@ -5,6 +5,9 @@
         float: none;
         display: inline;
     }
+    .select-list li .time-input {
+        display: inline;
+    }
 </style>
 <head>
     <th:block th:include="include :: header('报销列表')"/>
@@ -17,6 +20,9 @@
                 <div class="select-list">
                     <ul>
                         <li>
+                            报销编号：<input type="text" name="num"/>
+                        </li>
+                        <li>
                             报销人：
                             <div class="col-sm-9">
                                 <input id="loanUser" type="text" name="loanUser"/>
@@ -28,6 +34,12 @@
                                     </ul>
                                 </div>
                             </div>
+                        </li>
+                        <li>
+                            类型： <input type="text" name="type"/>
+                        </li>
+                        <li>
+                            申请时间：<input class="time-input" name="reimburseTime"/>
                         </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i

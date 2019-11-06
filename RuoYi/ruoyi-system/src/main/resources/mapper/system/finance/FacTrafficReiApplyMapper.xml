@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<resultMap type="FacTrafficReiApply" id="FacTrafficReiApplyResult">
 		<result property="id" column="id" />
 		<result property="ddDate" column="dd_date" />
-		<result property="targetUnit" column="target_unit" />
+		<result property="targetUnit" column="targetUnit" />
 		<result property="amount" column="amount" />
 		<result property="user" column="user" />
 		<result property="departure" column="departure" />
@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 
 	<sql id="selectFacTrafficReiApplyVo">
-		select id, dd_date, target_unit, amount, user, departure,
+		select id, dd_date, targetUnit, amount, user, departure,
 		target,
 		apply_user, document_num, reason, type, num, status from
 		fac_traffic_rei_apply
@@ -33,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<where>
 			<if test="id != null "> and id = #{id}</if>
 			<if test="ddDate != null "> and dd_date = #{ddDate}</if>
-			<if test="targetUnit != null  and targetUnit != '' "> and target_unit = #{targetUnit}</if>
+			<if test="targetUnit != null  and targetUnit != '' "> and targetUnit = #{targetUnit}</if>
 			<if test="amount != null "> and amount = #{amount}</if>
 			<if test="user != null  and user != '' "> and user = #{user}</if>
 			<if test="departure != null  and departure != '' "> and departure = #{departure}</if>
@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		insert into fac_traffic_rei_apply
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="ddDate != null  ">dd_date,</if>
-			<if test="targetUnit != null  and targetUnit != ''  ">target_unit,</if>
+			<if test="targetUnit != null  and targetUnit != ''  ">targetUnit,</if>
 			<if test="amount != null  ">amount,</if>
 			<if test="user != null  and user != ''  ">user,</if>
 			<if test="departure != null  and departure != ''  ">departure,</if>
@@ -100,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		update fac_traffic_rei_apply
 		<trim prefix="SET" suffixOverrides=",">
 			<if test="ddDate != null  ">dd_date = #{ddDate},</if>
-			<if test="targetUnit != null  and targetUnit != ''  ">target_unit = #{targetUnit},</if>
+			<if test="targetUnit != null  and targetUnit != ''  ">targetUnit = #{targetUnit},</if>
 			<if test="amount != null  ">amount = #{amount},</if>
 			<if test="user != null  and user != ''  ">user = #{user},</if>
 			<if test="departure != null  and departure != ''  ">departure = #{departure},</if>

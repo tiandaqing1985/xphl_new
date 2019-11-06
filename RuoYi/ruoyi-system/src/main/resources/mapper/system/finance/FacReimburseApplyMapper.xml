@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="addUser != null  and addUser != '' "> and addUser = #{addUser}</if>
              <if test="documentNum != null "> and document_num = #{documentNum}</if>
              <if test="location != null  and location != '' "> and location = #{location}</if>
-             <if test="targetUnit != null  and targetUnit != '' "> and target_unit = #{targetUnit}</if>
+             <if test="targetUnit != null  and targetUnit != '' "> and targetUnit = #{targetUnit}</if>
              <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
              <if test="num != null  and num != '' "> and num = #{num}</if>
              <if test="status != null  and status != '' "> and status = #{status}</if>
@@ -101,6 +101,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
           a.`amount`,
           b.`user_name` AS userName,
           a.`status`,
+          a.`JKnum`,
           a.`reimburse_time` AS reimburesTime,
           a.`create_time` AS createTime
         FROM
@@ -113,7 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="hosTail" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
 SELECT
   a.`ddDate` AS ddDate,
-  a.`target_unit` AS targetUnit,
+  a.`targetUnit` AS targetUnit,
   a.`amount`,
   a.`addUser` AS addUser,
   a.`location`,
@@ -126,7 +127,7 @@ SELECT
         SELECT
         a.id,
         a.`dd_date` AS ddDate,
-        a.`target_unit` AS targetUnit,
+        a.`targetUnit` AS targetUnit,
         a.amount,
         a.target,
         a.`departure`,
@@ -144,7 +145,7 @@ SELECT
         SELECT
         a.id,
         a.`dd_date` AS ddDate,
-        a.`target_unit` AS targetUnit,
+        a.`targetUnit` AS targetUnit,
         a.amount,
         a.target,
         a.`departure`,
@@ -159,7 +160,7 @@ SELECT
     </select>
     
      <select id="selectFacHostById" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply" >
-          select id, ddDate, amount, addUser, document_num, location, target_unit, reason, num, status, applyNum, user from fac_rei_hospitality_apply 
+          select id, ddDate, amount, addUser, document_num, location, targetUnit, reason, num, status, applyNum, user from fac_rei_hospitality_apply 
            
          WHERE  id = #{param1}
     </select>
@@ -230,14 +231,14 @@ SELECT
 
 
     <insert id="TrafficBatchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO fac_traffic_rei_apply (dd_date, target_unit, amount, user, departure, target, apply_user,document_num,reason,type,num)
+        INSERT INTO fac_traffic_rei_apply (dd_date, targetUnit, amount, user, departure, target, apply_user,document_num,reason,type,num)
         VALUES
         <foreach collection="list" item="item" separator=",">
             (#{item.ddDate}, #{item.targetUnit}, #{item.amount}, #{item.user}, #{item.departure}, #{item.target},#{item.applyUser}, #{item.documentNum},#{item.reason},#{item.type},#{item.num})
         </foreach>
     </insert>
     <insert id="HospBatchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO fac_rei_hospitality_apply (ddDate, amount, addUser, user, document_num, location, target_unit,
+        INSERT INTO fac_rei_hospitality_apply (ddDate, amount, addUser, user, document_num, location, targetUnit,
         reason,num)
         VALUES
         <foreach collection="list" item="item" separator=",">
@@ -287,7 +288,7 @@ SELECT
         update fac_traffic_rei_apply
         <trim prefix="SET" suffixOverrides=",">
             <if test="ddDate != null  ">dd_date = #{ddDate},</if>
-            <if test="targetUnit != null  and targetUnit != ''  ">target_unit = #{targetUnit},</if>
+            <if test="targetUnit != null  and targetUnit != ''  ">targetUnit = #{targetUnit},</if>
             <if test="amount != null  ">amount = #{amount},</if>
             <if test="user != null  and user != ''  ">user = #{user},</if>
             <if test="departure != null  and departure != ''  ">departure = #{departure},</if>

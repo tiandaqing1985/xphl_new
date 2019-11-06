@@ -7,6 +7,8 @@
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-facCostApply-add">
         <input id="id" name="id" class="form-control-static" type="hidden" th:value="${id}">
+        <input id="amount" name="amount" class="form-control-static" type="hidden" th:value="${amount}">
+
         是否提交数据
     </form>
 </div>
@@ -17,6 +19,7 @@
     var prefix = ctx + "system/facCostApply"
     var dept = $("#dept").val();
     var id = $("#id").val();
+    var amount = $("#amount").val();
     $("#form-facCostApply-add").validate({
         rules: {
             xxxx: {
@@ -27,14 +30,13 @@
     });
 
     function submitHandler() {
-
-        $.operate.save(prefix + "/add", {"id": id});
+        if (amount > 0) {
+            $.operate.save(prefix + "/add", {"id": id});
+        } else {
+            alert("请补充数据");
+        }
     }
-    // $(function(){
-    //     // $('iframe').css('height','100%')
-    //     $('.layui-layer-iframe').css('height','100%')
-    //
-    // })
+
 </script>
 </body>
 </html>

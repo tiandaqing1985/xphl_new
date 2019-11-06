@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,6 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.finance.FacCollectApply;
 import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacCostDetailApply;
 import com.ruoyi.system.domain.finance.FacCostPutupApply;
@@ -118,6 +118,8 @@ public class FacCostApplyController extends BaseController {
 	@GetMapping("/addSave")
 	public String addSave(String id, ModelMap map) {
 		map.put("id", id);
+		FacCostApply facCostApply = facCostApplyService.selectFacCostApplyById(Long.valueOf(id).longValue()); 
+		map.put("amount", facCostApplyService.selectDouble(facCostApply.getNum()));
 		return prefix + "/addSave";
 	}
 
@@ -191,9 +193,9 @@ public class FacCostApplyController extends BaseController {
 	/**
 	 * 新增保存差旅申请
 	 */
-	@Log(title = "差旅申请", businessType = BusinessType.INSERT)
+	@Log(title = "差旅申请", businessType = BusinessType.INSERT) 
 	@PostMapping("/add")
-	@ResponseBody
+	@ResponseBody 
 	public AjaxResult adSave(FacCostApply facCostApply) {
 		facCostApply.setUserId(ShiroUtils.getUserId());
 		facCostApply.setApplicationTime(new Date());
@@ -206,6 +208,13 @@ public class FacCostApplyController extends BaseController {
 			facCostApplyService
 					.deleteFacCostApplyByIds(facCostApply.getId() + "");
 		}
+		
+//		if(facCostApply.getMoneyEs()!=null){
+//			
+//		}else{
+//			//return  AjaxResult.success();
+//			return AjaxResult.error("请补全数据");
+//		} 
 		return toAjax(facCostApplyService.insertFacCostApply(facCostApply));
 	}
 
@@ -434,6 +443,7 @@ public class FacCostApplyController extends BaseController {
 	/**
 	 * 修改保存团建申请
 	 */
+	@Transactional
 	@Log(title = "差旅申请", businessType = BusinessType.UPDATE)
 	@PostMapping("/addEdit")
 	@ResponseBody

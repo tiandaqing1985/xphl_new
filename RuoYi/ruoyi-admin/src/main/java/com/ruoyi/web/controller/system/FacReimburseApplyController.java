@@ -74,10 +74,12 @@ public class FacReimburseApplyController extends BaseController {
 	private FacTrafficReiApplyMapper facTrafficReiApplyMapper;
 	@Autowired
 	private IFacNumberTableService facNumberTableService;
+
 	@GetMapping()
 	public String facReimburseApply() {
 		return prefix + "/facReimburseApply";
 	}
+
 	/**
 	 * 查询报销列表
 	 */
@@ -97,10 +99,12 @@ public class FacReimburseApplyController extends BaseController {
 						.selectFacReimburseApplyList(facReimburseApply);
 				FacUserApproval facUserApproval = null;
 				for (FacReimburseApply facReimburseApply1 : list) {
-					if(facReimburseApply1.getType().equals("日常报销")){
-						
-					}else{
-						facReimburseApply1.setStatus("1");
+					if (facReimburseApply1.getType() != null) {
+						if (facReimburseApply1.getType().equals("日常报销")) {
+
+						} else {
+							facReimburseApply1.setStatus("1");
+						}
 					}
 					facUserApproval = new FacUserApproval();
 					facUserApproval.setApprovalSight("1");
@@ -149,11 +153,14 @@ public class FacReimburseApplyController extends BaseController {
 				.selectFacReimburseApplyList(facReimburseApply);
 		FacUserApproval facUserApproval = null;
 		for (FacReimburseApply facReimburseApply1 : list) {
-			if(facReimburseApply1.getType().equals("日常报销")){
-				
-			}else{
-				facReimburseApply1.setStatus("1");
+			if (facReimburseApply1.getType() != null) {
+				if (facReimburseApply1.getType().equals("日常报销")) {
+
+				} else {
+					facReimburseApply1.setStatus("1");
+				}
 			}
+
 			facUserApproval = new FacUserApproval();
 			facUserApproval.setApprovalSight("1");
 			facUserApproval.setApplyId(facReimburseApply1.getNum());
@@ -197,6 +204,7 @@ public class FacReimburseApplyController extends BaseController {
 		return getDataTable(list);
 
 	}
+
 	/**
 	 * 导出报销列表
 	 */
@@ -209,6 +217,7 @@ public class FacReimburseApplyController extends BaseController {
 				FacReimburseApply.class);
 		return util.exportExcel(list, "facReimburseApply");
 	}
+
 	/**
 	 * 查看详情
 	 */
@@ -227,9 +236,10 @@ public class FacReimburseApplyController extends BaseController {
 		map.put("date", facReimburseApplies.get(0).getPassTime());
 		return prefix + "/detail";
 	}
+
 	/**
 	 * 新增报销
-	 * 
+	 *
 	 * @throws Exception
 	 */
 	@GetMapping("/add")
@@ -264,6 +274,7 @@ public class FacReimburseApplyController extends BaseController {
 		}
 		return prefix + "/reimbuseDetail";
 	}
+
 	/**
 	 * 新增保存报销
 	 */
@@ -285,9 +296,18 @@ public class FacReimburseApplyController extends BaseController {
 		} else {
 			facReimburseApply.setCreateTime(new Date());
 		}
+
+//		if (facReimburseApply.getAmount() != null) {
+//
+//		} else {
+//
+//			return AjaxResult.error("请补全数据");
+//		}
+
 		return toAjax(facReimburseApplyService
 				.insertSaveFacReimburseApply(facReimburseApply));
 	}
+
 	/**
 	 * 新增提交报销
 	 */
@@ -403,10 +423,21 @@ public class FacReimburseApplyController extends BaseController {
 			if (applicant != null) {
 				v.setUserName(sysUserService.selectUserById(v.getUser())
 						.getUserName());
-			}
+			} 
+			SysUser user = ShiroUtils.getSysUser();
+			SysDept sysDept = sysDeptService.selectDeptById(user.getDeptId());
+			List<SysRole> sysRoles = sysRoleService
+					.selectRolesByUserId(user.getUserId());
+//			for (SysRole sysRole : sysRoles) {
+//				if (sysRole.isFlag() && sysRole.getRoleId() == 13) {
+//				}
+//				}
+			
 		}
+		
 		return getDataTable(list);
 	}
+
 	/**
 	 * 招待费用报销
 	 */
@@ -441,8 +472,8 @@ public class FacReimburseApplyController extends BaseController {
 				.selectReiHospitalityApplyList(reiHospitalityApply);
 		return getDataTable(list);
 	}
+
 	/**
-	 *
 	 * 其他报销申请
 	 */
 	@GetMapping("/otherDetail")
@@ -544,6 +575,9 @@ public class FacReimburseApplyController extends BaseController {
 				.selectReiTrafficApply(num);
 		if (facReimburseApply != null) {
 			for (ReiTrafficApply list : facReimburseApply) {
+				
+				//applyUser  通过userID获取角色
+				
 				double amount = facTrafficReiApplyMapper
 						.selectAmount(list.getApplyUser());
 				if (amount > 800) {
@@ -569,8 +603,8 @@ public class FacReimburseApplyController extends BaseController {
 		startPage();
 		List<ReiTrafficApply> facReimburseApply = facReimburseApplyService
 				.selectReiTrafficApply(num);
-		Long user = ShiroUtils.getUserId(); 
-		if (facReimburseApply != null) { 
+		Long user = ShiroUtils.getUserId();
+		if (facReimburseApply != null) {
 			for (int i = 0; i < facReimburseApply.size(); i++) {
 				if (user == 253 || user == 257) {
 					if (facReimburseApply.get(i).getType().equals("公出")) {
@@ -585,7 +619,7 @@ public class FacReimburseApplyController extends BaseController {
 					facReimburseApply.get(i).setExcess("0");
 				}
 			}
-			return getDataTable(facReimburseApply); 
+			return getDataTable(facReimburseApply);
 		} else {
 			List<String> a = new ArrayList<>();
 			return getDataTable(a);
@@ -615,6 +649,10 @@ public class FacReimburseApplyController extends BaseController {
 	@GetMapping("/addSave")
 	public String addSave(String id, ModelMap map) {
 		map.put("id", id);
+		FacReimburseApply facReimburseApply = facReimburseApplyService
+				.selectFacReimburseApplyById(id);
+		map.put("amount", facReimburseApplyService
+				.selectDouble(facReimburseApply.getNum()));
 		return prefix + "/addSave";
 	}
 
@@ -628,6 +666,7 @@ public class FacReimburseApplyController extends BaseController {
 		return toAjax(facReimburseApplyService
 				.updateFacReimburseApply(facReimburseApply));
 	}
+
 	/**
 	 * 修改报销
 	 */
@@ -636,16 +675,17 @@ public class FacReimburseApplyController extends BaseController {
 		FacReimburseApply facReimburseApply = facReimburseApplyService
 				.selectFacReimburseApplyById(id + "");
 		mmap.put("facReimburseApply", facReimburseApply);
-		mmap.put("name",facReimburseApply.getName());
-		mmap.put("num",facReimburseApply.getNum()); 
+		mmap.put("name", facReimburseApply.getName());
+		mmap.put("num", facReimburseApply.getNum());
 		mmap.put("msg", "1");
 		mmap.put("userName", ShiroUtils.getSysUser().getUserName());
 		mmap.put("userId", ShiroUtils.getUserId());
 		mmap.put("deptId", ShiroUtils.getDeptId());
-		mmap.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());  
-		mmap.put("id",id);
+		mmap.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
+		mmap.put("id", id);
 		return prefix + "/edit";
 	}
+
 	/**
 	 * 修改报销
 	 */
@@ -656,6 +696,7 @@ public class FacReimburseApplyController extends BaseController {
 		mmap.put("data", facReimburseApply);
 		return prefix + "/editTran";
 	}
+
 	/**
 	 * 修改报销
 	 */
@@ -676,6 +717,7 @@ public class FacReimburseApplyController extends BaseController {
 		mmap.put("facReiHospitalityApply", ReiHospitalityApply);
 		return prefix + "/editZhao";
 	}
+
 	/**
 	 * 修改报销
 	 */
@@ -696,6 +738,7 @@ public class FacReimburseApplyController extends BaseController {
 		mmap.put("facReiAdiApply", facReiAdiApply);
 		return prefix + "/editQi";
 	}
+
 	/**
 	 * 修改报销
 	 */
@@ -705,6 +748,7 @@ public class FacReimburseApplyController extends BaseController {
 		return toAjax(
 				facReiAdiApplyMapper.updateFacReiAdiApply(facReiAdiApply));
 	}
+
 	/**
 	 * 删除报销
 	 */
@@ -747,6 +791,7 @@ public class FacReimburseApplyController extends BaseController {
 			return error(e.getMessage());
 		}
 	}
+
 	/**
 	 * 保存团建申请报销
 	 */

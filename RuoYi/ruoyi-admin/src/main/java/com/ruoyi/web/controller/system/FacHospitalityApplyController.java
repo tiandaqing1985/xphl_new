@@ -22,6 +22,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacHospitalityApply;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.domain.finance.ReiHospitalityApply;
 import com.ruoyi.system.service.ISysUserService;
@@ -265,6 +266,69 @@ public class FacHospitalityApplyController extends BaseController {
 		facReimburseApplyService
 				.insertFacreiHospitalityApply(reiHospitalityApply);
 		return prefix + "/reimbuseDetail";
+	}
+
+	/**
+	 * 新增招待申请
+	 *
+	 * @throws Exception
+	 */
+	@GetMapping("/baoxiaoEdit") 
+	public String Baoxiao(String id, ModelMap mmap)
+	{
+		FacHospitalityApply facHospitalityApply = facHospitalityApplyService.selectFacHospitalityApplyById( Long.valueOf(id).longValue());
+		mmap.put("facHospitalityApply", facHospitalityApply);
+		return prefix + "/baoxiaoEdit";
+	} 
+	
+	@Log(title = "差旅申请", businessType = BusinessType.UPDATE)
+	@PostMapping("/addEdit")
+	@ResponseBody
+	public AjaxResult addEdit(FacHospitalityApply facHospitalityApply) {
+		FacHospitalityApply facHospitalityApplys = facHospitalityApplyService.selectFacHospitalityApplyById( facHospitalityApply.getId());
+		FacReimburseApply facReimburseApply = new FacReimburseApply();
+		facReimburseApply.setNum(
+				facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
+		facReimburseApply.setName(facHospitalityApply.getZdName());// 报销名
+		facReimburseApply.setAmount(facHospitalityApply.getAmount());
+		facReimburseApply.setLoanUser(facHospitalityApply.getUserId());
+		facReimburseApply.setCreateTime(ShiroUtils.getDate());
+		facReimburseApply.setReimburseTime(facHospitalityApply.getApplicationTime());
+		facReimburseApply.setReason(facHospitalityApply.getReason());
+		facReimburseApply.setType("招待报销");
+		facReimburseApply.setJKnum(facHospitalityApply.getNum());
+		facReimburseApply.setLoanUser(ShiroUtils.getUserId());
+		facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
+		facHospitalityApply.setStates(6L); 
+		if (facHospitalityApply.getAmount()<= facHospitalityApplys.getAmount()) {
+			// 不需要二次审批
+			facReimburseApply.setStatus("1");
+			facReimburseApply.setSubmitStatus("submit"); 
+			ReiHospitalityApply reiHospitalityApply=new ReiHospitalityApply();
+			reiHospitalityApply.setUser(ShiroUtils.getUserId()); 
+			reiHospitalityApply.setNum(facReimburseApply.getNum());
+			
+			reiHospitalityApply.setDdDate(facHospitalityApply.getApplicationTime()); 
+			reiHospitalityApply.setAddUser(facHospitalityApply.getLoanId());
+			reiHospitalityApply.setAmount(facHospitalityApply.getAmount()); 
+			//reiHospitalityApply.setTargetUnit(facHospitalityApply.get); //目标单位简称
+			//reiHospitalityApply.setDocumentNum(facHospitalityApply.get);  //单据数
+			reiHospitalityApply.setReason(facHospitalityApply.getReason());
+			
+			facReimburseApplyService.insertFacreiHospitalityApply(reiHospitalityApply); 
+			facReimburseApplyService.insertApply(facReimburseApply);
+		} else {
+			// 需要二次审批
+			facHospitalityApply.setNum(
+					facNumberTableService.getNum("ZD", ShiroUtils.getDateId()));
+			facHospitalityApply.setUserId(ShiroUtils.getUserId());
+			facHospitalityApply.setZdName(facHospitalityApplys.getZdName());
+			facHospitalityApply.setApplicationTime(facHospitalityApplys.getApplicationTime());
+			FacHospitalityApply fac = facHospitalityApply;
+			fac.setStates(3L); 
+			facHospitalityApplyService.insertFacHospitalityApply(fac);
+		}
+		return toAjax(facHospitalityApplyService.updateFacHospitalityApply(facHospitalityApply));
 	}
 
 }

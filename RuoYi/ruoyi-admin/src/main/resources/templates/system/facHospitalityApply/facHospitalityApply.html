@@ -140,7 +140,7 @@
                         if (row.approvalStatus == 1) {
                             //审批成功
                             actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-detail"></i>查看</a>');
-                             if(row.states != 4){
+                             if(row.states == 3){
                                 actions.push('<a class="btn btn-danger btn-xs ' + '" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>报销</a>');
                              }
                         } else if (row.states == 2) {
@@ -409,19 +409,7 @@
     }
 
     function f(id) {
-        var options = {
-            title: "",
-            width: 800,
-            height: 800,
-            url: prefix + "/reimbuseDetail?id=" + id,
-            skin: 'layui-layer-gray',
-            btn: ['关闭'],
-            yes: function (index, layero) {
-                layer.close(index);
-            }
-        };
-        $.modal.openOptions(options);
-
+        $.modal.open("报销添加", "/system/facHospitalityApply/baoxiaoEdit?id=" + id);
     }
 
 </script>
