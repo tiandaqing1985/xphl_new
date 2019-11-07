@@ -89,8 +89,16 @@ public class FacReimburseApplyController extends BaseController {
 	 */
 	@PostMapping("/list")
 	@ResponseBody
-	public TableDataInfo list(FacReimburseApply facReimburseApply) {
+	public TableDataInfo list(FacReimburseApply facReimburseApply,String loanUserName) {
 		// 查出这个人的信息
+		if(loanUserName!=null&&!loanUserName.equals("")){
+			Long loanUserId = sysUserService.selectUserIdByUserNameOnly(loanUserName);
+			if(loanUserId==null){
+				return getDataTable(new ArrayList<>());
+			}
+			facReimburseApply.setLoanUser(loanUserId);
+		}
+
 		SysUser user = ShiroUtils.getSysUser();
 		SysDept sysDept = sysDeptService.selectDeptById(user.getDeptId());
 		List<SysRole> sysRoles = sysRoleService

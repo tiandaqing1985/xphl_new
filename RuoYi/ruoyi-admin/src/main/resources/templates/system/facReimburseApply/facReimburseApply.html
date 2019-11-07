@@ -29,7 +29,7 @@
                         <li>
                             报销人：
                             <div class="col-sm-9">
-                                <input id="loanUser" type="text" name="loanUser"/>
+                                <input id="loanUser" type="text" name="loanUserName"/>
                                 <div class="input-group-btn" style="float: right">
                                     <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
                                         <span class="caret"></span>
@@ -65,10 +65,9 @@
             <a class="btn btn-success" onclick="add()">
                 <i class="fa fa-plus"></i> 日常报销申请
             </a>
-            <a class="btn btn-warning" onclick="$.table.exportExcel()"
-            >
-                <i class="fa fa-download"></i> 导出
-            </a>
+<!--            <a class="btn btn-warning" onclick="$.table.exportExcel()">-->
+<!--                <i class="fa fa-download"></i> 导出-->
+<!--            </a>-->
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -385,7 +384,7 @@
         url: ctx + "system/user/userModel",
         showBtn: false,
         idField: "userName",
-        keyField: "userId",
+        keyField: "userName",
         effectiveFields: ["deptName", "userName"],
         multiWord: true,
         hideOnSelect: true
