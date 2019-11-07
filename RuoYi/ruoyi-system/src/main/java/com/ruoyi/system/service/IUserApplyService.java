@@ -142,6 +142,8 @@ public interface IUserApplyService
 	
 	public int addOvertimeSave(UserApply userApply,Long userId);
 	
+	public int addOutSave(UserApply userApply,Long userId);
+
 	/**
 	 * 判断起始时间是否在加班时间范围内
 	 * @param userApply

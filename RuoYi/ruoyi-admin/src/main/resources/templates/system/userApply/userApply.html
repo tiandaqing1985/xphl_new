@@ -11,7 +11,7 @@
 			$.modal.open("请假申请", "/system/userApply/add");
 		}
 		function addOut(){
-			$.modal.open("外出报备申请","/system/oaOut/add")
+			$.modal.open("外出报备申请","/system/userApply/addOut")
 		}
 		
 		function toView(applyId){
@@ -157,8 +157,8 @@
 				<a class="btn btn-success" onclick="addOther()">
 					<i class="fa fa-plus"></i> 加班申请
 				</a>
-				<a class="btn btn-success" onclick="addOut()" style="display:none">
-					<i class="fa fa-plus"></i> 外出报备申请
+				<a class="btn btn-success" onclick="addOut()">
+					<i class="fa fa-plus"></i> 外出申请
 				</a>
 				<a class="btn btn-primary btn-edit disabled" onclick="undoing()" style="display:none">
 					<i class="fa fa-edit"></i> 修改

@@ -13,32 +13,32 @@
 			<div class="form-control-static" th:text="${userApply.applyType}">
 			</div>
 		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">
+		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'none' : 'block'}">
 			<label class="col-sm-2 control-label">请假类型：</label>
 			<div class="form-control-static" th:text="${userApply.leaveType}">
 			</div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-2 control-label">开始时间：</label>
-			<div class="form-control-static" id="starttime" th:text="${#dates.format(userApply.starttime, 'yyyy-MM-dd HH:mm:ss')}" th:style="'display:' + ${userApply.applyType == '加班' ? 'block' : 'none'}"></div>
-			<div class="form-control-static" id="starttime" th:text="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}"></div>
+			<div class="form-control-static" id="starttime" th:text="${#dates.format(userApply.starttime, 'yyyy-MM-dd HH:mm:ss')}" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'block' : 'none'}"></div>
+			<div class="form-control-static" id="starttime" th:text="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'none' : 'block'}"></div>
 		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">
+		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'none' : 'block'}">
 			<label class="col-sm-2 control-label">开始时段：</label>
 			<div class="form-control-static" th:text="${userApply.timeapart1}"></div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-2 control-label">结束时间：</label>
-			<div class="form-control-static" id="endtime" th:text="${#dates.format(userApply.endtime, 'yyyy-MM-dd HH:mm:ss')}" th:style="'display:' + ${userApply.applyType == '加班' ? 'block' : 'none'}"></div>
-			<div class="form-control-static" id="endtime" th:text="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}"></div>
+			<div class="form-control-static" id="endtime" th:text="${#dates.format(userApply.endtime, 'yyyy-MM-dd HH:mm:ss')}" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'block' : 'none'}"></div>
+			<div class="form-control-static" id="endtime" th:text="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'none' : 'block'}"></div>
 		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' ? 'none' : 'block'}">
+		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'none' : 'block'}">
 			<label class="col-sm-2 control-label">结束时段：</label>
 			<div class="form-control-static" th:text="${userApply.timeapart2}"></div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-2 control-label">时长：</label>
-			<div class="form-control-static" th:text="${userApply.timelength} + ${userApply.applyType == '加班' ? '小时' : '天'}"></div>
+			<div class="form-control-static" th:text="${userApply.timelength} + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? '小时' : '天'}"></div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-2 control-label">原因：</label>
