@@ -303,7 +303,7 @@ public class FacHospitalityApplyController extends BaseController {
 		if (facHospitalityApply.getAmount()<= facHospitalityApplys.getAmount()) {
 			// 不需要二次审批
 			facReimburseApply.setStatus("1");
-			facReimburseApply.setSubmitStatus("submit"); 
+			facReimburseApply.setSubmitStatus("save"); 
 			ReiHospitalityApply reiHospitalityApply=new ReiHospitalityApply();
 			reiHospitalityApply.setUser(ShiroUtils.getUserId()); 
 			reiHospitalityApply.setNum(facReimburseApply.getNum());

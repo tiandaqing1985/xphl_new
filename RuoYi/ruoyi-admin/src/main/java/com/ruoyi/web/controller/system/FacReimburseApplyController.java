@@ -75,9 +75,9 @@ public class FacReimburseApplyController extends BaseController {
 	private FacTrafficReiApplyMapper facTrafficReiApplyMapper;
 	@Autowired
 	private IFacNumberTableService facNumberTableService;
-	
+
 	@Autowired
-	private  FacReimburseApplyMapper facReimburseApplyMapper;
+	private FacReimburseApplyMapper facReimburseApplyMapper;
 
 	@GetMapping()
 	public String facReimburseApply() {
@@ -287,6 +287,9 @@ public class FacReimburseApplyController extends BaseController {
 	@ResponseBody
 	@Transactional
 	public AjaxResult addSave(FacReimburseApply facReimburseApply) {
+		ReiHospitalityApply reiHospitalityApply = new ReiHospitalityApply();
+		reiHospitalityApply.setNum(facReimburseApply.getNum());
+		List<ReiHospitalityApply> list=	facReimburseApplyService.selectReiHospitalityApplyList(reiHospitalityApply);
 		facReimburseApply.setLoanUser(ShiroUtils.getUserId());
 		facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
 		if (facReimburseApply.getId() != null) {
@@ -296,18 +299,15 @@ public class FacReimburseApplyController extends BaseController {
 			facReimburseApplyService.deleteFacReimburseApplyById(
 					facReimburseApply.getId() + "");
 			facReimburseApply.setUpdateTime(new Date());
-			facReimburseApply.setCreateTime(fac.getCreateTime());
+			facReimburseApply.setCreateTime(fac.getCreateTime()); 
+			String zdnum = facReimburseApply.getJKnum().substring(0, 2); 
+			if(list!=null&&zdnum.equals("ZD")){
+			
+			
+			}  
 		} else {
 			facReimburseApply.setCreateTime(new Date());
-		}
-
-//		if (facReimburseApply.getAmount() != null) {
-//
-//		} else {
-//
-//			return AjaxResult.error("请补全数据");
-//		}
-
+		} 
 		return toAjax(facReimburseApplyService
 				.insertSaveFacReimburseApply(facReimburseApply));
 	}
@@ -427,14 +427,15 @@ public class FacReimburseApplyController extends BaseController {
 			if (applicant != null) {
 				v.setUserName(sysUserService.selectUserById(v.getUser())
 						.getUserName());
-			}  
-			double amount = facReimburseApplyMapper.selectHospitailAmount(v.getUser());
+			}
+			double amount = facReimburseApplyMapper
+					.selectHospitailAmount(v.getUser());
 			if (amount > 3000) {
 				v.setExcess("1");
 			} else {
 				v.setExcess("0");
-			} 
-		} 
+			}
+		}
 		return getDataTable(list);
 	}
 
@@ -575,11 +576,12 @@ public class FacReimburseApplyController extends BaseController {
 				.selectReiTrafficApply(num);
 		if (facReimburseApply != null) {
 			for (ReiTrafficApply list : facReimburseApply) {
-				
-				//applyUser  通过userID获取角色
-				
+
+				// applyUser 通过userID获取角色
+
 				double amount = facTrafficReiApplyMapper
 						.selectAmount(list.getApplyUser());
+
 				if (amount > 800) {
 					list.setExcess("1");
 				} else {
@@ -663,6 +665,8 @@ public class FacReimburseApplyController extends BaseController {
 	@PostMapping("/edit")
 	@ResponseBody
 	public AjaxResult editSave(FacReimburseApply facReimburseApply) {
+		facReimburseApply.setAmount(facReimburseApplyService
+				.selectDouble(facReimburseApply.getNum()));
 		return toAjax(facReimburseApplyService
 				.updateFacReimburseApply(facReimburseApply));
 	}
@@ -683,6 +687,21 @@ public class FacReimburseApplyController extends BaseController {
 		mmap.put("deptId", ShiroUtils.getDeptId());
 		mmap.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
 		mmap.put("id", id);
+		List<Long> longs = facReimburseApplyService
+				.selectRole(ShiroUtils.getUserId());
+		for (Long l : longs) {
+			if (l == 10 || l == 9) {
+				mmap.put("dept", 10);
+				break;
+			} else {
+				mmap.put("dept", 11);
+			}
+		}
+		ReiHospitalityApply reiHospitalityApply = facReimburseApplyService
+				.selectFacHostById(id);
+		if (reiHospitalityApply != null) {
+			mmap.put("dept", 10);
+		}
 		return prefix + "/edit";
 	}
 

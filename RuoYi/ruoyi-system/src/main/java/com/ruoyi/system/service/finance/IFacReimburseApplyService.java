@@ -133,10 +133,8 @@ public interface IFacReimburseApplyService {
 	 */
 	public int insertFacreiAdiApply(FacReiAdiApply reiAdiApply);
 
-	
-	
 	public int insertApply(FacReimburseApply facReimburseApply);
-	
+
 	ReiTrafficApply selectFacTransById(long id);
 	ReiHospitalityApply selectFacHostById(long id);
 	int updateReiTrafficApplyById(ReiTrafficApply reiTrafficApply);
@@ -149,8 +147,8 @@ public interface IFacReimburseApplyService {
 	List<Long> selectRole(long uesrId);
 
 	void updateFacReimburseApplyByNum(FacReimburseApply facReimburseApply);
-	
-	int  updateFacReiHospitalityApply(ReiHospitalityApply reiHospitalityApply);
+
+	int updateFacReiHospitalityApply(ReiHospitalityApply reiHospitalityApply);
 
 	List<FacReimburseApply> selectFacReimburseApplyListByCreateBy(
 			List<SysUser> sysUsersList);

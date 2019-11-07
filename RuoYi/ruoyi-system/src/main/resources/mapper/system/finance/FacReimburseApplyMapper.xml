@@ -74,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="ddDate != null "> and ddDate = #{ddDate}</if>
              <if test="amount != null "> and amount = #{amount}</if>
              <if test="addUser != null  and addUser != '' "> and addUser = #{addUser}</if>
-             <if test="documentNum != null "> and document_num = #{documentNum}</if>
+             <if test="documentNum != null "> and documentNum = #{documentNum}</if>
              <if test="location != null  and location != '' "> and location = #{location}</if>
              <if test="targetUnit != null  and targetUnit != '' "> and targetUnit = #{targetUnit}</if>
              <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
@@ -119,7 +119,7 @@ SELECT
   a.`addUser` AS addUser,
   a.`location`,
   a.`reason`,
-  a.`document_num` AS aocumentNum
+  a.`documentNum` AS aocumentNum
    FROM fac_rei_hospitality_apply AS a
    WHERE a.`num`=#{num}
     </select>
@@ -160,7 +160,7 @@ SELECT
     </select>
     
      <select id="selectFacHostById" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply" >
-          select id, ddDate, amount, addUser, document_num, location, targetUnit, reason, num, status, applyNum, user from fac_rei_hospitality_apply 
+          select id, ddDate, amount, addUser, documentNum, location, targetUnit, reason, num, status, applyNum, user from fac_rei_hospitality_apply 
            
          WHERE  id = #{param1}
     </select>
@@ -250,7 +250,7 @@ SELECT
         </foreach>
     </insert>
     <insert id="HospBatchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO fac_rei_hospitality_apply (ddDate, amount, addUser, user, document_num, location, targetUnit,
+        INSERT INTO fac_rei_hospitality_apply (ddDate, amount, addUser, user, documentNum, location, targetUnit,
         reason,num)
         VALUES
         <foreach collection="list" item="item" separator=",">
@@ -321,7 +321,7 @@ SELECT
             <if test="ddDate != null  ">ddDate = #{ddDate},</if>
             <if test="amount != null  ">amount = #{amount},</if>
             <if test="addUser != null  and addUser != ''  ">addUser = #{addUser},</if>
-            <if test="documentNum != null  ">document_num = #{documentNum},</if>
+            <if test="documentNum != null  ">documentNum = #{documentNum},</if>
             <if test="location != null  and location != ''  ">location = #{location},</if>
             <if test="targetUnit != null  and targetUnit != ''  ">targetUnit = #{targetUnit},</if>
             <if test="reason != null  and reason != ''  ">reason = #{reason},</if>

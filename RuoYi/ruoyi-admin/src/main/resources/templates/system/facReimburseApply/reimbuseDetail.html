@@ -21,7 +21,8 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报销名称：</label>
                                 <div class="col-sm-8">
-                                    <input name="name" id="name" autocomplete="off" placeholder="XX月份报销" class="form-control"
+                                    <input name="name" id="name" autocomplete="off" placeholder="XX月份报销"
+                                           class="form-control"
                                            type="text" maxlength="30" th:value="${name}" required>
                                 </div>
                             </div>
@@ -101,9 +102,11 @@
     var msg = $("#msg").val();
     var userId = $("#userId").val();
     var dept = $("#dept").val();
+
     function zAdd() {
         $.modal.openFull("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
     }
+
     function mAdd(id) {
         if (id == 1) {
             $.table._option.id = "bootstrap-table-1";
@@ -119,6 +122,7 @@
             $.modal.open("其他添加", "/system/facReimburseApply/otherDetail?num=" + num);
         }
     }
+
     function mEdit(index, id) {
         if (index == 1) {
             $.table._option.id = "bootstrap-table-1";
@@ -134,6 +138,7 @@
         }
         $.operate.edit(id);
     }
+
     function mRemove(index, id) {
         if (index == 1) {
             $.table._option.modalName = "交通报销信息";
@@ -147,6 +152,7 @@
         }
         $.operate.remove(id);
     }
+
     $(function () {
         if (dept == 10) {
             $("#zdf").attr("style", "display:block;");//显示div
@@ -210,16 +216,16 @@
                     field: 'type',
                     title: '类型 ',
                     sortable: true
-                },{
+                }, {
                     field: 'excess',
                     title: '是否超额 ',
                     visible: true,
                     formatter: function (value, row, index) {
-                        if(value==1){
+                        if (value == 1) {
                             layer.msg("已超出额度");
-                            return  "超额";
-                        }else {
-                            return  "未超额";
+                            return "超额";
+                        } else {
+                            return "未超额";
                         }
                     }
                 },
@@ -239,9 +245,6 @@
 
         $.table.init(options);
     });
-
-
-
 
 
     $(function () {
@@ -301,19 +304,24 @@
                     sortable: true
                 },
                 {
+                    field: 'documentNum',
+                    title: '单据数',
+                    sortable: true
+                },
+                {
                     field: 'userName',
                     title: '申请人',
                     sortable: true
-                },{
+                }, {
                     field: 'excess',
                     title: '是否超额 ',
                     visible: true,
                     formatter: function (value, row, index) {
-                        if(value==1){
+                        if (value == 1) {
                             layer.msg("已超出额度");
-                            return  "超额";
-                        }else {
-                            return  "未超额";
+                            return "超额";
+                        } else {
+                            return "未超额";
                         }
                     }
                 },

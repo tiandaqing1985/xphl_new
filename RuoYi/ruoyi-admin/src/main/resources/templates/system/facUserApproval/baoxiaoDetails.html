@@ -263,70 +263,89 @@
         $.table.init(options);
     });
 
+
     $(function () {
         var options = {
             id: "bootstrap-table-2",
-            Url: prefix + "/addAll",
+            url: prefix + "/addAll",
             showSearch: false,
             showRefresh: false,
             showToggle: false,
             showColumns: false,
-            modelName: "招待费用信息",
+            modalName: "招待费报销申请",
             columns: [
-                [
-                    {
-                        title: '招待费用信息',
-                        align: 'center',
-                        colspan: 8,
-                    }
 
-                ],
-                [{
-                    checkbox: true
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                }
+                ,
+                {
+                    field: 'num',
+                    title: '报销编号',
+                    sortable: true
                 },
-                    {
-                        field: 'id',
-                        title: 'id',
-                        visible: false
-                    },
-                    {
-                        field: 'ddDate',
-                        title: '日期',
-                        formatter: function (value, row, index) {
-                            var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                            return newDate;
+                {
+                    field: 'ddDate',
+                    title: '日期',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
+                    }
+                },
+                {
+                    field: 'amount',
+                    title: '金额',
+                    sortable: true
+                },
+                {
+                    field: 'addUser',
+                    title: '参加人',
+                    sortable: true
+                },
+                {
+                    field: 'location',
+                    title: '地点',
+                    sortable: true
+                },
+                {
+                    field: 'targetUnit',
+                    title: '目标单位简称',
+                    sortable: true
+                },
+                {
+                    field: 'documentNum',
+                    title: '单据数',
+                    sortable: true
+                },
+                {
+                    field: 'reason',
+                    title: '事由',
+                    sortable: true
+                },
+                {
+                    field: 'userName',
+                    title: '申请人',
+                    sortable: true
+                },{
+                    field: 'excess',
+                    title: '是否超额 ',
+                    visible: true,
+                    formatter: function (value, row, index) {
+                        if(value==1){
+                            layer.msg("已超出额度");
+                            return  "超额";
+                        }else {
+                            return  "未超额";
                         }
-                    },
-                    {
-                        field: 'amount',
-                        title: '金额'
-                    },
-                    {
-                        field: 'project',
-                        title: '报销科目'
-                    },
-                    {
-                        field: 'reason',
-                        title: '事由'
-                    },
-                    {
-                        field: 'documentNum',
-                        title: '单据数'
-                    },
-                    {
-                        field: 'status',
-                        title: '用户状态',
-                        visible: false,
-                        align: 'center',
-                        formatter: function (value, row, index) {
-                            return $.table.selectDictLabel(datas, value);
-                        }
-                    },
-                   ]]
+                    }
+                }
+                ]
         };
         $.table.init(options);
     });
-
     $(function () {
         var options = {
             id: "bootstrap-table-3",

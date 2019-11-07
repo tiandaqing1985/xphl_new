@@ -59,6 +59,7 @@
             exportUrl: prefix + "/export",
             facHospitalityApplyDetailUrl: "/system/facHospitalityApply/detail/{id}",
             onClickRow: onClickRow,
+            clickToSelect: true,
             modalName: "招待费申请",
             showExport: true,
             columns: [{
@@ -132,6 +133,7 @@
                 {
                     title: '操作',
                     align: 'center',
+                    clickToSelect: false,
                     formatter: function (value, row, index) {
                         var actions = [];
 
