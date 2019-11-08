@@ -23,29 +23,28 @@
 
 
         <form class="form-horizontal m" id="form-facUserApproval-edit" th:object="${facUserApproval}">
-
-                <div class="col-sm-6">
-                    <div  class="form-group"  >
-                        <div class="col-sm-4 control-label">
-                            <label class="radio-box">
-                                <input type="radio" checked value="1" name="approvalState" style="position: absolute; opacity: 0;">
-                                同意</label>
-                            <label class="radio-box">
-                                <input type="radio" value="2" name="approvalState" style="position: absolute; opacity: 0;">
-                                驳回</label>
-                        </div>
-                    </div>
-                    <div class="form-group" >
-                        <label class="col-sm-4 control-label"></span>审批意见：</label>
-                        <div class="col-sm-8">
-                            <input id="opi" name="opi" class="form-control" type="text">
-                            <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
-                            <input id="approverId" name="approverId" class="form-control-static" type="hidden"
-                                   th:value="${userId}">
-                        </div>
+            <div class="col-sm-4  col-sm-offset-4">
+                <h4 class="form-header h4">审批填写</h4>
+                <div  class="form-group"  >
+                    <div class="col-sm-4 control-label" style="text-align:center;">
+                        <label class="radio-box">
+                            <input type="radio" checked value="1" name="approvalState" style="position: absolute; opacity: 0;">
+                            同意</label>
+                        <label class="radio-box">
+                            <input type="radio" value="2" name="approvalState" style="position: absolute; opacity: 0;">
+                            驳回</label>
                     </div>
                 </div>
-
+                <div class="form-group" style="text-align:center;">
+                    <label class="col-sm-4 control-label"></span>审批意见：</label>
+                    <div class="col-sm-4">
+                        <textarea id="opi" name="opi" class="form-control" type="text"></textarea>
+                        <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
+                        <input id="approverId" name="approverId" class="form-control-static" type="hidden"
+                               th:value="${userId}">
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
     <div th:include="include::footer"></div>
@@ -80,8 +79,8 @@
                             title: '申请名称'
                         },
                         {
-                            field: 'user',
-                            title: '申请人id'
+                            field: 'userName',
+                            title: '申请人'
                         },
                         {
                             field: 'amount',
@@ -95,13 +94,7 @@
                             field: 'payeeAccount',
                             title: '收款人账号'
                         } ,
-                        {
-                            field: 'status',
-                            title: '审批状态',
-                            formatter: function(value, row, index) {
-                                return $.table.selectDictLabel(approvalState, value);
-                            }
-                        },
+
                     ]
                 };
                 $.table.init(options);

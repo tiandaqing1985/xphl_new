@@ -132,6 +132,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="moneyEs != null  ">money_es = #{moneyEs},</if>
 			<if test="toLocal != null  and toLocal != ''  ">to_local = #{toLocal},</if>
 			<if test="reason != null  and reason != ''  ">reason = #{reason},</if>
+			<if test="status != null  and status != ''  ">status = #{status},</if>
 			<if test="userId != null  and userId != '' ">user_id = #{userId},</if>
 			<if test="applicationTime != null ">user_id = #{applicationTime},</if>
 		</trim>

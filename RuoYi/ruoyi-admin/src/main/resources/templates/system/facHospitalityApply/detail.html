@@ -14,8 +14,6 @@
 
  <div>
         <h4 class="form-header h4">招待详细信息</h4>
-   
-
         <div class="col-sm-12 select-table table-striped">
 
             <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
@@ -25,7 +23,6 @@
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
     var prefix = ctx + "system/facHospitalityApply";
-    var datas = [[${@dict.getType('sys_normal_disable')}]];
     var num = $("#num").val();
     var msg = $("#msg").val();
 
@@ -43,44 +40,72 @@
                     checkbox: true
                 },
                 {
-                    field: 'num',
-                    title: '差旅编号'
+                    field : 'id',
+                    title : 'id',
+                    visible: false
                 },
                 {
-                    field: 'bus_name',
-                    title: '项目名称'
+                    field : 'num',
+                    title : '招待费编号',
+                    sortable: true
                 },
                 {
-                    field: 'outTime',
-                    title: '出差时间',
+                    field : 'dept',
+                    title : '部门',
+                    sortable: true
+                },
+                {
+                    field : 'zdName',
+                    title : '项目名称',
+                    sortable: true
+                },
+                {
+                    field : 'loanId',
+                    title : '己方人员',
+                    sortable: true
+                },
+                {
+                    field : 'zdDate',
+                    title : '招待时间',
+                    sortable: true,
                     formatter: function (value, row, index) {
                         var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                         return newDate;
                     }
                 },
                 {
-                    field: 'backTimeEs',
-                    title: '预计返回时间',
+                    field : 'reason',
+                    title : '招待事由',
+                    sortable: true
+                },
+                {
+                    field : 'addUser',
+                    title : '对方人员',
+                    sortable: true
+                },
+                {
+                    field : 'totalNumber',
+                    title : '总人数',
+                    sortable: true
+                },
+                {
+                    field : 'standardAmount',
+                    title : '招待费标准',
+                    sortable: true
+                },
+                {
+                    field : 'amount',
+                    title : '预算金额',
+                    sortable: true
+                },
+                {
+                    field : 'applicationTime',
+                    title : '申请时间',
+                    sortable: true,
                     formatter: function (value, row, index) {
                         var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                         return newDate;
                     }
-                },
-                {
-                    field: 'outMan',
-                    title: '出差人员'
-                },
-                {
-                    field: 'moneyEs',
-                    title: '预计费用'
-                },
-                {
-                    field: 'toLocal',
-                    title: '出差目的地'
-                },
-                {
-                    field: 'reason',
-                    title: '事由'
                 }
             ]
         };

@@ -373,8 +373,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 								facReimburseApplyMapper.insertFacReimburseApply(
 										facReimburseApply);
 								flg = true;
-							}
-
+							} 
 						} else if (centerId.get(i).intValue() == 194) {// 到韩总处
 
 							if (num <= 10000.00) {
@@ -382,8 +381,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 								facReimburseApplyMapper.insertFacReimburseApply(
 										facReimburseApply);
 								flg = true;
-							}
-
+							} 
 						} else {
 							if (level == 2) {
 								// 如果含有加班申请 人事审批
@@ -415,13 +413,11 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 									}
 								}
 							}
-						}
-
+						} 
 						if (flg) {
 							return AjaxResult.success();
 						}
-					}
-
+					} 
 				}
 			}
 			facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
@@ -496,7 +492,17 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
 	@Override
 	public List<ReiTrafficApply> selectReiTrafficApply(String num) {
-
+		List<ReiTrafficApply> list=	 facReimburseApplyMapper.traTail(num);
+		for( ReiTrafficApply rei:list ){ 
+			if(rei.getType().equals("加班")){
+				
+			}else{
+				
+			} 
+		}
+		
+		
+		
 		return facReimburseApplyMapper.traTail(num);
 	}
 
@@ -590,6 +596,19 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 	@Override
 	public ReiHospitalityApply selectFacHostById(long id) {
 		return facReimburseApplyMapper.selectFacHostById(id);
+	}
+
+	@Override
+	public int insertApply(FacReimburseApply facReimburseApply) {
+		
+		return 	facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
+	}
+
+	@Override
+	public int updateFacReiHospitalityApply(
+			ReiHospitalityApply reiHospitalityApply) {
+		return  facReimburseApplyMapper.updateFacReiHospitalityApply(reiHospitalityApply);
+		
 	}
 
 }

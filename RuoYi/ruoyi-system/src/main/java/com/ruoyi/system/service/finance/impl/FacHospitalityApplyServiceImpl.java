@@ -128,6 +128,7 @@ public class FacHospitalityApplyServiceImpl
 				center.setCreateTime(new Date());// 创建时间
 				center.setApplicantId(facHospitalityApply.getUserId());
 				center.setAmount(facHospitalityApply.getAmount());
+				center.setProjectName(facHospitalityApply.getZdName());
 				approvalProcessMapper.insert(center);
 				if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
 					return facHospitalityApplyMapper

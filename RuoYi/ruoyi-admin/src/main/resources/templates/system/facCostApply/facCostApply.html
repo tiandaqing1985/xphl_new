@@ -59,6 +59,8 @@
             detailUrl: prefix + "/detail/{id}",
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
+            facCostApplyDetailUrl: "/system/facCostApply/clDetail/{id}",
+            onClickRow: onClickRow,
             modalName: "差旅申请",
             showExport: true,
             columns: [{
@@ -151,8 +153,10 @@
 
                         if (row.approvalStatus == 1) {
                             //审批成功
-                            actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
-
+                            actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
+                            if(row.status==4) {
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="baoxiao(\'' + row.id + '\')"> </i>报销</a> ');
+                            }
                         } else if (row.status == 2) {
                             //审批失败
                         } else if (row.status == 3) {
@@ -161,7 +165,7 @@
                         } else if (row.status == 5) {
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
                             //待审批
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 
                         } else {
@@ -178,12 +182,18 @@
         $.modal.openTab("查看" + $.table._option.modalName, prefix + "/detail?id=" + id);
     }
 
+    function onClickRow(row, $element){
+        var url = $.table._option.facCostApplyDetailUrl.replace("{id}",row.id);
+        $.modal.open("详情", url);
+
+    }
     function submitHandler(id) {
-        //index为1表示保存
-        debugger
-        mSave(prefix + "/add", {"id": id});
-        $.modal.close();
-        $.modal.closeTab();
+        $.modal.open("保存", "/system/facCostApply/addSave?id=" + id);
+    }
+
+    function  baoxiao(id){
+        //  $.modal.open("报销添加", "/system/facCostApply/baoxiao?id=" + id);
+         $.modal.open("报销添加", "/system/facCostApply/baoxiaoEdit?id=" + id);
     }
 
     function add() {
@@ -207,7 +217,7 @@
             shadeClose: true,
             yes: function (index,layero) {
                 var config = {
-                    url: "/system/facCostApply/add",
+
                     type: "post",
                     dataType: "json",
                     contentType : "application/x-www-form-urlencoded;charset=UTF-8",
@@ -220,11 +230,27 @@
                         layer.close(index);
                     }
                 };
-                $.ajax(config)
+                var result = window.frames[0].document.getElementById("busName").value;
+                var result2 = window.frames[0].document.getElementById("outTime").value;
+                var result3 = window.frames[0].document.getElementById("backTimeEs").value;
+                var result4 = window.frames[0].document.getElementById("outMan").value;
+
+                if (result == '') {
+                    layer.msg("请填写项目名称")
+                } else if (result2 == '') {
+                    layer.msg("请填写出差时间")
+                } else if (result3 == '') {
+                    layer.msg("请填写预计返回时间")
+                } else if (result4 == '') {
+                    layer.msg("请填写出差人员")
+                }  else {
+                    $.ajax(config);
+                    window.location.reload();
+                }
+
             },
             btn2: function (index,layero) {
                 var config = {
-                    url: "/system/facCostApply/add",
                     type: "post",
                     dataType: "json",
                     contentType : "application/x-www-form-urlencoded;charset=UTF-8",
@@ -237,7 +263,24 @@
                         layer.close(index);
                     }
                 };
-                $.ajax(config)
+                var result = window.frames[0].document.getElementById("busName").value;
+                var result2 = window.frames[0].document.getElementById("outTime").value;
+                var result3 = window.frames[0].document.getElementById("backTimeEs").value;
+                var result4 = window.frames[0].document.getElementById("outMan").value;
+
+                if (result == '') {
+                    layer.msg("请填写项目名称")
+                } else if (result2 == '') {
+                    layer.msg("请填写出差时间")
+                } else if (result3 == '') {
+                    layer.msg("请填写预计返回时间")
+                } else if (result4 == '') {
+                    layer.msg("请填写出差人员")
+                }  else {
+                    $.ajax(config);
+                    window.location.reload();
+                }
+                return false;
             },
             cancel: function(index) {
                 return true;

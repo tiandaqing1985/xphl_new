@@ -126,7 +126,7 @@ public interface FacReimburseApplyMapper
 
 	public String  selectsysuser(Long id); 
 	
-	
+	int updateFacReiHospitalityApply(ReiHospitalityApply reiHospitalityApply);
 	
 	
 	ReiTrafficApply selectFacTransById(long id);
@@ -143,4 +143,7 @@ public interface FacReimburseApplyMapper
 	
 	
 	List<FacReimburseApply> selectFacReimburseApplyListByCreateBy(List<SysUser> sysUsersList);
+	
+	/***查报销每个月每个人的钱*/
+	public double selectHospitailAmount(long user);
 }

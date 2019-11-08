@@ -63,8 +63,20 @@ public class ReiHospitalityApply {
      */
     private  String location;
     private  String userName;
+    /**
+     * 是否超额
+     * */
+    private String excess;  
+    
+    public String getExcess() {
+		return excess;
+	}
 
-    public String getUserName() {
+	public void setExcess(String excess) {
+		this.excess = excess;
+	}
+
+	public String getUserName() {
         return userName;
     }
 

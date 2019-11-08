@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.finance.FacCollectApply;
 import com.ruoyi.system.domain.finance.FacReiAdiApply;
 import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.ReiHospitalityApply;
@@ -132,6 +133,8 @@ public interface IFacReimburseApplyService {
 	 */
 	public int insertFacreiAdiApply(FacReiAdiApply reiAdiApply);
 
+	public int insertApply(FacReimburseApply facReimburseApply);
+
 	ReiTrafficApply selectFacTransById(long id);
 	ReiHospitalityApply selectFacHostById(long id);
 	int updateReiTrafficApplyById(ReiTrafficApply reiTrafficApply);
@@ -144,6 +147,8 @@ public interface IFacReimburseApplyService {
 	List<Long> selectRole(long uesrId);
 
 	void updateFacReimburseApplyByNum(FacReimburseApply facReimburseApply);
+
+	int updateFacReiHospitalityApply(ReiHospitalityApply reiHospitalityApply);
 
 	List<FacReimburseApply> selectFacReimburseApplyListByCreateBy(
 			List<SysUser> sysUsersList);

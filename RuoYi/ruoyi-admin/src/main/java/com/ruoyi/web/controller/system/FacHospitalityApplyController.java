@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -23,6 +22,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacHospitalityApply;
+import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.domain.finance.ReiHospitalityApply;
 import com.ruoyi.system.service.ISysUserService;
@@ -115,6 +115,14 @@ public class FacHospitalityApplyController extends BaseController {
 		return prefix + "/add";
 	}
 
+	@GetMapping("/addSave")
+	public String addSave(String id, ModelMap map) {
+		map.put("id",id);
+		return prefix + "/addSave";
+	} 
+	
+	
+
 	/**
 	 * 新增保存招待费申请
 	 *
@@ -131,7 +139,7 @@ public class FacHospitalityApplyController extends BaseController {
 
 		if (facHospitalityApply.getId() == null) {
 			// 直接添加
-			facHospitalityApply.setNum("ZD" +facNumberTableService.getNum("ZD", ShiroUtils.getDateId()));
+			facHospitalityApply.setNum(facNumberTableService.getNum("ZD", ShiroUtils.getDateId()));
 			facHospitalityApply.setUserId(ShiroUtils.getUserId());
 			facHospitalityApply.setApplicationTime(new Date());
 			facHospitalityApply
@@ -159,7 +167,7 @@ public class FacHospitalityApplyController extends BaseController {
 	public AjaxResult addSove(FacHospitalityApply facHospitalityApply)
 			throws Exception {
 		 
-		facHospitalityApply.setNum("ZD" +facNumberTableService.getNum("ZD", ShiroUtils.getDateId()));
+		facHospitalityApply.setNum(facNumberTableService.getNum("ZD", ShiroUtils.getDateId()));
 		facHospitalityApply.setUserId(ShiroUtils.getUserId());
 		facHospitalityApply.setApplicationTime(new Date());
 		facHospitalityApply.setAmount(facHospitalityApply.getStandardAmount()
@@ -204,13 +212,13 @@ public class FacHospitalityApplyController extends BaseController {
 	/**
 	 * 查看详情
 	 */
-	@GetMapping("/detail")
-	public String detail(@RequestParam("id") Long id, ModelMap map) {
+	@GetMapping("/detail/{id}")
+	public String detail(@PathVariable("id") Long id, ModelMap map) {
 		FacHospitalityApply facHospitalityApply = new FacHospitalityApply();
 		facHospitalityApply.setId(id);
 		List<FacHospitalityApply> facReimburseApplies = facHospitalityApplyService
 				.selectFacHospitalityApplyList(facHospitalityApply);
-		map.put("rid", id);
+		map.put("id", id);
 		map.put("num", facReimburseApplies.get(0).getNum());
 		return prefix + "/detail";
 	}
@@ -246,7 +254,8 @@ public class FacHospitalityApplyController extends BaseController {
 		map.put("amount", facHospitalityApply.getAmount());
 		 String num=facNumberTableService.getNum("BX", ShiroUtils.getDateId());
 		map.put("num", num);
-		map.put("name", facHospitalityApply.getZdName());
+		map.put("name", facHospitalityApply.getZdName()); 
+		map.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
 		ReiHospitalityApply reiHospitalityApply = new ReiHospitalityApply();
 		reiHospitalityApply.setDdDate(facHospitalityApply.getZdDate());
 		reiHospitalityApply.setAmount(facHospitalityApply.getAmount());
@@ -257,6 +266,69 @@ public class FacHospitalityApplyController extends BaseController {
 		facReimburseApplyService
 				.insertFacreiHospitalityApply(reiHospitalityApply);
 		return prefix + "/reimbuseDetail";
+	}
+
+	/**
+	 * 新增招待申请
+	 *
+	 * @throws Exception
+	 */
+	@GetMapping("/baoxiaoEdit") 
+	public String Baoxiao(String id, ModelMap mmap)
+	{
+		FacHospitalityApply facHospitalityApply = facHospitalityApplyService.selectFacHospitalityApplyById( Long.valueOf(id).longValue());
+		mmap.put("facHospitalityApply", facHospitalityApply);
+		return prefix + "/baoxiaoEdit";
+	} 
+	
+	@Log(title = "差旅申请", businessType = BusinessType.UPDATE)
+	@PostMapping("/addEdit")
+	@ResponseBody
+	public AjaxResult addEdit(FacHospitalityApply facHospitalityApply) {
+		FacHospitalityApply facHospitalityApplys = facHospitalityApplyService.selectFacHospitalityApplyById( facHospitalityApply.getId());
+		FacReimburseApply facReimburseApply = new FacReimburseApply();
+		facReimburseApply.setNum(
+				facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
+		facReimburseApply.setName(facHospitalityApply.getZdName());// 报销名
+		facReimburseApply.setAmount(facHospitalityApply.getAmount());
+		facReimburseApply.setLoanUser(facHospitalityApply.getUserId());
+		facReimburseApply.setCreateTime(ShiroUtils.getDate());
+		facReimburseApply.setReimburseTime(facHospitalityApply.getApplicationTime());
+		facReimburseApply.setReason(facHospitalityApply.getReason());
+		facReimburseApply.setType("招待报销");
+		facReimburseApply.setJKnum(facHospitalityApply.getNum());
+		facReimburseApply.setLoanUser(ShiroUtils.getUserId());
+		facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
+		facHospitalityApply.setStates(6L); 
+		if (facHospitalityApply.getAmount()<= facHospitalityApplys.getAmount()) {
+			// 不需要二次审批
+			facReimburseApply.setStatus("1");
+			facReimburseApply.setSubmitStatus("save"); 
+			ReiHospitalityApply reiHospitalityApply=new ReiHospitalityApply();
+			reiHospitalityApply.setUser(ShiroUtils.getUserId()); 
+			reiHospitalityApply.setNum(facReimburseApply.getNum());
+			
+			reiHospitalityApply.setDdDate(facHospitalityApply.getApplicationTime()); 
+			reiHospitalityApply.setAddUser(facHospitalityApply.getLoanId());
+			reiHospitalityApply.setAmount(facHospitalityApply.getAmount()); 
+			//reiHospitalityApply.setTargetUnit(facHospitalityApply.get); //目标单位简称
+			//reiHospitalityApply.setDocumentNum(facHospitalityApply.get);  //单据数
+			reiHospitalityApply.setReason(facHospitalityApply.getReason());
+			
+			facReimburseApplyService.insertFacreiHospitalityApply(reiHospitalityApply); 
+			facReimburseApplyService.insertApply(facReimburseApply);
+		} else {
+			// 需要二次审批
+			facHospitalityApply.setNum(
+					facNumberTableService.getNum("ZD", ShiroUtils.getDateId()));
+			facHospitalityApply.setUserId(ShiroUtils.getUserId());
+			facHospitalityApply.setZdName(facHospitalityApplys.getZdName());
+			facHospitalityApply.setApplicationTime(facHospitalityApplys.getApplicationTime());
+			FacHospitalityApply fac = facHospitalityApply;
+			fac.setStates(3L); 
+			facHospitalityApplyService.insertFacHospitalityApply(fac);
+		}
+		return toAjax(facHospitalityApplyService.updateFacHospitalityApply(facHospitalityApply));
 	}
 
 }

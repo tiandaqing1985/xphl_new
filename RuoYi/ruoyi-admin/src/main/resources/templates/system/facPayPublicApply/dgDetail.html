@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <th:block th:include="include :: header('初始多表格')"/>
+    <th:block th:include="include :: layout-latest-css" />
+    <th:block th:include="include :: ztree-css" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
+        <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
+    <div>
+        <h4 class="form-header h4">对公支付详情</h4>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+        </div>
+     <h4 class="form-header h4">对公支付明细</h4>
+     <div class="col-sm-12 select-table table-striped">
+         <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+     </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "system/facPayPublicApply";
+    var datas = [[${@dict.getType('sys_normal_disable')}]];
+    var num = $("#num").val();
+    var msg = $("#msg").val();
+    $(function () {
+        var options = {
+            id: "bootstrap-table-1",
+            url: prefix + "/query?num="+num,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            modalName: "对公详细信息",
+            columns: [
+                {
+                    checkbox: true
+                } ,
+                {
+                    field : 'id',
+                    title : 'ID',
+                    visible: false
+                },
+                {
+                    field : 'num',
+                    title : '申请编号',
+                    sortable: true
+                },
+                {
+                    field : 'name',
+                    title : '申请名称',
+                    sortable: true
+                },
+                {
+                    field : 'unit',
+                    title : '付款单位',
+                    sortable: true
+                },
+                {
+                    field : 'weatherInvoice',
+                    title : '是否有发票',
+                    sortable: true
+                },
+                {
+                    field : 'createTime',
+                    title : '提交时间',
+                    sortable: true
+                },
+                {
+                    field : 'amount',
+                    title : '付款金额',
+                    sortable: true
+                },
+                {
+                    field : 'payee',
+                    title : '收款人',
+                    sortable: true
+                },
+                {
+                    field : 'payeeBank',
+                    title : '收款人开户行',
+                    sortable: true
+                },
+                {
+                    field : 'payeeAccount',
+                    title : '收款人账号',
+                    sortable: true
+                },
+                {
+                    field : 'remarks',
+                    title : '备注',
+                    sortable: true
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+    $(function () {
+        var options = {
+            id: "bootstrap-table-2",
+            url: prefix + "/dgtail?num=" + num,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            modalName: "对公明细添加",
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : 'id',
+                    visible: false
+                },
+                {
+                    field : 'num',
+                    title : '对公编号',
+                    sortable: true
+                },
+                {
+                    field : 'name',
+                    title : '项目名称',
+                    sortable: true
+                },
+                {
+                    field : 'reson',
+                    title : '付款事由',
+                    sortable: true
+                },
+                {
+                    field : 'money',
+                    title : '付款金额',
+                    sortable: true
+                },
+                {
+                    field : 'detail',
+                    title : '详情',
+                    sortable: true
+                }
+
+            ]
+        };
+        $.table.init(options);
+    });
+
+</script>
+</body>
+</html>

@@ -1,5 +1,14 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<style>
+    .select-list li .time-input{
+        display:inline;
+    }
+    .select-list ul li div{
+        float:none;
+        display:inline;
+    }
+</style>
 <head>
     <th:block th:include="include :: header('财务审批列表')"/>
 </head>
@@ -96,7 +105,13 @@
                     field: 'approvalState',
                     title: '审批',
                     formatter: function (value, row, index) {
-                        return $.table.selectDictLabel(approvalState, value);
+                        if (value == 1) {
+                            return "审批成功";
+                        } else if (value == 2) {
+                            return "驳回";
+                        }  else {
+                            return "---";
+                        }
                     }
                 },
                 {

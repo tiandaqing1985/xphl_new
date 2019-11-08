@@ -117,6 +117,7 @@ public class FacPayPublicApplyServiceImpl implements IFacPayPublicApplyService {
 				center.setApprovalLevel(++level);// 审批等级
 				center.setApplyId(facSysUserApproval.getApplyId()); // 申请人ID
 				center.setApprovalState("3");
+				center.setApplicantId(facPayPublicApply.getUser());
 				center.setApprovalSight("0");// 可见性
 				center.setCreateTime(new Date());// 创建时间
 				center.setApplyId(facPayPublicApply.getNum());

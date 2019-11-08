@@ -22,7 +22,7 @@ public interface IFacCostApplyService {
 	 */
 	public FacCostApply selectFacCostApplyById(Long id);
 	
-	
+	public double selectDouble(String num);
 	
 	public FacCostDetailApply selectFacCostDetailApplyById(Long id);
 	

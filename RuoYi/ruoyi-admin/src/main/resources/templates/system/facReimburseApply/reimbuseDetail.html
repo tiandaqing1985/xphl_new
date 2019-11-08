@@ -21,7 +21,7 @@
                             <div class="form-group">
                                 <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报销名称：</label>
                                 <div class="col-sm-8">
-                                    <input name="name" autocomplete="off" placeholder="XX月份报销" class="form-control"
+                                    <input name="name" id="name" autocomplete="off" placeholder="XX月份报销" class="form-control"
                                            type="text" maxlength="30" th:value="${name}" required>
                                 </div>
                             </div>
@@ -86,36 +86,23 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-offset-5 col-sm-10">
-                        <!--                        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i-->
-                        <!--                                class="fa fa-check"></i>保 存-->
-                        <!--                        </button> -->
-                        <button type="button" class="btn btn-sm btn-primary" onclick="sub()"><i
-                                class="fa fa-check"></i>保 存
-                        </button>&nbsp;
-                        <!--                        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i-->
-                        <!--                                class="fa fa-reply-all"></i>关 闭-->
-                        <!--                        </button>-->
-
                     </div>
                 </div>
             </div>
         </div>
     </form>
 </div>
-
 <div th:include="include :: footer"></div>
 </body>
 <script th:inline="javascript">
-
     var prefix = ctx + "system/facReimburseApply";
     var datas = [[${@dict.getType('sys_normal_disable')}]];
     var num = $("#num").val();
     var msg = $("#msg").val();
     var userId = $("#userId").val();
     var dept = $("#dept").val();
-
     function zAdd() {
-        $.modal.openTab("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
+        $.modal.openFull("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
     }
     function mAdd(id) {
         if (id == 1) {
@@ -132,7 +119,6 @@
             $.modal.open("其他添加", "/system/facReimburseApply/otherDetail?num=" + num);
         }
     }
-
     function mEdit(index, id) {
         if (index == 1) {
             $.table._option.id = "bootstrap-table-1";
@@ -148,7 +134,6 @@
         }
         $.operate.edit(id);
     }
-
     function mRemove(index, id) {
         if (index == 1) {
             $.table._option.modalName = "交通报销信息";
@@ -162,12 +147,10 @@
         }
         $.operate.remove(id);
     }
-
     $(function () {
         if (dept == 10) {
             $("#zdf").attr("style", "display:block;");//显示div
         }
-
         var options = {
             id: "bootstrap-table-1",
             url: prefix + "/addTraDetail",
@@ -187,12 +170,13 @@
                 }, {
                     field: 'num',
                     title: '报销编号',
-                    sortable: true
+                    sortable: false,
+                    visible: false
                 },
                 {
                     field: 'ddDate',
                     title: '日期',
-                    sortable: true,
+                    sortable: false,
                     formatter: function (value, row, index) {
                         var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                         return newDate;
@@ -201,32 +185,44 @@
                 {
                     field: 'targetUnit',
                     title: '目标单位简称',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'amount',
                     title: '金额',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'user',
                     title: '人员',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'departure',
                     title: '出发地',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'target',
                     title: '目的地',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'type',
                     title: '类型 ',
-                    sortable: true
+                    sortable: false
+                },{
+                    field: 'excess',
+                    title: '是否超额 ',
+                    visible: false,
+                    formatter: function (value, row, index) {
+                        if(value==1){
+                            layer.msg("已超出额度");
+                            return  "超额";
+                        }else {
+                            return  "未超额";
+                        }
+                    }
                 },
                 {
                     title: '操作',
@@ -244,6 +240,10 @@
 
         $.table.init(options);
     });
+
+
+
+
 
     $(function () {
         var options = {
@@ -265,12 +265,13 @@
                 {
                     field: 'num',
                     title: '报销编号',
-                    sortable: true
+                    sortable: true,
+                    visible: false
                 },
                 {
                     field: 'ddDate',
                     title: '日期',
-                    sortable: true,
+                    sortable: false,
                     formatter: function (value, row, index) {
                         var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                         return newDate;
@@ -279,27 +280,44 @@
                 {
                     field: 'amount',
                     title: '金额',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'addUser',
                     title: '参加人',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'location',
                     title: '地点',
-                    sortable: true
+                    sortable: false
+                },
+                {
+                    field: 'targetUnit',
+                    title: '目标单位简称',
+                    sortable: false
                 },
                 {
                     field: 'reason',
                     title: '事由',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'userName',
                     title: '申请人',
-                    sortable: true
+                    sortable: false
+                },{
+                    field: 'excess',
+                    title: '是否超额 ',
+                    visible: false,
+                    formatter: function (value, row, index) {
+                        if(value==1){
+                            layer.msg("已超出额度");
+                            return  "超额";
+                        }else {
+                            return  "未超额";
+                        }
+                    }
                 },
                 {
                     title: '操作',
@@ -334,6 +352,7 @@
                 {
                     field: 'ddDate',
                     title: '日期',
+                    sortable: false,
                     formatter: function (value, row, index) {
                         var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                         return newDate;
@@ -341,25 +360,30 @@
                 },
                 {
                     field: 'amount',
-                    title: '金额'
+                    title: '金额',
+                    sortable: false
                 },
                 {
                     field: 'project',
-                    title: '报销科目'
+                    title: '报销科目',
+                    sortable: false
                 },
                 {
                     field: 'reason',
-                    title: '事由'
+                    title: '事由',
+                    sortable: false
                 },
                 {
                     field: 'documentNum',
-                    title: '单据数'
+                    title: '单据数',
+                    sortable: false
                 },
                 {
                     field: 'status',
                     title: '用户状态',
                     visible: false,
                     align: 'center',
+                    sortable: false,
                     formatter: function (value, row, index) {
                         return $.table.selectDictLabel(datas, value);
                     }
@@ -368,6 +392,7 @@
                 {
                     title: '操作',
                     align: 'center',
+                    sortable: false,
                     formatter: function (value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="mEdit(3,\'' + row.id + '\')"><i class  = "fa fa-edit" > </i>修改</a> ');
@@ -405,7 +430,7 @@
     }
 
     function submitHandler() {
-        debugger
+
         if ($.validate.form()) {
             //index为1表示保存
 

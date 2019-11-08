@@ -65,7 +65,16 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 				.selectFacCostApplyList(facCostApply);
 		return list;
 	}
+ 
 
+	@Override
+	public double selectDouble(String num) {
+		double a = facCostPutupApplyMapper.selectMoney(num);
+		double b = facCostApplyMapper.selectAmount(num); 
+		return a + b ;
+	}
+	 
+	
 	/**
 	 * 新增差旅申请
 	 * 

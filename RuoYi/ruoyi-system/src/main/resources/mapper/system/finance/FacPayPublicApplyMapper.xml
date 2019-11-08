@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="amount"    column="amount"    />
         <result property="payee"    column="payee"    />
         <result property="payeeBank"    column="payee_bank"    />
-        <result property="payeeAccount"    column="payee_account"    />
+        <result property="payeeAccount"    column="payeeAccount"    />
         <result property="remarks"    column="remarks"    />
         <result property="updateTime"    column="update_time"    />
         <result property="status"    column="status"    />
@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 	
 	<sql id="selectFacPayPublicApplyVo">
-        select id, num, name, user, weather_invoice, create_time, amount, payee, payee_bank, payee_account, remarks, update_time, status,unit, opr_time from fac_pay_public_apply
+        select id, num, name, user, weather_invoice, create_time, amount, payee, payee_bank, payeeAccount, remarks, update_time, status,unit, opr_time from fac_pay_public_apply
     </sql>
 	
     <select id="selectFacPayPublicApplyList" parameterType="FacPayPublicApply" resultMap="FacPayPublicApplyResult">
@@ -38,7 +38,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="amount != null "> and amount = #{amount}</if>
              <if test="payee != null  and payee != '' "> and payee = #{payee}</if>
              <if test="payeeBank != null  and payeeBank != '' "> and payee_bank = #{payeeBank}</if>
-             <if test="payeeAccount != null  and payeeAccount != '' "> and payee_account = #{payeeAccount}</if>
+             <if test="payeeAccount != null  and payeeAccount != '' "> and payeeAccount = #{payeeAccount}</if>
              <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
              <if test="updateTime != null "> and update_time = #{updateTime}</if>
              <if test="status != null  and status != '' "> and status = #{status}</if>
@@ -50,8 +50,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     
     <select id="detail" resultType="com.ruoyi.system.domain.finance.FacPayPublicApply">
-	 select id, num, name, user, weather_invoice, create_time, amount, payee, payee_bank, payee_account, remarks, update_time, status, unit,opr_time from fac_pay_public_apply
-		where num=#{num}
+	<include refid="selectFacPayPublicApplyVo"/>
+	where num=#{num}
 	</select>
     
     
@@ -71,7 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="amount != null  ">amount,</if>
 			<if test="payee != null  and payee != ''  ">payee,</if>
 			<if test="payeeBank != null  and payeeBank != ''  ">payee_bank,</if>
-			<if test="payeeAccount != null  and payeeAccount != ''  ">payee_account,</if>
+			<if test="payeeAccount != null  and payeeAccount != ''  ">payeeAccount,</if>
 			<if test="remarks != null  and remarks != ''  ">remarks,</if>
 			<if test="updateTime != null  ">update_time,</if>
 			<if test="status != null  and status != ''  ">status,</if>
@@ -107,7 +107,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="amount != null  ">amount = #{amount},</if>
             <if test="payee != null  and payee != ''  ">payee = #{payee},</if>
             <if test="payeeBank != null  and payeeBank != ''  ">payee_bank = #{payeeBank},</if>
-            <if test="payeeAccount != null  and payeeAccount != ''  ">payee_account = #{payeeAccount},</if>
+            <if test="payeeAccount != null  and payeeAccount != ''  ">payeeAccount = #{payeeAccount},</if>
             <if test="remarks != null  and remarks != ''  ">remarks = #{remarks},</if>
             <if test="updateTime != null  ">update_time = #{updateTime},</if>
             <if test="status != null  and status != ''  ">status = #{status},</if>

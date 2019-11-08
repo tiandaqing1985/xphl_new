@@ -4,6 +4,21 @@
     <th:block th:include="include :: header('初始多表格')"/>
     <th:block th:include="include :: layout-latest-css"/>
     <th:block th:include="include :: ztree-css"/>
+    <style>
+        .table-striped table thead{
+            background-color:#fff;
+        }
+        .select-table{
+            box-shadow:none;
+            padding:0;
+            margin-bottom:25px;
+        }
+        .fixed-table-container thead th .th-inner{
+            font-size: 13px;
+            color: #676a6c;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body class="gray-bg">
 <div class="container-div">
@@ -176,23 +191,6 @@
                             field : 'moneyEs',
                             title : '预计费用'
                         } ,
-                        {
-                            field : 'status',
-                            title : '审批状态',
-                            formatter: function (value, row, index) {
-                                if (value == 1) {
-                                    return "审批成功";
-                                } else if (value == 2) {
-                                    return "驳回";
-                                } else if (value == 3) {
-                                    return "审批中";
-                                } else if (value == 5) {
-                                    return "待提交";
-                                } else {
-                                    return "待审批";
-                                }
-                            }
-                        },
                         {
                             field: 'reason',
                             title: '事由'
