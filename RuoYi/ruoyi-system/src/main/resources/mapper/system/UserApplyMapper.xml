@@ -488,7 +488,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="leaveType != null  and leaveType != ''  ">leave_type,</if>
 			<if test="forApplyId != null  and forApplyId != ''  ">for_applyid,</if>
 			<if test="prove != null and prove != '' ">prove,</if>
-			<if test="applyTime != null">apply_time,</if>
+			apply_time
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="userId != null  ">#{userId},</if>
