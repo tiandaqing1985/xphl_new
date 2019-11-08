@@ -21,11 +21,11 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCollectApply;
-import com.ruoyi.system.domain.finance.FacCostApply;
 import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCollectApplyService;
+import com.ruoyi.system.service.finance.IFacCollectInformationService;
 import com.ruoyi.system.service.finance.IFacNumberTableService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
@@ -53,7 +53,9 @@ public class FacCollectApplyController extends BaseController {
 	
 	@Autowired
 	private IFacNumberTableService facNumberTableService;
- 
+
+	@Autowired
+	private IFacCollectInformationService facCollectInformationService;
 
 	//@RequiresPermissions("system:facCollectApply:view")
 	@GetMapping()
@@ -167,6 +169,7 @@ public class FacCollectApplyController extends BaseController {
 		facReimburseApply.setType("团建报销");   
 		facReimburseApply.setJKnum(facCollectApply.getNum());
 		mmap.put("facReimburseApply", facReimburseApply);
+		mmap.put("num", facCollectApply.getNum());
 		return prefix + "/baoxiao";
 	}
 	
@@ -201,12 +204,13 @@ public class FacCollectApplyController extends BaseController {
 	@PostMapping("/addEdit")
 	@ResponseBody
 	public AjaxResult addEdit(FacCollectApply facCollectApply) {
+		double money =facCollectInformationService.selectAmount(facCollectApply.getNum());
 		FacCollectApply facCollectApplys = facCollectApplyService
 				.selectFacCollectApplyById(facCollectApply.getId());
 		FacReimburseApply facReimburseApply = new FacReimburseApply();
 		facReimburseApply.setNum(facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
 		facReimburseApply.setName(facCollectApply.getLeagueProject());//报销名
-		facReimburseApply.setAmount(facCollectApply.getAmount());
+		facReimburseApply.setAmount(money);
 		facReimburseApply.setLoanUser(facCollectApply.getApplicant());
 		facReimburseApply.setCreateTime(ShiroUtils.getDate());
 		facReimburseApply.setReimburseTime(facCollectApply.getStartDate()); 
@@ -217,7 +221,7 @@ public class FacCollectApplyController extends BaseController {
 		facReimburseApply.setLoanUser(ShiroUtils.getUserId());
 		facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
 		facCollectApply.setStatus("6");
-		 if(facCollectApply.getAmount()<=facCollectApplys.getAmount()){
+		 if(money<=facCollectApplys.getAmount()){
 			 //不需要二次审批 
 			 facReimburseApply.setStatus("1");
 			 facReimburseApply.setSubmitStatus("submit");  

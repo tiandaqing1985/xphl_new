@@ -27,6 +27,9 @@
                             报销编号：<input type="text" name="num"/>
                         </li>
                         <li>
+                            申请时间：<input class="time-input" name="reimburseTime"/>
+                        </li>
+                        <li>
                             报销人：
                             <div class="col-sm-9">
                                 <input id="loanUser" type="text" name="loanUserName"/>
@@ -48,9 +51,7 @@
                                 <option value="差旅报销">差旅报销</option>
                             </select>
                         </li>
-                        <li>
-                            申请时间：<input class="time-input" name="reimburseTime"/>
-                        </li>
+
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
@@ -377,7 +378,6 @@
 
     function submitHandler(id) {
         $.modal.open("保存", "/system/facReimburseApply/addSave?id=" + id);
-        //  $.operate.save(prefix + "/addSubmit", {"id":id});
     }
 
     var testBsSuggest = $("#loanUser").bsSuggest({

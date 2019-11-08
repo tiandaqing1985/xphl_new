@@ -53,7 +53,6 @@
                 </div>
             </form>
         </div>
-
         <div class="btn-group-sm" id="toolbar" role="group">
             <a class="btn btn-success" onclick="add()" >
                 <i class="fa fa-plus"></i> 添加
@@ -61,12 +60,6 @@
             <a class="btn btn-success" onclick="cyAdd()">
                 <i class="fa fa-edit"></i> 添加常用收款
             </a>
-
-<!--            <a class="btn btn-success" onclick="cyUser()">-->
-<!--                <i class="fa fa-edit"></i> 使用常用收款-->
-<!--            </a>-->
-
-
             <a class="btn btn-warning" onclick="$.table.exportExcel()">
                 <i class="fa fa-download"></i> 导出
             </a>
@@ -81,19 +74,13 @@
 <th:block th:include="include :: bootstrap-suggest-js" />
 <th:block th:include="include :: bootstrap-select-js" />
 <script th:inline="javascript">
-
     var prefix = ctx + "system/facPayPublicApply";
-
-
     function cyAdd() {
         $.modal.openFull("常用收款", "/system/facPayPublicApply/addCo");
     }
-
-
-    function cyUser() {
+    function cyUser(){
         $.modal.openTab("使用常用", " /system/facCommonlyApply");
     }
-
     $(function () {
         var options = {
             url: prefix + "/list",
@@ -102,7 +89,7 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             facPayPublicApplyDetailUrl: "/system/facPayPublicApply/dgDetail/{id}",
-            onClickRow: onClickRow,
+            onDblClickRow: onDblClickRow,
             modalName: "对公申请",
             showExport: true,
             columns: [{
@@ -215,15 +202,11 @@
     });
     function submitHandler(id) {
         $.modal.open("保存", "/system/facPayPublicApply/addSave?id=" + id);
-
     }
-
-    function onClickRow(row, $element){
+    function onDblClickRow(row, $element){
         var url = $.table._option.facPayPublicApplyDetailUrl.replace("{id}",row.id);
         $.modal.open("详情", url);
-
     }
-
     function add() {
         var width;
         var height;
@@ -245,7 +228,6 @@
             shadeClose: true,
             yes: function (index,layero) {
                 var config = {
-
                     type: "post",
                     dataType: "json",
                     contentType : "application/x-www-form-urlencoded;charset=UTF-8",
@@ -263,8 +245,6 @@
                 var result3 = window.frames[0].document.getElementById("payee").value;
                 var result4 = window.frames[0].document.getElementById("payeeBank").value;
                 var result5 = window.frames[0].document.getElementById("payeeAccount").value;
-
-
                 if (result == '') {
                     layer.msg("请填写申请名称")
                 } else if (result2 == '') {
@@ -322,9 +302,6 @@
         });
         layer.full(index);
     }
-
-
-
 
     function f(id) {
         var options = {
