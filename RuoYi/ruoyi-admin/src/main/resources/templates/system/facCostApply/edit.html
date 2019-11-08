@@ -22,14 +22,14 @@
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">出差时间：</label>
 				<div class="col-sm-8">
-					<input id="outTime" name="outTime"  class="time-input"
+					<input id="outTime" name="outTime"  class="time-input form-control"
 						   th:value="${#dates.format(facCostApply.outTime,'yyyy-MM-dd')}" required>
 				</div>
 			</div>
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">预计返回时间：</label>
 				<div class="col-sm-8">
-					<input id="backTimeEs" name="backTimeEs"   class="time-input"
+					<input id="backTimeEs" name="backTimeEs"   class="time-input form-control"
 						   th:value="${#dates.format(facCostApply.backTimeEs,'yyyy-MM-dd')}" required>
 				</div>
 			</div>

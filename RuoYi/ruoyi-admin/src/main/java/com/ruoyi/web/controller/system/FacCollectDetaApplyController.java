@@ -2,9 +2,6 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 
-import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.service.finance.IFacNumberTableService;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -20,8 +17,10 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.finance.FacCollectDetaApply;
 import com.ruoyi.system.service.finance.IFacCollectDetaApplyService;
+import com.ruoyi.system.service.finance.IFacNumberTableService;
 
 /**
  * 团建明细 信息操作处理

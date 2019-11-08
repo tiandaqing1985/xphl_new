@@ -58,7 +58,7 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             facHospitalityApplyDetailUrl: "/system/facHospitalityApply/detail/{id}",
-            onClickRow: onClickRow,
+            onDblClickRow: onDblClickRow,
             clickToSelect: true,
             modalName: "招待费申请",
             showExport: true,
@@ -177,7 +177,7 @@
     }
 
 
-    function onClickRow(row, $element){
+    function onDblClickRow(row, $element){
         var url = $.table._option.facHospitalityApplyDetailUrl.replace("{id}",row.id);
         $.modal.open("详情", url);
 

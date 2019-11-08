@@ -60,7 +60,7 @@
             removeUrl: prefix + "/remove",
             exportUrl: prefix + "/export",
             facCostApplyDetailUrl: "/system/facCostApply/clDetail/{id}",
-            onClickRow: onClickRow,
+            onDblClickRow: onDblClickRow,
             modalName: "差旅申请",
             showExport: true,
             columns: [{
@@ -182,7 +182,7 @@
         $.modal.openTab("查看" + $.table._option.modalName, prefix + "/detail?id=" + id);
     }
 
-    function onClickRow(row, $element){
+    function onDblClickRow(row, $element){
         var url = $.table._option.facCostApplyDetailUrl.replace("{id}",row.id);
         $.modal.open("详情", url);
 

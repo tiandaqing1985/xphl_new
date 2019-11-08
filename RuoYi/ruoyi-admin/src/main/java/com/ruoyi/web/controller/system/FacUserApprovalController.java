@@ -131,7 +131,7 @@ public class FacUserApprovalController extends BaseController {
         map.put("msg", "1");
         map.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
         map.put("userId", ShiroUtils.getUserId());
-        map.put("name", facUserApproval.getName());
+        map.put("name", facUserApproval.getProjectName());
         map.put("userName", facUserApproval.getName());
         
        String nums = facUserApproval.getApplyId().substring(0, 2);

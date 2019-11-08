@@ -627,11 +627,9 @@ public class FacReimburseApplyController extends BaseController {
 			return getDataTable(a);
 		}
 	}
-
 	/**
 	 * 查看其他报销费申请详情
 	 */
-
 	@PostMapping("/otherDetail")
 	@ResponseBody
 	public TableDataInfo otherDetail(@RequestParam String num) {
@@ -647,7 +645,6 @@ public class FacReimburseApplyController extends BaseController {
 			return getDataTable(a);
 		}
 	}
-
 	@GetMapping("/addSave")
 	public String addSave(String id, ModelMap map) {
 		map.put("id", id);
@@ -670,7 +667,6 @@ public class FacReimburseApplyController extends BaseController {
 		return toAjax(facReimburseApplyService
 				.updateFacReimburseApply(facReimburseApply));
 	}
-
 	/**
 	 * 修改报销
 	 */
