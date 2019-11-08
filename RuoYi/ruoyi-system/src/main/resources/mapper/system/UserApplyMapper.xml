@@ -30,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <association property="userApproval" column="approval_id" javaType="UserApproval" resultMap="UserApprovalResult"/>
         <association property="sysUser" column="user_id" javaType="SysUser" resultMap="SysUserResult"/>
         <association property="sysDept" column="dept_id" javaType="SysDept" resultMap="SysDeptResult"/>  
+        <association property="allAppNames" column="apply_id" select="getAllAppNamesByApplyid"/>
     </resultMap>
     
     <resultMap type="SysUser" id="SysUserResult">
@@ -235,6 +236,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="approvalS != null and approvalS != '' ">and p.approval_sight = #{approvalS}</if>
          </where>
          ORDER BY a.apply_id DESC
+    </select>
+    
+    <!-- 子查询显示当前申请的所有审批人及审批状态 -->
+    <select id="getAllAppNamesByApplyid" parameterType="Integer" resultType="String">
+		    	SELECT REPLACE
+				(
+					GROUP_CONCAT(
+						u.user_name,
+						"(",
+						(
+						CASE
+								
+								WHEN app.approval_state = 1 THEN
+								'同意' 
+								WHEN app.approval_state = 2 THEN
+								'驳回' 
+								WHEN app.approval_state = 3 THEN
+								'未操作' ELSE '' 
+							END 
+							),
+							")" 
+						),
+						',',
+						'--' 
+					) allAppNames 
+			FROM
+				sys_user_approval app
+				LEFT JOIN sys_user_apply a ON app.apply_id = a.apply_id
+				LEFT JOIN sys_user u ON u.`user_id` = app.`approver_id` 
+			WHERE
+				a.apply_id = #{apply_id}
+		ORDER BY
+			app.approval_level
     </select>
 
     <select id="selectUserApplyByIds" parameterType="String" resultMap="UserApplyResult">

@@ -57,6 +57,15 @@ public class QueryConditions {
 	/**部门对象集合*/
 	private Set<SysDept> dSet;
 	
+	/** 所有审批人及其审批状态*/
+	private String allAppNames;
+	
+	public String getAllAppNames() {
+		return allAppNames;
+	}
+	public void setAllAppNames(String allAppNames) {
+		this.allAppNames = allAppNames;
+	}
 	public long getUserId() {
 		return userId;
 	}
@@ -212,11 +221,14 @@ public class QueryConditions {
 	}
 	@Override
 	public String toString() {
-		return "QueryConditions [userId="+userId+",userName="+userName+",approvalId=" + approvalId + ", approverId=" + approverId + ", applyId=" + applyId
-				+ ", applyerId=" + applyerId + ", listNum=" + listNum + ", applyerName=" + applyerName
-				+ ", approverName=" + approverName + ", applyType=" + applyType + ", leaveType=" + leaveType
-				+ ", timelength=" + timelength + ", applyState=" + applyState + ", applyTime=" + applyTime
-				+ ", approvalTime=" + approvalTime + ", approvalState=" + approvalState + ", deptName=" + deptName
-				+ ", approvalSight=" + approvalSight + ", timelengthPlus=" + timelengthPlus + "]";
-	}	
+		return "QueryConditions [userId=" + userId + ", userName=" + userName + ", approvalId=" + approvalId
+				+ ", approverId=" + approverId + ", applyId=" + applyId + ", applyerId=" + applyerId + ", listNum="
+				+ listNum + ", applyerName=" + applyerName + ", approverName=" + approverName + ", applyType="
+				+ applyType + ", leaveType=" + leaveType + ", timelength=" + timelength + ", applyState=" + applyState
+				+ ", applyTime=" + applyTime + ", approvalTime=" + approvalTime + ", approvalState=" + approvalState
+				+ ", deptName=" + deptName + ", approvalSight=" + approvalSight + ", timelengthPlus=" + timelengthPlus
+				+ ", starttime=" + starttime + ", endtime=" + endtime + ", prove=" + prove + ", details=" + details
+				+ ", status=" + status + ", dSet=" + dSet + ", allAppNames=" + allAppNames + "]";
+	}
+
 }

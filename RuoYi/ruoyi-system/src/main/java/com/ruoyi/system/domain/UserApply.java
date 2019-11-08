@@ -62,8 +62,20 @@ public class UserApply extends BaseEntity
 	
 	private String approverName;
 	
+	/** 所有审批人及其审批状态*/
+	private String allAppNames;
 	
-    public String getApprovalState() {
+    public String getAllAppNames() {
+		return allAppNames;
+	}
+
+
+	public void setAllAppNames(String allAppNames) {
+		this.allAppNames = allAppNames;
+	}
+
+
+	public String getApprovalState() {
 		return approvalState;
 	}
 
@@ -307,12 +319,11 @@ public class UserApply extends BaseEntity
 		return "UserApply [applyId=" + applyId + ", userId=" + userId + ", userName=" + userName + ", listNum="
 				+ listNum + ", starttime=" + starttime + ", endtime=" + endtime + ", timeapart1=" + timeapart1
 				+ ", timeapart2=" + timeapart2 + ", timeapart3=" + timeapart3 + ", timelength=" + timelength
-				+ ", applyType=" + applyType + ", applyState=" + applyState 
+				+ ", applyType=" + applyType + ", applyState=" + applyState + ", approvalState=" + approvalState
 				+ ", details=" + details + ", leaveType=" + leaveType + ", approvalS=" + approvalS + ", applyTime="
 				+ applyTime + ", forApplyId=" + forApplyId + ", prove=" + prove + ", timelengthPlus=" + timelengthPlus
-				+ ", sysUser=" + sysUser + ", sysDept=" + sysDept + ", userApproval="
-				+ userApproval + ", approverName=" + approverName + "]";
+				+ ", sysUser=" + sysUser + ", sysDept=" + sysDept + ", userApproval=" + userApproval + ", approverName="
+				+ approverName + ", allAppNames=" + allAppNames + "]";
 	}
-
 
 }
