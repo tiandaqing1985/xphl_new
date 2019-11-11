@@ -128,7 +128,7 @@
             $.table._option.updateUrl = prefix + "/editTran/{id}";
         } else if (index == 2) {
             $.table._option.id = "bootstrap-table-2";
-            $.table._option.url = prefix + "/addAll";
+            $.table._option.url = prefix + "/addAll?queryType=all";
             $.table._option.modalName = "招待报销信息";
             $.table._option.updateUrl = prefix + "/editZhao/{id}";
         } else {
@@ -260,7 +260,7 @@
 
         var options2 = {
             id: "bootstrap-table-2",
-            url: prefix + "/addAll",
+            url: prefix + "/addAll?queryType=all",
             showSearch: false,
             showRefresh: false,
             showToggle: false,

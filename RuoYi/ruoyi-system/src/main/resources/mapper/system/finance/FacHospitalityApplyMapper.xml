@@ -32,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="num != null  and num != '' "> and num = #{num}</if>
              <if test="dept != null  and dept != '' "> and dept = #{dept}</if>
              <if test="userId != null "> and userId = #{userId}</if>
-             <if test="zdName != null  and zdName != '' "> and zd_name = #{zdName}</if>
+             <if test="zdName != null  and zdName != '' "> and zd_name like concat('%',#{zdName},'%')</if>
              <if test="loanId != null "> and loanId = #{loanId}</if>
              <if test="zdDate != null "> and zd_date = #{zdDate}</if>
              <if test="reason != null  and reason != '' "> and reason = #{reason}</if>

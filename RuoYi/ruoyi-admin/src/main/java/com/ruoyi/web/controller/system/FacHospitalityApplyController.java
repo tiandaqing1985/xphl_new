@@ -66,22 +66,16 @@ public class FacHospitalityApplyController extends BaseController {
 	public TableDataInfo list(FacHospitalityApply facHospitalityApply) {
 		startPage();
 		facHospitalityApply.setUserId(ShiroUtils.getUserId());
-		List<FacHospitalityApply> list = facHospitalityApplyService
-				.selectFacHospitalityApplyList(facHospitalityApply);
+		List<FacHospitalityApply> list = facHospitalityApplyService.selectFacHospitalityApplyList(facHospitalityApply);
 		for (FacHospitalityApply v : list) {
-			v.setUserIdName(
-					sysUserService.selectUserById(v.getUserId()).getUserName());
-			FacUserApproval name = facUserApprovalService
-					.selectApproval(v.getNum(), v.getUserId());
+			v.setUserIdName(sysUserService.selectUserById(v.getUserId()).getUserName());
+			FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getUserId());
 			if (name != null) {
 				if (name.getApproverId() != null) {
-					v.setApprover(
-							sysUserService.selectUserById(name.getApproverId())
-									.getUserName());
+					v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
 				}
 				v.setApprovalStatus(name.getApprovalState());
-				if (ShiroUtils.getUserId() == 103
-						&& ShiroUtils.getUserId() == 101) {
+				if (ShiroUtils.getUserId() == 103 && ShiroUtils.getUserId() == 101) {
 					v.setApprovalStatus("1");
 				}
 
@@ -99,10 +93,8 @@ public class FacHospitalityApplyController extends BaseController {
 	@PostMapping("/export")
 	@ResponseBody
 	public AjaxResult export(FacHospitalityApply facHospitalityApply) {
-		List<FacHospitalityApply> list = facHospitalityApplyService
-				.selectFacHospitalityApplyList(facHospitalityApply);
-		ExcelUtil<FacHospitalityApply> util = new ExcelUtil<FacHospitalityApply>(
-				FacHospitalityApply.class);
+		List<FacHospitalityApply> list = facHospitalityApplyService.selectFacHospitalityApplyList(facHospitalityApply);
+		ExcelUtil<FacHospitalityApply> util = new ExcelUtil<FacHospitalityApply>(FacHospitalityApply.class);
 		return util.exportExcel(list, "facHospitalityApply");
 	}
 
@@ -131,29 +123,23 @@ public class FacHospitalityApplyController extends BaseController {
 	@Log(title = "招待费申请", businessType = BusinessType.INSERT)
 	@PostMapping("/add")
 	@ResponseBody
-	public AjaxResult addSave(FacHospitalityApply facHospitalityApply)
-			throws Exception {
+	public AjaxResult addSave(FacHospitalityApply facHospitalityApply)throws Exception {
 
-	 
 		facHospitalityApply.setUserId(ShiroUtils.getUserId());
 
 		if (facHospitalityApply.getId() == null) {
 			// 直接添加
 			facHospitalityApply.setNum(facNumberTableService.getNum("ZD", ShiroUtils.getDateId()));
-			facHospitalityApply.setUserId(ShiroUtils.getUserId());
 			facHospitalityApply.setApplicationTime(new Date());
-			facHospitalityApply
-					.setAmount(facHospitalityApply.getStandardAmount() * Double
-							.valueOf(facHospitalityApply.getTotalNumber()));// 获取预计金额
+			facHospitalityApply.setAmount(facHospitalityApply.getStandardAmount() * Double.valueOf(facHospitalityApply.getTotalNumber()));// 获取预计金额
 		} else {
 			// 更新
-			facHospitalityApply = facHospitalityApplyService
-					.selectFacHospitalityApplyById(facHospitalityApply.getId());
-			facHospitalityApplyService.deleteFacHospitalityApplyByIds(
-					facHospitalityApply.getId() + "");
+			FacHospitalityApply hospitalityApply = facHospitalityApplyService.selectFacHospitalityApplyById(facHospitalityApply.getId());
+			facHospitalityApplyService.deleteFacHospitalityApplyByIds(facHospitalityApply.getId() + "");
+			facHospitalityApply.setApplicationTime(hospitalityApply.getApplicationTime());
+			facHospitalityApply.setAmount(facHospitalityApply.getStandardAmount() * Double.valueOf(facHospitalityApply.getTotalNumber()));// 获取预计金额
 		}
-		return toAjax(facHospitalityApplyService
-				.insertFacHospitalityApply(facHospitalityApply));
+		return toAjax(facHospitalityApplyService.insertFacHospitalityApply(facHospitalityApply));
 	}
 
 	/**
@@ -180,10 +166,10 @@ public class FacHospitalityApplyController extends BaseController {
 	 * 修改招待费申请
 	 */
 	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
-		FacHospitalityApply facHospitalityApply = facHospitalityApplyService
-				.selectFacHospitalityApplyById(id);
+	public String edit(@PathVariable("id") Long id,String edit, ModelMap mmap) {
+		FacHospitalityApply facHospitalityApply = facHospitalityApplyService.selectFacHospitalityApplyById(id);
 		mmap.put("facHospitalityApply", facHospitalityApply);
+		mmap.put("edit", edit);
 		return prefix + "/edit";
 	}
 

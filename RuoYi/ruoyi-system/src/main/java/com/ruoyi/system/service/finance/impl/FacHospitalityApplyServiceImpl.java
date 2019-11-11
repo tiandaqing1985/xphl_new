@@ -57,10 +57,8 @@ public class FacHospitalityApplyServiceImpl
 	 * @return 招待费申请集合
 	 */
 	@Override
-	public List<FacHospitalityApply> selectFacHospitalityApplyList(
-			FacHospitalityApply facHospitalityApply) {
-		return facHospitalityApplyMapper
-				.selectFacHospitalityApplyList(facHospitalityApply);
+	public List<FacHospitalityApply> selectFacHospitalityApplyList(FacHospitalityApply facHospitalityApply) {
+		return facHospitalityApplyMapper.selectFacHospitalityApplyList(facHospitalityApply);
 	}
 
 	/**
@@ -197,8 +195,7 @@ public class FacHospitalityApplyServiceImpl
 	@Override
 	public int insertApply(FacHospitalityApply facHospitalityApply) {
 		facHospitalityApply.setStates(5L);
-		return facHospitalityApplyMapper
-				.insertFacHospitalityApply(facHospitalityApply);
+		return facHospitalityApplyMapper.insertFacHospitalityApply(facHospitalityApply);
 	}
 
 }

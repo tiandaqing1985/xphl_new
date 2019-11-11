@@ -63,7 +63,7 @@
             modalName: "招待费申请",
             showExport: true,
             columns: [{
-                checkbox: true
+                checkbox: false
             },
                 {
                     field: 'id',
@@ -73,27 +73,27 @@
                 {
                     field: 'num',
                     title: '招待费编号',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'zdName',
                     title: '项目名称',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'dept',
                     title: '部门',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'userIdName',
                     title: '申请人',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'applicationTime',
                     title: '申请时间',
-                    sortable: true,
+                    sortable: false,
                     formatter: function (value, row, index) {
                         var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                         return newDate;
@@ -102,16 +102,16 @@
                 {
                     field: 'amount',
                     title: '预算金额',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'approver',
                     title: '当前审批人',
-                    sortable: true
+                    sortable: false
                 }, {
                     field: 'approvalStatus',
                     title: '当前审批状态',
-                    sortable: true,
+                    sortable: false,
                     formatter: function (value, row, index) {
                         if (value == 1) {
                             return "审批成功";
@@ -142,7 +142,7 @@
                             //审批成功
                             actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-detail"></i>查看</a>');
                              if(row.states == 3){
-                                actions.push('<a class="btn btn-danger btn-xs ' + '" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>报销</a>');
+                                // actions.push('<a class="btn btn-danger btn-xs ' + '" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>报销</a>');
                              }
                         } else if (row.states == 2) {
                             //审批失败
@@ -151,9 +151,9 @@
                             //待审批
 
                         } else if (row.states == 5) {
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
+                            // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
                             //待审批
-                            actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 
                         } else {
@@ -179,7 +179,7 @@
 
     function onDblClickRow(row, $element){
         var url = $.table._option.facHospitalityApplyDetailUrl.replace("{id}",row.id);
-        $.modal.open("详情", url);
+        $.modal.openTab("详情", prefix + "/edit/"+row.id+"?edit=false",);
 
     }
 
@@ -230,87 +230,63 @@
             // 弹层外区域关闭
             shadeClose: true,
             yes: function (index,layero) {
-                var config = {
-
-                    type: "post",
-                    dataType: "json",
-                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
-                    async: false,
-                    data:'',
-                    success: function() {
-                        var body = layer.getChildFrame('body', index);
-                        var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.submitHandler();
-                        layer.close(index);
-                    }
-                };
-                var result = window.frames[0].document.getElementById("zdName").value;
-                var result2 = window.frames[0].document.getElementById("loanId").value;
-                var result3 = window.frames[0].document.getElementById("zdDate").value;
-                var result4 = window.frames[0].document.getElementById("reason").value;
-                var result5 = window.frames[0].document.getElementById("addUser").value;
-                var result6 = window.frames[0].document.getElementById("totalNumber").value;
-                var result7 = window.frames[0].document.getElementById("standardAmount").value;
-
-                if (result == '') {
-                    layer.msg("请填写项目名称")
-                } else if (result2 == '') {
-                    layer.msg("请填写己方人员")
-                } else if (result3 == '') {
-                    layer.msg("请填写招待时间")
-                } else if (result4 == '') {
-                    layer.msg("请填写招待事由")
-                }  else if (result5 == '') {
-                    layer.msg("请填写对方人员")
-                } else if (result6 == '') {
-                    layer.msg("请填写总人数")
-                } else if (result7 == '') {
-                    layer.msg("请填写招待费标准")
-                }  else {
-                    $.ajax(config);
-                    window.location.reload();
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.submitHandler();
+                if(res){
+                    $.layer.close(index);
+                    $.table.refresh();
                 }
+                layer.close(index);
             },
             btn2: function (index,layero) {
-                var config = {
-                    type: "post",
-                    dataType: "json",
-                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
-                    async: false,
-                    data:'',
-                    success: function() {
-                        var body = layer.getChildFrame('body', index);
-                        var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.sub();
-                        layer.close(index);
-                    }
-                };
-                var result = window.frames[0].document.getElementById("zdName").value;
-                var result2 = window.frames[0].document.getElementById("loanId").value;
-                var result3 = window.frames[0].document.getElementById("zdDate").value;
-                var result4 = window.frames[0].document.getElementById("reason").value;
-                var result5 = window.frames[0].document.getElementById("addUser").value;
-                var result6 = window.frames[0].document.getElementById("totalNumber").value;
-                var result7 = window.frames[0].document.getElementById("standardAmount").value;
-
-                if (result == '') {
-                    layer.msg("请填写项目名称")
-
-                } else if (result2 == '') {
-                    layer.msg("请填写己方人员")
-                } else if (result3 == '') {
-                    layer.msg("请填写招待时间")
-                } else if (result4 == '') {
-                    layer.msg("请填写招待事由")
-                }  else if (result5 == '') {
-                    layer.msg("请填写对方人员")
-                } else if (result6 == '') {
-                    layer.msg("请填写总人数")
-                } else if (result7 == '') {
-                    layer.msg("请填写招待费标准")
-                }  else {
-                    $.ajax(config);
-                    window.location.reload();
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.sub();
+                if(res){
+                    $.layer.close(index);
+                    $.table.refresh();
+                }
+                return false;
+            },
+            cancel: function(index) {
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+    function mEdit(id) {
+        var width;
+        var height;
+        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+            width = 'auto';
+            height = 'auto';
+        }
+        var index = layer.open({
+            type: 2,
+            area: [width, height],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "提交预览",
+            content: prefix + "/edit/"+id,
+            btn: ['提交','保存','关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function (index,layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.submitHandler();
+                if(res){
+                    $.layer.close(index);
+                    $.table.refresh();
+                }
+                layer.close(index);
+            },
+            btn2: function (index,layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.sub();
+                if(res){
+                    $.layer.close(index);
+                    $.table.refresh();
                 }
                 return false;
             },

@@ -146,4 +146,6 @@ public interface FacReimburseApplyMapper
 	
 	/***查报销每个月每个人的钱*/
 	public double selectHospitailAmount(long user);
+
+	List<ReiHospitalityApply> selectHospitalityApplyListByUser(Long userId);
 }

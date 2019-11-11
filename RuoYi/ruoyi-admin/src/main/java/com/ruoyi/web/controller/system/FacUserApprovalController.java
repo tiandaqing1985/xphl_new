@@ -3,6 +3,9 @@ package com.ruoyi.web.controller.system;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ruoyi.system.domain.finance.FacHospitalityApply;
+import com.ruoyi.system.domain.finance.ReiHospitalityApply;
+import com.ruoyi.system.service.finance.IFacHospitalityApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -44,8 +47,10 @@ public class FacUserApprovalController extends BaseController {
     private ISysUserService sysUserService;
     @Autowired
     private IFacReimburseApplyService facReimburseApplyService;
+    @Autowired
+    private IFacHospitalityApplyService facHospitalityApplyService;
 
-   // @RequiresPermissions("system:facUserApproval:view")
+    // @RequiresPermissions("system:facUserApproval:view")
     @GetMapping()
     public String facUserApproval() {
         return prefix + "/facUserApproval";
@@ -133,8 +138,8 @@ public class FacUserApprovalController extends BaseController {
         map.put("userId", ShiroUtils.getUserId());
         map.put("name", facUserApproval.getProjectName());
         map.put("userName", facUserApproval.getName());
-        
-       String nums = facUserApproval.getApplyId().substring(0, 2);
+
+        String nums = facUserApproval.getApplyId().substring(0, 2);
         if (nums.equals("BX")) {
             return prefix + "/baoxiaoDetails";
         } else if (nums.equals("JK")) {
@@ -196,12 +201,35 @@ public class FacUserApprovalController extends BaseController {
         FacUserApproval facUser = new FacUserApproval();
         facUser.setApplyId(facUserApproval.getApplyId());
         facUser.setApproverId(facUserApproval.getApproverId());
-        List<FacUserApproval> list = facUserApprovalService
-                .selectFacUserApprovalList(facUser);
+        List<FacUserApproval> list = facUserApprovalService.selectFacUserApprovalList(facUser);
         FacUserApproval fac = list.get(0);
         fac.setApprovalState(facUserApproval.getApprovalState());
         fac.setOpi(facUserApproval.getOpi());
-        return toAjax(facUserApprovalService.updateFacUserApproval(fac));
+        int status = facUserApprovalService.updateFacUserApproval(fac);
+        //当前申请所有审批人已经同意
+        if (status == 0) {
+            if(facUserApproval.getApplyId().startsWith("ZD")){
+                //招待费同意则生成招待费的报销信息
+                FacHospitalityApply selectHospitalityApply = new FacHospitalityApply();
+                selectHospitalityApply.setNum(facUserApproval.getApplyId());
+                List<FacHospitalityApply> facHospitalityApplies = facHospitalityApplyService.selectFacHospitalityApplyList(selectHospitalityApply);
+
+                if(facHospitalityApplies.size()>0){
+
+                    selectHospitalityApply = facHospitalityApplies.get(0);
+                    ReiHospitalityApply reiHospitalityApply = new ReiHospitalityApply();
+                    reiHospitalityApply.setDdDate(selectHospitalityApply.getZdDate());
+                    reiHospitalityApply.setAmount(selectHospitalityApply.getAmount());
+                    reiHospitalityApply.setAddUser(selectHospitalityApply.getLoanId());
+                    reiHospitalityApply.setReason(selectHospitalityApply.getReason());
+                    reiHospitalityApply.setUser(selectHospitalityApply.getUserId());
+                    reiHospitalityApply.setApplyNum(selectHospitalityApply.getNum());
+                    facReimburseApplyService.insertReiHospitalityApply(reiHospitalityApply);
+
+                }
+            }
+        }
+        return toAjax(1);
     }
 
 

@@ -50,7 +50,7 @@ public class FacReimburseApply extends BaseEntity {
 	/**
 	 * 报销时间
 	 */
-	@JsonFormat(pattern = "yyyy-MM-DD")
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date reimburseTime;
 	/**
 	 * 财务操作

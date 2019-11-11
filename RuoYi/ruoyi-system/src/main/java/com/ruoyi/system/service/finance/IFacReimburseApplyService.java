@@ -41,11 +41,9 @@ public interface IFacReimburseApplyService {
 	 *            报销信息
 	 * @return 报销集合
 	 */
-	public List<FacReimburseApply> selectFacReimburseApplyList(
-			FacReimburseApply facReimburseApply);
+	public List<FacReimburseApply> selectFacReimburseApplyList(FacReimburseApply facReimburseApply);
 
-	public List<ReiHospitalityApply> selectReiHospitalityApplyList(
-			ReiHospitalityApply reiHospitalityApply);
+	public List<ReiHospitalityApply> selectReiHospitalityApplyList(ReiHospitalityApply reiHospitalityApply);
 
 	public int insertFacreiHospitalityApply(
 			ReiHospitalityApply reiHospitalityApply);
@@ -153,4 +151,6 @@ public interface IFacReimburseApplyService {
 	List<FacReimburseApply> selectFacReimburseApplyListByCreateBy(
 			List<SysUser> sysUsersList);
 
+	//查询招待申请审批后生成的招待费报销
+	public List<ReiHospitalityApply> selectHospitalityApplyListByUser(Long userId);
 }

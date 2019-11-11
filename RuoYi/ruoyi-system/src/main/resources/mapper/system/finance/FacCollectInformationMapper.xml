@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.finance.FacCollectInformationMapper">
+    
+    <resultMap type="FacCollectInformation" id="FacCollectInformationResult">
+        <result property="id"    column="id"    />
+        <result property="num"    column="num"    />
+        <result property="name"    column="name"    />
+        <result property="amount"    column="amount"    />
+        <result property="number"    column="number"    />
+    </resultMap>
+	
+	<sql id="selectFacCollectInformationVo">
+        select id, num, name, amount, number from fac_collect_information
+    </sql>
+	
+    <select id="selectFacCollectInformationList" parameterType="FacCollectInformation" resultMap="FacCollectInformationResult">
+        <include refid="selectFacCollectInformationVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="num != null  and num != '' "> and num = #{num}</if>
+             <if test="name != null  and name != '' "> and name = #{name}</if>
+             <if test="amount != null "> and amount = #{amount}</if>
+             <if test="number != null "> and number = #{number}</if>
+         </where>
+    </select>
+    
+    
+    <select id="selectAmount" resultType="double"> 
+		select ifNull((select
+		sum(amount) from fac_collect_information where num
+		=#{num}),0);
+	</select>
+    
+    
+    
+    
+    <select id="selectFacCollectInformationById" parameterType="Long" resultMap="FacCollectInformationResult">
+        <include refid="selectFacCollectInformationVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFacCollectInformation" parameterType="FacCollectInformation" useGeneratedKeys="true" keyProperty="id">
+        insert into fac_collect_information
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">num,</if>
+			<if test="name != null  and name != ''  ">name,</if>
+			<if test="amount != null  ">amount,</if>
+			<if test="number != null  ">number,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">#{num},</if>
+			<if test="name != null  and name != ''  ">#{name},</if>
+			<if test="amount != null  ">#{amount},</if>
+			<if test="number != null  ">#{number},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateFacCollectInformation" parameterType="FacCollectInformation">
+        update fac_collect_information
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null  and num != ''  ">num = #{num},</if>
+            <if test="name != null  and name != ''  ">name = #{name},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="number != null  ">number = #{number},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteFacCollectInformationById" parameterType="Long">
+        delete from fac_collect_information where id = #{id}
+    </delete>
+	
+    <delete id="deleteFacCollectInformationByIds" parameterType="String">
+        delete from fac_collect_information where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
