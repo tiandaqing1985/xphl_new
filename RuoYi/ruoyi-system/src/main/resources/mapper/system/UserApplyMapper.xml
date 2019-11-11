@@ -30,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <association property="userApproval" column="approval_id" javaType="UserApproval" resultMap="UserApprovalResult"/>
         <association property="sysUser" column="user_id" javaType="SysUser" resultMap="SysUserResult"/>
         <association property="sysDept" column="dept_id" javaType="SysDept" resultMap="SysDeptResult"/>  
+        <association property="allAppNames" column="apply_id" select="getAllAppNamesByApplyid"/>
     </resultMap>
     
     <resultMap type="SysUser" id="SysUserResult">
@@ -146,7 +147,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         WHEN a.apply_type = 2 THEN
 		          CONCAT(TRUNCATE(a.timelength,0 ) , '小时')
 		         WHEN a.apply_type = 3 THEN
-		          CONCAT(TRUNCATE(a.timelength,1 ) , '天')		        
+		          CONCAT(TRUNCATE(a.timelength,1 ) , '天')		
+		          WHEN a.apply_type = 4 THEN
+		          CONCAT(TRUNCATE(a.timelength,0 ) , '小时')	        
 		         ELSE 
 		            ''
 	        	END)timelengthPlus,
@@ -157,6 +160,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          '加班'
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
+		          WHEN a.apply_type = 4 THEN
+		          '外出'
 		         ELSE 
 		            ''
 	        	END)apply_type,  
@@ -232,6 +237,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </where>
          ORDER BY a.apply_id DESC
     </select>
+    
+    <!-- 子查询显示当前申请的所有审批人及审批状态 -->
+    <select id="getAllAppNamesByApplyid" parameterType="Integer" resultType="String">
+		    	SELECT REPLACE
+				(
+					GROUP_CONCAT(
+						u.user_name,
+						"(",
+						(
+						CASE
+								
+								WHEN app.approval_state = 1 THEN
+								'同意' 
+								WHEN app.approval_state = 2 THEN
+								'驳回' 
+								WHEN app.approval_state = 3 THEN
+								'未操作' ELSE '' 
+							END 
+							),
+							")" 
+						),
+						',',
+						'--' 
+					) allAppNames 
+			FROM
+				sys_user_approval app
+				LEFT JOIN sys_user_apply a ON app.apply_id = a.apply_id
+				LEFT JOIN sys_user u ON u.`user_id` = app.`approver_id` 
+			WHERE
+				a.apply_id = #{apply_id}
+		ORDER BY
+			app.approval_level
+    </select>
 
     <select id="selectUserApplyByIds" parameterType="String" resultMap="UserApplyResult">
         select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.for_applyid, a.prove,
@@ -266,6 +304,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          '加班'
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
+		         WHEN a.apply_type = 4 THEN
+		          '外出'
 		         ELSE 
 		            ''
 		        END)apply_type,  
@@ -348,6 +388,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          '加班'
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
+		         WHEN a.apply_type = 4 THEN
+		          '外出'
 		         ELSE 
 		            ''
 		        END)apply_type,  
@@ -403,6 +445,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          '加班'
 		         WHEN a.apply_type = 3 THEN
 		          '销假'
+		         WHEN a.apply_type = 4 THEN
+		          '外出'
 		         ELSE 
 		            ''
 		        END)apply_type,  
@@ -495,7 +539,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="leaveType != null  and leaveType != ''  ">#{leaveType},</if>
 			<if test="forApplyId != null  and forApplyId != ''  ">#{forApplyId},</if>
 			<if test="prove != null and prove != '' ">#{prove},</if>
-			sysdate()
+			 sysdate() 			
          </trim>
     </insert>
 	 

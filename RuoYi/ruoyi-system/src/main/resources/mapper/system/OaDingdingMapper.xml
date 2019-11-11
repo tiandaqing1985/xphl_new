@@ -124,10 +124,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id="updateOaDingDingByTime" parameterType="Dingding">
 		update oa_dingding 
 		set timeResult=#{timeResult},status=#{status},apply_state=#{applyState} 
-		where user_id= #{userId}
-		<if test="startTime != null and endTime != null">and userCheckTime <![CDATA[  >= #{startTime} ]]> and userCheckTime <![CDATA[ <= #{endTime} ]]> </if>
-		<if test="workDate != null">and workDate = #{workDate}</if>
-		<if test="checkType != null and checkType != ''">and checkType = #{checkType}</if>
+		<where>
+			<if test="userId != null">user_id = #{userId}</if>
+			<if test="userName != null and userName !=''">user_name = #{userName}</if>
+			<if test="startTime != null and endTime != null">and userCheckTime <![CDATA[  >= #{startTime} ]]> and userCheckTime <![CDATA[ <= #{endTime} ]]> </if>
+			<if test="workDate != null">and workDate = #{workDate}</if>
+			<if test="checkType != null and checkType != ''">and checkType = #{checkType}</if>
+		</where>
 	</update>
 
 	<delete id="deleteOaDingdingById" parameterType="Long">

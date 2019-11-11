@@ -18,6 +18,7 @@ import com.ruoyi.system.mapper.OaDingdingMapper;
 import com.ruoyi.system.mapper.OaWorkingCalendarMapper;
 import com.ruoyi.system.mapper.SysDictDataMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
+import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.mapper.UserApplyMapper;
 import com.ruoyi.system.mapper.UserApprovalMapper;
 import com.ruoyi.system.domain.Dingding;
@@ -63,7 +64,8 @@ public class UserApplyServiceImpl implements IUserApplyService
 	
     @Autowired
     private SysUserMapper userMapper;
-    
+    @Autowired
+    private SysUserRoleMapper userRoleMapper;
     @Autowired
 	private OaDingdingMapper oaDingdingMapper;
 	@Autowired
@@ -979,5 +981,88 @@ public class UserApplyServiceImpl implements IUserApplyService
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public int addOutSave(UserApply userApply, Long userId) {
+		userApply.setUserId(userId);
+		userApply.setApplyState("1");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+		userApply.setApplyType("4");//申请类型（1请假，2加班，3销假，4外出）
+		userApplyMapper.insertUserApply(userApply);
+
+		SysUser user = userMapper.selectUserById(userId);//查出当前用户的area值
+		
+		//生成审批记录
+		Long approvalId = 0L;//审批人id
+		
+		//直属上级审批
+		Long leaderId = userMapper.selectApproverIdByApplyerId(user.getUserId());//所在部门负责人id(上级)
+		Long upLeaderId = userMapper.selectUpApproverIdByApplyerId(user.getUserId());//所在部门负责人的上级（上上级）
+		if(leaderId.equals(user.getUserId())){	//判断用户是否部门负责人  
+			approvalId = upLeaderId; //上上级作为一级审批人
+		}
+		else{
+			approvalId = leaderId;//上级作为一级审批人
+		}
+		
+		//生成一级审批记录
+		UserApproval userApproval = new UserApproval();
+		userApproval.setApproverId(approvalId);
+		userApproval.setApplyId(userApply.getApplyId());
+		userApproval.setApprovalSight("1");//可视
+		userApproval.setApprovalLevel(1);//审批等级 —— 上级审批 1级
+		userApproval.setApprovalState("3");//审批意见（1同意，2驳回 ，3未操作）
+		
+		if(userId == 103L){//COO
+			userApproval.setApprovalId(101L);
+		}
+		
+		userApprovalMapper.insertUserApproval(userApproval);
+		
+		if(upLeaderId ==  null){
+			return 1;
+		}
+		
+		//如果是审批人是 coo 直接结束
+		if(approvalId != null && approvalId.longValue()==103){ 
+		    return 1;
+		}
+		
+		SysUser user2 = new SysUser();
+		user2.setRoleId(6L);//人事总监
+		Long hrId = userRoleMapper.selectUserIdByRoleId(user2);//人事总监id	
+		
+		if(upLeaderId.longValue() == hrId.longValue()){
+			return 1;
+		}
+		
+//		//当前用户的leader是人事总监时，只需要leader审批
+//		if(approvalId.longValue() == hrId.longValue()){
+//			return 1;
+//		}
+//		
+//		//当前用户是hr时，只需要人事总监审批
+//		if(upLeaderId.longValue() == hrId.longValue()){
+//		    return 1;
+//		}
+//		
+//		//当前用户是人事总监时，只需要leader审批
+//		if(user.getUserId().longValue() == hrId.longValue()){
+//		    return 1;
+//		}
+		
+		//人事部门审批是两级审批，其他部门员工只需要leader审批
+		if(upLeaderId.longValue() == hrId.longValue()){
+			//生成一级审批记录
+			UserApproval userApproval2 = new UserApproval();
+			userApproval2.setApproverId(hrId);
+			userApproval2.setApplyId(userApply.getApplyId());
+			userApproval2.setApprovalSight("0");//1可见  0不可见
+			userApproval2.setApprovalLevel(2);//审批等级 —— 上级审批 1级
+			userApproval2.setApprovalState("3");//审批意见（1同意，2驳回 ，3未操作）
+			userApprovalMapper.insertUserApproval(userApproval2);
+		}
+		
+	    return 1;
 	}
 }

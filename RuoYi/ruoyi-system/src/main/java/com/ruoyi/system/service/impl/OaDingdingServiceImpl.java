@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ruoyi.system.mapper.OaDingdingMapper;
 import com.ruoyi.system.mapper.OaDingdingUserMapper;
-import com.ruoyi.system.mapper.OaOutMapper;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.mapper.SysUserRoleMapper;
@@ -22,7 +21,6 @@ import com.ruoyi.system.mapper.UserApplyMapper;
 import com.ruoyi.system.domain.Dingding;
 import com.ruoyi.system.domain.OaDingding;
 import com.ruoyi.system.domain.OaDingdingUser;
-import com.ruoyi.system.domain.OaOut;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.UserApply;
@@ -50,8 +48,6 @@ public class OaDingdingServiceImpl implements IOaDingdingService
     private SysUserRoleMapper userRoleMapper;
     @Autowired
     private UserApplyMapper applyMapper;
-    @Autowired
-    private OaOutMapper outMapper;
     @Autowired
     private OaDingdingUserMapper oaDingdingUserMapper;
     
@@ -233,7 +229,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		//（一）根据请假情况更新钉钉考勤表
 		UserApply apply = new UserApply();
 //		apply.setApplyState(applyState);//申请状态（1 待审批，2已撤回，3申请成功，4申请失败） 
-		apply.setApplyType("1");//申请类型（1请假，2加班，3销假） 
+		apply.setApplyType("1");//申请类型（1请假，2加班，3销假，4外出）
 		List<UserApply> applyList = applyMapper.selectApplyList(apply);//申请成功的请假记录
 		
 		if(applyList == null){
@@ -370,21 +366,16 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		}
 		
 		//（一）根据外出报备情况更新钉钉考勤表
-		OaOut out = new OaOut();
-//		out.setState(state);//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
-		List<OaOut> outList = outMapper.selectOaOutList(out);//查询申请成功且未更新在钉钉考勤记录表中的外出报备数据
-		if(outList.size() == 0) return 1;
+		UserApply apply2 = new UserApply();
+		apply2.setApplyType("4");//申请类型（1请假，2加班，3销假，4外出） 
+		List<UserApply> applyList2 = applyMapper.selectApplyList(apply2);//申请成功的请假记录
+		if(applyList2.size() == 0) return 1;
 		
-		for(OaOut o : outList){
-			String state = o.getState();//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
-			
-			OaDingdingUser dingUser = new OaDingdingUser();
-			dingUser.setUserName(o.getUserName());			
-			List<OaDingdingUser> dingUserList = oaDingdingUserMapper.selectOaDingdingUserList(dingUser);//根据userName查找钉钉考勤用户表中的userId
-			if(dingUserList.size() == 0) continue;
+		for(UserApply o : applyList2){
+			String state = o.getApplyState();//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）		
 
 			Dingding ding = new Dingding();
-			ding.setUserId(dingUserList.get(0).getUserId());
+			ding.setUserName(o.getUserName());
 			ding.setStartTime(o.getStarttime());
 			if(o.getStarttime().equals(o.getEndtime())){
 				ding.setEndTime(getWorkDate(o.getEndtime(), 24));
@@ -396,13 +387,8 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 			ding.setTimeResult("out");
 			ding.setApplyState(state);
 			ding.setStatus("1");
-			oaDingdingMapper.updateOaDingDingByTime(ding);
-			
-//			OaOut out2 = new OaOut();
-//			out2.setOutId(o.getOutId());
-//			out2.setStatus("1");
-//			outMapper.updateOaOut(out2);
-		}
+			oaDingdingMapper.updateOaDingDingByTime(ding);			
+		}		
 		return 1;
 	}
 

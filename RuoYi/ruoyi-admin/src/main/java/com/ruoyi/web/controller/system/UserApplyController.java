@@ -293,7 +293,7 @@ public class UserApplyController extends BaseController
 	/**
 	 * 新增保存加班申请
 	 */
-	@Log(title = "申请", businessType = BusinessType.INSERT)
+	@Log(title = "加班申请", businessType = BusinessType.INSERT)
 	@PostMapping("/addOther")
 	@ResponseBody
 	public AjaxResult addOvertimeSave(UserApply userApply)
@@ -302,6 +302,26 @@ public class UserApplyController extends BaseController
 		return toAjax(i);
 	}
 	
+	/**
+	 * 新增外出申请
+	 */
+	@GetMapping("/addOut")
+	public String addOut()
+	{
+	    return prefix + "/addOut";
+	}
+	
+	/**
+	 * 新增保存外出申请
+	 */
+	@Log(title = "外出申请", businessType = BusinessType.INSERT)
+	@PostMapping("/addOut")
+	@ResponseBody
+	public AjaxResult addOutSave(UserApply userApply)
+	{
+		int i = userApplyService.addOutSave(userApply,ShiroUtils.getUserId());
+		return toAjax(i);
+	}
 	/**
 	 * 验证员工是否通过试用一期
 	 * */
@@ -423,7 +443,7 @@ public class UserApplyController extends BaseController
     	List<UserApply> ifStarttimeRepeat = userApplyService.selectUserApplyListByStartTime(userApply);
     	List<UserApply> ifEndtimeRepeat = userApplyService.selectUserApplyListByEndTime(userApply);
     	if(ifStarttimeRepeat != null && ifStarttimeRepeat.size()>0){
-    		if(ifStarttimeRepeat.size()==1){
+    		if(ifStarttimeRepeat.size()==1 && userApply.getApplyId() != null){
     			//查出本身
     			if(ifStarttimeRepeat.get(0).getApplyId().longValue()==userApply.getApplyId().longValue()){
     				return "0";

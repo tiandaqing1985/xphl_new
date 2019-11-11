@@ -124,6 +124,14 @@
 					sortable: false
 				},
 				{
+					field : 'allAppNames', 
+					title : '所有审批人',
+					sortable: false,
+					formatter: function(value, row, index) {
+						return $.table.tooltip(value);
+					}
+				},
+				{
 					field : 'approverName', 
 					title : '当前审批人',
 					visible: true,

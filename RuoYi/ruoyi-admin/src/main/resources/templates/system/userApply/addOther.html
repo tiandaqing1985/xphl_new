@@ -5,7 +5,6 @@
 	<th:block th:include="include :: datetimepicker-css" />
 </head>
 <body class="white-bg">
-    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
         <form class="form-horizontal m" id="form-userApply-addOther">
         	<div class="form-group" style="display: none">	
 				<label class="col-sm-3 control-label">申请类型：</label>
@@ -36,7 +35,7 @@
 			<div class="form-group">	
 				<label class="col-sm-3 control-label"><span style="color: red; ">*</span>加班原因：</label>
 				<div class="col-sm-8">
-					<textarea id="details" name="details" type="text" class="form-control" maxlength="500" rows="3"></textarea>
+					<textarea id="details" name="details" class="form-control" maxlength="500" rows="3"></textarea>
 				</div>
 			</div>
 			<input id="timelength" name="timelength" style="display:none"/>

@@ -1,8 +1,5 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
@@ -32,6 +29,16 @@ public class OaOutApproval extends BaseEntity
 	private String approvalSight;
 	/** 审批等级 1leader  2人事审批 */
 	private Integer approvalLevel;
+    /** 备注 */
+    private String remark;
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 
 	public void setId(Long id) 
 	{
@@ -97,16 +104,12 @@ public class OaOutApproval extends BaseEntity
 		return approvalLevel;
 	}
 
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("outId", getOutId())
-            .append("approvalState", getApprovalState())
-            .append("approvalId", getApprovalId())
-            .append("approvalDate", getApprovalDate())
-            .append("approvalSight", getApprovalSight())
-            .append("approvalLevel", getApprovalLevel())
-            .append("remark", getRemark())
-            .toString();
-    }
+	@Override
+	public String toString() {
+		return "OaOutApproval [id=" + id + ", outId=" + outId + ", approvalState=" + approvalState + ", approvalId="
+				+ approvalId + ", approvalDate=" + approvalDate + ", approvalSight=" + approvalSight
+				+ ", approvalLevel=" + approvalLevel + ", remark=" + remark + "]";
+	}
+
+ 
 }

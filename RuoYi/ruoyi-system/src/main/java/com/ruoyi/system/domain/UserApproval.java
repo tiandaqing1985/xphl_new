@@ -1,8 +1,5 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
@@ -29,7 +26,9 @@ public class UserApproval extends BaseEntity
 	private String approvalTime;
 	/** 审批等级*/
 	private int approvalLevel;
-	
+    /** 备注 */
+    private String remark;
+
 	
 	/** 申请人*/
 	private SysUser sysUser;
@@ -55,9 +54,18 @@ public class UserApproval extends BaseEntity
 //	/** 用户名称 */
 //    @Excel(name = "用户名称")
 //    private String userName;
-//    
+//   
+	
 	public SysUser getSysUser() {
 		return sysUser;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
 	}
 
 	public void setSysUser(SysUser sysUser) {
@@ -154,14 +162,12 @@ public class UserApproval extends BaseEntity
 		this.approvalTime = approvalTime;
 	}
 
+	@Override
 	public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("approvalId", getApprovalId())
-            .append("applyId", getApplyId())
-            .append("approvalState", getApprovalState())
-            .append("approverId", getApproverId())
-            .toString();
-    }
+		return "UserApproval [approvalId=" + approvalId + ", applyId=" + applyId + ", approvalState=" + approvalState
+				+ ", approverId=" + approverId + ", approvalSight=" + approvalSight + ", approvalTime=" + approvalTime
+				+ ", approvalLevel=" + approvalLevel + ", remark=" + remark + ", sysUser=" + sysUser + ", userApply="
+				+ userApply + ", sysDept=" + sysDept + ", timelengthPlus=" + timelengthPlus + "]";
+	}
 
-	
 }
