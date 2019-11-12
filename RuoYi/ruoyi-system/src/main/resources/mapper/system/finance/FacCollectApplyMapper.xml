@@ -33,20 +33,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="id != null "> and id = #{id}</if>
              <if test="num != null  and num != '' "> and num = #{num}</if>
              <if test="deptCompany != null  and deptCompany != '' "> and dept_company = #{deptCompany}</if>
-             <if test="deptName != null  and deptName != '' "> and dept_name = #{deptName}</if>
+             <if test="deptName != null  and deptName != '' "> and dept_name like concat('%', #{deptName}, '%')</if>
              <if test="applicant != null "> and applicant = #{applicant}</if>
              <if test="amount != null "> and amount = #{amount}</if>
              <if test="applicationTime != null "> and application_time = #{applicationTime}</if>
              <if test="startDate != null "> and start_date = #{startDate}</if>
              <if test="endDate != null "> and end_date = #{endDate}</if>
-             <if test="leagueProject != null  and leagueProject != '' "> and league_project = #{leagueProject}</if>
+             <if test="leagueProject != null  and leagueProject != '' "> and league_project like concat('%', #{leagueProject}, '%')</if>
              <if test="participants != null  and participants != '' "> and participants = #{participants}</if>
              <if test="parNumber != null "> and par_number = #{parNumber}</if>
              <if test="activityPlace != null  and activityPlace != '' "> and activity_place = #{activityPlace}</if>
-             <if test="activityForm != null  and activityForm != '' "> and activity_form = #{activityForm}</if>
+             <if test="activityForm != null  and activityForm != '' "> and activity_form like concat('%', #{activityForm}, '%')</if>
              <if test="status != null "> and status = #{status}</if>
              <if test="remarks != null  and remarks != '' "> and remarks = #{remarks}</if>
          </where>
+        order by id desc
     </select>
     
     <select id="selectFacCollectApplyById" parameterType="Long" resultMap="FacCollectApplyResult">
