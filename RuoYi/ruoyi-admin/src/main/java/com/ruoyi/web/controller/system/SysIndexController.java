@@ -7,17 +7,12 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.ruoyi.common.config.Global;
 import com.ruoyi.common.core.controller.BaseController;
-import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.QueryConditions;
 import com.ruoyi.system.domain.SysMenu;
 import com.ruoyi.system.domain.SysUser;
-import com.ruoyi.system.domain.YwBusiness;
-import com.ruoyi.system.domain.YwContract;
-import com.ruoyi.system.domain.YwTract;
 import com.ruoyi.system.service.ISysMenuService;
-import com.ruoyi.system.service.IYwBusinessService;
-import com.ruoyi.system.service.IYwContractService;
-import com.ruoyi.system.service.IYwTractService;
+import com.ruoyi.system.service.IUserApprovalService;
 
 /**
  * 首页 业务处理
@@ -28,19 +23,10 @@ import com.ruoyi.system.service.IYwTractService;
 public class SysIndexController extends BaseController
 {
     @Autowired
-    private ISysMenuService menuService;
-    
-    @Autowired
-    private IYwBusinessService ywBusinessService;
-    
-    @Autowired
-    private IYwTractService ywTractService;
-    
-    @Autowired
-    private IYwContractService ywContractService;
-    
-    
-
+    private ISysMenuService menuService;  
+	@Autowired
+	private IUserApprovalService userApprovalService;
+	
     // 系统首页
     @GetMapping("/index")
     public String index(ModelMap mmap)
@@ -69,38 +55,36 @@ public class SysIndexController extends BaseController
     // 系统介绍
     @GetMapping("/system/main")
     public String main(ModelMap mmap)
-    {
-    	//总有效商机
-    	YwBusiness ywBusiness = new YwBusiness();
-    	ywBusiness.setBusinessStatus("0");
-    	List<YwBusiness> list1 = ywBusinessService.selectYwBusinessList(ywBusiness);
-    	mmap.put("bu", list1.size());
+    {   	
+    	//待审批总数
+    	QueryConditions queryConditions = new QueryConditions();
+    	queryConditions.setApproverId(ShiroUtils.getUserId());//审批人是登录的用户
+		queryConditions.setApprovalState("3");//审批意见是，未操作
+		queryConditions.setApprovalSight("1");//审批为可见状态
+		queryConditions.setApplyState("1");//申请状态 待审批
+		
+		List<QueryConditions> list = userApprovalService.selectQueryConditionsList(queryConditions);
+    	mmap.put("unApprovalNum", list.size());
     	
-    	ywBusiness.setCreateTime(DateUtils.lastMonday());
+		//请假总数
+    	queryConditions.setApplyType("1");
+    	list = userApprovalService.selectQueryConditionsList(queryConditions);
+    	mmap.put("holidayNum", list.size());
     	
-    	//上周新增有效商机
-    	List<YwBusiness> list2 = ywBusinessService.selectYwBusinessList(ywBusiness);
-    	mmap.put("bu1", list2.size());
+    	//加班总数
+    	queryConditions.setApplyType("2");
+    	list = userApprovalService.selectQueryConditionsList(queryConditions);
+    	mmap.put("overtimeNum", list.size());
     	
-    	//总跟进记录
-    	YwTract ywTract = new YwTract();
-    	List<YwTract> list3 = ywTractService.selectYwTractList(ywTract);
-    	mmap.put("tr", list3.size());
+    	//销假总数
+    	queryConditions.setApplyType("3");
+    	list = userApprovalService.selectQueryConditionsList(queryConditions);
+    	mmap.put("cancelNum", list.size());
     	
-    	ywTract.setCreateTime(DateUtils.lastMonday());
-    	List<YwTract> list4 = ywTractService.selectYwTractList(ywTract);
-    	mmap.put("tr1", list4.size());
-    	
-    	//总有效合同
-    	YwContract ywContract = new YwContract();
-    	ywContract.setStatus("0");//有效合同
-    	List<YwContract> list5 = ywContractService.selectYwContractList(ywContract);
-    	mmap.put("con", list5.size());
-    	
-    	ywContract.setCreateTime(DateUtils.lastMonday());
-    	List<YwContract> list6 = ywContractService.selectYwContractList(ywContract);
-    	mmap.put("con1", list6.size());
-    	
+    	//外出总数
+     	queryConditions.setApplyType("4");
+    	list = userApprovalService.selectQueryConditionsList(queryConditions);
+    	mmap.put("outNum", list.size());
     	
     	if(ShiroUtils.getUserId()==103 || ShiroUtils.getUserId()==1){
     		mmap.put("admin", true);
