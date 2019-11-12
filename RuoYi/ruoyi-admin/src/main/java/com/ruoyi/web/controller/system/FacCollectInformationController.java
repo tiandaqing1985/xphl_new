@@ -101,7 +101,6 @@ public class FacCollectInformationController extends BaseController {
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(FacCollectInformation facCollectInformation) {
-		facCollectInformation.setMoney(facCollectInformation.getAmount());
 		return toAjax(facCollectInformationService
 				.insertFacCollectInformation(facCollectInformation));
 	}

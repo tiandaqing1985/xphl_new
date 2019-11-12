@@ -6,148 +6,113 @@
     <th:block th:include="include :: ztree-css"/>
 </head>
 <body class="gray-bg">
-<div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-facCollectApply-edit" th:object="${facCollectApply}">
-        <input id="id" name="id" th:field="*{id}"  type="hidden">
-        <div class="form-group">
-            <label class="col-sm-3 control-label">团建费编号：</label>
-            <div class="col-sm-8">
-                <input id="num" name="num" th:field="*{num}" class="form-control" type="text" readonly>
+<div class="container-div">
+    <div class="row">
+        <input id="id" name="id" class="form-control-static" type="hidden" th:value="${id}"/>
+        <div>
+            <div class="col-sm-12 select-table table-striped">
+                  <h4 class="form-header h4">团建申请信息</h4>
+                <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
             </div>
         </div>
-
-        <div class="form-group">
-            <label class="col-sm-3 control-label">所属部门：</label>
-            <div class="col-sm-8">
-                <input id="deptName" name="deptName" th:field="*{deptName}" class="form-control" type="text" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">申请人：</label>
-            <div class="col-sm-8">
-                <input id="applicantName" name="applicantName" th:field="*{applicantName}" class="form-control" type="text" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">申请金额：</label>
-            <div class="col-sm-8">
-                <input id="amount" name="amount"  th:field="*{amount}" class="form-control" type="text" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">开始日期：</label>
-            <div class="col-sm-8">
-                <input id="startDate" name="startDate" th:value="${#dates.format(facCollectApply.startDate,'yyyy-MM-dd')}" class="time-input form-control" type="text" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">结束日期：</label>
-            <div class="col-sm-8">
-                <input id="endDate" name="endDate" th:value="${#dates.format(facCollectApply.endDate,'yyyy-MM-dd')}" class="time-input form-control" type="text" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">参与人：</label>
-            <div class="col-sm-8">
-                <input id="participants" name="participants" th:field="*{participants}" class="form-control" type="text" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">参与人数：</label>
-            <div class="col-sm-8">
-                <input id="parNumber" name="parNumber" th:field="*{parNumber}" class="form-control" type="text" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">活动地点：</label>
-            <div class="col-sm-8">
-                <input id="activityPlace" name="activityPlace" th:field="*{activityPlace}" class="form-control" type="text" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">活动形式：</label>
-            <div class="col-sm-8">
-                <input id="activityForm" name="activityForm" th:field="*{activityForm}" class="form-control" type="text" readonly>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">备注：</label>
-            <div class="col-sm-8">
-                <input id="remarks" name="remarks" th:field="*{remarks}" class="form-control" type="text" readonly>
-            </div>
-        </div>
-
-        <div class="row">
-            <input id="id" name="id" class="form-control-static" type="hidden" th:value="${id}"/>
-            <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
-            <div>
-                <div class="col-sm-12 select-table table-striped">
-                    <h4 class="form-header h4">团建报销信息</h4>
-                    <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
-                </div>
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
-<div th:include="include::footer"></div>
-<th:block th:include="include :: bootstrap-suggest-js" />
-<th:block th:include="include :: bootstrap-select-js" />
-
-
-
+<div th:include="include :: footer"></div>
 <script th:inline="javascript">
     var prefix = ctx + "system/facCollectApply";
-    var prefixs = ctx + "system/facCollectInformation";
     var id = $("#id").val();
-    var num = $("#num").val();
-    $(function() {
+    $(function () {
         var options = {
-            id: "bootstrap-table-2",
-            url: prefixs + "/query",
-            updateUrl: prefixs + "/edit/{id}",
-            removeUrl: prefixs + "/remove",
+            id: "bootstrap-table-1",
+            url: prefix + "/query?id=" + id,
             showSearch: false,
             showRefresh: false,
             showToggle: false,
             showColumns: false,
-            modalName: "团建费报销",
+            modalName: "团建申请",
             columns: [{
                 checkbox: true
             },
                 {
-                    field : 'id',
-                    title : 'id',
+                    field: 'id',
+                    title: '',
                     visible: false
                 },
                 {
-                    field : 'num',
-                    title : '项目编号',
+                    field: 'num',
+                    title: '团建费编号',
                     sortable: true
                 },
                 {
-                    field : 'name',
-                    title : '项目名称',
+                    field: 'deptName',
+                    title: '所属部门',
                     sortable: true
                 },
                 {
-                    field : 'amount',
-                    title : '金额',
+                    field: 'amount',
+                    title: '申请金额',
                     sortable: true
                 },
                 {
-                    field : 'money',
-                    title : '实际金额',
+                    field: 'applicationTime',
+                    title: '申请时间',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
+                },
+                {
+                    field: 'startDate',
+                    title: '开始日期',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
+                },
+                {
+                    field: 'endDate',
+                    title: '结束日期',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return  newDate;
+                    }
+                },
+                {
+                    field: 'leagueProject',
+                    title: '团建项目',
                     sortable: true
                 },
                 {
-                    field : 'number',
-                    title : '单据数',
+                    field: 'participants',
+                    title: '参与人',
                     sortable: true
-                } ]
+                },
+                {
+                    field: 'parNumber',
+                    title: '参与人数',
+                    sortable: true
+                },
+                {
+                    field: 'activityPlace',
+                    title: '活动地点',
+                    sortable: true
+                },
+                {
+                    field: 'activityForm',
+                    title: '活动形式',
+                    sortable: true
+                },
+                {
+                    field: 'remarks',
+                    title: '备注',
+                    sortable: true
+                }]
         };
         $.table.init(options);
     });
-
 
 </script>
 </body>

@@ -50,17 +50,26 @@
                 </div>
                 <div class="row">
                     <div class="col-sm-12 select-table table-striped">
+<!--                        <a class="btn btn-success" onclick="mAdd(1)">-->
+<!--                            <i class="fa fa-plus"></i> 交通费报销信息-->
+<!--                        </a>-->
                         <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
                     </div>
                 </div>
 
                 <div class="row" id="zdf">
                     <div class="col-sm-12 select-table table-striped">
+<!--                        <a class="btn btn-success" onclick="mAdd(2)">-->
+<!--                            <i class="fa fa-plus"></i> 招待费报销信息-->
+<!--                        </a>-->
                         <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-12 select-table table-striped">
+<!--                        <a class="btn btn-success" onclick="mAdd(3)">-->
+<!--                            <i class="fa fa-plus"></i> 其他费用报销信息-->
+<!--                        </a>-->
                         <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
                     </div>
                 </div>
@@ -96,6 +105,9 @@
     var userId = $("#userId").val();
     var dept = $("#dept").val();
     var prefixs = ctx + "system/facUserApproval";
+    // function zAdd() {
+    //     $.modal.open("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
+    // }
 
     if (dept = 10) {
         $("#zdf").hide();//隐藏
@@ -107,12 +119,15 @@
         if (id == 1) {
             $.table._option.id = "bootstrap-table-1";
             $.table._option.url = prefix + "/addTraDetail";
+            //  $.modal.open("交通添加", "/system/facReimburseApply/tranDetail?num=" + num);
         } else if (id == 2) {
             $.table._option.id = "bootstrap-table-2";
             $.table._option.url = prefix + "/addAll";
+            //   $.modal.open("招待费添加", "/system/facReimburseApply/addAll?num=" + num);
         } else if (id == 3) {
             $.table._option.id = "bootstrap-table-3";
             $.table._option.url = prefix + "/otherDetail";
+            //    $.modal.open("其他添加", "/system/facReimburseApply/otherDetail?num=" + num);
         }
     }
 

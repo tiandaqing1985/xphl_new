@@ -79,7 +79,12 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
         if (hospitalityApplyList.size() > 0 && hospitalityApplyList != null) {
             facReimburseApply.setHospitalityApplies(hospitalityApplyList);
         }
-
+        // 行政和其他
+        // List<FacReiAdiApply> applies = facReimburseApplyMapper.adiTail(num);
+        // if (applies != null && applies.size() > 0) {
+        // facReimburseApply.setOtherReiAdiApplies(applies);
+        // }
+        // 加班交通申请和公共交通申请
         List<ReiTrafficApply> traTail = facReimburseApplyMapper.traTail(num);
         if (traTail != null && traTail.size() > 0) {
             facReimburseApply.setTrafficReiApplyList(traTail);

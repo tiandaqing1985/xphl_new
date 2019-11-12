@@ -61,8 +61,5 @@ public interface FacCollectInformationMapper
 	public int deleteFacCollectInformationByIds(String[] ids);
 	
 	public double selectAmount(String num);
-
-	public double selectMoney(String num);
-
 	
 }

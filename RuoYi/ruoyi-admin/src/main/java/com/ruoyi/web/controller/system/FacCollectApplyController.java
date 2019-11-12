@@ -204,7 +204,7 @@ public class FacCollectApplyController extends BaseController {
 	@PostMapping("/addEdit")
 	@ResponseBody
 	public AjaxResult addEdit(FacCollectApply facCollectApply) {
-		double money =facCollectInformationService.selectMoney(facCollectApply.getNum());
+		double money =facCollectInformationService.selectAmount(facCollectApply.getNum());
 		FacCollectApply facCollectApplys = facCollectApplyService
 				.selectFacCollectApplyById(facCollectApply.getId());
 		FacReimburseApply facReimburseApply = new FacReimburseApply();
@@ -227,9 +227,14 @@ public class FacCollectApplyController extends BaseController {
 			 facReimburseApply.setSubmitStatus("submit");  
 			 facReimburseApplyService.insertApply(facReimburseApply); 
 		 }else{
-			 //需要二次审批
-			 facReimburseApply.setSubmitStatus("submit");
-			 facReimburseApplyService.insertFacReimburseApply(facReimburseApply);
+			 //需要二次审批 
+			 facCollectApply.setNum(facNumberTableService.getNum("TJ", ShiroUtils.getDateId())); 
+			 facCollectApply.setApplicant(ShiroUtils.getUserId()); 
+			 facCollectApply.setLeagueProject(facCollectApplys.getLeagueProject());
+			 facCollectApply.setApplicationTime(facCollectApplys.getApplicationTime());
+			 FacCollectApply fac=facCollectApply;
+			 fac.setStatus("1");
+			 facCollectApplyService.insertFacCollectApply(fac);  
 		 }  
 		return toAjax(
 				facCollectApplyService.updateFacCollectApply(facCollectApply));
@@ -245,9 +250,6 @@ public class FacCollectApplyController extends BaseController {
 		facCollectApply.setApplicationTime(new Date());
 		facCollectApply.setApplicant(ShiroUtils.getUserId());
 		facCollectApply.setDeptCompany("新普互联（北京）科技有限公司");
-		facCollectApply.setAmount(
-				facCollectInformationService.selectAmount(facCollectApply.getNum())
-		);
 		if (facCollectApply.getId() == null) {
 			// 直接添加
 			
@@ -276,9 +278,6 @@ public class FacCollectApplyController extends BaseController {
 		facCollectApply.setNum(facNumberTableService.getNum("TJ", ShiroUtils.getDateId()));
 		facCollectApply.setApplicant(ShiroUtils.getUserId());
 		facCollectApply.setApplicationTime(new Date());
-		facCollectApply.setAmount(
-				facCollectInformationService.selectAmount(facCollectApply.getNum())
-		);
 		return toAjax(facCollectApplyService.insertApply(facCollectApply));
 	}
 
@@ -321,12 +320,7 @@ public class FacCollectApplyController extends BaseController {
 	
 	@GetMapping("/detail/{id}")
 	public String Detail(@PathVariable("id") Long id, ModelMap map) { 
-		map.put("id", id);
-		FacCollectApply facCollectApply =facCollectApplyService.selectFacCollectApplyById(id);
-		facCollectApply.setApplicantName(sysUserService.selectUserById(facCollectApply.getApplicant())
-				.getUserName());
-		map.put("num",facCollectApply.getNum());
-		map.put("facCollectApply",facCollectApply);
+		map.put("id", id); 
 		return prefix + "/detail";
 	}
 	

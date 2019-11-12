@@ -12,16 +12,14 @@
         <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
         <div>
             <h4 class="form-header h4">团建信息</h4>
+
+
             <div class="col-sm-12 select-table table-striped">
+
                 <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
             </div>
         </div>
-        <div>
-            <h4 class="form-header h4">团建报销信息</h4>
-            <div class="col-sm-12 select-table table-striped">
-                <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
-            </div>
-        </div>
+
 
         <form class="form-horizontal m" id="form-facUserApproval-edit" th:object="${facUserApproval}">
             <div class="col-sm-4  col-sm-offset-4">
@@ -56,7 +54,7 @@
         var userId = $("#userId").val();
         var dept = $("#dept").val();
         var prefixs = ctx + "system/facUserApproval";
-        var prefixes = ctx + "system/facCollectInformation";
+
         $(function () {
             var options = {
                 id: "bootstrap-table-1",
@@ -124,52 +122,6 @@
             $.table.init(options);
         });
 
-
-        $(function() {
-            var options = {
-                id: "bootstrap-table-2",
-                url: prefixes + "/query?num="+num,
-                showSearch: false,
-                showRefresh: false,
-                showToggle: false,
-                showColumns: false,
-                modalName: "团建费报销",
-                columns: [{
-                    checkbox: true
-                },
-                    {
-                        field : 'id',
-                        title : 'id',
-                        visible: false
-                    },
-                    {
-                        field : 'num',
-                        title : '项目编号',
-                        sortable: true
-                    },
-                    {
-                        field : 'name',
-                        title : '项目名称',
-                        sortable: true
-                    },
-                    {
-                        field : 'amount',
-                        title : '金额',
-                        sortable: true
-                    },
-                    {
-                        field : 'money',
-                        title : '实际金额',
-                        sortable: true
-                    },
-                    {
-                        field : 'number',
-                        title : '单据数',
-                        sortable: true
-                    } ]
-            };
-            $.table.init(options);
-        });
 
         $("#form-facCollectApply-add").validate({
             rules: {
