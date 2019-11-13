@@ -30,14 +30,11 @@
         </div>
 
         <div class="btn-group-sm" id="toolbar" role="group">
-<!--            <a class="btn btn-success" onclick="$.operate.addTab()">-->
-             <a class="btn btn-success" onclick="add()">
+            <!--            <a class="btn btn-success" onclick="$.operate.addTab()">-->
+            <a class="btn btn-success" onclick="add()">
                 <i class="fa fa-plus"></i> 添加
             </a>
 
-            <a class="btn btn-warning" onclick="$.table.exportExcel()">
-                <i class="fa fa-download"></i> 导出
-            </a>
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -113,7 +110,7 @@
                     field: 'approver',
                     title: '当前审批人',
                     sortable: true
-                },{
+                }, {
                     field: 'approvalStatus',
                     title: '当前审批状态',
                     sortable: true,
@@ -122,7 +119,7 @@
                             return "审批成功";
                         } else if (value == 2) {
                             return "驳回";
-                        }   else {
+                        } else {
                             return "待审批";
                         }
                     }
@@ -153,8 +150,8 @@
 
                         if (row.approvalStatus == 1) {
                             //审批成功
-                            actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>查看</a>');
-                            if(row.status==4) {
+                            actions.push('<a class="btn btn-primary btn-xs" href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-detail"></i>打印</a>');
+                            if (row.status == 4) {
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="baoxiao(\'' + row.id + '\')"> </i>报销</a> ');
                             }
                         } else if (row.status == 2) {
@@ -163,9 +160,9 @@
                             //审批中
 
                         } else if (row.status == 5) {
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
+                            // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
                             //待审批
-                            actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 
                         } else {
@@ -178,22 +175,152 @@
         $.table.init(options);
     });
 
-    function f(id) {
-        $.modal.openTab("查看" + $.table._option.modalName, prefix + "/detail?id=" + id);
+    function print(num) {
+        var width;
+        var height;
+        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+            width = 'auto';
+            height = 'auto';
+        }
+        var index = layer.open({
+            type: 2,
+            area: [width, height],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "打印预览",
+            content: "/system/print/preview?type=chuchai&num="+num,
+            // content: "/system/print/view?type=jiekuan&num="+id,
+            btn: ['打印', '关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function () {
+                var html1 = "";
+                var html2 = "";
+                var config = {
+                    url: "/system/print/preview?type=chuchai&num="+num,
+                    type: "get",
+                    dataType: "html",
+                    async: false,
+                    data: "",
+                    success: function(result) {
+                        html1 = html1+result;
+                    }
+                };
+                $.ajax(config)
+
+                printWindow=window.open('','_blank');
+                printWindow.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <title></title><style>@page{margin-bottom:0mm;margin-top:2mm}</style></head><body>');
+
+                //这里是向新建的窗口写入HTML的head信息，可引入自己的js和css，以供打印时样式与网页中显示的一致
+
+                printWindow.document.write('<div style="page-break-after:always; width:100%; height:100%;">'+html1+'</div>');
+
+                //这里向新建的窗体中写入BODY的内容，注意，外边加的额外DIV是有必要的，它里面CSS可以控制打印时不会出现空白页
+
+                printWindow.document.write("</body></html>");//这里向新建的窗体写入HTML的结束标记
+
+
+                printWindow.document.close();//关闭新建窗口的文档输出流，否则下面的打印语句无效
+
+                printWindow.print();//打印当前新建窗口中的内容
+
+                printWindow.close();//关闭新建的窗口
+            },
+            cancel: function(index) {
+                return true;
+            }
+        });
+        layer.full(index);
     }
 
-    function onDblClickRow(row, $element){
-        var url = $.table._option.facCostApplyDetailUrl.replace("{id}",row.id);
+    // function f(id) {
+    //     $.modal.openTab("查看" + $.table._option.modalName, prefix + "/detail?id=" + id);
+    // }
+
+    function onDblClickRow(row, $element) {
+        var url = $.table._option.facCostApplyDetailUrl.replace("{id}", row.id);
         $.modal.open("详情", url);
 
     }
+
     function submitHandler(id) {
         $.modal.open("保存", "/system/facCostApply/addSave?id=" + id);
     }
 
-    function  baoxiao(id){
+    function baoxiao(id) {
         //  $.modal.open("报销添加", "/system/facCostApply/baoxiao?id=" + id);
-         $.modal.open("报销添加", "/system/facCostApply/baoxiaoEdit?id=" + id);
+        // $.modal.open("报销添加", "/system/facCostReimburse/baoxiaoEdit?id=" + id);
+        var index = layer.open({
+            type: 2,
+            area: ["auto","auto"],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "报销添加",
+            content: "/system/facCostReimburse/baoxiaoEdit?id=" + id,
+            btn: ['确定', '关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function(index, layero) {
+                var iframeWin = layero.find('iframe')[0];
+                iframeWin.contentWindow.submitHandler(index, layero);
+                $.table.refresh();
+            },
+            cancel: function(index) {
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+
+    function mEdit(id) {
+
+        var width;
+        var height;
+        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+            width = 'auto';
+            height = 'auto';
+        }
+        var index = layer.open({
+            type: 2,
+            area: [width, height],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "提交预览",
+            content: prefix + "/edit/" + id,
+            btn: ['提交', '保存', '关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function (index, layero) {
+
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.submitHandler();
+                if(res){
+                    layer.close(index);
+                }
+
+            },
+            btn2: function (index, layero) {
+
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.sub();
+                if(res){
+                    layer.close(index);
+                }
+                return false;
+
+            },
+            cancel: function (index) {
+                return true;
+            }
+        });
+        layer.full(index);
+
     }
 
     function add() {
@@ -212,83 +339,25 @@
             shade: 0.3,
             title: "提交预览",
             content: "/system/facCostApply/add",
-            btn: ['提交','保存','关闭'],
+            btn: ['提交', '保存', '关闭'],
             // 弹层外区域关闭
             shadeClose: true,
-            yes: function (index,layero) {
-                var config = {
-
-                    type: "post",
-                    dataType: "json",
-                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
-                    async: false,
-                    data:'',
-                    success: function() {
-                        var body = layer.getChildFrame('body', index);
-                        var iframeWin = window[layero.find('iframe')[0]['name']];
-                         iframeWin.submitHandler();
-                        layer.close(index);
-                    }
-                };
-                var result = window.frames[0].document.getElementById("busName").value;
-                var result2 = window.frames[0].document.getElementById("outTime").value;
-                var result3 = window.frames[0].document.getElementById("backTimeEs").value;
-                var result4 = window.frames[0].document.getElementById("outMan").value;
-
-                if (result == '') {
-                    layer.msg("请填写项目名称")
-                } else if (result2 == '') {
-                    layer.msg("请填写出差时间")
-                } else if (result3 == '') {
-                    layer.msg("请填写预计返回时间")
-                } else if (result4 == '') {
-                    layer.msg("请填写出差人员")
-                }  else {
-                    $.ajax(config);
-                    window.location.reload();
-                }
-
+            yes: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.submitHandler();
+                return res;
             },
-            btn2: function (index,layero) {
-                var config = {
-                    type: "post",
-                    dataType: "json",
-                    contentType : "application/x-www-form-urlencoded;charset=UTF-8",
-                    async: false,
-                    data:'',
-                    success: function() {
-                        var body = layer.getChildFrame('body', index);
-                        var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.sub();
-                        layer.close(index);
-                    }
-                };
-                var result = window.frames[0].document.getElementById("busName").value;
-                var result2 = window.frames[0].document.getElementById("outTime").value;
-                var result3 = window.frames[0].document.getElementById("backTimeEs").value;
-                var result4 = window.frames[0].document.getElementById("outMan").value;
-
-                if (result == '') {
-                    layer.msg("请填写项目名称")
-                } else if (result2 == '') {
-                    layer.msg("请填写出差时间")
-                } else if (result3 == '') {
-                    layer.msg("请填写预计返回时间")
-                } else if (result4 == '') {
-                    layer.msg("请填写出差人员")
-                }  else {
-                    $.ajax(config);
-                    window.location.reload();
-                }
-                return false;
+            btn2: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.sub();
+                return res;
             },
-            cancel: function(index) {
+            cancel: function (index) {
                 return true;
             }
         });
         layer.full(index);
     }
-
 
 
     function getNowFormatDate() {

@@ -6,11 +6,11 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
 	<form class="form-horizontal m" id="form-facCostApply-edit" th:object="${facCostApply}">
-		<input id="id" name="id" th:field="*{id}"  type="hidden">
+<!--		<input id="id" name="id" th:field="*{id}"  type="hidden">-->
 		<div class="form-group">
 			<label class="col-sm-3 control-label">出差编号：</label>
 			<div class="col-sm-8">
-				<input id="num" name="num" th:field="*{num}" class="form-control" type="text">
+				<input id="num" name="num" th:field="*{num}" class="form-control" type="text" readonly>
 			</div>
 		</div>
 		<div class="form-group">
@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-3 control-label">预计费用：</label>
+			<label class="col-sm-3 control-label">实际费用：</label>
 			<div class="col-sm-8">
 				<input id="moneyEs" name="moneyEs" th:field="*{moneyEs}" class="form-control" type="text" readonly>
 			</div>
@@ -73,7 +73,12 @@
 <th:block th:include="include :: bootstrap-suggest-js" />
 <th:block th:include="include :: bootstrap-select-js" />
 <script type="text/javascript">
-	var prefix = ctx + "system/facCostApply";
+	var prefix = ctx + "system/facCostReimburse";
+	var prefix1 = ctx + "system/facCostDetailReimburse";
+	var prefix2 = ctx + "system/facCostPutupReimburse";
+
+	var facCostReimburseId = [[${facCostApply.id}]];
+
 	var num = $("#num").val();
 	$("#form-facCostApply-edit").validate({
 		rules:{
@@ -85,18 +90,32 @@
 	});
 
 
+	function mAdd() {
+		$.table._option.id = "bootstrap-table-1";
+		$.table._option.url = prefix + "/querys/" + num;
+		$.modal.open("行程详细信息", "/system/facCostApply/tranDetail?num=" + num,undefined,undefined,function(index, layero) {
+			var iframeWin = layero.find('iframe')[0];
+			iframeWin.contentWindow.baoxiaoSubmitHandler(index, layero);
+		});
+	}
+	function zAdd() {
+		$.table._option.id = "bootstrap-table-2";
+		$.table._option.url = prefix + "/sleep/" + num;
+		$.modal.open("住宿详细信息", "/system/facCostApply/putAdd?num=" + num,undefined,undefined,function(index, layero) {
+			var iframeWin = layero.find('iframe')[0];
+			iframeWin.contentWindow.baoxiaoSubmitHandler(index, layero);
+		});
+	}
+
 	var options1 = {
 		id: "bootstrap-table-1",
-		url: prefix + "/querys/" + num,
+		url: prefix1 + "/list",
 		showSearch: false,
 		showRefresh: false,
 		showToggle: false,
 		showColumns: false,
 		modalName: "行程安排",
 		columns: [
-			{
-				checkbox: true
-			},
 			{
 				field: 'id',
 				title: 'id',
@@ -133,7 +152,7 @@
 			},
 			{
 				field: 'amount',
-				title: '预计金额',
+				title: '实际金额',
 				sortable: true
 			},
 			{
@@ -155,18 +174,16 @@
 
 		]
 	};
+
 	var options2 = {
 		id: "bootstrap-table-2",
-		url: prefix + "/sleep/" + num,
+		url: prefix2 + "/list?num" + num,
 		showSearch: false,
 		showRefresh: false,
 		showToggle: false,
 		showColumns: false,
 		modalName: "住宿安排",
 		columns: [
-			{
-				checkbox: true
-			},
 			{
 				field: 'id',
 				title: 'id',
@@ -212,7 +229,7 @@
 			},
 			{
 				field: 'money',
-				title: '住宿金额',
+				title: '实际住宿金额',
 				sortable: true
 			},
 			{
@@ -236,22 +253,55 @@
 			$.table._option.id = "bootstrap-table-1";
 			$.table._option.url = prefix + "/addTraDetail";
 			$.table._option.modalName = "行程安排";
-			$.table._option.updateUrl = prefix + "/editTra/{id}";
+			$.table._option.updateUrl = prefix1 + "/edit/"+id;
 		}else if(index==2){
 			$.table._option.id = "bootstrap-table-2";
 			$.table._option.modalName = "住宿安排";
-			$.table._option.updateUrl = prefix + "/editPut/{id}";
+			$.table._option.updateUrl = prefix2 + "/edit/"+id;
 		}
-		$.operate.edit(id);
+		var width;
+		var height;
+		if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+			width = 'auto';
+			height = 'auto';
+		}
+		var index = layer.open({
+			type: 2,
+			area: [width, height],
+			fix: false,
+			//不固定
+			maxmin: true,
+			shade: 0.3,
+			title: "提交预览",
+			content: $.table._option.updateUrl,
+			btn: ['确定', '关闭'],
+			// 弹层外区域关闭
+			shadeClose: true,
+			yes: function (index, layero) {
+
+				var iframeWin = window[layero.find('iframe')[0]['name']];
+				var res = iframeWin.baoxiaoSubmit();
+				if(res){
+					layer.close(index);
+				}
+
+			},
+			cancel: function (index) {
+				return true;
+			}
+		});
+		layer.full(index);
 	}
 
 	function mRemove(index,id){
 		if(index==1){
+			$.table._option.id = "bootstrap-table-1";
 			$.table._option.modalName = "行程安排";
-			$.table._option.removeUrl = prefix + "/removeTra";
+			$.table._option.removeUrl = prefix1 + "/remove";
 		}else if(index==2){
+			$.table._option.id = "bootstrap-table-2";
 			$.table._option.modalName = "住宿安排";
-			$.table._option.removeUrl = prefix + "/removePut";
+			$.table._option.removeUrl = prefix2 + "/remove";
 		}
 		$.operate.remove(id);
 	}
@@ -264,7 +314,39 @@
 
 	function submitHandler() {
 		if ($.validate.form()) {
-			$.operate.save(prefix + "/addEdit", $('#form-facCostApply-edit').serialize());
+			var config = {
+				url: prefix + "/edit?id="+facCostReimburseId,
+				type: "post",
+				dataType: "json",
+				async: false,
+				data: $('#form-facCostApply-edit').serialize(),
+				beforeSend: function () {
+					$.modal.loading("正在处理中，请稍后...");
+					$.modal.disable();
+				},
+				success: function(result) {
+					if(result.code == 0){
+
+						var config1 = {
+							url: "/system/facReimburseApply/applyReimburse",
+							type: "post",
+							dataType: "json",
+							async: false,
+							data: {"num":num,"type":"chailv"},
+							beforeSend: function () {
+								$.modal.loading("正在处理中，请稍后...");
+								$.modal.disable();
+							},
+							success: function(result) {
+							}
+						};
+						$.ajax(config1);
+					}
+
+					$.operate.successCallback(result);
+				}
+			};
+			$.ajax(config);
 		}
 	}
 </script>

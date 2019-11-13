@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.finance.FacCostDetailReimburseMapper">
+    
+    <resultMap type="FacCostDetailReimburse" id="FacCostDetailReimburseResult">
+        <result property="id"    column="id"    />
+        <result property="num"    column="num"    />
+        <result property="costDate"    column="costDate"    />
+        <result property="vehicle"    column="vehicle"    />
+        <result property="departure"    column="departure"    />
+        <result property="target"    column="target"    />
+        <result property="amount"    column="amount"    />
+        <result property="reason"    column="reason"    />
+    </resultMap>
+	
+	<sql id="selectFacCostDetailReimburseVo">
+        select id, num, costDate, vehicle, departure, target, amount, reason from fac_cost_detail_reimburse
+    </sql>
+	
+    <select id="selectFacCostDetailReimburseList" parameterType="FacCostDetailReimburse" resultMap="FacCostDetailReimburseResult">
+        <include refid="selectFacCostDetailReimburseVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="num != null  and num != '' "> and num = #{num}</if>
+             <if test="costDate != null "> and costDate = #{costDate}</if>
+             <if test="vehicle != null  and vehicle != '' "> and vehicle = #{vehicle}</if>
+             <if test="departure != null  and departure != '' "> and departure = #{departure}</if>
+             <if test="target != null  and target != '' "> and target = #{target}</if>
+             <if test="amount != null "> and amount = #{amount}</if>
+             <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
+         </where>
+    </select>
+    
+    <select id="selectFacCostDetailReimburseById" parameterType="Long" resultMap="FacCostDetailReimburseResult">
+        <include refid="selectFacCostDetailReimburseVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectAmountByNum" parameterType="String" resultType="Double">
+        select ifnull(sum(amount),0) from fac_cost_detail_reimburse where num = #{param1}
+    </select>
+
+    <insert id="insertFacCostDetailReimburse" parameterType="FacCostDetailReimburse" useGeneratedKeys="true" keyProperty="id">
+        insert into fac_cost_detail_reimburse
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">num,</if>
+			<if test="costDate != null  ">costDate,</if>
+			<if test="vehicle != null  and vehicle != ''  ">vehicle,</if>
+			<if test="departure != null  and departure != ''  ">departure,</if>
+			<if test="target != null  and target != ''  ">target,</if>
+			<if test="amount != null  ">amount,</if>
+			<if test="reason != null  and reason != ''  ">reason,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">#{num},</if>
+			<if test="costDate != null  ">#{costDate},</if>
+			<if test="vehicle != null  and vehicle != ''  ">#{vehicle},</if>
+			<if test="departure != null  and departure != ''  ">#{departure},</if>
+			<if test="target != null  and target != ''  ">#{target},</if>
+			<if test="amount != null  ">#{amount},</if>
+			<if test="reason != null  and reason != ''  ">#{reason},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateFacCostDetailReimburse" parameterType="FacCostDetailReimburse">
+        update fac_cost_detail_reimburse
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null  and num != ''  ">num = #{num},</if>
+            <if test="costDate != null  ">costDate = #{costDate},</if>
+            <if test="vehicle != null  and vehicle != ''  ">vehicle = #{vehicle},</if>
+            <if test="departure != null  and departure != ''  ">departure = #{departure},</if>
+            <if test="target != null  and target != ''  ">target = #{target},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="reason != null  and reason != ''  ">reason = #{reason},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteFacCostDetailReimburseById" parameterType="Long">
+        delete from fac_cost_detail_reimburse where id = #{id}
+    </delete>
+	
+    <delete id="deleteFacCostDetailReimburseByIds" parameterType="String">
+        delete from fac_cost_detail_reimburse where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -53,5 +53,11 @@ public interface IFacCostPutupApplyService
      * @return 结果
      */
 	public int deleteFacCostPutupApplyByIds(String ids);
-	
+
+	/**
+	 * 根据单号查询金额合计
+	 * @param num
+	 * @return
+	 */
+    public double selectMoney(String num);
 }

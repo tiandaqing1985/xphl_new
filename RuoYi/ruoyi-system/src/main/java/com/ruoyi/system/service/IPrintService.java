@@ -9,7 +9,7 @@ public interface IPrintService {
 
     String previewchucai(String num);
     
-    String previewchucaiBX(String num);
+    String previewchucaiBX(String num,String applyNum);
 
     String previewduigong(String num);
 

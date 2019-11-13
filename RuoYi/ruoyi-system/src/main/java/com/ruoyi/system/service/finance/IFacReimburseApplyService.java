@@ -75,8 +75,7 @@ public interface IFacReimburseApplyService {
 	 *            报销信息
 	 * @return 结果
 	 */
-	public AjaxResult insertFacReimburseApply(
-			FacReimburseApply facReimburseApply);
+	public AjaxResult insertFacReimburseApply(FacReimburseApply facReimburseApply);
 	/**
 	 * 新增报销
 	 *
@@ -153,4 +152,7 @@ public interface IFacReimburseApplyService {
 
 	//查询招待申请审批后生成的招待费报销
 	public List<ReiHospitalityApply> selectHospitalityApplyListByUser(Long userId);
+
+	//查询当月的
+	List<FacReimburseApply> selectCurrentMonthFacReimburseApplyList(FacReimburseApply facReimburseApply);
 }

@@ -59,28 +59,31 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" id="div1">
                     <div class="col-sm-12 select-table table-striped">
                         <a class="btn btn-success" onclick="mAdd(1)" th:style="${edit=='false'}?'display: none':''">
                             <i class="fa fa-plus"></i> 交通费报销信息
                         </a>
+                        <h4 class="form-header h4">交通费报销</h4>
                         <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
                     </div>
                 </div>
 
-                <div class="row">
+                <div class="row" id="div2">
                     <div class="col-sm-12 select-table table-striped">
                         <a class="btn btn-success" id="zdf" onclick="mAdd(2)" th:style="${edit=='false'}?'display: none':''">
                             <i class="fa fa-plus"></i> 招待费报销信息
                         </a>
+                        <h4 class="form-header h4">招待费报销</h4>
                         <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
                     </div>
                 </div>
-                <div class="row">
+                <div class="row" id="div3">
                     <div class="col-sm-12 select-table table-striped">
                         <a class="btn btn-success" onclick="mAdd(3)" th:style="${edit=='false'}?'display: none':''">
                             <i class="fa fa-plus"></i> 其他费用报销信息
                         </a>
+                        <h4 class="form-header h4">其他费用报销</h4>
                         <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
                     </div>
                 </div>
@@ -101,6 +104,7 @@
     var msg = $("#msg").val();
     var userId = $("#userId").val();
     var dept = $("#dept").val();
+    var limitAmount = [[${limitAmount}]];
 
     function zAdd() {
         $.modal.openFull("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
@@ -155,6 +159,7 @@
         }
         $.operate.remove(id);
     }
+
     $(function () {
         if (dept == 10) {
             // $("#zdf").attr("style", "display:block;");//显示div
@@ -169,11 +174,14 @@
             showToggle: false,
             showColumns: false,
             pagination: false,
+            responseHandler: function(data){
+                if(data.total==0){
+                    $("#div1").attr("style", "display:none;");//隐藏
+                }
+                $.table.init(options2);
+            },
             modalName: "报销申请添加",
             columns: [
-                {
-                    checkbox: true
-                },
                 {
                     field: 'id',
                     title: 'ID',
@@ -266,6 +274,12 @@
             showToggle: false,
             showColumns: false,
             pagination: false,
+            responseHandler: function(data){
+                if(data.total==0){
+                    $("#div2").attr("style", "display:none;");//隐藏
+                }
+                $.table.init(options3);
+            },
             modalName: "招待费报销申请",
             columns: [
 
@@ -327,11 +341,10 @@
                     title: '是否超额 ',
                     visible: false,
                     formatter: function (value, row, index) {
-                        if(value==1){
-                            layer.msg("已超出额度");
-                            return  "超额";
-                        }else {
-                            return  "未超额";
+                        if(value == 1){
+                            return "超额";
+                        }else{
+                            return "未超额";
                         }
                     }
                 },
@@ -351,7 +364,7 @@
                     }
                 }]
         };
-        $.table.init(options2);
+        // $.table.init(options2);
 
         var options3 = {
             id: "bootstrap-table-3",
@@ -361,6 +374,11 @@
             showToggle: false,
             showColumns: false,
             pagination: false,
+            responseHandler: function(data){
+                if(data.total==0){
+                    $("#div3").attr("style", "display:none;");//隐藏
+                }
+            },
             modelName: "其他费用申请",
             columns: [
 
@@ -430,7 +448,7 @@
                 }
             ]
         };
-        $.table.init(options3);
+        // $.table.init(options3);
 
     });
 

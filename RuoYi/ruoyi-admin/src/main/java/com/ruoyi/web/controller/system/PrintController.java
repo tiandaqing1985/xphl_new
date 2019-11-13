@@ -74,7 +74,7 @@ public class PrintController {
 					return printService
 							.previewTuanjianBX(facReimburseApply.getJKnum());
 				} else if (nums.equals("CL")) {
-					return printService.previewchucaiBX(facReimburseApply.getJKnum());
+					return printService.previewchucaiBX(facReimburseApply.getJKnum(),facReimburseApply.getNum());
 				}
 				else if (nums.equals("ZD")) {
 					return printService.previewZhaodaifeiBX(facReimburseApply.getJKnum());

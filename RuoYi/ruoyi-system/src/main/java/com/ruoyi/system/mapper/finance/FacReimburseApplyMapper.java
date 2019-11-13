@@ -148,4 +148,6 @@ public interface FacReimburseApplyMapper
 	public double selectHospitailAmount(long user);
 
 	List<ReiHospitalityApply> selectHospitalityApplyListByUser(Long userId);
+
+	List<FacReimburseApply> selectCurrentMonthFacReimburseApplyList(FacReimburseApply facReimburseApply);
 }

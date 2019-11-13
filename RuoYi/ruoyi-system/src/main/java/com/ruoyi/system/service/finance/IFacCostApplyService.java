@@ -130,5 +130,7 @@ public interface IFacCostApplyService {
 	 */
 	List<FacCostDetailApply> deatils(String num);
 
-	
+
+	//查询金额合计
+    public double selectAmount(String num);
 }

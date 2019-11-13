@@ -54,7 +54,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="type != null and type != ''">and a.type = #{type}</if>
         order by a.create_time desc
     </select>
-    
+
+    <select id="selectCurrentMonthFacReimburseApplyList" parameterType="FacReimburseApply" resultMap="FacReimburseApplyResult">
+        SELECT
+        c.`dept_name`,
+        b.user_name,
+        a.id,a.num,a.name,a.amount,a.loan_user,a.create_time,a.reimburse_time,a.fac_operate,a.reason,a.apply_status,a.update_time,a.pass_time,a.type,a.approve_status,a.submit_status,a.create_by,a.status,a.JKnum
+        FROM
+        fac_reimburse_apply AS a
+        LEFT JOIN sys_user AS b
+        ON a.loan_user = b.user_id
+        LEFT JOIN sys_dept AS c
+        ON c.dept_id = b.dept_id
+        where 1=1
+        <if test="name!=null and name != ''">
+            and a.name = #{name}
+        </if>
+        <if test="id!=null">and a.id = #{id}</if>
+        <if test="num!=null and num!=''"> and a.num=#{num}</if>
+        <if test="createBy!=null and createBy!=''">and a.create_by=#{createBy}</if>
+        <if test="loanUser!=null and loanUser!=''">and a.loan_user=#{loanUser}</if>
+        <if test="reimburseTime != null">and a.reimburse_time = #{reimburseTime}</if>
+        <if test="type != null and type != ''">and a.type = #{type}</if>
+        and DATE_FORMAT(reimburse_time, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
+        order by a.create_time desc
+    </select>
+
     <select id="selectReiHospitalityApplyList" parameterType="com.ruoyi.system.domain.finance.ReiHospitalityApply" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
         select * from  fac_rei_hospitality_apply
         <where>  

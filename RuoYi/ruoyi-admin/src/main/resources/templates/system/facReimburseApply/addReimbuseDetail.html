@@ -101,6 +101,7 @@
     var msg = $("#msg").val();
     var userId = $("#userId").val();
     var dept = $("#dept").val();
+    var limitAmount = [[${limitAmount}]];
 
     function zAdd() {
         $.modal.openFull("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
@@ -171,9 +172,6 @@
             pagination: false,
             modalName: "报销申请添加",
             columns: [
-                {
-                    checkbox: true
-                },
                 {
                     field: 'id',
                     title: 'ID',
@@ -322,16 +320,16 @@
                     field: 'userName',
                     title: '申请人',
                     sortable: false
-                },{
+                },
+                {
                     field: 'excess',
                     title: '是否超额 ',
                     visible: false,
                     formatter: function (value, row, index) {
-                        if(value==1){
-                            layer.msg("已超出额度");
-                            return  "超额";
-                        }else {
-                            return  "未超额";
+                        if(value == 1){
+                            return "超额";
+                        }else{
+                            return "未超额";
                         }
                     }
                 },
@@ -352,7 +350,6 @@
                 }]
         };
         $.table.init(options2);
-
         var options3 = {
             id: "bootstrap-table-3",
             url: prefix + "/otherDetail",

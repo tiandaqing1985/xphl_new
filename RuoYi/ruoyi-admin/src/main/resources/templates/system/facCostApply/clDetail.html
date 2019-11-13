@@ -5,15 +5,17 @@
     <th:block th:include="include :: layout-latest-css"/>
     <th:block th:include="include :: ztree-css"/>
     <style>
-        .table-striped table thead{
-            background-color:#fff;
+        .table-striped table thead {
+            background-color: #fff;
         }
-        .select-table{
-            box-shadow:none;
-            padding:0;
-            margin-bottom:25px;
+
+        .select-table {
+            box-shadow: none;
+            padding: 0;
+            margin-bottom: 25px;
         }
-        .fixed-table-container thead th .th-inner{
+
+        .fixed-table-container thead th .th-inner {
             font-size: 13px;
             color: #676a6c;
             font-weight: bold;
@@ -28,19 +30,18 @@
 
 
         <div>
-            <h4 class="form-header h4">差旅详细信息</h4>
-
-            <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
-            <div class="col-sm-12 select-table table-striped">
-
-                <h4 class="form-header h4">行程安排详细信息</h4>
+            <div>
+                <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+            </div>
+            <div>
+                <h4 class="form-header h4"></h4>
                 <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
             </div>
-            <div></div>
             <div>
-                <h4 class="form-header h4">住宿安排详细信息</h4>
+                <h4 class="form-header h4"></h4>
                 <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
             </div>
+
         </div>
         <div th:include="include :: footer"></div>
         <script th:inline="javascript">
@@ -57,53 +58,57 @@
                     showRefresh: false,
                     showToggle: false,
                     showColumns: false,
+                    pagination: false,
                     modalName: "差旅详细信息",
                     columns: [
+                            [{
+                                title : '差旅详细信息',
+                                align : 'center',
+                                colspan : 8
+                            }],
+                        [
                         {
-                            checkbox: true
-                        },
-                        {
-                            field : 'id',
-                            title : 'ID',
+                            field: 'id',
+                            title: 'ID',
                             visible: false
                         },
                         {
-                            field : 'num',
-                            title : '出差编号'
+                            field: 'num',
+                            title: '出差编号'
                         },
                         {
-                            field : 'busName',
-                            title : '项目名称'
+                            field: 'busName',
+                            title: '项目名称'
                         },
                         {
-                            field : 'outTime',
-                            title : '出差时间',
+                            field: 'outTime',
+                            title: '出差时间',
                             formatter: function (value, row, index) {
-                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                                return  newDate;
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
                             }
                         },
                         {
-                            field : 'backTimeEs',
-                            title : '预计返回时间',
+                            field: 'backTimeEs',
+                            title: '预计返回时间',
                             formatter: function (value, row, index) {
-                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                                return  newDate;
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
                             }
                         },
                         {
-                            field : 'outMan',
-                            title : '出差人员'
+                            field: 'outMan',
+                            title: '出差人员'
                         },
                         {
-                            field : 'moneyEs',
-                            title : '预计费用'
-                        } ,
+                            field: 'moneyEs',
+                            title: '预计费用'
+                        },
                         {
                             field: 'reason',
                             title: '事由'
                         }
-                    ]
+                    ]]
                 };
                 $.table.init(options);
             });
@@ -117,11 +122,16 @@
                     showRefresh: false,
                     showToggle: false,
                     showColumns: false,
+                    pagination: false,
                     modalName: "住宿安排详细信息",
-                    columns: [
-                        {
-                            checkbox: true
-                        },
+                    columns:
+                        [
+                            [{
+                                title : '住宿安排详细信息',
+                                align : 'center',
+                                colspan : 8
+                            }],
+                        [
                         {
                             field: 'num',
                             title: '差旅编号',
@@ -137,8 +147,8 @@
                             title: '入店时间',
                             sortable: true,
                             formatter: function (value, row, index) {
-                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                                return  newDate;
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
                             }
                         },
                         {
@@ -146,8 +156,8 @@
                             title: '离店时间',
                             sortable: true,
                             formatter: function (value, row, index) {
-                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                                return  newDate;
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
                             }
                         },
                         {
@@ -165,7 +175,7 @@
                             title: '住宿金额',
                             sortable: true
                         }
-                    ]
+                    ]]
                 };
                 $.table.init(options);
             });
@@ -179,11 +189,15 @@
                     showRefresh: false,
                     showToggle: false,
                     showColumns: false,
+                    pagination: false,
                     modalName: "行程安排详细信息",
                     columns: [
-                        {
-                            checkbox: true
-                        },
+                            [{
+                                title : '行程安排详细信息',
+                                align : 'center',
+                                colspan : 7
+                            }],
+                        [
                         {
                             field: 'num',
                             title: '差旅编号'
@@ -192,8 +206,8 @@
                             field: 'costDate',
                             title: '时间',
                             formatter: function (value, row, index) {
-                                var   newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                                return  newDate;
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
                             }
                         },
                         {
@@ -216,7 +230,7 @@
                             field: 'reason',
                             title: '事由'
                         }
-                    ]
+                    ]]
                 };
                 $.table.init(options);
             });

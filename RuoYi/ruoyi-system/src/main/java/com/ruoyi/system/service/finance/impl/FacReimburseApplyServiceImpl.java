@@ -102,15 +102,15 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
             List<FacUserApproval> facUserApprovals = facUserApprovalService.selectFacUserApprovalList(selectVo);
             FacUserApproval last = null;
             for (FacUserApproval facUserApproval : facUserApprovals) {
-                if(last==null){
+                if (last == null) {
                     last = facUserApproval;
-                }else{
-                    if(facUserApproval.getApprovalLevel()>last.getApprovalLevel()){
+                } else {
+                    if (facUserApproval.getApprovalLevel() > last.getApprovalLevel()) {
                         last = facUserApproval;
                     }
                 }
             }
-            if(last!=null){
+            if (last != null) {
                 reimburseApply.setStatus(last.getApprovalState());
             }
         }
@@ -143,14 +143,17 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
             center.setApprovalState("3");
             center.setApprovalTime(new Date());
 
-            facReimburseApply.setType("日常报销");
+//            facReimburseApply.setType("日常报销");
             facReimburseApply.setApplyStatus("1");
-
-            double a = facReiAdiApplyMapper.selectAmount(facReimburseApply.getNum());
-            double b = facReimburseApplyMapper.selectHospAmount(facReimburseApply.getNum());
-            double c = facReimburseApplyMapper.selectTraAmount(facReimburseApply.getNum());
-            facReimburseApply.setAmount(a + b + c);
-            center.setAmount(a + b + c);
+            if(facReimburseApply.getType().equals("日常报销")){
+                double a = facReiAdiApplyMapper.selectAmount(facReimburseApply.getNum());
+                double b = facReimburseApplyMapper.selectHospAmount(facReimburseApply.getNum());
+                double c = facReimburseApplyMapper.selectTraAmount(facReimburseApply.getNum());
+                facReimburseApply.setAmount(a + b + c);
+                center.setAmount(a + b + c);
+            }else{
+                center.setAmount(facReimburseApply.getAmount());
+            }
             facReimburseApply.setReimburseTime(new Date());
             double num = center.getAmount();
             Long leaderId = iSysUserService.selectApproverIdByApplyerId(facReimburseApply.getLoanUser());
@@ -183,8 +186,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                 facSysUserApproval.setApprovalState("3");
                 approvalProcessService.insert(facSysUserApproval);
                 // 为加班申请增加人事审批
-                if (facReimburseApply.getTrafficReiApplyList() != null
-                        && facReimburseApply.getTrafficReiApplyList().size() > 0
+                if (facReimburseApply.getTrafficReiApplyList() != null && facReimburseApply.getTrafficReiApplyList().size() > 0
                         && facReimburseApply.getTrafficReiApplyList().get(0)
                         .getType().equals("2")) {
 
@@ -200,8 +202,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     facSysUserApproval2.setApprovalTime(new Date());
                     facSysUserApproval2.setApprovalLevel(level++);
                     facSysUserApproval2.setApplyId(facReimburseApply.getNum());
-                    facSysUserApproval2
-                            .setProjectName(facReimburseApply.getName());
+                    facSysUserApproval2.setProjectName(facReimburseApply.getName());
                     facSysUserApproval2.setApprovalState("3");
                     approvalProcessService.insert(facSysUserApproval2);
                 } else {
@@ -278,8 +279,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                         if (reiTrafficApply.getType()
                                                 .equals("加班")) {
                                             if (area.equals("1")) {
-                                                center.setApproverId(
-                                                        new Long("253"));// 审批id为人事
+                                                center.setApproverId(new Long("253"));// 审批id为人事
                                             } else {
                                                 center.setApproverId(
                                                         new Long("257"));// 审批id为人事
@@ -609,9 +609,40 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
     //查询招待申请审批后生成的招待费报销
     @Override
-    public List<ReiHospitalityApply> selectHospitalityApplyListByUser(Long userId){
+    public List<ReiHospitalityApply> selectHospitalityApplyListByUser(Long userId) {
 
         return facReimburseApplyMapper.selectHospitalityApplyListByUser(userId);
+
+    }
+
+    /**
+     * 查询报销列表
+     *
+     * @param facReimburseApply 报销信息
+     * @return 报销集合
+     */
+    @Override
+    public List<FacReimburseApply> selectCurrentMonthFacReimburseApplyList(FacReimburseApply facReimburseApply) {
+        List<FacReimburseApply> facReimburseApplies = facReimburseApplyMapper.selectCurrentMonthFacReimburseApplyList(facReimburseApply);
+        for (FacReimburseApply reimburseApply : facReimburseApplies) {
+            FacUserApproval selectVo = new FacUserApproval();
+            selectVo.setApplyId(reimburseApply.getNum());
+            List<FacUserApproval> facUserApprovals = facUserApprovalService.selectFacUserApprovalList(selectVo);
+            FacUserApproval last = null;
+            for (FacUserApproval facUserApproval : facUserApprovals) {
+                if (last == null) {
+                    last = facUserApproval;
+                } else {
+                    if (facUserApproval.getApprovalLevel() > last.getApprovalLevel()) {
+                        last = facUserApproval;
+                    }
+                }
+            }
+            if (last != null) {
+                reimburseApply.setStatus(last.getApprovalState());
+            }
+        }
+        return facReimburseApplies;
 
     }
 

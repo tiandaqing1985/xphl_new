@@ -6,7 +6,7 @@
 <body class="white-bg">
     <div>
         <button type="button" class="btn btn-w-m btn-primary" onclick="show(1)" th:text="${btn1}"></button>
-        <button type="button" class="btn btn-w-m btn-primary" onclick="show(2)" th:text="${btn2}"></button>
+        <button type="button" id="btn2" class="btn btn-w-m btn-primary" onclick="show(2)" th:text="${btn2}"></button>
         <div id="content">
 
         </div>
@@ -16,6 +16,10 @@
 
         $(function () {
             show(1);
+            var btn2 = [[${btn2}]];
+            if(btn2==undefined){
+                $("#btn2").attr("style","display:none")
+            }
         })
 
 

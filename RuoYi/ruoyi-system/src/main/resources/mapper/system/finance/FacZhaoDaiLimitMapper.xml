@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.finance.FacZhaoDaiLimitMapper">
+    
+    <resultMap type="FacZhaoDaiLimit" id="FacZhaoDaiLimitResult">
+        <result property="id"    column="id"    />
+        <result property="roleId"    column="role_id"    />
+        <result property="roleName"    column="role_name"    />
+        <result property="limitAmount"    column="limit_amount"    />
+    </resultMap>
+	
+	<sql id="selectFacZhaoDaiLimitVo">
+        select id, role_id, role_name, limit_amount from fac_zhao_dai_limit
+    </sql>
+	
+    <select id="selectFacZhaoDaiLimitList" parameterType="FacZhaoDaiLimit" resultMap="FacZhaoDaiLimitResult">
+        <include refid="selectFacZhaoDaiLimitVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="roleId != null "> and role_id = #{roleId}</if>
+             <if test="roleName != null  and roleName != '' "> and role_name = #{roleName}</if>
+             <if test="limitAmount != null "> and limit_amount = #{limitAmount}</if>
+         </where>
+    </select>
+    
+    <select id="selectFacZhaoDaiLimitById" parameterType="Long" resultMap="FacZhaoDaiLimitResult">
+        <include refid="selectFacZhaoDaiLimitVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectFacZhaoDaiLimitByRoleId" parameterType="Long" resultMap="FacZhaoDaiLimitResult">
+        <include refid="selectFacZhaoDaiLimitVo"/>
+        where role_id = #{param1}
+    </select>
+
+    <insert id="insertFacZhaoDaiLimit" parameterType="FacZhaoDaiLimit" useGeneratedKeys="true" keyProperty="id">
+        insert into fac_zhao_dai_limit
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="roleId != null  ">role_id,</if>
+			<if test="roleName != null  and roleName != ''  ">role_name,</if>
+			<if test="limitAmount != null  ">limit_amount,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="roleId != null  ">#{roleId},</if>
+			<if test="roleName != null  and roleName != ''  ">#{roleName},</if>
+			<if test="limitAmount != null  ">#{limitAmount},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateFacZhaoDaiLimit" parameterType="FacZhaoDaiLimit">
+        update fac_zhao_dai_limit
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="roleId != null  ">role_id = #{roleId},</if>
+            <if test="roleName != null  and roleName != ''  ">role_name = #{roleName},</if>
+            <if test="limitAmount != null  ">limit_amount = #{limitAmount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteFacZhaoDaiLimitById" parameterType="Long">
+        delete from fac_zhao_dai_limit where id = #{id}
+    </delete>
+	
+    <delete id="deleteFacZhaoDaiLimitByIds" parameterType="String">
+        delete from fac_zhao_dai_limit where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

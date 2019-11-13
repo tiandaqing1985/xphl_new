@@ -79,5 +79,12 @@ public class FacCostPutupApplyServiceImpl implements IFacCostPutupApplyService
 	{
 		return facCostPutupApplyMapper.deleteFacCostPutupApplyByIds(Convert.toStrArray(ids));
 	}
-	
+
+	/*
+		查询金额合计
+	 */
+	@Override
+	public double selectMoney(String num) {
+		return facCostPutupApplyMapper.selectMoney(num);
+	}
 }

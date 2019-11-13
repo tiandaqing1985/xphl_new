@@ -62,11 +62,16 @@
 <th:block th:include="include :: bootstrap-select-js" />
 <script type="text/javascript">
     var prefix = ctx + "system/facCostApply";
+    var prefix1 = ctx + "system/facCostDetailReimburse";
     var num = $("#num").val();
     function submitHandler() {
-        debugger
         if ($.validate.form()) {
             $.operate.save(prefix + "/tranDetail", $('#form-add').serialize());
+        }
+    }
+    function baoxiaoSubmitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix1 + "/add", $('#form-add').serialize());
         }
     }
 </script>

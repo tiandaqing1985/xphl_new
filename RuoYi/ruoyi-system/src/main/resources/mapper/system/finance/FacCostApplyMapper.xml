@@ -27,7 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="id != null "> and id = #{id}</if>
              <if test="num != null  and num != '' "> and num = #{num}</if>
-             <if test="busName != null  and busName != '' "> and bus_name = #{busName}</if>
+             <if test="busName != null  and busName != '' "> and bus_name like concat('%',#{busName},'%')</if>
              <if test="outTime != null "> and out_time = #{outTime}</if>
              <if test="backTimeEs != null "> and back_time_es = #{backTimeEs}</if>
              <if test="outMan != null  and outMan != '' "> and out_man = #{outMan}</if>
@@ -70,6 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into fac_cost_apply
 		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">id,</if>
 			<if test="num != null  and num != ''  ">num,</if>
 			<if test="busName != null  and busName != ''  ">bus_name,</if>
 			<if test="outTime != null  ">out_time,</if>
@@ -83,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="applicationTime != null ">applicationTime,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">#{id},</if>
 			<if test="num != null  and num != ''  ">#{num},</if>
 			<if test="busName != null  and busName != ''  ">#{busName},</if>
 			<if test="outTime != null  ">#{outTime},</if>

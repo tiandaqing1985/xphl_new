@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.finance.FacCostPutupReimburseMapper">
+    
+    <resultMap type="FacCostPutupReimburse" id="FacCostPutupReimburseResult">
+        <result property="id"    column="id"    />
+        <result property="num"    column="num"    />
+        <result property="city"    column="city"    />
+        <result property="entrytime"    column="entrytime"    />
+        <result property="shoptime"    column="shoptime"    />
+        <result property="number"    column="number"    />
+        <result property="details"    column="details"    />
+        <result property="money"    column="money"    />
+    </resultMap>
+	
+	<sql id="selectFacCostPutupReimburseVo">
+        select id, num, city, entrytime, shoptime, number, details, money from fac_cost_putup_reimburse
+    </sql>
+	
+    <select id="selectFacCostPutupReimburseList" parameterType="FacCostPutupReimburse" resultMap="FacCostPutupReimburseResult">
+        <include refid="selectFacCostPutupReimburseVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="num != null  and num != '' "> and num = #{num}</if>
+             <if test="city != null  and city != '' "> and city = #{city}</if>
+             <if test="entrytime != null "> and entrytime = #{entrytime}</if>
+             <if test="shoptime != null "> and shoptime = #{shoptime}</if>
+             <if test="number != null "> and number = #{number}</if>
+             <if test="details != null  and details != '' "> and details = #{details}</if>
+             <if test="money != null "> and money = #{money}</if>
+         </where>
+    </select>
+    
+    <select id="selectFacCostPutupReimburseById" parameterType="Long" resultMap="FacCostPutupReimburseResult">
+        <include refid="selectFacCostPutupReimburseVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectAmountByNum" parameterType="String" resultType="Double">
+        select ifnull(sum(money),0) from fac_cost_putup_reimburse where num = #{param1}
+    </select>
+        
+    <insert id="insertFacCostPutupReimburse" parameterType="FacCostPutupReimburse" useGeneratedKeys="true" keyProperty="id">
+        insert into fac_cost_putup_reimburse
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">num,</if>
+			<if test="city != null  and city != ''  ">city,</if>
+			<if test="entrytime != null  ">entrytime,</if>
+			<if test="shoptime != null  ">shoptime,</if>
+			<if test="number != null  ">number,</if>
+			<if test="details != null  and details != ''  ">details,</if>
+			<if test="money != null  ">money,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="num != null  and num != ''  ">#{num},</if>
+			<if test="city != null  and city != ''  ">#{city},</if>
+			<if test="entrytime != null  ">#{entrytime},</if>
+			<if test="shoptime != null  ">#{shoptime},</if>
+			<if test="number != null  ">#{number},</if>
+			<if test="details != null  and details != ''  ">#{details},</if>
+			<if test="money != null  ">#{money},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateFacCostPutupReimburse" parameterType="FacCostPutupReimburse">
+        update fac_cost_putup_reimburse
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="num != null  and num != ''  ">num = #{num},</if>
+            <if test="city != null  and city != ''  ">city = #{city},</if>
+            <if test="entrytime != null  ">entrytime = #{entrytime},</if>
+            <if test="shoptime != null  ">shoptime = #{shoptime},</if>
+            <if test="number != null  ">number = #{number},</if>
+            <if test="details != null  and details != ''  ">details = #{details},</if>
+            <if test="money != null  ">money = #{money},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteFacCostPutupReimburseById" parameterType="Long">
+        delete from fac_cost_putup_reimburse where id = #{id}
+    </delete>
+	
+    <delete id="deleteFacCostPutupReimburseByIds" parameterType="String">
+        delete from fac_cost_putup_reimburse where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

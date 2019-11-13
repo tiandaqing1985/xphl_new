@@ -183,7 +183,7 @@
                         }
                         if (row.submitStatus == "submit") {
                             if (row.status == 1) {
-                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-detail"></i>打印</a>');
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\',\''+row.type+'\')"><i class="fa fa-detail"></i>打印</a>');
                             }
                         }
                         return actions.join('');
@@ -295,7 +295,7 @@
         layer.full(index);
     }
 
-    function print(id) {
+    function print(id,type) {
         // $.modal.openTab("编辑" + $.table._option.modalName, prefix + "/detail?id=" + id);
         var width;
         var height;
@@ -355,15 +355,18 @@
 
                 printWindow.document.write("</body></html>");//这里向新建的窗体写入HTML的结束标记
 
-                printWindow.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <title></title><style>@page{margin-bottom:0mm;margin-top:2mm}</style></head><body>');
+                if(type == '日常报销'){
+                    printWindow.document.write('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> <title></title><style>@page{margin-bottom:0mm;margin-top:2mm}</style></head><body>');
 
-                //这里是向新建的窗口写入HTML的head信息，可引入自己的js和css，以供打印时样式与网页中显示的一致
+                    //这里是向新建的窗口写入HTML的head信息，可引入自己的js和css，以供打印时样式与网页中显示的一致
 
-                printWindow.document.write('<div style="page-break-after:always; width:100%; height:100%;">' + html2 + '</div>');
+                    printWindow.document.write('<div style="page-break-after:always; width:100%; height:100%;">' + html2 + '</div>');
 
-                //这里向新建的窗体中写入BODY的内容，注意，外边加的额外DIV是有必要的，它里面CSS可以控制打印时不会出现空白页
+                    //这里向新建的窗体中写入BODY的内容，注意，外边加的额外DIV是有必要的，它里面CSS可以控制打印时不会出现空白页
 
-                printWindow.document.write("</body></html>");//这里向新建的窗体写入HTML的结束标记
+                    printWindow.document.write("</body></html>");//这里向新建的窗体写入HTML的结束标记
+                }
+
 
                 printWindow.document.close();//关闭新建窗口的文档输出流，否则下面的打印语句无效
 
