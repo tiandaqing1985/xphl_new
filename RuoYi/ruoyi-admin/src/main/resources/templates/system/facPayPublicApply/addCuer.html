@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增对公申请')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-facPayPublicApply-add"  th:object="${facCommonlyApply}">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">对公编号：</label>
+            <div class="col-sm-8">
+                <input id="num" name="num" class="form-control" type="text" th:value="${num}" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>申请名称：</label>
+            <div class="col-sm-8">
+                <input id="name" name="name" class="form-control" type="text"  required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>付款单位：</label>
+            <div class="col-sm-8">
+                <select id="unit" name="unit">
+                    <option value="新普互联（北京）科技有限公司" >新普互联（北京）科技有限公司</option>
+                    <option value="普菲特（海南）科技有限公司">普菲特（海南）科技有限公司</option>
+                    <option value="新疆普菲特网络科技有限公司">新疆普菲特网络科技有限公司</option>
+                    <option value="上海优寰网络科技有限公司">上海优寰网络科技有限公司</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">是否有发票：</label>
+            <div class="col-sm-8">
+                <label><input    type="radio" name="weatherInvoice" value="有发票" checked>有发票</label>
+                <label><input    type="radio" name="weatherInvoice" value="暂无发票">暂无发票</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>付款金额：</label>
+            <div class="col-sm-8">
+                <input id="amount" name="amount" class="form-control" type="text"  required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人：</label>
+            <div class="col-sm-8">
+
+                <input id="payee" name="payee"   th:value="${facCommonlyApply.name}" class="form-control" type="text"  required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人开户行：</label>
+            <div class="col-sm-8">
+                <input id="payeeBank" name="payeeBank" class="form-control"  th:value="${facCommonlyApply.userName}" type="text"  required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人账号：</label>
+            <div class="col-sm-8">
+                <input id="payeeAccount" name="payeeAccount"  th:value="${facCommonlyApply.number}"  class="form-control" type="text"  required>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">备注：</label>
+            <div class="col-sm-8">
+                <input id="remarks" name="remarks" class="form-control" type="text" >
+            </div>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <a id="addzhusu" class="btn btn-success" onclick="zAdd()">
+                <i class="fa fa-plus"></i> 对公明细
+            </a>
+            <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<th:block th:include="include :: bootstrap-suggest-js" />
+<th:block th:include="include :: bootstrap-select-js" />
+<script type="text/javascript">
+    var prefix = ctx + "system/facPayPublicApply"
+    var num = $("#num").val();
+    $("#form-facPayPublicApply-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+
+    function zAdd() {
+        $.modal.open("对公明细", "/system/facPayPublicApply/offset?num=" + num);
+    }
+
+    $(function () {
+        var options = {
+            id: "bootstrap-table-1",
+            url: prefix + "/dgtail",
+            updateUrl: prefix + "/editPub/{id}",
+            removeUrl: prefix + "/removePub",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            modalName: "对公明细添加",
+            columns: [
+                {
+                    checkbox: true
+                },
+                {
+                    field : 'id',
+                    title : 'id',
+                    visible: false
+                },
+                {
+                    field : 'num',
+                    title : '对公编号',
+                    sortable: true
+                },
+                {
+                    field : 'name',
+                    title : '项目名称',
+                    sortable: true
+                },
+                {
+                    field : 'reson',
+                    title : '付款事由',
+                    sortable: true
+                },
+                {
+                    field : 'money',
+                    title : '付款金额',
+                    sortable: true
+                },
+                {
+                    field : 'detail',
+                    title : '详情',
+                    sortable: true
+                }
+                ,
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }
+
+            ]
+        };
+
+        $.table.init(options);
+    });
+    function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-facPayPublicApply-add').serialize());
+            }
+            $.operate.successCallback();
+            window.location.reload();
+            $.modal.close();
+    }
+</script>
+</body>
+</html>

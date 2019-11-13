@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增审批')"/>
+</head>
+<body class="white-bg">
+<form  class="form-horizontal m" id="form-facUserApproval-edit" >
+    <input id="approvalId" name="approvalId" class="form-control-static" type="hidden" th:value="${approvalId}">
+<div class="col-md-12">
+    <div class="form-group">
+        <label class="col-sm-3 control-label"></label>
+        <div class="col-sm-9">
+            <label class="radio-box">
+                <input type="radio" checked value="1" name="approvalState" style="position: absolute; opacity: 0;">
+                同意</label>
+            <label class="radio-box">
+                <input type="radio" value="2" name="approvalState" style="position: absolute; opacity: 0;">
+                驳回</label>
+        </div>
+    </div>
+    <div class="form-group" id="opi">
+        <label class="col-sm-3 control-label">审批意见：</label>
+        <div class="col-sm-9">
+            <textarea name="opi" class="form-control" placeholder="审批意见"></textarea>
+        </div>
+    </div>
+</div>
+</form>
+
+
+<th:block th:include="include :: footer"/>
+<script type="text/javascript">
+    var prefixs = ctx + "system/facUserApproval";
+
+    function submitHandler() {
+        if ($.validate.form()) {
+
+            $.operate.save(prefixs + "/editSa", $('#form-facUserApproval-edit').serialize());
+
+        }
+    }
+
+
+    function mSave(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+                $.modal.disable();
+            },
+            success: function (result) {
+                if (typeof callback == "function") {
+                    callback(result);
+                }
+                $.modal.closeLoading();
+                $.modal.enable();
+                alert(result.msg);
+                $.modal.closeTab();
+            }
+        };
+        $.ajax(config)
+    }
+</script>
+</body>
+</html>

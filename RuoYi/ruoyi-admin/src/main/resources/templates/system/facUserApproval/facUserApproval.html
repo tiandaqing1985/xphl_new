@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<style>
+    .select-list li .time-input{
+        display:inline;
+    }
+    .select-list ul li div{
+        float:none;
+        display:inline;
+    }
+</style>
+<head>
+    <th:block th:include="include :: header('财务审批列表')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <div class="col-sm-12 search-collapse">
+            <form id="formId">
+                <div class="select-list">
+                    <ul>
+                        <li>
+                            申请编号：<input type="text" name="applyId"/>
+                        </li>
+
+                        <li>
+                            申请人 ：
+                            <div class="col-sm-9">
+                                <input id="applicantId" type="text" name="applicantId"/>
+                                <div class="input-group-btn" style="float: right">
+                                    <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+
+
+                        <li>
+                            审批操作时间：<input type="text" class="time-input" name="approvalTime"/>
+                        </li>
+
+                        <li>
+                            创建时间：<input type="text" class="time-input" name="createTime"/>
+                        </li>
+
+
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
+                </div>
+            </form>
+        </div>
+
+        <div class="btn-group-sm" id="toolbar" role="group">
+            <!--				<a class="btn btn-success" onclick="$.operate.add()" >-->
+            <!--					<i class="fa fa-plus"></i> 添加-->
+            <!--				</a>-->
+
+            <a class="btn btn-warning" onclick="$.table.exportExcel()">
+                <i class="fa fa-download"></i> 导出
+            </a>
+        </div>
+        <div class="col-sm-12 select-table table-striped">
+            <table id="bootstrap-table" data-mobile-responsive="true"></table>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+
+<th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    var prefix = ctx + "system/facUserApproval";
+    var approvalState = [[${@dict.getType('fac_approval_state')}]];
+    $(function () {
+        var options = {
+            url: prefix + "/list",
+            createUrl: prefix + "/add",
+            updateUrl: prefix + "/edit/{id}",
+            removeUrl: prefix + "/remove",
+            exportUrl: prefix + "/export",
+            modalName: "财务审批",
+            showExport: true,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'approvalId',
+                    title: '审批记录ID',
+                    visible: false
+                },
+                {
+                    field: 'applyId',
+                    title: '申请编号',
+                    sortable: true
+                },
+                {
+                    field: 'projectName',
+                    title: '审批项目名称',
+                    sortable: true
+                },
+                {
+                    field: 'amount',
+                    title: '审批总金额',
+                    sortable: true
+
+                },
+                {
+                    field: 'applicantName',
+                    title: '申请人',
+                    sortable: true
+                },
+                {
+                    field: 'approverName',
+                    title: '审批人',
+                    sortable: true
+                },
+                {
+                    field: 'approvalState',
+                    title: '审批状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(approvalState, value);
+                    }
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="zAdd(\'' + row.approvalId + '\')"><i class="fa fa-edit"></i>审 批</a> ');
+
+                         // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="sAdd(\'' + row.approvalId + '\')"><i class="fa fa-edit"></i>审批</a> ');
+                        //actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.approvalId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
+        };
+        $.table.init(options);
+    });
+
+    function zAdd(id) {
+        $.modal.openFull("审批", "/system/facUserApproval/edit/" + id);
+
+    }
+
+    function sAdd(id) {
+        $.modal.open("审批", "/system/facUserApproval/editSa/" + id);
+
+    }
+
+
+
+    var testBsSuggest = $("#applicantId").bsSuggest({
+        url: ctx + "system/user/userModel",
+        showBtn: false,
+        idField: "userName",
+        keyField: "userId",
+        effectiveFields: ["deptName", "userName"],
+        multiWord: true,
+        hideOnSelect: true
+    }).on('onDataRequestSuccess', function (e, result) {
+        console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword) {
+        console.log('onSetSelectValue: ', keyword);
+    }).on('onUnsetSelectValue', function (e) {
+        console.log("onUnsetSelectValue");
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+package com.ruoyi.system.domain;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.common.core.domain.BaseEntity;
+import java.util.Date;
+
+/**
+ * 外出报备审批表 oa_out_approval
+ * 
+ * @author ruoyi
+ * @date 2019-08-05
+ */
+public class OaOutApproval extends BaseEntity
+{
+	private static final long serialVersionUID = 1L;
+	
+	/** 唯一标识 */
+	private Long id;
+	/** 外出报备id */
+	private Long outId;
+	/** 审批状态（1同意，2驳回 ，3未操作） */
+	private String approvalState;
+	/** 审批人user_id */
+	private Long approvalId;
+	/** 审批时间 */
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date approvalDate;
+	/** 1可见  0不可见 */
+	private String approvalSight;
+	/** 审批等级 1leader  2人事审批 */
+	private Integer approvalLevel;
+    /** 备注 */
+    private String remark;
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public void setId(Long id) 
+	{
+		this.id = id;
+	}
+
+	public Long getId() 
+	{
+		return id;
+	}
+	public void setOutId(Long outId) 
+	{
+		this.outId = outId;
+	}
+
+	public Long getOutId() 
+	{
+		return outId;
+	}
+	public void setApprovalState(String approvalState) 
+	{
+		this.approvalState = approvalState;
+	}
+
+	public String getApprovalState() 
+	{
+		return approvalState;
+	}
+	public void setApprovalId(Long approvalId) 
+	{
+		this.approvalId = approvalId;
+	}
+
+	public Long getApprovalId() 
+	{
+		return approvalId;
+	}
+	public void setApprovalDate(Date approvalDate) 
+	{
+		this.approvalDate = approvalDate;
+	}
+
+	public Date getApprovalDate() 
+	{
+		return approvalDate;
+	}
+	public void setApprovalSight(String approvalSight) 
+	{
+		this.approvalSight = approvalSight;
+	}
+
+	public String getApprovalSight() 
+	{
+		return approvalSight;
+	}
+	public void setApprovalLevel(Integer approvalLevel) 
+	{
+		this.approvalLevel = approvalLevel;
+	}
+
+	public Integer getApprovalLevel() 
+	{
+		return approvalLevel;
+	}
+
+	@Override
+	public String toString() {
+		return "OaOutApproval [id=" + id + ", outId=" + outId + ", approvalState=" + approvalState + ", approvalId="
+				+ approvalId + ", approvalDate=" + approvalDate + ", approvalSight=" + approvalSight
+				+ ", approvalLevel=" + approvalLevel + ", remark=" + remark + "]";
+	}
+
+ 
+}

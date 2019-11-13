@@ -9,11 +9,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="num"    column="num"    />
         <result property="name"    column="name"    />
         <result property="amount"    column="amount"    />
+        <result property="money"    column="money"    />
         <result property="number"    column="number"    />
     </resultMap>
 	
 	<sql id="selectFacCollectInformationVo">
-        select id, num, name, amount, number from fac_collect_information
+        select id, num, name, money, amount, number from fac_collect_information
     </sql>
 	
     <select id="selectFacCollectInformationList" parameterType="FacCollectInformation" resultMap="FacCollectInformationResult">
@@ -23,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="num != null  and num != '' "> and num = #{num}</if>
              <if test="name != null  and name != '' "> and name = #{name}</if>
              <if test="amount != null "> and amount = #{amount}</if>
+             <if test="money != null "> and money = #{money}</if>
              <if test="number != null "> and number = #{number}</if>
          </where>
     </select>
@@ -33,8 +35,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		sum(amount) from fac_collect_information where num
 		=#{num}),0);
 	</select>
-    
-    
+
+    <select id="selectMoney" resultType="double">
+		select ifNull((select
+		sum(money) from fac_collect_information where num
+		=#{num}),0);
+	</select>
     
     
     <select id="selectFacCollectInformationById" parameterType="Long" resultMap="FacCollectInformationResult">
@@ -48,12 +54,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="num != null  and num != ''  ">num,</if>
 			<if test="name != null  and name != ''  ">name,</if>
 			<if test="amount != null  ">amount,</if>
+            <if test="money != null  ">money,</if>
 			<if test="number != null  ">number,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="num != null  and num != ''  ">#{num},</if>
 			<if test="name != null  and name != ''  ">#{name},</if>
 			<if test="amount != null  ">#{amount},</if>
+            <if test="money != null  ">#{money},</if>
 			<if test="number != null  ">#{number},</if>
          </trim>
     </insert>
@@ -64,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="num != null  and num != ''  ">num = #{num},</if>
             <if test="name != null  and name != ''  ">name = #{name},</if>
             <if test="amount != null  ">amount = #{amount},</if>
+            <if test="money != null  ">money = #{money},</if>
             <if test="number != null  ">number = #{number},</if>
         </trim>
         where id = #{id}

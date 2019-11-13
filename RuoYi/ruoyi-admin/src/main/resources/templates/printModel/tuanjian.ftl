@@ -34,6 +34,20 @@
       <td class="X5 X6" style="width:91.9pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">备注</span></p></td>
       <td class="X5 X6" style="width:605.5pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="6"><p>${cost.remarks!}</p></td>
      </tr>
+	  <tr class="X5 X6">
+      <td class="X5 X6" style="width:91.9pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">序号</span></p></td>
+      <td class="X5 X6" style="width:241.0pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">项目</span></p></td>
+      <td class="X5 X6" style="width:106.3pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">费用</span></p></td>
+      <td class="X5 X6" style="width:258.2pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="4"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">单据数</span></p></td>
+     </tr> 
+	  <#list tuanjian as item>
+	 <tr class="X5 X6">
+      <td class="X5 X6" style="width:91.9pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.order!}</span></p></td>
+      <td class="X5 X6" style="width:241.0pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.name!}</span></p></td>
+      <td class="X5 X6" style="width:106.3pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.amount!}</span></p></td>
+      <td class="X5 X6" style="width:258.2pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="4"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.number!}</span></p></td>
+     </tr>
+	 </#list> 
      <tr class="X5 X6">
       <td class="X5 X6" style="width:495.9pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="5"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">费用合计</span></p></td>
       <td class="X5 X6" style="width:201.5pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="2"><p>￥${cost.amount!}</p></td>

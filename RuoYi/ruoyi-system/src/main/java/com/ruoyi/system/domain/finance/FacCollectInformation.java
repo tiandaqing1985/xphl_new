@@ -24,8 +24,28 @@ public class FacCollectInformation extends BaseEntity
 	private Double amount;
 	/** 单据数 */
 	private Long number;
+	/** 实际金额 */
+	private Double money;
 
-	public void setId(Long id) 
+	private int order;
+
+	public int getOrder() {
+		return order;
+	}
+
+	public void setOrder(int order) {
+		this.order = order;
+	}
+
+	public Double getMoney() {
+		return money;
+	}
+
+	public void setMoney(Double money) {
+		this.money = money;
+	}
+
+	public void setId(Long id)
 	{
 		this.id = id;
 	}

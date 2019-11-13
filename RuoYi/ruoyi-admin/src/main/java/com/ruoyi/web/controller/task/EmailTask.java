@@ -13,10 +13,13 @@ import org.springframework.stereotype.Component;
 
 import com.ruoyi.common.config.Global;
 import com.ruoyi.system.domain.Holiday;
+import com.ruoyi.system.domain.OaOut;
+import com.ruoyi.system.domain.OutApproval;
 import com.ruoyi.system.domain.QueryConditions;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.email.EmailSend;
+import com.ruoyi.system.mapper.OaOutMapper;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.mapper.UserApprovalMapper;
@@ -32,6 +35,8 @@ public class EmailTask {
 	private SysUserMapper userMapper;
 	@Autowired
 	private SysDeptMapper deptMapper;
+	@Autowired
+	private OaOutMapper oaOutMapper;
 	@Autowired
 	private ISysUserService userService;
 	@Autowired
@@ -309,14 +314,23 @@ public class EmailTask {
 			query.setApplyState("1");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
 			List<QueryConditions> cList = userApprovalMapper.selectQueryConditionsList(query);
 			
-			System.out.println("\n"+"未审批请假总数："+cList.size()+"\n");	
+			System.out.println("\n"+"未审批请假总数："+cList.size()+"\n");
+			
+			//查询外出报备待审批列表
+			OaOut oaOut = new OaOut();
+			oaOut.setApprovalId(user.getUserId());
+			oaOut.setApprovalState("3");//审批状态（1同意，2驳回 ，3未操作）
+			oaOut.setApprovalSight("1");
+			oaOut.setState("1");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+	        List<OutApproval> list = oaOutMapper.selectOutApprovalList(oaOut);
+			System.out.println("\n"+"未审批外出报备请假总数："+list.size()+"\n");
 
-			if(cList.size() == 0) continue;
+			if(cList.size() == 0 && list.size() == 0) continue;
 
 			System.out.println("\n"+"审批人："+user.getUserName()+"\n");
 			EmailSend es = new EmailSend();
 			 try {
-				 if(cList.size() != 0){
+				 if(cList.size() != 0 || list.size() != 0){
 					 System.out.println("\n"+user.getEmail()+"\n");
 
 						es.sendMail(user.getEmail(), null,

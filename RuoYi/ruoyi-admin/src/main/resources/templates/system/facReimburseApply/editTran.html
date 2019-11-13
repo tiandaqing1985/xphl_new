@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('报销申请添加')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-add" th:object="${data}">
+        <input id="transId" name="id" class="form-control-static" type="hidden" th:value="${id}"/>
+        <div class="row">
+            <div class="form-group ui-sortable-helper col-md-6">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>日期</label>
+                <div class="col-sm-9">
+                    <input id="ddDate" name="ddDate" class="time-input form-control" th:value="${#dates.format(data.ddDate,'yyyy-MM-dd')}" required>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>类别</label>
+                <label><input th:checked="${data.type eq '公出'}" type="radio" name="type" value="公出">公出交通费用申请</label>
+                <label><input th:checked="${data.type eq '加班'}" type="radio" name="type" value="加班">加班交通费用申请</label>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>金额</label>
+                <div class="col-sm-9">
+                    <input id="amount" name="amount" class="form-control" type="text" th:field="*{amount}" required>
+                </div>
+            </div>
+            <div class="form-group">
+
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>人员</label>
+
+                <div class="col-sm-9">
+                    <div class="input-group">
+                        <input id="user" name="user" class="form-control" type="text" th:field="*{user}" required>
+                        <div class="input-group-btn">
+                            <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>出发地</label>
+                <div class="col-sm-9">
+                    <input id="departure" name="departure" class="form-control" type="text" th:field="*{departure}" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>目的地</label>
+                <div class="col-sm-9">
+                    <input id="target" name="target" class="form-control" type="text" th:field="*{target}" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>附单据数</label>
+                <div class="col-sm-9">
+                    <input id="documentNum" name="documentNum" class="form-control" type="text" th:field="*{documentNum}" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>目标单位简称</label>
+                    <div class="col-sm-9">
+                        <input id="targetUnit" name="targetUnit" class="form-control" type="text" th:field="*{targetUnit}" required>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                        <label class="col-sm-3 control-label"><span style="color: red; ">*</span>事由</label>
+                        <div class="col-sm-9">
+                            <textarea id="reason" name="reason" class="form-control" type="text" th:field="*{reason}" required></textarea>
+                        </div>
+                    </div>
+                </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<th:block th:include="include :: bootstrap-suggest-js" />
+<th:block th:include="include :: bootstrap-select-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/facReimburseApply";
+
+    function submitHandler() {
+        if ($.validate.form()) {
+            $.operate.save(prefix + "/editTran", $('#form-add').serialize());
+        }
+    }
+
+    var testBsSuggest = $("#user").bsSuggest({
+        url: ctx + "system/user/userModel",
+        showBtn: false,
+        idField: "userName",
+        keyField: "userName",
+        effectiveFields: ["deptName","userName"],
+        hideOnSelect: true
+    }).on('onDataRequestSuccess', function (e, result) {
+        console.log('onDataRequestSuccess: ', result);
+    }).on('onSetSelectValue', function (e, keyword) {
+        console.log('onSetSelectValue: ', keyword);
+    }).on('onUnsetSelectValue', function (e) {
+        console.log("onUnsetSelectValue");
+    });
+
+</script>
+</body>
+</html>

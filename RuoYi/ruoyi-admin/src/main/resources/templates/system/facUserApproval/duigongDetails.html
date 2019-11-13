@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('初始多表格')"/>
+    <th:block th:include="include :: layout-latest-css" />
+    <th:block th:include="include :: ztree-css" />
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
+        <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
+        <div>
+            <h4 class="form-header h4">对公支付详情</h4>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+            </div>
+            <h4 class="form-header h4">对公支付明细</h4>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+
+
+        <form class="form-horizontal m" id="form-facUserApproval-edit" th:object="${facUserApproval}">
+            <div class="col-sm-4  col-sm-offset-4">
+                <h4 class="form-header h4">审批填写</h4>
+                <div  class="form-group"  >
+                    <div class="col-sm-4 control-label" style="text-align:center;">
+                        <label class="radio-box">
+                            <input type="radio" checked value="1" name="approvalState" style="position: absolute; opacity: 0;">
+                            同意</label>
+                        <label class="radio-box">
+                            <input type="radio" value="2" name="approvalState" style="position: absolute; opacity: 0;">
+                            驳回</label>
+                    </div>
+                </div>
+                <div class="form-group" style="text-align:center;">
+                    <label class="col-sm-4 control-label"></span>审批意见：</label>
+                    <div class="col-sm-4">
+                        <textarea id="opi" name="opi" class="form-control" type="text"></textarea>
+                        <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
+                        <input id="approverId" name="approverId" class="form-control-static" type="hidden"
+                               th:value="${userId}">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div th:include="include::footer"></div>
+
+        <script th:inline="javascript">
+            var approvalState = [[${@dict.getType('fac_approval_state')}]];
+            var prefix = ctx + "system/facPayPublicApply";
+            var datas = [[${@dict.getType('sys_normal_disable')}]];
+            var num = $("#num").val();
+            var msg = $("#msg").val();
+
+            var prefixs = ctx + "system/facUserApproval";
+            $(function () {
+                var options = {
+                    id: "bootstrap-table-1",
+                    url: prefix + "/query?num="+num,
+                    showSearch: false,
+                    showRefresh: false,
+                    showToggle: false,
+                    showColumns: false,
+                    modalName: "对公详细信息",
+                    columns: [
+                        {
+                            checkbox: true
+                        } ,
+                        {
+                            field: 'num',
+                            title: '申请编号'
+                        },
+                        {
+                            field: 'name',
+                            title: '申请名称'
+                        },
+                        {
+                            field: 'userName',
+                            title: '申请人'
+                        },
+                        {
+                            field: 'amount',
+                            title: '付款金额'
+                        },
+                        {
+                            field: 'payee',
+                            title: '收款人'
+                        },
+                        {
+                            field: 'payeeAccount',
+                            title: '收款人账号'
+                        } ,
+
+                    ]
+                };
+                $.table.init(options);
+            });
+
+
+
+            $(function () {
+                var options = {
+                    id: "bootstrap-table-2",
+                    url: prefix + "/dgtail?num=" + num,
+                    showSearch: false,
+                    showRefresh: false,
+                    showToggle: false,
+                    showColumns: false,
+                    modalName: "对公明细添加",
+                    columns: [
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field : 'id',
+                            title : 'id',
+                            visible: false
+                        },
+                        {
+                            field : 'num',
+                            title : '对公编号',
+                            sortable: true
+                        },
+                        {
+                            field : 'name',
+                            title : '项目名称',
+                            sortable: true
+                        },
+                        {
+                            field : 'reson',
+                            title : '付款事由',
+                            sortable: true
+                        },
+                        {
+                            field : 'money',
+                            title : '付款金额',
+                            sortable: true
+                        },
+                        {
+                            field : 'detail',
+                            title : '详情',
+                            sortable: true
+                        }
+
+                    ]
+                };
+
+                $.table.init(options);
+            });
+
+
+
+
+    $("#form-facPayPublicApply-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+            function mSave(url, data, callback) {
+                debugger
+                var config = {
+                    url: url,
+                    type: "post",
+                    dataType: "json",
+                    data: data,
+                    beforeSend: function () {
+                        $.modal.loading("正在处理中，请稍后...");
+                        $.modal.disable();
+                    },
+                    success: function (result) {
+                        if (typeof callback == "function") {
+                            callback(result);
+                        }
+                        $.modal.closeLoading();
+                        $.modal.enable();
+                        
+                        $.modal.closeTab();
+                        $.modal.closeTab();
+                        $.modal.closeAll();
+                        $.modal.close();
+                    }
+                };
+                $.ajax(config)
+                $.modal.msgReload("保存成功,正在刷新数据请稍后……", modal_status.SUCCESS);
+                $.operate.successCallback();
+                $.modal.closeTab();
+                $.operate.successCallback();
+                window.location.reload();
+                $.modal.close();
+            }
+
+
+            function submitHandler() {
+
+                if ($.validate.form()) {
+
+                    mSave(prefixs + "/edit", $('#form-facUserApproval-edit').serialize());
+
+                }
+            }
+
+        </script>
+</body>
+</html>

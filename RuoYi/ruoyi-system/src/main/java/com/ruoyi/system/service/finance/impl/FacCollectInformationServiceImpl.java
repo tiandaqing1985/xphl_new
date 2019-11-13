@@ -85,5 +85,12 @@ public class FacCollectInformationServiceImpl implements IFacCollectInformationS
 		 
 		return facCollectInformationMapper.selectAmount(num);
 	}
-	
+
+	@Override
+	public double selectMoney(String num) {
+
+		return facCollectInformationMapper.selectMoney(num);
+	}
+
+
 }

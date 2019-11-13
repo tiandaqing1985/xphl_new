@@ -34,9 +34,18 @@ import com.dingtalk.api.response.OapiUserSimplelistResponse;
 import com.dingtalk.api.response.OapiUserSimplelistResponse.Userlist;
 import com.ruoyi.system.domain.OaDingding;
 import com.ruoyi.system.domain.OaDingdingUser;
+import com.ruoyi.system.domain.OaOut;
+import com.ruoyi.system.domain.OaOutApproval;
+import com.ruoyi.system.domain.UserApply;
+import com.ruoyi.system.domain.UserApproval;
 import com.ruoyi.system.mapper.OaDingdingUserMapper;
+import com.ruoyi.system.mapper.OaOutApprovalMapper;
+import com.ruoyi.system.mapper.OaOutMapper;
+import com.ruoyi.system.mapper.UserApplyMapper;
+import com.ruoyi.system.mapper.UserApprovalMapper;
 import com.ruoyi.system.service.IOaDingdingService;
 import com.ruoyi.system.service.IOaDingdingUserService;
+import com.ruoyi.system.service.IUserApplyService;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
@@ -66,6 +75,64 @@ public class DingDingTask{
 
 	@Autowired
 	OaDingdingUserMapper oaDingdingUserMapper;
+	
+    @Autowired
+    private OaOutMapper outMapper;
+	@Autowired
+	private OaOutApprovalMapper oaOutApprovalMapper;
+    @Autowired
+    private UserApplyMapper applyMapper;
+    @Autowired
+    private UserApprovalMapper approvalMapper;
+    @Autowired
+    private IUserApplyService applyService;
+	
+	public void importData(){
+		//查询外出申请表
+	   List<OaOut> oList = outMapper.selectOaOutList(null);
+	   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	   double timelength = 0.0;
+	   for(OaOut o : oList){
+		    UserApply apply = new UserApply();
+			//根据申请id查询外出审批表
+			OaOutApproval oaOutApproval = new OaOutApproval();
+			oaOutApproval.setOutId(o.getOutId());
+			List<OaOutApproval> appList = oaOutApprovalMapper.selectOaOutApprovalList(oaOutApproval);
+			
+			//外出申请插入请假申请表，并返回生成id
+			apply.setApplyState(o.getState());
+			apply.setApplyTime(o.getCreateDate());
+			apply.setApplyType("4");
+			apply.setUserId(o.getUserId());
+			apply.setStarttime(o.getStarttime());
+			apply.setEndtime(o.getEndtime());
+			apply.setDetails(o.getReason());
+			
+			timelength = applyService.countTimeLength(o.getStarttime(), o.getEndtime());
+			apply.setTimelength(timelength);
+			
+			applyMapper.insertUserApply(apply);
+			
+			for(OaOutApproval app : appList){
+				UserApproval approval = new UserApproval();
+				
+				//获取新申请id，插入审批表数据
+				approval.setApplyId(apply.getApplyId());
+				approval.setApproverId(app.getApprovalId());	
+				approval.setApprovalLevel(app.getApprovalLevel());
+				approval.setApprovalSight(app.getApprovalSight());
+				approval.setApprovalState(app.getApprovalState());
+				if(app.getApprovalDate() != null){
+					approval.setApprovalTime(sdf.format(app.getApprovalDate()));
+				}
+				approval.setRemark(app.getRemark());
+				approvalMapper.insertUserApproval(approval);
+			}
+			
+		}
+		
+		
+	}
 	
 	public void dingDingTask() throws Exception
 	{		

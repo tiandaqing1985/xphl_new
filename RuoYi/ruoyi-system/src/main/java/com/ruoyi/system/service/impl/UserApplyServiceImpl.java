@@ -183,7 +183,8 @@ public class UserApplyServiceImpl implements IUserApplyService
 		user3.setRoleId(3L);//人事
 		user3.setArea(user.getArea());
 		
-		if(approvalId.longValue() != hrId.longValue()){//当前用户一级审批人就是人事总监时不用二级审批
+		//当前用户的上级是人事leader，不进行人事总监审批
+		if(upLeaderId.longValue() != hrId.longValue() && approvalId.longValue() != hrId.longValue()){//审批人是否是人事总监
 			//人事总监审批
 //			personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user3));
 			personnel.setApproverId(hrId);
