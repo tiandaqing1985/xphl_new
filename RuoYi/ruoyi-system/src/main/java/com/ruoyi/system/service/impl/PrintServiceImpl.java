@@ -48,7 +48,8 @@ public class PrintServiceImpl implements IPrintService {
     private IFacCostPutupReimburseService facCostPutupReimburseService;
     @Autowired
     private IFacCostDetailReimburseService facCostDetailReimburseService;
-
+    @Autowired
+    private IFacCollectInformationService facCollectInformationService;
 
     /**
      * 预览报销
@@ -453,7 +454,12 @@ public class PrintServiceImpl implements IPrintService {
         data.put("user", sysUser);
         data.put("payPublicApply", payPublicApply);
         data.put("facPayPublicDetailed", facPayPublicDetailed);
-        return PrintUtil.printString("duigongDetail.ftl", data);
+        String isPrint = "";
+        //打印时是否打印
+        if(facPayPublicDetailed.size()!=0){
+            isPrint = "否";
+        }
+        return isPrint + PrintUtil.printString("duigongDetail.ftl", data);
     }
 
     /**
@@ -475,6 +481,16 @@ public class PrintServiceImpl implements IPrintService {
         }
         facCollectApply = list.get(0);
         data.put("cost", facCollectApply);
+
+        FacCollectInformation facCollectInformation = new FacCollectInformation();
+        facCollectInformation.setNum(facCollectApply.getNum());
+        List<FacCollectInformation> lists = facCollectInformationService.selectFacCollectInformationList(facCollectInformation);
+        int tu = 1;
+        for (FacCollectInformation v : lists) {
+            v.setOrder(tu++);
+        }
+        data.put("tuanjian", lists);
+
         String amountInWords = NumberToCN.number2CNMontrayUnit(new BigDecimal(facCollectApply.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
         data.put("amountInWords", amountInWords);
         //查询当前审批过的记录
@@ -606,44 +622,52 @@ public class PrintServiceImpl implements IPrintService {
 	}
 
 	@Override
-	public String previewTuanjianBX(String num) {
-		  Map<String, Object> data = new HashMap<>();
-	        //查询团建费申请
+	public String previewTuanjianBX(String num,String applyNum) {
+        Map<String, Object> data = new HashMap<>();
+        //查询团建费申请
 
-	        FacCollectApply facCollectApply = new FacCollectApply();
-	        facCollectApply.setNum(num);
-	        List<FacCollectApply> list = facCollectApplyService.selectFacCollectApplyList(facCollectApply);
-	        for (FacCollectApply v : list) {
-	            v.setApplicantName(sysUserService.selectUserById(v.getApplicant()).getUserName());
-	        }
-	        facCollectApply = list.get(0);
-	        data.put("cost", facCollectApply);
-	        String amountInWords = NumberToCN.number2CNMontrayUnit(new BigDecimal(facCollectApply.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
-	        data.put("amountInWords", amountInWords);
-	        //查询当前审批过的记录
-	        FacUserApproval selectVo = new FacUserApproval();
-	        selectVo.setApplyId(num);
-	        List<FacUserApproval> facUserApprovals = facUserApprovalService.selectFacUserApprovalList(selectVo);
-	        for (int i = 0; i < facUserApprovals.size(); i++) {
-	            SysUser sysUser = sysUserService.selectUserById(facUserApprovals.get(i).getApproverId());
-	            if (sysUser != null) {
-	                facUserApprovals.get(i).setApproverName(sysUser.getUserName());
-	            }
-	            if (facUserApprovals.get(i).getApprovalState().equals("1")) {
-	                facUserApprovals.get(i).setApprovalState("审批通过");
-	            } else if (facUserApprovals.get(i).getApprovalState().equals("2")) {
-	                facUserApprovals.get(i).setApprovalState("审批拒绝");
-	            } else {
-	                facUserApprovals.remove(i);
-	                i--;
-	            }
-	        }
-	        data.put("facUserApprovals", facUserApprovals);
-	        return PrintUtil.printString("tuanjianBX.ftl", data);
+        FacCollectApply facCollectApply = new FacCollectApply();
+        facCollectApply.setNum(num);
+        List<FacCollectApply> list = facCollectApplyService.selectFacCollectApplyList(facCollectApply);
+        for (FacCollectApply v : list) {
+            v.setApplicantName(sysUserService.selectUserById(v.getApplicant()).getUserName());
+        }
+        facCollectApply = list.get(0);
+        data.put("cost", facCollectApply);
+        String amountInWords = NumberToCN.number2CNMontrayUnit(new BigDecimal(facCollectApply.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
+        data.put("amountInWords", amountInWords);
+        FacCollectInformation facCollectInformation = new FacCollectInformation();
+        facCollectInformation.setNum(facCollectApply.getNum());
+        List<FacCollectInformation> lists = facCollectInformationService.selectFacCollectInformationList(facCollectInformation);
+        int tu = 1;
+        for (FacCollectInformation v : lists) {
+            v.setOrder(tu++);
+        }
+        data.put("tuanjian", lists);
+        //查询当前审批过的记录
+        FacUserApproval selectVo = new FacUserApproval();
+        selectVo.setApplyId(applyNum);
+        List<FacUserApproval> facUserApprovals = facUserApprovalService.selectFacUserApprovalList(selectVo);
+        for (int i = 0; i < facUserApprovals.size(); i++) {
+            SysUser sysUser = sysUserService.selectUserById(facUserApprovals.get(i).getApproverId());
+            if (sysUser != null) {
+                facUserApprovals.get(i).setApproverName(sysUser.getUserName());
+            }
+            if (facUserApprovals.get(i).getApprovalState().equals("1")) {
+                facUserApprovals.get(i).setApprovalState("审批通过");
+            } else if (facUserApprovals.get(i).getApprovalState().equals("2")) {
+                facUserApprovals.get(i).setApprovalState("审批拒绝");
+            } else {
+                facUserApprovals.remove(i);
+                i--;
+            }
+        }
+        data.put("facUserApprovals", facUserApprovals);
+        return PrintUtil.printString("tuanjianBX.ftl", data);
 	}
 
 	@Override
-	public String previewZhaodaifeiBX(String num) {
+	public String previewZhaodaifeiBX(String num,String applyNum) {
 		   Map<String, Object> data = new HashMap<>();
 	        //查询招待费
 	        FacHospitalityApply facHospitalityApply = new FacHospitalityApply();
@@ -659,7 +683,7 @@ public class PrintServiceImpl implements IPrintService {
 	        data.put("user", sysUser1);
 	        //查询当前审批过的记录
 	        FacUserApproval selectVo = new FacUserApproval();
-	        selectVo.setApplyId(num);
+	        selectVo.setApplyId(applyNum);
 	        List<FacUserApproval> facUserApprovals = facUserApprovalService.selectFacUserApprovalList(selectVo);
 	        for (int i = 0; i < facUserApprovals.size(); i++) {
 	            SysUser sysUser = sysUserService.selectUserById(facUserApprovals.get(i).getApproverId());

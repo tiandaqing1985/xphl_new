@@ -54,5 +54,6 @@ public interface IFacCollectApplyService
      * @return 结果
      */
 	public int deleteFacCollectApplyByIds(String ids);
-	
+
+    FacCollectApply selectFacCollectApplyByNum(String num);
 }

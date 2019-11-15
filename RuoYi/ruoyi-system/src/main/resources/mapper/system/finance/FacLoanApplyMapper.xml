@@ -67,7 +67,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="insertFacLoanApply" parameterType="FacLoanApply"
 		useGeneratedKeys="true" keyProperty="id">
 		insert into fac_loan_apply
-		<trim prefix="(" suffix=")" suffixOverrides=","> 
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+		 	<if test="id != null">id,</if>
 			<if test="num != null  and num != ''  ">num,</if>
 			<if test="loanName != null  and loanName != ''  ">loan_name,</if>
 			<if test="amount != null  ">amount,</if>
@@ -80,7 +81,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="applyStatus != null  and applyStatus != ''  ">apply_status,</if>
 			<if test="updateTime != null  ">update_time,</if>
 		</trim>
-		<trim prefix="values (" suffix=")" suffixOverrides=","> 
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+		 	<if test="id != null">#{id},</if>
 			<if test="num != null  and num != ''  ">#{num},</if>
 			<if test="loanName != null  and loanName != ''  ">#{loanName},</if>
 			<if test="amount != null  ">#{amount},</if>

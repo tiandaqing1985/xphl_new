@@ -14,12 +14,12 @@
                 <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
                 <input id="userId" name="userId" class="form-control-static" type="hidden" th:value="${userId}"/>
                 <input id="dept" name="dept" class="form-control-static" type="hidden" th:value="${dept}"/>
+                <h4 class="form-header h4">报销申请</h4>
                 <div>
-                    <h4 class="form-header h4">日常报销申请</h4>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label"><span style="color: red; ">*</span>报销名称：</label>
+                                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>报销名称：</label>
                                 <div class="col-sm-8">
                                     <input name="name" autocomplete="off" placeholder="XX月份报销" class="form-control"
                                            type="text" maxlength="30" th:value="${name}" readonly required>
@@ -28,7 +28,7 @@
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label">&nbsp&nbsp部门：</label>
+                                <label class="col-sm-3 control-label">&nbsp&nbsp部门：</label>
                                 <div class="col-sm-8">
                                     <input name="userName" autocomplete="off" placeholder="悦维联动" class="form-control"
                                            type="text" maxlength="30" readonly="readonly" th:value="${deptName}" >
@@ -36,44 +36,150 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                                <label class="col-sm-4 control-label"></span>报销编号：</label>
+                                <label class="col-sm-3 control-label"></span>报销编号：</label>
                                 <div class="col-sm-8">
                                     <input id="num" name="num" class="form-control" type="text" th:value="${num}"
                                            readonly="readonly">
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row" id="jtf">
-                    <div class="col-sm-12 select-table table-striped">
-<!--                        <a class="btn btn-success" onclick="mAdd(1)">-->
-<!--                            <i class="fa fa-plus"></i> 交通费报销信息-->
-<!--                        </a>-->
-                        <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+                        <div class="col-sm-6">
+                        </div>
                     </div>
                 </div>
 
-                <div class="row" id="zdf">
-                    <div class="col-sm-12 select-table table-striped">
-<!--                        <a class="btn btn-success" onclick="mAdd(2)">-->
-<!--                            <i class="fa fa-plus"></i> 招待费报销信息-->
-<!--                        </a>-->
-                        <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+                <div id="rcbx" style="display: none">
+                    <div class="row" id="jtf">
+                        <div class="col-sm-12 select-table table-striped">
+                            <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+                        </div>
+                    </div>
+
+                    <div class="row" id="zdf">
+                        <div class="col-sm-12 select-table table-striped">
+                            <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
+                        </div>
+                    </div>
+                    <div class="row" id="qtf">
+                        <div class="col-sm-12 select-table table-striped">
+                            <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
+                        </div>
                     </div>
                 </div>
-                <div class="row" id="qtf">
+
+                <div id="tjbx" style="display: none">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>团建费编号：</label>
+                                <div class="col-sm-8">
+                                    <input id="num" name="num" th:field="${facCollectApply.num}" class="form-control" type="text" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>所属部门：</label>
+                                <div class="col-sm-8">
+                                    <input id="deptName" name="deptName" th:field="${facCollectApply.deptName}" class="form-control" type="text" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>开始日期：</label>
+                                <div class="col-sm-8">
+                                    <input id="startDate" name="startDate" th:value="${#dates.format(facCollectApply.startDate,'yyyy-MM-dd')}" class="time-input form-control" type="text" required readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>结束日期：</label>
+                                <div class="col-sm-8">
+                                    <input id="endDate" name="endDate" th:value="${#dates.format(facCollectApply.endDate,'yyyy-MM-dd')}" class="time-input form-control" type="text" required readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>参与人：</label>
+                                <div class="col-sm-8">
+                                    <input id="participants" name="participants" th:field="${facCollectApply.participants}" class="form-control" type="text" required readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>参与人数：</label>
+                                <div class="col-sm-8">
+                                    <input id="parNumber" name="parNumber" th:field="${facCollectApply.parNumber}" class="form-control" type="text" required readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>活动地点：</label>
+                                <div class="col-sm-8">
+                                    <input id="activityPlace" name="activityPlace" th:field="${facCollectApply.activityPlace}" class="form-control" type="text" required readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>活动形式：</label>
+                                <div class="col-sm-8">
+                                    <input id="activityForm" name="activityForm" th:field="${facCollectApply.activityForm}" class="form-control" type="text" required readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">备注：</label>
+                                <div class="col-sm-8">
+                                    <input id="remarks" name="remarks" th:field="${facCollectApply.remarks}" class="form-control" type="text" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>申请金额：</label>
+                                <div class="col-sm-8">
+                                    <input id="amount" name="amount"  th:field="${facUserApproval.amount}" class="form-control" type="text" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="col-sm-12 select-table table-striped">
-<!--                        <a class="btn btn-success" onclick="mAdd(3)">-->
-<!--                            <i class="fa fa-plus"></i> 其他费用报销信息-->
-<!--                        </a>-->
-                        <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
+                        <table id="bootstrap-table-4" data-mobile-responsive="true"></table>
                     </div>
                 </div>
+
+                <div id="clbx" style="display: none">
+                    <div>
+                        <table id="bootstrap-table-5" data-mobile-responsive="true"></table>
+                    </div>
+                    <div>
+                        <h4 class="form-header h4"></h4>
+                        <table id="bootstrap-table-6" data-mobile-responsive="true"></table>
+                    </div>
+                    <div>
+                        <h4 class="form-header h4"></h4>
+                        <table id="bootstrap-table-7" data-mobile-responsive="true"></table>
+                    </div>
+                </div>
+
             </div>
         </div>
     </form>
@@ -92,17 +198,17 @@
                     驳回</label>
             </div>
         </div>
-        <div class="form-group" style="text-align:center;">
-            <label class="col-sm-4 control-label"></span>审批意见：</label>
-            <div class="col-sm-4">
-                <textarea id="opi" name="opi" class="form-control" type="text"></textarea>
-                <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
-                <input id="approverId" name="approverId" class="form-control-static" type="hidden"
-                       th:value="${userId}">
+            <div class="form-group" style="text-align:center;">
+                <label class="col-sm-4 control-label"></span>审批意见：</label>
+                <div class="col-sm-4">
+                    <textarea id="opi" name="opi" class="form-control" type="text"></textarea>
+                    <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
+                    <input id="approverId" name="approverId" class="form-control-static" type="hidden"
+                           th:value="${userId}">
+                </div>
             </div>
-        </div>
+        </form>
     </div>
-</form>
 <div th:include="include :: footer"></div>
 
 <script th:inline="javascript">
@@ -114,7 +220,13 @@
     var userId = $("#userId").val();
     var dept = $("#dept").val();
     var prefixs = ctx + "system/facUserApproval";
-
+    var prefix1 = ctx + "system/facCostReimburse";
+    var prefix2 = ctx + "system/facCostPutupReimburse";
+    var prefix3 = ctx + "system/facCostDetailReimburse";
+    var isOverAmountLimit = [[${isOverAmountLimit}]];
+    if(isOverAmountLimit=="true"){
+        $.modal.alertWarning("已超出额度上限");
+    }
     if (dept == 10) {
         $("#zdf").hide();//隐藏
     } else {
@@ -128,250 +240,154 @@
         $("#qtf").show();//显示
 
     }
-
-
-
-
-    function mAdd(id) {
-        if (id == 1) {
-            $.table._option.id = "bootstrap-table-1";
-            $.table._option.url = prefix + "/addTraDetail";
-            //  $.modal.open("交通添加", "/system/facReimburseApply/tranDetail?num=" + num);
-        } else if (id == 2) {
-            $.table._option.id = "bootstrap-table-2";
-            $.table._option.url = prefix + "/addAll";
-            //   $.modal.open("招待费添加", "/system/facReimburseApply/addAll?num=" + num);
-        } else if (id == 3) {
-            $.table._option.id = "bootstrap-table-3";
-            $.table._option.url = prefix + "/otherDetail";
-            //    $.modal.open("其他添加", "/system/facReimburseApply/otherDetail?num=" + num);
-        }
-    }
-
-    function mEdit(index, id) {
-        if (index == 1) {
-            $.table._option.id = "bootstrap-table-1";
-            $.table._option.url = prefix + "/addTraDetail";
-            $.table._option.modalName = "交通报销信息";
-            $.table._option.updateUrl = prefix + "/editTran/{id}";
-        } else if (index == 2) {
-            $.table._option.updateUrl = prefix + "/editTran/{id}";
-        }
-        $.operate.edit(id);
-    }
-
-    function mRemove(index, id) {
-        if (index == 1) {
-            $.table._option.modalName = "交通报销信息";
-            $.table._option.removeUrl = prefix + "/removeTran";
-        } else if (index == 2) {
-            $.table._option.removeUrl = prefix + "/removeTran";
-        }
-        $.operate.remove(id);
-    }
-
+    var type = [[${type}]];
     $(function () {
-        var options = {
-            id: "bootstrap-table-1",
-            url: prefix + "/lookTraDetail",
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            modalName: "报销申请添加",
-            columns: [
-                [
+        $("#"+type).attr("style","display: block")
+        if(type == "rcbx"){
+
+            var options = {
+                id: "bootstrap-table-1",
+                url: prefix + "/lookTraDetail",
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                queryParams: function(params){
+                    var curParams = {
+                        // 传递参数查询参数
+                        pageSize:       params.limit,
+                        pageNum:        params.offset / params.limit + 1,
+                        searchValue:    params.search,
+                        orderByColumn:  params.sort,
+                        isAsc:          params.order
+                    };
+                    var currentId = $.common.isEmpty($.table._option.formId) ? $('form').attr('id') : $.table._option.formId;
+                    return $.extend(curParams, {"num":num});
+                },
+                modalName: "报销申请添加",
+                columns: [
+                    [
                         {
                             title: '交通费报销信息',
                             align: 'center',
                             colspan: 11,
                         }
 
-                ],
-                [
-                {
-                    checkbox: true
-                },
-                {
-                    field: 'id',
-                    title: 'ID',
-                    visible: false
-                }, {
-                    field: 'num',
-                    title: '报销编号',
-                    sortable: true
-                },
-                {
-                    field: 'ddDate',
-                    title: '日期',
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                        return newDate;
-                    }
-                },
-                {
-                    field: 'targetUnit',
-                    title: '目标单位简称',
-                    sortable: true
-                },
-                {
-                    field: 'amount',
-                    title: '金额',
-                    sortable: true
-                },
-                {
-                    field: 'user',
-                    title: '人员',
-                    sortable: true
-                },
-                {
-                    field: 'departure',
-                    title: '出发地',
-                    sortable: true
-                },
-                {
-                    field: 'target',
-                    title: '目的地',
-                    sortable: true
-                },
-                {
-                    field: 'type',
-                    title: '类型 ',
-                    sortable: true
-                },{
-                    field: 'excess',
-                    title: '是否超额 ',
-                    visible: true,
-                    formatter: function (value, row, index) {
-                        if(value==1){
-                            layer.msg("已超出额度");
-                            return  "超额";
-                        }else {
-                            return  "未超额";
+                    ],
+                    [
+                        {
+                            checkbox: true
+                        },
+                        {
+                            field: 'id',
+                            title: 'ID',
+                            visible: false
+                        }, {
+                        field: 'num',
+                        title: '报销编号',
+                        sortable: true
+                    },
+                        {
+                            field: 'ddDate',
+                            title: '日期',
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                        },
+                        {
+                            field: 'targetUnit',
+                            title: '目标单位简称',
+                            sortable: true
+                        },
+                        {
+                            field: 'amount',
+                            title: '金额',
+                            sortable: true
+                        },
+                        {
+                            field: 'user',
+                            title: '人员',
+                            sortable: true
+                        },
+                        {
+                            field: 'departure',
+                            title: '出发地',
+                            sortable: true
+                        },
+                        {
+                            field: 'target',
+                            title: '目的地',
+                            sortable: true
+                        },
+                        {
+                            field: 'type',
+                            title: '类型 ',
+                            sortable: true
+                        },{
+                        field: 'excess',
+                        title: '是否超额 ',
+                        visible: true,
+                        formatter: function (value, row, index) {
+                            if(value==1){
+                                layer.msg("已超出额度");
+                                return  "超额";
+                            }else {
+                                return  "未超额";
+                            }
                         }
                     }
-                }
 
-            ]
+                    ]
                 ]
-        };
+            };
+            $.table.init(options);
+            var options = {
+                id: "bootstrap-table-2",
+                url: prefix + "/addAll",
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                modalName: "招待费报销申请",
+                queryParams: function(params){
+                    var curParams = {
+                        // 传递参数查询参数
+                        pageSize:       params.limit,
+                        pageNum:        params.offset / params.limit + 1,
+                        searchValue:    params.search,
+                        orderByColumn:  params.sort,
+                        isAsc:          params.order
+                    };
+                    var currentId = $.common.isEmpty($.table._option.formId) ? $('form').attr('id') : $.table._option.formId;
+                    return $.extend(curParams, {"num":num});
+                },
+                columns: [
+                        [
+                            {
+                                title: '招待费报销信息',
+                                align: 'center',
+                                colspan: 11,
+                            }
+                        ],
+                    [
 
-        $.table.init(options);
-    });
-
-
-    $(function () {
-        var options = {
-            id: "bootstrap-table-2",
-            url: prefix + "/addAll",
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            modalName: "招待费报销申请",
-            columns: [
-
-                {
-                    field: 'id',
-                    title: 'ID',
-                    visible: false
-                }
-                ,
-                {
-                    field: 'num',
-                    title: '报销编号',
-                    sortable: true
-                },
-                {
-                    field: 'ddDate',
-                    title: '日期',
-                    sortable: true,
-                    formatter: function (value, row, index) {
-                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                        return newDate;
-                    }
-                },
-                {
-                    field: 'amount',
-                    title: '金额',
-                    sortable: true
-                },
-                {
-                    field: 'addUser',
-                    title: '参加人',
-                    sortable: true
-                },
-                {
-                    field: 'location',
-                    title: '地点',
-                    sortable: true
-                },
-                {
-                    field: 'targetUnit',
-                    title: '目标单位简称',
-                    sortable: true
-                },
-                {
-                    field: 'documentNum',
-                    title: '单据数',
-                    sortable: true
-                },
-                {
-                    field: 'reason',
-                    title: '事由',
-                    sortable: true
-                },
-                {
-                    field: 'userName',
-                    title: '申请人',
-                    sortable: true
-                },{
-                    field: 'excess',
-                    title: '是否超额 ',
-                    visible: true,
-                    formatter: function (value, row, index) {
-                        if(value==1){
-                            layer.msg("已超出额度");
-                            return  "超额";
-                        }else {
-                            return  "未超额";
-                        }
-                    }
-                }
-                ]
-        };
-        $.table.init(options);
-    });
-    $(function () {
-        var options = {
-            id: "bootstrap-table-3",
-            url: prefix + "/otherDetail",
-            showSearch: false,
-            showRefresh: false,
-            showToggle: false,
-            showColumns: false,
-            modelName: "其他费用申请",
-            columns: [
-                [
-                    {
-                        title: '其他费用报销信息',
-                        align: 'center',
-                        colspan: 8,
-                    }
-
-                ],
-                [{
-                    checkbox: true
-                },
                     {
                         field: 'id',
-                        title: 'id',
+                        title: 'ID',
                         visible: false
+                    }
+                    ,
+                    {
+                        field: 'num',
+                        title: '报销编号',
+                        sortable: true
                     },
                     {
                         field: 'ddDate',
                         title: '日期',
+                        sortable: true,
                         formatter: function (value, row, index) {
                             var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                             return newDate;
@@ -379,32 +395,353 @@
                     },
                     {
                         field: 'amount',
-                        title: '金额'
+                        title: '金额',
+                        sortable: true
                     },
                     {
-                        field: 'project',
-                        title: '报销科目'
+                        field: 'addUser',
+                        title: '参加人',
+                        sortable: true
                     },
                     {
-                        field: 'reason',
-                        title: '事由'
+                        field: 'location',
+                        title: '地点',
+                        sortable: true
+                    },
+                    {
+                        field: 'targetUnit',
+                        title: '目标单位简称',
+                        sortable: true
                     },
                     {
                         field: 'documentNum',
-                        title: '单据数'
+                        title: '单据数',
+                        sortable: true
                     },
                     {
-                        field: 'status',
-                        title: '用户状态',
-                        visible: false,
-                        align: 'center',
+                        field: 'reason',
+                        title: '事由',
+                        sortable: true
+                    },
+                    {
+                        field: 'userName',
+                        title: '申请人',
+                        sortable: true
+                    },{
+                        field: 'excess',
+                        title: '是否超额 ',
+                        visible: true,
                         formatter: function (value, row, index) {
-                            return $.table.selectDictLabel(datas, value);
+                            if(value==1){
+                                layer.msg("已超出额度");
+                                return  "超额";
+                            }else {
+                                return  "未超额";
+                            }
                         }
-                    }]]
-        };
-        $.table.init(options);
+                    }
+                ]]
+            };
+            $.table.init(options);
+            var options = {
+                id: "bootstrap-table-3",
+                url: prefix + "/otherDetail",
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                modelName: "其他费用申请",
+                queryParams: function(params){
+                    var curParams = {
+                        // 传递参数查询参数
+                        pageSize:       params.limit,
+                        pageNum:        params.offset / params.limit + 1,
+                        searchValue:    params.search,
+                        orderByColumn:  params.sort,
+                        isAsc:          params.order
+                    };
+                    var currentId = $.common.isEmpty($.table._option.formId) ? $('form').attr('id') : $.table._option.formId;
+                    return $.extend(curParams, {"num":num});
+                },
+                columns: [
+                    [
+                        {
+                            title: '其他费用报销信息',
+                            align: 'center',
+                            colspan: 8,
+                        }
+
+                    ],
+                    [{
+                        checkbox: true
+                    },
+                        {
+                            field: 'id',
+                            title: 'id',
+                            visible: false
+                        },
+                        {
+                            field: 'ddDate',
+                            title: '日期',
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                        },
+                        {
+                            field: 'amount',
+                            title: '金额'
+                        },
+                        {
+                            field: 'project',
+                            title: '报销科目'
+                        },
+                        {
+                            field: 'reason',
+                            title: '事由'
+                        },
+                        {
+                            field: 'documentNum',
+                            title: '单据数'
+                        },
+                        {
+                            field: 'status',
+                            title: '用户状态',
+                            visible: false,
+                            align: 'center',
+                            formatter: function (value, row, index) {
+                                return $.table.selectDictLabel(datas, value);
+                            }
+                        }]]
+            };
+            $.table.init(options);
+
+        }else if(type == "tjbx"){
+
+            var options = {
+                id: "bootstrap-table-4",
+                url: "/system/facCollectInformation/query",
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                modalName: "团建费报销",
+                columns: [
+                    {
+                        field : 'id',
+                        title : 'id',
+                        visible: false
+                    },
+                    {
+                        field : 'num',
+                        title : '项目编号',
+                        sortable: false
+                    },
+                    {
+                        field : 'name',
+                        title : '项目名称',
+                        sortable: false
+                    },
+                    {
+                        field : 'amount',
+                        title : '申请金额',
+                        sortable: false
+                    },
+                    {
+                        field : 'money',
+                        title : '报销金额',
+                        sortable: false
+                    },
+                    {
+                        field : 'number',
+                        title : '单据数',
+                        sortable: false
+                    }]
+            };
+            $.table.init(options);
+
+        }else if(type == "clbx"){
+
+            var options = {
+                id: "bootstrap-table-5",
+                url: prefix1 + "/list?num=" + num,
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                pagination: false,
+                modalName: "差旅详细信息",
+                columns: [
+                    [{
+                        title : '差旅详细信息',
+                        align : 'center',
+                        colspan : 8
+                    }],
+                    [
+                        {
+                            field: 'id',
+                            title: 'ID',
+                            visible: false
+                        },
+                        {
+                            field: 'num',
+                            title: '出差编号'
+                        },
+                        {
+                            field: 'busName',
+                            title: '项目名称'
+                        },
+                        {
+                            field: 'outTime',
+                            title: '出差时间',
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                        },
+                        {
+                            field: 'backTimeEs',
+                            title: '预计返回时间',
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                        },
+                        {
+                            field: 'outMan',
+                            title: '出差人员'
+                        },
+                        {
+                            field: 'moneyEs',
+                            title: '报销费用'
+                        },
+                        {
+                            field: 'reason',
+                            title: '事由'
+                        }
+                    ]]
+            };
+            $.table.init(options);
+            var options = {
+                id: "bootstrap-table-6",
+                url: prefix2 + "/list?num=" + num,
+                createUrl: prefix2 + "/tranDetail?id=" + num,
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                pagination: false,
+                modalName: "住宿安排详细信息",
+                columns:
+                    [
+                        [{
+                            title : '住宿安排详细信息',
+                            align : 'center',
+                            colspan : 8
+                        }],
+                        [
+                            {
+                                field: 'num',
+                                title: '差旅编号',
+                                sortable: true
+                            },
+                            {
+                                field: 'city',
+                                title: '入住城市',
+                                sortable: true
+                            },
+                            {
+                                field: 'entrytime',
+                                title: '入店时间',
+                                sortable: true,
+                                formatter: function (value, row, index) {
+                                    var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                    return newDate;
+                                }
+                            },
+                            {
+                                field: 'shoptime',
+                                title: '离店时间',
+                                sortable: true,
+                                formatter: function (value, row, index) {
+                                    var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                    return newDate;
+                                }
+                            },
+                            {
+                                field: 'number',
+                                title: '入住人数',
+                                sortable: true
+                            },
+                            {
+                                field: 'details',
+                                title: '入住详情',
+                                sortable: true
+                            },
+                            {
+                                field: 'money',
+                                title: '住宿金额',
+                                sortable: true
+                            }
+                        ]]
+            };
+            $.table.init(options);
+            var options = {
+                id: "bootstrap-table-7",
+                url: prefix3 + "/list?num=" + num,
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                pagination: false,
+                modalName: "行程安排详细信息",
+                columns: [
+                    [{
+                        title : '行程安排详细信息',
+                        align : 'center',
+                        colspan : 7
+                    }],
+                    [
+                        {
+                            field: 'num',
+                            title: '差旅编号'
+                        },
+                        {
+                            field: 'costDate',
+                            title: '时间',
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                        },
+                        {
+                            field: 'vehicle',
+                            title: '交通工具'
+                        },
+                        {
+                            field: 'departure',
+                            title: '出发地'
+                        },
+                        {
+                            field: 'target',
+                            title: '目的地'
+                        },
+                        {
+                            field: 'amount',
+                            title: '报销金额'
+                        },
+                        {
+                            field: 'reason',
+                            title: '事由'
+                        }
+                    ]]
+            };
+            $.table.init(options);
+
+        }
     });
+
+
 
     function mSave(url, data, callback) {
         debugger
@@ -438,15 +775,6 @@
         window.location.reload();
         $.modal.close();
     }
-
-
-
-    function refreshParent() {
-        window.opener.location.href = window.opener.location.href;
-        window.close();
-    }
-
-
 
     function submitHandler() {
 

@@ -88,4 +88,7 @@ public interface IFacUserApprovalService {
 	 * @return 结果
 	 */
 	public int deleteFacUserApprovalByIds(String ids);
+
+	//创建报销的审批流
+    public void createPublicPayApprovalProcess(String num,Double amount,String processName, Long userId);
 }

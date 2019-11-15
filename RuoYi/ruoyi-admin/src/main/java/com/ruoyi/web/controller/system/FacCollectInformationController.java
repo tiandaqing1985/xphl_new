@@ -75,8 +75,7 @@ public class FacCollectInformationController extends BaseController {
 		startPage();
 		FacCollectInformation fac = new FacCollectInformation();
 		fac.setNum(num);
-		List<FacCollectInformation> list = facCollectInformationService
-				.selectFacCollectInformationList(fac); 
+		List<FacCollectInformation> list = facCollectInformationService.selectFacCollectInformationList(fac);
 		if (list != null) { 
 			return getDataTable(list);
 		} else {
@@ -110,10 +109,10 @@ public class FacCollectInformationController extends BaseController {
 	 * 修改团建费报销
 	 */
 	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
-		FacCollectInformation facCollectInformation = facCollectInformationService
-				.selectFacCollectInformationById(id);
+	public String edit(@PathVariable("id") Long id, ModelMap mmap,String editType) {
+		FacCollectInformation facCollectInformation = facCollectInformationService.selectFacCollectInformationById(id);
 		mmap.put("facCollectInformation", facCollectInformation);
+		mmap.put("editType", editType);
 		return prefix + "/edit";
 	}
 

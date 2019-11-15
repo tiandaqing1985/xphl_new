@@ -19,7 +19,7 @@
       <td class="X5 X6" style="width:63.75pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">事由</span></p></td>
       <td class="X5 X6" style="width:106.35pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="4"><p>${facCostApply.reason!}</p></td>
       <td class="X5 X6" style="width:63.75pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="2"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">申请时间</span></p></td>
-      <td class="X5 X6" style="width:111.65pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="3"><p>2019-01-01</p></td>
+      <td class="X5 X6" style="width:111.65pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="3"><p>${facCostApply.applicationTime?string('yyyy-MM-dd')}</p></td>
      </tr>
      <tr class="X5 X6">
       <td class="X5 X6" style="width:70.65pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="2"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">日期</span></p></td>
@@ -67,7 +67,7 @@
      </tr>
      <tr class="X5 X6">
       <td class="X5 X6" style="width:70.65pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="2"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">备注</span></p></td>
-      <td class="X5 X6" style="width:636.1pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="16"><p>${facCostApply.reason}</p></td>
+      <td class="X5 X6" style="width:636.1pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="16"><p>${facCostApply.reason!}</p></td>
      </tr>
      <tr class="X5 X6">
       <td class="X5 X6" style="width:141.5pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="3"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">审批人</span></p></td>

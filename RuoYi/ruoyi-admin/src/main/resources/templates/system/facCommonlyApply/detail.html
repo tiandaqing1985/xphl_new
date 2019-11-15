@@ -10,6 +10,9 @@
     <div class="row">
         <div>
             <h4 class="form-header h4">常用收款人信息</h4>
+            <a class="btn btn-success" onclick="cyAdd()">
+                <i class="fa fa-edit"></i> 添加常用收款
+            </a>
             <div class="col-sm-12 select-table table-striped">
                 <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
             </div>
@@ -19,15 +22,17 @@
 <div th:include="include :: footer"></div>
 <script th:inline="javascript">
     var prefix = ctx + "system/facCommonlyApply";
+    function cyAdd() {
+        $.modal.openFull("常用收款", "/system/facPayPublicApply/addCo");
+    }
+
     $(function () {
         var options = {
             id: "bootstrap-table-1",
             url: prefix + "/list",
             modalName: "对公常显",
-            showExport: true,
-            columns: [{
-                checkbox: true
-            },
+            showExport: false,
+            columns: [
                 {
                     field: 'id',
                     title: 'id',
@@ -36,17 +41,17 @@
                 {
                     field: 'name',
                     title: '收款人名称',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'number',
                     title: '收款人账户',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'userName',
                     title: '收款人开户行',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     title: '操作',

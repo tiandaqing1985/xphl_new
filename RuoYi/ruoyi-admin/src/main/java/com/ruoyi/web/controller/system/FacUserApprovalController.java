@@ -3,9 +3,8 @@ package com.ruoyi.web.controller.system;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ruoyi.system.domain.finance.FacHospitalityApply;
-import com.ruoyi.system.domain.finance.ReiHospitalityApply;
-import com.ruoyi.system.service.finance.IFacHospitalityApplyService;
+import com.ruoyi.system.domain.finance.*;
+import com.ruoyi.system.service.finance.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -24,11 +23,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
-import com.ruoyi.system.domain.finance.FacReimburseApply;
-import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
-import com.ruoyi.system.service.finance.IFacReimburseApplyService;
-import com.ruoyi.system.service.finance.IFacUserApprovalService;
 
 /**
  * 财务审批 信息操作处理
@@ -49,6 +44,12 @@ public class FacUserApprovalController extends BaseController {
     private IFacReimburseApplyService facReimburseApplyService;
     @Autowired
     private IFacHospitalityApplyService facHospitalityApplyService;
+    @Autowired
+    private IFacCollectApplyService facCollectApplyService;
+    @Autowired
+    private IFacCostReimburseService facCostReimburseService;
+    @Autowired
+    private IFacZhaoDaiLimitService facZhaoDaiLimitService;
 
     // @RequiresPermissions("system:facUserApproval:view")
     @GetMapping()
@@ -118,8 +119,7 @@ public class FacUserApprovalController extends BaseController {
      * 修改财务审批
      */
     @GetMapping("/edit/{approvalId}")
-    public String edit(@PathVariable("approvalId") Long approvalId,
-                       ModelMap map) {
+    public String edit(@PathVariable("approvalId") Long approvalId, ModelMap map) {
 
         FacUserApproval facUserApproval = facUserApprovalService
                 .selectFacUserApprovalById(approvalId);
@@ -138,9 +138,62 @@ public class FacUserApprovalController extends BaseController {
         map.put("userId", ShiroUtils.getUserId());
         map.put("name", facUserApproval.getProjectName());
         map.put("userName", facUserApproval.getName());
-
+        map.put("facCollectApply",new FacCollectApply());
         String nums = facUserApproval.getApplyId().substring(0, 2);
         if (nums.equals("BX")) {
+            FacReimburseApply reimburseApply = new FacReimburseApply();
+            reimburseApply.setNum(facUserApproval.getApplyId());
+            List<FacReimburseApply> reimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(reimburseApply);
+            String type = reimburseApplies.get(0).getType();
+            if (type.equals("日常报销")) {
+                map.put("type","rcbx");
+                //查询限额
+                Double limitAmount = 0.00;
+                List<Long> roleIds = facReimburseApplyService.selectRole(facUserApproval.getApplicantId());
+                for (Long roleId : roleIds) {
+                    FacZhaoDaiLimit facZhaoDaiLimit = facZhaoDaiLimitService.selectFacZhaoDaiLimitByRoleId(roleId);
+                    if (facZhaoDaiLimit == null) {
+                        continue;
+                    } else if (facZhaoDaiLimit.getLimitAmount().doubleValue() > limitAmount) {
+                        limitAmount = facZhaoDaiLimit.getLimitAmount().doubleValue();
+                    }
+                }
+                //查询当前已用额度
+                //计算报销人当月已审批和审批中的招待费报销金额
+                Double amount = 0.00;
+                FacReimburseApply facReimburseApplyVO = new FacReimburseApply();
+                facReimburseApplyVO.setLoanUser(facUserApproval.getApplicantId());
+                List<FacReimburseApply> facReimburseApplyList = facReimburseApplyService.selectCurrentMonthFacReimburseApplyList(facReimburseApplyVO);
+                for (FacReimburseApply apply : facReimburseApplyList) {
+
+                    if (apply.getType().equals("日常报销")) {
+                        //计算 待审批的 审批中的 审批成功的
+                        if (apply.getStatus() == null || apply.getStatus().equals("1") || apply.getStatus().equals("3")) {
+                            ReiHospitalityApply hospitalityApply = new ReiHospitalityApply();
+                            hospitalityApply.setNum(apply.getNum());
+                            List<ReiHospitalityApply> reiHospitalityApplies = facReimburseApplyService.selectReiHospitalityApplyList(hospitalityApply);
+                            for (ReiHospitalityApply reiHospitalityApply : reiHospitalityApplies) {
+                                amount = amount + reiHospitalityApply.getAmount();
+                            }
+                        }
+
+                    }
+
+                }
+                if (limitAmount < amount) {
+                    map.put("isOverAmountLimit","true");
+                }else{
+                    map.put("isOverAmountLimit","false");
+                }
+
+            } else if (type.equals("团建报销")) {
+                FacCollectApply facCollectApply = null;
+                facCollectApply = facCollectApplyService.selectFacCollectApplyByNum(reimburseApplies.get(0).getJKnum());
+                map.put("type","tjbx");
+                map.put("facCollectApply",facCollectApply);
+            } else if (type.equals("差旅报销")) {
+                map.put("type","clbx");
+            }
             return prefix + "/baoxiaoDetails";
         } else if (nums.equals("JK")) {
             return prefix + "/jiekuanDetails";
@@ -208,13 +261,13 @@ public class FacUserApprovalController extends BaseController {
         int status = facUserApprovalService.updateFacUserApproval(fac);
         //当前申请所有审批人已经同意
         if (status == 0) {
-            if(facUserApproval.getApplyId().startsWith("ZD")){
+            if (facUserApproval.getApplyId().startsWith("ZD")) {
                 //招待费同意则生成招待费的报销信息
                 FacHospitalityApply selectHospitalityApply = new FacHospitalityApply();
                 selectHospitalityApply.setNum(facUserApproval.getApplyId());
                 List<FacHospitalityApply> facHospitalityApplies = facHospitalityApplyService.selectFacHospitalityApplyList(selectHospitalityApply);
 
-                if(facHospitalityApplies.size()>0){
+                if (facHospitalityApplies.size() > 0) {
 
                     selectHospitalityApply = facHospitalityApplies.get(0);
                     ReiHospitalityApply reiHospitalityApply = new ReiHospitalityApply();

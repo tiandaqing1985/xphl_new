@@ -28,13 +28,13 @@
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">借款时间：</label>
 				<div class="col-sm-8">
-					<input id="loanTime" name="loanTime"  th:value="${#dates.format(facLoanApply.loanTime,'yyyy-MM-dd')}" class="time-input form-control"  >
+					<input id="loanTime" name="loanTime"  th:value="${#dates.format(facLoanApply.loanTime,'yyyy-MM-dd')}" class="time-input form-control"  readonly style="background-color: white">
 				</div>
 			</div>
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">预计还款时间：</label>
 				<div class="col-sm-8">
-					<input id="repayTime" name="repayTime" th:value="${#dates.format(facLoanApply.repayTime,'yyyy-MM-dd')}" class="time-input form-control" >
+					<input id="repayTime" name="repayTime" th:value="${#dates.format(facLoanApply.repayTime,'yyyy-MM-dd')}" class="time-input form-control" readonly style="background-color: white">
 				</div>
 			</div>
 
@@ -60,12 +60,61 @@
 			},
 			focusCleanup: true
 		});
-		
+
 		function submitHandler() {
-	        if ($.validate.form()) {
-	            $.operate.save(prefix + "/edit", $('#form-facLoanApply-edit').serialize());
-	        }
-	    }
+			var res = false;
+			if ($.validate.form()) {
+				var config = {
+					url: prefix + "/add",
+					type: "post",
+					dataType: "json",
+					data: $('#form-facLoanApply-edit').serialize(),
+					async: false,
+					beforeSend: function () {
+						$.modal.loading("正在处理中，请稍后...");
+						$.modal.disable();
+					},
+					success: function(result) {
+						if(result.code==0){
+							res = true;
+						}
+						$.operate.successCallback(result);
+					}
+				};
+				$.ajax(config);
+			}
+			return res;
+		}
+		function sub() {
+			var res = false;
+			if ($.validate.form()) {
+				var config = {
+					url: prefix + "/addSove",
+					type: "post",
+					dataType: "json",
+					data: $('#form-facLoanApply-edit').serialize(),
+					async: false,
+					beforeSend: function () {
+						$.modal.loading("正在处理中，请稍后...");
+						$.modal.disable();
+					},
+					success: function(result) {
+						if(result.code==0){
+							res = true;
+						}
+						$.operate.successCallback(result);
+					}
+				};
+				$.ajax(config);
+			}
+			return res;
+		}
+
+		// function submitHandler() {
+	    //     if ($.validate.form()) {
+	    //         $.operate.save(prefix + "/edit", $('#form-facLoanApply-edit').serialize());
+	    //     }
+	    // }
 	</script>
 </body>
 </html>

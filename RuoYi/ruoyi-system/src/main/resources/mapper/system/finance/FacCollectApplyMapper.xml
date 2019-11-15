@@ -52,12 +52,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectFacCollectApplyById" parameterType="Long" resultMap="FacCollectApplyResult">
         <include refid="selectFacCollectApplyVo"/>
-        where id = #{id}
+        where id = #{id} order by id desc
     </select>
-        
+    <select id="selectFacCollectApplyByNum" parameterType="String" resultMap="FacCollectApplyResult">
+        <include refid="selectFacCollectApplyVo"/>
+        where num = #{param1}
+    </select>
+
     <insert id="insertFacCollectApply" parameterType="FacCollectApply" useGeneratedKeys="true" keyProperty="id">
         insert into fac_collect_apply
 		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="id != null">id,</if>
 			<if test="num != null  and num != ''  ">num,</if>
 			<if test="deptCompany != null  and deptCompany != ''  ">dept_company,</if>
 			<if test="deptName != null  and deptName != ''  ">dept_name,</if>
@@ -75,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="remarks != null  and remarks != ''  ">remarks,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
 			<if test="num != null  and num != ''  ">#{num},</if>
 			<if test="deptCompany != null  and deptCompany != ''  ">#{deptCompany},</if>
 			<if test="deptName != null  and deptName != ''  ">#{deptName},</if>

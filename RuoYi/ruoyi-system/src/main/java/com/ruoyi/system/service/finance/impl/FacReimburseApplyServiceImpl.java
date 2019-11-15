@@ -217,11 +217,8 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     approvalProcessService.insert(center);
                     if (level == 2) {
                         // 如果含有加班申请 人事审批
-                        if (facReimburseApply.getTrafficReiApplyList() != null
-                                && facReimburseApply.getTrafficReiApplyList()
-                                .size() != 0) {
-                            List<ReiTrafficApply> trafficReiApplyList = facReimburseApply
-                                    .getTrafficReiApplyList();
+                        if (facReimburseApply.getTrafficReiApplyList() != null&& facReimburseApply.getTrafficReiApplyList().size() != 0) {
+                            List<ReiTrafficApply> trafficReiApplyList = facReimburseApply.getTrafficReiApplyList();
                             for (ReiTrafficApply reiTrafficApply : trafficReiApplyList) {
                                 if (reiTrafficApply.getType().equals("加班")) {
 
@@ -242,9 +239,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
                 }
                 // 获取该申请人下的所有领导
-                LinkedList<Long> centerId = (LinkedList<Long>) iSysUserService
-                        .selectCenterIdByUserId(
-                                facReimburseApply.getLoanUser());
+                LinkedList<Long> centerId = (LinkedList<Long>) iSysUserService.selectCenterIdByUserId(facReimburseApply.getLoanUser());
 
                 if (centerId != null && centerId.size() > 0) {
                     for (int i = centerId.size() - 1; i >= 0; i--) {
@@ -370,8 +365,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                 if (num > 10000.00) {
                                     center.setApproverId(new Long(103));
                                     center.setApprovalLevel(level++);
-                                    center.setProjectName(
-                                            facReimburseApply.getName());
+                                    center.setProjectName(facReimburseApply.getName());
                                     approvalProcessService.insert(center);
                                 }
                                 facReimburseApplyMapper.insertFacReimburseApply(
@@ -382,8 +376,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
                             if (num <= 10000.00) {
                                 facReimburseApply.setStatus("3");
-                                facReimburseApplyMapper.insertFacReimburseApply(
-                                        facReimburseApply);
+                                facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
                                 flg = true;
                             }
                         } else {
@@ -646,4 +639,8 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
     }
 
+    @Override
+    public List<ReiHospitalityApply> hosTail(String num) {
+        return facReimburseApplyMapper.hosTail(num);
+    }
 }

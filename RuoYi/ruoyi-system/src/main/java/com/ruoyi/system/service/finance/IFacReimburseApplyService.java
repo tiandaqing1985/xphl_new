@@ -155,4 +155,6 @@ public interface IFacReimburseApplyService {
 
 	//查询当月的
 	List<FacReimburseApply> selectCurrentMonthFacReimburseApplyList(FacReimburseApply facReimburseApply);
+
+    List<ReiHospitalityApply> hosTail(String num);
 }

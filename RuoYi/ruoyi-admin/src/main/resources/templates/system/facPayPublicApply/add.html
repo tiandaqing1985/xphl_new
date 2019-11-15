@@ -6,71 +6,107 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-facPayPublicApply-add" >
-        <div class="form-group">
-            <a id="cy" class="btn btn-success" onclick="cy()">
-                <i class="fa fa-plus"></i> 常用收款人
-            </a>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">对公编号：</label>
-            <div class="col-sm-8">
-                <input id="num" name="num" class="form-control" type="text" th:value="${num}" readonly="readonly">
+        <input id="id" name="id" th:field="${data.id}" type="hidden">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">对公编号：</label>
+                    <div class="col-sm-8">
+                        <input id="num" name="num" class="form-control" type="text" th:value="${num}" readonly="readonly">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">付款单位：</label>
+                    <div class="col-sm-8">
+                        <select id="unit" name="unit">
+                            <option th:selected="${data.unit=='新普互联（北京）科技有限公司'}" value="新普互联（北京）科技有限公司">新普互联（北京）科技有限公司</option>
+                            <option th:selected="${data.unit=='普菲特（海南）科技有限公司'}" value="普菲特（海南）科技有限公司">普菲特（海南）科技有限公司</option>
+                            <option th:selected="${data.unit=='新疆普菲特网络科技有限公司'}" value="新疆普菲特网络科技有限公司">新疆普菲特网络科技有限公司</option>
+                            <option th:selected="${data.unit=='上海优寰网络科技有限公司'}" value="上海优寰网络科技有限公司">上海优寰网络科技有限公司</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label">付款单位：</label>
-            <div class="col-sm-8">
-                <select id="unit" name="unit">
-                    <option value="新普互联（北京）科技有限公司" >新普互联（北京）科技有限公司</option>
-                    <option value="普菲特（海南）科技有限公司">普菲特（海南）科技有限公司</option>
-                    <option value="新疆普菲特网络科技有限公司">新疆普菲特网络科技有限公司</option>
-                    <option value="上海优寰网络科技有限公司">上海优寰网络科技有限公司</option>
-                </select>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>申请名称：</label>
+                    <div class="col-sm-8">
+                        <input id="name" name="name" class="form-control" type="text" required th:value="${data.name}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>是否有发票：</label>
+                    <div class="col-sm-8">
+                        <label><input type="radio" name="weatherInvoice" value="有发票" checked="checked" th:checked="${data.weatherInvoice=='有发票' or data.weatherInvoice == null}">有发票</label>
+                        <label><input type="radio" name="weatherInvoice" value="暂无发票" th:checked="${data.weatherInvoice=='暂无发票'}">暂无发票</label>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>申请名称：</label>
-            <div class="col-sm-8">
-                <input id="name" name="name" class="form-control" type="text" required>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>付款金额：</label>
+                    <div class="col-sm-8">
+                        <input id="amount" name="amount" class="form-control" type="text" required th:value="${data.amount}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <div class="col-sm-3 control-label">
+                        <a id="cy" class="btn btn-success" onclick="cy()">
+                            <i class="fa fa-plus"></i> 常用收款人
+                        </a>
+                    </div>
+                    <div class="col-sm-8">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>是否有发票：</label>
-            <div class="col-sm-8">
-                <label><input type="radio" name="weatherInvoice" value="有发票" checked>有发票</label>
-                <label><input type="radio" name="weatherInvoice" value="暂无发票">暂无发票</label>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人：</label>
+                    <div class="col-sm-8">
+                        <input id="payee" name="payee" class="form-control" type="text" required th:value="${data.payee}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人账号：</label>
+                    <div class="col-sm-8">
+                        <input id="payeeAccount" name="payeeAccount" class="form-control" type="text" required th:value="${data.payeeAccount}">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>付款金额：</label>
-            <div class="col-sm-8">
-                <input id="amount" name="amount" class="form-control" type="text" required>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人开户行：</label>
+                    <div class="col-sm-8">
+                        <input id="payeeBank" name="payeeBank" class="form-control" type="text" required th:value="${data.payeeBank}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"><span style="color: red; "></span>备注：</label>
+                    <div class="col-sm-8">
+                        <textarea id="remarks" name="remarks" class="form-control" type="text" th:text="${data.remarks}"></textarea>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人：</label>
-            <div class="col-sm-8">
-                <input id="payee" name="payee" class="form-control" type="text" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人开户行：</label>
-            <div class="col-sm-8">
-                <input id="payeeBank" name="payeeBank" class="form-control" type="text" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; ">*</span>收款人账号：</label>
-            <div class="col-sm-8">
-                <input id="payeeAccount" name="payeeAccount" class="form-control" type="text" required>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="col-sm-3 control-label"><span style="color: red; "></span>备注：</label>
-            <div class="col-sm-8">
-                <input id="remarks" name="remarks" class="form-control" type="text">
-            </div>
-        </div>
+
 
         <div class="col-sm-12 select-table table-striped">
             <a id="addzhusu" class="btn btn-success" onclick="zAdd()">
@@ -188,16 +224,51 @@
 
 
     function submitHandler() {
-        debugger
+        var res = false;
         if ($.validate.form()) {
-            $.operate.save(prefix + "/add", $('#form-facPayPublicApply-add').serialize());
+            var config = {
+                url: prefix + "/add",
+                type: "post",
+                dataType: "json",
+                data: $('#form-facPayPublicApply-add').serialize(),
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                    $.modal.disable();
+                },
+                success: function(result) {
+                    if(result.code==0){
+                        res = false;
+                    }
+                    $.operate.successCallback(result);
+                }
+            };
+            $.ajax(config);
         }
+        return res;
     }
 
     function sub() {
+        var res = false;
         if ($.validate.form()) {
-            $.operate.save(prefix + "/addSove", $('#form-facPayPublicApply-add').serialize());
+            var config = {
+                url: prefix + "/addSove",
+                type: "post",
+                dataType: "json",
+                data: $('#form-facPayPublicApply-add').serialize(),
+                beforeSend: function () {
+                    $.modal.loading("正在处理中，请稍后...");
+                    $.modal.disable();
+                },
+                success: function(result) {
+                    if(result.code==0){
+                        res = false;
+                    }
+                    $.operate.successCallback(result);
+                }
+            };
+            $.ajax(config);
         }
+        return res;
     }
 </script>
 </body>

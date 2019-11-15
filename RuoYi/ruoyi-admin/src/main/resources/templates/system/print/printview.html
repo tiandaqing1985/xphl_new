@@ -41,6 +41,10 @@
                 async: false,
                 data: "",
                 success: function(result) {
+                    var str = result.substring(0,1);
+                    if(str=="否"){
+                        result = result.substring(1);
+                    }
                     $("#content").html(result);
                 }
             };

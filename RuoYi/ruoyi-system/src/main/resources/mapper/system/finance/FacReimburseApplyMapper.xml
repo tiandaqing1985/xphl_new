@@ -52,7 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <if test="loanUser!=null and loanUser!=''">and a.loan_user=#{loanUser}</if>
         <if test="reimburseTime != null">and a.reimburse_time = #{reimburseTime}</if>
         <if test="type != null and type != ''">and a.type = #{type}</if>
-        order by a.create_time desc
+        order by a.id desc
     </select>
 
     <select id="selectCurrentMonthFacReimburseApplyList" parameterType="FacReimburseApply" resultMap="FacReimburseApplyResult">
@@ -126,6 +126,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="hosTail" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
 SELECT
+    a.applyNum,
   a.`ddDate` AS ddDate,
   a.`targetUnit` AS targetUnit,
   a.`amount`,

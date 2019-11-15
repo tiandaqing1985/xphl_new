@@ -63,6 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertFacPayPublicApply" parameterType="FacPayPublicApply" useGeneratedKeys="true" keyProperty="id">
         insert into fac_pay_public_apply
 		<trim prefix="(" suffix=")" suffixOverrides=",">
+		    <if test="id != null">id,</if>
 			<if test="num != null  and num != ''  ">num,</if>
 			<if test="name != null  and name != ''  ">name,</if>
 			<if test="user != null  ">user,</if>
@@ -79,6 +80,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="unit != null  and unit != ''  ">unit,</if> 
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
 			<if test="num != null  and num != ''  ">#{num},</if>
 			<if test="name != null  and name != ''  ">#{name},</if>
 			<if test="user != null  ">#{user},</if>

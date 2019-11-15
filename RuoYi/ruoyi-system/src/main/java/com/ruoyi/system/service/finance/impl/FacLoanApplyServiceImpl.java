@@ -94,6 +94,8 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
 		if(facLoanApply.getLoanUser() == 103
 				|| facLoanApply.getLoanUser() == 101){
 			facSysUserApproval.setApproverId(101L);
+			facSysUserApproval.setApprovalSight("1");
+			facSysUserApproval.setApprovalState("1");
 		}
 		approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
 		if (facLoanApply.getLoanUser() == 103

@@ -73,6 +73,9 @@
                         <a class="btn btn-success" id="zdf" onclick="mAdd(2)" th:style="${edit=='false'}?'display: none':''">
                             <i class="fa fa-plus"></i> 招待费报销信息
                         </a>
+                        <a class="btn btn-success" id="zdf1" th:style="${edit=='false'}?'display: none':''">
+                            招待费报销信息
+                        </a>
                         <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
                     </div>
                 </div>
@@ -159,6 +162,7 @@
     $(function () {
         if (dept == 10) {
             // $("#zdf").attr("style", "display:block;");//显示div
+            $("#zdf1").attr("style", "display:none;");//隐藏div
         }else{
             $("#zdf").attr("style", "display:none;");//隐藏div
         }
@@ -265,8 +269,8 @@
             showColumns: false,
             pagination: false,
             modalName: "招待费报销申请",
-            columns: [
-
+            columns:
+                [
                 {
                     field: 'id',
                     title: 'ID',
@@ -350,6 +354,7 @@
                 }]
         };
         $.table.init(options2);
+
         var options3 = {
             id: "bootstrap-table-3",
             url: prefix + "/otherDetail",

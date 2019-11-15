@@ -85,13 +85,37 @@ public class FacReimburseApplyController extends BaseController {
     private IFacCostApplyService facCostApplyService;
     @Autowired
     private IFacZhaoDaiLimitService facZhaoDaiLimitService;
+    @Autowired
+    private IFacCollectApplyService facCollectApplyService;
 
     @GetMapping()
     public String facReimburseApply() {
         return prefix + "/facReimburseApply";
     }
 
-    //差旅和团建的报销申请入口
+    //查看差旅报销详情
+    @GetMapping("/costReimburseDetail")
+    public String costReimburseDetail(String num,ModelMap map){
+        FacReimburseApply facReimburseApply = new FacReimburseApply();
+        facReimburseApply.setNum(num);
+        List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
+        map.put("num",facReimburseApplies.get(0).getJKnum());
+        return prefix + "/costDetail";
+    }
+    //查看团建报销详情
+    @GetMapping("/collectReimbuseDetail")
+    public String collectReimbuseDetail(String num,ModelMap map){
+        FacReimburseApply facReimburseApply = new FacReimburseApply();
+        facReimburseApply.setNum(num);
+        List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
+        FacCollectApply facCollectApply = facCollectApplyService.selectFacCollectApplyByNum(facReimburseApplies.get(0).getJKnum());
+        facCollectApply.setApplicantName(sysUserService.selectUserById(facCollectApply.getApplicant()).getUserName());
+        map.put("num", facCollectApply.getNum());
+        map.put("facCollectApply", facCollectApply);
+        return prefix + "/collectReimbuseDetail";
+    }
+
+    //差旅的报销申请入口
     @PostMapping("/applyReimburse")
     @ResponseBody
     public AjaxResult applyReimburse(String num, String type) {
@@ -236,13 +260,6 @@ public class FacReimburseApplyController extends BaseController {
         List<FacReimburseApply> list = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
         FacUserApproval facUserApproval = null;
         for (FacReimburseApply facReimburseApply1 : list) {
-//            if (facReimburseApply1.getType() != null) {
-//                if (facReimburseApply1.getType().equals("日常报销")) {
-//
-//                } else {
-//                    facReimburseApply1.setStatus("1");
-//                }
-//            }
 
             facUserApproval = new FacUserApproval();
             facUserApproval.setApprovalSight("1");
@@ -256,7 +273,6 @@ public class FacReimburseApplyController extends BaseController {
                     facReimburseApply1.setApproveName(sysUser.getUserName());
                 }
             }
-
             FacUserApproval name = facUserApprovalService.selectApproval(facReimburseApply1.getNum(), facReimburseApply1.getLoanUser());
             if (name != null) {
 

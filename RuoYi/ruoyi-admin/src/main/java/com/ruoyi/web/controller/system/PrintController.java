@@ -1,6 +1,7 @@
 package com.ruoyi.web.controller.system;
 
 import com.ruoyi.system.domain.finance.FacReimburseApply;
+import com.ruoyi.system.domain.finance.ReiHospitalityApply;
 import com.ruoyi.system.service.IPrintService;
 import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 
@@ -10,6 +11,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/system/print")
@@ -66,19 +69,17 @@ public class PrintController {
 		}
 
 		if (type.equals("baoxiao")) {
-			FacReimburseApply facReimburseApply = facReimburseApplyService
-					.deatil(num);
+			FacReimburseApply facReimburseApply = facReimburseApplyService.deatil(num);
 			if (facReimburseApply.getJKnum() != null) {
 				String nums = facReimburseApply.getJKnum().substring(0, 2);
 				if (nums.equals("TJ")) {
-					return printService
-							.previewTuanjianBX(facReimburseApply.getJKnum());
+					return printService.previewTuanjianBX(facReimburseApply.getJKnum(),facReimburseApply.getNum());
 				} else if (nums.equals("CL")) {
 					return printService.previewchucaiBX(facReimburseApply.getJKnum(),facReimburseApply.getNum());
 				}
-				else if (nums.equals("ZD")) {
-					return printService.previewZhaodaifeiBX(facReimburseApply.getJKnum());
-				}
+//				else if (nums.equals("ZD")) {
+//					return printService.previewZhaodaifeiBX(facReimburseApply.getJKnum(),facReimburseApply.getNum());
+//				}
 			} 
 			return printService.previewBaoxiao(num);
 		} else if (type.equals("baoxiaoDetail")) {
@@ -94,7 +95,19 @@ public class PrintController {
 		} else if (type.equals("tuanjian")) {
 			return printService.previewTuanjian(num);
 		} else if (type.equals("zhaodaifei")) {
-			return printService.previewZhaodaifei(num);
+			if(num.startsWith("BX")){
+				StringBuffer stringBuffer = new StringBuffer();
+				List<ReiHospitalityApply> hospitalityApplies = facReimburseApplyService.hosTail(num);
+				for(ReiHospitalityApply hospitalityApply:hospitalityApplies){
+					if(hospitalityApply.getApplyNum()!=null){
+						stringBuffer.append(printService.previewZhaodaifei(hospitalityApply.getApplyNum()));
+					}
+				}
+				return stringBuffer.toString();
+			}else{
+				return printService.previewZhaodaifei(num);
+			}
+
 		} else {
 			return "参数不正确";
 		}

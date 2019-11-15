@@ -111,9 +111,7 @@
             showToggle: false,
             showColumns: false,
             modalName: "团建费报销",
-            columns: [{
-                checkbox: true
-            },
+            columns: [
                 {
                     field : 'id',
                     title : 'id',
@@ -122,27 +120,28 @@
                 {
                     field : 'num',
                     title : '项目编号',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field : 'name',
                     title : '项目名称',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field : 'amount',
-                    title : '金额',
-                    sortable: true
+                    title : '申请金额',
+                    sortable: false
                 },
                 {
                     field : 'money',
-                    title : '实际金额',
-                    sortable: true
+                    title : '报销金额',
+                    sortable: false,
+                    visible: false
                 },
                 {
                     field : 'number',
                     title : '单据数',
-                    sortable: true
+                    sortable: false
                 } ]
         };
         $.table.init(options);

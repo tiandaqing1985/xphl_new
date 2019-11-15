@@ -28,7 +28,7 @@
                             申请金额：<input type="text" name="amount"/>
                         </li>
                         <li>
-                            申请时间：<input  class="time-input" name="applicationTime"/>
+                            申请时间：<input  class="time-input" name="applicationTime"  readonly style="background-color: white"/>
                         </li>
 
                         <li>
@@ -183,7 +183,7 @@
                         var actions = [];
                         if (row.approvalStatus == 1) {
                             //审批成功
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-detail"></i>查看</a>');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-detail"></i>打印</a>');
                             if (row.status == 1) {
                                 actions.push('<a class="btn btn-primary btn-xs " href="javascript:void(0)" onclick="baoxiao(\'' + row.id + '\')"> </i>报销</a> ');
                             }
@@ -192,9 +192,9 @@
                         } else if (row.status == 3) {
                             //审批中
                         } else if (row.status == 5) {
-                            actions.push('<a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
+                            // actions.push('<a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');
                             //待审批
-                            actions.push('<a class="btn-info btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            actions.push('<a class="btn btn-info  btn-xs" href="javascript:void(0)" onclick="mEdit(\'' + row.num + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                         } else {
                         }
@@ -204,6 +204,42 @@
         };
         $.table.init(options);
     });
+
+    function mEdit(num) {
+        var width;
+        var height;
+        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+            width = 'auto';
+            height = 'auto';
+        }
+        var index = layer.open({
+            type: 2,
+            area: [width, height],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "提交预览",
+            content: prefix + "/edit/"+num,
+            btn: ['提交', '保存', '关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.submitHandler();
+                return res;
+            },
+            btn2: function (index, layero) {
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.sub();
+                return res;
+            },
+            cancel: function (index) {
+                return true;
+            }
+        });
+        layer.full(index);
+    }
 
     function submitHandler(id) {
         $.modal.open("保存", "/system/facCollectApply/addSave?id=" + id);
@@ -215,7 +251,7 @@
 
     function onDblClickRow(row, $element) {
         var url = $.table._option.facCollectApplyDetailUrl.replace("{id}", row.id);
-        $.modal.openFull("详情", url);
+        $.modal.openTab("团建申请详情",url);
 
     }
 
@@ -239,88 +275,14 @@
             // 弹层外区域关闭
             shadeClose: true,
             yes: function (index, layero) {
-                var config = {
-
-                    type: "post",
-                    dataType: "json",
-                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-                    async: false,
-                    data: '',
-                    success: function () {
-                        var body = layer.getChildFrame('body', index);
-                        var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.submitHandler();
-                        layer.close(index);
-                    }
-                };
-                var result = window.frames[0].document.getElementById("leagueProject").value;
-                var result3 = window.frames[0].document.getElementById("startDate").value;
-                var result4 = window.frames[0].document.getElementById("endDate").value;
-                var result5 = window.frames[0].document.getElementById("participants").value;
-                var result6 = window.frames[0].document.getElementById("parNumber").value;
-                var result7 = window.frames[0].document.getElementById("activityPlace").value;
-                var result8 = window.frames[0].document.getElementById("activityForm").value;
-
-                if (result == '') {
-                    layer.msg("请填写团建名称")
-                } else if (result3 == '') {
-                    layer.msg("请填写开始日期")
-                } else if (result4 == '') {
-                    layer.msg("请填写结束日期")
-                } else if (result5 == '') {
-                    layer.msg("请填写参与人")
-                } else if (result6 == '') {
-                    layer.msg("请填写参与人数")
-                } else if (result7 == '') {
-                    layer.msg("请填写活动地点")
-                } else if (result8 == '') {
-                    layer.msg("请填写活动形式")
-                } else {
-                    $.ajax(config);
-                    window.location.reload();
-                }
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.submitHandler();
+                return res;
             },
             btn2: function (index, layero) {
-                var config = {
-                    type: "post",
-                    dataType: "json",
-                    contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-                    async: false,
-                    data: '',
-                    success: function () {
-                        var body = layer.getChildFrame('body', index);
-                        var iframeWin = window[layero.find('iframe')[0]['name']];
-                        iframeWin.sub();
-                        layer.close(index);
-                    }
-                };
-                var result = window.frames[0].document.getElementById("leagueProject").value;
-                var result3 = window.frames[0].document.getElementById("startDate").value;
-                var result4 = window.frames[0].document.getElementById("endDate").value;
-                var result5 = window.frames[0].document.getElementById("participants").value;
-                var result6 = window.frames[0].document.getElementById("parNumber").value;
-                var result7 = window.frames[0].document.getElementById("activityPlace").value;
-                var result8 = window.frames[0].document.getElementById("activityForm").value;
-
-                if (result == '') {
-                    layer.msg("请填写团建名称")
-                } else if (result3 == '') {
-                    layer.msg("请填写开始日期")
-                } else if (result4 == '') {
-                    layer.msg("请填写结束日期")
-                } else if (result5 == '') {
-                    layer.msg("请填写参与人")
-                } else if (result6 == '') {
-                    layer.msg("请填写参与人数")
-                } else if (result7 == '') {
-                    layer.msg("请填写活动地点")
-                } else if (result8 == '') {
-                    layer.msg("请填写活动形式")
-                } else {
-                    $.ajax(config);
-                    window.location.reload();
-                }
-                return false;
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var res = iframeWin.sub();
+                return res;
             },
             cancel: function (index) {
                 return true;

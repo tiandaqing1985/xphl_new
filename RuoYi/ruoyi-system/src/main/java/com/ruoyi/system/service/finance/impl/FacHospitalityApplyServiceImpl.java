@@ -98,6 +98,8 @@ public class FacHospitalityApplyServiceImpl
 		if(facHospitalityApply.getUserId() == 103
 				|| facHospitalityApply.getUserId() == 101){
 			facSysUserApproval.setApproverId(101L);
+			facSysUserApproval.setApprovalSight("1");
+			facSysUserApproval.setApprovalState("1");
 		}
 		approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
 		if (facHospitalityApply.getUserId() == 103

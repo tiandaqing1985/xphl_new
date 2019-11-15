@@ -17,9 +17,9 @@ public interface IPrintService {
 
     String previewTuanjian(String num);
 
-    String previewTuanjianBX(String num);
+    String previewTuanjianBX(String num,String applyNum);
     
     String previewZhaodaifei(String num); 
     
-    String previewZhaodaifeiBX(String num);
+    String previewZhaodaifeiBX(String num,String applyNum);
 }
