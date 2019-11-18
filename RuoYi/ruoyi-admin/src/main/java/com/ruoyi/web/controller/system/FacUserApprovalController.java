@@ -138,7 +138,7 @@ public class FacUserApprovalController extends BaseController {
         map.put("userId", ShiroUtils.getUserId());
         map.put("name", facUserApproval.getProjectName());
         map.put("userName", facUserApproval.getName());
-        map.put("facCollectApply",new FacCollectApply());
+        map.put("facCollectApply", new FacCollectApply());
         String nums = facUserApproval.getApplyId().substring(0, 2);
         if (nums.equals("BX")) {
             FacReimburseApply reimburseApply = new FacReimburseApply();
@@ -146,8 +146,12 @@ public class FacUserApprovalController extends BaseController {
             List<FacReimburseApply> reimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(reimburseApply);
             String type = reimburseApplies.get(0).getType();
             if (type.equals("日常报销")) {
-                map.put("type","rcbx");
-                //查询限额
+                map.put("type", "rcbx");
+                //查询本报销是否有招待费报销项
+                ReiHospitalityApply reiHospitalityApplyVO = new ReiHospitalityApply();
+                reiHospitalityApplyVO.setNum(facUserApproval.getApplyId());
+                List<ReiHospitalityApply> reiHospitalityApplies1 = facReimburseApplyService.selectReiHospitalityApplyList(reiHospitalityApplyVO);
+                //查询招待费限额
                 Double limitAmount = 0.00;
                 List<Long> roleIds = facReimburseApplyService.selectRole(facUserApproval.getApplicantId());
                 for (Long roleId : roleIds) {
@@ -158,7 +162,7 @@ public class FacUserApprovalController extends BaseController {
                         limitAmount = facZhaoDaiLimit.getLimitAmount().doubleValue();
                     }
                 }
-                //查询当前已用额度
+                //查询招待费当前已用额度
                 //计算报销人当月已审批和审批中的招待费报销金额
                 Double amount = 0.00;
                 FacReimburseApply facReimburseApplyVO = new FacReimburseApply();
@@ -180,19 +184,59 @@ public class FacUserApprovalController extends BaseController {
                     }
 
                 }
-                if (limitAmount < amount) {
-                    map.put("isOverAmountLimit","true");
-                }else{
-                    map.put("isOverAmountLimit","false");
+                //本次报销有招待费且大于限额
+                if (reiHospitalityApplies1.size() > 0 && limitAmount < amount) {
+                    map.put("isOverAmountLimit", "true");
+                } else {
+                    map.put("isOverAmountLimit", "false");
+                }
+
+                //判断公出费是否超额
+                List<Long> longs = facReimburseApplyService.selectRole(facUserApproval.getApplicantId());
+                for (Long roleId : longs) {
+                    if (roleId == 9 || roleId == 10) {
+                        //查询当前创建人一个月内审批中 审批通过 未审批的公出交通费金额
+                        Double sumAmount = 0.00;
+                        FacReimburseApply selectVO = new FacReimburseApply();
+                        selectVO.setLoanUser(facUserApproval.getApplicantId());
+                        List<FacReimburseApply> facReimburseApplies1 = facReimburseApplyService.selectCurrentMonthFacReimburseApplyList(selectVO);
+                        for (FacReimburseApply apply : facReimburseApplies1) {
+
+                            if (apply.getType().equals("日常报销")) {
+                                //计算 待审批的 审批中的 审批成功的
+                                if (apply.getStatus() == null || apply.getStatus().equals("1") || apply.getStatus().equals("3")) {
+                                    List<ReiTrafficApply> reiTrafficApplyList = facReimburseApplyService.selectReiTrafficApply(apply.getNum());
+                                    for (ReiTrafficApply trafficApply : reiTrafficApplyList) {
+                                        if ("公出".equals(trafficApply.getType())) {
+                                            sumAmount = sumAmount + trafficApply.getAmount();
+                                        }
+                                    }
+                                }
+
+                            }
+
+                        }
+                        List<ReiTrafficApply> reiTrafficApplyList = facReimburseApplyService.selectReiTrafficApply(facUserApproval.getApplyId());
+                        map.put("isOverGongChuLimit", "false");
+                        for (int i = 0; i < reiTrafficApplyList.size(); i++) {
+                            if(reiTrafficApplyList.get(i).getType().equals("公出")){
+                                if (sumAmount > 800) {
+                                    map.put("isOverGongChuLimit", "true");
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    }
                 }
 
             } else if (type.equals("团建报销")) {
                 FacCollectApply facCollectApply = null;
                 facCollectApply = facCollectApplyService.selectFacCollectApplyByNum(reimburseApplies.get(0).getJKnum());
-                map.put("type","tjbx");
-                map.put("facCollectApply",facCollectApply);
+                map.put("type", "tjbx");
+                map.put("facCollectApply", facCollectApply);
             } else if (type.equals("差旅报销")) {
-                map.put("type","clbx");
+                map.put("type", "clbx");
             }
             return prefix + "/baoxiaoDetails";
         } else if (nums.equals("JK")) {

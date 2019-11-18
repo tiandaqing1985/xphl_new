@@ -151,33 +151,49 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 
     @Override
     public FacUserApproval selectApproval(String num, Long userId) {
-        FacUserApproval facUserApproval = new FacUserApproval();
-        facUserApproval.setApplyId(num);
-        facUserApproval.setApplicantId(userId);
-        facUserApproval.setApprovalSight("1");
-        FacUserApproval facUserApproval2 = new FacUserApproval();
-        facUserApproval2.setApplyId(num);
-        facUserApproval2.setApplicantId(userId);
-        facUserApproval2.setApprovalSight("1");
-        facUserApproval2.setApprovalState("3");
-        FacUserApproval facUserApproval3;
-
-        List<FacUserApproval> list = facUserApprovalMapper
-                .selectFacUserApprovalList(facUserApproval2);
-
-        if (list != null && list.size() > 0) {
-            facUserApproval3 = list.get(0);
-        } else {
-            facUserApproval3 = null;
+        FacUserApproval selectVo = new FacUserApproval();
+        selectVo.setApplyId(num);
+        List<FacUserApproval> facUserApprovals = facUserApprovalMapper.selectFacUserApprovalList(selectVo);
+        FacUserApproval last = null;
+        for (FacUserApproval facUserApproval : facUserApprovals) {
+            if(facUserApproval.getApprovalSight().equals("1")) {
+                if (last == null) {
+                    last = facUserApproval;
+                } else {
+                    if (facUserApproval.getApprovalLevel() > last.getApprovalLevel()) {
+                        last = facUserApproval;
+                    }
+                }
+            }
         }
-        if (facUserApproval3 != null) {
-            return facUserApproval3;
-        } else {
+        return  last;
 
-            FacUserApproval FacUserApproval5 = facUserApprovalMapper.selectApprovaIdlList(facUserApproval);
-
-            return FacUserApproval5;
-        }
+//        FacUserApproval facUserApproval = new FacUserApproval();
+//        facUserApproval.setApplyId(num);
+//        facUserApproval.setApplicantId(userId);
+//        facUserApproval.setApprovalSight("1");
+//        FacUserApproval facUserApproval2 = new FacUserApproval();
+//        facUserApproval2.setApplyId(num);
+//        facUserApproval2.setApplicantId(userId);
+//        facUserApproval2.setApprovalSight("1");
+//        facUserApproval2.setApprovalState("3");
+//        FacUserApproval facUserApproval3;
+//
+//        List<FacUserApproval> list = facUserApprovalMapper.selectFacUserApprovalList(facUserApproval2);
+//
+//        if (list != null && list.size() > 0) {
+//            facUserApproval3 = list.get(0);
+//        } else {
+//            facUserApproval3 = null;
+//        }
+//        if (facUserApproval3 != null) {
+//            return facUserApproval3;
+//        } else {
+//
+//            FacUserApproval facUserApproval5 = facUserApprovalMapper.selectApprovaIdlList(facUserApproval);
+//
+//            return facUserApproval5;
+//        }
     }
 
     /**

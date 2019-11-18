@@ -95,9 +95,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="status != null  and status != '' "> and status = #{status}</if>
              <if test="applyNum != null  and applyNum != '' "> and applyNum = #{applyNum}</if>
              <if test="user != null "> and user = #{user}</if>
+            and DATE_FORMAT(ddDate, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
          </where>
-    </select>  
-    <select id="selectsysuser"   resultType="String"> 
+    </select>
+
+    <select id="selectsysuser"   resultType="String">
        select area from  sys_user where user_id = #{id}
     </select> 
     

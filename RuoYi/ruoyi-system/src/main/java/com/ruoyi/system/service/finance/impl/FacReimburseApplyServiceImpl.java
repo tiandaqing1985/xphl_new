@@ -102,11 +102,13 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
             List<FacUserApproval> facUserApprovals = facUserApprovalService.selectFacUserApprovalList(selectVo);
             FacUserApproval last = null;
             for (FacUserApproval facUserApproval : facUserApprovals) {
-                if (last == null) {
-                    last = facUserApproval;
-                } else {
-                    if (facUserApproval.getApprovalLevel() > last.getApprovalLevel()) {
+                if (facUserApproval.getApprovalSight().equals("1")) {
+                    if (last == null) {
                         last = facUserApproval;
+                    } else {
+                        if (facUserApproval.getApprovalLevel() > last.getApprovalLevel()) {
+                            last = facUserApproval;
+                        }
                     }
                 }
             }
@@ -145,13 +147,13 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
 //            facReimburseApply.setType("日常报销");
             facReimburseApply.setApplyStatus("1");
-            if(facReimburseApply.getType().equals("日常报销")){
+            if (facReimburseApply.getType().equals("日常报销")) {
                 double a = facReiAdiApplyMapper.selectAmount(facReimburseApply.getNum());
                 double b = facReimburseApplyMapper.selectHospAmount(facReimburseApply.getNum());
                 double c = facReimburseApplyMapper.selectTraAmount(facReimburseApply.getNum());
                 facReimburseApply.setAmount(a + b + c);
                 center.setAmount(a + b + c);
-            }else{
+            } else {
                 center.setAmount(facReimburseApply.getAmount());
             }
             facReimburseApply.setReimburseTime(new Date());
@@ -217,7 +219,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     approvalProcessService.insert(center);
                     if (level == 2) {
                         // 如果含有加班申请 人事审批
-                        if (facReimburseApply.getTrafficReiApplyList() != null&& facReimburseApply.getTrafficReiApplyList().size() != 0) {
+                        if (facReimburseApply.getTrafficReiApplyList() != null && facReimburseApply.getTrafficReiApplyList().size() != 0) {
                             List<ReiTrafficApply> trafficReiApplyList = facReimburseApply.getTrafficReiApplyList();
                             for (ReiTrafficApply reiTrafficApply : trafficReiApplyList) {
                                 if (reiTrafficApply.getType().equals("加班")) {
@@ -623,11 +625,13 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
             List<FacUserApproval> facUserApprovals = facUserApprovalService.selectFacUserApprovalList(selectVo);
             FacUserApproval last = null;
             for (FacUserApproval facUserApproval : facUserApprovals) {
-                if (last == null) {
-                    last = facUserApproval;
-                } else {
-                    if (facUserApproval.getApprovalLevel() > last.getApprovalLevel()) {
+                if (facUserApproval.getApprovalSight().equals("1")) {
+                    if (last == null) {
                         last = facUserApproval;
+                    } else {
+                        if (facUserApproval.getApprovalLevel() > last.getApprovalLevel()) {
+                            last = facUserApproval;
+                        }
                     }
                 }
             }
@@ -643,4 +647,5 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
     public List<ReiHospitalityApply> hosTail(String num) {
         return facReimburseApplyMapper.hosTail(num);
     }
+
 }

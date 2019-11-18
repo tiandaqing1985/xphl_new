@@ -95,16 +95,17 @@ public class FacReimburseApplyController extends BaseController {
 
     //查看差旅报销详情
     @GetMapping("/costReimburseDetail")
-    public String costReimburseDetail(String num,ModelMap map){
+    public String costReimburseDetail(String num, ModelMap map) {
         FacReimburseApply facReimburseApply = new FacReimburseApply();
         facReimburseApply.setNum(num);
         List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
-        map.put("num",facReimburseApplies.get(0).getJKnum());
+        map.put("num", facReimburseApplies.get(0).getJKnum());
         return prefix + "/costDetail";
     }
+
     //查看团建报销详情
     @GetMapping("/collectReimbuseDetail")
-    public String collectReimbuseDetail(String num,ModelMap map){
+    public String collectReimbuseDetail(String num, ModelMap map) {
         FacReimburseApply facReimburseApply = new FacReimburseApply();
         facReimburseApply.setNum(num);
         List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
@@ -664,7 +665,7 @@ public class FacReimburseApplyController extends BaseController {
 
             if (limitAmount < amount) {
                 return AjaxResult.success("已超出额度");
-            }else{
+            } else {
                 return AjaxResult.success("操作成功");
             }
 
@@ -717,7 +718,47 @@ public class FacReimburseApplyController extends BaseController {
         FacReimburseApply facReimburseApply = new FacReimburseApply();
         facReimburseApply.setLoanUser(ShiroUtils.getUserId());
         facReimburseApply.setTrafficReiApplyList(list);
-        return toAjax(facReimburseApplyService.insertReiTrafficApply(reiTrafficApply));
+        //查询当前创建人一个月内审批中 审批通过 未审批的公出交通费金额
+        Double amount = 0.00;
+        FacReimburseApply reimburseApply = new FacReimburseApply();
+        reimburseApply.setLoanUser(ShiroUtils.getUserId());
+        List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectCurrentMonthFacReimburseApplyList(reimburseApply);
+        for (FacReimburseApply apply : facReimburseApplies) {
+
+            if (apply.getType().equals("日常报销")) {
+                //计算 待审批的 审批中的 审批成功的
+                if (apply.getStatus() == null || apply.getStatus().equals("1") || apply.getStatus().equals("3")) {
+                    List<ReiTrafficApply> reiTrafficApplyList = facReimburseApplyService.selectReiTrafficApply(apply.getNum());
+                    for (ReiTrafficApply trafficApply : reiTrafficApplyList) {
+                        if ("公出".equals(trafficApply.getType())) {
+                            amount = amount + trafficApply.getAmount();
+                        }
+                    }
+                }
+
+            }
+
+        }
+        facReimburseApplyService.insertReiTrafficApply(reiTrafficApply);
+        //查询本次插入的申请对应申请单的其他公出金额
+        List<ReiTrafficApply> reiTrafficApplyList = facReimburseApplyService.selectReiTrafficApply(reiTrafficApply.getNum());
+        for (ReiTrafficApply trafficApply : reiTrafficApplyList) {
+            if ("公出".equals(trafficApply.getType())) {
+                amount = amount + trafficApply.getAmount();
+            }
+        }
+        List<Long> longs = facReimburseApplyService.selectRole(ShiroUtils.getUserId());
+        boolean isLimit = false;
+        for (Long roleId : longs) {
+            if (roleId == 9 || roleId == 10) {
+                isLimit = true;
+                break;
+            }
+        }
+        if (isLimit && amount > 800) {
+            return AjaxResult.success("公出交通费超额");
+        }
+        return AjaxResult.success();
     }
 
     /**

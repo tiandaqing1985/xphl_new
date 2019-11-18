@@ -224,8 +224,12 @@
     var prefix2 = ctx + "system/facCostPutupReimburse";
     var prefix3 = ctx + "system/facCostDetailReimburse";
     var isOverAmountLimit = [[${isOverAmountLimit}]];
+    var isOverGongChuLimit = [[${isOverGongChuLimit}]];
     if(isOverAmountLimit=="true"){
-        $.modal.alertWarning("已超出额度上限");
+        $.modal.alertWarning("本月招待费已超出额度上限");
+    }
+    if(isOverGongChuLimit=="true"){
+        $.modal.alertWarning("本月公出交通费已超出额度上限");
     }
     if (dept == 10) {
         $("#zdf").hide();//隐藏
@@ -328,7 +332,7 @@
                         },{
                         field: 'excess',
                         title: '是否超额 ',
-                        visible: true,
+                        visible: false,
                         formatter: function (value, row, index) {
                             if(value==1){
                                 layer.msg("已超出额度");
@@ -430,7 +434,7 @@
                     },{
                         field: 'excess',
                         title: '是否超额 ',
-                        visible: true,
+                        visible: false,
                         formatter: function (value, row, index) {
                             if(value==1){
                                 layer.msg("已超出额度");
