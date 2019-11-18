@@ -188,6 +188,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 	@Override
 	public int updateOaDingding(OaDingding oaDingding)
 	{
+		oaDingding.setCreateTime(new Date());
 	    return oaDingdingMapper.updateOaDingding(oaDingding);
 	}
 
