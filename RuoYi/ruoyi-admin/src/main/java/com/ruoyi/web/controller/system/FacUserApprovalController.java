@@ -175,7 +175,7 @@ public class FacUserApprovalController extends BaseController {
                         if (apply.getStatus() == null || apply.getStatus().equals("1") || apply.getStatus().equals("3")) {
                             ReiHospitalityApply hospitalityApply = new ReiHospitalityApply();
                             hospitalityApply.setNum(apply.getNum());
-                            List<ReiHospitalityApply> reiHospitalityApplies = facReimburseApplyService.selectReiHospitalityApplyList(hospitalityApply);
+                            List<ReiHospitalityApply> reiHospitalityApplies = facReimburseApplyService.selectCurrentMonthReiHospitalityApplyList(hospitalityApply);
                             for (ReiHospitalityApply reiHospitalityApply : reiHospitalityApplies) {
                                 amount = amount + reiHospitalityApply.getAmount();
                             }

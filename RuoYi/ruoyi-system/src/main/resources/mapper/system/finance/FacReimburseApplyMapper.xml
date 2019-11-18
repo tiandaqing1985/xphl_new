@@ -95,6 +95,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="status != null  and status != '' "> and status = #{status}</if>
              <if test="applyNum != null  and applyNum != '' "> and applyNum = #{applyNum}</if>
              <if test="user != null "> and user = #{user}</if>
+         </where>
+    </select>
+    <select id="selectCurrentMonthReiHospitalityApplyList" parameterType="com.ruoyi.system.domain.finance.ReiHospitalityApply" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
+        select * from  fac_rei_hospitality_apply
+        <where>
+            <if test="id != null "> and id = #{id}</if>
+             <if test="amount != null "> and amount = #{amount}</if>
+             <if test="addUser != null  and addUser != '' "> and addUser = #{addUser}</if>
+             <if test="documentNum != null "> and documentNum = #{documentNum}</if>
+             <if test="location != null  and location != '' "> and location = #{location}</if>
+             <if test="targetUnit != null  and targetUnit != '' "> and targetUnit = #{targetUnit}</if>
+             <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
+             <if test="num != null  and num != '' "> and num = #{num}</if>
+             <if test="status != null  and status != '' "> and status = #{status}</if>
+             <if test="applyNum != null  and applyNum != '' "> and applyNum = #{applyNum}</if>
+             <if test="user != null "> and user = #{user}</if>
             and DATE_FORMAT(ddDate, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
          </where>
     </select>

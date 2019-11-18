@@ -648,4 +648,10 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
         return facReimburseApplyMapper.hosTail(num);
     }
 
+    //查询当月的报销
+    @Override
+    public List<ReiHospitalityApply> selectCurrentMonthReiHospitalityApplyList(ReiHospitalityApply hospitalityApply) {
+        return facReimburseApplyMapper.selectCurrentMonthReiHospitalityApplyList(hospitalityApply);
+    }
+
 }

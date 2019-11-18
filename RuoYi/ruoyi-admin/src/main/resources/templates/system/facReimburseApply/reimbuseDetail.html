@@ -64,7 +64,7 @@
                         <a class="btn btn-success" onclick="mAdd(1)" th:style="${edit=='false'}?'display: none':''">
                             <i class="fa fa-plus"></i> 交通费报销信息
                         </a>
-                        <h4 class="form-header h4">交通费报销</h4>
+                        <h4 class="form-header h4" th:style="${edit!='false'}?'display: none':''">交通费报销</h4>
                         <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                         <a class="btn btn-success" id="zdf" onclick="mAdd(2)" th:style="${edit=='false'}?'display: none':''">
                             <i class="fa fa-plus"></i> 招待费报销信息
                         </a>
-                        <h4 class="form-header h4">招待费报销</h4>
+                        <h4 class="form-header h4" th:style="${edit!='false'}?'display: none':''">招待费报销</h4>
                         <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
                     </div>
                 </div>
@@ -83,7 +83,7 @@
                         <a class="btn btn-success" onclick="mAdd(3)" th:style="${edit=='false'}?'display: none':''">
                             <i class="fa fa-plus"></i> 其他费用报销信息
                         </a>
-                        <h4 class="form-header h4">其他费用报销</h4>
+                        <h4 class="form-header h4" th:style="${edit!='false'}?'display: none':''">其他费用报销</h4>
                         <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
     var userId = $("#userId").val();
     var dept = $("#dept").val();
     var limitAmount = [[${limitAmount}]];
-
+    var edit = [[${edit}]];
     function zAdd() {
         $.modal.openFull("冲抵借款", "/system/facLoanApply/offset?payer=" + userId);
     }
@@ -176,7 +176,9 @@
             pagination: false,
             responseHandler: function(data){
                 if(data.total==0){
-                    $("#div1").attr("style", "display:none;");//隐藏
+                    if(edit=="false"){
+                        $("#div1").attr("style", "display:none;");//隐藏
+                    }
                 }
                 $.table.init(options2);
             },
@@ -276,7 +278,9 @@
             pagination: false,
             responseHandler: function(data){
                 if(data.total==0){
-                    $("#div2").attr("style", "display:none;");//隐藏
+                    if(edit=="false") {
+                        $("#div2").attr("style", "display:none;");//隐藏
+                    }
                 }
                 $.table.init(options3);
             },
@@ -376,7 +380,9 @@
             pagination: false,
             responseHandler: function(data){
                 if(data.total==0){
-                    $("#div3").attr("style", "display:none;");//隐藏
+                    if(edit=="false") {
+                        $("#div3").attr("style", "display:none;");//隐藏
+                    }
                 }
             },
             modelName: "其他费用申请",

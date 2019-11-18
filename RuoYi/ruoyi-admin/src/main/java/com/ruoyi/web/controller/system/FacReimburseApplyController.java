@@ -647,7 +647,7 @@ public class FacReimburseApplyController extends BaseController {
                     if (reimburseApply.getStatus() == null || reimburseApply.getStatus().equals("1") || reimburseApply.getStatus().equals("3")) {
                         ReiHospitalityApply hospitalityApply = new ReiHospitalityApply();
                         hospitalityApply.setNum(reimburseApply.getNum());
-                        List<ReiHospitalityApply> reiHospitalityApplies = facReimburseApplyService.selectReiHospitalityApplyList(hospitalityApply);
+                        List<ReiHospitalityApply> reiHospitalityApplies = facReimburseApplyService.selectCurrentMonthReiHospitalityApplyList(hospitalityApply);
                         for (ReiHospitalityApply apply : reiHospitalityApplies) {
                             amount = amount + apply.getAmount();
                         }

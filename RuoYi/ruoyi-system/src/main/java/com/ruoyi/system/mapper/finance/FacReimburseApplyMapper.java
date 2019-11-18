@@ -151,4 +151,5 @@ public interface FacReimburseApplyMapper
 
 	List<FacReimburseApply> selectCurrentMonthFacReimburseApplyList(FacReimburseApply facReimburseApply);
 
+	List<ReiHospitalityApply> selectCurrentMonthReiHospitalityApplyList(ReiHospitalityApply hospitalityApply);
 }
