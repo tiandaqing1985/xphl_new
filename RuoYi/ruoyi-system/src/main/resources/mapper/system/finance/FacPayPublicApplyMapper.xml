@@ -44,8 +44,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="status != null  and status != '' "> and status = #{status}</if>
              <if test="oprTime != null  and oprTime != '' "> and opr_time = #{oprTime}</if>
               <if test="unit != null  and unit != '' "> and unit = #{unit}</if>
-             order by id desc
          </where>
+        order by id desc
     </select>
     
     
