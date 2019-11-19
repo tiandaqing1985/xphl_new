@@ -148,7 +148,9 @@
                             //审批失败
 
                         } else if (row.states == 3) {
-                            //待审批
+                            if (row.approvalStatus == 4) {
+                                actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            }
 
                         } else if (row.states == 5) {
                             // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="submitHandler(\'' + row.id + '\')"> </i>提交</a> ');

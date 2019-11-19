@@ -218,7 +218,7 @@ public class FacReimburseApplyController extends BaseController {
         List<SysRole> sysRoles = sysRoleService.selectRolesByUserId(user.getUserId());
         for (SysRole sysRole : sysRoles) {
 
-            if (sysRole.isFlag() && sysRole.getRoleId() == 13) {
+            if (sysRole.isFlag() && sysRole.getRoleId() == 13|| ShiroUtils.getUserId()==1L) {
                 // 若是财务
                 startPage();
                 List<FacReimburseApply> list = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
@@ -281,6 +281,11 @@ public class FacReimburseApplyController extends BaseController {
                     facReimburseApply1.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
                 }
                 facReimburseApply1.setApprovalStatus(name.getApprovalState());
+
+                if (name.getApprovalState().equals("3") && name.getApprovalLevel().equals(1)) {
+                    facReimburseApply1.setStatus("4");
+                }
+
                 if (ShiroUtils.getUserId() == 103 && ShiroUtils.getUserId() == 101) {
                     facReimburseApply1.setApprovalStatus("1");
                 }
@@ -292,7 +297,6 @@ public class FacReimburseApplyController extends BaseController {
                 facReimburseApply1.setApprover("--");
                 facReimburseApply1.setApprovalStatus("--");
             }
-
         }
         return getDataTable(list);
 

@@ -68,6 +68,37 @@ public class FacLoanApplyController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacLoanApply facLoanApply) {
         startPage();
+        if (ShiroUtils.getUserId() == 1L) {
+            List<FacLoanApply> lists = facLoanApplyService
+                    .selectFacLoanApplyList(facLoanApply);
+            for (FacLoanApply v : lists) {
+                v.setUserName(sysUserService.selectUserById(v.getLoanUser()).getUserName());
+                FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getLoanUser());
+                if (name != null) {
+                    if (name.getApproverId() != null) {
+                        v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
+                    }
+
+                    if (name.getApprovalState().equals("3")) {
+                        v.setApprovalStatus("4");
+                    } else {
+                        v.setApprovalStatus(name.getApprovalState());
+                    }
+
+                    if (name.getStates() != null) {
+                        v.setApplyStatus(name.getStates());
+                    }
+                    if (v.getLoanUser() == 103 && v.getLoanUser() == 101) {
+                        v.setApprovalStatus("1");
+                    }
+                } else {
+                    v.setApprover("--");
+                    v.setApprovalStatus("--");
+                }
+            }
+
+            return getDataTable(lists);
+        }
         facLoanApply.setLoanUser(ShiroUtils.getUserId());
         List<FacLoanApply> list = facLoanApplyService
                 .selectFacLoanApplyList(facLoanApply);
@@ -78,7 +109,12 @@ public class FacLoanApplyController extends BaseController {
                 if (name.getApproverId() != null) {
                     v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
                 }
-                v.setApprovalStatus(name.getApprovalState());
+                if (name.getApprovalState().equals("3") && name.getApprovalLevel().equals(1)) {
+                    v.setApprovalStatus("4");
+                } else {
+                    v.setApprovalStatus(name.getApprovalState());
+                }
+
                 if (name.getStates() != null) {
                     v.setApplyStatus(name.getStates());
                 }

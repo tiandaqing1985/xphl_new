@@ -10,6 +10,8 @@ import com.ruoyi.system.service.finance.IFacLoanApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
+import com.ruoyi.system.domain.finance.FacUserApproval;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -30,6 +32,9 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
 	private FacLoanApplyMapper facLoanApplyMapper;
 	@Autowired
 	private ISysUserService iSysUserService;
+	@Autowired
+	private FacUserApprovalMapper facUserApprovalMapper;
+
 
 	/**
 	 * 查询借款申请信息
@@ -155,6 +160,15 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
 	 */
 	@Override
 	public int deleteFacLoanApplyByIds(String ids) {
+		FacLoanApply facLoanApply = facLoanApplyMapper.selectFacLoanApplyById(ids);
+		FacUserApproval facUserApproval= new FacUserApproval();
+		facUserApproval.setApplyId(facLoanApply.getNum());
+		List<FacUserApproval> list =facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
+		if(list!=null&&list.size()>0){
+			for(FacUserApproval v :list){
+				facUserApprovalMapper.deleteFacUserApprovalById(v.getApprovalId());
+			}
+		}
 		return facLoanApplyMapper
 				.deleteFacLoanApplyByIds(Convert.toStrArray(ids));
 	}

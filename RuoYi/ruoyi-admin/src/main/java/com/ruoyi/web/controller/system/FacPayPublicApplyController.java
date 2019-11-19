@@ -66,6 +66,39 @@ public class FacPayPublicApplyController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacPayPublicApply facPayPublicApply) {
         startPage();
+        if(ShiroUtils.getUserId()==1L){
+            List<FacPayPublicApply> lists = facPayPublicApplyService
+                    .selectFacPayPublicApplyList(facPayPublicApply);
+            for (FacPayPublicApply v : lists) {
+                v.setUserName(
+                        sysUserService.selectUserById(v.getUser()).getUserName());
+
+                FacUserApproval name = facUserApprovalService
+                        .selectApproval(v.getNum(), v.getUser());
+                if (name != null) {
+                    if (name.getApproverId() != null) {
+                        v.setApprover(
+                                sysUserService.selectUserById(name.getApproverId())
+                                        .getUserName());
+                    }
+                    if (name.getApprovalState().equals("3") && name.getApprovalLevel().equals(1)) {
+                        v.setApprovalStatus("4");
+                    } else {
+                        v.setApprovalStatus(name.getApprovalState());
+                    }
+
+                    if (v.getUser() == 103
+                            && v.getUser() == 101) {
+                        v.setApprovalStatus("1");
+                    }
+                } else {
+                    v.setApprover("--");
+                    v.setApprovalStatus("--");
+                }
+
+            }
+            return getDataTable(lists);
+        }
         facPayPublicApply.setUser(ShiroUtils.getUserId());
         List<FacPayPublicApply> list = facPayPublicApplyService
                 .selectFacPayPublicApplyList(facPayPublicApply);

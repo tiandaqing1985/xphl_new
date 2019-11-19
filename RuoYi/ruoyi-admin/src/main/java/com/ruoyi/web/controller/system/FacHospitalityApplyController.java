@@ -65,6 +65,27 @@ public class FacHospitalityApplyController extends BaseController {
 	@ResponseBody
 	public TableDataInfo list(FacHospitalityApply facHospitalityApply) {
 		startPage();
+		if(ShiroUtils.getUserId()==1L){
+			List<FacHospitalityApply> lists = facHospitalityApplyService.selectFacHospitalityApplyList(facHospitalityApply);
+			for (FacHospitalityApply v : lists) {
+				v.setUserIdName(sysUserService.selectUserById(v.getUserId()).getUserName());
+				FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getUserId());
+				if (name != null) {
+					if (name.getApproverId() != null) {
+						v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
+					}
+					v.setApprovalStatus(name.getApprovalState());
+					if (v.getUserId() == 103 && v.getUserId() == 101) {
+						v.setApprovalStatus("1");
+					}
+
+				} else {
+					v.setApprover("--");
+					v.setApprovalStatus("--");
+				}
+			}
+			return getDataTable(lists);
+		}
 		facHospitalityApply.setUserId(ShiroUtils.getUserId());
 		List<FacHospitalityApply> list = facHospitalityApplyService.selectFacHospitalityApplyList(facHospitalityApply);
 		for (FacHospitalityApply v : list) {
@@ -74,7 +95,11 @@ public class FacHospitalityApplyController extends BaseController {
 				if (name.getApproverId() != null) {
 					v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
 				}
-				v.setApprovalStatus(name.getApprovalState());
+				if (name.getApprovalState().equals("3") && name.getApprovalLevel().equals(1)) {
+					v.setApprovalStatus("4");
+				} else {
+					v.setApprovalStatus(name.getApprovalState());
+				}
 				if (ShiroUtils.getUserId() == 103 && ShiroUtils.getUserId() == 101) {
 					v.setApprovalStatus("1");
 				}

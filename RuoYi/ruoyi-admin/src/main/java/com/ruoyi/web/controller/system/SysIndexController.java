@@ -13,6 +13,8 @@ import com.ruoyi.system.domain.SysMenu;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysMenuService;
 import com.ruoyi.system.service.IUserApprovalService;
+import com.ruoyi.system.domain.finance.FacUserApproval;
+import com.ruoyi.system.service.finance.IFacUserApprovalService;
 
 /**
  * 首页 业务处理
@@ -26,6 +28,8 @@ public class SysIndexController extends BaseController
     private ISysMenuService menuService;  
 	@Autowired
 	private IUserApprovalService userApprovalService;
+	@Autowired
+	private IFacUserApprovalService facUserApprovalService;
 	
     // 系统首页
     @GetMapping("/index")
@@ -65,7 +69,17 @@ public class SysIndexController extends BaseController
 		
 		List<QueryConditions> list = userApprovalService.selectQueryConditionsList(queryConditions);
     	mmap.put("unApprovalNum", list.size());
-    	
+
+
+		FacUserApproval facUserApproval=new FacUserApproval();
+		facUserApproval.setApprovalState("3");
+		facUserApproval.setApproverId(ShiroUtils.getUserId());
+		facUserApproval.setApprovalSight("1");
+		List<FacUserApproval> lists = facUserApprovalService.selectFacUserApprovalList(facUserApproval);
+		mmap.put("facUserNum", lists.size());
+
+
+
 		//请假总数
     	queryConditions.setApplyType("1");
     	list = userApprovalService.selectQueryConditionsList(queryConditions);

@@ -17,6 +17,8 @@ import com.ruoyi.system.mapper.finance.FacHospitalityApplyMapper;
 import com.ruoyi.system.mapper.finance.FacReimburseApplyMapper;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacHospitalityApplyService;
+import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
+import com.ruoyi.system.domain.finance.FacUserApproval;
 
 /**
  * 招待费申请 服务层实现
@@ -36,6 +38,9 @@ public class FacHospitalityApplyServiceImpl
 	private ISysUserService iSysUserService;
 	@Autowired
 	private FacReimburseApplyMapper facReimburseApplyMapper;
+
+	@Autowired
+	private FacUserApprovalMapper facUserApprovalMapper;
 
 	/**
 	 * 查询招待费申请信息
@@ -164,6 +169,15 @@ public class FacHospitalityApplyServiceImpl
 	 */
 	@Override
 	public int deleteFacHospitalityApplyByIds(String ids) {
+		FacHospitalityApply facPayPublicApply = facHospitalityApplyMapper.selectFacHospitalityApplyById(Long.valueOf(ids));
+		FacUserApproval facUserApproval= new FacUserApproval();
+		facUserApproval.setApplyId(facPayPublicApply.getNum());
+		List<FacUserApproval> list =facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
+		if(list!=null&&list.size()>0){
+			for(FacUserApproval v :list){
+				facUserApprovalMapper.deleteFacUserApprovalById(v.getApprovalId());
+			}
+		}
 		return facHospitalityApplyMapper
 				.deleteFacHospitalityApplyByIds(Convert.toStrArray(ids));
 	}

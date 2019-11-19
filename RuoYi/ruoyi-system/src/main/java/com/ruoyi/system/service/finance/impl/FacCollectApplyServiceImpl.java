@@ -14,6 +14,9 @@ import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
 import com.ruoyi.system.mapper.finance.FacCollectApplyMapper;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCollectApplyService;
+import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
+import com.ruoyi.system.domain.finance.FacUserApproval;
+
 
 /**
  * 团建申请 服务层实现
@@ -29,7 +32,8 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
     private ApprovalProcessMapper approvalProcessMapper;
     @Autowired
     private ISysUserService iSysUserService;
-
+    @Autowired
+    private  FacUserApprovalMapper facUserApprovalMapper;
     /**
      * 查询团建申请信息
      *
@@ -142,6 +146,15 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
      */
     @Override
     public int deleteFacCollectApplyByIds(String ids) {
+        FacCollectApply facCollectApply = facCollectApplyMapper.selectFacCollectApplyById(Long.valueOf(ids));
+        FacUserApproval facUserApproval= new FacUserApproval();
+        facUserApproval.setApplyId(facCollectApply.getNum());
+        List<FacUserApproval> list =facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
+        if(list!=null&&list.size()>0){
+            for(FacUserApproval v :list){
+                facUserApprovalMapper.deleteFacUserApprovalById(v.getApprovalId());
+            }
+        }
         return facCollectApplyMapper
                 .deleteFacCollectApplyByIds(Convert.toStrArray(ids));
     }

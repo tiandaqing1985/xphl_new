@@ -13,7 +13,8 @@ import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCostApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
+import com.ruoyi.system.domain.finance.FacUserApproval;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -38,6 +39,9 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
 
     @Autowired
     private FacCostDetailApplyMapper facCostDetailApplyMapper;
+
+    @Autowired
+    private FacUserApprovalMapper facUserApprovalMapper;
 
     /**
      * 查询差旅申请信息
@@ -168,6 +172,15 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
      */
     @Override
     public int deleteFacCostApplyByIds(String ids) {
+        FacCostApply facCostApply = facCostApplyMapper.selectFacCostApplyById(Long.valueOf(ids));
+        FacUserApproval facUserApproval= new FacUserApproval();
+        facUserApproval.setApplyId(facCostApply.getNum());
+        List<FacUserApproval> list =facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
+        if(list!=null&&list.size()>0){
+            for(FacUserApproval v :list){
+                facUserApprovalMapper.deleteFacUserApprovalById(v.getApprovalId());
+            }
+        }
         return facCostApplyMapper
                 .deleteFacCostApplyByIds(Convert.toStrArray(ids));
     }

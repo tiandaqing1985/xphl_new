@@ -74,6 +74,29 @@ public class FacCostApplyController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacCostApply facCostApply) {
         startPage();
+        if(ShiroUtils.getUserId()==1L){
+            List<FacCostApply> lists = facCostApplyService.selectFacCostApplyList(facCostApply);
+            for (FacCostApply v : lists) {
+
+                FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getUserId());
+                if (name != null) {
+                    if (name.getApproverId() != null) {
+                        v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
+                    }
+
+                    v.setApprovalStatus(name.getApprovalState());
+
+                    if (ShiroUtils.getUserId() == 103 && ShiroUtils.getUserId() == 101) {
+                        v.setApprovalStatus("1");
+                    }
+                } else {
+                    v.setApprover("--");
+                    v.setApprovalStatus("--");
+                }
+            }
+            return getDataTable(lists);
+        }
+
         facCostApply.setUserId(ShiroUtils.getUserId());
         List<FacCostApply> list = facCostApplyService.selectFacCostApplyList(facCostApply);
 
@@ -84,7 +107,11 @@ public class FacCostApplyController extends BaseController {
                 if (name.getApproverId() != null) {
                     v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
                 }
-                v.setApprovalStatus(name.getApprovalState());
+                if (name.getApprovalState().equals("3") && name.getApprovalLevel().equals(1)) {
+                    v.setApprovalStatus("4");
+                } else {
+                    v.setApprovalStatus(name.getApprovalState());
+                }
                 if (ShiroUtils.getUserId() == 103 && ShiroUtils.getUserId() == 101) {
                     v.setApprovalStatus("1");
                 }

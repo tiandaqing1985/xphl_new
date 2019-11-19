@@ -166,7 +166,9 @@
                             actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
 
                         } else {
-                            //待审批
+                            if (row.approvalStatus == 4) {
+                                actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                            }
                         }
                         return actions.join('');
                     }

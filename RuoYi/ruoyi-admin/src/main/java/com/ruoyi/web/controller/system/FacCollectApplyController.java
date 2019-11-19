@@ -72,6 +72,35 @@ public class FacCollectApplyController extends BaseController {
     public TableDataInfo list(FacCollectApply facCollectApply) {
         startPage();
         facCollectApply.setApplicant(ShiroUtils.getUserId());
+        if(ShiroUtils.getUserId()==1L){
+            FacCollectApply fac = new FacCollectApply();
+            List<FacCollectApply> lists = facCollectApplyService.selectFacCollectApplyList(fac);
+            for (FacCollectApply v : lists) {
+                v.setApplicantName(sysUserService.selectUserById(v.getApplicant()).getUserName());
+
+                FacUserApproval name = facUserApprovalService
+                        .selectApproval(v.getNum(), v.getApplicant());
+                if (name != null) {
+
+                    if (name.getApproverId() != null) {
+                        v.setApprover(
+                                sysUserService.selectUserById(name.getApproverId())
+                                        .getUserName());
+                    }
+                    v.setApprovalStatus(name.getApprovalState());
+
+                    if (v.getApplicant() == 103
+                            && v.getApplicant() == 101) {
+                        v.setApprovalStatus("1");
+                    }
+                } else {
+                    v.setApprover("--");
+                    v.setApprovalStatus("--");
+                }
+            }
+
+            return getDataTable(lists);
+        }
         List<FacCollectApply> list = facCollectApplyService.selectFacCollectApplyList(facCollectApply);
 
         for (FacCollectApply v : list) {
@@ -86,7 +115,11 @@ public class FacCollectApplyController extends BaseController {
                             sysUserService.selectUserById(name.getApproverId())
                                     .getUserName());
                 }
-                v.setApprovalStatus(name.getApprovalState());
+                if (name.getApprovalState().equals("3") && name.getApprovalLevel().equals(1)) {
+                    v.setApprovalStatus("4");
+                } else {
+                    v.setApprovalStatus(name.getApprovalState());
+                }
                 if (ShiroUtils.getUserId() == 103
                         && ShiroUtils.getUserId() == 101) {
                     v.setApprovalStatus("1");

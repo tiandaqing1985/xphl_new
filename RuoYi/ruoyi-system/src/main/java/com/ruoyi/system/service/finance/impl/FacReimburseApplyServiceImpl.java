@@ -7,9 +7,7 @@ import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.finance.*;
 import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.mapper.UserApplyMapper;
-import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
-import com.ruoyi.system.mapper.finance.FacReiAdiApplyMapper;
-import com.ruoyi.system.mapper.finance.FacReimburseApplyMapper;
+import com.ruoyi.system.mapper.finance.*;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.ApprovalProcessService;
@@ -19,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import com.ruoyi.system.domain.finance.FacCostApply;
+import com.ruoyi.system.mapper.finance.FacCostApplyMapper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,6 +57,14 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
     private ISysRoleService sysRoleService;
     @Autowired
     private IFacUserApprovalService facUserApprovalService;
+
+    @Autowired
+    private FacUserApprovalMapper facUserApprovalMapper;
+    @Autowired
+    private FacCollectApplyMapper facCollectApplyMapper;
+    @Autowired
+    private FacCostApplyMapper facCostApplyMapper;
+
 
     /**
      * 查询报销信息
@@ -451,6 +459,30 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
      */
     @Override
     public int deleteFacReimburseApplyByIds(String ids) {
+
+
+
+        FacReimburseApply facReimburseApply =facReimburseApplyMapper.selectFacReimburseApplyById(ids);
+        FacUserApproval facUserApproval= new FacUserApproval();
+        facUserApproval.setApplyId(facReimburseApply.getNum());
+        List<FacUserApproval> list =facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
+        if(list!=null&&list.size()>0){
+            for(FacUserApproval v :list){
+                facUserApprovalMapper.deleteFacUserApprovalById(v.getApprovalId());
+            }
+        }
+        if(facReimburseApply.getType().equals("团建报销")){
+            FacCollectApply facCollectApply=facCollectApplyMapper.selectFacCollectApplyByNum(facReimburseApply.getJKnum());
+            facCollectApply.setStatus("1");
+            facCollectApplyMapper.updateFacCollectApply(facCollectApply);
+        }else if(facReimburseApply.getType().equals("差旅报销")){
+            FacCostApply fac = new FacCostApply();
+            fac.setNum(facReimburseApply.getJKnum());
+            FacCostApply facCostApply= facCostApplyMapper.selectFacCostApplyList(fac).get(0);
+            facCostApply.setStatus("1");
+            facCostApplyMapper.updateFacCostApply(facCostApply);
+        }
+
         return facReimburseApplyMapper
                 .deleteFacReimburseApplyByIds(Convert.toStrArray(ids));
     }
