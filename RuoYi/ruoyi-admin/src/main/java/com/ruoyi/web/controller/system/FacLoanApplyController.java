@@ -75,6 +75,9 @@ public class FacLoanApplyController extends BaseController {
                 v.setUserName(sysUserService.selectUserById(v.getLoanUser()).getUserName());
                 FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getLoanUser());
                 if (name != null) {
+                    if(facUserApprovalService.approverName(v.getNum())!=null){
+                        v.setAllName(facUserApprovalService.approverName(v.getNum()));
+                    }
                     if (name.getApproverId() != null) {
                         v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
                     }
@@ -106,6 +109,9 @@ public class FacLoanApplyController extends BaseController {
             v.setUserName(sysUserService.selectUserById(v.getLoanUser()).getUserName());
             FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getLoanUser());
             if (name != null) {
+                if(facUserApprovalService.approverName(v.getNum())!=null){
+                    v.setAllName(facUserApprovalService.approverName(v.getNum()));
+                }
                 if (name.getApproverId() != null) {
                     v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
                 }

@@ -80,6 +80,9 @@ public class FacCostApplyController extends BaseController {
 
                 FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getUserId());
                 if (name != null) {
+                    if(facUserApprovalService.approverName(v.getNum())!=null){
+                        v.setAllName(facUserApprovalService.approverName(v.getNum()));
+                    }
                     if (name.getApproverId() != null) {
                         v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
                     }
@@ -104,6 +107,9 @@ public class FacCostApplyController extends BaseController {
 
             FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getUserId());
             if (name != null) {
+               if(facUserApprovalService.approverName(v.getNum())!=null){
+                   v.setAllName(facUserApprovalService.approverName(v.getNum()));
+               }
                 if (name.getApproverId() != null) {
                     v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
                 }
@@ -116,6 +122,7 @@ public class FacCostApplyController extends BaseController {
                     v.setApprovalStatus("1");
                 }
             } else {
+                v.setAllName("--");
                 v.setApprover("--");
                 v.setApprovalStatus("--");
             }

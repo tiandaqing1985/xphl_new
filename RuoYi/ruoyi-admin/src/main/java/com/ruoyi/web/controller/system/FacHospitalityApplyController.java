@@ -71,6 +71,9 @@ public class FacHospitalityApplyController extends BaseController {
 				v.setUserIdName(sysUserService.selectUserById(v.getUserId()).getUserName());
 				FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getUserId());
 				if (name != null) {
+					if(facUserApprovalService.approverName(v.getNum())!=null){
+						v.setAllName(facUserApprovalService.approverName(v.getNum()));
+					}
 					if (name.getApproverId() != null) {
 						v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
 					}
@@ -92,6 +95,9 @@ public class FacHospitalityApplyController extends BaseController {
 			v.setUserIdName(sysUserService.selectUserById(v.getUserId()).getUserName());
 			FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getUserId());
 			if (name != null) {
+				if(facUserApprovalService.approverName(v.getNum())!=null){
+					v.setAllName(facUserApprovalService.approverName(v.getNum()));
+				}
 				if (name.getApproverId() != null) {
 					v.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
 				}

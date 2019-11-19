@@ -81,7 +81,9 @@ public class FacCollectApplyController extends BaseController {
                 FacUserApproval name = facUserApprovalService
                         .selectApproval(v.getNum(), v.getApplicant());
                 if (name != null) {
-
+                    if(facUserApprovalService.approverName(v.getNum())!=null){
+                        v.setAllName(facUserApprovalService.approverName(v.getNum()));
+                    }
                     if (name.getApproverId() != null) {
                         v.setApprover(
                                 sysUserService.selectUserById(name.getApproverId())
@@ -109,7 +111,9 @@ public class FacCollectApplyController extends BaseController {
             FacUserApproval name = facUserApprovalService
                     .selectApproval(v.getNum(), v.getApplicant());
             if (name != null) {
-
+                if(facUserApprovalService.approverName(v.getNum())!=null){
+                    v.setAllName(facUserApprovalService.approverName(v.getNum()));
+                }
                 if (name.getApproverId() != null) {
                     v.setApprover(
                             sysUserService.selectUserById(name.getApproverId())

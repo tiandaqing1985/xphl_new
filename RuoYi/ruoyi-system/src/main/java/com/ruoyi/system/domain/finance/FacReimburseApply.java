@@ -111,6 +111,18 @@ public class FacReimburseApply extends BaseEntity {
 
 	private String approvalStatus;
 
+	/**所有审批人姓名*/
+	private String allName;
+
+	public String getAllName() {
+		return allName;
+	}
+
+	public void setAllName(String allName) {
+		this.allName = allName;
+	}
+
+
 	public String getApprover() {
 		return approver;
 	}

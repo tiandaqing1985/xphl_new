@@ -100,7 +100,9 @@ public interface FacUserApprovalMapper {
 	 */
 	public int deleteFacUserApprovalByIds(String[] approvalIds);
 	 
-	 
-	
+	 /**
+	  * 查所有审批的名字
+	  * */
+	public String getAllAppNames(String applyId);
 	
 }

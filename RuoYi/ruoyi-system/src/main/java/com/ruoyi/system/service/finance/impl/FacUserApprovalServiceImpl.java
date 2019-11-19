@@ -1,28 +1,24 @@
 package com.ruoyi.system.service.finance.impl;
 
+import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.system.domain.finance.FacSysUserApproval;
+import com.ruoyi.system.domain.finance.FacUserApproval;
+import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
+import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
+import com.ruoyi.system.service.ISysDeptService;
+import com.ruoyi.system.service.ISysRoleService;
+import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.system.service.finance.ApprovalProcessService;
+import com.ruoyi.system.service.finance.IFacReimburseApplyService;
+import com.ruoyi.system.service.finance.IFacUserApprovalService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
-import com.ruoyi.common.core.domain.AjaxResult;
-import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.domain.finance.FacSysUserApproval;
-import com.ruoyi.system.domain.finance.ReiTrafficApply;
-import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
-import com.ruoyi.system.service.ISysRoleService;
-import com.ruoyi.system.service.finance.ApprovalProcessService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.system.domain.finance.FacReimburseApply;
-import com.ruoyi.system.domain.finance.FacUserApproval;
-import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
-import com.ruoyi.system.service.ISysDeptService;
-import com.ruoyi.system.service.ISysUserService;
-import com.ruoyi.system.service.finance.IFacReimburseApplyService;
-import com.ruoyi.system.service.finance.IFacUserApprovalService;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 /**
  * 财务审批 服务层实现
@@ -33,6 +29,10 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 @Service
 public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
     @Autowired
+    ISysUserService iSysUserService;
+    @Autowired
+    ISysDeptService sysDeptService;
+    @Autowired
     private FacUserApprovalMapper facUserApprovalMapper;
     @Autowired
     private IFacReimburseApplyService facReimburseApplyService;
@@ -42,11 +42,8 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
     private ApprovalProcessService approvalProcessService;
     @Autowired
     private ISysRoleService sysRoleService;
-
     @Autowired
-    ISysUserService iSysUserService;
-    @Autowired
-    ISysDeptService sysDeptService;
+    private ISysUserService sysUserService;
 
     /**
      * 查询财务审批信息
@@ -156,7 +153,7 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
         List<FacUserApproval> facUserApprovals = facUserApprovalMapper.selectFacUserApprovalList(selectVo);
         FacUserApproval last = null;
         for (FacUserApproval facUserApproval : facUserApprovals) {
-            if(facUserApproval.getApprovalSight().equals("1")) {
+            if (facUserApproval.getApprovalSight().equals("1")) {
                 if (last == null) {
                     last = facUserApproval;
                 } else {
@@ -166,34 +163,7 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
                 }
             }
         }
-        return  last;
-
-//        FacUserApproval facUserApproval = new FacUserApproval();
-//        facUserApproval.setApplyId(num);
-//        facUserApproval.setApplicantId(userId);
-//        facUserApproval.setApprovalSight("1");
-//        FacUserApproval facUserApproval2 = new FacUserApproval();
-//        facUserApproval2.setApplyId(num);
-//        facUserApproval2.setApplicantId(userId);
-//        facUserApproval2.setApprovalSight("1");
-//        facUserApproval2.setApprovalState("3");
-//        FacUserApproval facUserApproval3;
-//
-//        List<FacUserApproval> list = facUserApprovalMapper.selectFacUserApprovalList(facUserApproval2);
-//
-//        if (list != null && list.size() > 0) {
-//            facUserApproval3 = list.get(0);
-//        } else {
-//            facUserApproval3 = null;
-//        }
-//        if (facUserApproval3 != null) {
-//            return facUserApproval3;
-//        } else {
-//
-//            FacUserApproval facUserApproval5 = facUserApprovalMapper.selectApprovaIdlList(facUserApproval);
-//
-//            return facUserApproval5;
-//        }
+        return last;
     }
 
     /**
@@ -345,4 +315,9 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
         }
 
     }
+
+    public String approverName(String applyId) {
+        return facUserApprovalMapper.getAllAppNames(applyId);
+    }
+
 }

@@ -16,7 +16,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>金额：</label>
             <div class="col-sm-8">
-                <input id="amount" name="amount" class="form-control" type="text" required>
+                <input id="amount" name="amount" class="form-control" type="text" onkeyup="chkPrice(this);" onblur="chkLast(this)" required>
             </div>
         </div>
         <div class="form-group">
@@ -28,7 +28,7 @@
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>单据数：</label>
             <div class="col-sm-8">
-                <input id="documentNum" name="documentNum" class="form-control" type="text" required>
+                <input id="documentNum" name="documentNum" class="form-control" type="text" onkeyup="chkPrice(this);" onblur="chkLast(this)" required>
             </div>
         </div>
         <div class="form-group">
@@ -68,6 +68,22 @@
             $.operate.save(prefix + "/Arbitrarily", $('#form-add').serialize());
         }
     }
+    function chkPrice(obj){
+        obj.value = obj.value.replace(/[^\d.]/g,"");
+//必须保证第一位为数字而不是.
+        obj.value = obj.value.replace(/^\./g,"");
+//保证只有出现一个.而没有多个.
+        obj.value = obj.value.replace(/\.{2,}/g,".");
+//保证.只出现一次，而不能出现两次以上
+        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+    }
+    function chkLast(obj){
+// 如果出现非法字符就截取掉
+        if(obj.value.substr((obj.value.length - 1), 1) == '.')
+            obj.value = obj.value.substr(0,(obj.value.length - 1));
+    }
+
+
 </script>
 </body>
 </html>

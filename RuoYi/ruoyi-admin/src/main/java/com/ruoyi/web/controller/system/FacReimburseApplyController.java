@@ -237,6 +237,9 @@ public class FacReimburseApplyController extends BaseController {
                     }
                     FacUserApproval name = facUserApprovalService.selectApproval(facReimburseApply1.getNum(), facReimburseApply1.getLoanUser());
                     if (name != null) {
+                        if(facUserApprovalService.approverName(facReimburseApply1.getNum())!=null){
+                            facReimburseApply1.setAllName(facUserApprovalService.approverName(facReimburseApply1.getNum()));
+                        }
                         if (name.getApproverId() != null) {
                             facReimburseApply1.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());
                         }
@@ -276,6 +279,9 @@ public class FacReimburseApplyController extends BaseController {
             }
             FacUserApproval name = facUserApprovalService.selectApproval(facReimburseApply1.getNum(), facReimburseApply1.getLoanUser());
             if (name != null) {
+                if(facUserApprovalService.approverName(facReimburseApply1.getNum())!=null){
+                    facReimburseApply1.setAllName(facUserApprovalService.approverName(facReimburseApply1.getNum()));
+                }
 
                 if (name.getApproverId() != null) {
                     facReimburseApply1.setApprover(sysUserService.selectUserById(name.getApproverId()).getUserName());

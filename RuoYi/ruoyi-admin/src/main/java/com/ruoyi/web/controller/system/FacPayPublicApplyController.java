@@ -76,6 +76,9 @@ public class FacPayPublicApplyController extends BaseController {
                 FacUserApproval name = facUserApprovalService
                         .selectApproval(v.getNum(), v.getUser());
                 if (name != null) {
+                    if(facUserApprovalService.approverName(v.getNum())!=null){
+                        v.setAllName(facUserApprovalService.approverName(v.getNum()));
+                    }
                     if (name.getApproverId() != null) {
                         v.setApprover(
                                 sysUserService.selectUserById(name.getApproverId())
@@ -109,6 +112,9 @@ public class FacPayPublicApplyController extends BaseController {
             FacUserApproval name = facUserApprovalService
                     .selectApproval(v.getNum(), v.getUser());
             if (name != null) {
+                if(facUserApprovalService.approverName(v.getNum())!=null){
+                    v.setAllName(facUserApprovalService.approverName(v.getNum()));
+                }
                 if (name.getApproverId() != null) {
                     v.setApprover(
                             sysUserService.selectUserById(name.getApproverId())
