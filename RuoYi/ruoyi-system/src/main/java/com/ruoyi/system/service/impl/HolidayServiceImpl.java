@@ -221,6 +221,9 @@ public class HolidayServiceImpl implements IHolidayService
 			return holidayMapper.selectRestByUserId(sysUser);
 		}
 		
+		if(user.getArea().equals("3")){
+			user.setArea("2");
+		}
 		Long upLeaderId =userMapper.selectUpApproverIdByApplyerId(sysUser.getUserId());//所在部门负责人的上级leader
 		user.setRoleId(3L);//人事专员
 		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id

@@ -55,7 +55,9 @@ public class UserApprovalController extends BaseController
 	@GetMapping()
 	public String userApproval()
 	{
-	    return prefix + "/userApproval";
+//	    return prefix + "/userApproval";
+	    return prefix + "/tabs_panels";
+
 	}
 	
 	

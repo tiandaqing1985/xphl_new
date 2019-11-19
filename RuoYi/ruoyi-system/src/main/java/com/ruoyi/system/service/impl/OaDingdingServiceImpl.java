@@ -79,7 +79,6 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		}
 		
 		SysUser user = userMapper.selectUserById(ding.getUserId());
-		
 
 		if(user.getUserId() == 103L){//COO
 			//leader
@@ -123,6 +122,9 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 			return oaDingdingMapper.selectDingData(ding);
 		}
 		
+		if(user.getArea().equals("3")){
+			user.setArea("2");
+		}
 		SysUser user3 = new SysUser();
 		user3.setRoleId(3L);//人事专员
 		user3.setArea(user.getArea());
