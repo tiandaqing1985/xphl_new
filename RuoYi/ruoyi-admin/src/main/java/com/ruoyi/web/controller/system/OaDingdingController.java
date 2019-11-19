@@ -1,17 +1,23 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.config.Global;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.system.domain.Dingding;
 import com.ruoyi.system.domain.OaDingding;
 import com.ruoyi.system.service.IOaDingdingService;
@@ -103,27 +109,48 @@ public class OaDingdingController extends BaseController
 		return toAjax(oaDingdingService.insertOaDingding(oaDingding));
 	}
 	
-	
 	/**
-	 * 修改钉钉考勤数据
+	 * 修改钉钉考勤数据,添加图片
 	 */
-	@GetMapping("/edit/{userId}")
-	public String edit(@PathVariable("userId") Long userId, ModelMap mmap)
+	@GetMapping("/edit")
+	public String edit(Date userCheckTime,Map<String, Date> map)
 	{
-		OaDingding oaDingding = oaDingdingService.selectOaDingdingById(userId);
-		mmap.put("oaDingding", oaDingding);
+		map.put("userCheckTime", userCheckTime);
 	    return prefix + "/edit";
 	}
 	
 	/**
-	 * 修改保存钉钉考勤数据
+	 * 修改钉钉考勤数据,添加图片
 	 */
 	@Log(title = "钉钉考勤数据", businessType = BusinessType.UPDATE)
 	@PostMapping("/edit")
 	@ResponseBody
-	public AjaxResult editSave(OaDingding oaDingding)
-	{		
-		return toAjax(oaDingdingService.updateOaDingding(oaDingding));
+	public AjaxResult edit(MultipartFile file)
+	{
+		Map<String, Date> map = new HashMap();
+		Date userCheckTime = (Date) map.get("userCheckTime");
+		OaDingding ding = new OaDingding();
+		  try
+	        {
+	            // 上传文件路径
+	            String filePath = Global.getUploadPath();
+	            // 上传并返回新文件名称
+	            String fileName = FileUploadUtils.upload(filePath, file);
+//	            String url = serverConfig.getUrl() + UPLOAD_PATH + fileName;
+	            String url = filePath + fileName;
+	            AjaxResult ajax = AjaxResult.success();
+	            ajax.put("fileName", fileName);
+	            ajax.put("url", url);
+	            ding.setUserId(ShiroUtils.getUserId());
+	            ding.setPath(url);
+	            ding.setUserCheckTime(userCheckTime);
+	        }
+	        catch (Exception e)
+	        {
+	            return AjaxResult.error(e.getMessage());
+	        }
+
+		return toAjax(oaDingdingService.updateOaDingding(ding));
 	}
 	
 	/**

@@ -34,19 +34,12 @@ import com.dingtalk.api.response.OapiUserSimplelistResponse;
 import com.dingtalk.api.response.OapiUserSimplelistResponse.Userlist;
 import com.ruoyi.system.domain.OaDingding;
 import com.ruoyi.system.domain.OaDingdingUser;
-import com.ruoyi.system.domain.OaOut;
-import com.ruoyi.system.domain.OaOutApproval;
-import com.ruoyi.system.domain.UserApply;
-import com.ruoyi.system.domain.UserApproval;
 import com.ruoyi.system.mapper.OaDingdingUserMapper;
-import com.ruoyi.system.mapper.OaOutApprovalMapper;
-import com.ruoyi.system.mapper.OaOutMapper;
 import com.ruoyi.system.mapper.UserApplyMapper;
 import com.ruoyi.system.mapper.UserApprovalMapper;
 import com.ruoyi.system.service.IOaDingdingService;
 import com.ruoyi.system.service.IOaDingdingUserService;
 import com.ruoyi.system.service.IUserApplyService;
-
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -75,66 +68,11 @@ public class DingDingTask{
 
 	@Autowired
 	OaDingdingUserMapper oaDingdingUserMapper;
-	
-    @Autowired
-    private OaOutMapper outMapper;
-	@Autowired
-	private OaOutApprovalMapper oaOutApprovalMapper;
-    @Autowired
-    private UserApplyMapper applyMapper;
-    @Autowired
-    private UserApprovalMapper approvalMapper;
-    @Autowired
-    private IUserApplyService applyService;
-	
-	public void importData(){
-		//查询外出申请表
-	   List<OaOut> oList = outMapper.selectOaOutList(null);
-	   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-	   double timelength = 0.0;
-	   for(OaOut o : oList){
-		    UserApply apply = new UserApply();
-			//根据申请id查询外出审批表
-			OaOutApproval oaOutApproval = new OaOutApproval();
-			oaOutApproval.setOutId(o.getOutId());
-			List<OaOutApproval> appList = oaOutApprovalMapper.selectOaOutApprovalList(oaOutApproval);
-			
-			//外出申请插入请假申请表，并返回生成id
-			apply.setApplyState(o.getState());
-			apply.setApplyTime(o.getCreateDate());
-			apply.setApplyType("4");
-			apply.setUserId(o.getUserId());
-			apply.setStarttime(o.getStarttime());
-			apply.setEndtime(o.getEndtime());
-			apply.setDetails(o.getReason());
-			
-			timelength = applyService.countTimeLength(o.getStarttime(), o.getEndtime());
-			apply.setTimelength(timelength);
-			
-			applyMapper.insertUserApply(apply);
-			
-			for(OaOutApproval app : appList){
-				UserApproval approval = new UserApproval();
-				
-				//获取新申请id，插入审批表数据
-				approval.setApplyId(apply.getApplyId());
-				approval.setApproverId(app.getApprovalId());	
-				approval.setApprovalLevel(app.getApprovalLevel());
-				approval.setApprovalSight(app.getApprovalSight());
-				approval.setApprovalState(app.getApprovalState());
-				if(app.getApprovalDate() != null){
-					approval.setApprovalTime(sdf.format(app.getApprovalDate()));
-				}
-				approval.setRemark(app.getRemark());
-				approvalMapper.insertUserApproval(approval);
-			}
-			
-		}
-		
-		
-	}
-	
-	public void dingDingTask() throws Exception
+
+	/**
+	 *  num = -1 生成昨天的考勤
+	 * */
+	public void dingDingTask(String num) throws Exception
 	{		
 
 		DingTalkClient client = new DefaultDingTalkClient("");
@@ -167,6 +105,7 @@ public class DingDingTask{
 			List<Userlist> userList = getUser(client, accessToken,deptId);
 			for(Userlist user : userList){
 				OaDingdingUser dingUser = new OaDingdingUser();
+				if("12485610011037053255".equals(user.getUserid()))continue;
 				if(!"manager8676".equals(user.getUserid())){
 					dingUser.setUserId(Long.parseLong(user.getUserid()));
 				}else{
@@ -184,7 +123,7 @@ public class DingDingTask{
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = sdf.format(date);
         
-        String yesterday = getPreDayOrAfterDay(currentDate, -1);//-1是前一天， +1是后一天
+        String yesterday = getPreDayOrAfterDay(currentDate, Integer.parseInt(num));//-1是前一天， +1是后一天
         String workDateFrom = yesterday + " " + "00:00:00";
         String workDateTo = yesterday+ " " + "23:59:59";//当前时间
 
@@ -251,6 +190,7 @@ public class DingDingTask{
                   
                   OaDingding dingding = new OaDingding();
                   dingding.setCheckType(record.getString("checkType"));
+                  if("12485610011037053255".equals(record.getString("userId")))continue;
                   if(!"manager8676".equals(record.getString("userId"))){
                 	  dingding.setUserId(Long.parseLong(record.getString("userId")));
 	  			  }else{

@@ -56,7 +56,26 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	private Date startTime;
 	
 	private Date endTime;
-	
+    /** 路径 */
+	private String path;
+	/** 图片上传时间 */
+	private Date createTime;
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
 	public String getApplyState() {
 		return applyState;
@@ -176,9 +195,11 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 
 	@Override
 	public String toString() {
-		return "Dingding [userId=" + userId + ", userName=" + userName + ", workDate=" + workDate + ", checkType="
-				+ checkType + ", userCheckTime=" + userCheckTime + ", timeResult=" + timeResult + ", status=" + status
-				+ ", dSet=" + dSet + ", startTime=" + startTime + ", endTime=" + endTime + "]";
+		return "Dingding [userId=" + userId + ", userName=" + userName + ", deptName=" + deptName + ", area=" + area
+				+ ", workDate=" + workDate + ", weekDay=" + weekDay + ", checkType=" + checkType + ", userCheckTime="
+				+ userCheckTime + ", timeResult=" + timeResult + ", status=" + status + ", applyState=" + applyState
+				+ ", dSet=" + dSet + ", startTime=" + startTime + ", endTime=" + endTime + ", path=" + path
+				+ ", createTime=" + createTime + "]";
 	}
 
 }
