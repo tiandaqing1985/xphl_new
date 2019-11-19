@@ -23,7 +23,7 @@ public class FacSysUserApproval {
 	/** 审批时间 */
 	private Date approvalTime;
 	/** 审批等级 */
-	private int approvalLevel;
+	private Integer approvalLevel;
 	/**
 	 * 审批意见
 	 */
@@ -33,7 +33,7 @@ public class FacSysUserApproval {
 	 * 编号
 	 **/
 
-	private long applicantId;
+	private Long applicantId;
 
 	/**
 	 * 申请创建时间
@@ -45,63 +45,12 @@ public class FacSysUserApproval {
 
 	private String projectName;
 
-	public String getProjectName() {
-		return projectName;
-	}
-
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
-
-	public Double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Double amount) {
-		this.amount = amount;
-	}
-
-	@Override
-	public String toString() {
-		return "FacSysUserApproval{" + "approvalId=" + approvalId
-				+ ", applyId='" + applyId + '\'' + ", approvalState='"
-				+ ",amount" + approvalState + '\'' + ", approverId="
-				+ approverId + ", approvalSight='" + approvalSight + '\''
-				+ ", approvalTime=" + approvalTime + ", approvalLevel="
-				+ approvalLevel + ", opi='" + opi + '\'' + ", createTime="
-				+ createTime + '}';
-	}
-
-	public String getOpi() {
-		return opi;
-	}
-
-	public void setOpi(String opi) {
-		this.opi = opi;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
-
 	public Long getApprovalId() {
 		return approvalId;
 	}
 
 	public void setApprovalId(Long approvalId) {
 		this.approvalId = approvalId;
-	}
-
-	public long getApplicantId() {
-		return applicantId;
-	}
-
-	public void setApplicantId(long applicantId) {
-		this.applicantId = applicantId;
 	}
 
 	public String getApplyId() {
@@ -144,11 +93,51 @@ public class FacSysUserApproval {
 		this.approvalTime = approvalTime;
 	}
 
-	public int getApprovalLevel() {
+	public Integer getApprovalLevel() {
 		return approvalLevel;
 	}
 
-	public void setApprovalLevel(int approvalLevel) {
+	public void setApprovalLevel(Integer approvalLevel) {
 		this.approvalLevel = approvalLevel;
+	}
+
+	public String getOpi() {
+		return opi;
+	}
+
+	public void setOpi(String opi) {
+		this.opi = opi;
+	}
+
+	public Long getApplicantId() {
+		return applicantId;
+	}
+
+	public void setApplicantId(Long applicantId) {
+		this.applicantId = applicantId;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
+
+	public String getProjectName() {
+		return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+		this.projectName = projectName;
 	}
 }

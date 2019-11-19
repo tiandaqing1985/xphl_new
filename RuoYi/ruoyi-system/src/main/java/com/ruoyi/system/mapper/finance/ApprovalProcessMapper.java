@@ -26,6 +26,5 @@ public interface ApprovalProcessMapper {
      Long queryHighDeptLeaderId(@Param("userId") Long userId);
 
 
-
-
+     List<FacSysUserApproval> selectFacUserApprovalList(FacSysUserApproval facSysUserApproval);
 }

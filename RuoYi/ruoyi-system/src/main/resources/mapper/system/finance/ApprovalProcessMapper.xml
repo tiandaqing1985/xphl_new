@@ -3,7 +3,43 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.finance.ApprovalProcessMapper">
-     
+
+    <resultMap type="com.ruoyi.system.domain.finance.FacSysUserApproval" id="FacUserApprovalResult">
+        <result property="approvalId"    column="approval_id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="approvalState"    column="approval_state"    />
+        <result property="approverId"    column="approver_id"    />
+        <result property="approvalTime"    column="approval_time"    />
+        <result property="approvalSight"    column="approval_sight"    />
+        <result property="approvalLevel"    column="approval_level"    />
+        <result property="opi"    column="opi"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="applicantId"    column="applicant_id"    />
+        <result property="amount"    column="amount"    />
+        <result property="projectName"    column="projectName"    />
+    </resultMap>
+
+    <sql id="selectFacUserApprovalVo">
+        select approval_id, apply_id, approval_state, approver_id, approval_time, approval_sight, approval_level, opi, create_time, applicant_id, amount, projectName from fac_sys_user_approval
+    </sql>
+
+    <select id="selectFacUserApprovalList" parameterType="FacUserApproval" resultMap="FacUserApprovalResult">
+        <include refid="selectFacUserApprovalVo"/>
+        <where>
+            <if test="approvalId != null "> and approval_id = #{approvalId}</if>
+            <if test="applyId != null  and applyId != '' "> and apply_id = #{applyId}</if>
+            <if test="approvalState != null  and approvalState != '' "> and approval_state = #{approvalState}</if>
+            <if test="approverId != null "> and approver_id = #{approverId}</if>
+            <if test="approvalTime != null "> and approval_time = #{approvalTime}</if>
+            <if test="approvalSight != null  and approvalSight != '' "> and approval_sight = #{approvalSight}</if>
+            <if test="approvalLevel != null "> and approval_level = #{approvalLevel}</if>
+            <if test="opi != null  and opi != '' "> and opi = #{opi}</if>
+            <if test="createTime != null "> and create_time = #{createTime}</if>
+            <if test="applicantId != null "> and applicant_id = #{applicantId}</if>
+            <if test="amount != null "> and amount = #{amount}</if>
+            <if test="projectName != null  and projectName != '' "> and projectName = #{projectName}</if>
+        </where>
+    </select>
 
  <insert id="insert" parameterType="FacUserApproval" useGeneratedKeys="true" keyProperty="approvalId">
         insert into fac_sys_user_approval
