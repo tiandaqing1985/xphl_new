@@ -174,4 +174,9 @@ public interface IUserApplyService
 	 * @return
 	 */
 	public boolean ifBetween(UserApply userApply);
+	
+	/**
+	 * 验证加班审批是否已通过且满足2.5小时
+	 * */
+	public boolean ifSatisfied(Long userId, Date time);
 }
