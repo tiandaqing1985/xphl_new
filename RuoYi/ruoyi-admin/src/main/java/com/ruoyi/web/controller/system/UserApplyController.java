@@ -18,6 +18,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.UserApply;
 import com.ruoyi.system.domain.UserApplyList;
+import com.ruoyi.system.mapper.UserApplyMapper;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
@@ -39,6 +40,9 @@ import com.ruoyi.framework.util.ShiroUtils;
 public class UserApplyController extends BaseController
 {
     private String prefix = "system/userApply";
+	
+	@Autowired
+	private UserApplyMapper userApplyMapper;
 	
 	@Autowired
 	private IUserApplyService userApplyService;
@@ -357,6 +361,37 @@ public class UserApplyController extends BaseController
 		}else{
 	    	return "0";
 		}
+    }
+    
+	/**
+	 * 验证开始时间是否为昨天之前的时间;
+	 * 加班审批是否已通过且满足2.5小时
+	 */
+    @PostMapping("/ifSatisfied")
+    @ResponseBody
+    public boolean ifSatisfied(UserApply userApply)
+    {
+    	Date nowDate = new Date();
+    	
+    	//根据日期查询加班申请记录是否已通过且>2.5h
+    	userApply.setApplyType("2");//申请类型（1请假，2加班，销假）
+    	userApply.setApplyState("3");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+    	List<UserApply> aList = userApplyMapper.selectApplyList(userApply);
+    	if(aList.size() == 0){
+    		return false;
+    	}else{
+    		if(aList.get(0).getTimelength()>=2.5){
+    			//判断起始时间是否是昨天的时间
+    			if(userApply.getStarttime().getTime() > nowDate.getTime()){
+    				return false;
+    			}else{
+    		    	return true;
+    			}
+    		}else{
+    			return false;
+    		}
+    	}
+    				
     }
     
 	/**

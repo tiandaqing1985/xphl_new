@@ -127,6 +127,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<where>
 		     <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
 			 <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
+			 <if test="userId != null"> and a.user_id = #{userId}</if>
+		     <if test="starttime != null  and starttime != '' "> and a.starttime like concat('%',#{starttime},'%')</if>
 		</where>
     </select>
     

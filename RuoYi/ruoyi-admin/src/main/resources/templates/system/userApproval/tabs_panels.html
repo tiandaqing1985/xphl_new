@@ -18,7 +18,6 @@
 		}
 		function agree(id,remark){
 		    $.modal.open('审批', prefix + "/approvalModer?ids="+id+"&remark="+remark, '500', '320');
-			
 			/* var data = { "ids": id };
 	 	    $.operate.submit("/system/userApproval/agree", "post", "json", data); */
 		}
@@ -169,25 +168,16 @@
 <th:block th:include="include :: bootstrap-suggest-js"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
-var options1Init = false;
-var options2Init = false;
-function mySearch(id) {
-    if (id == '1') {
-        $.table._option.id = 'bootstrap-table-1';
-    } else{
-        $.table._option.id = 'bootstrap-table-2';
-    }
-    $.table.search('formId' + id);
-}
 
-function initTable(id) {
-    if (id == 1) {
-        $.table.init(options1);
-        options1Init = true;
-    } else{
-        $.table.init(options2);
-        options2Init = true;
-    } 
+function mySearch(id) {
+	$.table._option.id = 'bootstrap-table'+id;
+	if( id == '1'){
+		$.table._option.url = "/system/userApproval/list";
+	}else{
+		$.table._option.url = "/system/userApproval/myApproval";
+	}
+	
+    $.table.search('formId' + id);
 }
 
 var prefix = ctx + "system/userApproval";
@@ -202,13 +192,6 @@ $(function() {
 		exportUrl: prefix + "/export",
         modalName: "未审批",
         showExport: true,
-        onDblClickRow: function () {
-            initTable(1);
-            if (options1Init) {
-                $.table._option.id = 'bootstrap-table-1';
-                $.table.search("formId1", {"applyerName": applyerName,"deptName":deptName,"applyType":applyType});
-            }
-        },
         columns: [{
             checkbox: true
         },
@@ -319,13 +302,7 @@ $(function() {
 		 exportUrl: prefix2 + "/export",
         modalName: "已审批",
          showExport: true,
-         onDblClickRow: function () {
-             initTable(2);
-             if (options2Init) {
-                 $.table._option.id = 'bootstrap-table-2';
-                 $.table.search("formId2", {"applyerName": applyerName,"deptName":deptName,"applyType":applyType});
-             }
-         },
+       
         columns: [{
             checkbox: true
         },
