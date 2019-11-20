@@ -500,5 +500,4 @@ public class FacUserApprovalController extends BaseController {
                 .selectApproverIdList(facUserApproval);
         return getDataTable(list);
     }
-
 }
