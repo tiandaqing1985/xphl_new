@@ -98,6 +98,16 @@ public class FacPayPublicApply extends BaseEntity {
 	private String approvalStatus;
     /**所有审批人姓名*/
     private String allName;
+    /**是否保存*/
+    private String isKeep;
+
+    public String getIsKeep() {
+        return isKeep;
+    }
+
+    public void setIsKeep(String isKeep) {
+        this.isKeep = isKeep;
+    }
 
     public String getAllName() {
         return allName;

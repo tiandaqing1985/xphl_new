@@ -1,6 +1,8 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+
+import com.ruoyi.framework.util.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -49,6 +51,7 @@ public class FacCommonlyApplyController extends BaseController
 	public TableDataInfo list(FacCommonlyApply facCommonlyApply)
 	{
 		startPage();
+		facCommonlyApply.setNum(ShiroUtils.getUserId()+"");
         List<FacCommonlyApply> list = facCommonlyApplyService.selectFacCommonlyApplyList(facCommonlyApply);
 		return getDataTable(list);
 	}
@@ -102,7 +105,8 @@ public class FacCommonlyApplyController extends BaseController
 	@PostMapping("/add")
 	@ResponseBody
 	public AjaxResult addSave(FacCommonlyApply facCommonlyApply)
-	{		
+	{
+		facCommonlyApply.setNum(ShiroUtils.getUserId()+"");
 		return toAjax(facCommonlyApplyService.insertFacCommonlyApply(facCommonlyApply));
 	}
 

@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('汇总情况')"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+
+    <div class="tabs-container">
+        <ul class="nav nav-tabs">
+            <li id="tb1" class="active">
+                <a data-toggle="tab" href="#tab-1" aria-expanded="true" onclick="changeTab(1)">广告主管理</a>
+            </li>
+            <li id="tb2" class="">
+                <a data-toggle="tab" href="#tab-2" aria-expanded="false" onclick="changeTab(2)">广告组管理</a>
+            </li>
+            <li id="tb3" class="">
+                <a data-toggle="tab" href="#tab-3" aria-expanded="false" onclick="changeTab(3)">广告计划管理</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="tab-1" class="tab-pane active">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12 search-collapse">
+                            <form id="formId1">
+                                <div class="select-list">
+                                    <ul>
+<!--                                        <li>-->
+<!--                                            <p>广告主ID：</p>-->
+<!--                                            <input type="text" name="id"/>-->
+<!--                                        </li>-->
+                                        <li>
+                                            <p>广告主名称：</p>
+                                            <input type="text" name="name"/>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-primary btn-rounded btn-sm" onclick="mySearch(1)"><i
+                                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                                            <a class="btn btn-warning btn-rounded btn-sm"
+                                               onclick="$.form.reset('formId1')"><i
+                                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+<!--                                            <a class="btn btn-success" onclick="adMutual();"><i class="fa fa-plus"></i>-->
+<!--                                                同步广告主</a>-->
+                                        </li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-sm-12 select-table table-striped">
+                            <div class="btn-group-sm" role="group" id="toolbar1">
+<!--                                <a class="btn btn-success" onclick="$.operate.add()">-->
+<!--                                    <i class="fa fa-plus"></i> 添加-->
+<!--                                </a>-->
+<!--                                <a class="btn btn-primary single disabled" onclick="$.operate.edit()">-->
+<!--                                    <i class="fa fa-edit"></i> 修改-->
+<!--                                </a>-->
+<!--                                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">-->
+<!--                                    <i class="fa fa-remove"></i> 删除-->
+<!--                                </a>-->
+<!--                                <a class="btn btn-warning" onclick="$.table.exportExcel()">-->
+<!--                                    <i class="fa fa-download"></i> 导出-->
+<!--                                </a>-->
+                            </div>
+                            <table class="freeTable" id="bootstrap-table-1" data-mobile-responsive="true"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="tab-2" class="tab-pane">
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-sm-12 search-collapse">
+                            <form id="formId2">
+                                <div class="select-list">
+                                    <ul>
+<!--                                        <li>-->
+<!--                                            <p>广告组ID：</p>-->
+<!--                                            <input type="text" name="campaignId"/>-->
+<!--                                        </li>-->
+                                        <li>
+                                            <p>广告组名称：</p>
+                                            <input type="text" name="campaignName"/>
+                                        </li>
+<!--                                        <li>-->
+<!--                                            <p>广告主名称：</p>-->
+<!--                                            <input type="text" name="advertiserId"/>-->
+<!--                                        </li>-->
+
+                                        <li>
+                                            <a class="btn btn-primary btn-rounded btn-sm" onclick="mySearch(2)"><i
+                                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                                            <a class="btn btn-warning btn-rounded btn-sm"
+                                               onclick="$.form.reset('formId2')"><i
+                                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                                            <a class="btn btn-primary btn-rounded btn-sm"
+                                               onclick="myExportExcel('2')"><i class="fa fa-download"></i> 导出</a>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </form>
+                        </div>
+                        <div class="col-sm-12 select-table table-striped">
+                            <div class="btn-group-sm" role="group" id="toolbar2">
+<!--                                <a class="btn btn-success" onclick="$.operate.add()">-->
+<!--                                    <i class="fa fa-plus"></i> 添加-->
+<!--                                </a>-->
+<!--                                <a class="btn btn-primary single disabled" onclick="$.operate.edit()">-->
+<!--                                    <i class="fa fa-edit"></i> 修改-->
+<!--                                </a>-->
+<!--                                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()">-->
+<!--                                    <i class="fa fa-remove"></i> 删除-->
+<!--                                </a>-->
+<!--                                <a class="btn btn-warning" onclick="$.table.exportExcel()">-->
+<!--                                    <i class="fa fa-download"></i> 导出-->
+<!--                                </a>-->
+                                <a class="btn btn-success" onclick="syncCampaigns()">
+                                    <i class="fa fa-plus"></i> 同步广告计划
+                                </a>
+                            </div>
+                            <table class="freeTable" id="bootstrap-table-2" data-mobile-responsive="true"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="tab-3" class="tab-pane">
+                <div class="panel-body">
+                    <div class="row">
+
+                        <div class="col-sm-12 search-collapse">
+                            <form id="formId3">
+                                <input name="updateFlag" value="0" type="hidden">
+                                <div class="select-list">
+                                    <ul>
+<!--                                        <li class="select-time">-->
+<!--                                            <label>导入时间： </label>-->
+<!--                                            <input type="text" id="dueDateStart1" placeholder="开始时间（包含）"-->
+<!--                                                   name="start"/>-->
+<!--                                            <span>-</span>-->
+<!--                                            <input type="text" id="dueDateEnd1" placeholder="结束时间（包含）"-->
+<!--                                                   name="end"/>-->
+<!--                                        </li>-->
+                                        <li class="select-time">
+                                            <label>计划名称： </label>
+                                            <input type="text" id="name" name="name"/>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-primary btn-rounded btn-sm" onclick="mySearch(3)"><i
+                                                    class="fa fa-search"></i>&nbsp;搜索</a>
+                                            <a class="btn btn-warning btn-rounded btn-sm"
+                                               onclick="$.form.reset('formId3')"><i
+                                                    class="fa fa-refresh"></i>&nbsp;重置</a>
+                                            <a class="btn btn-primary btn-rounded btn-sm"
+                                               onclick="myExportExcel('3')"><i class="fa fa-download"></i> 导出</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-sm-12 select-table table-striped">
+                            <div class="btn-group-sm" role="group" id="toolbar3">
+<!--                                <a class="btn btn-danger multiple"-->
+<!--                                   onclick="removeAll()" style="display: none">-->
+<!--                                    <i class="fa fa-remove"></i> 删除-->
+<!--                                </a>-->
+<!--                                <a class="btn btn-warning" onclick="importExcel(3)">-->
+<!--                                    <i class="fa fa-upload"></i> 导入-->
+<!--                                </a>-->
+<!--                                <a class="btn btn-primary" onclick="startPlan()">-->
+<!--                                    <i class="fa fa-upload"></i> 启用-->
+<!--                                </a>-->
+<!--                                <a class="btn btn-primary" onclick="stopPlan()">-->
+<!--                                    <i class="fa fa-upload"></i> 停止-->
+<!--                                </a>-->
+                                <a class="btn btn-info" onclick="$.table.refresh('bootstrap-table-3')" style="float: right">
+                                    <i class="fa fa-refresh"></i> 刷新
+                                </a>
+                                <a class="btn btn-success" onclick="syncPlan()">
+                                    <i class="fa fa-refresh"></i> 同步广告计划
+                                </a>
+<!--                                <a class="btn btn-danger multiple"-->
+<!--                                   onclick="openFull('更新管理', prefix3);">-->
+<!--                                    <i class="fa fa-remove"></i> 更新管理-->
+<!--                                </a>-->
+<!--                                <a class="btn btn-danger multiple"-->
+<!--                                   onclick="$.modal.openTab('新增管理', prefix3+'/newAddManager')">-->
+<!--                                    <i class="fa fa-remove"></i> 新增管理-->
+<!--                                </a>-->
+                                <a class="btn btn-success" onclick="showField()" style="float: right">
+                                    <i class="fa fa-plus"></i> 显示方案
+                                </a>
+                            </div>
+
+                            <div class="col-sm-12 select-table table-striped" id="fieldDiv" style="display: none">
+                                <div class="row">
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="campaignId">广告组ID
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="campaignName">广告组名称
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="adId">广告ID
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="name">广告名称
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="deliveryRange">投放范围
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="budgetMode">预算类型
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="budget">预算金额
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="startTime">开始时间
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="endTime">结束时间
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="pricing">出价类型
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="bid">出价金额
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="scheduleType">广告投放类型
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="scheduleTime">广告投放时段
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="flowControlMode">投放速度类型
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="openUrl">应用直达链接
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="downloadType">应用下载方式
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="externalUrl">广告落地页链接
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="downloadUrl">广告应用下载链接
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="appType">应用下载类型
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="adPackage">广告应用下载包名
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="hideIfConverted">过滤已转化用户类型
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="cpaBid">ocpm广告转化出价
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="convertId">转化ID
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="retargetingTagsInclude">定向人群包列表
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="retargetingTagsExclude">排除人群包列表
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="gender">受众性别
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="age">受众年龄区间
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="carrier">运营商
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="ac">网络类型
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="articleCategory">受众文章分类
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="platform">受众平台
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="district">地域类型
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="city">地域定向城市或者区县列表
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="adTag">兴趣分类
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="interestTags">兴趣关键词
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="appBehaviorTarget">APP行为定向
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="appCategory">APP行为按分类集合
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="appIds">APP行为定向APP集合
+                                    </div>
+
+                                    <div class="col-sm-1"><input type="checkbox" class="field" checked="checked"
+                                                                 value="remark">备注
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        <input type="checkbox" name="allSelect" checked="checked" >全选
+                                        <button class="btn btn-primary " type="button"
+                                        onclick="saveFields()"><i class="fa fa-check"></i>&nbsp;保存
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-5" id="fieldBtnGroup">
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <table class="freeTable" id="bootstrap-table-3" data-mobile-responsive="true"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix1 = ctx + "today/advertiser";
+    var prefix2 = ctx + "today/campaign";
+    var prefix3 = ctx + "today/ad";
+    var prefix4 = ctx + "today/show";
+    var prefix5 = ctx + "today/creativity";
+
+
+    var advertiserId = undefined;
+    var campaignId = undefined;
+
+    var editFlag = [[${@permission.hasPermi('today:ad:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('today:ad:remove')}]];
+    var deliveryRangeDatas = [[${@dict.getType('th_ad_delivery_range')}]];
+    var budgetModeDatas = [[${@dict.getType('th_ad_budget_mode')}]];
+    var pricingDatas = [[${@dict.getType('th_ad_pricing')}]];
+    var scheduleTypeDatas = [[${@dict.getType('th_ad_schedule_type')}]];
+    var flowControlModeDatas = [[${@dict.getType('th_ad_flow_control_mode')}]];
+    var appTypeDatas = [[${@dict.getType('th_ad_app_type')}]];
+    var hideIfConvertedDatas = [[${@dict.getType('th_ad_hide_if_converted')}]];
+    var genderDatas = [[${@dict.getType('th_ad_gender')}]];
+    var ageDatas = [[${@dict.getType('th_ad_age')}]];
+    var carrierDatas = [[${@dict.getType('th_ad_carrier')}]];
+    var acDatas = [[${@dict.getType('th_ad_ac')}]];
+    var adStatus = [[${@dict.getType('th_ad_status')}]];
+    var articleCategoryDatas = [[${@dict.getType('th_ad_article_category')}]];
+    var platformDatas = [[${@dict.getType('th_ad_platform')}]];
+    var appBehaviorTargetDatas = [[${@dict.getType('th_ad_behavior_target')}]];
+    var districtDatas = [[${@dict.getType('th_ad_district')}]];
+    var cityDatas = [[${@dict.getType('th_ad_city')}]];
+
+    var showFieldCase = {};
+
+    function useShowFieldCase(name) {
+        var fields = showFieldCase[name];
+        $('.field:checkbox:checked').prop("checked",false);
+        $.each(isShow,function(name,value){
+            isShow[name] = false;
+        });
+        fields.split(",").forEach(function (item,index) {
+            $(".field:checkbox[value='" + item + "']").prop("checked",true);
+            isShow[item] = true;
+        });
+        $.table.destroy();
+        initTable(3);
+    }
+
+    function initFieldGroup() {
+        showFieldCase = {};
+        var config = {
+            url: prefix4 + "/list",
+            type: "post",
+            dataType: "json",
+            data: {"type":"adplan"},
+            success: function(result) {
+                var html = [];
+                result.forEach(function(item,index){
+                    showFieldCase[item.id] = item.context;
+                    html.push("<button class='btn btn-danger ' type='button' onclick='useShowFieldCase("+item.id+")'>&nbsp;"+item.name+"</button>&nbsp;")
+                });
+                $("#fieldBtnGroup").html(html.join(""));
+            }
+        };
+        $.ajax(config);
+    }
+
+    function saveFields() {
+
+        var data = {};
+        var context;
+        layer.prompt({title: '请输入显示方案名称', formType: 2}, function(text, index){
+
+            if(text==undefined){
+                layer.msg("方案名称不能为空");
+            }else{
+                layer.close(index);
+                $.each($('.field:checkbox:checked'), function (index, val) {
+                    var name = $(this).val();
+                    if ($.common.isEmpty(context)) {
+                        context = name;
+                    }else{
+                        context = context + "," + name;
+                    }
+                });
+                data["name"] = text;
+                data["context"] = context;
+                data["type"] = "adplan";
+                $.operate.submit(prefix4 + "/add", "post", "json", data, function (result) {
+                    initFieldGroup();
+                });
+            }
+        });
+
+    }
+
+
+    function showField() {
+        var state = $("#fieldDiv").attr("style");
+        if (state == "display:block") {
+            $("#fieldDiv").attr("style", "display:none");//隐藏div
+        } else {
+            $("#fieldDiv").attr("style", "display:block");//显示div
+            initFieldGroup();
+        }
+    }
+
+    function changeTab(id) {
+        if (id == 1) {
+            advertiserId = undefined;
+            campaignId = undefined;
+        } else if (id == 2) {
+            campaignId = undefined;
+        }
+        initTable(id);
+    }
+
+    function openFull(title, url, width, height) {
+        //如果是移动端，就使用自适应大小弹窗
+        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+            width = 'auto';
+            height = 'auto';
+        }
+        if ($.common.isEmpty(title)) {
+            title = false;
+        }
+        if ($.common.isEmpty(url)) {
+            url = "/404.html";
+        }
+        if ($.common.isEmpty(width)) {
+            width = 800;
+        }
+        if ($.common.isEmpty(height)) {
+            height = ($(window).height() - 50);
+        }
+        var index = layer.open({
+            type: 2,
+            area: [width + 'px', height + 'px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: title,
+            content: url,
+            btn: ['确定', '关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function (index, layero) {
+                $.table.refresh('bootstrap-table-3')
+                return true;
+            },
+            cancel: function (index) {
+                $.table.refresh('bootstrap-table-3')
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+
+    function syncCampaigns() {
+        $.modal.confirm("确认同步广告组吗?", function () {
+            var url = prefix2 + "/syncCampaign"
+            var data = {"ids": advertiserId};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+
+    function syncPlan() {
+        $.modal.confirm("确认同步广告计划吗?", function () {
+            var url = prefix3 + "/syncPlan"
+            var data = {"advertiserId": advertiserId, "campaignId": campaignId};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+
+    function stopPlan() {
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确认要停止选中的" + rows.length + "条计划吗?", function () {
+            var url = prefix3 + "/stopPlan"
+            var data = {"ids": rows.join()};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+
+    function startPlan() {
+        var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+        if (rows.length == 0) {
+            $.modal.alertWarning("请至少选择一条记录");
+            return;
+        }
+        $.modal.confirm("确认要启用选中的" + rows.length + "条计划吗?", function () {
+            var url = prefix3 + "/startPlan"
+            var data = {"ids": rows.join(),"opt":"start"};
+            $.operate.submit(url, "post", "json", data);
+        });
+    }
+
+    function importExcel(id) {
+        if (id == 1) {
+            $.table._option.importUrl = prefix + "/importData";
+            $.table._option.importTemplateUrl = prefix + "/importTemplate";
+            $.table._option.modalName = "消耗信息"
+        } else if (id == 2) {
+            $.table._option.importUrl = prefix + "/importTaskData";
+            $.table._option.importTemplateUrl = prefix + "/importTaskTemplate";
+            $.table._option.modalName = "任务信息"
+        } else if (id == 3) {
+            $.table._option.importUrl = prefix3 + "/importData";
+            $.table._option.importTemplateUrl = prefix3 + "/importTemplate";
+            $.table._option.modalName = "广告计划"
+        }
+        importFile(undefined, importSucess);
+    }
+
+    function importSucess() {
+        $.modal.openTab('新增管理', prefix3 + '/newAddManager');
+    }
+
+    function mySearch(id) {
+        var data = {};
+        if (id == '1') {
+            $.table._option.id = 'bootstrap-table-1';
+        } else if (id == '2') {
+            $.table._option.id = 'bootstrap-table-2';
+            data["advertiserId"] = advertiserId;
+        } else if (id == '3') {
+            $.table._option.id = 'bootstrap-table-3';
+            data["campaignId"] = campaignId;
+        }
+        $.table.search('formId' + id,data);
+    }
+
+    function myExportExcel(id) {
+        if (id == '1') {
+            $.table._option.exportUrl = prefix + "/export";
+            $.table._option.modalName = "个人消耗情况汇总";
+        } else if (id == '2') {
+            $.table._option.exportUrl = prefix + "/exportRankConsumption";
+            $.table._option.modalName = "消耗完成率排名";
+        } else if (id == '3') {
+            $.table._option.exportUrl = prefix + "/exportTotalConsume";
+            $.table._option.modalName = "华东华北消耗整体完成率";
+        }
+        $.table.exportExcel('fromId' + id);
+    }
+
+    var isShow = {
+        "campaignId":true,
+
+        "campaignName":true,
+
+        "adId":true,
+
+        "name":true,
+
+        "deliveryRange":true,
+
+        "budgetMode":true,
+
+        "budget":true,
+
+        "startTime":true,
+
+        "endTime":true,
+
+        "pricing":true,
+
+        "bid":true,
+
+        "scheduleType":true,
+
+        "scheduleTime":true,
+
+        "flowControlMode":true,
+
+        "openUrl":true,
+
+        "downloadType":true,
+
+        "externalUrl":true,
+
+        "downloadUrl":true,
+
+        "appType":true,
+
+        "adPackage":true,
+
+        "hideIfConverted":true,
+
+        "cpaBid":true,
+
+        "convertId":true,
+
+        "retargetingTagsInclude":true,
+
+        "retargetingTagsExclude":true,
+
+        "gender":true,
+
+        "age":true,
+
+        "carrier":true,
+
+        "ac":true,
+
+        "articleCategory":true,
+
+        "platform":true,
+
+        "district":true,
+
+        "city":true,
+
+        "adTag":true,
+
+        "interestTags":true,
+
+        "appBehaviorTarget":true,
+
+        "appCategory":true,
+
+        "appIds":true,
+
+        "remark":true
+    };
+
+    var options1Init = false;
+    var options2Init = false;
+    var options3Init = false;
+    var options1 = {
+        id: "bootstrap-table-1",
+        url: prefix1 + "/list",
+        createUrl: prefix1 + "/add",
+        updateUrl: prefix1 + "/edit/{id}",
+        removeUrl: prefix1 + "/remove",
+        exportUrl: prefix1 + "/export",
+        modalName: "广告主",
+        showSearch: false,
+        showRefresh: false,
+        showToggle: false,
+        showColumns: false,
+        showExport: false,
+        onDblClickRow: function (row) {
+            $("#tb1").removeClass("active");
+            $("#tb2").addClass("active");
+            $("#tab-1").removeClass("active");
+            $("#tab-2").addClass("active");
+            advertiserId = row.id;
+            initTable(2);
+            if (options2Init) {
+                $.table._option.id = 'bootstrap-table-2';
+                $.table.search("formId2", {"advertiserId": advertiserId});
+            }
+        },
+        columns: [{
+            checkbox: true
+        },
+            {
+                field: 'id',
+                title: '广告主ID'
+            },
+            {
+                field: 'name',
+                title: '广告主名称'
+            },
+            {
+                field: 'status',
+                title: '状态'
+            },
+            {
+                field: 'remark',
+                title: '备注'
+            },
+            {
+                title: '操作',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    var actions = [];
+                    // actions.push('<a class="btn btn-success btn-xs  href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                    // actions.push('<a class="btn btn-danger btn-xs   href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                    return actions.join('');
+                }
+            }]
+    };
+
+    function copy(id,level) {
+
+        var data = {};
+        var context;
+        layer.prompt({title: '请输入复制后名称', formType: 2}, function(text, index){
+
+            if(text==undefined){
+                layer.msg("名称不能为空");
+            }else{
+                layer.close(index);
+                layer.prompt({title: '请输入复制个数', formType: 2}, function(num, index1){
+                    if(text==undefined){
+                        layer.msg("名称不能为空");
+                    }else{
+                        if (!(/(^[1-9]\d*$)/.test(num))) {
+                            layer.msg("输入的不是正整数");
+                        }else {
+                            layer.close(index1);
+                            $.operate.post(prefix2 + "/copy", {"id": id, "level": level, "num": num, "name": text});
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    var options2 = {
+        id: "bootstrap-table-2",
+        url: prefix2 + "/list",
+        createUrl: prefix2 + "/add",
+        updateUrl: prefix2 + "/edit/{id}",
+        removeUrl: prefix2 + "/remove",
+        exportUrl: prefix2 + "/export",
+        onDblClickRow: function (row) {
+            $("#tb2").removeClass("active");
+            $("#tb3").addClass("active");
+            $("#tab-2").removeClass("active");
+            $("#tab-3").addClass("active");
+            campaignId = row.campaignId;
+            initTable(3);
+            if (options3Init) {
+                $.table._option.id = 'bootstrap-table-3';
+                $.table.search("formId3", {"advertiserId": advertiserId, "campaignId": campaignId, "updateFlag": "0"});
+            }
+        },
+        queryParams: function (params) {
+            var curParams = {
+                // 传递参数查询参数
+                pageSize: params.limit,
+                pageNum: params.offset / params.limit + 1,
+                searchValue: params.search,
+                orderByColumn: params.sort,
+                isAsc: params.order
+            };
+            var currentId = $.common.isEmpty($.table._option.formId) ? $('form').attr('id') : $.table._option.formId;
+            return $.extend(curParams, {"advertiserId": advertiserId});
+        },
+        modalName: "广告组",
+        showSearch: false,
+        showRefresh: false,
+        showToggle: false,
+        showColumns: false,
+        showExport: false,
+        columns: [{
+            checkbox: true
+        },
+            {
+                field: 'campaignId',
+                title: '广告组ID'
+            },
+            {
+                field: 'advertiserId',
+                title: '广告主ID'
+
+            },
+            {
+                field: 'campaignName',
+                title: '广告组名称'
+            },
+            {
+                field: 'budgetMode',
+                title: '广告组预算类型'
+            },
+            {
+                field: 'budget',
+                title: '广告组预算'
+            },
+            {
+                field: 'landingType',
+                title: '广告组推广目的'
+            },
+            {
+                field: 'status',
+                title: '状态'
+            },
+            {
+                field: 'remark',
+                title: '备注',
+                visible: false
+            },
+            {
+                title: '操作',
+                align: 'center',
+                formatter: function (value, row, index) {
+                    var actions = [];
+                    // actions.push('<a class="btn btn-success btn-xs  href="javascript:void(0)" onclick="$.operate.edit(\'' + row.campaignId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                    // actions.push('<a class="btn btn-danger btn-xs   href="javascript:void(0)" onclick="$.operate.remove(\'' + row.campaignId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                    actions.push('<a class="btn btn-info btn-xs   href="javascript:void(0)" onclick="copy('+row.campaignId+',\''+"campaign"+'\')"><i class="fa fa-paste"></i>复制</a>');
+                    return actions.join('');
+                }
+            }]
+    };
+
+
+    var options3 ;
+    function options3Initfun(){
+        options3 = {
+            id: "bootstrap-table-3",
+            url: prefix3 + "/list",
+            createUrl: prefix3 + "/add",
+            updateUrl: prefix3 + "/edit/{id}",
+            removeUrl: prefix3 + "/remove",
+            exportUrl: prefix3 + "/export",
+            onDblClickRow: function (row) {
+                $.modal.openTab('广告创意', prefix5+'/'+row.id);
+            },
+            queryParams: function (params) {
+                var curParams = {
+                    // 传递参数查询参数
+                    pageSize: params.limit,
+                    pageNum: params.offset / params.limit + 1,
+                    searchValue: params.search,
+                    orderByColumn: params.sort,
+                    isAsc: params.order
+                };
+                var currentId = $.common.isEmpty($.table._option.formId) ? $('form').attr('id') : $.table._option.formId;
+                return $.extend(curParams, {"updateFlag": "0","opt":"normal"});
+            },
+            modalName: "广告计划",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            showExport: false,
+            fixedColumns: true,
+            fixedNumber: 5,
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        // actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        // actions.push('<a style="display: none" class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-info btn-xs   href="javascript:void(0)" onclick="copy('+row.adId+',\''+"plan"+'\')"><i class="fa fa-paste"></i>复制</a>');
+                        return actions.join('');
+                    }
+                },
+                {
+                    field: 'status',
+                    title: '状态',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(adStatus, value);
+                    }
+                },
+                {
+                    field: 'advertiserId',
+                    title: '广告主ID'
+                },
+                {
+                    field: 'advertiserName',
+                    title: '广告主名称'
+                },
+                {
+                    field: 'campaignId',
+                    title: '广告组ID',
+                    visible: isShow["campaignId"]
+                },
+                {
+                    field: 'campaignName',
+                    title: '广告组名称',
+                    visible: isShow["campaignName"]
+                },
+                {
+                    field: 'adId',
+                    title: '广告ID',
+                    visible: isShow["adId"]
+                },
+                {
+                    field: 'name',
+                    title: '广告名称',
+                    visible: isShow["name"]
+                },
+                {
+                    field: 'deliveryRange',
+                    title: '投放范围',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(deliveryRangeDatas, value);
+                    },
+                    visible: isShow["deliveryRange"]
+                },
+                {
+                    field: 'budgetMode',
+                    title: '预算类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(budgetModeDatas, value);
+                    },
+                    visible: isShow["budgetMode"]
+                },
+                {
+                    field: 'budget',
+                    title: '预算金额',
+                    visible: isShow["budget"]
+                },
+                {
+                    field: 'startTime',
+                    title: '开始时间',
+                    visible: isShow["startTime"]
+                },
+                {
+                    field: 'endTime',
+                    title: '结束时间',
+                    visible: isShow["endTime"]
+                },
+                {
+                    field: 'pricing',
+                    title: '出价类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(pricingDatas, value);
+                    },
+                    visible: isShow["pricing"]
+                },
+                {
+                    field: 'bid',
+                    title: '出价金额',
+                    visible: isShow["bid"]
+                },
+                {
+                    field: 'scheduleType',
+                    title: '广告投放类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(scheduleTypeDatas, value);
+                    },
+                    visible: isShow["scheduleType"]
+                },
+                {
+                    field: 'scheduleTime',
+                    title: '广告投放时段',
+                    visible: isShow["scheduleTime"]
+                },
+                {
+                    field: 'flowControlMode',
+                    title: '投放速度类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(flowControlModeDatas, value);
+                    },
+                    visible: isShow["flowControlMode"]
+                },
+                {
+                    field: 'openUrl',
+                    title: '应用直达链接',
+                    visible: isShow["openUrl"]
+                },
+                {
+                    field: 'downloadType',
+                    title: '应用下载方式',
+                    visible: isShow["downloadType"]
+                },
+                {
+                    field: 'externalUrl',
+                    title: '广告落地页链接',
+                    visible: isShow["externalUrl"]
+                },
+                {
+                    field: 'downloadUrl',
+                    title: '广告应用下载链接',
+                    visible: isShow["downloadUrl"]
+                },
+                {
+                    field: 'appType',
+                    title: '应用下载类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(appTypeDatas, value);
+                    },
+                    visible: isShow["appType"]
+                },
+                {
+                    field: 'adPackage',
+                    title: '广告应用下载包名',
+                    visible: isShow["adPackage"]
+                },
+                {
+                    field: 'hideIfConverted',
+                    title: '过滤已转化用户类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(hideIfConvertedDatas, value);
+                    },
+                    visible: isShow["hideIfConverted"]
+                },
+                {
+                    field: 'cpaBid',
+                    title: 'ocpm广告转化出价',
+                    visible: isShow["cpaBid"]
+                },
+                {
+                    field: 'convertId',
+                    title: '转化ID',
+                    visible: isShow["convertId"]
+                },
+                {
+                    field: 'retargetingTagsInclude',
+                    title: '定向人群包列表',
+                    visible: isShow["retargetingTagsInclude"]
+                },
+                {
+                    field: 'retargetingTagsExclude',
+                    title: '排除人群包列表',
+                    visible: isShow["retargetingTagsExclude"]
+                },
+                {
+                    field: 'gender',
+                    title: '受众性别',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(genderDatas, value);
+                    },
+                    visible: isShow["gender"]
+                },
+                {
+                    field: 'age',
+                    title: '受众年龄区间',
+                    formatter: function (value, row, index) {
+                        if ($.common.isEmpty(value)) {
+                            return undefined;
+                        }
+                        var val = value.split(",");
+                        val.forEach(function (value1, index1, array) {
+                            array[index1] = $.table.selectDictLabel(ageDatas, value1);
+                        })
+                        return val.join(",");
+                    },
+                    visible: isShow["age"]
+                },
+                {
+                    field: 'carrier',
+                    title: '运营商',
+                    formatter: function (value, row, index) {
+                        if ($.common.isEmpty(value)) {
+                            return undefined;
+                        }
+                        var val = value.split(",");
+                        val.forEach(function (value1, index1, array) {
+                            array[index1] = $.table.selectDictLabel(carrierDatas, value1);
+                        })
+                        return val.join(",");
+                    },
+                    visible: isShow["carrier"]
+                },
+                {
+                    field: 'ac',
+                    title: '网络类型',
+                    formatter: function (value, row, index) {
+                        if ($.common.isEmpty(value)) {
+                            return undefined;
+                        }
+                        var val = value.split(",");
+                        val.forEach(function (value1, index1, array) {
+                            array[index1] = $.table.selectDictLabel(acDatas, value1);
+                        })
+                        return val.join(",");
+                    },
+                    visible: isShow["ac"]
+                },
+                {
+                    field: 'articleCategory',
+                    title: '受众文章分类',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(articleCategoryDatas, value);
+                    },
+                    visible: isShow["articleCategory"]
+                },
+                {
+                    field: 'platform',
+                    title: '受众平台',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(platformDatas, value);
+                    },
+                    visible: isShow["platform"]
+                },
+                {
+                    field: 'district',
+                    title: '地域类型',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(districtDatas, value);
+                    },
+                    visible: isShow["district"]
+                },
+                {
+                    field: 'city',
+                    title: '地域定向城市或者区县列表',
+                    formatter: function (value, row, index) {
+                        if ($.common.isEmpty(value)) {
+                            return undefined;
+                        }
+                        var val = value.split(",");
+                        val.forEach(function (value1, index1, array) {
+                            array[index1] = $.table.selectDictLabel(cityDatas, value1);
+                        })
+                        return val.join(",");
+                    },
+                    visible: isShow["city"]
+                },
+                {
+                    field: 'adTag',
+                    title: '兴趣分类',
+                    visible: isShow["adTag"]
+                },
+                {
+                    field: 'interestTags',
+                    title: '兴趣关键词',
+                    visible: isShow["interestTags"]
+                },
+                {
+                    field: 'appBehaviorTarget',
+                    title: 'APP行为定向',
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(appBehaviorTargetDatas, value);
+                    },
+                    visible: isShow["appBehaviorTarget"]
+                },
+                {
+                    field: 'appCategory',
+                    title: 'APP行为按分类集合',
+                    visible: isShow["appCategory"]
+                },
+                {
+                    field: 'appIds',
+                    title: 'APP行为定向,APP集合',
+                    visible: isShow["appIds"]
+                },
+                {
+                    field: 'remark',
+                    title: '备注',
+                    formatter: function (value, row, index) {
+                        return $.table.tooltip(value);
+                    },
+                    visible: isShow["remark"]
+                }]
+        }
+    }
+
+
+
+    $(function () {
+        $.table.init(options1);
+        layui.use('laydate', function () {
+            var laydate = layui.laydate;
+
+            laydate.render({
+                elem: '#dueDateStart1',
+                type: 'datetime',
+                trigger: 'click'
+            });
+            laydate.render({
+                elem: '#dueDateEnd1',
+                type: 'datetime',
+                trigger: 'click'
+            });
+
+        });
+        $(".field").change(function () {
+            var o = $(this).prop("checked");
+            var field = $(this).attr("value");
+            if (o) {
+                isShow[field] = true;
+                $.table.showColumn(field)
+            } else {
+                isShow[field] = false;
+                $.table.hideColumn(field)
+            }
+        });
+        $("input[name='allSelect']").change(function () {
+            var o = $(this).prop("checked");
+            $(".field").prop("checked",o);
+            $.each(isShow,function(name,value){
+                isShow[name] = o;
+            });
+            $.table.destroy();
+            initTable(3);
+        });
+    });
+
+    function initTable(id) {
+        if (id == 1) {
+            $.table.init(options1);
+            options1Init = true;
+        } else if (id == 2) {
+            $.table.init(options2);
+            options2Init = true;
+        } else if (id == 3) {
+            options3Initfun();
+            $.table.init(options3);
+            options3Init = true;
+        }
+    }
+
+    function adMutual(data) {
+
+        var url = prefix1 + "/adMutual";
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+            },
+            success: function (result) {
+                if (typeof callback == "function") {
+                    callback(result);
+                }
+                $.operate.ajaxSuccess(result);
+            }
+        };
+        $.ajax(config)
+    }
+
+    function importFile(formId, fun) {
+        var currentId = $.common.isEmpty(formId) ? 'importTpl' : formId;
+        layer.open({
+            type: 1,
+            area: ['400px', '230px'],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: '导入' + $.table._option.modalName + '数据',
+            content: $('#' + currentId).html(),
+            btn: ['<i class="fa fa-check"></i> 导入', '<i class="fa fa-remove"></i> 取消'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            btn1: function (index, layero) {
+                var file = layero.find('#file').val();
+                if (file == '' || (!$.common.endWith(file, '.xls') && !$.common.endWith(file, '.xlsx'))) {
+                    $.modal.msgWarning("请选择后缀为 “xls”或“xlsx”的文件。");
+                    return false;
+                }
+                var index = layer.load(2, {shade: false});
+                $.modal.disable();
+                var formData = new FormData();
+                formData.append("file", $('#file')[0].files[0]);
+                formData.append("updateSupport", $("input[name='updateSupport']").is(':checked'));
+                $.ajax({
+                    url: $.table._option.importUrl,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    type: 'POST',
+                    success: function (result) {
+                        if (result.code == web_status.SUCCESS) {
+                            $.modal.closeAll();
+                            $.modal.alertSuccess(result.msg);
+                            $.table.refresh();
+                            if (fun != undefined) {
+                                fun();
+                            }
+                        } else if (result.code == web_status.WARNING) {
+                            layer.close(index);
+                            $.modal.enable();
+                            $.modal.alertWarning(result.msg)
+                        } else {
+                            layer.close(index);
+                            $.modal.enable();
+                            $.modal.alertError(result.msg);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function removeAll(){
+        $.operate.removeAll();
+    }
+
+    function remove(id){
+        $.operate.remove(id);
+    }
+
+</script>
+</body>
+<!-- 导入区域 -->
+<script id="importTpl" type="text/template">
+    <form enctype="multipart/form-data" class="mt20 mb10">
+        <div class="col-xs-offset-1">
+            <input type="file" id="file" name="file"/>
+            <div class="mt10 pt5">
+                <input type="checkbox" id="updateSupport" name="updateSupport" title="如果登录账户已经存在，更新这条数据。"> 是否更新已经存在的用户数据
+                &nbsp; <a onclick="$.table.importTemplate()" class="btn btn-default btn-xs"><i
+                    class="fa fa-file-excel-o"></i> 下载模板</a>
+            </div>
+            <font color="red" class="pull-left mt10">
+                提示：仅允许导入“xls”或“xlsx”格式文件！
+            </font>
+        </div>
+    </form>
+</script>
+</html>

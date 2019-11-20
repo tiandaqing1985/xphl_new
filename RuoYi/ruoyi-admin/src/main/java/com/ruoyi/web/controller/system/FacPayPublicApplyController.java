@@ -222,6 +222,17 @@ public class FacPayPublicApplyController extends BaseController {
         }
         facUserApprovalService.createPublicPayApprovalProcess(facPayPublicApply.getNum(),facPayPublicApply.getAmount(),facPayPublicApply.getName(),ShiroUtils.getUserId());
         facPayPublicApply.setStatus("1");
+        if(facPayPublicApply.getIsKeep()!=null){
+            if(facPayPublicApply.getIsKeep().equals("1")){
+                FacCommonlyApply facCommonlyApply=new FacCommonlyApply();
+                facCommonlyApply.setNum(ShiroUtils.getUserId()+"");
+                facCommonlyApply.setName(facPayPublicApply.getPayee());
+                facCommonlyApply.setNumber(facPayPublicApply.getPayeeAccount());
+                facCommonlyApply.setUserName(facPayPublicApply.getPayeeBank());
+                facCommonlyApplyService.insertFacCommonlyApply(facCommonlyApply);
+            }
+        }
+
         facPayPublicApplyService.insertFacPayPublicApply(facPayPublicApply);
         return AjaxResult.success("操作成功");
     }
@@ -363,6 +374,17 @@ public class FacPayPublicApplyController extends BaseController {
 		} else {
 			facPayPublicApplyService.deleteFacPayPublicApplyByIds(facPayPublicApply.getId().toString());
 		}
+        if(facPayPublicApply.getIsKeep()!=null){
+            if(facPayPublicApply.getIsKeep().equals("1")){
+                FacCommonlyApply facCommonlyApply=new FacCommonlyApply();
+                facCommonlyApply.setNum(ShiroUtils.getUserId()+"");
+                facCommonlyApply.setName(facPayPublicApply.getPayee());
+                facCommonlyApply.setNumber(facPayPublicApply.getPayeeAccount());
+                facCommonlyApply.setUserName(facPayPublicApply.getPayeeBank());
+                facCommonlyApplyService.insertFacCommonlyApply(facCommonlyApply);
+            }
+        }
+
 		facPayPublicApplyService.insertApply(facPayPublicApply);
 		return AjaxResult.success("操作成功");
 

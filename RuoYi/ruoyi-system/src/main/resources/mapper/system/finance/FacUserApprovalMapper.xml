@@ -44,7 +44,6 @@
             <if test="applicantId != null ">and applicant_id = #{applicantId}</if>
             <if test="amount != null ">and amount = #{amount}</if>
             <if test="projectName != null  and projectName != '' ">and projectName = #{projectName}</if>
-
         </where>
         order by approval_id desc
     </select>
@@ -65,9 +64,15 @@
 
     <select id="selectApplicantIdList" parameterType="FacUserApproval"
             resultMap="FacUserApprovalResult">
-		select * from fac_sys_user_approval where approval_state in
-		(1,2) AND
-		approver_id = #{approverId} order by create_time desc
+        <include refid="selectFacUserApprovalVo"/>
+		<where>
+        <if test="applyId != null  and applyId != '' ">and apply_id = #{applyId}</if>
+            <if test="applicantId != null ">and applicant_id = #{applicantId}</if>
+            <if test="projectName != null  and projectName != '' ">and projectName = #{projectName}</if>
+            <if test="approverId != null ">and approver_id = #{approverId}</if>
+        </where>
+        and   approval_state in (1,2)
+		 order by create_time desc
 	</select>
 
     <select id="selectApproverIdList" parameterType="FacUserApproval"

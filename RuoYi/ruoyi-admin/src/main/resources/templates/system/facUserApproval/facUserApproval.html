@@ -28,7 +28,7 @@
                         <div class="container-div">
                             <div class="row">
                                 <div class="col-sm-12 search-collapse">
-                                    <form id="formId">
+                                    <form id="formId1">
                                         <div class="select-list">
                                             <ul>
                                                 <li>
@@ -52,9 +52,9 @@
                                                 </li>
 
                                                 <li>
-                                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="mySearch(1)"><i
                                                             class="fa fa-search"></i>&nbsp;搜索</a>
-                                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('formId1')"><i
                                                             class="fa fa-refresh"></i>&nbsp;重置</a>
                                                 </li>
                                             </ul>
@@ -62,7 +62,7 @@
                                     </form>
                                 </div>
                                 <div class="col-sm-12 select-table table-striped">
-                                    <table id="bootstrap-table" data-mobile-responsive="true"></table>
+                                    <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@
                         <div class="container-div">
                             <div class="row">
                                 <div class="col-sm-12 search-collapse">
-                                    <form id="formIds">
+                                    <form id="formId2">
                                         <div class="select-list">
                                             <ul>
                                                 <li>
@@ -96,9 +96,9 @@
                                                     审批项目名称：<input type="text"   name="projectName" />
                                                 </li>
                                                 <li>
-                                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                                    <a class="btn btn-primary btn-rounded btn-sm" onclick="mySearch(2)"><i
                                                             class="fa fa-search"></i>&nbsp;搜索</a>
-                                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                                    <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('formId2')"><i
                                                             class="fa fa-refresh"></i>&nbsp;重置</a>
                                                 </li>
                                             </ul>
@@ -106,7 +106,7 @@
                                     </form>
                                 </div>
                                 <div class="col-sm-12 select-table table-striped">
-                                    <table id="bootstrap-table1" data-mobile-responsive="true"></table>
+                                    <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
                                 </div>
                             </div>
                         </div> </div>
@@ -123,7 +123,7 @@
     var approvalState = [[${@dict.getType('fac_approval_state')}]];
     $(function () {
         var options = {
-            id:"bootstrap-table",
+            id:"bootstrap-table-1",
             url: prefix + "/list",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
@@ -188,7 +188,7 @@
 
     $(function () {
         var options = {
-            id:"bootstrap-table1",
+            id:"bootstrap-table-2",
             url: prefix + "/endfacUserApproval",
             createUrl: prefix + "/add",
             updateUrl: prefix + "/edit/{id}",
@@ -282,6 +282,16 @@
 
     }
 
+    function mySearch(id) {
+        if (id == '1') {
+            $.table._option.id = 'bootstrap-table-1';
+            $.table._option.url = prefix + "/list";
+        } else if (id == '2') {
+            $.table._option.id = 'bootstrap-table-2';
+            $.table._option.url = prefix + "/endfacUserApproval";
+        }
+        $.table.search('formId' + id);
+    }
 
 
     var testBsSuggest = $("#applicantId").bsSuggest({
