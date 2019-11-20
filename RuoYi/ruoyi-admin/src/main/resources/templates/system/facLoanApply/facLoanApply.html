@@ -126,7 +126,10 @@
                 {
                     field: 'allName',
                     title: '所有审批人',
-                    sortable: true
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value);
+                    }
                 },
                 {
                     field: 'approver',

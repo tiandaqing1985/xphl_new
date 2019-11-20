@@ -217,8 +217,7 @@ public class FacReimburseApplyController extends BaseController {
         SysDept sysDept = sysDeptService.selectDeptById(user.getDeptId());
         List<SysRole> sysRoles = sysRoleService.selectRolesByUserId(user.getUserId());
         for (SysRole sysRole : sysRoles) {
-
-            if (sysRole.isFlag() && sysRole.getRoleId() == 13|| ShiroUtils.getUserId()==1L) {
+            if (sysRole.isFlag() && sysRole.getRoleId() == 22|| ShiroUtils.getUserId()==1L) {
                 // 若是财务
                 startPage();
                 List<FacReimburseApply> list = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);

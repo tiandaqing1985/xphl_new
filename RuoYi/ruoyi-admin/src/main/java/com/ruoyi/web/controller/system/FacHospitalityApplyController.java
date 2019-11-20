@@ -65,7 +65,7 @@ public class FacHospitalityApplyController extends BaseController {
 	@ResponseBody
 	public TableDataInfo list(FacHospitalityApply facHospitalityApply) {
 		startPage();
-		if(ShiroUtils.getUserId()==1L){
+		if(ShiroUtils.getUserId()==1L||ShiroUtils.getUserId()==154L||ShiroUtils.getUserId()==110L){
 			List<FacHospitalityApply> lists = facHospitalityApplyService.selectFacHospitalityApplyList(facHospitalityApply);
 			for (FacHospitalityApply v : lists) {
 				v.setUserIdName(sysUserService.selectUserById(v.getUserId()).getUserName());
