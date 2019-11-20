@@ -173,6 +173,9 @@ public class UserApplyServiceImpl implements IUserApplyService
 		personnel.setApplyId(userApply.getApplyId());
 		personnel.setApprovalLevel(++level);
 		SysUser user = userMapper.selectUserById(userApply.getUserId());
+		if(user.getArea().equals("3")){
+			user.setArea("2");
+		}
 		
 		SysUser user2 = new SysUser();
 		user2.setRoleId(6L);//人事总监
@@ -763,6 +766,9 @@ public class UserApplyServiceImpl implements IUserApplyService
 		personnel.setApplyId(userApply.getApplyId());
 		personnel.setApprovalLevel(2);
 		SysUser user = userMapper.selectUserById(userApply.getUserId());//根据申请人查询区域
+		if(user.getArea().equals("3")){
+			user.setArea("2");
+		}
 		SysUser user2 = new SysUser();//当前区域hr
 		user2.setArea(user.getArea());
 		user2.setRoleId(3L);
@@ -781,6 +787,9 @@ public class UserApplyServiceImpl implements IUserApplyService
 		}
 		
 		SysUser user = userMapper.selectUserById(userApply.getUserId());
+		if(user.getArea().equals("3")){
+			user.setArea("2");
+		}
 		SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
 		String workDate = sd.format(userApply.getStarttime());
 		
@@ -991,7 +1000,9 @@ public class UserApplyServiceImpl implements IUserApplyService
 		userApplyMapper.insertUserApply(userApply);
 
 		SysUser user = userMapper.selectUserById(userId);//查出当前用户的area值
-		
+		if(user.getArea().equals("3")){
+			user.setArea("2");
+		}
 		//生成审批记录
 		Long approvalId = 0L;//审批人id
 		

@@ -155,7 +155,6 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 		}
 		
 		SysUser user = userMapper.selectUserById(queryConditions.getUserId());//查出当前用户
-
 		
 		//人事总监
 		SysUser user2 = new SysUser();
@@ -183,6 +182,9 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 			return userApprovalMapper.selectQueryConditionsList(queryConditions);
 		}
 
+		if(user.getArea().equals("3")){
+			user.setArea("2");
+		}
 		Long upLeaderId =userMapper.selectUpApproverIdByApplyerId(queryConditions.getUserId());//所在部门负责人的上级leader
 		user.setRoleId(3L);//人事专员
 		Long hrId = userRoleMapper.selectUserIdByRoleId(user);//人事专员id
