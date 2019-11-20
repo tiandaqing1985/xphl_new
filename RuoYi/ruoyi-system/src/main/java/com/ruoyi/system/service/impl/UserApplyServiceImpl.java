@@ -1088,10 +1088,7 @@ public class UserApplyServiceImpl implements IUserApplyService
     	List<UserApply> aList = userApplyMapper.selectApplyList(userApply);
     	if(aList.size() == 0){
     		return false;
-    	}else{
-    		if(aList.get(0).getTimelength()>=2.5){
-    			return false;
-    		}
+    	}else{    		
     		return true;
     	}
 	}

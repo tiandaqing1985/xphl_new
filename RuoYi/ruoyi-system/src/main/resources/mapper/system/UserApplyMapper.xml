@@ -129,6 +129,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
 			 <if test="userId != null"> and a.user_id = #{userId}</if>
 		     <if test="starttime != null  and starttime != '' "> and a.starttime like concat('%',#{starttime},'%')</if>
+		     <if test="timelength != null"> and a.timelength <![CDATA[  >=  ]]> 0.5</if>
 		</where>
     </select>
     
