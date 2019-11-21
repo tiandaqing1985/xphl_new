@@ -35,11 +35,8 @@ import com.dingtalk.api.response.OapiUserSimplelistResponse.Userlist;
 import com.ruoyi.system.domain.OaDingding;
 import com.ruoyi.system.domain.OaDingdingUser;
 import com.ruoyi.system.mapper.OaDingdingUserMapper;
-import com.ruoyi.system.mapper.UserApplyMapper;
-import com.ruoyi.system.mapper.UserApprovalMapper;
 import com.ruoyi.system.service.IOaDingdingService;
 import com.ruoyi.system.service.IOaDingdingUserService;
-import com.ruoyi.system.service.IUserApplyService;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.ClientProtocolException;
@@ -147,14 +144,14 @@ public class DingDingTask{
         }
 	
 	//弹性工作制
-	public void dingElasticTime(){
+	public void dingElasticTime(String num){
 		//弹性工作制
 		//设置查询时间
 		Date date = new Date();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = sdf.format(date);
         
-        String yesterday = getPreDayOrAfterDay(currentDate, -1);//-1是前一天， +1是后一天
+        String yesterday = getPreDayOrAfterDay(currentDate,  Integer.parseInt(num));//-1是前一天， +1是后一天
 		dingdingService.updateOaDingDingByElasticTime(yesterday);
 	}
 	
