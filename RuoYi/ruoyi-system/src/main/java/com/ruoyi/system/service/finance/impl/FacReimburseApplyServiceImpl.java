@@ -311,11 +311,11 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                 if (role.getRoleId() == 13) {
                                     // 是否财务
                                     isCaywu = true;
-                                } else if (role.getRoleId().equals(6)
-                                        || role.getRoleId().equals(3)) {
+                                } else if (role.getRoleId() == 6
+                                        || role.getRoleId() == 3 ) {
                                     // 是否人事
                                     isRenshi = true;
-                                } else if (role.getRoleId().equals(14)) {
+                                } else if (role.getRoleId() ==14 ) {
                                     // 是否行政
                                     isXingzheng = true;
                                 }
@@ -359,7 +359,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                             facReimburseApplyMapper
                                     .insertFacReimburseApply(facReimburseApply);
                             flg = true;
-                        } else if (isCaywu || isRenshi || isXingzheng) {// 财务审批规则
+                        } else if (isCaywu || isRenshi || isXingzheng) {   // 财务审批规则
 
                             if (num <= 2000.00) {
                                 facReimburseApply.setStatus("3");

@@ -3,7 +3,7 @@ package com.ruoyi.system.mapper;
 import com.ruoyi.system.domain.UserApply;
 import com.ruoyi.system.domain.UserApplyList;
 
-import java.util.List;	
+import java.util.List;
 
 /**
  * 申请 数据层

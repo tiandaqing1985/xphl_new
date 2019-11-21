@@ -8,25 +8,29 @@
     <form class="form-horizontal m" id="form-add">
         <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
         <div class="row">
-            <div class="form-group ui-sortable-helper col-md-6">
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>日期</label>
-                <div class="col-sm-9">
-                    <input id="ddDate" name="ddDate" class="time-input form-control" required  readonly style="background-color: white"/>
-                </div>
-            </div>
+
             <div class="form-group col-md-6">
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>出行类别</label>
                 <div class="col-sm-9">
-                    <label><input    type="radio" name="type" value="公出" checked>公出交通费用申请</label>
-                    <label><input    type="radio" name="type" value="加班">加班交通费用申请</label>
-                 </div>
+                    <label><input type="radio" name="type" value="公出" checked>公出交通费用申请</label>
+                    <label><input type="radio" name="type" value="加班">加班交通费用申请</label>
+                </div>
             </div>
+            <div class="form-group ui-sortable-helper col-md-6">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>日期</label>
+                <div class="col-sm-9">
+                    <input id="ddDate" name="ddDate" class="time-input form-control" required readonly
+                           style="background-color: white"/>
+                </div>
+            </div>
+
 
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="col-sm-3 control-label"><span style="color: red; ">*</span>金额</label>
                     <div class="col-sm-9">
-                        <input id="amount" name="amount" class="form-control" type="text" onkeyup="chkPrice(this);" onblur="chkLast(this)" required>
+                        <input id="amount" name="amount" class="form-control" type="text" onkeyup="chkPrice(this);"
+                               onblur="chkLast(this)" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -57,7 +61,8 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label"><span style="color: red; ">*</span>附单据数</label>
                     <div class="col-sm-9">
-                        <input id="documentNum" name="documentNum" class="form-control" type="text" onkeyup="chkPrice(this);" onblur="chkLast(this)" required>
+                        <input id="documentNum" name="documentNum" class="form-control" type="text"
+                               onkeyup="chkPrice(this);" onblur="chkLast(this)" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -73,7 +78,7 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label"><span style="color: red; ">*</span>事由</label>
                     <div class="col-sm-9">
-                        <textarea id="reason" name="reason"  class="form-control" type="text" required></textarea>
+                        <textarea id="reason" name="reason" class="form-control" type="text" required></textarea>
                     </div>
                 </div>
             </div>
@@ -94,14 +99,14 @@
     }
 
     $(function () {
-        $("input[type='radio']").on("click",function () {
-            if($("input[name='type']:checked").val()=="加班"){
-                $("#reason").attr("placeholder","详细写明加班内容");
-                $("#ddDate").attr("placeholder","加班时长超过2.5小时且申请加班审批通过后方可提交");
+        $("input[type='radio']").on("click", function () {
+            if ($("input[name='type']:checked").val() == "加班") {
+                $("#reason").attr("placeholder", "详细写明加班内容");
+                $("#ddDate").attr("placeholder", "加班时长超过2.5小时且申请加班审批通过后方可提交");
 
-            }else{
-                $("#reason").attr("placeholder","");
-                $("#ddDate").attr("placeholder","");
+            } else {
+                $("#reason").attr("placeholder", "");
+                $("#ddDate").attr("placeholder", "");
             }
         })
     })
@@ -121,19 +126,21 @@
     }).on('onUnsetSelectValue', function (e) {
         console.log("onUnsetSelectValue");
     });
-    function chkPrice(obj){
-        obj.value = obj.value.replace(/[^\d.]/g,"");
+
+    function chkPrice(obj) {
+        obj.value = obj.value.replace(/[^\d.]/g, "");
 //必须保证第一位为数字而不是.
-        obj.value = obj.value.replace(/^\./g,"");
+        obj.value = obj.value.replace(/^\./g, "");
 //保证只有出现一个.而没有多个.
-        obj.value = obj.value.replace(/\.{2,}/g,".");
+        obj.value = obj.value.replace(/\.{2,}/g, ".");
 //保证.只出现一次，而不能出现两次以上
-        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
     }
-    function chkLast(obj){
+
+    function chkLast(obj) {
 // 如果出现非法字符就截取掉
-        if(obj.value.substr((obj.value.length - 1), 1) == '.')
-            obj.value = obj.value.substr(0,(obj.value.length - 1));
+        if (obj.value.substr((obj.value.length - 1), 1) == '.')
+            obj.value = obj.value.substr(0, (obj.value.length - 1));
     }
 </script>
 </body>

@@ -715,12 +715,12 @@ public class FacReimburseApplyController extends BaseController {
     @ResponseBody
     public AjaxResult tranDetailSave(ReiTrafficApply reiTrafficApply) {
         //此处需要改写代码
-        if (reiTrafficApply.getType().equals("加班")) {
-            boolean a = userApplyService.ifSatisfied(ShiroUtils.getUserId(), reiTrafficApply.getDdDate());
-            if (!a) {
-                return AjaxResult.success("加班时长不满足2.5小时或加班审批没有通过");
-            }
-        }
+//        if (reiTrafficApply.getType().equals("加班")) {
+//            boolean a = userApplyService.ifSatisfied(ShiroUtils.getUserId(), reiTrafficApply.getDdDate());
+//            if (!a) {
+//                return AjaxResult.success("加班时长不满足2.5小时或加班审批没有通过");
+//            }
+//        }
         reiTrafficApply.setApplyUser(ShiroUtils.getUserId());
         List<ReiTrafficApply> list = new ArrayList<>();
         list.add(reiTrafficApply);
@@ -867,12 +867,12 @@ public class FacReimburseApplyController extends BaseController {
                         i--;
                     }
                 }
-                double amount = facTrafficReiApplyMapper.selectAmount(facReimburseApply.get(i).getApplyUser());
-                if (amount > 800) {
-                    facReimburseApply.get(i).setExcess("1");
-                } else {
-                    facReimburseApply.get(i).setExcess("0");
-                }
+//                double amount = facTrafficReiApplyMapper.selectAmount(facReimburseApply.get(i).getApplyUser());
+//                if (amount > 800) {
+//                    facReimburseApply.get(i).setExcess("1");
+//                } else {
+//                    facReimburseApply.get(i).setExcess("0");
+//                }
             }
             return getDataTable(facReimburseApply);
         } else {
