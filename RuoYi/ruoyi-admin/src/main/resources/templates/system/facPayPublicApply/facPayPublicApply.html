@@ -118,7 +118,7 @@
                 {
                     field: 'userName',
                     title: '申请人',
-                    sortable: true
+                    sortable: false
                 },
                 {
                     field: 'amount',
@@ -138,7 +138,7 @@
                 {
                     field: 'allName',
                     title: '所有审批人',
-                    sortable: true,
+                    sortable: false,
                     formatter: function(value, row, index) {
                         return $.table.tooltip(value);
                     }
@@ -146,11 +146,11 @@
                 {
                     field: 'approver',
                     title: '当前审批人',
-                    sortable: true
+                    sortable: false
                 },{
                     field: 'approvalStatus',
                     title: '当前审批状态',
-                    sortable: true,
+                    sortable: false,
                     formatter: function (value, row, index) {
                         if (value == 1) {
                             return "审批成功";

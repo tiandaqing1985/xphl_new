@@ -1,36 +1,17 @@
 package com.ruoyi.web.controller.system;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.system.domain.finance.*;
-import com.ruoyi.system.service.finance.*;
-import org.apache.poi.ss.usermodel.DateUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.finance.*;
 import com.ruoyi.system.mapper.finance.FacReiAdiApplyMapper;
 import com.ruoyi.system.mapper.finance.FacReimburseApplyMapper;
 import com.ruoyi.system.mapper.finance.FacTrafficReiApplyMapper;
@@ -38,7 +19,17 @@ import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
-import scala.collection.generic.Shrinkable;
+import com.ruoyi.system.service.IUserApplyService;
+import com.ruoyi.system.service.finance.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 报销 信息操作处理
@@ -87,6 +78,8 @@ public class FacReimburseApplyController extends BaseController {
     private IFacZhaoDaiLimitService facZhaoDaiLimitService;
     @Autowired
     private IFacCollectApplyService facCollectApplyService;
+    @Autowired
+    private IUserApplyService userApplyService;
 
     @GetMapping()
     public String facReimburseApply() {
@@ -217,7 +210,7 @@ public class FacReimburseApplyController extends BaseController {
         SysDept sysDept = sysDeptService.selectDeptById(user.getDeptId());
         List<SysRole> sysRoles = sysRoleService.selectRolesByUserId(user.getUserId());
         for (SysRole sysRole : sysRoles) {
-            if (sysRole.isFlag() && sysRole.getRoleId() == 22|| ShiroUtils.getUserId()==1L) {
+            if (sysRole.isFlag() && sysRole.getRoleId() == 22 || ShiroUtils.getUserId() == 1L) {
                 // 若是财务
                 startPage();
                 List<FacReimburseApply> list = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
@@ -236,7 +229,7 @@ public class FacReimburseApplyController extends BaseController {
                     }
                     FacUserApproval name = facUserApprovalService.selectApproval(facReimburseApply1.getNum(), facReimburseApply1.getLoanUser());
                     if (name != null) {
-                        if(facUserApprovalService.approverName(facReimburseApply1.getNum())!=null){
+                        if (facUserApprovalService.approverName(facReimburseApply1.getNum()) != null) {
                             facReimburseApply1.setAllName(facUserApprovalService.approverName(facReimburseApply1.getNum()));
                         }
                         if (name.getApproverId() != null) {
@@ -278,7 +271,7 @@ public class FacReimburseApplyController extends BaseController {
             }
             FacUserApproval name = facUserApprovalService.selectApproval(facReimburseApply1.getNum(), facReimburseApply1.getLoanUser());
             if (name != null) {
-                if(facUserApprovalService.approverName(facReimburseApply1.getNum())!=null){
+                if (facUserApprovalService.approverName(facReimburseApply1.getNum()) != null) {
                     facReimburseApply1.setAllName(facUserApprovalService.approverName(facReimburseApply1.getNum()));
                 }
 
@@ -721,6 +714,13 @@ public class FacReimburseApplyController extends BaseController {
     @PostMapping("/tranDetail")
     @ResponseBody
     public AjaxResult tranDetailSave(ReiTrafficApply reiTrafficApply) {
+        //此处需要改写代码
+        if (reiTrafficApply.getType().equals("加班")) {
+            boolean a = userApplyService.ifSatisfied(ShiroUtils.getUserId(), reiTrafficApply.getDdDate());
+            if (!a) {
+                return AjaxResult.success("加班时长不满足2.5小时或加班审批没有通过");
+            }
+        }
         reiTrafficApply.setApplyUser(ShiroUtils.getUserId());
         List<ReiTrafficApply> list = new ArrayList<>();
         list.add(reiTrafficApply);
@@ -864,6 +864,7 @@ public class FacReimburseApplyController extends BaseController {
                 if (user == 253 || user == 257) {
                     if (facReimburseApply.get(i).getType().equals("公出")) {
                         facReimburseApply.remove(i);
+                        i--;
                     }
                 }
                 double amount = facTrafficReiApplyMapper.selectAmount(facReimburseApply.get(i).getApplyUser());
