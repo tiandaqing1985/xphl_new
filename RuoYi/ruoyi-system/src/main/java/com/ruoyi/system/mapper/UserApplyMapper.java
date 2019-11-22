@@ -3,7 +3,10 @@ package com.ruoyi.system.mapper;
 import com.ruoyi.system.domain.UserApply;
 import com.ruoyi.system.domain.UserApplyList;
 
-import java.util.List;	
+import java.util.Date;
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;	
 
 /**
  * 申请 数据层
@@ -43,6 +46,13 @@ public interface UserApplyMapper
      */
 	public List<UserApply> selectUserApplyList(UserApply userApply);
 	
+	/**
+	 * 查询加班申请
+	 * @param userId
+	 * @param starttime
+	 * @return
+	 */
+	public List<UserApply> selectOtherApplyList(@Param("userId")Long userId , @Param("starttime") String starttime);
 	/**
 	 * 查询申请列表
 	 * @param userApply

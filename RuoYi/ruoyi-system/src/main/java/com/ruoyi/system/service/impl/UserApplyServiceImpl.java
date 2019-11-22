@@ -3,6 +3,7 @@ package com.ruoyi.system.service.impl;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -1079,13 +1080,11 @@ public class UserApplyServiceImpl implements IUserApplyService
 
 	@Override
 	public boolean ifSatisfied(Long userId, Date time) {
-		UserApply userApply = new UserApply();
-		userApply.setUserId(userId);
-		userApply.setStarttime(time);
-		//根据日期查询加班申请记录是否已通过且>2.5h
-    	userApply.setApplyType("2");//申请类型（1请假，2加班，销假）
-    	userApply.setApplyState("3");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
-    	List<UserApply> aList = userApplyMapper.selectApplyList(userApply);
+		SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+		String date = sdf.format(time);
+		date.substring(0, 9);
+    	List<UserApply> aList = new ArrayList<UserApply>();
+		aList = userApplyMapper.selectOtherApplyList(userId, date);
     	if(aList.size() == 0){
     		return false;
     	}else{    		
