@@ -18,6 +18,8 @@
 		}
 		function agree(id,remark){
 		    $.modal.open('审批', prefix + "/approvalModer?ids="+id+"&remark="+remark, '500', '320');
+		    $.table._option.id = 'bootstrap-table1';
+		    $.table.refresh();
 			/* var data = { "ids": id };
 	 	    $.operate.submit("/system/userApproval/agree", "post", "json", data); */
 		}
