@@ -20,7 +20,7 @@
 				<div class="col-sm-8">
                    <div class="input-group date">
                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                       <input type="text" class="form-control" id="starttime" name="starttime" placeholder="yyyy-MM-dd HH:mm:ss" readonly="readonly" autocomplete="off">
+                       <input type="text" class="form-control" id="starttime" name="starttime" readonly="readonly" autocomplete="off">
                    </div><span id="p01"></span>
 				</div>
 			</div>
@@ -29,7 +29,7 @@
 				<div class="col-sm-8">
 					<div class="input-group date">
                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                       <input type="text" class="form-control" id="endtime" name="endtime" placeholder="yyyy-MM-dd HH:mm:ss" readonly="readonly" autocomplete="off">
+                       <input type="text" class="form-control" id="endtime" name="endtime" readonly="readonly" autocomplete="off">
                    </div><span id="p02"></span>
 				</div>
 			</div>
@@ -65,13 +65,13 @@
 			
 				laydate.render({ 
        		    	elem: '#starttime',
-       		 		format: 'yyyy-MM-dd HH:mm',
+       		 		format: 'yyyy-MM-dd HH:mm:ss',
        		   	    type: 'datetime',
        		    	trigger: 'click'
        		 	 });
 				laydate.render({ 
        		    	elem: '#endtime',
-       		 		format: 'yyyy-MM-dd HH:mm',
+       		 		format: 'yyyy-MM-dd HH:mm:ss',
        		   	    type: 'datetime',
        		    	trigger: 'click'
        		 	 });
@@ -79,11 +79,10 @@
 		 });
 		
 		function submitHandler() {
-			debugger;
 		   var flag = false;//提交flag 
 		   var repeatFlag = false;
 		   var startFlag = false;
-		   var beforeFlag = false;
+		   var beforeFlag = true;
 	       if ($.validate.form()) {
 	    	   var applyType = $("#applyType").val();
 	    	   var starttime = $("#starttime").val();
@@ -104,29 +103,15 @@
 				   flag = false;
 				   return;
 			   }
-			   
-			 //验证起始时间是否是昨天之前的时间
-				 $.ajax({
-					type:"post",
-					async:false,
-					url:"/system/userApply/ifBefore",
-					data:{"starttime":starttime,"endtime":endtime },
-					dataType:"json",
-					success:function(result){
-						 if(result == "0"){
-							 beforeFlag = true;
-						}
-						else{
-							beforeFlag = false;
-							$.modal.alertWarning("只能提交昨天（含）之前的加班申请。");
-							return;
-						}
-					},
-					error:function(){
-						$.modal.alertWarning("请联系管理员");
-					}
-				}); 
-			 
+			   debugger;
+			   var today = new Date().format("yyyy-MM-dd");
+			   var stime = $("#starttime").val().substring(0,10);
+			   if(stime >= today){
+				    beforeFlag = false;
+					$.modal.alertWarning("只能提交昨天（含）之前的加班申请。");
+					return;
+			   }
+					 
 		if(beforeFlag){
 				 //验证所请假期 是否与已有申请时段重复 
 				 $.ajax({
@@ -212,7 +197,28 @@
      		iDay = Math.floor(iDays * 10)/10
             return  iDay  
         };
-    
+     
+     //将日期转换成yyyy-MM-dd hh:mm:ss 或者 yyyy-MM-dd
+     Date.prototype.format = function(fmt) { 
+         var o = { 
+            "M+" : this.getMonth()+1,                 //月份 
+            "d+" : this.getDate(),                    //日 
+            "h+" : this.getHours(),                   //小时 
+            "m+" : this.getMinutes(),                 //分 
+            "s+" : this.getSeconds(),                 //秒 
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+            "S"  : this.getMilliseconds()             //毫秒 
+        }; 
+        if(/(y+)/.test(fmt)) {
+                fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+        }
+         for(var k in o) {
+            if(new RegExp("("+ k +")").test(fmt)){
+                 fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+             }
+         }
+        return fmt; 
+    }   
 	</script>
 </body>
 </html>
