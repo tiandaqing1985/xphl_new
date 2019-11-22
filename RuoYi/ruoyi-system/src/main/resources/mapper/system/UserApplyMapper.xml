@@ -128,8 +128,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		     <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
 			 <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
 			 <if test="userId != null"> and a.user_id = #{userId}</if>
-		     <if test="starttime != null  and starttime != '' "> and a.starttime like concat('%',#{starttime},'%')</if>
-		     <if test="timelength != null"> and a.timelength <![CDATA[  >=  ]]> 0.5</if>
+		     <if test="starttime != null"> and a.starttime like concat('%',#{starttime},'%')</if>
+		     <if test="timelength != null"> and a.timelength <![CDATA[  >=  ]]> 2.5</if>
+		</where>
+    </select>
+    
+    <select id="selectOtherApplyList" parameterType="Map" resultMap="UserApplyResult">
+    	SELECT us.user_name,a.* 
+    		FROM sys_user_apply a
+			LEFT JOIN sys_user us ON us.user_id = a.user_id 
+		<where>
+		     a.apply_type = 2 and a.apply_state = 3 and a.timelength <![CDATA[  >=  ]]> 2.5
+			 <if test="userId != null"> and a.user_id = #{userId}</if>
+		     <if test="starttime != null"> and a.starttime like concat('%',#{starttime},'%')</if>
 		</where>
     </select>
     
