@@ -8,20 +8,19 @@
     <form class="form-horizontal m" id="form-add">
         <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
         <div class="row">
+            <div class="form-group col-md-6">
+                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>出行类别</label>
+                <div class="col-sm-9">
+                    <label><input    type="radio" name="type" value="公出" checked>公出交通费用申请</label>
+                    <label><input    type="radio" name="type" value="加班">加班交通费用申请</label>
+                </div>
+            </div>
             <div class="form-group ui-sortable-helper col-md-6">
                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>日期</label>
                 <div class="col-sm-9">
                     <input id="ddDate" name="ddDate" class="time-input form-control" required  readonly style="background-color: white"/>
                 </div>
             </div>
-            <div class="form-group col-md-6">
-                <label class="col-sm-3 control-label"><span style="color: red; ">*</span>出行类别</label>
-                <div class="col-sm-9">
-                    <label><input    type="radio" name="type" value="公出" checked>公出交通费用申请</label>
-                    <label><input    type="radio" name="type" value="加班">加班交通费用申请</label>
-                 </div>
-            </div>
-
             <div class="col-md-6">
                 <div class="form-group">
                     <label class="col-sm-3 control-label"><span style="color: red; ">*</span>金额</label>

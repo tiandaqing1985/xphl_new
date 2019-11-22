@@ -45,7 +45,7 @@
                             </div>
                         </li>
                         <li>
-                            类型： <!-- <input type="text" name="type"/> 这个需要改-->
+                            类型：
                             <select id="type" name="type" class="form-control">
                                 <option value="">-- 请选择 --</option>
                                 <option value="日常报销">日常报销</option>
@@ -68,9 +68,6 @@
             <a class="btn btn-success" onclick="add()">
                 <i class="fa fa-plus"></i> 日常报销申请
             </a>
-            <!--            <a class="btn btn-warning" onclick="$.table.exportExcel()">-->
-            <!--                <i class="fa fa-download"></i> 导出-->
-            <!--            </a>-->
         </div>
         <div class="col-sm-12 select-table table-striped">
             <table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -194,7 +191,10 @@
                         if (row.submitStatus == "submit") {
                             if (row.status == 1) {
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\',\''+row.type+'\',\''+row.jknum+'\')"><i class="fa fa-detail"></i>打印</a>');
-                            }else if(row.status == 4){
+                            }else if (row.status == 2) {
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\',\''+row.type+'\',\''+row.jknum+'\')"><i class="fa fa-detail"></i>打印</a>');
+                               // actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                            }  else if(row.status == 4){
                                 actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
                             }
                         }
@@ -203,7 +203,6 @@
                 }]
         };
         $.table.init(options);
-        // $.modal.openTab("添加" + $.table._option.modalName, $.operate.addUrl(id));
     });
 
     function onDblClickRow(row, $element) {
@@ -217,6 +216,11 @@
         }
 
     }
+
+
+
+
+
 
     function mEdit(id) {
         var width;

@@ -718,7 +718,7 @@ public class FacReimburseApplyController extends BaseController {
         if (reiTrafficApply.getType().equals("加班")) {
             boolean a = userApplyService.ifSatisfied(ShiroUtils.getUserId(), reiTrafficApply.getDdDate());
             if (!a) {
-                return AjaxResult.success("加班时长不满足2.5小时或加班审批没有通过");
+                return AjaxResult.success("加班时长不满足2.5小时或加班审批没有通过,保存失败");
             }
         }
         reiTrafficApply.setApplyUser(ShiroUtils.getUserId());
@@ -744,9 +744,7 @@ public class FacReimburseApplyController extends BaseController {
                         }
                     }
                 }
-
             }
-
         }
         facReimburseApplyService.insertReiTrafficApply(reiTrafficApply);
         //查询本次插入的申请对应申请单的其他公出金额
@@ -932,7 +930,6 @@ public class FacReimburseApplyController extends BaseController {
             edit = "";
         }
         mmap.put("edit", edit);
-
         mmap.put("facReimburseApply", facReimburseApply);
         mmap.put("name", facReimburseApply.getName());
         mmap.put("num", facReimburseApply.getNum());

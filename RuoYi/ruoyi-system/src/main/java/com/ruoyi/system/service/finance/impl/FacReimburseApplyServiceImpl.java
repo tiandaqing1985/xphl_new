@@ -6,7 +6,6 @@ import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.finance.*;
 import com.ruoyi.system.mapper.SysUserRoleMapper;
-import com.ruoyi.system.mapper.UserApplyMapper;
 import com.ruoyi.system.mapper.finance.*;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
@@ -17,8 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
-import com.ruoyi.system.domain.finance.FacCostApply;
-import com.ruoyi.system.mapper.finance.FacCostApplyMapper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,8 +40,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
     ApprovalProcessService approvalProcessService;
     @Autowired
     ApprovalProcessMapper approvalProcessMapper;
-    @Autowired
-    private UserApplyMapper userApplyMapper;
+
     @Autowired
     private FacReiAdiApplyMapper facReiAdiApplyMapper;
 
@@ -448,6 +444,19 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
      */
     @Override
     public int updateFacReimburseApply(FacReimburseApply facReimburseApply) {
+//        FacUserApproval facUserApproval = new FacUserApproval();
+//        facUserApproval.setApplyId(facReimburseApply.getNum());
+//        List<FacUserApproval> list = facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
+//        if (list != null&&list.size()>0) {
+//            for (FacUserApproval f:list) {
+//            f.setAmount(selectDouble(facReimburseApply.getNum()));
+//            if(f.getApprovalState().equals("2")){
+//                f.setApprovalState("3");
+//                f.setOpi("");
+//            }
+//                facUserApprovalMapper.updateFacUserApproval(f);
+//            }
+//        }
         return facReimburseApplyMapper.updateFacReimburseApply(facReimburseApply);
     }
 
@@ -461,49 +470,48 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
     public int deleteFacReimburseApplyByIds(String ids) {
 
 
-
-        FacReimburseApply facReimburseApply =facReimburseApplyMapper.selectFacReimburseApplyById(ids);
-        FacUserApproval facUserApproval= new FacUserApproval();
+        FacReimburseApply facReimburseApply = facReimburseApplyMapper.selectFacReimburseApplyById(ids);
+        FacUserApproval facUserApproval = new FacUserApproval();
         facUserApproval.setApplyId(facReimburseApply.getNum());
-        List<FacUserApproval> list =facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
-        if(list!=null&&list.size()>0){
-            for(FacUserApproval v :list){
+        List<FacUserApproval> list = facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
+        if (list != null && list.size() > 0) {
+            for (FacUserApproval v : list) {
                 facUserApprovalMapper.deleteFacUserApprovalById(v.getApprovalId());
             }
         }
-        if(facReimburseApply.getType().equals("团建报销")){
-            FacCollectApply facCollectApply=facCollectApplyMapper.selectFacCollectApplyByNum(facReimburseApply.getJKnum());
+        if (facReimburseApply.getType().equals("团建报销")) {
+            FacCollectApply facCollectApply = facCollectApplyMapper.selectFacCollectApplyByNum(facReimburseApply.getJKnum());
             facCollectApply.setStatus("1");
             facCollectApplyMapper.updateFacCollectApply(facCollectApply);
-        }else if(facReimburseApply.getType().equals("差旅报销")){
+        } else if (facReimburseApply.getType().equals("差旅报销")) {
             FacCostApply fac = new FacCostApply();
             fac.setNum(facReimburseApply.getJKnum());
-            FacCostApply facCostApply= facCostApplyMapper.selectFacCostApplyList(fac).get(0);
+            FacCostApply facCostApply = facCostApplyMapper.selectFacCostApplyList(fac).get(0);
             facCostApply.setStatus("1");
             facCostApplyMapper.updateFacCostApply(facCostApply);
-        }else{
-          String num=  facReimburseApply.getNum();
+        } else {
+            String num = facReimburseApply.getNum();
             FacReiAdiApply facReiAdiApply = new FacReiAdiApply();
             facReiAdiApply.setNum(num);
-            List<FacReiAdiApply> listadi= facReiAdiApplyMapper.selectFacReiAdiApplyList(facReiAdiApply);
-            if(listadi!=null&&listadi.size()>0){
-                    for(FacReiAdiApply  v:listadi){
-                        facReiAdiApplyMapper.deleteFacReiAdiApplyById(v.getId());
-                    }
+            List<FacReiAdiApply> listadi = facReiAdiApplyMapper.selectFacReiAdiApplyList(facReiAdiApply);
+            if (listadi != null && listadi.size() > 0) {
+                for (FacReiAdiApply v : listadi) {
+                    facReiAdiApplyMapper.deleteFacReiAdiApplyById(v.getId());
+                }
             }
 
             List<ReiTrafficApply> listTra = facReimburseApplyMapper.traTail(num);
-            if(listTra!=null&&listTra.size()>0){
-                for(ReiTrafficApply  v:listTra){
+            if (listTra != null && listTra.size() > 0) {
+                for (ReiTrafficApply v : listTra) {
                     facReimburseApplyMapper.deleteReiTrafficApplyById(v.getId());
                 }
             }
 
-            ReiHospitalityApply reiHospitality =new ReiHospitalityApply();
+            ReiHospitalityApply reiHospitality = new ReiHospitalityApply();
             reiHospitality.setNum(num);
             List<ReiHospitalityApply> listHosp = facReimburseApplyMapper.selectReiHospitalityApplyList(reiHospitality);
-            if(listHosp!=null&&listHosp.size()>0){
-                for(ReiHospitalityApply  v:listHosp){
+            if (listHosp != null && listHosp.size() > 0) {
+                for (ReiHospitalityApply v : listHosp) {
                     facReimburseApplyMapper.deleteZhaodaiById(v.getId().toString());
                 }
             }

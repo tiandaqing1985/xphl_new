@@ -138,6 +138,7 @@ public class FacUserApprovalController extends BaseController {
         map.put("userId", ShiroUtils.getUserId());
         map.put("name", facUserApproval.getProjectName());
         map.put("userName", facUserApproval.getName());
+        map.put("userIdName", sysUserService.selectUserById(facUserApproval.getApplicantId()).getUserName());
         map.put("facCollectApply", new FacCollectApply());
         String nums = facUserApproval.getApplyId().substring(0, 2);
         if (nums.equals("BX")) {
