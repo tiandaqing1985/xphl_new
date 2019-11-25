@@ -140,6 +140,10 @@ public class FacUserApprovalController extends BaseController {
         map.put("userName", facUserApproval.getName());
         map.put("userIdName", sysUserService.selectUserById(facUserApproval.getApplicantId()).getUserName());
         map.put("facCollectApply", new FacCollectApply());
+        map.put("edit1", "false");
+        map.put("edit2", "false");
+        map.put("edit3", "false");
+
         String nums = facUserApproval.getApplyId().substring(0, 2);
         if (nums.equals("BX")) {
             FacReimburseApply reimburseApply = new FacReimburseApply();
@@ -148,6 +152,7 @@ public class FacUserApprovalController extends BaseController {
             String type = reimburseApplies.get(0).getType();
             if (type.equals("日常报销")) {
                 map.put("type", "rcbx");
+
                 //查询本报销是否有招待费报销项
                 ReiHospitalityApply reiHospitalityApplyVO = new ReiHospitalityApply();
                 reiHospitalityApplyVO.setNum(facUserApproval.getApplyId());
@@ -163,6 +168,19 @@ public class FacUserApprovalController extends BaseController {
                         limitAmount = facZhaoDaiLimit.getLimitAmount().doubleValue();
                     }
                 }
+
+                List<ReiTrafficApply> reiTrafficApply1 = facReimburseApplyService.selectReiTrafficApply(facUserApproval.getApplyId());
+                List<FacReiAdiApply> facReimburseApplys = facReimburseApplyService.selectFacReiAdiApply(facUserApproval.getApplyId());
+                if(reiHospitalityApplies1!=null&&reiHospitalityApplies1.size()>0){
+                    map.put("edit1", "ture");
+                }
+                if(reiTrafficApply1!=null&&reiTrafficApply1.size()>0){
+                    map.put("edit2", "ture");
+                }
+                if(facReimburseApplys!=null&&facReimburseApplys.size()>0){
+                    map.put("edit3", "ture");
+                }
+
                 //查询招待费当前已用额度
                 //计算报销人当月已审批和审批中的招待费报销金额
                 Double amount = 0.00;
@@ -382,6 +400,23 @@ public class FacUserApprovalController extends BaseController {
 
         map.put("approvalState", facUserApproval.getApprovalState());
 
+        map.put("edit1", "false");
+        map.put("edit2", "false");
+        map.put("edit3", "false");
+        ReiHospitalityApply reiHospitalityApplyVO = new ReiHospitalityApply();
+        reiHospitalityApplyVO.setNum(facUserApproval.getApplyId());
+        List<ReiHospitalityApply> reiHospitalityApplies1 = facReimburseApplyService.selectReiHospitalityApplyList(reiHospitalityApplyVO);
+        List<ReiTrafficApply> reiTrafficApply1 = facReimburseApplyService.selectReiTrafficApply(facUserApproval.getApplyId());
+        List<FacReiAdiApply> facReimburseApplys = facReimburseApplyService.selectFacReiAdiApply(facUserApproval.getApplyId());
+        if(reiHospitalityApplies1!=null&&reiHospitalityApplies1.size()>0){
+            map.put("edit1", "ture");
+        }
+        if(reiTrafficApply1!=null&&reiTrafficApply1.size()>0){
+            map.put("edit2", "ture");
+        }
+        if(facReimburseApplys!=null&&facReimburseApplys.size()>0){
+            map.put("edit3", "ture");
+        }
         String nums = facUserApproval.getApplyId().substring(0, 2);
         if (nums.equals("BX")) {
             return prefix + "/baoxiao";

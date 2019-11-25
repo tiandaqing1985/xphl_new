@@ -914,8 +914,17 @@ public class FacReimburseApplyController extends BaseController {
     @ResponseBody
     public AjaxResult editSave(FacReimburseApply facReimburseApply) {
 
-        facReimburseApply.setAmount(facReimburseApplyService.selectDouble(facReimburseApply.getNum()));
-
+//        facReimburseApply.setAmount(facReimburseApplyService.selectDouble(facReimburseApply.getNum()));
+//        facReimburseApply.getNum();
+//        FacUserApproval facUserApproval = new FacUserApproval();
+//        facUserApproval.setApplyId(facReimburseApply.getNum());
+//        List<FacUserApproval> list = facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
+//        if (list != null&&list.size()>0) {
+//            for (FacUserApproval f:list) {
+//            f.setAmount(facReimburseApplyService.selectDouble(facReimburseApply.getNum()));
+//                facUserApprovalMapper.deleteFacUserApprovalById(f.getApprovalId());
+//            }
+//        }
         return toAjax(facReimburseApplyService.updateFacReimburseApply(facReimburseApply));
     }
 

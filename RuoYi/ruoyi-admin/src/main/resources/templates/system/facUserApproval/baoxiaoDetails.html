@@ -57,27 +57,23 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="rcbx" style="display: none">
-                    <div class="row" id="jtf">
-                        <div class="col-sm-12 select-table table-striped" th:style="${edit=='false'}?'display: none':''">
+                    <div class="row" id="jtf" >
+                        <div class="col-sm-12 select-table table-striped" >
                             <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
                         </div>
                     </div>
-
-                    <div class="row" id="zdf">
-                        <div class="col-sm-12 select-table table-striped" th:style="${edit=='false'}?'display: none':''">
+                    <div class="row" id="zdf" >
+                        <div class="col-sm-12 select-table table-striped" >
                             <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
                         </div>
                     </div>
-                    <div class="row" id="qtf">
+                    <div class="row" id="qtf" >
                         <div class="col-sm-12 select-table table-striped">
-
-                            <table id="bootstrap-table-3" data-mobile-responsive="true" th:style="${edit=='false'}?'display: none':''"></table>
+                            <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
                         </div>
                     </div>
                 </div>
-
                 <div id="tjbx" style="display: none">
                     <div class="row">
                         <div class="col-sm-6">
@@ -173,7 +169,6 @@
                         <table id="bootstrap-table-4" data-mobile-responsive="true"></table>
                     </div>
                 </div>
-
                 <div id="clbx" style="display: none">
                     <div>
                         <table id="bootstrap-table-5" data-mobile-responsive="true"></table>
@@ -187,7 +182,6 @@
                         <table id="bootstrap-table-7" data-mobile-responsive="true"></table>
                     </div>
                 </div>
-
             </div>
         </div>
     </form>
@@ -227,6 +221,11 @@
     var msg = $("#msg").val();
     var userId = $("#userId").val();
     var dept = $("#dept").val();
+
+    var edit1 = [[${edit1}]];
+    var edit2 = [[${edit2}]];
+    var edit3 = [[${edit3}]];
+
     var prefixs = ctx + "system/facUserApproval";
     var prefix1 = ctx + "system/facCostReimburse";
     var prefix2 = ctx + "system/facCostPutupReimburse";
@@ -250,8 +249,31 @@
         $("#zdf").hide();//隐藏
     } else {
         $("#qtf").show();//显示
+    }
+
+
+    if (edit2 == "false") {
+
+        $("#jtf").hide();//隐藏
+    } else {
+        $("#jtf").show();//显示
 
     }
+
+    if (edit1 == "false") {
+        $("#zdf").hide();//隐藏
+    } else {
+        $("#zdf").show();//显示
+    }
+
+    if (edit3 == "false") {
+        $("#qtf").hide();//隐藏
+    } else {
+        $("#qtf").show();//显示
+    }
+
+
+
     var type = [[${type}]];
     $(function () {
         $("#"+type).attr("style","display: block")

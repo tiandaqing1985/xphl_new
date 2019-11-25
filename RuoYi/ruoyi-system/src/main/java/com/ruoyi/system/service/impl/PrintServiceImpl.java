@@ -456,7 +456,7 @@ public class PrintServiceImpl implements IPrintService {
         data.put("facPayPublicDetailed", facPayPublicDetailed);
         String isPrint = "";
         //打印时是否打印
-        if(facPayPublicDetailed.size()!=0){
+        if(facPayPublicDetailed.size()==0){
             isPrint = "否";
         }
         return isPrint + PrintUtil.printString("duigongDetail.ftl", data);

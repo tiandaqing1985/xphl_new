@@ -444,19 +444,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
      */
     @Override
     public int updateFacReimburseApply(FacReimburseApply facReimburseApply) {
-//        FacUserApproval facUserApproval = new FacUserApproval();
-//        facUserApproval.setApplyId(facReimburseApply.getNum());
-//        List<FacUserApproval> list = facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
-//        if (list != null&&list.size()>0) {
-//            for (FacUserApproval f:list) {
-//            f.setAmount(selectDouble(facReimburseApply.getNum()));
-//            if(f.getApprovalState().equals("2")){
-//                f.setApprovalState("3");
-//                f.setOpi("");
-//            }
-//                facUserApprovalMapper.updateFacUserApproval(f);
-//            }
-//        }
+
         return facReimburseApplyMapper.updateFacReimburseApply(facReimburseApply);
     }
 

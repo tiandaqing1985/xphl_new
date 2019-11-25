@@ -97,6 +97,32 @@
     var dept = $("#dept").val();
     var prefixs = ctx + "system/facUserApproval";
 
+    var edit1 = [[${edit1}]];
+    var edit2 = [[${edit2}]];
+    var edit3 = [[${edit3}]];
+
+
+    if (edit2 == "false") {
+
+        $("#jtf").hide();//隐藏
+    } else {
+        $("#jtf").show();//显示
+
+    }
+
+    if (edit1 == "false") {
+        $("#zdf").hide();//隐藏
+    } else {
+        $("#zdf").show();//显示
+    }
+
+    if (edit3 == "false") {
+        $("#qtf").hide();//隐藏
+    } else {
+        $("#qtf").show();//显示
+    }
+
+
     if (dept = 10) {
         $("#zdf").hide();//隐藏
     } else {
