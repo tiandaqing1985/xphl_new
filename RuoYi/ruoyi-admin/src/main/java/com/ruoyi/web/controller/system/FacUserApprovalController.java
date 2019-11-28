@@ -1,20 +1,5 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.ruoyi.system.domain.finance.*;
-import com.ruoyi.system.service.finance.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -23,7 +8,18 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.finance.*;
+import com.ruoyi.system.mapper.finance.FacReiAdiApplyMapper;
+import com.ruoyi.system.mapper.finance.FacReimburseApplyMapper;
 import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.system.service.finance.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 财务审批 信息操作处理
@@ -50,6 +46,13 @@ public class FacUserApprovalController extends BaseController {
     private IFacCostReimburseService facCostReimburseService;
     @Autowired
     private IFacZhaoDaiLimitService facZhaoDaiLimitService;
+    @Autowired
+    private ISysUserService userService;
+    @Autowired
+    private FacReiAdiApplyMapper facReiAdiApplyMapper;
+    @Autowired
+    private FacReimburseApplyMapper facReimburseApplyMapper;
+
 
     // @RequiresPermissions("system:facUserApproval:view")
     @GetMapping()
@@ -82,6 +85,80 @@ public class FacUserApprovalController extends BaseController {
         }
         return getDataTable(list);
     }
+
+
+    /**
+     * 查询统计财务金额
+     */
+
+    @PostMapping("/user")
+    @ResponseBody
+    public TableDataInfo lists(SysUser user) {
+        double bxjb = 1.00;
+        double bxgc = 0.00;
+        double bxzd = 0.00;
+        double bxqt = 1.00;
+        double tj = 0.00;
+        double dg = 0.00;
+        double cl = 0.00;
+        List<SysUser> lists = userService.selectUserList(user);
+        FacAmountApply facAmountApply = new FacAmountApply();
+        List<FacUserApproval> list2 = facUserApprovalService.selectChengGong();
+
+//        for (FacUserApproval v : list) {
+//            String head = v.getApplyId().substring(0, 2);
+//            if (head.equals("BX")) {
+//                FacReimburseApply facReimburseApply = facReimburseApplyService.deatil(v.getApplyId());
+//                if (facReimburseApply.getType().equals("日常报销")) {
+//                    List<ReiTrafficApply> listTra = facReimburseApplyMapper.traTail(v.getApplyId());
+//                    if (listTra != null && listTra.size() > 0) {
+//                        for (ReiTrafficApply am : listTra) {
+//                            if (am.getType().equals("加班")) {
+//                                double c = facReimburseApplyMapper.selectTraAmount(v.getApplyId());
+//                                bxjb = bxjb + c;
+//                            } else {
+//                                double d = facReimburseApplyMapper.selectTraAmount(v.getApplyId());
+//                                bxgc = bxgc + d;
+//                            }
+//                        }
+//                    }
+//                    double a = facReiAdiApplyMapper.selectAmount(v.getApplyId());
+//                    double b = facReimburseApplyMapper.selectHospAmount(v.getApplyId());
+//                    bxzd = bxzd + b;
+//                    bxqt = bxqt + a;
+//
+//                } else if (facReimburseApply.getType().equals("团建报销")) {
+//                    tj = tj + v.getAmount();
+//                } else {
+//                    cl = cl + v.getAmount();
+//                }
+//            } else if (head.equals("DG")) {
+//                dg = dg + v.getAmount();
+//            }
+//        }
+        facAmountApply.setCLamount(cl);
+        facAmountApply.setZDamount(bxzd);
+        facAmountApply.setDGamount(dg);
+        facAmountApply.setTJamount(tj);
+        facAmountApply.setBXGCamount(bxgc);
+        facAmountApply.setBXQTamount(bxqt);
+        facAmountApply.setBXJBamount(bxjb);
+        List<FacAmountApply> list = new ArrayList<>();
+        list.add(facAmountApply);
+        return getDataTable(list);
+    }
+
+    /**
+     * 新增财务审批金额统计
+     */
+    @GetMapping("/user")
+    public String amount() {
+        return prefix + "/user";
+    }
+
+
+
+
 
     /**
      * 导出财务审批列表
@@ -171,13 +248,13 @@ public class FacUserApprovalController extends BaseController {
 
                 List<ReiTrafficApply> reiTrafficApply1 = facReimburseApplyService.selectReiTrafficApply(facUserApproval.getApplyId());
                 List<FacReiAdiApply> facReimburseApplys = facReimburseApplyService.selectFacReiAdiApply(facUserApproval.getApplyId());
-                if(reiHospitalityApplies1!=null&&reiHospitalityApplies1.size()>0){
+                if (reiHospitalityApplies1 != null && reiHospitalityApplies1.size() > 0) {
                     map.put("edit1", "ture");
                 }
-                if(reiTrafficApply1!=null&&reiTrafficApply1.size()>0){
+                if (reiTrafficApply1 != null && reiTrafficApply1.size() > 0) {
                     map.put("edit2", "ture");
                 }
-                if(facReimburseApplys!=null&&facReimburseApplys.size()>0){
+                if (facReimburseApplys != null && facReimburseApplys.size() > 0) {
                     map.put("edit3", "ture");
                 }
 
@@ -238,7 +315,7 @@ public class FacUserApprovalController extends BaseController {
                         List<ReiTrafficApply> reiTrafficApplyList = facReimburseApplyService.selectReiTrafficApply(facUserApproval.getApplyId());
                         map.put("isOverGongChuLimit", "false");
                         for (int i = 0; i < reiTrafficApplyList.size(); i++) {
-                            if(reiTrafficApplyList.get(i).getType().equals("公出")){
+                            if (reiTrafficApplyList.get(i).getType().equals("公出")) {
                                 if (sumAmount > 800) {
                                     map.put("isOverGongChuLimit", "true");
                                     break;
@@ -408,13 +485,13 @@ public class FacUserApprovalController extends BaseController {
         List<ReiHospitalityApply> reiHospitalityApplies1 = facReimburseApplyService.selectReiHospitalityApplyList(reiHospitalityApplyVO);
         List<ReiTrafficApply> reiTrafficApply1 = facReimburseApplyService.selectReiTrafficApply(facUserApproval.getApplyId());
         List<FacReiAdiApply> facReimburseApplys = facReimburseApplyService.selectFacReiAdiApply(facUserApproval.getApplyId());
-        if(reiHospitalityApplies1!=null&&reiHospitalityApplies1.size()>0){
+        if (reiHospitalityApplies1 != null && reiHospitalityApplies1.size() > 0) {
             map.put("edit1", "ture");
         }
-        if(reiTrafficApply1!=null&&reiTrafficApply1.size()>0){
+        if (reiTrafficApply1 != null && reiTrafficApply1.size() > 0) {
             map.put("edit2", "ture");
         }
-        if(facReimburseApplys!=null&&facReimburseApplys.size()>0){
+        if (facReimburseApplys != null && facReimburseApplys.size() > 0) {
             map.put("edit3", "ture");
         }
         String nums = facUserApproval.getApplyId().substring(0, 2);

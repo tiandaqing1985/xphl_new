@@ -18,6 +18,7 @@
         <result property="applicantId" column="applicant_id"/>
         <result property="amount" column="amount"/>
         <result property="projectName" column="projectName"/>
+        <result property="isnotice" column="isnotice"/>
     </resultMap>
 
     <sql id="selectFacUserApprovalVo">
@@ -25,7 +26,7 @@
 		approval_time,
 		approval_sight, approval_level, opi, create_time,
 		applicant_id,
-		amount, projectName from fac_sys_user_approval
+		amount, projectName, isnotice from fac_sys_user_approval
 	</sql>
 
     <select id="selectFacUserApprovalList" parameterType="FacUserApproval"
@@ -44,9 +45,31 @@
             <if test="applicantId != null ">and applicant_id = #{applicantId}</if>
             <if test="amount != null ">and amount = #{amount}</if>
             <if test="projectName != null  and projectName != '' ">and projectName = #{projectName}</if>
+            <if test="isnotice != null  and isnotice != '' ">and isnotice = #{isnotice}</if>
         </where>
         order by approval_id desc
     </select>
+
+
+    <select id="selectBoHui" resultMap="FacUserApprovalResult">
+        select approval_id, apply_id, approval_state, approver_id,
+		approval_time,
+		approval_sight, approval_level, opi, create_time,
+		applicant_id,
+		amount, projectName from fac_sys_user_approval where  approval_state ='2'
+    </select>
+
+    <select id="selectChenggong" resultMap="FacUserApprovalResult">
+       select *
+       from fac_sys_user_approval
+       where (apply_id, approval_level)
+       in (select apply_id, max(approval_level)
+       from fac_sys_user_approval
+       where approval_state = '1'
+       and approval_sight = '1'
+      group by apply_id);
+    </select>
+
 
     <select id="selectEndFacUserApprovalList" parameterType="FacUserApproval"
             resultMap="FacUserApprovalResult">
@@ -65,15 +88,15 @@
     <select id="selectApplicantIdList" parameterType="FacUserApproval"
             resultMap="FacUserApprovalResult">
         <include refid="selectFacUserApprovalVo"/>
-		<where>
-        <if test="applyId != null  and applyId != '' ">and apply_id = #{applyId}</if>
+        <where>
+            <if test="applyId != null  and applyId != '' ">and apply_id = #{applyId}</if>
             <if test="applicantId != null ">and applicant_id = #{applicantId}</if>
             <if test="projectName != null  and projectName != '' ">and projectName = #{projectName}</if>
             <if test="approverId != null ">and approver_id = #{approverId}</if>
         </where>
-        and   approval_state in (1,2)
-		 order by create_time desc
-	</select>
+        and approval_state in (1,2)
+        order by create_time desc
+    </select>
 
     <select id="selectApproverIdList" parameterType="FacUserApproval"
             resultMap="FacUserApprovalResult">
@@ -135,6 +158,7 @@ ORDER BY app.approval_level
             <if test="applicantId != null  ">applicant_id,</if>
             <if test="amount != null  ">amount,</if>
             <if test="projectName != null  and projectName != ''  ">projectName,</if>
+            <if test="isnotice != null  and isnotice != ''  ">isnotice,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="applyId != null  and applyId != ''  ">#{applyId},</if>
@@ -148,6 +172,7 @@ ORDER BY app.approval_level
             <if test="applicantId != null  ">#{applicantId},</if>
             <if test="amount != null  ">#{amount},</if>
             <if test="projectName != null  and projectName != ''  ">#{projectName},</if>
+            <if test="isnotice != null  and isnotice != ''  ">#{isnotice},</if>
         </trim>
     </insert>
 
@@ -165,6 +190,7 @@ ORDER BY app.approval_level
             <if test="applicantId != null  ">applicant_id = #{applicantId},</if>
             <if test="amount != null  ">amount = #{amount},</if>
             <if test="projectName != null  and projectName != ''  ">projectName = #{projectName},</if>
+            <if test="isnotice != null  and isnotice != ''  ">isnotice = #{isnotice},</if>
         </trim>
         where approval_id = #{approvalId} and approval_level =
         #{approvalLevel}

@@ -85,7 +85,13 @@ public interface IFacUserApprovalService {
     public void createPublicPayApprovalProcess(String num, Double amount, String processName, Long userId);
 
     /**
-     *查询所有审批人
+     * 查询所有审批人
      **/
     public String approverName(String applyId);
+
+    /***
+     *查询审批通过数据
+     *
+     * **/
+    public List<FacUserApproval> selectChengGong();
 }

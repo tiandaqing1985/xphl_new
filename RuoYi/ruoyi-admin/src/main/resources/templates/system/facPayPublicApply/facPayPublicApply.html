@@ -186,7 +186,10 @@
                         var actions = [];
                         if(row.approvalStatus==1){
                             actions.push('<a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-remove"></i>打印</a>');
-                        }else if(row.status==2){
+                        }else if(row.approvalStatus==2){
+                            //审批失败
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                         }else if(row.status==2){
                             //审批失败
 
                         }else if(row.status==3){

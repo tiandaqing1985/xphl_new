@@ -22,4 +22,6 @@ public interface IPrintService {
     String previewZhaodaifei(String num); 
     
     String previewZhaodaifeiBX(String num,String applyNum);
+
+    String deptNameUtils(Long userid);
 }

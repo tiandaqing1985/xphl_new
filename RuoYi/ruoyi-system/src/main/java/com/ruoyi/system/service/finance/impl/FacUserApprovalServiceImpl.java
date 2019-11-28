@@ -316,8 +316,15 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 
     }
 
+    @Override
     public String approverName(String applyId) {
         return facUserApprovalMapper.getAllAppNames(applyId);
     }
 
+
+    @Override
+    public List<FacUserApproval> selectChengGong() {
+
+        return facUserApprovalMapper.selectChenggong();
+    }
 }

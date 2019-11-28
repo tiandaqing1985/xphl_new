@@ -148,7 +148,6 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
             center.setCreateTime(new Date());
             center.setApprovalState("3");
             center.setApprovalTime(new Date());
-
 //            facReimburseApply.setType("日常报销");
             facReimburseApply.setApplyStatus("1");
             if (facReimburseApply.getType().equals("日常报销")) {
@@ -175,13 +174,9 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
             for (String name : queryRoleName) {
                 roleName = roleName + "," + name.trim().toLowerCase();
             }
-            if (roleName.contains("ceo")) {
-                // 是ceo 直接通过
-                facReimburseApply.setStatus("3");
-                facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
-                // 如果为coo申请 交给ceo审批
-            } else if (roleName.contains("coo")) {
-                facReimburseApply.setStatus("0");
+
+                if (roleName.contains("coo")||roleName.contains("ceo")) {
+                facReimburseApply.setStatus("1");
                 facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
                 FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
                 facSysUserApproval.setApprovalId(new Long(CEO_id));
@@ -189,7 +184,10 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                 facSysUserApproval.setApprovalLevel(level++);
                 facSysUserApproval.setApplyId(facReimburseApply.getNum());
                 facSysUserApproval.setProjectName(facReimburseApply.getName());
-                facSysUserApproval.setApprovalState("3");
+                facSysUserApproval.setApprovalState("1");
+                facSysUserApproval.setAmount(facReimburseApply.getAmount());
+                facSysUserApproval.setApproverId(facReimburseApply.getLoanUser());
+                facSysUserApproval.setApplicantId(facReimburseApply.getLoanUser());
                 approvalProcessService.insert(facSysUserApproval);
                 // 为加班申请增加人事审批
                 if (facReimburseApply.getTrafficReiApplyList() != null && facReimburseApply.getTrafficReiApplyList().size() > 0
@@ -204,7 +202,6 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     } else {
                         center.setApproverId(new Long("257"));// 审批id为人事
                     }
-
                     facSysUserApproval2.setApprovalTime(new Date());
                     facSysUserApproval2.setApprovalLevel(level++);
                     facSysUserApproval2.setApplyId(facReimburseApply.getNum());
@@ -213,6 +210,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     approvalProcessService.insert(facSysUserApproval2);
                 } else {
                 }
+                return AjaxResult.success();
             }
             // 普通员工
             else {

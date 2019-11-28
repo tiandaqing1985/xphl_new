@@ -11,9 +11,7 @@ import com.ruoyi.system.service.finance.*;
 import com.ruoyi.system.tool.NumberToCN;
 import com.ruoyi.system.tool.PrintUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ClassUtils;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -51,6 +49,7 @@ public class PrintServiceImpl implements IPrintService {
     @Autowired
     private IFacCollectInformationService facCollectInformationService;
 
+
     /**
      * 预览报销
      *
@@ -67,6 +66,7 @@ public class PrintServiceImpl implements IPrintService {
         selectVO.setNum(num);
         //报销信息
         List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(selectVO);
+        facReimburseApplies.get(0).setDeptName(deptNameUtils(facReimburseApplies.get(0).getLoanUser()));
         data.put("data", facReimburseApplies.get(0));
         //加班公出交通费报销
         List<ReiTrafficApply> reiTrafficApplys = facReimburseApplyService.selectReiTrafficApply(num);
@@ -204,6 +204,7 @@ public class PrintServiceImpl implements IPrintService {
         selectVO.setNum(num);
         //报销信息
         List<FacReimburseApply> facReimburseApplies = facReimburseApplyService.selectFacReimburseApplyList(selectVO);
+        facReimburseApplies.get(0).setDeptName(deptNameUtils(facReimburseApplies.get(0).getLoanUser()));
         data.put("data", facReimburseApplies.get(0));
         //加班公出交通费报销
         List<ReiTrafficApply> reiTrafficApplys = facReimburseApplyService.selectReiTrafficApply(num);
@@ -293,7 +294,7 @@ public class PrintServiceImpl implements IPrintService {
         SysDept sysDept = sysDeptService.selectDeptById(sysUser.getDeptId());
         //金额大写
         String sumStr = NumberToCN.number2CNMontrayUnit(new BigDecimal(sum));
-        data.put("deptName", sysDept.getDeptName());
+        data.put("deptName", deptNameUtils(facCostApply.getUserId()));
         data.put("userName", sysUser.getUserName());
         data.put("facCostDetailApplies", facCostDetailApplies);
         data.put("facCostPutupApplies", facCostPutupApplies);
@@ -352,7 +353,7 @@ public class PrintServiceImpl implements IPrintService {
         data.put("borrowMoney", facLoanApply);
         SysUser sysUser = sysUserService.selectUserById(facLoanApply.getLoanUser());
         SysDept sysDept = sysDeptService.selectDeptById(sysUser.getDeptId());
-        data.put("dept", sysDept.getDeptName());
+        data.put("dept", deptNameUtils(facLoanApply.getLoanUser()));
         //金额大写
         String amountStr = NumberToCN.number2CNMontrayUnit(new BigDecimal(facLoanApply.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
         data.put("amountStr", amountStr);
@@ -398,7 +399,7 @@ public class PrintServiceImpl implements IPrintService {
         payPublicApply = list.get(0);
         SysUser sysUser = sysUserService.selectUserById(payPublicApply.getUser());
         SysDept sysDept = sysDeptService.selectDeptById(sysUser.getDeptId());
-        data.put("dept", sysDept.getDeptName());
+        data.put("dept", deptNameUtils(payPublicApply.getUser()));
         data.put("data", payPublicApply);
 
         //查询对公支付详情
@@ -456,7 +457,7 @@ public class PrintServiceImpl implements IPrintService {
         data.put("facPayPublicDetailed", facPayPublicDetailed);
         String isPrint = "";
         //打印时是否打印
-        if(facPayPublicDetailed.size()==0){
+        if (facPayPublicDetailed.size() == 0) {
             isPrint = "否";
         }
         return isPrint + PrintUtil.printString("duigongDetail.ftl", data);
@@ -480,6 +481,9 @@ public class PrintServiceImpl implements IPrintService {
             v.setApplicantName(sysUserService.selectUserById(v.getApplicant()).getUserName());
         }
         facCollectApply = list.get(0);
+        facCollectApply.setDeptName(deptNameUtils(facCollectApply.getApplicant()));
+
+
         data.put("cost", facCollectApply);
 
         FacCollectInformation facCollectInformation = new FacCollectInformation();
@@ -535,7 +539,7 @@ public class PrintServiceImpl implements IPrintService {
         data.put("facHospitalityApply", facHospitalityApply);
         //查询部门
         SysUser sysUser1 = sysUserService.selectUserById(facHospitalityApply.getUserId());
-        data.put("user", sysUser1);
+        data.put("user", deptNameUtils(facHospitalityApply.getUserId()));
         //查询当前审批过的记录
         FacUserApproval selectVo = new FacUserApproval();
         selectVo.setApplyId(num);
@@ -558,8 +562,8 @@ public class PrintServiceImpl implements IPrintService {
         return PrintUtil.printString("zhaodai.ftl", data);
     }
 
-	@Override
-	public String previewchucaiBX(String num,String applyNum) {
+    @Override
+    public String previewchucaiBX(String num, String applyNum) {
 
         Map<String, Object> data = new HashMap<>();
         Double sum = new Double(0);
@@ -589,7 +593,7 @@ public class PrintServiceImpl implements IPrintService {
         SysDept sysDept = sysDeptService.selectDeptById(sysUser.getDeptId());
         //金额大写
         String sumStr = NumberToCN.number2CNMontrayUnit(new BigDecimal(sum));
-        data.put("deptName", sysDept.getDeptName());
+        data.put("deptName", deptNameUtils(facCostApply.getUserId()));
         data.put("userName", sysUser.getUserName());
         data.put("facCostDetailApplies", facCostDetailApplies);
         data.put("facCostPutupApplies", facCostPutupApplies);
@@ -619,10 +623,10 @@ public class PrintServiceImpl implements IPrintService {
         data.put("checkLogList", facUserApprovals);
 
         return PrintUtil.printString("chuchaishenqingBX.ftl", data);
-	}
+    }
 
-	@Override
-	public String previewTuanjianBX(String num,String applyNum) {
+    @Override
+    public String previewTuanjianBX(String num, String applyNum) {
         Map<String, Object> data = new HashMap<>();
         //查询团建费申请
 
@@ -633,6 +637,7 @@ public class PrintServiceImpl implements IPrintService {
             v.setApplicantName(sysUserService.selectUserById(v.getApplicant()).getUserName());
         }
         facCollectApply = list.get(0);
+        facCollectApply.setDeptName(deptNameUtils(facCollectApply.getApplicant()));
         data.put("cost", facCollectApply);
         String amountInWords = NumberToCN.number2CNMontrayUnit(new BigDecimal(facCollectApply.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP));
         data.put("amountInWords", amountInWords);
@@ -664,42 +669,82 @@ public class PrintServiceImpl implements IPrintService {
         }
         data.put("facUserApprovals", facUserApprovals);
         return PrintUtil.printString("tuanjianBX.ftl", data);
-	}
+    }
 
-	@Override
-	public String previewZhaodaifeiBX(String num,String applyNum) {
-		   Map<String, Object> data = new HashMap<>();
-	        //查询招待费
-	        FacHospitalityApply facHospitalityApply = new FacHospitalityApply();
-	        facHospitalityApply.setNum(num);
-	        List<FacHospitalityApply> list = facHospitalityApplyService.selectFacHospitalityApplyList(facHospitalityApply);
-	        for (FacHospitalityApply v : list) {
-	            v.setUserIdName(sysUserService.selectUserById(v.getUserId()).getUserName());
-	        }
-	        facHospitalityApply = list.get(0);
-	        data.put("facHospitalityApply", facHospitalityApply);
-	        //查询部门
-	        SysUser sysUser1 = sysUserService.selectUserById(facHospitalityApply.getUserId());
-	        data.put("user", sysUser1);
-	        //查询当前审批过的记录
-	        FacUserApproval selectVo = new FacUserApproval();
-	        selectVo.setApplyId(applyNum);
-	        List<FacUserApproval> facUserApprovals = facUserApprovalService.selectFacUserApprovalList(selectVo);
-	        for (int i = 0; i < facUserApprovals.size(); i++) {
-	            SysUser sysUser = sysUserService.selectUserById(facUserApprovals.get(i).getApproverId());
-	            if (sysUser != null) {
-	                facUserApprovals.get(i).setApproverName(sysUser.getUserName());
-	            }
-	            if (facUserApprovals.get(i).getApprovalState().equals("1")) {
-	                facUserApprovals.get(i).setApprovalState("审批通过");
-	            } else if (facUserApprovals.get(i).getApprovalState().equals("2")) {
-	                facUserApprovals.get(i).setApprovalState("审批拒绝");
-	            } else {
-	                facUserApprovals.remove(i);
-	                i--;
-	            }
-	        }
-	        data.put("facUserApprovals", facUserApprovals);
-	        return PrintUtil.printString("zhaodaiBX.ftl", data);
-	}
+    @Override
+    public String previewZhaodaifeiBX(String num, String applyNum) {
+        Map<String, Object> data = new HashMap<>();
+        //查询招待费
+        FacHospitalityApply facHospitalityApply = new FacHospitalityApply();
+        facHospitalityApply.setNum(num);
+        List<FacHospitalityApply> list = facHospitalityApplyService.selectFacHospitalityApplyList(facHospitalityApply);
+        for (FacHospitalityApply v : list) {
+            v.setUserIdName(sysUserService.selectUserById(v.getUserId()).getUserName());
+        }
+        facHospitalityApply = list.get(0);
+        data.put("facHospitalityApply", facHospitalityApply);
+        //查询部门
+        SysUser sysUser1 = sysUserService.selectUserById(facHospitalityApply.getUserId());
+        data.put("user", sysUser1);
+        //查询当前审批过的记录
+        FacUserApproval selectVo = new FacUserApproval();
+        selectVo.setApplyId(applyNum);
+        List<FacUserApproval> facUserApprovals = facUserApprovalService.selectFacUserApprovalList(selectVo);
+        for (int i = 0; i < facUserApprovals.size(); i++) {
+            SysUser sysUser = sysUserService.selectUserById(facUserApprovals.get(i).getApproverId());
+            if (sysUser != null) {
+                facUserApprovals.get(i).setApproverName(sysUser.getUserName());
+            }
+            if (facUserApprovals.get(i).getApprovalState().equals("1")) {
+                facUserApprovals.get(i).setApprovalState("审批通过");
+            } else if (facUserApprovals.get(i).getApprovalState().equals("2")) {
+                facUserApprovals.get(i).setApprovalState("审批拒绝");
+            } else {
+                facUserApprovals.remove(i);
+                i--;
+            }
+        }
+        data.put("facUserApprovals", facUserApprovals);
+        return PrintUtil.printString("zhaodaiBX.ftl", data);
+    }
+
+    @Override
+    public String deptNameUtils(Long userid) {
+        SysUser user = sysUserService.selectUserById(userid);
+        SysDept a = sysDeptService.selectDeptById(user.getDeptId());
+        String deptnames = "";
+        if (a.getDeptId() != 100L) {
+            String[] split = a.getAncestors().split(",");
+            for (int i = 0; i < split.length; i++) {
+                if (Long.valueOf(split[i]) != 0L) {
+                    String deptName2 = sysDeptService.selectDeptById(Long.valueOf(split[i])).getDeptName();
+                    if (deptnames.equals("")) {
+                        deptnames = deptName2;
+                    } else {
+                        deptnames = deptnames + "-" + deptName2;
+                    }
+                }
+            }
+            return deptnames + "-" + user.getDept().getDeptName();
+        } else {
+            return user.getDept().getDeptName();
+        }
+
+
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

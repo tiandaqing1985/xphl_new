@@ -104,5 +104,17 @@ public interface FacUserApprovalMapper {
 	  * 查所有审批的名字
 	  * */
 	public String getAllAppNames(String applyId);
-	
+
+
+	/**
+	 * 查询审批驳回
+	 * */
+	public List<FacUserApproval> selectBoHui();
+
+	/**
+	 * 查询审批成功需发送邮件
+	 * */
+	public List<FacUserApproval> selectChenggong();
+
+
 }

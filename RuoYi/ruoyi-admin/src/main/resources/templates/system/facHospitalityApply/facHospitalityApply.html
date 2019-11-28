@@ -152,6 +152,10 @@
                              if(row.states == 3){
                                 // actions.push('<a class="btn btn-danger btn-xs ' + '" href="javascript:void(0)" onclick="f(\'' + row.id + '\')"><i class="fa fa-detail"></i>报销</a>');
                              }
+                        } else if (row.approvalStatus == 2) {
+                            //审批失败
+                            actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+
                         } else if (row.states == 2) {
                             //审批失败
 

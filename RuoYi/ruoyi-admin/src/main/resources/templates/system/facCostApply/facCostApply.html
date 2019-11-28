@@ -162,6 +162,9 @@
                             if (row.status == 4) {
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="baoxiao(\'' + row.id + '\')"> </i>报销</a> ');
                             }
+                        } else if (row.approvalStatus == 2) {
+                            //驳回
+                            actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                         } else if (row.status == 2) {
                             //审批失败
                         } else if (row.status == 3) {

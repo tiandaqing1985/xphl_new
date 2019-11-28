@@ -155,5 +155,20 @@ public class Global
     {
         return getConfig("ruoyi.password");
     }
+
+    /**
+     * 获取财务提醒邮箱
+     * */
+    public static String getFacEmail()
+    {
+        return getConfig("ruoyi.facemail");
+    }
+    /**
+     * 获取财务提醒邮箱密码
+     * */
+    public static String getFacPassword()
+    {
+        return getConfig("ruoyi.facpassword");
+    }
   
 }
