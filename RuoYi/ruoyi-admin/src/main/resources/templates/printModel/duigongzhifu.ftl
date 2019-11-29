@@ -21,12 +21,15 @@
      </tr>
 	 <tr class="X5 X6">
       <td class="X5 X6" style="width:113.15pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-size:14.0pt;">发票状态</span></p></td>
-      <td class="X5 X6" style="width:241.0pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="7"><p>
+      <td class="X5 X6" style="width:241.0pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="3"><p>
 	  ${data.weatherInvoice!}</p></td>
+	   <td class="X5 X6" style="width:92.15pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-size:14.0pt;">付款单位</span></p></td>
+      <td class="X5 X6" style="width:251.1pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="3"><p>${data.unit!}</p></td>
+    
      </tr>
 	 <tr class="X5 X6">
       <td class="X5 X6" style="width:113.15pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-size:14.0pt;">申请总金额</span></p></td>
-      <td class="X5 X6" style="width:241.0pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="3"><p>${sum!}</p></td>
+      <td class="X5 X6" style="width:241.0pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="3"><p>${data.amount!}</p></td>
       <td class="X5 X6" style="width:92.15pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-size:14.0pt;">收款人户名</span></p></td>
       <td class="X5 X6" style="width:251.1pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="3"><p>${data.payee!}</p></td>
      </tr>

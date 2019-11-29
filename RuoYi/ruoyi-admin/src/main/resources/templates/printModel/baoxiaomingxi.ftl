@@ -9,14 +9,17 @@
     <tbody>
      <tr class="X5 X6">
       <td class="X5 X6" style="width:130.65pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="2"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">报销人</span></p></td>
-      <td class="X5 X6" style="width:577.6pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="9"><p>${data.userName!}</p></td>
+      <td class="X5 X6" style="width:577.6pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="8"><p>${data.userName!}</p></td>
      </tr>
      <tr class="X5 X6">
       <td class="X5 X6" style="width:130.65pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="2"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">部门名称</span></p></td>
-      <td class="X5 X6" style="width:577.6pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="9"><p>${data.deptName!}</p></td>
+      <td class="X5 X6" style="width:577.6pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="8"><p>${data.deptName!}</p></td>
+     </tr>
+	  <tr class="X5 X6">
+      <td class="X5 X6" style="width:130.65pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="2"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">报销编号</span></p></td>
+      <td class="X5 X6" style="width:577.6pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="8"><p>${data.num}</p></td>
      </tr>
      <tr class="X5 X6">
-      <td class="X5 X6" style="width:65.2pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">报销编号</span></p></td>
       <td class="X5 X6" style="width:65.45pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">日期</span></p></td>
       <td class="X5 X6" style="width:65.45pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">报销科目</span></p></td>
       <td class="X5 X6" style="width:79.95pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">事由</span></p></td>
@@ -30,7 +33,6 @@
      </tr>
 	 <#list jiaotong as item>
      <tr class="X5 X6">
-      <td class="X5 X6" style="width:65.2pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.num}</span></p></td>
       <td class="X5 X6" style="width:65.45pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.ddDate?string('yyyy-MM-dd')}</span></p></td>
       <td class="X5 X6" style="width:65.45pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.type!}</span></p></td>
       <td class="X5 X6" style="width:79.95pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.reason!}</span></p></td>
@@ -45,7 +47,6 @@
 	 </#list>
 	 <#list zhaodaifei as item>
      <tr class="X5 X6">
-      <td class="X5 X6" style="width:65.2pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.num}</span></p></td>
       <td class="X5 X6" style="width:65.45pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';"><#if item.ddDate??>${item.ddDate?string('yyyy-MM-dd')}<#else></#if></span></p></td>
       <td class="X5 X6" style="width:65.45pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">招待费报销</span></p></td>
       <td class="X5 X6" style="width:79.95pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.reason!}</span></p></td>
@@ -60,7 +61,6 @@
 	 </#list>
 	 <#list qita as item>
      <tr class="X5 X6">
-      <td class="X5 X6" style="width:65.2pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.num}</span></p></td>
       <td class="X5 X6" style="width:65.45pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.ddDate?string('yyyy-MM-dd')}</span></p></td>
       <td class="X5 X6" style="width:65.45pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.project!}</span></p></td>
       <td class="X5 X6" style="width:79.95pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p style="text-align:center;"><span style="font-family:'微软雅黑';">${item.reason!}</span></p></td>
@@ -74,7 +74,7 @@
      </tr>
 	 </#list>
      <tr class="X5 X6">
-      <td class="X5 X6" style="width:624.05pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="9"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">合计</span></p></td>
+      <td class="X5 X6" style="width:624.05pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;" colspan="8"><p style="text-align:center;"><span style="font-family:'微软雅黑';font-weight:bold;">合计</span></p></td>
       <td class="X5 X6" style="width:47.55pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p>￥${total}</p></td>
       <td class="X5 X6" style="width:36.65pt;border-top:1px solid #000000;border-bottom:1px solid #000000;border-left:1px solid #000000;border-right:1px solid #000000;"><p>${invoices}张</p></td>
      </tr>

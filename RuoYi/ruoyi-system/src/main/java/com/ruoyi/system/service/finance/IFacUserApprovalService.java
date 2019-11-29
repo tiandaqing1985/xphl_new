@@ -94,4 +94,9 @@ public interface IFacUserApprovalService {
      *
      * **/
     public List<FacUserApproval> selectChengGong();
+    /***
+     *查询某人审批通过的条数
+     *
+     * **/
+    public List<FacUserApproval> select(Long userId);
 }

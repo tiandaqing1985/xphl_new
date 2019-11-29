@@ -270,6 +270,7 @@ public class FacCollectApplyController extends BaseController {
             center.setApprovalTime(new Date());
             center.setApprovalLevel(1);
             center.setApprovalSight("1");
+            center.setAmount(facCollectApply.getAmount());
             approvalProcessService.insert(center);
         } else {
             //需要二次审批

@@ -15,40 +15,35 @@ public class FacAmountApply extends BaseEntity {
      * 部门名称
      */
     private String deptNAme;
-    /***
-     *日常报销
-     * **/
-    private Double BXamount;
+
     /**
      * 加班交通费
      */
-    private Double BXJBamount;
+    private Double bxJBamount;
     /**
      * 公出交通费
      */
-    private Double BXGCamount;
+    private Double bxGCamount;
     /**
      * 其他报销费
      */
-    private Double BXQTamount;
+    private Double bxQTamount;
     /**
      * 招待费
      */
-    private Double ZDamount;
+    private Double zdAmount;
     /**
      * 对公支付费
      */
-    private Double DGamount;
+    private Double dgAmount;
     /**
      * 团建费
      */
-    private Double TJamount;
+    private Double tjAmount;
     /**
      * 差旅费
      */
-    private Double CLamount;
-
-
+    private Double clAmount;
 
     public String getDeptNAme() {
         return deptNAme;
@@ -58,67 +53,59 @@ public class FacAmountApply extends BaseEntity {
         this.deptNAme = deptNAme;
     }
 
-    public Double getBXamount() {
-        return BXamount;
+    public Double getBxJBamount() {
+        return bxJBamount;
     }
 
-    public void setBXamount(Double BXamount) {
-        this.BXamount = BXamount;
+    public void setBxJBamount(Double bxJBamount) {
+        this.bxJBamount = bxJBamount;
     }
 
-    public Double getBXJBamount() {
-        return BXJBamount;
+    public Double getBxGCamount() {
+        return bxGCamount;
     }
 
-    public void setBXJBamount(Double BXJBamount) {
-        this.BXJBamount = BXJBamount;
+    public void setBxGCamount(Double bxGCamount) {
+        this.bxGCamount = bxGCamount;
     }
 
-    public Double getBXGCamount() {
-        return BXGCamount;
+    public Double getBxQTamount() {
+        return bxQTamount;
     }
 
-    public void setBXGCamount(Double BXGCamount) {
-        this.BXGCamount = BXGCamount;
+    public void setBxQTamount(Double bxQTamount) {
+        this.bxQTamount = bxQTamount;
     }
 
-    public Double getBXQTamount() {
-        return BXQTamount;
+    public Double getZdAmount() {
+        return zdAmount;
     }
 
-    public void setBXQTamount(Double BXQTamount) {
-        this.BXQTamount = BXQTamount;
+    public void setZdAmount(Double zdAmount) {
+        this.zdAmount = zdAmount;
     }
 
-    public Double getZDamount() {
-        return ZDamount;
+    public Double getDgAmount() {
+        return dgAmount;
     }
 
-    public void setZDamount(Double ZDamount) {
-        this.ZDamount = ZDamount;
+    public void setDgAmount(Double dgAmount) {
+        this.dgAmount = dgAmount;
     }
 
-    public Double getDGamount() {
-        return DGamount;
+    public Double getTjAmount() {
+        return tjAmount;
     }
 
-    public void setDGamount(Double DGamount) {
-        this.DGamount = DGamount;
+    public void setTjAmount(Double tjAmount) {
+        this.tjAmount = tjAmount;
     }
 
-    public Double getTJamount() {
-        return TJamount;
+    public Double getClAmount() {
+        return clAmount;
     }
 
-    public void setTJamount(Double TJamount) {
-        this.TJamount = TJamount;
-    }
-
-    public Double getCLamount() {
-        return CLamount;
-    }
-
-    public void setCLamount(Double CLamount) {
-        this.CLamount = CLamount;
+    public void setClAmount(Double clAmount) {
+        this.clAmount = clAmount;
     }
 }

@@ -115,6 +115,10 @@ public interface FacUserApprovalMapper {
 	 * 查询审批成功需发送邮件
 	 * */
 	public List<FacUserApproval> selectChenggong();
+	/**
+	 * 查询审批成功
+	 * */
+	public List<FacUserApproval> selectUserId(Long userId);
 
 
 }

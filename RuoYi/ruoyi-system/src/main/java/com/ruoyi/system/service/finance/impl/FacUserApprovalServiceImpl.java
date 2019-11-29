@@ -327,4 +327,8 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 
         return facUserApprovalMapper.selectChenggong();
     }
+    @Override
+    public List<FacUserApproval> select(Long userId){
+        return facUserApprovalMapper.selectUserId(userId);
+    }
 }

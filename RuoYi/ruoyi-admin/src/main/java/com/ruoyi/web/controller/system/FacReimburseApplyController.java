@@ -116,6 +116,9 @@ public class FacReimburseApplyController extends BaseController {
 
         FacReimburseApply facReimburseApply = new FacReimburseApply();
         //center 是直接审批成功的
+        FacCostApply facCostApply2 =new FacCostApply();
+        facCostApply2.setNum(num);
+        FacCostApply facCost1 =facCostApplyService.selectFacCostApplyList(facCostApply2).get(0);
         FacSysUserApproval center = new FacSysUserApproval();//审批流
         center.setApplicantId(ShiroUtils.getUserId());
         center.setApplyId(facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
@@ -124,6 +127,9 @@ public class FacReimburseApplyController extends BaseController {
         center.setApprovalTime(new Date());
         center.setApprovalLevel(1);
         center.setApprovalSight("1");
+        if(facCost1!=null){
+            center.setAmount(facCost1.getMoneyEs());
+        }
 //        approvalProcessService.insert(center);
         if (type == null) {
 
