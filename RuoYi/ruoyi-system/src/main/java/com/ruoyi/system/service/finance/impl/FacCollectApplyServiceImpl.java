@@ -91,6 +91,7 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
             facSysUserApproval.setApprovalSight("1");
             facSysUserApproval.setApprovalState("1");
         }
+        facSysUserApproval.setCreateTime(new Date());
         approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
         if (facCollectApply.getApplicant() == 103 || facCollectApply.getApplicant() == 101) {
             facCollectApply.setStatus("1");

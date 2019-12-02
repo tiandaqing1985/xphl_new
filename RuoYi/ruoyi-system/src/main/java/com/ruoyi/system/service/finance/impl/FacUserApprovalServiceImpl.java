@@ -2,9 +2,10 @@ package com.ruoyi.system.service.finance.impl;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.domain.finance.FacSysUserApproval;
-import com.ruoyi.system.domain.finance.FacUserApproval;
+import com.ruoyi.system.domain.finance.*;
 import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
+import com.ruoyi.system.mapper.finance.FacReiAdiApplyMapper;
+import com.ruoyi.system.mapper.finance.FacReimburseApplyMapper;
 import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
 import com.ruoyi.system.service.ISysDeptService;
 import com.ruoyi.system.service.ISysRoleService;
@@ -16,9 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * 财务审批 服务层实现
@@ -44,6 +45,10 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
     private ISysRoleService sysRoleService;
     @Autowired
     private ISysUserService sysUserService;
+    @Autowired
+    private FacReiAdiApplyMapper facReiAdiApplyMapper;
+    @Autowired
+    private FacReimburseApplyMapper facReimburseApplyMapper;
 
     /**
      * 查询财务审批信息
@@ -327,8 +332,81 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
 
         return facUserApprovalMapper.selectChenggong();
     }
+
     @Override
-    public List<FacUserApproval> select(Long userId){
+    public List<FacUserApproval> select(Long userId) {
         return facUserApprovalMapper.selectUserId(userId);
     }
+
+    @Override
+    public Map<Long, FacAmountApply> selectDept()  {
+
+        List<FacUserApproval> list = facUserApprovalMapper.selectDept();
+
+        List<FacAmountApply> faclist = new ArrayList();
+        Map<Long, FacAmountApply> map = new HashMap();
+        for (FacUserApproval v : list) {
+            Long key = v.getDeptId();
+            if (key == null) continue;
+            FacAmountApply fac = map.get(key);
+            if (fac == null) {
+                fac = new FacAmountApply();
+            }
+            double bxjb = 0.00;
+            double bxgc = 0.00;
+            double bxzd = 0.00;
+            double bxqt = 0.00;
+            double tj = 0.00;
+            double dg = 0.00;
+            double cl = 0.00;
+            fac.setDeptId(v.getDeptId());
+            String head = v.getApplyId().substring(0, 2);
+            if (head.equals("BX")) {
+                FacReimburseApply facReimburse = new FacReimburseApply();
+                facReimburse.setNum(v.getApplyId());
+                List<FacReimburseApply> facReimList = facReimburseApplyService.selectFacReimburseApplyList(facReimburse);
+                if (facReimList != null && facReimList.size() > 0) {
+                    FacReimburseApply facReimburseApply = facReimList.get(0);
+                    if (facReimburseApply.getSubmitStatus().equals("submit")) {
+                        if (facReimburseApply.getType().equals("日常报销")) {
+                            List<ReiTrafficApply> listTra = facReimburseApplyMapper.traTail(v.getApplyId());
+                            if (listTra != null && listTra.size() > 0) {
+                                for (ReiTrafficApply am : listTra) {
+                                    if (am.getType().equals("加班")) {
+                                        double c = facReimburseApplyMapper.selectTraAmount(v.getApplyId());
+                                        bxjb = bxjb + c;
+                                    } else {
+                                        double d = facReimburseApplyMapper.selectTraAmount(v.getApplyId());
+                                        bxgc = bxgc + d;
+                                    }
+                                }
+                            }
+                            double a = facReiAdiApplyMapper.selectAmount(v.getApplyId());
+                            double b = facReimburseApplyMapper.selectHospAmount(v.getApplyId());
+                            bxzd = bxzd + b;
+                            bxqt = bxqt + a;
+                        } else if (facReimburseApply.getType().equals("团建报销")) {
+                            tj = tj + v.getAmount();
+                        } else if (facReimburseApply.getType().equals("差旅报销")) {
+                            cl = cl + v.getAmount();
+                        }
+                    }
+                }
+            } else if (head.equals("DG")) {
+                dg = dg + v.getAmount();
+            }
+            fac.setClAmount(cl);
+            fac.setZdAmount(bxzd);
+            fac.setDgAmount(dg);
+            fac.setTjAmount(tj);
+            fac.setBxGCamount(bxgc);
+            fac.setBxQTamount(bxqt);
+            fac.setBxJBamount(bxjb);
+            faclist.add(fac);
+            map.put(key, fac);
+        }
+        return map;
+    }
+
+
 }

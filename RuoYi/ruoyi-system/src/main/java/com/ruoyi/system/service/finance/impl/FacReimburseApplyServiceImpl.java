@@ -206,7 +206,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     facSysUserApproval2.setApprovalLevel(level++);
                     facSysUserApproval2.setApplyId(facReimburseApply.getNum());
                     facSysUserApproval2.setProjectName(facReimburseApply.getName());
-                    facSysUserApproval2.setApprovalState("3");
+                    facSysUserApproval2.setApprovalState("1");
                     approvalProcessService.insert(facSysUserApproval2);
                 } else {
                 }
@@ -234,7 +234,9 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                     center.setApprovalLevel(level++);
                                     center.setProjectName(
                                             facReimburseApply.getName());
+                                    center.setApprovalState("1");
                                     approvalProcessService.insert(center);
+                                    center.setApprovalState("3");
                                     break;
                                 }
                             }
@@ -287,8 +289,10 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                             center.setProjectName(
                                                     facReimburseApply
                                                             .getName());
+                                            center.setApprovalState("1");
                                             approvalProcessService
                                                     .insert(center);
+                                            center.setApprovalState("3");
                                             break;
                                         }
                                     }
@@ -343,8 +347,10 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                             center.setProjectName(
                                                     facReimburseApply
                                                             .getName());
+                                            center.setApprovalState("1");
                                             approvalProcessService
                                                     .insert(center);
+                                            center.setApprovalState("3");
                                             break;
                                         }
                                     }
@@ -407,8 +413,10 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                             center.setProjectName(
                                                     facReimburseApply
                                                             .getName());
+                                            center.setApprovalState("1");
                                             approvalProcessService
                                                     .insert(center);
+                                            center.setApprovalState("3");
                                             break;
                                         }
                                     }

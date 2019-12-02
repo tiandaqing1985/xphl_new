@@ -118,6 +118,7 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
             facSysUserApproval.setApprovalSight("1");
             facSysUserApproval.setApprovalState("1");
         }
+        facSysUserApproval.setCreateTime(new Date());
         approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
         if (facCostApply.getUserId() == 103 || facCostApply.getUserId() == 101) {
             facCostApply.setStatus("1");

@@ -13,6 +13,18 @@
                 <input type="hidden" id="deptId" name="deptId">
                 <input type="hidden" id="parentId" name="parentId">
                 <div class="select-list">
+                    <ul>
+                        <li class="select-time">
+                            <label>创建时间： </label>
+                            <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+                            <span>-</span>
+                            <input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+                        </li>
+                        <li>
+                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                        </li>
+                    </ul>
                 </div>
             </form>
         </div>
@@ -43,31 +55,59 @@
                     {
                         field: 'bxJBamount',
                         title: '加班交通费'
+                        ,
+                        formatter: function (value, row, index) {
 
+                            return value.toFixed(2);
+                        }
                     },
                     {
                         field: 'bxGCamount',
-                        title: '公出交通费'
+                        title: '公出交通费' ,
+                        formatter: function (value, row, index) {
+
+                            return value.toFixed(2);
+                        }
                     },
                     {
                         field: 'bxQTamount',
-                        title: '其他报销费'
+                        title: '其他报销费' ,
+                        formatter: function (value, row, index) {
+
+                            return value.toFixed(2);
+                        }
                     },
                     {
                         field: 'zdAmount',
-                        title: '招待费'
+                        title: '招待费' ,
+                        formatter: function (value, row, index) {
+
+                            return value.toFixed(2);
+                        }
                     },
                     {
                         field: 'dgAmount',
-                        title: '对公支付费'
+                        title: '对公支付费' ,
+                        formatter: function (value, row, index) {
+
+                            return value.toFixed(2);
+                        }
                     },
                     {
                         field: 'tjAmount',
-                        title: '团建费'
+                        title: '团建费' ,
+                        formatter: function (value, row, index) {
+
+                            return value.toFixed(2);
+                        }
                     },
                     {
                         field: 'clAmount',
-                        title: '差旅费'
+                        title: '差旅费' ,
+                        formatter: function (value, row, index) {
+
+                            return value.toFixed(2);
+                        }
                     }]
             };
             $.table.init(options);

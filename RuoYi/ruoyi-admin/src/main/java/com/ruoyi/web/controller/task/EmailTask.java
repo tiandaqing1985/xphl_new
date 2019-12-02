@@ -366,6 +366,8 @@ public class EmailTask {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            list.setIsnotice("0");
+            facUserApprovalMapper.updateFacUserApproval(list);
         }
         System.out.println("\n 审批提醒已发送邮件数量：" + count + "\n");
     }
@@ -406,7 +408,8 @@ public class EmailTask {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
+            list.setIsnotice("0");
+            facUserApprovalMapper.updateFacUserApproval(list);
         }
 
     }

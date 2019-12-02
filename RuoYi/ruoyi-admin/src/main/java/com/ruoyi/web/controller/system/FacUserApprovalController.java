@@ -7,7 +7,6 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
-import com.ruoyi.system.domain.SysDept;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.finance.*;
 import com.ruoyi.system.mapper.finance.FacReiAdiApplyMapper;
@@ -20,8 +19,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 财务审批 信息操作处理
@@ -100,78 +101,12 @@ public class FacUserApprovalController extends BaseController {
     @ResponseBody
     public TableDataInfo lists(SysUser user) {
 
+        Map<Long, FacAmountApply> map = facUserApprovalService.selectDept();
         List<FacAmountApply> list = new ArrayList<>();
-        SysDept sysDept=new SysDept();
-        sysDept.setStatus("0");
-        sysDept.setDelFlag("0");
-        List<SysDept> sysDeptList=sysDeptService.selectDeptList(sysDept);
-        for(SysDept  m :sysDeptList){
-            double bxjb = 0.00;
-            double bxgc = 0.00;
-            double bxzd = 0.00;
-            double bxqt = 0.00;
-            double tj = 0.00;
-            double dg = 0.00;
-            double cl = 0.00;
-            FacAmountApply facAmountApply = new FacAmountApply();
-            facAmountApply.setDeptNAme(m.getDeptName());
-            SysUser user2 =new SysUser();
-            user2.setDeptId(m.getDeptId());
-            List<SysUser> lists = userService.selectUserList(user2);
-            for (SysUser e : lists) {
-
-                List<FacUserApproval> list2 = facUserApprovalService.select(e.getUserId());
-                for (FacUserApproval v : list2) {
-                    String head = v.getApplyId().substring(0, 2);
-                    if (head.equals("BX")) {
-                        FacReimburseApply facReimburse =new  FacReimburseApply();
-                        facReimburse.setNum(v.getApplyId());
-                        List<FacReimburseApply> facReimList =facReimburseApplyService.selectFacReimburseApplyList(facReimburse);
-                        if(facReimList!=null&&facReimList.size()>0){
-                            FacReimburseApply facReimburseApply = facReimList.get(0);
-                            if(facReimburseApply.getSubmitStatus().equals("submit")){
-                                if (facReimburseApply.getType().equals("日常报销")) {
-                                    List<ReiTrafficApply> listTra = facReimburseApplyMapper.traTail(v.getApplyId());
-                                    if (listTra != null && listTra.size() > 0) {
-                                        for (ReiTrafficApply am : listTra) {
-                                            if (am.getType().equals("加班")) {
-                                                double c = facReimburseApplyMapper.selectTraAmount(v.getApplyId());
-                                                bxjb = bxjb + c;
-                                            } else {
-                                                double d = facReimburseApplyMapper.selectTraAmount(v.getApplyId());
-                                                bxgc = bxgc + d;
-                                            }
-                                        }
-                                    }
-                                    double a = facReiAdiApplyMapper.selectAmount(v.getApplyId());
-                                    double b = facReimburseApplyMapper.selectHospAmount(v.getApplyId());
-                                    bxzd = bxzd + b;
-                                    bxqt = bxqt + a;
-
-                                } else if (facReimburseApply.getType().equals("团建报销")) {
-                                    tj = tj + v.getAmount();
-                                } else if (facReimburseApply.getType().equals("差旅报销")) {
-                                    cl = cl + v.getAmount();
-                                }
-                            }
-                        }
-                    } else if (head.equals("DG")) {
-                        dg = dg + v.getAmount();
-                    }
-                }
-            }
-
-            facAmountApply.setClAmount(cl);
-            facAmountApply.setZdAmount(bxzd);
-            facAmountApply.setDgAmount(dg);
-            facAmountApply.setTjAmount(tj);
-            facAmountApply.setBxGCamount(bxgc);
-            facAmountApply.setBxQTamount(bxqt);
-            facAmountApply.setBxJBamount(bxjb);
-            list.add(facAmountApply);
+        for (FacAmountApply s : map.values()) {//遍历map的值
+            s.setDeptNAme( sysDeptService.selectDeptById(s.getDeptId()).getDeptName());
+            list.add(s);
         }
-
-
         return getDataTable(list);
     }
 

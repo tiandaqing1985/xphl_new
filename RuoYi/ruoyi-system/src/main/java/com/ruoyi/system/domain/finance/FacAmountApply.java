@@ -12,6 +12,10 @@ public class FacAmountApply extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 部门id
+     */
+    private Long deptId;
+    /**
      * 部门名称
      */
     private String deptNAme;
@@ -44,6 +48,14 @@ public class FacAmountApply extends BaseEntity {
      * 差旅费
      */
     private Double clAmount;
+
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
 
     public String getDeptNAme() {
         return deptNAme;

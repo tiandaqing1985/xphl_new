@@ -19,6 +19,7 @@
         <result property="amount" column="amount"/>
         <result property="projectName" column="projectName"/>
         <result property="isnotice" column="isnotice"/>
+
     </resultMap>
 
     <sql id="selectFacUserApprovalVo">
@@ -65,9 +66,25 @@
        where (apply_id, approval_level)
        in (select apply_id, max(approval_level)
        from fac_sys_user_approval
-       where approval_state = '1'
-       and approval_sight = '1'
-      group by apply_id);
+       where  approval_sight = '1'
+      group by apply_id) and isnull(isnotice) and approval_state = '1';
+    </select>
+
+
+    <select id="selectDept" resultMap="FacUserApprovalResult">
+        SELECT a.approval_id, a.apply_id, a.approval_state, a.approver_id,
+        a.approval_time,
+        a.approval_sight, a.approval_level,a.opi, a.create_time,
+        a.applicant_id,
+        a.amount, a.projectName, a.isnotice,b.dept_id deptId FROM fac_sys_user_approval a
+        LEFT JOIN sys_user b ON a.applicant_id = b.user_id AND a.approval_state='1'
+<!--        <if test="approvalTime != null">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
+<!--            AND date_format(a.create_time,'%y%m%d') >= date_format(#{approvalTime},'%y%m%d')-->
+<!--        </if>-->
+<!--        <if test="createTime != null">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
+<!--            AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{createTime},'%y%m%d')-->
+<!--        </if>-->
+        GROUP BY a.apply_id
     </select>
 
 

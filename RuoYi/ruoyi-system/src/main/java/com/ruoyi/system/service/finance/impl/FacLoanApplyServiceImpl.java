@@ -83,6 +83,7 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
 		facSysUserApproval.setApprovalSight("1");
 		facSysUserApproval.setAmount(facLoanApply.getAmount());
 		facSysUserApproval.setProjectName(facLoanApply.getLoanName());
+		facSysUserApproval.setCreateTime(new Date());
 		Long leaderId = iSysUserService
 				.selectApproverIdByApplyerId(facLoanApply.getLoanUser());// 所在部门负责人id
 		Long upLeaderId = iSysUserService

@@ -1,5 +1,6 @@
 package com.ruoyi.system.mapper.finance;
 
+import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.system.domain.finance.FacUserApproval;
@@ -119,6 +120,11 @@ public interface FacUserApprovalMapper {
 	 * 查询审批成功
 	 * */
 	public List<FacUserApproval> selectUserId(Long userId);
+	/**
+	 * 查询审批成功部门详细信息
+	 * */
+	//public List<FacUserApproval> selectDept(Date approvalTime, Date createTime);
 
+	public List<FacUserApproval> selectDept();
 
 }

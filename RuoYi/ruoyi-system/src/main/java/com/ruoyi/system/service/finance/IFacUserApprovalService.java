@@ -1,8 +1,12 @@
 package com.ruoyi.system.service.finance;
 
+import com.ruoyi.system.domain.finance.FacAmountApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 财务审批 服务层
@@ -99,4 +103,6 @@ public interface IFacUserApprovalService {
      *
      * **/
     public List<FacUserApproval> select(Long userId);
+
+    public Map<Long, FacAmountApply> selectDept();
 }
