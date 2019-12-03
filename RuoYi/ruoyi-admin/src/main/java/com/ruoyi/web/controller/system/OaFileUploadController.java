@@ -146,7 +146,8 @@ public class OaFileUploadController extends BaseController
 	            AjaxResult ajax = AjaxResult.success();
 	            ajax.put("fileName", fileName);
 	            ajax.put("url", url);
-	            fileUpload.setUserId(ShiroUtils.getUserId());
+//	            fileUpload.setApplyId(applyId);
+	            fileUpload.setUserName(ShiroUtils.getLoginName());
 	            fileUpload.setFileName(file.getOriginalFilename());
 	            fileUpload.setFilePath(url);
 	        }

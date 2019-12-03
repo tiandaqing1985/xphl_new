@@ -60,6 +60,17 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	private String path;
 	/** 图片上传时间 */
 	private Date createTime;
+	
+	/** 传入String类型的时间变量 */
+	private String time;
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
 
 	public String getPath() {
 		return path;

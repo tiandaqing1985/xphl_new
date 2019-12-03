@@ -13,32 +13,40 @@
 			<div class="form-control-static" th:text="${userApply.applyType}">
 			</div>
 		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出' ? 'none' : 'block'}">
+		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出' or userApply.applyType =='补卡' ? 'none' : 'block'}">
 			<label class="col-sm-2 control-label">请假类型：</label>
 			<div class="form-control-static" th:text="${userApply.leaveType}">
 			</div>
 		</div>
-		<div class="form-group">
+		<div class="form-group" th:style="'display:' + ${userApply.applyType =='补卡'  ? 'none' : 'block'}">
 			<label class="col-sm-2 control-label">开始时间：</label>
 			<div class="form-control-static" id="starttime" th:text="${#dates.format(userApply.starttime, 'yyyy-MM-dd HH:mm:ss')}" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'block' : 'none'}"></div>
 			<div class="form-control-static" id="starttime" th:text="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'none' : 'block'}"></div>
 		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'none' : 'block'}">
+		<div class="form-group" th:style="'display:' + ${userApply.applyType =='补卡'  ? 'block' : 'none'}">
+			<label class="col-sm-2 control-label">补卡时间：</label>
+			<div class="form-control-static" id="starttime" th:text="${#dates.format(userApply.starttime, 'yyyy-MM-dd HH:mm:ss')}"></div>
+		</div>
+		<div class="form-group" th:style="'display:' + ${userApply.applyType =='补卡'  ? 'block' : 'none'}">
+			<label class="col-sm-2 control-label">补卡类型：</label>
+			<div class="form-control-static" th:text="${userApply.ctype}"></div>
+		</div>
+		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出' or userApply.applyType =='补卡'  ? 'none' : 'block'}">
 			<label class="col-sm-2 control-label">开始时段：</label>
 			<div class="form-control-static" th:text="${userApply.timeapart1}"></div>
 		</div>
-		<div class="form-group">
+		<div class="form-group" th:style="'display:' + ${userApply.applyType =='补卡'  ? 'none' : 'block'}">
 			<label class="col-sm-2 control-label">结束时间：</label>
 			<div class="form-control-static" id="endtime" th:text="${#dates.format(userApply.endtime, 'yyyy-MM-dd HH:mm:ss')}" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'block' : 'none'}"></div>
 			<div class="form-control-static" id="endtime" th:text="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'none' : 'block'}"></div>
 		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? 'none' : 'block'}">
+		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出' or userApply.applyType =='补卡'  ? 'none' : 'block'}">
 			<label class="col-sm-2 control-label">结束时段：</label>
 			<div class="form-control-static" th:text="${userApply.timeapart2}"></div>
 		</div>
-		<div class="form-group">
+		<div class="form-group" th:style="'display:' + ${userApply.applyType =='补卡'  ? 'none' : 'block'}">
 			<label class="col-sm-2 control-label">时长：</label>
-			<div class="form-control-static" th:text="${userApply.timelength} + ${userApply.applyType == '加班' or userApply.applyType =='外出'  ? '小时' : '天'}"></div>
+			<div class="form-control-static" th:text="${userApply.timelength} + ${userApply.applyType == '加班' or userApply.applyType =='外出' ? '小时' : '天'}"></div>
 		</div>
 		<div class="form-group">
 			<label class="col-sm-2 control-label">原因：</label>
@@ -48,10 +56,18 @@
 			<label class="col-sm-2 control-label">审批意见：</label>
 			<div class="form-control-static" th:text="${userApply.remark} == null ? '无' : ${userApply.remark}"></div>
 		</div>
-		<div id="prove" name="prove" style="display:none" th:text="${userApply.prove}"></div>
+		
+		<div id="prove" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出' or userApply.applyType == '补卡' ? 'none' : 'block'}" th:text="${userApply.prove}"></div>
 		<div class="form-group" th:style="'display:' + ${showFlag == true ? 'block' : 'none'}">
-			<label class="col-sm-2 control-label">证明附件：</label>
-			<img alt="111" th:src="${userApply.prove}"  class="img">
+			<div th:style="'display:' + ${userApply.applyType == '补卡' ? 'none' : 'block'}">
+				<label class="col-sm-2 control-label">证明附件：</label>
+				<img alt="正在加载..." th:src="${userApply.prove}"  class="img">
+			</div>
+		</div> 
+		
+		<div th:each="file:${userApply.fileList}" class="form-group" th:style="'display:' + ${userApply.applyType == '补卡' ? 'block' : 'none'}" >
+			<label class="col-sm-2 control-label">补卡图片：</label>
+			<img alt="正在加载..." th:src="${file}"  class="img">
 		</div>
 	</form>
     </div>

@@ -1,7 +1,5 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
 
@@ -23,6 +21,7 @@ public class Holiday extends BaseEntity
 	private Integer id;
 	/** 员工id */
 	private Long userId;
+	/** 申请id */
 	private Long applyId;
 	/** 假期类型（1年假，2调休） */
 	private String holidayType;
@@ -127,15 +126,11 @@ public class Holiday extends BaseEntity
 		this.holidayDetail = holidayDetail;
 	}
 
+	@Override
 	public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("userId", getUserId())
-            .append("holidayType", getHolidayType())
-            .append("availability", getAvailability())
-            .append("createdate", getCreatedate())
-            .append("overdate", getOverdate())
-            .append("value", getValue())
-            .toString();
-    }
+		return "Holiday [id=" + id + ", userId=" + userId + ", applyId=" + applyId + ", holidayType=" + holidayType
+				+ ", availability=" + availability + ", createdate=" + createdate + ", overdate=" + overdate
+				+ ", value=" + value + ", holidayDetail=" + holidayDetail + ", idate=" + idate + "]";
+	}
+
 }

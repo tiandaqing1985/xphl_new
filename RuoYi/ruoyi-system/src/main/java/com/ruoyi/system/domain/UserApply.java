@@ -2,6 +2,7 @@ package com.ruoyi.system.domain;
 
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 申请表 sys_user_apply
@@ -51,6 +52,8 @@ public class UserApply extends BaseEntity
 	private Long forApplyId;
 	/** 证明附件*/
 	private String prove;
+	/** 补卡类型：上班/下班 */
+	private String ctype;
 	/** 有时间后缀的时长*/
 	private String timelengthPlus;
 	
@@ -65,7 +68,43 @@ public class UserApply extends BaseEntity
 	/** 所有审批人及其审批状态*/
 	private String allAppNames;
 	
-    public String getAllAppNames() {
+	/**申请表对应的上传图片集合*/
+	private List<String> fileList;
+	
+	/** 传入String类型的时间 */
+	private String time;
+	
+    public String getTime() {
+		return time;
+	}
+
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
+
+	public String getCtype() {
+		return ctype;
+	}
+
+
+	public void setCtype(String ctype) {
+		this.ctype = ctype;
+	}
+
+
+	public List<String> getFileList() {
+		return fileList;
+	}
+
+
+	public void setFileList(List<String> fileList) {
+		this.fileList = fileList;
+	}
+
+
+	public String getAllAppNames() {
 		return allAppNames;
 	}
 

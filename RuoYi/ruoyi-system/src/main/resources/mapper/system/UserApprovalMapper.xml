@@ -142,7 +142,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	         WHEN a.apply_type = 3 THEN
 	          '销假'
 	         WHEN a.apply_type = 4 THEN
-		          '外出'
+		     '外出'
+	         WHEN a.apply_type = 5 THEN
+		     '补卡'
 	         ELSE 
 	            ''
         	END)apply_type,
@@ -200,7 +202,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	         WHEN a.apply_type = 3 THEN
 	          '销假'
 	         WHEN a.apply_type = 4 THEN
-		          '外出'
+		     '外出'
+	         WHEN a.apply_type = 5 THEN
+		     '补卡'
 	         ELSE 
 	            ''
         	END)apply_type,
@@ -340,6 +344,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	          '销假'
 	         WHEN a.apply_type = 4 THEN
 		          '外出'
+	         WHEN a.apply_type = 5 THEN
+		          '补卡'
 	         ELSE 
 	            ''
         	END)apply_type,

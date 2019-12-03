@@ -308,7 +308,7 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 			Double timelength = userApproval1.getUserApply().getTimelength();
 			//如果是加班申请，根据加班时长，生成调休
 			if( applyType.equals("2") ){
-				SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+				/*SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
 				
 				Holiday holiday = new Holiday();
 				holiday.setUserId(userApproval1.getUserApply().getUserId());
@@ -322,7 +322,13 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 				int temp = (int)(timelength/2)*2;
 				Double value = (double)temp;
 				holiday.setValue(value);
-				holidayMapper.insertHoliday(holiday);
+				holidayMapper.insertHoliday(holiday);*/
+				
+				//修改相应调休记录为有效
+				Holiday holiday = new Holiday();
+				holiday.setApplyId(userApproval1.getApplyId());
+				holiday.setAvailability("1");
+				holidayMapper.updateHoliday(holiday);
 				
 			}
 			//如果是销假申请

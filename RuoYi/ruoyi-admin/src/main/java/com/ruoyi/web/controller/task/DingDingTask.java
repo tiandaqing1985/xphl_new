@@ -139,7 +139,7 @@ public class DingDingTask{
 //        System.out.println("获取从昨天0点到今天0点时间的打卡记录"+ Arrays.asList(users));
 
         
-        //根据请假、外出报备修改钉钉打卡考勤结果
+        //根据请假、外出报备、补卡修改钉钉打卡考勤结果
         dingdingService.updateOaDingDingByOutAndApply();
         }
 	

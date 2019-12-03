@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="Holiday" id="HolidayResult">
         <result property="id"    column="id"    />
         <result property="userId"    column="user_id"    />
+        <result property="applyId"    column="apply_id"    />
         <result property="holidayType"    column="holiday_type"    />
         <result property="availability"    column="availability"    />
         <result property="createdate"    column="createdate"    />
@@ -25,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="id != null "> and id = #{id}</if>
              <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="applyId != null "> and apply_id = #{applyId}</if>
              <if test="holidayType != null  and holidayType != '' "> and holiday_type = #{holidayType}</if>
              <if test="availability != null  and availability != '' "> and availability = #{availability}</if>
              <if test="createdate != null "> and createdate = #{createdate}</if>
@@ -47,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into sys_holiday
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="userId != null  ">user_id,</if>
+			<if test="applyId != null  ">apply_id,</if>
 			<if test="holidayType != null  and holidayType != ''  ">holiday_type,</if>
 			<if test="availability != null  and availability != ''  ">availability,</if>
 			<if test="createdate != null  ">createdate,</if>
@@ -56,6 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="userId != null  ">#{userId},</if>
+			<if test="applyId != null  ">#{applyId},</if>
 			<if test="holidayType != null  and holidayType != ''  ">#{holidayType},</if>
 			<if test="availability != null  and availability != ''  ">#{availability},</if>
 			<if test="createdate != null  ">#{createdate},</if>
@@ -69,6 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update sys_holiday
         <trim prefix="SET" suffixOverrides=",">
             <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="applyId != null  ">apply_id = #{applyId},</if>
             <if test="holidayType != null  and holidayType != ''  ">holiday_type = #{holidayType},</if>
             <if test="availability != null  and availability != ''  ">availability = #{availability},</if>
             <if test="createdate != null  ">createdate = #{createdate},</if>
@@ -76,11 +81,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="value != null  ">value = #{value},</if>
             <if test="holidayDetail != null  and holidayDetail != ''  ">holiday_detail = #{holidayDetail},</if>
         </trim>
-        where id = #{id}
+        <where>
+        	<if test="id != null"> id = #{id}</if>
+        	<if test="applyId != null"> apply_id = #{applyId}</if>
+        </where>
     </update>
 
 	<delete id="deleteHolidayById" parameterType="Integer">
         delete from sys_holiday where id = #{id}
+    </delete>
+    
+    <delete id="deleteHolidayByApplyId" parameterType="Long">
+        delete from sys_holiday where apply_id = #{applyId}
     </delete>
 	
     <delete id="deleteHolidayByIds" parameterType="String">
@@ -100,6 +112,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     		 DATE_FORMAT(createdate, '%Y-%m') = DATE_FORMAT(#{idate}, '%Y-%m')
              <if test="id != null "> and id = #{id}</if>
              <if test="userId != null "> and user_id = #{userId}</if>
+             <if test="applyId != null "> and apply_id = #{applyId}</if>
              <if test="holidayType != null  and holidayType != '' "> and holiday_type = #{holidayType}</if>
              <if test="availability != null  and availability != '' "> and availability = #{availability}</if>
              <if test="createdate != null "> and createdate = #{createdate}</if>

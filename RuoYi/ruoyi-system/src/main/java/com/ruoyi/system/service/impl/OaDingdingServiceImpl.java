@@ -233,7 +233,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 		UserApply apply = new UserApply();
 //		apply.setApplyState(applyState);//申请状态（1 待审批，2已撤回，3申请成功，4申请失败） 
 		apply.setApplyType("1");//申请类型（1请假，2加班，3销假，4外出）
-		List<UserApply> applyList = applyMapper.selectApplyList(apply);//申请成功的请假记录
+		List<UserApply> applyList = applyMapper.selectApplyList(apply);//请假申请记录
 		
 		if(applyList == null){
 			return 0;//没有申请成功的请假记录需要更新在钉钉考勤表中
@@ -368,10 +368,10 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 //			applyMapper.updateUserApplyStatusById(a.getApplyId());//0 未更新  1已更新
 		}
 		
-		//（一）根据外出报备情况更新钉钉考勤表
+		//（二）根据外出报备情况更新钉钉考勤表
 		UserApply apply2 = new UserApply();
 		apply2.setApplyType("4");//申请类型（1请假，2加班，3销假，4外出） 
-		List<UserApply> applyList2 = applyMapper.selectApplyList(apply2);//申请成功的请假记录
+		List<UserApply> applyList2 = applyMapper.selectApplyList(apply2);//外出申请记录
 		if(applyList2.size() == 0) return 1;
 		
 		for(UserApply o : applyList2){
@@ -391,7 +391,32 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 			ding.setApplyState(state);
 			ding.setStatus("1");
 			oaDingdingMapper.updateOaDingDingByTime(ding);			
-		}		
+		}
+		
+		//（三）根据补卡情况更新钉钉考勤表
+		//18  Clocked 已补卡  oa_ding_timeResult
+		UserApply apply3 = new UserApply();
+		apply3.setApplyType("5");//申请类型（1请假，2加班，3销假，4外出，5补卡）
+		List<UserApply> applyList3 = applyMapper.selectApplyList(apply3);//补卡申请记录
+		if(applyList3.size() == 0) return 1;
+		
+		for(UserApply o : applyList3){
+			Dingding ding = new Dingding();
+			ding.setUserName(o.getUserName());
+			if(o.getCtype().equals("上班")){
+				ding.setCheckType("OnDuty");
+			}else{
+				ding.setCheckType("OffDuty");
+			}
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+			String time = sdf.format(o.getStarttime());
+			time.substring(0,9);
+			ding.setTime(time);
+			ding.setTimeResult("Clocked");
+			ding.setApplyState(o.getApplyState());//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+			ding.setStatus("1");
+			oaDingdingMapper.updateOaDingDingByTime(ding);			
+		}
 		return 1;
 	}
 

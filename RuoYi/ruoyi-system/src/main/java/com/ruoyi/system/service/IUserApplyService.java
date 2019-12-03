@@ -6,6 +6,8 @@ import com.ruoyi.system.domain.UserApplyList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * 申请 服务层
  * 
@@ -144,6 +146,8 @@ public interface IUserApplyService
 	
 	public int addOutSave(UserApply userApply,Long userId);
 
+	public Long addPicSave(UserApply userApply,Long userId);
+	
 	/**
 	 * 判断起始时间是否在加班时间范围内
 	 * @param userApply
@@ -179,4 +183,17 @@ public interface IUserApplyService
 	 * 验证加班审批是否已通过且满足2.5小时
 	 * */
 	public boolean ifSatisfied(Long userId, Date time);
+	
+	
+    /**
+     * 上传图片
+     * @param file_data
+     * @param fileId
+     * @return
+     * @throws Exception
+     */
+    public Long uploadMateria(MultipartFile file_data, String fileId) throws Exception;
+    
+    /** 验证是否重复提交补卡申请 */
+    public String ifPicRepeat(UserApply userApply);
 }

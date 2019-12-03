@@ -54,6 +54,8 @@ public interface HolidayMapper
      */
 	public int deleteHolidayById(Integer id);
 	
+	public int deleteHolidayByApplyId(Long applyId);
+	
 	/**
      * 批量删除假期
      * 

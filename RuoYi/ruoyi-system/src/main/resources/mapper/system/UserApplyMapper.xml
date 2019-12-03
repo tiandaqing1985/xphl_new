@@ -27,10 +27,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="prove"  column="prove"/>
         <result property="timelengthPlus"  column="timelengthPlus"/>
         <result property="remark"  column="remark"/>
+        <result property="ctype" column="ctype"/>
         <association property="userApproval" column="approval_id" javaType="UserApproval" resultMap="UserApprovalResult"/>
         <association property="sysUser" column="user_id" javaType="SysUser" resultMap="SysUserResult"/>
         <association property="sysDept" column="dept_id" javaType="SysDept" resultMap="SysDeptResult"/>  
         <association property="allAppNames" column="apply_id" select="getAllAppNamesByApplyid"/>
+        <collection property="fileList" column="apply_id" select="selectFileListByApplyId"/>
+        
     </resultMap>
     
     <resultMap type="SysUser" id="SysUserResult">
@@ -87,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
 	<sql id="selectUserApplyVo">
         select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove,
-        		p.approval_id, p.apply_id, p.approval_state, p.approver_id,  p.approval_sight,p.approval_time,
+        		p.approval_id, p.apply_id, p.approval_state, p.approver_id,  p.approval_sight,p.approval_time,a.ctype,
         		u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
         		s.user_id, s.dept_id, s.login_name, (s.user_name)approver_name, s.email, s.phonenumber, s.sex, s.avatar, s.password, s.salt, s.del_flag, s.login_ip, s.login_date, s.create_time, s.remark,s.record,s.intime,s.firstphase,s.secondphase
         from sys_user_apply a 
@@ -130,6 +133,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 <if test="userId != null"> and a.user_id = #{userId}</if>
 		     <if test="starttime != null"> and a.starttime like concat('%',#{starttime},'%')</if>
 		     <if test="timelength != null"> and a.timelength <![CDATA[  >=  ]]> 2.5</if>
+		     <if test="ctype != null and ctype != ''"> and a.ctype = #{ctype}</if>
+		</where>
+    </select>
+    
+   <select id="selectApplyPicList" parameterType="UserApply" resultMap="UserApplyResult">
+    	SELECT us.user_name,a.* 
+    		FROM sys_user_apply a
+			LEFT JOIN sys_user us ON us.user_id = a.user_id 
+		<where>
+			a.apply_state <![CDATA[ != ]]> 2
+		    and a.apply_type = 5
+		     <if test="userId != null"> and a.user_id = #{userId}</if>
+		     <if test="time != null"> and a.starttime like concat('%',#{time},'%')</if>
+		     <if test="ctype != null and ctype != ''"> and a.ctype = #{ctype}</if>
 		</where>
     </select>
     
@@ -153,7 +170,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="selectUserApplyAsList"  parameterType="UserApply" resultMap="UserApplyResult">
-    	select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.for_applyid, a.prove,
+    	select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.for_applyid, a.prove,a.ctype,
     			a.timelength,
     			(CASE
 		         WHEN a.apply_type = 1 THEN
@@ -176,6 +193,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          '销假'
 		          WHEN a.apply_type = 4 THEN
 		          '外出'
+		          WHEN a.apply_type = 5 THEN
+		          '补卡'
 		         ELSE 
 		            ''
 	        	END)apply_type,  
@@ -286,7 +305,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="selectUserApplyByIds" parameterType="String" resultMap="UserApplyResult">
-        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.for_applyid, a.prove,
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.for_applyid, a.prove,a.ctype,
         		(CASE
 		         WHEN a.timeapart1 = 1 THEN
 		          '10:00——15:00'
@@ -320,6 +339,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          '销假'
 		         WHEN a.apply_type = 4 THEN
 		          '外出'
+		          WHEN a.apply_type = 5 THEN
+		          '补卡'
 		         ELSE 
 		            ''
 		        END)apply_type,  
@@ -369,8 +390,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </select>
     
+    <!-- 子查询申请表对应的图片 -->
+    <select id="selectFileListByApplyId" parameterType="Long" resultType="String">
+    	SELECT
+			file_path fileList
+		FROM
+			oa_file_upload 
+		WHERE
+			apply_id = #{apply_id}
+    </select>
+    
     <select id="selectUserApplyById" parameterType="Long" resultMap="UserApplyResult">
-        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.for_applyid, a.prove,
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.for_applyid, a.prove,a.ctype,
         		(CASE
 		         WHEN a.timeapart1 = 1 THEN
 		          '10:00——15:00'
@@ -404,6 +435,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          '销假'
 		         WHEN a.apply_type = 4 THEN
 		          '外出'
+		          WHEN a.apply_type = 5 THEN
+		          '补卡'
 		         ELSE 
 		            ''
 		        END)apply_type,  
@@ -451,7 +484,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="selectUserApplyByIdForUndo" parameterType="Long" resultMap="UserApplyResult">
-        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.for_applyid, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.prove,
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.for_applyid, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.prove,a.ctype,
     			(CASE
 		         WHEN a.apply_type = 1 THEN
 		          '请假'
@@ -461,6 +494,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		          '销假'
 		         WHEN a.apply_type = 4 THEN
 		          '外出'
+		          WHEN a.apply_type = 5 THEN
+		          '补卡'
 		         ELSE 
 		            ''
 		        END)apply_type,  
@@ -536,6 +571,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="leaveType != null  and leaveType != ''  ">leave_type,</if>
 			<if test="forApplyId != null  and forApplyId != ''  ">for_applyid,</if>
 			<if test="prove != null and prove != '' ">prove,</if>
+			<if test="ctype != null and ctype != '' ">ctype,</if>
 			apply_time
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -553,6 +589,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="leaveType != null  and leaveType != ''  ">#{leaveType},</if>
 			<if test="forApplyId != null  and forApplyId != ''  ">#{forApplyId},</if>
 			<if test="prove != null and prove != '' ">#{prove},</if>
+			<if test="ctype != null and ctype != '' ">#{ctype},</if>
 			 sysdate() 			
          </trim>
     </insert>
@@ -574,6 +611,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="leaveType != null  and leaveType != ''  ">leave_type = #{leaveType},</if>
             <if test="applyTime != null  ">apply_time = #{applyTime},</if>
             <if test="prove != null and prove != '' ">prove = #{prove}</if>
+            <if test="ctype != null and ctype != '' ">ctype = #{ctype}</if>
             <if test="forApplyId != null  and forApplyId != ''  ">for_applyid = #{forApplyId},</if>
         </trim>
         where apply_id = #{applyId}

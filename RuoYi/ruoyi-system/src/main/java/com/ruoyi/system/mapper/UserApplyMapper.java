@@ -46,6 +46,14 @@ public interface UserApplyMapper
 	public List<UserApply> selectUserApplyList(UserApply userApply);
 	
 	/**
+	 * 查询补卡申请重复数据
+	 * @param ctype
+	 * @param starttime
+	 * @return
+	 */
+	public List<UserApply> selectApplyPicList(UserApply userApply);
+	
+	/**
 	 * 查询加班申请
 	 * @param userId
 	 * @param starttime

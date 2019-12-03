@@ -9,6 +9,10 @@ import java.util.List;
  * @author ruoyi
  * @date 2019-08-16
  */
+/**
+ * @author admin
+ *
+ */
 public interface OaFileUploadMapper 
 {
 	/**
@@ -42,6 +46,13 @@ public interface OaFileUploadMapper
      * @return 结果
      */
 	public int updateOaFileUpload(OaFileUpload oaFileUpload);
+	
+	/**
+	 * 上传图片后关联申请表和文件记录表
+	 * @param oaFileUpload
+	 * @return
+	 */
+	public int updateOaFileUploadByApply(OaFileUpload oaFileUpload);
 	
 	/**
      * 删除文件上传记录

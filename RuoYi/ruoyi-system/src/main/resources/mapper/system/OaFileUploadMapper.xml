@@ -6,21 +6,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="OaFileUpload" id="OaFileUploadResult">
         <result property="fileId"    column="file_id"    />
-        <result property="userId"    column="user_id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="userName"    column="user_name"    />
         <result property="fileName"    column="file_name"    />
         <result property="filePath"    column="file_path"    />
         <result property="createTime"    column="create_time"    />
     </resultMap>
 	
 	<sql id="selectOaFileUploadVo">
-        select file_id, user_id, file_name, file_path, create_time from oa_file_upload
+        select file_id, apply_id, file_name, file_path, create_time from oa_file_upload
     </sql>
 	
     <select id="selectOaFileUploadList" parameterType="OaFileUpload" resultMap="OaFileUploadResult">
         <include refid="selectOaFileUploadVo"/>
         <where>  
             <if test="fileId != null "> and file_id = #{fileId}</if>
-             <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="applyId != null "> and apply_id = #{applyId}</if>
+             <if test="userName != null and userName != ''"> and user_name = #{userName}</if>
              <if test="fileName != null  and fileName != '' "> and file_name like '%${fileName}%'</if>
              <if test="filePath != null  and filePath != '' "> and file_path = #{filePath}</if>
              <if test="createTime != null "> and create_time = #{createTime}</if>
@@ -35,13 +37,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertOaFileUpload" parameterType="OaFileUpload" useGeneratedKeys="true" keyProperty="fileId">
         insert into oa_file_upload
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="userId != null  ">user_id,</if>
+			<if test="applyId != null  ">apply_id,</if>
+			<if test="userName != null  ">user_name,</if>
 			<if test="fileName != null  and fileName != ''  ">file_name,</if>
 			<if test="filePath != null  and filePath != ''  ">file_path,</if>
 			create_time
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-			<if test="userId != null  ">#{userId},</if>
+        	<if test="applyId != null  ">#{applyId},</if>
+			<if test="userName != null  ">#{userName},</if>
 			<if test="fileName != null  and fileName != ''  ">#{fileName},</if>
 			<if test="filePath != null  and filePath != ''  ">#{filePath},</if>
 			sysdate()
@@ -51,22 +55,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateOaFileUpload" parameterType="OaFileUpload">
         update oa_file_upload
         <trim prefix="SET" suffixOverrides=",">
-            <if test="userId != null  ">user_id = #{userId},</if>
+            <if test="applyId != null  ">apply_id = #{applyId},</if>
+            <if test="userName != null  ">user_name = #{userName},</if>
             <if test="fileName != null  and fileName != ''  ">file_name = #{fileName},</if>
             <if test="filePath != null  and filePath != ''  ">file_path = #{filePath},</if>
             <if test="createTime != null  ">create_time = #{createTime},</if>
         </trim>
         where file_id = #{fileId}
     </update>
+    
+     <update id="updateOaFileUploadByApply" parameterType="OaFileUpload">
+        update oa_file_upload
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyId != null  ">apply_id = #{applyId},</if>           
+        </trim>
+        where apply_id is null and user_name = #{userName}
+    </update>
+    
 
 	<delete id="deleteOaFileUploadById" parameterType="Long">
         delete from oa_file_upload where file_id = #{fileId}
     </delete>
 	
     <delete id="deleteOaFileUploadByIds" parameterType="String">
-        delete from oa_file_upload where file_id in 
-        <foreach item="fileId" collection="array" open="(" separator="," close=")">
-            #{fileId}
+        delete from oa_file_upload where apply_id in 
+        <foreach item="applyId" collection="array" open="(" separator="," close=")">
+            #{applyId}
         </foreach>
     </delete>
     

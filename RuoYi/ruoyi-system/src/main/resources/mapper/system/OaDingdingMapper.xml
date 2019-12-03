@@ -143,6 +143,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="startTime != null and endTime != null">and userCheckTime <![CDATA[  >= #{startTime} ]]> and userCheckTime <![CDATA[ <= #{endTime} ]]> </if>
 			<if test="workDate != null">and workDate = #{workDate}</if>
 			<if test="checkType != null and checkType != ''">and checkType = #{checkType}</if>
+			<if test="time != null">and workDate = #{time}</if>
 		</where>
 	</update>
 
@@ -180,6 +181,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 					  WHEN ding.timeResult='Early' THEN '早退'
 					  WHEN ding.timeResult='SeriousLate' THEN '严重迟到'
 					  WHEN ding.timeResult='NotSigned' THEN '未打卡'
+					  WHEN ding.timeResult='Clocked' THEN '已补卡'
 					  WHEN ding.timeResult = 'out' THEN '外出'
 					  WHEN ding.timeResult = 'Absenteeism' THEN '旷工迟到'
 					  WHEN ding.timeResult = '1' THEN '年假' 

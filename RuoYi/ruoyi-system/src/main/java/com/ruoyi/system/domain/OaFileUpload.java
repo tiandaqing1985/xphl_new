@@ -16,12 +16,22 @@ public class OaFileUpload extends BaseEntity
 	
 	/** 文件id */
 	private Long fileId;
-	/** 用户id */
-	private Long userId;
+	/** 申请id */
+	private Long applyId;
+	/** 用户名 */
+	private String userName;
 	/** 文件名 */
 	private String fileName;
 	/** 路径 */
 	private String filePath;
+
+	public Long getApplyId() {
+		return applyId;
+	}
+
+	public void setApplyId(Long applyId) {
+		this.applyId = applyId;
+	}
 
 	public void setFileId(Long fileId) 
 	{
@@ -32,15 +42,15 @@ public class OaFileUpload extends BaseEntity
 	{
 		return fileId;
 	}
-	public void setUserId(Long userId) 
-	{
-		this.userId = userId;
+	
+	public String getUserName() {
+		return userName;
 	}
 
-	public Long getUserId() 
-	{
-		return userId;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
+
 	public void setFileName(String fileName) 
 	{
 		this.fileName = fileName;
@@ -63,7 +73,8 @@ public class OaFileUpload extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("fileId", getFileId())
-            .append("userId", getUserId())
+            .append("applyId", getApplyId())
+            .append("userName", getUserName())
             .append("fileName", getFileName())
             .append("filePath", getFilePath())
             .append("createTime", getCreateTime())

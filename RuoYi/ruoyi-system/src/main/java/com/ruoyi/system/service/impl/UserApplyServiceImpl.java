@@ -9,13 +9,17 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ruoyi.system.mapper.HolidayMapper;
 import com.ruoyi.system.mapper.HolidayRecordMapper;
 import com.ruoyi.system.mapper.OaDingdingMapper;
+import com.ruoyi.system.mapper.OaFileUploadMapper;
 import com.ruoyi.system.mapper.OaWorkingCalendarMapper;
 import com.ruoyi.system.mapper.SysDictDataMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
@@ -24,6 +28,7 @@ import com.ruoyi.system.mapper.UserApplyMapper;
 import com.ruoyi.system.mapper.UserApprovalMapper;
 import com.ruoyi.system.domain.Dingding;
 import com.ruoyi.system.domain.Holiday;
+import com.ruoyi.system.domain.OaFileUpload;
 import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.UserApply;
@@ -34,7 +39,11 @@ import com.ruoyi.system.service.IHolidayService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IUserApplyService;
+import com.ruoyi.common.config.Global;
 import com.ruoyi.common.core.text.Convert;
+import com.ruoyi.common.utils.file.FileUploadUtils;
+import com.ruoyi.common.utils.file.FileUtils;
+import com.ruoyi.common.utils.security.PermissionUtils;
 
 /**
  * 申请 服务层实现
@@ -45,6 +54,8 @@ import com.ruoyi.common.core.text.Convert;
 @Service
 public class UserApplyServiceImpl implements IUserApplyService  
 {
+    private static Logger logger = LoggerFactory.getLogger(UserApplyServiceImpl.class);
+
 	@Autowired
 	private UserApplyMapper userApplyMapper;
 	
@@ -75,6 +86,8 @@ public class UserApplyServiceImpl implements IUserApplyService
 	private SysDictDataMapper dictDataMapper;
 	@Autowired
 	private IHolidayService holidayService;
+	@Autowired
+	private OaFileUploadMapper oaFileUploadMapper;
 	
 	/**
      * 查询申请信息
@@ -315,10 +328,35 @@ public class UserApplyServiceImpl implements IUserApplyService
 		List<UserApply> userApplyList = userApplyMapper.selectUserApplyByIds(Convert.toStrArray(ids));
 		
 		for(UserApply userApply : userApplyList){
-			//先还原假期表，删除假期使用表
-			holidayService.restoreHoliday(userApply.getApplyId(), null);
-			holidayRecordMapper.deleteHolidayRecordByApplyId(userApply.getApplyId());	
+			//加班申请：直接删除假期表生成的调休数据
+			if(userApply.getApplyType().equals("加班")){//申请类型（1请假，2加班，3销假，4外出，5补卡）
+				holidayMapper.deleteHolidayByApplyId(userApply.getApplyId());
+			}else if(userApply.getApplyType().equals("请假")){
+				//调休申请：先还原假期表，删除假期使用表
+				holidayService.restoreHoliday(userApply.getApplyId(), null);
+				holidayRecordMapper.deleteHolidayRecordByApplyId(userApply.getApplyId());
+			}
+			
+			//查询所有图片路径
+			OaFileUpload oaFileUpload = new OaFileUpload();
+			oaFileUpload.setApplyId(userApply.getApplyId());
+			List<OaFileUpload> fileList = oaFileUploadMapper.selectOaFileUploadList(oaFileUpload);
+			if(fileList.size() == 0) continue;
+			
+			for(OaFileUpload file : fileList){
+				boolean flag = FileUtils.deleteFile(Global.getUploadPath()+file.getFilePath());
+				if(flag){
+					logger.info("文件删除成功！");
+				}else{
+					logger.error("文件删除失败！");
+				}
+			}
 		}
+		
+		
+		
+		//删除图片上传记录
+		oaFileUploadMapper.deleteOaFileUploadByIds(Convert.toStrArray(ids));
 		
 		//删除审批记录
 		userApprovalMapper.deleteUserApprovalByIds(Convert.toStrArray(ids));
@@ -776,6 +814,27 @@ public class UserApplyServiceImpl implements IUserApplyService
 		personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user2));
 		userApprovalMapper.insertUserApproval(personnel);
 	
+		//生成无效的调休记录
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+		
+		Holiday holiday = new Holiday();
+		holiday.setUserId(userId);
+		holiday.setApplyId(userApply.getApplyId());
+		holiday.setHolidayType("2");
+		holiday.setAvailability("0");//是否有效（0否 1是）
+		holiday.setCreatedate(s.format(userApply.getStarttime()));
+		try {
+			holiday.setOverdate(s.format(iSysUserService.getDate(s.format(userApply.getStarttime()), 3)));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		/*int temp = (int)(userApply.getTimelength()/2)*2;
+		Double value = (double)temp;
+		holiday.setValue(value);*/
+		holiday.setValue(Math.floor(userApply.getTimelength()));
+		holidayMapper.insertHoliday(holiday);
+		
+		
 		return 1;
 	}
 
@@ -886,6 +945,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 	 */
 	@Override
 	public int updateUserApply(UserApply userApply) {
+		String applyType = userApply.getApplyType();
 		if(userApply.getLeaveType() != null){
 			SysDictData dictData = new SysDictData();
 			dictData.setDictLabel(userApply.getLeaveType());
@@ -896,9 +956,10 @@ public class UserApplyServiceImpl implements IUserApplyService
 		userApply.setApplyType(null);
 		userApply.setApplyTime(new Date());
 		userApplyMapper.updateUserApply(userApply);
-		
-		insertUserApply(userApply,userApply.getUserId());
-		
+		//补卡
+		if(!applyType.equals("5")){
+			insertUserApply(userApply,userApply.getUserId());
+		}
 	    return 1;
 	}
 
@@ -1090,5 +1151,86 @@ public class UserApplyServiceImpl implements IUserApplyService
     	}else{    		
     		return true;
     	}
+	}
+
+	/**
+	 * 	新增补卡申请
+	 * */
+	@Override
+	public Long addPicSave(UserApply userApply, Long userId) {
+		userApply.setUserId(userId);
+		userApply.setApplyState("1");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+		userApply.setApplyType("5");//申请类型（1请假，2加班，3销假，4外出，5补卡）
+		userApplyMapper.insertUserApply(userApply);
+		
+		SysUser user = userMapper.selectUserById(userId);//查出当前用户的area值
+		if(user.getArea().equals("3")){
+			user.setArea("2");
+		}
+		
+		//补卡申请id与上传图片关联
+		OaFileUpload oaFileUpload = new OaFileUpload();
+		oaFileUpload.setApplyId(userApply.getApplyId());
+		oaFileUpload.setUserName(user.getLoginName());
+		oaFileUploadMapper.updateOaFileUploadByApply(oaFileUpload);
+		
+		//人事审批
+		UserApproval personnel = new UserApproval();
+		personnel.setApplyId(userApply.getApplyId());
+		personnel.setApprovalLevel(1);
+		SysUser user2 = new SysUser();//当前区域hr
+		user2.setArea(user.getArea());
+		user2.setRoleId(3L);
+		
+		//生成审批记录
+		Long approvalId = iSysRoleService.selectUserIdByRoleId(user2);//人事id
+		if(approvalId.equals(user.getUserId())){//当前申请人是人事
+			SysUser user3 = new SysUser();
+			user3.setRoleId(6L);//人事总监
+			approvalId = userRoleMapper.selectUserIdByRoleId(user3);//人事总监id	
+		}
+		
+		personnel.setApproverId(approvalId);
+		personnel.setApprovalSight("1");
+		userApprovalMapper.insertUserApproval(personnel);
+	
+	    return userApply.getApplyId();
+	}
+
+	@Override
+    @Transactional(rollbackFor = Exception.class)
+	public Long uploadMateria(MultipartFile file_data, String fileId) throws Exception {
+        Long id = null;
+        try {
+            OaFileUpload fileUpload = new OaFileUpload();
+            // 上传文件路径
+            String filePath = Global.getUploadPath();
+            // 上传文件
+            String fileName = FileUploadUtils.upload(filePath, file_data);           
+            fileUpload.setUserName((String) PermissionUtils.getPrincipalProperty("loginName"));
+            fileUpload.setFilePath("/"+fileName);
+            oaFileUploadMapper.insertOaFileUpload(fileUpload);
+            id = fileUpload.getFileId();
+        } catch (Exception e) {
+            logger.error("上传文件" + fileId + "出现异常：", e);
+            throw e;
+        } finally {
+
+        }
+        return id;
+    }
+
+	@Override
+	public String ifPicRepeat(UserApply userApply) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
+		String date = sdf.format(userApply.getStarttime());
+		date.substring(0, 9);	
+		userApply.setTime(date);
+		List<UserApply> aList = userApplyMapper.selectApplyPicList(userApply);
+		if(aList.size() == 0){
+			return "0";
+		}else{
+			return "1";
+		}
 	}
 }

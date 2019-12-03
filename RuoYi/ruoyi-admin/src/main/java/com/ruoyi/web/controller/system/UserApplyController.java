@@ -13,11 +13,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.system.domain.OaFileUpload;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.UserApply;
 import com.ruoyi.system.domain.UserApplyList;
+import com.ruoyi.system.service.IOaFileUploadService;
 import com.ruoyi.system.service.ISysPostService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
@@ -39,8 +43,12 @@ import com.ruoyi.framework.util.ShiroUtils;
 public class UserApplyController extends BaseController
 {
     private String prefix = "system/userApply";
-	
-	@Autowired
+    /**
+     * 文件上传路径
+     */
+    public static final String UPLOAD_PATH = "/profile/upload/";
+
+    @Autowired
 	private IUserApplyService userApplyService;
 	
 	@Autowired
@@ -51,6 +59,9 @@ public class UserApplyController extends BaseController
 	
 	@Autowired
 	private ISysRoleService iSysRoleService;
+	
+	@Autowired
+	private IOaFileUploadService oaFileUploadService;
 	
 	@RequiresPermissions("system:userApply:view")
 	@GetMapping()
@@ -124,6 +135,11 @@ public class UserApplyController extends BaseController
 		for(UserApply apply : applyList){
 			if(apply.getRemark() != null)
 				m.addAttribute("userApply", apply);
+			if(apply.getApplyType().equals("5")){//补卡
+				OaFileUpload oaFileUpload = new OaFileUpload();
+				oaFileUpload.setApplyId(apply.getApplyId());
+				m.addAttribute("picList", oaFileUploadService.selectOaFileUploadList(oaFileUpload));
+			}
 		}
 		if(!m.containsAttribute("userApply"))
 			m.addAttribute("userApply", applyList.get(0));
@@ -322,6 +338,39 @@ public class UserApplyController extends BaseController
 		int i = userApplyService.addOutSave(userApply,ShiroUtils.getUserId());
 		return toAjax(i);
 	}
+	
+	/**
+	 * 新增补卡申请
+	 */
+	@GetMapping("/addPic")
+	public String addPic()
+	{
+	    return prefix + "/addPic";
+	}
+	
+	/**
+	 * 新增保存补卡申请
+	 */
+	@Log(title = "补卡申请", businessType = BusinessType.INSERT)
+	@PostMapping("/addPic")
+	@ResponseBody
+	public AjaxResult addPicSave(UserApply userApply)
+	{
+		Long i = userApplyService.addPicSave(userApply,ShiroUtils.getUserId());
+		return toAjax(i.intValue());
+	}
+	
+	 /**
+     * 上传多张图片
+     */
+    @PostMapping("/uploadList")
+    @ResponseBody
+    public AjaxResult uploadList(MultipartFile file_data, String fileId) throws Exception
+    {
+		userApplyService.uploadMateria(file_data, fileId);
+    	return AjaxResult.error();
+    }  
+	
 	/**
 	 * 验证员工是否通过试用一期
 	 * */
@@ -341,23 +390,7 @@ public class UserApplyController extends BaseController
     {
     	userApply.setUserId(ShiroUtils.getUserId());
     	return userApplyService.selectUserApplyListByTime(userApply);
-    }
-    
-	/**
-	 * 验证开始时间是否为昨天之前的时间
-	 */
-    @PostMapping("/ifBefore")
-    @ResponseBody
-    public String ifBefore(UserApply userApply)
-    {
-    	Date nowDate = new Date();
-		//判断起始时间是否是昨天的时间
-		if(userApply.getStarttime().getTime() > nowDate.getTime()){
-			return "1";
-		}else{
-	    	return "0";
-		}
-    } 
+    }  
     
 	/**
 	 * 验证是否能做销假操作
@@ -520,4 +553,15 @@ public class UserApplyController extends BaseController
      	}
      	
      }
+     
+     /**
+  	 * 验证补卡申请是否重复
+  	 */
+      @PostMapping("/ifPicRepeat")
+      @ResponseBody
+      public String ifPicRepeat(UserApply userApply){
+    	userApply.setUserId(ShiroUtils.getUserId()); 
+     	String result =  userApplyService.ifPicRepeat(userApply);
+      	return result;
+      }
 }
