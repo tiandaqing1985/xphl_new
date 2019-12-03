@@ -1171,7 +1171,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 		//补卡申请id与上传图片关联
 		OaFileUpload oaFileUpload = new OaFileUpload();
 		oaFileUpload.setApplyId(userApply.getApplyId());
-		oaFileUpload.setUserName(user.getLoginName());
+		oaFileUpload.setLoginName(user.getLoginName());
 		oaFileUploadMapper.updateOaFileUploadByApply(oaFileUpload);
 		
 		//人事审批
@@ -1207,7 +1207,7 @@ public class UserApplyServiceImpl implements IUserApplyService
             String filePath = Global.getUploadPath();
             // 上传文件
             String fileName = FileUploadUtils.upload(filePath, file_data);           
-            fileUpload.setUserName((String) PermissionUtils.getPrincipalProperty("loginName"));
+            fileUpload.setLoginName((String) PermissionUtils.getPrincipalProperty("loginName"));
             fileUpload.setFilePath("/"+fileName);
             oaFileUploadMapper.insertOaFileUpload(fileUpload);
             id = fileUpload.getFileId();

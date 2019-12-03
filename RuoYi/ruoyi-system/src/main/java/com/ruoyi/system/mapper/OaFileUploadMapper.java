@@ -70,4 +70,11 @@ public interface OaFileUploadMapper
      */
 	public int deleteOaFileUploadByIds(String[] fileIds);
 	
+	/**
+	 * 查询图片是否上传
+	 * @param loginName
+	 * @return
+	 */
+	public List<OaFileUpload> selectPicList(String loginName);
+	
 }

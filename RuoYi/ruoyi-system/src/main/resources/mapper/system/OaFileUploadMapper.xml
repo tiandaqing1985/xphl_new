@@ -7,14 +7,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="OaFileUpload" id="OaFileUploadResult">
         <result property="fileId"    column="file_id"    />
         <result property="applyId"    column="apply_id"    />
-        <result property="userName"    column="user_name"    />
+        <result property="loginName"    column="login_name"    />
         <result property="fileName"    column="file_name"    />
         <result property="filePath"    column="file_path"    />
         <result property="createTime"    column="create_time"    />
     </resultMap>
 	
 	<sql id="selectOaFileUploadVo">
-        select file_id, apply_id, file_name, file_path, create_time from oa_file_upload
+        select file_id, apply_id, login_name, file_name, file_path, create_time from oa_file_upload
     </sql>
 	
     <select id="selectOaFileUploadList" parameterType="OaFileUpload" resultMap="OaFileUploadResult">
@@ -22,10 +22,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>  
             <if test="fileId != null "> and file_id = #{fileId}</if>
             <if test="applyId != null "> and apply_id = #{applyId}</if>
-             <if test="userName != null and userName != ''"> and user_name = #{userName}</if>
+             <if test="loginName != null and loginName != ''"> and login_name = #{loginName}</if>
              <if test="fileName != null  and fileName != '' "> and file_name like '%${fileName}%'</if>
              <if test="filePath != null  and filePath != '' "> and file_path = #{filePath}</if>
              <if test="createTime != null "> and create_time = #{createTime}</if>
+         </where>
+    </select>
+    
+     <select id="selectPicList" parameterType="String" resultMap="OaFileUploadResult">
+        <include refid="selectOaFileUploadVo"/>
+        <where>  
+       		 apply_id is null
+             and login_name = #{loginName}
          </where>
     </select>
     
@@ -38,14 +46,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into oa_file_upload
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="applyId != null  ">apply_id,</if>
-			<if test="userName != null  ">user_name,</if>
+			<if test="loginName != null  ">login_name,</if>
 			<if test="fileName != null  and fileName != ''  ">file_name,</if>
 			<if test="filePath != null  and filePath != ''  ">file_path,</if>
 			create_time
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
         	<if test="applyId != null  ">#{applyId},</if>
-			<if test="userName != null  ">#{userName},</if>
+			<if test="loginName != null  ">#{loginName},</if>
 			<if test="fileName != null  and fileName != ''  ">#{fileName},</if>
 			<if test="filePath != null  and filePath != ''  ">#{filePath},</if>
 			sysdate()
@@ -56,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update oa_file_upload
         <trim prefix="SET" suffixOverrides=",">
             <if test="applyId != null  ">apply_id = #{applyId},</if>
-            <if test="userName != null  ">user_name = #{userName},</if>
+            <if test="loginName != null  ">login_name = #{loginName},</if>
             <if test="fileName != null  and fileName != ''  ">file_name = #{fileName},</if>
             <if test="filePath != null  and filePath != ''  ">file_path = #{filePath},</if>
             <if test="createTime != null  ">create_time = #{createTime},</if>
@@ -69,7 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="applyId != null  ">apply_id = #{applyId},</if>           
         </trim>
-        where apply_id is null and user_name = #{userName}
+        where apply_id is null and login_name = #{loginName}
     </update>
     
 

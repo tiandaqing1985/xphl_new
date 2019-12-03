@@ -147,7 +147,7 @@ public class OaFileUploadController extends BaseController
 	            ajax.put("fileName", fileName);
 	            ajax.put("url", url);
 //	            fileUpload.setApplyId(applyId);
-	            fileUpload.setUserName(ShiroUtils.getLoginName());
+	            fileUpload.setLoginName(ShiroUtils.getLoginName());
 	            fileUpload.setFileName(file.getOriginalFilename());
 	            fileUpload.setFilePath(url);
 	        }
@@ -246,5 +246,15 @@ public class OaFileUploadController extends BaseController
 		if(fList.size() != 0)
 			return true;
 		return false;
+	}
+	
+	/** 验证图片是否上传 */
+	@Log(title = "图片是否已经上传")
+	@PostMapping( "/ifPicUpload")
+	@ResponseBody
+	public boolean ifPicUpload()
+	{	
+		boolean flag = oaFileUploadService.ifPicUpload(ShiroUtils.getSysUser().getLoginName());
+		return flag;
 	}
 }

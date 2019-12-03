@@ -51,4 +51,11 @@ public interface IOaFileUploadService
      */
 	public int deleteOaFileUploadByIds(String ids);
 	
+	/**
+	 * 验证图片是否已经上传
+	 * @param loginName
+	 * @return
+	 */
+	public boolean ifPicUpload(String loginName);
+	
 }

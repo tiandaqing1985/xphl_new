@@ -79,5 +79,14 @@ public class OaFileUploadServiceImpl implements IOaFileUploadService
 	{
 		return oaFileUploadMapper.deleteOaFileUploadByIds(Convert.toStrArray(ids));
 	}
+
+	@Override
+	public boolean ifPicUpload(String loginName) {
+		List<OaFileUpload> fList = oaFileUploadMapper.selectPicList(loginName);
+		if(fList.size() == 0){
+			return false;
+		}
+		return true;
+	}
 	
 }

@@ -1,7 +1,5 @@
 package com.ruoyi.system.domain;
 
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
@@ -19,7 +17,7 @@ public class OaFileUpload extends BaseEntity
 	/** 申请id */
 	private Long applyId;
 	/** 用户名 */
-	private String userName;
+	private String loginName;
 	/** 文件名 */
 	private String fileName;
 	/** 路径 */
@@ -43,12 +41,12 @@ public class OaFileUpload extends BaseEntity
 		return fileId;
 	}
 	
-	public String getUserName() {
-		return userName;
+	public String getLoginName() {
+		return loginName;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setLoginName(String loginName) {
+		this.loginName = loginName;
 	}
 
 	public void setFileName(String fileName) 
@@ -70,14 +68,10 @@ public class OaFileUpload extends BaseEntity
 		return filePath;
 	}
 
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("fileId", getFileId())
-            .append("applyId", getApplyId())
-            .append("userName", getUserName())
-            .append("fileName", getFileName())
-            .append("filePath", getFilePath())
-            .append("createTime", getCreateTime())
-            .toString();
-    }
+	@Override
+	public String toString() {
+		return "OaFileUpload [fileId=" + fileId + ", applyId=" + applyId + ", loginName=" + loginName + ", fileName="
+				+ fileName + ", filePath=" + filePath + "]";
+	}
+
 }

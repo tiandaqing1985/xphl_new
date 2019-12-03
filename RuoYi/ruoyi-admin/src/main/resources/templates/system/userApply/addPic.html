@@ -46,7 +46,7 @@
 	                  <div class="form-group" >
 	                        <label class="font-noraml"><span style="color: red; ">*</span>上传图片</label>
 	                      	<div class="file-loading">
-	                      		<input id="fileinput-demo-1" type="file" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple required>
+	                      		<input id="fileinput-demo-1" type="file" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple>
 			        		</div>
 	                  </div>
 	            </div> 
@@ -126,15 +126,15 @@
 					}
 				});  
 				
-				/* //验证图片是否上传
+				//验证图片是否上传
 				$.ajax({
 					type:"post",
 					async:false,
-					url:"/system/userApply/ifPicUpload",
+					url:"/system/oaFileUpload/ifPicUpload",
 					data:{},
 					dataType:"json",
 					success:function(result){
-						 if(result == "1"){
+						 if(result){
 							 picFlag = true;
 						}
 						else{
@@ -146,7 +146,7 @@
 					error:function(){
 						$.modal.alertWarning("请联系管理员");
 					}
-				});   */
+				});  
 				
 				if(repeatFlag && picFlag){
 					save(prefix + "/addPic", $('#form-userApply-addPic').serialize());
