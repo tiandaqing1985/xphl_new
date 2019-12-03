@@ -124,6 +124,8 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
 
     }
 
+
+
     @Override
     public double selectDouble(String num) {
         double a = facReiAdiApplyMapper.selectAmount(num);
@@ -135,9 +137,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
     @Override
     @Transactional
     public AjaxResult insertFacReimburseApply(FacReimburseApply facReimburseApply) {
-
         String area = facReimburseApplyMapper.selectsysuser(facReimburseApply.getLoanUser());
-
         try {
             int level = 1;
             // 获取总的报销申请金额
@@ -210,6 +210,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     approvalProcessService.insert(facSysUserApproval2);
                 } else {
                 }
+
                 return AjaxResult.success();
             }
             // 普通员工
@@ -242,11 +243,9 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                             }
                         }
                     }
-
                 }
                 // 获取该申请人下的所有领导
                 LinkedList<Long> centerId = (LinkedList<Long>) iSysUserService.selectCenterIdByUserId(facReimburseApply.getLoanUser());
-
                 if (centerId != null && centerId.size() > 0) {
                     for (int i = centerId.size() - 1; i >= 0; i--) {
                         boolean flg = false;
@@ -424,12 +423,14 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                             }
                         }
                         if (flg) {
+
                             return AjaxResult.success();
                         }
                     }
                 }
             }
             facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
+
             return AjaxResult.success();
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus()

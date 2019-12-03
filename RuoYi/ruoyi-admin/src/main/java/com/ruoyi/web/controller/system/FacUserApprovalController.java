@@ -19,7 +19,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -101,10 +100,10 @@ public class FacUserApprovalController extends BaseController {
     @ResponseBody
     public TableDataInfo lists(SysUser user) {
 
-        Map<Long, FacAmountApply> map = facUserApprovalService.selectDept();
+        Map<String, FacAmountApply> map = facUserApprovalService.selectDept();
         List<FacAmountApply> list = new ArrayList<>();
         for (FacAmountApply s : map.values()) {//遍历map的值
-            s.setDeptNAme( sysDeptService.selectDeptById(s.getDeptId()).getDeptName());
+
             list.add(s);
         }
         return getDataTable(list);

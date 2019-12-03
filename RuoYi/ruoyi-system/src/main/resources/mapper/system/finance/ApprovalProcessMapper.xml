@@ -17,10 +17,11 @@
         <result property="applicantId"    column="applicant_id"    />
         <result property="amount"    column="amount"    />
         <result property="projectName"    column="projectName"    />
+        <result property="deptName"    column="deptName"    />
     </resultMap>
 
     <sql id="selectFacUserApprovalVo">
-        select approval_id, apply_id, approval_state, approver_id, approval_time, approval_sight, approval_level, opi, create_time, applicant_id, amount, projectName from fac_sys_user_approval
+        select approval_id, apply_id, approval_state, approver_id, approval_time, approval_sight, approval_level, opi, create_time, applicant_id, amount, projectName,deptName from fac_sys_user_approval
     </sql>
 
     <select id="selectFacUserApprovalList" parameterType="FacUserApproval" resultMap="FacUserApprovalResult">
@@ -38,6 +39,7 @@
             <if test="applicantId != null "> and applicant_id = #{applicantId}</if>
             <if test="amount != null "> and amount = #{amount}</if>
             <if test="projectName != null  and projectName != '' "> and projectName = #{projectName}</if>
+            <if test="deptName != null  and deptName != '' "> and deptName = #{deptName}</if>
         </where>
     </select>
 
@@ -55,6 +57,7 @@
 			<if test="applicantId != null  ">applicant_id,</if>
 			<if test="amount != null  ">amount,</if>
 			<if test="projectName != null  and projectName != ''  ">projectName,</if>
+            <if test="deptName != null  and deptName != ''  ">deptName,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="applyId != null  and applyId != ''  ">#{applyId},</if>
@@ -68,6 +71,7 @@
 			<if test="applicantId != null  ">#{applicantId},</if>
 			<if test="amount != null  ">#{amount},</if>
 			<if test="projectName != null  and projectName != ''  ">#{projectName},</if>
+            <if test="deptName != null  and deptName != ''  ">#{deptName},</if>
          </trim>
     </insert>
 

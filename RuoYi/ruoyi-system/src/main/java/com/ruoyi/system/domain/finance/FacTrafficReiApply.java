@@ -41,8 +41,17 @@ public class FacTrafficReiApply extends BaseEntity
 	private String num;
 	/** 申请状态 */
 	private String status;
+	private String deptName;
 
-	public void setId(Integer id) 
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
+	public void setId(Integer id)
 	{
 		this.id = id;
 	}

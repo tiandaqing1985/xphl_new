@@ -104,5 +104,5 @@ public interface IFacUserApprovalService {
      * **/
     public List<FacUserApproval> select(Long userId);
 
-    public Map<Long, FacAmountApply> selectDept();
+    public Map<String, FacAmountApply> selectDept();
 }

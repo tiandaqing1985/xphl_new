@@ -45,6 +45,17 @@ public class FacSysUserApproval {
 
 	private String projectName;
 
+
+	private String deptName;
+
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
 	public Long getApprovalId() {
 		return approvalId;
 	}

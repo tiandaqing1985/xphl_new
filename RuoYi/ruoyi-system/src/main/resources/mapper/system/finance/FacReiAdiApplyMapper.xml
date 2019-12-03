@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="status" column="status" />
 		<result property="num" column="num" />
 		<result property="createTime" column="create_time" />
+		<result property="deptName" column="deptName" />
 	</resultMap>
 
 	<sql id="selectFacReiAdiApplyVo">
@@ -89,6 +90,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="createTime != null  ">create_time = #{createTime},</if>
 		</trim>
 		where id = #{id}
+	</update>
+
+	<update id="updatePreservation" parameterType="FacReiAdiApply">
+		update fac_rei_adi_apply
+		<trim prefix="SET" suffixOverrides=",">
+			 status = '1',
+			<if test="deptName != null  and deptName != ''  ">deptName = #{deptName},</if>
+		</trim>
+		where num = #{num}
 	</update>
 
 	<delete id="deleteFacReiAdiApplyById" parameterType="Long">

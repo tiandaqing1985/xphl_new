@@ -152,4 +152,9 @@ public interface FacReimburseApplyMapper
 	List<FacReimburseApply> selectCurrentMonthFacReimburseApplyList(FacReimburseApply facReimburseApply);
 
 	List<ReiHospitalityApply> selectCurrentMonthReiHospitalityApplyList(ReiHospitalityApply hospitalityApply);
+
+	public int updateTrPreservation(String num);
+
+	public int updateHospPreservation(String num);
+
 }

@@ -31,8 +31,17 @@ public class FacReiAdiApply extends BaseEntity
 	private String status;
 	/** 报销编号 */
 	private String num;
+	private String deptName;
 
-	public void setId(Long id) 
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
+	public void setId(Long id)
 	{
 		this.id = id;
 	}

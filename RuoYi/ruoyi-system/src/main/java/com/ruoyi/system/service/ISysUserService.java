@@ -84,6 +84,15 @@ public interface ISysUserService
      */
     public SysUser selectUserById(Long userId);
 
+
+    /**
+     * 通过用户ID查询用户部门名称
+     *
+     * @param userId 用户ID
+     * @return 用户部门名称
+     */
+    public String selectDeptName(Long userId);
+
     /**
      * 通过用户ID删除用户
      * 

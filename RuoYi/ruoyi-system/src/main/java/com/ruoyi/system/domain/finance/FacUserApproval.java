@@ -64,6 +64,15 @@ public class FacUserApproval extends BaseEntity {
      * 是否发送邮件
      * **/
     private String isnotice;
+    private String deptName;
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
 
     public Long getDeptId() {
         return deptId;

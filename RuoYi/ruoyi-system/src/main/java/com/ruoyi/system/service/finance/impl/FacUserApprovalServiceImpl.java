@@ -2,7 +2,9 @@ package com.ruoyi.system.service.finance.impl;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.system.domain.SysRole;
-import com.ruoyi.system.domain.finance.*;
+import com.ruoyi.system.domain.finance.FacAmountApply;
+import com.ruoyi.system.domain.finance.FacSysUserApproval;
+import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
 import com.ruoyi.system.mapper.finance.FacReiAdiApplyMapper;
 import com.ruoyi.system.mapper.finance.FacReimburseApplyMapper;
@@ -17,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -339,72 +339,61 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
     }
 
     @Override
-    public Map<Long, FacAmountApply> selectDept()  {
-
-        List<FacUserApproval> list = facUserApprovalMapper.selectDept();
-
-        List<FacAmountApply> faclist = new ArrayList();
-        Map<Long, FacAmountApply> map = new HashMap();
-        for (FacUserApproval v : list) {
-            Long key = v.getDeptId();
+    public Map<String, FacAmountApply> selectDept() {
+        List<FacAmountApply> list = new ArrayList<>();
+        list.addAll(facUserApprovalMapper.selectcl());
+        list.addAll(facUserApprovalMapper.selectdg());
+        list.addAll(facUserApprovalMapper.selectJT());
+        list.addAll(facUserApprovalMapper.selectqt());
+        list.addAll(facUserApprovalMapper.selecttj());
+        list.addAll(facUserApprovalMapper.selectZD());
+        Map<String, FacAmountApply> map = new HashMap();
+        for (FacAmountApply f : list) {
+            String key = f.getDeptName();
             if (key == null) continue;
             FacAmountApply fac = map.get(key);
             if (fac == null) {
                 fac = new FacAmountApply();
+                fac.setBxJBamount(0.00);
+                fac.setBxGCamount(0.00);
+                fac.setBxQTamount(0.00);
+                fac.setZdAmount(0.00);
+                fac.setDgAmount(0.00);
+                fac.setTjAmount(0.00);
+                fac.setClAmount(0.00);
+                fac.setDeptName(key);
             }
-            double bxjb = 0.00;
-            double bxgc = 0.00;
-            double bxzd = 0.00;
-            double bxqt = 0.00;
-            double tj = 0.00;
-            double dg = 0.00;
-            double cl = 0.00;
-            fac.setDeptId(v.getDeptId());
-            String head = v.getApplyId().substring(0, 2);
-            if (head.equals("BX")) {
-                FacReimburseApply facReimburse = new FacReimburseApply();
-                facReimburse.setNum(v.getApplyId());
-                List<FacReimburseApply> facReimList = facReimburseApplyService.selectFacReimburseApplyList(facReimburse);
-                if (facReimList != null && facReimList.size() > 0) {
-                    FacReimburseApply facReimburseApply = facReimList.get(0);
-                    if (facReimburseApply.getSubmitStatus().equals("submit")) {
-                        if (facReimburseApply.getType().equals("日常报销")) {
-                            List<ReiTrafficApply> listTra = facReimburseApplyMapper.traTail(v.getApplyId());
-                            if (listTra != null && listTra.size() > 0) {
-                                for (ReiTrafficApply am : listTra) {
-                                    if (am.getType().equals("加班")) {
-                                        double c = facReimburseApplyMapper.selectTraAmount(v.getApplyId());
-                                        bxjb = bxjb + c;
-                                    } else {
-                                        double d = facReimburseApplyMapper.selectTraAmount(v.getApplyId());
-                                        bxgc = bxgc + d;
-                                    }
-                                }
-                            }
-                            double a = facReiAdiApplyMapper.selectAmount(v.getApplyId());
-                            double b = facReimburseApplyMapper.selectHospAmount(v.getApplyId());
-                            bxzd = bxzd + b;
-                            bxqt = bxqt + a;
-                        } else if (facReimburseApply.getType().equals("团建报销")) {
-                            tj = tj + v.getAmount();
-                        } else if (facReimburseApply.getType().equals("差旅报销")) {
-                            cl = cl + v.getAmount();
-                        }
-                    }
+
+            if (f.getType() != null) {
+                if (f.getType().equals("加班")) {
+                    fac.setBxJBamount(fac.getBxJBamount() + f.getAmount());//加班
+                } else if (f.getType().equals("公出")) {
+                    fac.setBxGCamount(fac.getBxGCamount() + f.getAmount());//公出
                 }
-            } else if (head.equals("DG")) {
-                dg = dg + v.getAmount();
             }
-            fac.setClAmount(cl);
-            fac.setZdAmount(bxzd);
-            fac.setDgAmount(dg);
-            fac.setTjAmount(tj);
-            fac.setBxGCamount(bxgc);
-            fac.setBxQTamount(bxqt);
-            fac.setBxJBamount(bxjb);
-            faclist.add(fac);
+
+            if (f.getBxQTamount() != null) {
+                fac.setBxQTamount(fac.getBxQTamount() + f.getBxQTamount());//其他
+            }
+
+            if (f.getZdAmount() != null) {
+                fac.setZdAmount(fac.getZdAmount() + f.getZdAmount());//招待
+            }
+
+            if (f.getDgAmount() != null) {
+                fac.setDgAmount(fac.getDgAmount() + f.getDgAmount());//对公
+            }
+
+            if (f.getTjAmount() != null) {
+                fac.setTjAmount(fac.getTjAmount() + f.getTjAmount());//团建
+            }
+
+            if (f.getClAmount() != null) {
+                fac.setClAmount(fac.getClAmount() + f.getClAmount());//差旅
+            }
             map.put(key, fac);
         }
+
         return map;
     }
 

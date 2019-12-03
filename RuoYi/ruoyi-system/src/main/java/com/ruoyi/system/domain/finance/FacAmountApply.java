@@ -2,6 +2,8 @@ package com.ruoyi.system.domain.finance;
 
 import com.ruoyi.common.core.domain.BaseEntity;
 
+import java.util.Date;
+
 /**
  * 财务金额统计
  *
@@ -18,7 +20,7 @@ public class FacAmountApply extends BaseEntity {
     /**
      * 部门名称
      */
-    private String deptNAme;
+    private String deptName;
 
     /**
      * 加班交通费
@@ -48,6 +50,40 @@ public class FacAmountApply extends BaseEntity {
      * 差旅费
      */
     private Double clAmount;
+    /**
+     * 交通费
+     */
+    private Double amount;
+    /**
+     * 申请时间
+     * */
+    private Date sqtime;
+
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public Date getSqtime() {
+        return sqtime;
+    }
+
+    public void setSqtime(Date sqtime) {
+        this.sqtime = sqtime;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
 
     public Long getDeptId() {
         return deptId;
@@ -57,12 +93,12 @@ public class FacAmountApply extends BaseEntity {
         this.deptId = deptId;
     }
 
-    public String getDeptNAme() {
-        return deptNAme;
+    public String getDeptName() {
+        return deptName;
     }
 
-    public void setDeptNAme(String deptNAme) {
-        this.deptNAme = deptNAme;
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
 
     public Double getBxJBamount() {

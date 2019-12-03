@@ -66,8 +66,19 @@ public class ReiHospitalityApply {
     /**
      * 是否超额
      * */
-    private String excess;  
-    
+    private String excess;
+
+
+    private String deptName;
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
     public String getExcess() {
 		return excess;
 	}

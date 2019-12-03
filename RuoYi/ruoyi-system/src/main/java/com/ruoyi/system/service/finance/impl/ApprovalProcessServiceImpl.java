@@ -1,14 +1,14 @@
 package com.ruoyi.system.service.finance.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.ruoyi.system.domain.finance.FacPayPublicApply;
 import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.FacSysUserApproval;
 import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
+import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.ApprovalProcessService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -23,6 +23,8 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
 
     @Autowired
     ApprovalProcessMapper approvalProcessMapper;
+    @Autowired
+    ISysUserService iSysUserService;
 
 
     @Transactional
@@ -304,7 +306,7 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
         List<FacSysUserApproval> approvalList = approvalProcessMapper.selectFacUserApprovalList(selectVO);
         facSysUserApproval.setApprovalLevel(approvalList.size() + 1);
         for (FacSysUserApproval approval : approvalList) {
-            if(approval.getApproverId()!=null && facSysUserApproval.getApproverId()!=null){
+            if (approval.getApproverId() != null && facSysUserApproval.getApproverId() != null) {
                 if (approval.getApproverId().intValue() == facSysUserApproval.getApproverId().intValue()) {
                     return;
                 }
@@ -315,6 +317,7 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
         } else {
             facSysUserApproval.setApprovalSight("0");
         }
+        facSysUserApproval.setDeptName(iSysUserService.selectDeptName(facSysUserApproval.getApproverId()));
         approvalProcessMapper.insert(facSysUserApproval);
     }
 }

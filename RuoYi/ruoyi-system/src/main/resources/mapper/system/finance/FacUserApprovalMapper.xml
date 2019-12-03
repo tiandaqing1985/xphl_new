@@ -78,13 +78,61 @@
         a.applicant_id,
         a.amount, a.projectName, a.isnotice,b.dept_id deptId FROM fac_sys_user_approval a
         LEFT JOIN sys_user b ON a.applicant_id = b.user_id AND a.approval_state='1'
-<!--        <if test="approvalTime != null">&lt;!&ndash; 开始时间检索 &ndash;&gt;-->
-<!--            AND date_format(a.create_time,'%y%m%d') >= date_format(#{approvalTime},'%y%m%d')-->
-<!--        </if>-->
-<!--        <if test="createTime != null">&lt;!&ndash; 结束时间检索 &ndash;&gt;-->
-<!--            AND date_format(a.create_time,'%y%m%d') &lt;= date_format(#{createTime},'%y%m%d')-->
-<!--        </if>-->
         GROUP BY a.apply_id
+    </select>
+
+
+
+
+
+    <select id="selectJT" resultType="com.ruoyi.system.domain.finance.FacAmountApply">
+        select  * from  (
+ select a.approval_id ,b.type,a.deptName,a.amount,b.dddate sqtime
+ from fac_sys_user_approval a left join fac_traffic_rei_apply b on a.apply_id = b.num  where a.approval_state=1 ) d where d.approval_id in
+(select  max(c.approval_id)  from (select a.approval_id,b.dddate,a.create_time,b.amount,b.type,a.applicant_id,a.approval_level from
+fac_sys_user_approval a left join fac_traffic_rei_apply b on a.apply_id = b.num  where a.approval_state=1) c
+  where 1=1 group by c.dddate ,c.create_time,c.amount,c.type,c.applicant_id) and  not isnull(amount) and not isnull(type)
+    </select>
+
+
+    <select id="selectcl" resultType="com.ruoyi.system.domain.finance.FacAmountApply">
+     select a.deptName,a.amount clamount,b.create_time sqtime from fac_sys_user_approval a ,fac_reimburse_apply b where a.apply_id = b.num   and  b.type  in('差旅报销') and a.approval_state =1
+     </select>
+
+
+
+
+    <select id="selecttj" resultType="com.ruoyi.system.domain.finance.FacAmountApply">
+	select a.deptName,a.amount tjamount,b.create_time sqtime from fac_sys_user_approval a ,fac_reimburse_apply b where a.apply_id = b.num   and  b.type  in('团建报销') and a.approval_state =1
+    </select>
+
+
+
+    <select id="selectdg" resultType="com.ruoyi.system.domain.finance.FacAmountApply">
+         	select a.deptName,a.amount dgamount,b.create_time sqtime from  fac_sys_user_approval a,fac_pay_public_apply b where a.apply_id = b.num  and a.apply_id like 'DG%'  and a.approval_state =1
+    </select>
+
+
+
+
+    <select id="selectqt" resultType="com.ruoyi.system.domain.finance.FacAmountApply">
+       select  * from  (
+ select a.approval_id,b.dd_date sqtime,b.amount bxqtamount,a.deptName
+ from fac_sys_user_approval a left join fac_rei_adi_apply b on a.apply_id = b.num  where a.approval_state=1 ) d where d.approval_id in
+(select  max(c.approval_id)  from (select a.approval_id,b.dddate,a.create_time,b.amount,b.type,a.applicant_id,a.approval_level from
+fac_sys_user_approval a left join fac_traffic_rei_apply b on a.apply_id = b.num  where a.approval_state=1) c
+  where 1=1 group by c.dddate ,c.create_time,c.amount,c.type,c.applicant_id) and  not isnull(bxQTamount)
+    </select>
+
+
+
+    <select id="selectZD" resultType="com.ruoyi.system.domain.finance.FacAmountApply">
+         select  * from  (
+ select a.approval_id,b.amount zdamount,b.dddate sqtime,a.deptName
+ from fac_sys_user_approval a left join fac_rei_hospitality_apply b on a.apply_id = b.num  where a.approval_state=1 ) d where d.approval_id in
+(select  max(c.approval_id)  from (select a.approval_id,b.dddate,a.create_time,b.amount,b.type,a.applicant_id,a.approval_level from
+fac_sys_user_approval a left join fac_traffic_rei_apply b on a.apply_id = b.num  where a.approval_state=1) c
+  where 1=1 group by c.dddate ,c.create_time,c.amount,c.type,c.applicant_id) and  not isnull(zdAmount)
     </select>
 
 
@@ -232,5 +280,28 @@ ORDER BY app.approval_level
             #{approvalId}
         </foreach>
     </delete>
+
+    <update id="update" parameterType="FacUserApproval">
+        update fac_sys_user_approval
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyId != null  and applyId != ''  ">apply_id = #{applyId},</if>
+            <if test="approvalState != null  and approvalState != ''  ">approval_state = #{approvalState},</if>
+            <if test="approverId != null  ">approver_id = #{approverId},</if>
+            <if test="approvalTime != null  ">approval_time = #{approvalTime},</if>
+            <if test="approvalSight != null  and approvalSight != ''  ">approval_sight = #{approvalSight},</if>
+            <if test="approvalLevel != null  ">approval_level = #{approvalLevel},</if>
+            <if test="opi != null  and opi != ''  ">opi = #{opi},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+            <if test="applicantId != null  ">applicant_id = #{applicantId},</if>
+            <if test="amount != null  ">amount = #{amount},</if>
+            <if test="projectName != null  and projectName != ''  ">projectName = #{projectName},</if>
+            <if test="isnotice != null  and isnotice != ''  ">isnotice = #{isnotice},</if>
+            <if test="deptName != null  and deptName != ''  ">deptName = #{deptName},</if>
+        </trim>
+        where approval_id = #{approvalId}
+    </update>
+
+
+
 
 </mapper>

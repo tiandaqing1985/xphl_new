@@ -1,61 +1,37 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper
-PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.finance.FacReimburseApplyMapper">
-    
+
     <resultMap type="FacReimburseApply" id="FacReimburseApplyResult">
-        <result property="id"    column="id"    />
-        <result property="num"    column="num"    />
-        <result property="name"    column="name"    />
-        <result property="amount"    column="amount"    />
-        <result property="loanUser"    column="loan_user"    />
-        <result property="reimburseTime"    column="reimburse_time"    />
-        <result property="facOperate"    column="fac_operate"    />
-        <result property="reason"    column="reason"    />
-        <result property="applyStatus"    column="apply_status"    />
-        <result property="passTime"    column="pass_time"    />
-        <result property="type"    column="type"    />
-        <result property="userName"    column="user_name"    />
-        <result property="deptName"    column="dept_name"    />
-        <result property="userName"    column="user_name"    />
-        <result property="applyStatus"    column="apply_status"    />
+        <result property="id" column="id"/>
+        <result property="num" column="num"/>
+        <result property="name" column="name"/>
+        <result property="amount" column="amount"/>
+        <result property="loanUser" column="loan_user"/>
+        <result property="reimburseTime" column="reimburse_time"/>
+        <result property="facOperate" column="fac_operate"/>
+        <result property="reason" column="reason"/>
+        <result property="applyStatus" column="apply_status"/>
+        <result property="passTime" column="pass_time"/>
+        <result property="type" column="type"/>
+        <result property="userName" column="user_name"/>
+        <result property="deptName" column="dept_name"/>
+        <result property="userName" column="user_name"/>
+        <result property="applyStatus" column="apply_status"/>
         <result property="submitStatus" column="submit_status"/>
         <result property="JKnum" column="JKnum"/>
-        <result property="createTime"    column="create_time"    />
+        <result property="createTime" column="create_time"/>
         <result property="createBy" column="create_by"/>
-        <result property="updateTime"    column="update_time"    />
+        <result property="updateTime" column="update_time"/>
     </resultMap>
-	
-	<sql id="selectFacReimburseApplyVo">
+
+    <sql id="selectFacReimburseApplyVo">
         select submit_status,id, num, name, amount, loan_user, create_time, reimburse_time, fac_operate, reason, apply_status, update_time, pass_time,JKnum, type from fac_reimburse_apply
     </sql>
-	
-    <select id="selectFacReimburseApplyList" parameterType="FacReimburseApply" resultMap="FacReimburseApplyResult">
-        SELECT
-        c.`dept_name`,
-        b.user_name,
-        a.id,a.num,a.name,a.amount,a.loan_user,a.create_time,a.reimburse_time,a.fac_operate,a.reason,a.apply_status,a.update_time,a.pass_time,a.type,a.approve_status,a.submit_status,a.create_by,a.status,a.JKnum
-    FROM
-      fac_reimburse_apply AS a
-      LEFT JOIN sys_user AS b
-        ON a.loan_user = b.user_id
-      LEFT JOIN sys_dept AS c
-        ON c.dept_id = b.dept_id
-        where 1=1
-        <if test="name!=null and name != ''">
-            and a.name = #{name}
-        </if>
-        <if test="id!=null">and a.id = #{id}</if>
-        <if test="num!=null and num!=''"> and a.num=#{num}</if>
-        <if test="createBy!=null and createBy!=''">and a.create_by=#{createBy}</if>
-        <if test="loanUser!=null and loanUser!=''">and a.loan_user=#{loanUser}</if>
-        <if test="reimburseTime != null">and a.reimburse_time = #{reimburseTime}</if>
-        <if test="type != null and type != ''">and a.type = #{type}</if>
-        order by a.id desc
-    </select>
 
-    <select id="selectCurrentMonthFacReimburseApplyList" parameterType="FacReimburseApply" resultMap="FacReimburseApplyResult">
+    <select id="selectFacReimburseApplyList" parameterType="FacReimburseApply" resultMap="FacReimburseApplyResult">
         SELECT
         c.`dept_name`,
         b.user_name,
@@ -71,7 +47,32 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             and a.name = #{name}
         </if>
         <if test="id!=null">and a.id = #{id}</if>
-        <if test="num!=null and num!=''"> and a.num=#{num}</if>
+        <if test="num!=null and num!=''">and a.num=#{num}</if>
+        <if test="createBy!=null and createBy!=''">and a.create_by=#{createBy}</if>
+        <if test="loanUser!=null and loanUser!=''">and a.loan_user=#{loanUser}</if>
+        <if test="reimburseTime != null">and a.reimburse_time = #{reimburseTime}</if>
+        <if test="type != null and type != ''">and a.type = #{type}</if>
+        order by a.id desc
+    </select>
+
+    <select id="selectCurrentMonthFacReimburseApplyList" parameterType="FacReimburseApply"
+            resultMap="FacReimburseApplyResult">
+        SELECT
+        c.`dept_name`,
+        b.user_name,
+        a.id,a.num,a.name,a.amount,a.loan_user,a.create_time,a.reimburse_time,a.fac_operate,a.reason,a.apply_status,a.update_time,a.pass_time,a.type,a.approve_status,a.submit_status,a.create_by,a.status,a.JKnum
+        FROM
+        fac_reimburse_apply AS a
+        LEFT JOIN sys_user AS b
+        ON a.loan_user = b.user_id
+        LEFT JOIN sys_dept AS c
+        ON c.dept_id = b.dept_id
+        where 1=1
+        <if test="name!=null and name != ''">
+            and a.name = #{name}
+        </if>
+        <if test="id!=null">and a.id = #{id}</if>
+        <if test="num!=null and num!=''">and a.num=#{num}</if>
         <if test="createBy!=null and createBy!=''">and a.create_by=#{createBy}</if>
         <if test="loanUser!=null and loanUser!=''">and a.loan_user=#{loanUser}</if>
         <if test="reimburseTime != null">and a.reimburse_time = #{reimburseTime}</if>
@@ -80,50 +81,53 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by a.create_time desc
     </select>
 
-    <select id="selectReiHospitalityApplyList" parameterType="com.ruoyi.system.domain.finance.ReiHospitalityApply" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
-        select * from  fac_rei_hospitality_apply
-        <where>  
-            <if test="id != null "> and id = #{id}</if>
-             <if test="ddDate != null "> and ddDate = #{ddDate}</if>
-             <if test="amount != null "> and amount = #{amount}</if>
-             <if test="addUser != null  and addUser != '' "> and addUser = #{addUser}</if>
-             <if test="documentNum != null "> and documentNum = #{documentNum}</if>
-             <if test="location != null  and location != '' "> and location = #{location}</if>
-             <if test="targetUnit != null  and targetUnit != '' "> and targetUnit = #{targetUnit}</if>
-             <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
-             <if test="num != null  and num != '' "> and num = #{num}</if>
-             <if test="status != null  and status != '' "> and status = #{status}</if>
-             <if test="applyNum != null  and applyNum != '' "> and applyNum = #{applyNum}</if>
-             <if test="user != null "> and user = #{user}</if>
-         </where>
-    </select>
-    <select id="selectCurrentMonthReiHospitalityApplyList" parameterType="com.ruoyi.system.domain.finance.ReiHospitalityApply" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
-        select * from  fac_rei_hospitality_apply
+    <select id="selectReiHospitalityApplyList" parameterType="com.ruoyi.system.domain.finance.ReiHospitalityApply"
+            resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
+        select * from fac_rei_hospitality_apply
         <where>
-            <if test="id != null "> and id = #{id}</if>
-             <if test="amount != null "> and amount = #{amount}</if>
-             <if test="addUser != null  and addUser != '' "> and addUser = #{addUser}</if>
-             <if test="documentNum != null "> and documentNum = #{documentNum}</if>
-             <if test="location != null  and location != '' "> and location = #{location}</if>
-             <if test="targetUnit != null  and targetUnit != '' "> and targetUnit = #{targetUnit}</if>
-             <if test="reason != null  and reason != '' "> and reason = #{reason}</if>
-             <if test="num != null  and num != '' "> and num = #{num}</if>
-             <if test="status != null  and status != '' "> and status = #{status}</if>
-             <if test="applyNum != null  and applyNum != '' "> and applyNum = #{applyNum}</if>
-             <if test="user != null "> and user = #{user}</if>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="ddDate != null ">and ddDate = #{ddDate}</if>
+            <if test="amount != null ">and amount = #{amount}</if>
+            <if test="addUser != null  and addUser != '' ">and addUser = #{addUser}</if>
+            <if test="documentNum != null ">and documentNum = #{documentNum}</if>
+            <if test="location != null  and location != '' ">and location = #{location}</if>
+            <if test="targetUnit != null  and targetUnit != '' ">and targetUnit = #{targetUnit}</if>
+            <if test="reason != null  and reason != '' ">and reason = #{reason}</if>
+            <if test="num != null  and num != '' ">and num = #{num}</if>
+            <if test="status != null  and status != '' ">and status = #{status}</if>
+            <if test="applyNum != null  and applyNum != '' ">and applyNum = #{applyNum}</if>
+            <if test="user != null ">and user = #{user}</if>
+        </where>
+    </select>
+    <select id="selectCurrentMonthReiHospitalityApplyList"
+            parameterType="com.ruoyi.system.domain.finance.ReiHospitalityApply"
+            resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
+        select * from fac_rei_hospitality_apply
+        <where>
+            <if test="id != null ">and id = #{id}</if>
+            <if test="amount != null ">and amount = #{amount}</if>
+            <if test="addUser != null  and addUser != '' ">and addUser = #{addUser}</if>
+            <if test="documentNum != null ">and documentNum = #{documentNum}</if>
+            <if test="location != null  and location != '' ">and location = #{location}</if>
+            <if test="targetUnit != null  and targetUnit != '' ">and targetUnit = #{targetUnit}</if>
+            <if test="reason != null  and reason != '' ">and reason = #{reason}</if>
+            <if test="num != null  and num != '' ">and num = #{num}</if>
+            <if test="status != null  and status != '' ">and status = #{status}</if>
+            <if test="applyNum != null  and applyNum != '' ">and applyNum = #{applyNum}</if>
+            <if test="user != null ">and user = #{user}</if>
             and DATE_FORMAT(ddDate, '%Y%m' ) = DATE_FORMAT( CURDATE( ) , '%Y%m' )
-         </where>
+        </where>
     </select>
 
-    <select id="selectsysuser"   resultType="String">
+    <select id="selectsysuser" resultType="String">
        select area from  sys_user where user_id = #{id}
-    </select> 
-    
+    </select>
+
     <select id="selectFacReimburseApplyById" parameterType="String" resultMap="FacReimburseApplyResult">
         <include refid="selectFacReimburseApplyVo"/>
         where id = #{id}
     </select>
-     
+
     <select id="detail" resultType="com.ruoyi.system.domain.finance.FacReimburseApply">
         SELECT
           a.num,
@@ -141,7 +145,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ON a.`loan_user` = b.`user_id`
          where a.num=#{num}
     </select>
-    
+
     <select id="hosTail" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
 SELECT
     a.applyNum,
@@ -173,7 +177,7 @@ SELECT
          WHERE a.`num` =#{num}
     </select>
 
-    <select id="selectFacTransById" resultType="com.ruoyi.system.domain.finance.ReiTrafficApply" >
+    <select id="selectFacTransById" resultType="com.ruoyi.system.domain.finance.ReiTrafficApply">
         SELECT
         a.id,
         a.`ddDate` AS ddDate,
@@ -190,25 +194,24 @@ SELECT
         FROM fac_traffic_rei_apply   AS a
          WHERE a.id = #{param1}
     </select>
-    
-     <select id="selectFacHostById" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply" >
+
+    <select id="selectFacHostById" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
           select id, ddDate, amount, addUser, documentNum, location, targetUnit, reason, num, status, applyNum, user from fac_rei_hospitality_apply 
            
          WHERE  id = #{param1}
     </select>
-    
-    
 
-    <delete id="deleteReiTrafficApplyById" >
+
+    <delete id="deleteReiTrafficApplyById">
         delete from fac_traffic_rei_apply where id = #{param1}
     </delete>
 
- <delete id="deleteZhaodaiById" >
+    <delete id="deleteZhaodaiById">
         delete from fac_rei_hospitality_apply where id = #{param1}
     </delete>
 
 
-	<select id="selectHospitailAmount" parameterType="long" resultType="double">
+    <select id="selectHospitailAmount" parameterType="long" resultType="double">
 		select ifNull((select
 		sum(amount)
 		from
@@ -219,17 +222,14 @@ SELECT
 	</select>
 
 
-
-
-
-<select id="selectTraAmount" resultType="double"> 
+    <select id="selectTraAmount" resultType="double">
 		select ifNull((select
 		sum(amount) from fac_traffic_rei_apply where num
 		=#{num}),0);
 	</select>
-	
-	
-<select id="selectHospAmount" resultType="double"> 
+
+
+    <select id="selectHospAmount" resultType="double">
 		select ifNull((select
 		sum(amount) from fac_rei_hospitality_apply where num
 		=#{num}),0);
@@ -237,55 +237,59 @@ SELECT
 
     <insert id="insertFacReimburseApply" parameterType="FacReimburseApply" useGeneratedKeys="true" keyProperty="id">
         insert into fac_reimburse_apply
-		<trim prefix="(" suffix=")" suffixOverrides=","> 
-			<if test="num != null  and num != ''  ">num,</if>
-			<if test="name != null  and name != ''  ">name,</if>
-			<if test="amount != null  ">amount,</if>
-			<if test="loanUser != null  ">loan_user,</if>
-			<if test="createTime != null  ">create_time,</if>
-			<if test="reimburseTime != null  ">reimburse_time,</if>
-			<if test="facOperate != null  and facOperate != ''  ">fac_operate,</if>
-			<if test="reason != null  and reason != ''  ">reason,</if>
-			<if test="applyStatus != null  and applyStatus != ''  ">apply_status,</if>
-			<if test="updateTime != null  ">update_time,</if>
-			<if test="passTime != null  ">pass_time,</if> 
-			<if test="type != null  and type != ''  ">type,</if>
-			<if test="submitStatus!=null and submitStatus!=''">submit_status,</if>
-			<if test="createBy != null and createBy !=''">create_by,</if>
-			<if test="JKnum != null and JKnum !=''">JKnum,</if>
-         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides=","> 
-			<if test="num != null  and num != ''  ">#{num},</if>
-			<if test="name != null  and name != ''  ">#{name},</if>
-			<if test="amount != null  ">#{amount},</if>
-			<if test="loanUser != null  ">#{loanUser},</if>
-			<if test="createTime != null  ">#{createTime},</if>
-			<if test="reimburseTime != null  ">#{reimburseTime},</if>
-			<if test="facOperate != null  and facOperate != ''  ">#{facOperate},</if>
-			<if test="reason != null  and reason != ''  ">#{reason},</if>
-			<if test="applyStatus != null  and applyStatus != ''  ">#{applyStatus},</if>
-			<if test="updateTime != null  ">#{updateTime},</if>
-			<if test="passTime != null  ">#{passTime},</if>
-			<if test="type != null  and type != ''  ">#{type},</if> 
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="num != null  and num != ''  ">num,</if>
+            <if test="name != null  and name != ''  ">name,</if>
+            <if test="amount != null  ">amount,</if>
+            <if test="loanUser != null  ">loan_user,</if>
+            <if test="createTime != null  ">create_time,</if>
+            <if test="reimburseTime != null  ">reimburse_time,</if>
+            <if test="facOperate != null  and facOperate != ''  ">fac_operate,</if>
+            <if test="reason != null  and reason != ''  ">reason,</if>
+            <if test="applyStatus != null  and applyStatus != ''  ">apply_status,</if>
+            <if test="updateTime != null  ">update_time,</if>
+            <if test="passTime != null  ">pass_time,</if>
+            <if test="type != null  and type != ''  ">type,</if>
+            <if test="submitStatus!=null and submitStatus!=''">submit_status,</if>
+            <if test="createBy != null and createBy !=''">create_by,</if>
+            <if test="JKnum != null and JKnum !=''">JKnum,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="num != null  and num != ''  ">#{num},</if>
+            <if test="name != null  and name != ''  ">#{name},</if>
+            <if test="amount != null  ">#{amount},</if>
+            <if test="loanUser != null  ">#{loanUser},</if>
+            <if test="createTime != null  ">#{createTime},</if>
+            <if test="reimburseTime != null  ">#{reimburseTime},</if>
+            <if test="facOperate != null  and facOperate != ''  ">#{facOperate},</if>
+            <if test="reason != null  and reason != ''  ">#{reason},</if>
+            <if test="applyStatus != null  and applyStatus != ''  ">#{applyStatus},</if>
+            <if test="updateTime != null  ">#{updateTime},</if>
+            <if test="passTime != null  ">#{passTime},</if>
+            <if test="type != null  and type != ''  ">#{type},</if>
             <if test="submitStatus!=null and submitStatus!=''">#{submitStatus},</if>
             <if test="createBy!=null and createBy!=''">#{createBy},</if>
-             <if test="JKnum!=null and JKnum!=''">#{JKnum},</if>
-         </trim>
+            <if test="JKnum!=null and JKnum!=''">#{JKnum},</if>
+        </trim>
     </insert>
 
 
     <insert id="TrafficBatchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO fac_traffic_rei_apply (ddDate, targetUnit, amount, user, departure, target, apply_user,document_num,reason,type,num)
+        INSERT INTO fac_traffic_rei_apply (ddDate, targetUnit, amount, user, departure, target,
+        apply_user,document_num,reason,type,num)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.ddDate}, #{item.targetUnit}, #{item.amount}, #{item.user}, #{item.departure}, #{item.target},#{item.applyUser}, #{item.documentNum},#{item.reason},#{item.type},#{item.num})
+            (#{item.ddDate}, #{item.targetUnit}, #{item.amount}, #{item.user}, #{item.departure},
+            #{item.target},#{item.applyUser}, #{item.documentNum},#{item.reason},#{item.type},#{item.num})
         </foreach>
     </insert>
     <insert id="HospBatchInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO fac_rei_hospitality_apply (ddDate, amount, addUser, user, documentNum, location, targetUnit,reason,num,applyNum)
+        INSERT INTO fac_rei_hospitality_apply (ddDate, amount, addUser, user, documentNum, location,
+        targetUnit,reason,num,applyNum)
         VALUES
         <foreach collection="list" item="item" separator=",">
-            (#{item.ddDate}, #{item.amount}, #{item.addUser}, #{item.user}, #{item.documentNum}, #{item.location}, #{item.targetUnit},#{item.reason},#{item.num},#{item.applyNum})
+            (#{item.ddDate}, #{item.amount}, #{item.addUser}, #{item.user}, #{item.documentNum}, #{item.location},
+            #{item.targetUnit},#{item.reason},#{item.num},#{item.applyNum})
         </foreach>
     </insert>
 
@@ -312,7 +316,7 @@ SELECT
         </trim>
         where id = #{id}
     </update>
-    
+
     <update id="updateFacReimburseApply" parameterType="FacReimburseApply">
         update fac_reimburse_apply
         <trim prefix="SET" suffixOverrides=",">
@@ -351,7 +355,7 @@ SELECT
         where id = #{id}
     </update>
 
- <update id="updateFacReiHospitalityApply" parameterType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
+    <update id="updateFacReiHospitalityApply" parameterType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
         update fac_rei_hospitality_apply
         <trim prefix="SET" suffixOverrides=",">
             <if test="ddDate != null  ">ddDate = #{ddDate},</if>
@@ -368,13 +372,13 @@ SELECT
         </trim>
         where id = #{id}
     </update>
-    
-	<delete id="deleteFacReimburseApplyById" parameterType="String">
+
+    <delete id="deleteFacReimburseApplyById" parameterType="String">
         delete from fac_reimburse_apply where id = #{id}
     </delete>
-	
+
     <delete id="deleteFacReimburseApplyByIds" parameterType="String">
-        delete from fac_reimburse_apply where id in 
+        delete from fac_reimburse_apply where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
@@ -406,15 +410,35 @@ SELECT
         LEFT JOIN sys_dept AS c
         ON c.dept_id = b.dept_id
         where a.create_by in
-            <foreach collection="list" item="item" separator="," open="(" close=")">
-                #{item.userId}
-            </foreach>
+        <foreach collection="list" item="item" separator="," open="(" close=")">
+            #{item.userId}
+        </foreach>
 
         order by a.create_time desc
     </select>
 
-    <select id="selectHospitalityApplyListByUser" parameterType="Long" resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
+    <select id="selectHospitalityApplyListByUser" parameterType="Long"
+            resultType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
         select * from fac_rei_hospitality_apply where num is null and applyNum is not null and user = #{param1}
     </select>
+
+
+    <update id="updateTrPreservation" parameterType="com.ruoyi.system.domain.finance.ReiTrafficApply">
+        update fac_traffic_rei_apply
+        <trim prefix="SET" suffixOverrides=",">
+            status = '1'
+        </trim>
+        where num = #{num}
+    </update>
+
+
+    <update id="updateHospPreservation" parameterType="com.ruoyi.system.domain.finance.ReiHospitalityApply">
+        update fac_rei_hospitality_apply
+        <trim prefix="SET" suffixOverrides=",">
+            status = '1'
+        </trim>
+        where num = #{num}
+    </update>
+
 
 </mapper>

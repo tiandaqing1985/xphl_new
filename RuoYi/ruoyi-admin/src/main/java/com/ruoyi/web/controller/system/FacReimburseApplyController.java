@@ -639,6 +639,10 @@ public class FacReimburseApplyController extends BaseController {
     public AjaxResult addAllSave2(ReiHospitalityApply reiHospitalityApply) {
 
         reiHospitalityApply.setUser(ShiroUtils.getUserId());
+
+        if(sysDeptService.selectDeptById(ShiroUtils.getDeptId())!=null){
+            reiHospitalityApply.setDeptName(sysDeptService.selectDeptById(ShiroUtils.getDeptId()).getDeptName());
+        }
         facReimburseApplyService.insertFacreiHospitalityApply(reiHospitalityApply);
         //查询当前用户的额度
         Double limitAmount = 0.00;
@@ -721,6 +725,9 @@ public class FacReimburseApplyController extends BaseController {
     @PostMapping("/Arbitrarily")
     @ResponseBody
     public AjaxResult Save(FacReiAdiApply reiAdiApply) {
+        if(sysDeptService.selectDeptById(ShiroUtils.getDeptId())!=null){
+            reiAdiApply.setDeptName(sysDeptService.selectDeptById(ShiroUtils.getDeptId()).getDeptName());
+        }
         return toAjax(facReimburseApplyService.insertFacreiAdiApply(reiAdiApply));
     }
 
@@ -731,6 +738,11 @@ public class FacReimburseApplyController extends BaseController {
     @PostMapping("/tranDetail")
     @ResponseBody
     public AjaxResult tranDetailSave(ReiTrafficApply reiTrafficApply) {
+
+
+        if(sysDeptService.selectDeptById(ShiroUtils.getDeptId())!=null){
+            reiTrafficApply.setDeptName(sysDeptService.selectDeptById(ShiroUtils.getDeptId()).getDeptName());
+        }
         //此处需要改写代码
         if (reiTrafficApply.getType().equals("加班")) {
             boolean a = userApplyService.ifSatisfied(ShiroUtils.getUserId(), reiTrafficApply.getDdDate());
