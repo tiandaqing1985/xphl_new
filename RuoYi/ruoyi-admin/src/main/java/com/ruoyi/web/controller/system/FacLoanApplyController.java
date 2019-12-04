@@ -246,7 +246,7 @@ public class FacLoanApplyController extends BaseController {
 
             for (FacLoanApply facLoanApply : list) {
                 SysUser sysUser = sysUserService.selectUserById(facLoanApply.getLoanUser());
-                facLoanApply.setLoanName(sysUser.getUserName());
+                facLoanApply.setUserName(sysUser.getUserName());
             }
 
             return getDataTable(list);
@@ -345,6 +345,9 @@ public class FacLoanApplyController extends BaseController {
         startPage();
         List<FacLoanRepayApply> list = facLoanRepayApplyService.selectList(num);
         if (list != null) {
+            for(FacLoanRepayApply v:list){
+                v.setPayerName(sysUserService.selectUserById(v.getPayer()).getUserName());
+            }
             return getDataTable(list);
         } else {
             List<String> a = new ArrayList<>();

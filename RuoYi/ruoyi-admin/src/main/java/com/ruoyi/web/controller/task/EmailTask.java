@@ -358,7 +358,7 @@ public class EmailTask {
             try {
                 if (list != null) {
                     es.sendMail(user.getEmail(), null,
-                            "审批通过通知",
+                            "财务审批通过通知",
                             "您的" + poname + list.getProjectName() + " 金额：" + list.getAmount() + "已通过审批。",
                             Global.getFacEmail(), Global.getFacPassword());
                     count++;
@@ -401,7 +401,7 @@ public class EmailTask {
                 if (list != null) {
 
                     es.sendMail(user.getEmail(), null,
-                            "审批通过通知",
+                            "审批驳回通知",
                             "您的" + poname + list.getProjectName() + " 金额：" + list.getAmount() + "没有通过审批。",
                             Global.getFacEmail(), Global.getFacPassword());
                 }
