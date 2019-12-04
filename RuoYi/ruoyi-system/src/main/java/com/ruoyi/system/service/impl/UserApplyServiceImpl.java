@@ -40,6 +40,7 @@ import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IUserApplyService;
 import com.ruoyi.common.config.Global;
+import com.ruoyi.common.config.ServerConfig;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.FileUtils;
@@ -55,7 +56,11 @@ import com.ruoyi.common.utils.security.PermissionUtils;
 public class UserApplyServiceImpl implements IUserApplyService  
 {
     private static Logger logger = LoggerFactory.getLogger(UserApplyServiceImpl.class);
-
+    /**
+     * 文件上传路径
+     */
+    public static final String UPLOAD_PATH = "/profile/upload/";
+    
 	@Autowired
 	private UserApplyMapper userApplyMapper;
 	
@@ -88,6 +93,8 @@ public class UserApplyServiceImpl implements IUserApplyService
 	private IHolidayService holidayService;
 	@Autowired
 	private OaFileUploadMapper oaFileUploadMapper;
+    @Autowired
+    private ServerConfig serverConfig;
 	
 	/**
      * 查询申请信息
@@ -1202,13 +1209,15 @@ public class UserApplyServiceImpl implements IUserApplyService
 	public Long uploadMateria(MultipartFile file_data, String fileId) throws Exception {
         Long id = null;
         try {
-            OaFileUpload fileUpload = new OaFileUpload();
-            // 上传文件路径
+        	// 上传文件路径
             String filePath = Global.getUploadPath();
-            // 上传文件
-            String fileName = FileUploadUtils.upload(filePath, file_data);           
+            // 上传并返回新文件名称
+            String fileName = FileUploadUtils.upload(filePath, file_data);
+            String url = serverConfig.getUrl() + UPLOAD_PATH + fileName;
+            
+            OaFileUpload fileUpload = new OaFileUpload();        
             fileUpload.setLoginName((String) PermissionUtils.getPrincipalProperty("loginName"));
-            fileUpload.setFilePath("/"+fileName);
+            fileUpload.setFilePath(url);
             oaFileUploadMapper.insertOaFileUpload(fileUpload);
             id = fileUpload.getFileId();
         } catch (Exception e) {

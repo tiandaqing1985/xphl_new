@@ -43,10 +43,6 @@ import com.ruoyi.framework.util.ShiroUtils;
 public class UserApplyController extends BaseController
 {
     private String prefix = "system/userApply";
-    /**
-     * 文件上传路径
-     */
-    public static final String UPLOAD_PATH = "/profile/upload/";
 
     @Autowired
 	private IUserApplyService userApplyService;
