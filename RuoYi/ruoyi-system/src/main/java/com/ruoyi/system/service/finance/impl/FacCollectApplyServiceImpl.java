@@ -92,6 +92,7 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
             facSysUserApproval.setApprovalState("1");
         }
         facSysUserApproval.setCreateTime(new Date());
+        facSysUserApproval.setDeptName(iSysUserService.selectDeptName(facSysUserApproval.getApplicantId()));
         approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
         if (facCollectApply.getApplicant() == 103 || facCollectApply.getApplicant() == 101) {
             facCollectApply.setStatus("1");
@@ -117,6 +118,7 @@ public class FacCollectApplyServiceImpl implements IFacCollectApplyService {
                 center.setCreateTime(new Date());// 创建时间
                 center.setApplyId(facCollectApply.getNum());
                 center.setProjectName(facCollectApply.getLeagueProject());
+                center.setDeptName(iSysUserService.selectDeptName(facSysUserApproval.getApplicantId()));
                 approvalProcessMapper.insert(center);
                 if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
                     return facCollectApplyMapper.insertFacCollectApply(facCollectApply);

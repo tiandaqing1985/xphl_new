@@ -119,6 +119,7 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
             facSysUserApproval.setApprovalState("1");
         }
         facSysUserApproval.setCreateTime(new Date());
+        facSysUserApproval.setDeptName(iSysUserService.selectDeptName(facSysUserApproval.getApplicantId()));
         approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
         if (facCostApply.getUserId() == 103 || facCostApply.getUserId() == 101) {
             facCostApply.setStatus("1");
@@ -143,7 +144,7 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
                 center.setAmount(facCostApply.getMoneyEs());
                 center.setCreateTime(new Date());// 创建时间
                 center.setProjectName(facCostApply.getBusName());
-
+                center.setDeptName(iSysUserService.selectDeptName(facSysUserApproval.getApplicantId()));
                 approvalProcessMapper.insert(center);
                 if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
                     return facCostApplyMapper.insertFacCostApply(facCostApply);

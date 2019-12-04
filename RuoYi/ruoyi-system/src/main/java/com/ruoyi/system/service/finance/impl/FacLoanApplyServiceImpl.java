@@ -103,6 +103,7 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
 			facSysUserApproval.setApprovalSight("1");
 			facSysUserApproval.setApprovalState("1");
 		}
+		facSysUserApproval.setDeptName(iSysUserService.selectDeptName(facSysUserApproval.getApplicantId()));
 		approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
 		if (facLoanApply.getLoanUser() == 103
 				|| facLoanApply.getLoanUser() == 101) {
@@ -131,6 +132,7 @@ public class FacLoanApplyServiceImpl implements IFacLoanApplyService {
 				center.setAmount(facLoanApply.getAmount());
 				center.setApplicantId(facLoanApply.getLoanUser());
 				center.setProjectName(facLoanApply.getLoanName());
+				center.setDeptName(iSysUserService.selectDeptName(facSysUserApproval.getApplicantId()));
 				approvalProcessMapper.insert(center);
 				if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
 					return facLoanApplyMapper.insertFacLoanApply(facLoanApply);

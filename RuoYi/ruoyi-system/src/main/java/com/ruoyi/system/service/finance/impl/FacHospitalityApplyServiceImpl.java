@@ -106,6 +106,7 @@ public class FacHospitalityApplyServiceImpl
 			facSysUserApproval.setApprovalSight("1");
 			facSysUserApproval.setApprovalState("1");
 		}
+		facSysUserApproval.setDeptName(iSysUserService.selectDeptName(facSysUserApproval.getApplicantId()));
 		approvalProcessMapper.insert(facSysUserApproval); // 插入一级审批记录
 		if (facHospitalityApply.getUserId() == 103
 				|| facHospitalityApply.getUserId() == 101) {
@@ -134,6 +135,7 @@ public class FacHospitalityApplyServiceImpl
 				center.setApplicantId(facHospitalityApply.getUserId());
 				center.setAmount(facHospitalityApply.getAmount());
 				center.setProjectName(facHospitalityApply.getZdName());
+				center.setDeptName(iSysUserService.selectDeptName(facSysUserApproval.getApplicantId()));
 				approvalProcessMapper.insert(center);
 				if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
 					return facHospitalityApplyMapper
