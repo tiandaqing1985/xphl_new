@@ -100,10 +100,9 @@ public class FacUserApprovalController extends BaseController {
     @ResponseBody
     public TableDataInfo lists(SysUser user) {
 
-        Map<String, FacAmountApply> map = facUserApprovalService.selectDept();
+        Map<String, FacAmountApply> map = facUserApprovalService.selectDept(user);
         List<FacAmountApply> list = new ArrayList<>();
         for (FacAmountApply s : map.values()) {//遍历map的值
-
             list.add(s);
         }
         return getDataTable(list);

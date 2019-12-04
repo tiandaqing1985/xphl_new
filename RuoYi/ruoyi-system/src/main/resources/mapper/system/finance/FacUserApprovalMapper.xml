@@ -82,9 +82,6 @@
     </select>
 
 
-
-
-
     <select id="selectJT" resultType="com.ruoyi.system.domain.finance.FacAmountApply">
         select  * from  (
  select a.approval_id ,b.type,a.deptName,a.amount,b.dddate sqtime
@@ -100,19 +97,17 @@ fac_sys_user_approval a left join fac_traffic_rei_apply b on a.apply_id = b.num 
      </select>
 
 
-
-
     <select id="selecttj" resultType="com.ruoyi.system.domain.finance.FacAmountApply">
 	select a.deptName,a.amount tjamount,b.create_time sqtime from fac_sys_user_approval a ,fac_reimburse_apply b where a.apply_id = b.num   and  b.type  in('团建报销') and a.approval_state =1
     </select>
 
 
-
     <select id="selectdg" resultType="com.ruoyi.system.domain.finance.FacAmountApply">
-         	select a.deptName,a.amount dgamount,b.create_time sqtime from  fac_sys_user_approval a,fac_pay_public_apply b where a.apply_id = b.num  and a.apply_id like 'DG%'  and a.approval_state =1
-    </select>
+    select a.deptname,a.amount dgamount,b.create_time sqtime from  (select f.* from fac_sys_user_approval f where approval_level = (select max(approval_level) from
+    fac_sys_user_approval where apply_id = f.apply_id and  apply_id like 'DG%' ) and f.approval_state =1) a,fac_pay_public_apply b
+     	 where a.apply_id = b.num
 
-
+     	  </select>
 
 
     <select id="selectqt" resultType="com.ruoyi.system.domain.finance.FacAmountApply">
@@ -123,7 +118,6 @@ fac_sys_user_approval a left join fac_traffic_rei_apply b on a.apply_id = b.num 
 fac_sys_user_approval a left join fac_traffic_rei_apply b on a.apply_id = b.num  where a.approval_state=1) c
   where 1=1 group by c.dddate ,c.create_time,c.amount,c.type,c.applicant_id) and  not isnull(bxQTamount)
     </select>
-
 
 
     <select id="selectZD" resultType="com.ruoyi.system.domain.finance.FacAmountApply">
@@ -300,8 +294,6 @@ ORDER BY app.approval_level
         </trim>
         where approval_id = #{approvalId}
     </update>
-
-
 
 
 </mapper>

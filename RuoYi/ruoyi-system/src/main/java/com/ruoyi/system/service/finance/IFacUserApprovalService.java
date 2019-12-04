@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.finance;
 
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.finance.FacAmountApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 
@@ -104,5 +105,5 @@ public interface IFacUserApprovalService {
      * **/
     public List<FacUserApproval> select(Long userId);
 
-    public Map<String, FacAmountApply> selectDept();
+    public Map<String, FacAmountApply> selectDept(SysUser user);
 }

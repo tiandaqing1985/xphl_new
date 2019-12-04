@@ -2,6 +2,7 @@ package com.ruoyi.system.service.finance.impl;
 
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.system.domain.SysRole;
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.finance.FacAmountApply;
 import com.ruoyi.system.domain.finance.FacSysUserApproval;
 import com.ruoyi.system.domain.finance.FacUserApproval;
@@ -19,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -339,7 +341,24 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
     }
 
     @Override
-    public Map<String, FacAmountApply> selectDept() {
+    public Map<String, FacAmountApply> selectDept(SysUser user) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String intime = null;
+        String loginDate = null;
+        int intNum = 0;
+        int loginDateNum = 0;
+        if (user.getIntime() != null) {
+            intime = sdf.format(user.getIntime());
+            intNum = Integer.valueOf(intime).intValue();
+            if (user.getLoginDate() != null) {
+                loginDate = sdf.format(user.getLoginDate());
+                loginDateNum = Integer.valueOf(loginDate).intValue();
+            } else {
+                loginDate = sdf.format(new Date());
+                loginDateNum = Integer.valueOf(loginDate).intValue();
+            }
+        }
         List<FacAmountApply> list = new ArrayList<>();
         list.addAll(facUserApprovalMapper.selectcl());
         list.addAll(facUserApprovalMapper.selectdg());
@@ -348,51 +367,105 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
         list.addAll(facUserApprovalMapper.selecttj());
         list.addAll(facUserApprovalMapper.selectZD());
         Map<String, FacAmountApply> map = new HashMap();
-        for (FacAmountApply f : list) {
-            String key = f.getDeptName();
-            if (key == null) continue;
-            FacAmountApply fac = map.get(key);
-            if (fac == null) {
-                fac = new FacAmountApply();
-                fac.setBxJBamount(0.00);
-                fac.setBxGCamount(0.00);
-                fac.setBxQTamount(0.00);
-                fac.setZdAmount(0.00);
-                fac.setDgAmount(0.00);
-                fac.setTjAmount(0.00);
-                fac.setClAmount(0.00);
-                fac.setDeptName(key);
-            }
 
-            if (f.getType() != null) {
-                if (f.getType().equals("加班")) {
-                    fac.setBxJBamount(fac.getBxJBamount() + f.getAmount());//加班
-                } else if (f.getType().equals("公出")) {
-                    fac.setBxGCamount(fac.getBxGCamount() + f.getAmount());//公出
+
+        if (intime != null) {
+            for (FacAmountApply f : list) {
+                int SqtimeNum = Integer.valueOf(sdf.format(f.getSqtime())).intValue();
+                if (intNum >= SqtimeNum) continue;
+                if (loginDateNum <= SqtimeNum) continue;
+                String key = f.getDeptName();
+                if (key == null) continue;
+                FacAmountApply fac = map.get(key);
+                if (fac == null) {
+                    fac = new FacAmountApply();
+                    fac.setBxJBamount(0.00);
+                    fac.setBxGCamount(0.00);
+                    fac.setBxQTamount(0.00);
+                    fac.setZdAmount(0.00);
+                    fac.setDgAmount(0.00);
+                    fac.setTjAmount(0.00);
+                    fac.setClAmount(0.00);
+                    fac.setDeptName(key);
                 }
-            }
 
-            if (f.getBxQTamount() != null) {
-                fac.setBxQTamount(fac.getBxQTamount() + f.getBxQTamount());//其他
-            }
+                if (f.getType() != null) {
+                    if (f.getType().equals("加班")) {
+                        fac.setBxJBamount(fac.getBxJBamount() + f.getAmount());//加班
+                    } else if (f.getType().equals("公出")) {
+                        fac.setBxGCamount(fac.getBxGCamount() + f.getAmount());//公出
+                    }
+                }
 
-            if (f.getZdAmount() != null) {
-                fac.setZdAmount(fac.getZdAmount() + f.getZdAmount());//招待
-            }
+                if (f.getBxQTamount() != null) {
+                    fac.setBxQTamount(fac.getBxQTamount() + f.getBxQTamount());//其他
+                }
 
-            if (f.getDgAmount() != null) {
-                fac.setDgAmount(fac.getDgAmount() + f.getDgAmount());//对公
-            }
+                if (f.getZdAmount() != null) {
+                    fac.setZdAmount(fac.getZdAmount() + f.getZdAmount());//招待
+                }
 
-            if (f.getTjAmount() != null) {
-                fac.setTjAmount(fac.getTjAmount() + f.getTjAmount());//团建
-            }
+                if (f.getDgAmount() != null) {
+                    fac.setDgAmount(fac.getDgAmount() + f.getDgAmount());//对公
+                }
 
-            if (f.getClAmount() != null) {
-                fac.setClAmount(fac.getClAmount() + f.getClAmount());//差旅
+                if (f.getTjAmount() != null) {
+                    fac.setTjAmount(fac.getTjAmount() + f.getTjAmount());//团建
+                }
+
+                if (f.getClAmount() != null) {
+                    fac.setClAmount(fac.getClAmount() + f.getClAmount());//差旅
+                }
+                map.put(key, fac);
             }
-            map.put(key, fac);
+        } else {
+            for (FacAmountApply f : list) {
+                String key = f.getDeptName();
+                if (key == null) continue;
+                FacAmountApply fac = map.get(key);
+                if (fac == null) {
+                    fac = new FacAmountApply();
+                    fac.setBxJBamount(0.00);
+                    fac.setBxGCamount(0.00);
+                    fac.setBxQTamount(0.00);
+                    fac.setZdAmount(0.00);
+                    fac.setDgAmount(0.00);
+                    fac.setTjAmount(0.00);
+                    fac.setClAmount(0.00);
+                    fac.setDeptName(key);
+                }
+
+                if (f.getType() != null) {
+                    if (f.getType().equals("加班")) {
+                        fac.setBxJBamount(fac.getBxJBamount() + f.getAmount());//加班
+                    } else if (f.getType().equals("公出")) {
+                        fac.setBxGCamount(fac.getBxGCamount() + f.getAmount());//公出
+                    }
+                }
+
+                if (f.getBxQTamount() != null) {
+                    fac.setBxQTamount(fac.getBxQTamount() + f.getBxQTamount());//其他
+                }
+
+                if (f.getZdAmount() != null) {
+                    fac.setZdAmount(fac.getZdAmount() + f.getZdAmount());//招待
+                }
+
+                if (f.getDgAmount() != null) {
+                    fac.setDgAmount(fac.getDgAmount() + f.getDgAmount());//对公
+                }
+
+                if (f.getTjAmount() != null) {
+                    fac.setTjAmount(fac.getTjAmount() + f.getTjAmount());//团建
+                }
+
+                if (f.getClAmount() != null) {
+                    fac.setClAmount(fac.getClAmount() + f.getClAmount());//差旅
+                }
+                map.put(key, fac);
+            }
         }
+
 
         return map;
     }
