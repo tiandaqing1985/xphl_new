@@ -1,19 +1,5 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.ruoyi.system.domain.SysUser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -21,15 +7,19 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.finance.FacLoanApply;
 import com.ruoyi.system.domain.finance.FacLoanRepayApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
-import com.ruoyi.system.service.finance.IFacLoanApplyService;
-import com.ruoyi.system.service.finance.IFacLoanRepayApplyService;
-import com.ruoyi.system.service.finance.IFacNumberTableService;
-import com.ruoyi.system.service.finance.IFacReimburseApplyService;
-import com.ruoyi.system.service.finance.IFacUserApprovalService;
+import com.ruoyi.system.service.finance.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 借款申请 信息操作处理
@@ -68,14 +58,14 @@ public class FacLoanApplyController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacLoanApply facLoanApply) {
         startPage();
-        if (ShiroUtils.getUserId() == 1L||ShiroUtils.getUserId()==154L||ShiroUtils.getUserId()==110L) {
+        if (ShiroUtils.getUserId() == 1L || ShiroUtils.getUserId() == 154L || ShiroUtils.getUserId() == 110L) {
             List<FacLoanApply> lists = facLoanApplyService
                     .selectFacLoanApplyList(facLoanApply);
             for (FacLoanApply v : lists) {
                 v.setUserName(sysUserService.selectUserById(v.getLoanUser()).getUserName());
                 FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getLoanUser());
                 if (name != null) {
-                    if(facUserApprovalService.approverName(v.getNum())!=null){
+                    if (facUserApprovalService.approverName(v.getNum()) != null) {
                         v.setAllName(facUserApprovalService.approverName(v.getNum()));
                     }
                     if (name.getApproverId() != null) {
@@ -109,7 +99,7 @@ public class FacLoanApplyController extends BaseController {
             v.setUserName(sysUserService.selectUserById(v.getLoanUser()).getUserName());
             FacUserApproval name = facUserApprovalService.selectApproval(v.getNum(), v.getLoanUser());
             if (name != null) {
-                if(facUserApprovalService.approverName(v.getNum())!=null){
+                if (facUserApprovalService.approverName(v.getNum()) != null) {
                     v.setAllName(facUserApprovalService.approverName(v.getNum()));
                 }
                 if (name.getApproverId() != null) {
@@ -243,12 +233,10 @@ public class FacLoanApplyController extends BaseController {
         startPage();
         List<FacLoanApply> list = facLoanApplyService.deatils(num);
         if (list != null) {
-
             for (FacLoanApply facLoanApply : list) {
                 SysUser sysUser = sysUserService.selectUserById(facLoanApply.getLoanUser());
                 facLoanApply.setUserName(sysUser.getUserName());
             }
-
             return getDataTable(list);
         } else {
             List<String> a = new ArrayList<>();
@@ -345,7 +333,7 @@ public class FacLoanApplyController extends BaseController {
         startPage();
         List<FacLoanRepayApply> list = facLoanRepayApplyService.selectList(num);
         if (list != null) {
-            for(FacLoanRepayApply v:list){
+            for (FacLoanRepayApply v : list) {
                 v.setPayerName(sysUserService.selectUserById(v.getPayer()).getUserName());
             }
             return getDataTable(list);
@@ -379,7 +367,6 @@ public class FacLoanApplyController extends BaseController {
             if (name != null) {
                 if (name.getApproverId() != null) {
                     String approid = sysUserService.selectUserById(name.getApproverId()).getUserName();
-
                     if (approid != null) {
                         v.setApprover(approid);
                     }
@@ -393,8 +380,6 @@ public class FacLoanApplyController extends BaseController {
                 v.setApprovalStatus("--");
             }
         }
-
-
         return getDataTable(list);
     }
 
@@ -403,8 +388,6 @@ public class FacLoanApplyController extends BaseController {
      */
     @GetMapping("/off")
     public String off(@RequestParam String id, ModelMap mmp) {
-
-
         mmp.put("num", facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
         mmp.put("msg", "1");
         mmp.put("userName", ShiroUtils.getSysUser().getUserName());
@@ -424,6 +407,4 @@ public class FacLoanApplyController extends BaseController {
         }
         return prefixs + "/off";
     }
-
-
 }
