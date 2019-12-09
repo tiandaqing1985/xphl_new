@@ -19,9 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 财务审批 信息操作处理
@@ -105,6 +103,18 @@ public class FacUserApprovalController extends BaseController {
         for (FacAmountApply s : map.values()) {//遍历map的值
             list.add(s);
         }
+
+
+        //String[] order = {"新普互联", "效果广告业务事业部", "搜索业务部", "百度营销服务一组", "百度营销服务二组", "百度营销服务三组", "大客户业务部", "新媒体业务部", "商务支持部", "SEO", "华北大区业务部", "内容创意与视频部", "策略策划部", "技术部", "品牌广告业务事业部", "直客销售部", "客服部", "运营管理中心", "财务部", "人力资源部", "行政部", "CW-北京", "CW-新疆", "CW-上海", "HR-北京", "HR-上海", "AD-北京", "AD-上海", "总办", "市场拓展部", "运营管理部", "法务部", "运营管理-北京", "运营管理-新疆", "运营培训总监", "大客户营销服务一部", "大客户营销服务二部", "创意设计部", "华南大区业务部", "数字营销服务部（深圳）", "上海优寰分公司", "SH-销售部", "SH-媒介部", "SH-营销服务部", "SH-商务支持", "SH-策略部", "销售部", "销售一组", "销售二组", "媒介部", "华北媒介部", "头条组", "快手组", "AD-深圳",  "总计"};
+        String[] order = sysDeptService.selectDeptNames();
+        List<String> definedOrder = Arrays.asList(order);
+        Collections.sort(list, new Comparator<FacAmountApply>() {
+            public int compare(FacAmountApply o1, FacAmountApply o2) {
+                int io1 = definedOrder.indexOf(o1.getDeptName());
+                int io2 = definedOrder.indexOf(o2.getDeptName());
+                return io1 - io2;
+            }
+        });
         return getDataTable(list);
     }
 

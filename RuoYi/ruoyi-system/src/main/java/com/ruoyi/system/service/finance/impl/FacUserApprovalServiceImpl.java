@@ -466,7 +466,37 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
             }
         }
 
+        FacAmountApply facAmountApply = new FacAmountApply();
+        double a = 0.00;
+        double b = 0.00;
+        double c = 0.00;
+        double d = 0.00;
+        double e = 0.00;
+        double f = 0.00;
+        double g = 0.00;
 
+        for (FacAmountApply s : map.values()) {//遍历map的值
+            a = a + s.getBxJBamount();
+            b = b + s.getBxGCamount();
+            c = c + s.getBxQTamount();
+            d = d + s.getClAmount();
+            e = e + s.getTjAmount();
+            f = f + s.getZdAmount();
+            g = g + s.getDgAmount();
+
+
+        }
+        facAmountApply.setDeptName("总计");
+        facAmountApply.setBxJBamount(a);
+        facAmountApply.setBxGCamount(b);
+        facAmountApply.setBxQTamount(c);
+        facAmountApply.setClAmount(d);
+        facAmountApply.setTjAmount(e);
+        facAmountApply.setZdAmount(f);
+        facAmountApply.setDgAmount(g);
+
+
+        map.put("总计", facAmountApply);
         return map;
     }
 

@@ -112,6 +112,11 @@ public interface SysDeptMapper
      * @return
      */
     public SysDept selectDeptByUserId(@Param("userId") Long userId);
-    
-    
+
+    /**
+     * 查询所有部门名称
+     * @param
+     * @return 部门列表
+     */
+    public List<SysDept> selectDeptNames();
 }
