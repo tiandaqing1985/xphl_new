@@ -808,7 +808,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 		userApprovalMapper.insertUserApproval(userApproval);
 		
 		//人事审批
-		UserApproval personnel = new UserApproval();
+		/*UserApproval personnel = new UserApproval();
 		personnel.setApplyId(userApply.getApplyId());
 		personnel.setApprovalLevel(2);
 		SysUser user = userMapper.selectUserById(userApply.getUserId());//根据申请人查询区域
@@ -819,7 +819,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 		user2.setArea(user.getArea());
 		user2.setRoleId(3L);
 		personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user2));
-		userApprovalMapper.insertUserApproval(personnel);
+		userApprovalMapper.insertUserApproval(personnel);*/
 	
 		//生成无效的调休记录
 		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");

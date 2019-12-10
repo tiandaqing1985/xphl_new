@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="zh"  xmlns:th="http://www.thymeleaf.org">
 <head>
-	<th:block th:include="include :: header('修改申请')" />
+	<th:block th:include="include :: header('修改请假申请')" />
 	<th:block th:include="include :: datetimepicker-css" />
 	<th:block th:include="include :: jsonview-css" />
 	
@@ -12,48 +12,22 @@
 		<input id="applyId" name="applyId" th:field="${userApply.applyId}"  type="hidden">
        <input id="applyType" name="applyType" th:field="${userApply.applyType}"  type="hidden">
             
-		<div class="form-group" th:style="'display:' + ${userApply.applyType == '请假' ? 'block' : 'none'}">
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>请假类型：</label>
 			<div class="col-sm-8">
                 <input class="form-control" type="text" maxlength="30" th:field="*{leaveType}" readonly>
             </div> 
-           <!--  <div class="col-sm-8">
-					<select name="leaveType" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_leavetype')}" required>
-	                    <option th:field="*{leaveType}" th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" ></option>
-	                </select>
-			</div> -->
 		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType =='请假' ? 'block' : 'none'}">
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>开始时间：</label>
 			<div class="col-sm-8">
 				<div class="select-time" style="width: 100%">
-                	<input id="starttime" name="starttime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" readonly="readonly" required>
+                	<input id="starttime1" name="starttime1" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" readonly="readonly" required>
                 </div><span id="p01"></span>
 			</div>
 		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType =='加班' or userApply.applyType =='外出' ? 'block' : 'none'}">
-			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>开始时间：</label>
-			<div class="col-sm-8">
-				<div class="select-time" style="width: 100%">
-                	<input id="starttime" name="starttime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" required>
-                </div><span id="p01"></span>
-			</div>
-		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType =='补卡' ? 'block' : 'none'}">
-			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>补卡时间：</label>
-			<div class="col-sm-8">
-				<div class="select-time" style="width: 100%">
-                	<input id="starttime" name="starttime" placeholder="yyyy-MM-dd HH:mm:ss" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" required>
-                </div><span id="p01"></span>
-			</div>
-		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType =='补卡' ? 'block' : 'none'}">	
-				<label class="col-sm-2 control-label"><span style="color: red; ">*</span>补卡类型：</label>
-				<div class="col-sm-8">
-			  		<input type="radio" name="ctype" th:text="${userApply.ctype}" checked="checked">
-        		</div>
-			</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出' or userApply.applyType =='补卡' ? 'none' : 'block'}">
+			
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>开始时段：</label>
 			<div class="col-sm-8">
                 <select id="timeapart1" name="timeapart1" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_timeapart')}">
@@ -61,19 +35,14 @@
                 </select>
 			</div>
 		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType =='请假' ? 'block' : 'none'}">
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>结束时间：</label>
 			<div class="col-sm-8">
-                <input id="endtime" name="endtime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" readonly="readonly" required>
+                <input id="endtime1" name="endtime1" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" readonly="readonly" required>
 			</div><span id="p02"></span>
 		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType =='加班' or userApply.applyType =='外出' ? 'block' : 'none'}">
-			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>结束时间：</label>
-			<div class="col-sm-8">
-                <input id="endtime" name="endtime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.endtime, 'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" required>
-			</div><span id="p02"></span>
-		</div>
-		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出' or userApply.applyType =='补卡' ? 'none' : 'block'}">
+		
+		<div class="form-group">
 			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>结束时段：</label>
 			<div class="col-sm-8">
                 <select id="timeapart2" name="timeapart2" class="form-control m-b" th:with="type=${@dict.getType('sys_user_apply_timeapart')}" required >
@@ -96,11 +65,7 @@
                     <button type="button" class="btn btn-sm btn-primary" onclick="shangchuan1()"><i class="fa fa-check"></i>上传</button>&nbsp;
 	           </div>
 			</div>
-		</div>		
-		<div th:each="file:${userApply.fileList}" class="form-group" th:style="'display:' + ${userApply.applyType == '补卡' ? 'block' : 'none'}" >
-			<label class="col-sm-2 control-label">补卡图片：</label>
-			<img alt="正在加载..." th:src="${file}"  class="img">
-		</div>
+		</div>				
 		<input id="timelength" name="timelength" style="display:none"/>
 	</form>
     </div>
@@ -112,26 +77,26 @@
 	   
 		$(function(){
 			$("#starttime").datetimepicker({
-       		    format: 'yyyy-MM-dd HH:mm:ss',
+       		    format: 'yyyy-MM-dd',
        		    autoclose: true
-       		});
+       		});		
 			$("#endtime").datetimepicker({
-       		    format: 'yyyy-MM-dd HH:mm:ss',
+       		    format: 'yyyy-MM-dd',
        		    autoclose: true
-       		});
+       		});			
 			layui.use('laydate', function(){
 				var laydate = layui.laydate;
 			
 				laydate.render({ 
        		    	elem: '#starttime',
-       		 		format: 'yyyy-MM-dd HH:mm:ss',
-       		   	    type: 'datetime',
-       		 	 });
+       		 		format: 'yyyy-MM-dd',
+       		   	    type: 'date',
+       		 	 });			
 				laydate.render({ 
        		    	elem: '#endtime',
-       		 		format: 'yyyy-MM-dd HH:mm:ss',
-       		   	    type: 'datetime',
-       		 	 });
+       		 		format: 'yyyy-MM-dd',
+       		   	    type: 'date',
+       		 	 });			
 			});
 		 });
 		
@@ -211,9 +176,8 @@
 				var restlength = 0.0;
 				var leaveType = '0';
 
-				if(applyType != '加班' && applyType != '外出' && applyType != '补卡'){
-					leaveType = leave($("#leaveType").val());
-				}
+				leaveType = leave($("#leaveType").val());
+
 
 				//计算休息日时长
 				//年假、调休、事假、病假需要计算休息日
@@ -229,22 +193,9 @@
 						}
 					}); 
 				}
-			
-				//alert(restlength);
-				
-				/* if(leaveType == "10"){
-					datelength = 1.0;
-				}else{
-					datelength = Datelength(starttime, endtime, timeapart1, timeapart2)-restlength;
-				} */
-				
-				if(applyType == '加班' || applyType == '外出'){
-					datelength = DateDiff(starttime,endtime);
-				}else if (applyType == '补卡'){
-					datelength = 0.0;
-				}else{
-					datelength = Datelength(starttime, endtime, timeapart1, timeapart2)-restlength;
-				}
+
+				datelength = Datelength(starttime, endtime, timeapart1, timeapart2)-restlength;
+
 				
 				applyType = aType($("#applyType").val());
 
@@ -258,36 +209,7 @@
 				var passFlag = true;//是否通过试用一期
 				var betweenFlag = true;
 				debugger;
-				if(applyType == "5"){//补卡
-					var ctype = $('input:radio:checked').val();
-
-					 //验证补卡申请是否重复
-					$.ajax({
-						type:"post",
-						async:false,
-						url:"/system/userApply/ifPicRepeat",
-						data:{"starttime":starttime,"ctype":ctype},
-						dataType:"json",
-						success:function(result){
-							 if(result == "0"){
-								 repeatFlag = true;
-							}
-							else{
-								repeatFlag = false;
-								$.modal.alertWarning("请勿重复提交补卡申请!");
-								return;
-							}
-						},
-						error:function(){
-							$.modal.alertWarning("请联系管理员");
-						}
-					});  
-					if(repeatFlag){
-						save(prefix + "/edit", $('#editForm').serialize());
-					}
-				}
-				
-				
+												
 				if ($('#prove').val() == null || $('#prove').val() == '') {
 				      proveFlag = false;
 				}
@@ -668,6 +590,7 @@
 	   return leave;
    	}
    	
+   	//申请类型（1请假，2加班，3销假，4外出，5补卡）
    	function aType(applyType){
    		var type;
    		if(applyType == "请假"){
@@ -676,8 +599,10 @@
    			type = 2;
    		}else if(applyType == "销假"){
    			type = 3;
-   		}else{
+   		}else if(applyType == "外出"){
    			type = 4;
+   		}else {
+   			type = 5;
    		}
    		return type;
    	}

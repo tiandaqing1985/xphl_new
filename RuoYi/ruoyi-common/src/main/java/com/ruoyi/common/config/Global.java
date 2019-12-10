@@ -137,6 +137,7 @@ public class Global
      */
     public static String getUploadPath()
     {
+//        return getConfig("ruoyi.profile");
         return getConfig("ruoyi.profile") + "upload/";
     }
     

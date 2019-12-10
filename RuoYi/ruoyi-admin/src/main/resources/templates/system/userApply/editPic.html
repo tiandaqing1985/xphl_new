@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh"  xmlns:th="http://www.thymeleaf.org">
+<head>
+	<th:block th:include="include :: header('修改补卡申请')" />
+	<th:block th:include="include :: datetimepicker-css" />
+	<th:block th:include="include :: bootstrap-fileinput-css" />	
+</head>
+<body class="white-bg">
+	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+	<form class="form-horizontal m-t" id="editForm" th:object="${userApply}">
+		<input id="applyId" name="applyId" th:field="${userApply.applyId}"  type="hidden">
+        <input id="applyType" name="applyType" th:field="${userApply.applyType}"  type="hidden">
+          
+		<div class="form-group">
+			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>补卡时间：</label>
+			<div class="col-sm-8">
+				<div class="select-time" style="width: 100%">
+                	<input id="starttime" name="starttime" placeholder="请填写精确打卡时间，如 2019-11-29 10:13:10" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd HH:mm:ss')}" readonly="readonly" required>
+                </div><span id="p01"></span>
+			</div>
+		</div>
+		
+		<div class="form-group">	
+				<label class="col-sm-2 control-label"><span style="color: red; ">*</span>补卡类型：</label>
+				<div class="col-sm-8">
+			  		<input type="radio" name="ctype" th:text="${userApply.ctype}" checked="checked">
+        		</div>
+		</div>
+				
+		<div class="form-group">
+			<label class="col-sm-2 control-label" ><span style="color: red; ">*</span>修改理由：</label>
+			<div class="col-sm-8">
+                <textarea id="details" name="details" class="form-control" maxlength="500" rows="3" th:field="*{details}"  required></textarea>
+			</div>
+		</div>
+				
+		<div th:each="file:${userApply.fileList}" class="form-group">
+			<label class="col-sm-2 control-label">补卡图片：</label>
+			<img alt="正在加载..." th:src="${file}"  class="img">
+		</div>
+		<input id="timelength" name="timelength" style="display:none"/>
+	</form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <th:block th:include="include :: bootstrap-fileinput-js"/>
+   <script type="text/javascript">
+	   var prefix = ctx + "system/userApply";	  	  
+	   
+		$(function(){		
+			layui.use('laydate', function(){
+				var laydate = layui.laydate;
+							
+				laydate.render({ 
+       		    	elem: '#starttime',
+       		 		format: 'yyyy-MM-dd HH:mm:ss',
+       		   	    type: 'datetime',
+       		   		trigger: 'click'
+       		 	 });
+			});
+		 });
+		
+		$("#editForm").validate({
+			rules:{
+				leaveType:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		$("#starttime").focus(function(){
+			
+            $('#p01').empty();
+
+	    });		
+		
+	   function submitHandler() {
+			debugger;
+			if ($.validate.form()) {
+				var applyId = $("#applyId").val();
+				var starttime = $("#starttime").val();
+				var applyType = $("#applyType").val();
+				var datelength = 0.0;
+				
+				applyType = aType($("#applyType").val());
+
+				$("#timelength").val(datelength);
+				
+				var repeatFlag = false;
+				debugger;
+
+				var ctype = $('input:radio:checked').val();
+
+				 //验证补卡申请是否重复
+				$.ajax({
+					type:"post",
+					async:false,
+					url:"/system/userApply/ifPicRepeat",
+					data:{"starttime":starttime,"ctype":ctype},
+					dataType:"json",
+					success:function(result){
+						 if(result == "0"){
+							 repeatFlag = true;
+						}
+						else{
+							repeatFlag = false;
+							$.modal.alertWarning("请勿重复提交补卡申请!");
+							return;
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				});  
+				if(repeatFlag){
+					save(prefix + "/edit", $('#editForm').serialize());
+				}																		        
+	    };
+	    function save(url, data) {
+       	var config = {
+   	        url: url,
+   	        type: "post",
+   	        dataType: "json",
+   	        data: data,
+   	        beforeSend: function () {
+   	        	$.modal.loading("正在处理中，请稍后...");
+   	        	$.modal.disable();
+   	        },
+   	        success: function(result) {
+   	        	$.operate.successCallback(result);
+   	        	
+   	        }
+   	    };
+   	    $.ajax(config)
+       };  
+   	
+    	//申请类型（1请假，2加班，3销假，4外出，5补卡）
+      	function aType(applyType){
+      		var type;
+      		if(applyType == "请假"){
+      			type = 1;
+      		}else if(applyType == "加班"){
+      			type = 2;
+      		}else if(applyType == "销假"){
+      			type = 3;
+      		}else if(applyType == "外出"){
+      			type = 4;
+      		}else {
+      			type = 5;
+      		}
+      		return type;
+      	}
+   </script>
+</body>
+</html>

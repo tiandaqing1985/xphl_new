@@ -234,7 +234,20 @@ public class UserApplyController extends BaseController
 	{
 		UserApply userApply = userApplyService.selectUserApplyByIdForUndo(applyId);
 		mmap.put("userApply", userApply);
-	    return prefix + "/edit";
+		String applyType = userApply.getApplyType();
+		if(applyType.equals("加班")){
+		    return prefix + "/editOther";
+		    
+		}else if(applyType.equals("外出")){
+		    return prefix + "/editOut";
+
+		}else if(applyType.equals("补卡")){
+		    return prefix + "/editPic";
+
+		}else{//请假、销假
+		    return prefix + "/edit";
+
+		}
 	}
 	
 	/**

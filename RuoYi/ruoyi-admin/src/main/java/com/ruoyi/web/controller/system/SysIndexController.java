@@ -1,11 +1,15 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.ruoyi.common.config.Global;
+import com.ruoyi.common.config.ServerConfig;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.framework.util.ShiroUtils;
 import com.ruoyi.system.domain.QueryConditions;
@@ -30,7 +34,9 @@ public class SysIndexController extends BaseController
 	private IUserApprovalService userApprovalService;
 	@Autowired
 	private IFacUserApprovalService facUserApprovalService;
-	
+    @Autowired
+    private ServerConfig serverConfig;
+    
     // 系统首页
     @GetMapping("/index")
     public String index(ModelMap mmap)
@@ -78,8 +84,6 @@ public class SysIndexController extends BaseController
 		List<FacUserApproval> lists = facUserApprovalService.selectFacUserApprovalList(facUserApproval);
 		mmap.put("facUserNum", lists.size());
 
-
-
 		//请假总数
     	queryConditions.setApplyType("1");
     	list = userApprovalService.selectQueryConditionsList(queryConditions);
@@ -99,6 +103,10 @@ public class SysIndexController extends BaseController
      	queryConditions.setApplyType("4");
     	list = userApprovalService.selectQueryConditionsList(queryConditions);
     	mmap.put("outNum", list.size());
+    	
+    	//下载路径
+    	String url = serverConfig.getUrl();
+    	mmap.put("url", url);
     	
     	if(ShiroUtils.getUserId()==103 || ShiroUtils.getUserId()==1){
     		mmap.put("admin", true);
