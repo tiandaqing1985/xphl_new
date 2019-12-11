@@ -58,9 +58,8 @@
 		</div>
 		
 		<div id="prove" th:style="'display:' + ${userApply.applyType == '请假' ? 'block' : 'none'}" th:text="${userApply.prove}"></div>
-		<!-- <div class="form-group" th:style="'display:' + ${showFlag == true ? 'block' : 'none'}"> -->
-		<div class="form-group">
-			<div th:style="'display:' + ${userApply.applyType == '补卡' ? 'none' : 'block'}">
+		<div class="form-group" th:style="'display:' + ${showFlag == true ? 'block' : 'none'}"> 
+			<div th:style="'display:' + ${userApply.applyType == '请假' ? 'block' : 'none'}">
 				<label class="col-sm-2 control-label">证明附件：</label>
 				<img alt="正在加载..." th:src="${userApply.prove}"  class="img">
 			</div>
