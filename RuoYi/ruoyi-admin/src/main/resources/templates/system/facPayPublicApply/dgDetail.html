@@ -46,53 +46,47 @@
                 },
                 {
                     field : 'num',
-                    title : '申请编号',
-                    sortable: true
+                    title : '申请编号'
                 },
                 {
                     field : 'name',
-                    title : '申请名称',
-                    sortable: true
+                    title : '申请名称'
                 },
                 {
                     field : 'unit',
-                    title : '付款单位',
-                    sortable: true
+                    title : '付款单位'
                 },
                 {
                     field : 'weatherInvoice',
-                    title : '是否有发票',
-                    sortable: true
+                    title : '是否有发票'
                 },
                 {
                     field : 'createTime',
                     title : '提交时间',
-                    sortable: true
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
+                    }
                 },
                 {
                     field : 'amount',
-                    title : '付款金额',
-                    sortable: true
+                    title : '付款金额'
                 },
                 {
                     field : 'payee',
-                    title : '收款人',
-                    sortable: true
+                    title : '收款人'
                 },
                 {
                     field : 'payeeBank',
-                    title : '收款人开户行',
-                    sortable: true
+                    title : '收款人开户行'
                 },
                 {
                     field : 'payeeAccount',
-                    title : '收款人账号',
-                    sortable: true
+                    title : '收款人账号'
                 },
                 {
                     field : 'remarks',
-                    title : '备注',
-                    sortable: true
+                    title : '备注'
                 }
             ]
         };

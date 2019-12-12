@@ -159,6 +159,7 @@ fac_sys_user_approval a left join fac_traffic_rei_apply b on a.apply_id = b.num 
             <if test="applicantId != null ">and applicant_id = #{applicantId}</if>
             <if test="projectName != null  and projectName != '' ">and projectName = #{projectName}</if>
             <if test="approverId != null ">and approver_id = #{approverId}</if>
+            <if test="approvalSight != null  and approvalSight != '' ">and approval_sight = #{approvalSight}</if>
         </where>
         and approval_state in (1,2)
         order by create_time desc

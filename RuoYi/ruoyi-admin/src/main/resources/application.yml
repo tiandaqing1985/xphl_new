@@ -17,6 +17,10 @@ ruoyi:
   email: oa@perfect-cn.cn
   #提醒邮箱密码
   password: Hr123456.
+  #财务提醒邮箱
+  facemail: caiwu@perfect-cn.cn
+  #财务提醒邮箱密码
+  facpassword: Perfect1127
 
 # 开发环境配置
 server:
