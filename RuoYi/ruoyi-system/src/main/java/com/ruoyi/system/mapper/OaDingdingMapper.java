@@ -29,6 +29,13 @@ public interface OaDingdingMapper
 	public List<OaDingding> selectOaDingdingList(OaDingding oaDingding);
 	
 	/**
+	 * 查询正常打卡记录
+	 * @param oaDingding
+	 * @return
+	 */
+	public List<OaDingding> selectDingdingCondition(OaDingding oaDingding);
+	
+	/**
      * 新增钉钉考勤数据
      * 
      * @param oaDingding 钉钉考勤数据信息

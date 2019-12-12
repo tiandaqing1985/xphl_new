@@ -415,7 +415,50 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 			ding.setTimeResult("Clocked");
 			ding.setApplyState(o.getApplyState());//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
 			ding.setStatus("1");
-			oaDingdingMapper.updateOaDingDingByTime(ding);			
+			ding.setUserCheckTime(o.getStarttime());
+			oaDingdingMapper.updateOaDingDingByTime(ding);	
+		
+			//查询补卡当天另一条正常打卡记录（除了未打卡之外的结果都是正常）
+			OaDingding oaDing = new OaDingding();
+			oaDing.setUserName(o.getUserName());
+			oaDing.setTime(time);
+			if(o.getCtype().equals("上班")){//补上班卡
+				oaDing.setCheckType("OffDuty");//查下班卡
+			}else{
+				oaDing.setCheckType("OnDuty");//查上班卡
+			}
+			List<OaDingding> dingList = oaDingdingMapper.selectDingdingCondition(oaDing);
+			if(dingList.size() == 0) continue;
+			
+			//计算两条打卡时间差是否大于等于9h
+			Date endDate = null;
+			boolean flag = false;//是否满足9h
+			if(o.getCtype().equals("上班")){//补上班卡
+				endDate = getWorkDate(o.getStarttime(),9);//计算9h以后的下班打卡时间
+				if(dingList.get(0).getUserCheckTime().after(endDate)){
+					flag = true;
+				}
+			}else{//补下班卡
+				endDate = getWorkDate(dingList.get(0).getUserCheckTime(),9);//计算9h以后的下班打卡时间
+				if(o.getStarttime().after(endDate)){
+					flag = true;
+				}
+			}
+			
+			//工时达到9小时，更新另一条打卡数据为Normal
+			if(flag){
+				Dingding ding2 = new Dingding();
+				ding2.setUserName(o.getUserName());
+				if(o.getCtype().equals("上班")){
+					ding2.setCheckType("OffDuty");
+				}else{
+					ding2.setCheckType("OnDuty");
+				}
+				ding2.setTime(time);
+				ding2.setTimeResult("Normal");
+				ding2.setStatus("0");
+				oaDingdingMapper.updateOaDingDingByTime(ding2);		
+			}
 		}
 		return 1;
 	}

@@ -188,6 +188,25 @@
 				var datelength = 0.0;
 				var restlength = 0.0;
 				
+				if(starttime == "" && endtime == ""){
+					p01.innerText="开始时间不能为空，请填写！";
+					$("#p01").css("color","red");
+					p02.innerText="结束时间不能为空，请填写！";
+					$("#p02").css("color","red");
+					return;
+				}else if(starttime != "" && endtime == ""){					
+					p02.innerText="结束时间不能为空，请填写！";
+					$("#p02").css("color","red");
+					return;
+				}else if(starttime == "" && endtime != ""){
+					p01.innerText="开始时间不能为空，请填写！";
+					$("#p01").css("color","red");
+					return;
+				}else{
+					
+				}
+				
+				
 				//计算休息日时长
 				//年假、调休、事假、病假需要计算休息日
 				if(leaveType == "1" || leaveType == "2" || leaveType == "3" || leaveType == "4"){

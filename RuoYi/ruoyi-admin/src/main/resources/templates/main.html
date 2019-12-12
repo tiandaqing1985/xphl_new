@@ -18,15 +18,15 @@
     </div>
    
 	 <div th:style="'margin-left:30px;display:'+${unApprovalNum==0 ? 'none':'block'}">
-	 	<div class="col-sm-5">
+	 	<div>
 	 		<br>
             <div style="font-size:16px;">OA系统待审批条数：<a href="/system/userApproval"><font color="red">[[${unApprovalNum}]]</font></a>条
-            （请假：[[${holidayNum}]]、加班：[[${overtimeNum}]]、外出：[[${outNum}]]、销假：[[${cancelNum}]]）</div>
+            （请假：[[${holidayNum}]]、加班：[[${overtimeNum}]]、外出：[[${outNum}]]、补卡：[[${picNum}]]、销假：[[${cancelNum}]]）</div>
         </div>
 	 </div>
 	 
     <div th:style="'margin-left:30px;display:'+${facUserNum==0 ? 'none':'block'}">
-        <div class="col-sm-5">
+        <div>
             <br>
             <div style="font-size:16px;">财务系统待审批条数：<a href="/system/facUserApproval"><font color="red">[[${facUserNum}]]</font></a>条
             </div>
@@ -37,7 +37,7 @@
     <div style="margin-left:30px;display:block">
         <div class="col-sm-5">
             <br>
-            <a href="/system/oaFileUpload/common/download/resource">点击下载员工手册</a>
+            <a href="/system/oaFileUpload/common/download/resource" style="font-size:15px">点击下载员工手册</a>
         </div>
     </div>
     

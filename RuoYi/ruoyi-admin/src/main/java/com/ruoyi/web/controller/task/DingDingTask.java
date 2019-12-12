@@ -134,7 +134,7 @@ public class DingDingTask{
         List<OaDingding> users = new ArrayList<>();
         List<OaDingding> dataList = getAttendances(allUserIdList,users, workDateFrom,  workDateTo, accessToken);
         if(dataList.size() != 0){
-            dingdingService.insertForeach(dataList);
+//            dingdingService.insertForeach(dataList);
         }
 //        System.out.println("获取从昨天0点到今天0点时间的打卡记录"+ Arrays.asList(users));
 

@@ -39,6 +39,17 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	/** 图片上传时间 */
 	private Date createTime;
 	
+	private String time;
+	
+	
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
 	public String getPath() {
 		return path;
 	}

@@ -42,7 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectOaDingdingVo"/>
         <where>  
             <if test="userId != null"> and user_id = #{userId}</if>
-              <if test="userName != null  and userName != '' "> and userName = #{userName}</if>
+              <if test="userName != null  and userName != '' "> and user_name = #{userName}</if>
              <if test="workDate != null "> and workDate = #{workDate}</if>
              <if test="checkType != null  and checkType != '' "> and checkType = #{checkType}</if>
              <if test="userCheckTime != null "> and userCheckTime = #{userCheckTime}</if>
@@ -54,6 +54,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
               null "> and create_time = #{createTime}</if>
          </where>
     </select>
+    
+    <select id="selectDingdingCondition" parameterType="OaDingding" resultMap="OaDingdingResult">
+        <include refid="selectOaDingdingVo"/>
+        <where>  
+        	 timeResult != 'NotSigned'
+              <if test="userId != null"> and user_id = #{userId}</if>
+              <if test="userName != null  and userName != '' "> and user_name = #{userName}</if>
+             <if test="workDate != null "> and workDate = #{workDate}</if>
+             <if test="time != null "> and workDate = #{time}</if>
+             <if test="checkType != null  and checkType != '' "> and checkType = #{checkType}</if>
+             <if test="userCheckTime != null "> and userCheckTime = #{userCheckTime}</if>
+             <if test="status != null and status != ''"> and status = #{status}</if>
+             <if test="applyState != null and applyState != ''"> and apply_state = #{applyState}</if>
+         </where>
+    </select>
+    
     <select id="selectOaDingdingListByCondition" parameterType="Dingding" resultMap="DingdingResult">
     	select * from oa_dingding
 		<where>
@@ -136,7 +152,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<update id="updateOaDingDingByTime" parameterType="Dingding">
 		update oa_dingding 
-		set timeResult=#{timeResult},status=#{status},apply_state=#{applyState} 
+		<set>
+			<if test="timeResult != null and timeResult != ''">timeResult=#{timeResult},</if>
+			<if test="status != null and status != ''">status=#{status},</if>
+			<if test="applyState != null">apply_state=#{applyState},</if>
+			<if test="userCheckTime != null">userCheckTime = #{userCheckTime},</if>
+		</set>
 		<where>
 			<if test="userId != null">user_id = #{userId}</if>
 			<if test="userName != null and userName !=''">user_name = #{userName}</if>

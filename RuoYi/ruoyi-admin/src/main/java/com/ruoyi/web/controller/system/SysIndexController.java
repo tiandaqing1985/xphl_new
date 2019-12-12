@@ -2,8 +2,6 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -34,8 +32,6 @@ public class SysIndexController extends BaseController
 	private IUserApprovalService userApprovalService;
 	@Autowired
 	private IFacUserApprovalService facUserApprovalService;
-    @Autowired
-    private ServerConfig serverConfig;
     
     // 系统首页
     @GetMapping("/index")
@@ -104,9 +100,10 @@ public class SysIndexController extends BaseController
     	list = userApprovalService.selectQueryConditionsList(queryConditions);
     	mmap.put("outNum", list.size());
     	
-    	//下载路径
-    	String url = serverConfig.getUrl();
-    	mmap.put("url", url);
+    	//补卡总数
+     	queryConditions.setApplyType("5");
+    	list = userApprovalService.selectQueryConditionsList(queryConditions);
+    	mmap.put("picNum", list.size());
     	
     	if(ShiroUtils.getUserId()==103 || ShiroUtils.getUserId()==1){
     		mmap.put("admin", true);
