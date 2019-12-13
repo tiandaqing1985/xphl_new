@@ -34,10 +34,6 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	private String applyState;
     /** 部门名称 */
     private String deptName;
-    /** 路径 */
-	private String path;
-	/** 图片上传时间 */
-	private Date createTime;
 	
 	private String time;
 	
@@ -48,22 +44,6 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 
 	public void setTime(String time) {
 		this.time = time;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
 	}
 
 	public String getApplyState() {
@@ -157,6 +137,7 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 		return "OaDingding [userId=" + userId + ", userName=" + userName + ", workDate=" + workDate + ", weekDay="
 				+ weekDay + ", checkType=" + checkType + ", userCheckTime=" + userCheckTime + ", timeResult="
 				+ timeResult + ", status=" + status + ", applyState=" + applyState + ", deptName=" + deptName
-				+ ", path=" + path + ", createTime=" + createTime + "]";
+				+ ", time=" + time + "]";
 	}
+
 }

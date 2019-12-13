@@ -29,6 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="intime"       column="intime"       />
 		<result property="firstphase"   column="firstphase"       />
 		<result property="secondphase"  column="secondphase"       />
+		<result property="firstWorkDate"  column="firstWorkDate"       />
 		<association property="dept"    column="dept_id" javaType="SysDept" resultMap="deptResult" />
 		<collection  property="roles"   javaType="java.util.List"        resultMap="RoleResult" />
 	</resultMap>
@@ -58,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<sql id="selectUserVo">
-        select  u.user_id, u.dept_id, u.login_name, u.user_name,u.area, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
+        select  u.user_id, u.dept_id, u.login_name, u.user_name,u.area, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,u.firstWorkDate,
        		    d.parent_id, d.dept_name, d.order_num, d.status as dept_status,
        		    r.role_id,p.post_id, r.role_name, r.role_key, r.role_sort, r.data_scope, r.status as role_status
 		from sys_user u
@@ -73,7 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	<select id="selectUserList" parameterType="SysUser" resultMap="SysUserResult">
-		select u.user_id, u.dept_id, u.login_name, u.user_name,u.area, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase, d.dept_name from sys_user u
+		select u.user_id, u.dept_id, u.login_name, u.user_name,u.area, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,u.firstWorkDate, d.dept_name from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id
 		where u.del_flag = '0'
 		<if test="userId != null">
@@ -114,6 +115,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		<if test="secondphase != null and secondphase != 0">
 			AND u.secondphase = #{secondphase}
+		</if>
+		<if test="firstWorkDate != null">
+			AND u.firstWorkDate = #{firstWorkDate}
 		</if>
 		<!-- 数据范围过滤 -->
 		${params.dataScope}
@@ -254,6 +258,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
  			<if test="remark != null and remark != ''">remark = #{remark},</if>
  			<if test="record != null and record != ''">record = #{record},</if>
+ 			<if test="firstWorkDate != null">firstWorkDate = #{firstWorkDate},</if>
  			<!-- <if test="intime != null and intime != ''">intime = #{intime},</if>
  			<if test="firstphase != null and firstphase != ''">firstphase = #{firstphase},</if>
  			<if test="secondphase != null and secondphase != ''">secondphase = #{secondphase},</if>  -->
@@ -281,6 +286,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="intime != null ">intime,</if>
  			<if test="firstphase != null ">firstphase,</if>
  			<if test="secondphase != null ">secondphase,</if>
+ 			<if test="firstWorkDate != null ">firstWorkDate,</if> 
  			create_time
  		)values(
  			<if test="userId != null and userId != ''">#{userId},</if>
@@ -300,6 +306,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="intime != null">#{intime},</if>
  			<if test="firstphase != null">#{firstphase},</if>
  			<if test="secondphase != null">#{secondphase},</if>
+ 			<if test="firstWorkDate != null">#{firstWorkDate},</if>
  			sysdate()
  		)
 	</insert>
@@ -314,7 +321,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 	
 	<select id="selectAllUser" resultMap="SysUserResult">
-		select u.user_id, u.dept_id, u.login_name, u.user_name, u.area, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase, d.dept_name from sys_user u
+		select u.user_id, u.dept_id, u.login_name, u.user_name, u.area, u.email, u.phonenumber, u.password, u.sex, u.avatar, u.salt, u.status, u.del_flag, u.login_ip, u.login_date, u.create_by, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,u.firstWorkDate, d.dept_name from sys_user u
 		left join sys_dept d on u.dept_id = d.dept_id
 		where u.del_flag = '0' and u.status = 0
 	</select>

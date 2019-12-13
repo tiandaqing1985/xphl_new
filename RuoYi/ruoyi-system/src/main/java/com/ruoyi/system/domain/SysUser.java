@@ -90,6 +90,11 @@ public class SysUser extends BaseEntity
     @Excel(name = "二期" , dateFormat = "yyyy/MM/dd", type = Type.IMPORT)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date secondphase;
+    
+    /** 试用二期结束日期（转正日期）*/
+    @Excel(name = "首次工作时间" , dateFormat = "yyyy/MM/dd", type = Type.IMPORT)
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private Date firstWorkDate;
 	
 	/** 帐号状态（0正常 1停用） */
     @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
@@ -123,8 +128,15 @@ public class SysUser extends BaseEntity
      */
     private Set<SysDept> dSet;
     
-    
-    public Long getPostId() {
+    public Date getFirstWorkDate() {
+		return firstWorkDate;
+	}
+
+	public void setFirstWorkDate(Date firstWorkDate) {
+		this.firstWorkDate = firstWorkDate;
+	}
+
+	public Long getPostId() {
 		return postId;
 	}
 

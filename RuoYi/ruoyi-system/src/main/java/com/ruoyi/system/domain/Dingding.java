@@ -56,10 +56,6 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	private Date startTime;
 	
 	private Date endTime;
-    /** 路径 */
-	private String path;
-	/** 图片上传时间 */
-	private Date createTime;
 	
 	/** 传入String类型的时间变量 */
 	private String time;
@@ -70,22 +66,6 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 
 	public void setTime(String time) {
 		this.time = time;
-	}
-
-	public String getPath() {
-		return path;
-	}
-
-	public void setPath(String path) {
-		this.path = path;
-	}
-
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
 	}
 
 	public String getApplyState() {
@@ -209,8 +189,7 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 		return "Dingding [userId=" + userId + ", userName=" + userName + ", deptName=" + deptName + ", area=" + area
 				+ ", workDate=" + workDate + ", weekDay=" + weekDay + ", checkType=" + checkType + ", userCheckTime="
 				+ userCheckTime + ", timeResult=" + timeResult + ", status=" + status + ", applyState=" + applyState
-				+ ", dSet=" + dSet + ", startTime=" + startTime + ", endTime=" + endTime + ", path=" + path
-				+ ", createTime=" + createTime + "]";
+				+ ", dSet=" + dSet + ", startTime=" + startTime + ", endTime=" + endTime + ", time=" + time + "]";
 	}
 
 }

@@ -142,7 +142,6 @@ public class OaDingdingController extends BaseController
 	            ajax.put("fileName", fileName);
 	            ajax.put("url", url);
 	            ding.setUserId(ShiroUtils.getUserId());
-	            ding.setPath(url);
 	            ding.setUserCheckTime(userCheckTime);
 	        }
 	        catch (Exception e)
