@@ -305,30 +305,30 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 			
 			SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM");
 			String applyType = userApproval1.getUserApply().getApplyType();
-			Double timelength = userApproval1.getUserApply().getTimelength();
+			
 			//如果是加班申请，根据加班时长，生成调休
 			if( applyType.equals("2") ){
-				/*SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
-				
-				Holiday holiday = new Holiday();
-				holiday.setUserId(userApproval1.getUserApply().getUserId());
-				holiday.setHolidayType("2");
-				holiday.setCreatedate(s.format(userApproval1.getUserApply().getStarttime()));
-				try {
-					holiday.setOverdate(s.format(iSysUserService.getDate(s.format(userApproval1.getUserApply().getStarttime()), 3)));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				int temp = (int)(timelength/2)*2;
-				Double value = (double)temp;
-				holiday.setValue(value);
-				holidayMapper.insertHoliday(holiday);*/
-				
 				//修改相应调休记录为有效
 				Holiday holiday = new Holiday();
 				holiday.setApplyId(userApproval1.getApplyId());
 				holiday.setAvailability("1");
-				holidayMapper.updateHoliday(holiday);
+				int count = holidayMapper.updateHoliday(holiday);
+				
+				//针对之前提交的加班申请，需要生成调休，结束后再删除
+				if(count == 0){
+					SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+					
+					holiday.setUserId(userApproval1.getUserApply().getUserId());
+					holiday.setHolidayType("2");
+					holiday.setAvailability("1");//是否有效（0否 1是）
+					try {
+						holiday.setOverdate(s.format(iSysUserService.getDate(s.format(userApproval1.getUserApply().getStarttime()), 3)));
+					} catch (ParseException e) {
+						e.printStackTrace();
+					}
+					holiday.setValue(Math.floor(userApply.getTimelength()));
+					holidayMapper.insertHoliday(holiday);										
+				}
 				
 			}
 			//如果是销假申请

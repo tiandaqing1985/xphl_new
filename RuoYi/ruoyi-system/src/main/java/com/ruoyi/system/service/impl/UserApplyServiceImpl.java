@@ -835,9 +835,6 @@ public class UserApplyServiceImpl implements IUserApplyService
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		/*int temp = (int)(userApply.getTimelength()/2)*2;
-		Double value = (double)temp;
-		holiday.setValue(value);*/
 		holiday.setValue(Math.floor(userApply.getTimelength()));
 		holidayMapper.insertHoliday(holiday);
 		
