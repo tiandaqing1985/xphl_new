@@ -95,6 +95,9 @@ public class SysUser extends BaseEntity
     @Excel(name = "首次工作时间" , dateFormat = "yyyy/MM/dd", type = Type.IMPORT)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date firstWorkDate;
+    
+    /** 在职时长 */
+    private Long onJobLength;
 	
 	/** 帐号状态（0正常 1停用） */
     @Excel(name = "帐号状态", readConverterExp = "0=正常,1=停用")
@@ -128,7 +131,15 @@ public class SysUser extends BaseEntity
      */
     private Set<SysDept> dSet;
     
-    public Date getFirstWorkDate() {
+    public Long getOnJobLength() {
+		return onJobLength;
+	}
+
+	public void setOnJobLength(Long onJobLength) {
+		this.onJobLength = onJobLength;
+	}
+
+	public Date getFirstWorkDate() {
 		return firstWorkDate;
 	}
 

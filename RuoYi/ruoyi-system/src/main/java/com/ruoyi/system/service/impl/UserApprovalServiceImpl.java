@@ -318,6 +318,9 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 				if(count == 0){
 					SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
 					
+					//查询申请
+					UserApply app = userApplyMapper.selectUserApplyByApplyId(userApproval1.getApplyId());
+					
 					holiday.setUserId(userApproval1.getUserApply().getUserId());
 					holiday.setHolidayType("2");
 					holiday.setAvailability("1");//是否有效（0否 1是）
@@ -326,7 +329,8 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 					} catch (ParseException e) {
 						e.printStackTrace();
 					}
-					holiday.setValue(Math.floor(userApply.getTimelength()));
+					holiday.setValue(Math.floor(app.getTimelength()));
+					holiday.setCreatedate(s.format(userApproval1.getUserApply().getStarttime()));
 					holidayMapper.insertHoliday(holiday);										
 				}
 				
