@@ -91,12 +91,12 @@ public class SysUser extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date secondphase;
     
-    /** 试用二期结束日期（转正日期）*/
+    /** 首次工作时间*/
     @Excel(name = "首次工作时间" , dateFormat = "yyyy/MM/dd", type = Type.IMPORT)
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date firstWorkDate;
     
-    /** 在职时长 */
+    /** 在职天数 */
     private Long onJobLength;
 	
 	/** 帐号状态（0正常 1停用） */

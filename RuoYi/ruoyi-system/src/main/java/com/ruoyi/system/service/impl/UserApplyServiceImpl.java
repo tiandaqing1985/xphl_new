@@ -3,7 +3,6 @@ package com.ruoyi.system.service.impl;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
@@ -28,6 +27,7 @@ import com.ruoyi.system.mapper.UserApplyMapper;
 import com.ruoyi.system.mapper.UserApprovalMapper;
 import com.ruoyi.system.domain.Dingding;
 import com.ruoyi.system.domain.Holiday;
+import com.ruoyi.system.domain.OaDingding;
 import com.ruoyi.system.domain.OaFileUpload;
 import com.ruoyi.system.domain.SysDictData;
 import com.ruoyi.system.domain.SysUser;
@@ -498,7 +498,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 	 * 拿到某天上一个月份的 病、事假的请假天数的和
 	 */
 	@Override
-	public Double leaveCount(String monthName, Long userId, Date date){
+	public Double leaveCount(String monthName, Long userId, Date date, String leaveType){
 		
 		//拿到上个月的第一天和最后一天
 		Date firstDay = getDate(monthName, date ,"第一天");
@@ -510,8 +510,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 		userApply.setStarttime(firstDay);
 		userApply.setEndtime(lastDay);
 		userApply.setApplyType("1");
-		
-		
+		userApply.setLeaveType(leaveType);
 		
 		//本月请假申请成功的天数
 		Double mid = 0.0;
@@ -1148,15 +1147,62 @@ public class UserApplyServiceImpl implements IUserApplyService
 		SimpleDateFormat sdf = new SimpleDateFormat("yyy-MM-dd");
 		String date = sdf.format(time);
 		date.substring(0, 9);
-    	List<UserApply> aList = new ArrayList<UserApply>();
+		//验证加班审批是否已通过且满足2.5小时     20191219注释
+    	/*List<UserApply> aList = new ArrayList<UserApply>();
 		aList = userApplyMapper.selectOtherApplyList(userId, date);
-    	if(aList.size() == 0){
+		if(aList.size() == 0){
     		return false;
     	}else{    		
     		return true;
-    	}
+    	}*/
+		
+		//查询钉钉考勤加班时长是否满足2.5h
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+		SysUser user = userMapper.selectUserById(userId);
+		OaDingding oaDingding = new OaDingding();
+		oaDingding.setTime(date);
+		oaDingding.setUserName(user.getUserName());
+		List<OaDingding> dingList = oaDingdingMapper.selectDingdingCondition(oaDingding);
+		if(dingList.size() == 0){
+			return false;
+		}else{
+			Date checkDate1 = dingList.get(0).getUserCheckTime();
+			String checkTime1 = sdf2.format(checkDate1);
+			Date checkDate2 = dingList.get(1).getUserCheckTime();
+			String checkTime2 = sdf2.format(checkDate2);
+			long timelength = 0L;
+			if(checkDate1.after(checkDate2)){
+				timelength = secondsBetween(checkTime2,checkTime1)/3600;
+			}else{
+				timelength = secondsBetween(checkTime1,checkTime2)/3600;
+			}
+			if(timelength >= 11.5){
+				return true;
+			}else{
+				return false;
+			}
+		}
+    	
 	}
-
+	 /** 
+	    *字符串的日期格式的计算 
+	    */  
+	 private long secondsBetween(String smdate,String bdate){  
+	    long time1 = 0L;
+		long time2 = 0L;
+		try {
+			SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");  
+			 Calendar cal = Calendar.getInstance();    
+			 cal.setTime(sdf.parse(smdate));    
+			 time1 = cal.getTimeInMillis();                 
+			 cal.setTime(sdf.parse(bdate));    
+			 time2 = cal.getTimeInMillis();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}         
+	     return (time2-time1)/1000;     
+	 }
 	/**
 	 * 	新增补卡申请
 	 * */

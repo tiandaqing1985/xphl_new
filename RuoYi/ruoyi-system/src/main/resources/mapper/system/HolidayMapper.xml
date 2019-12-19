@@ -35,6 +35,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="holidayDetail != null  and holidayDetail != '' "> and holiday_detail = #{holidayDetail}</if>
          </where>
     </select>
+	
+    <select id="selectHolidayListByCondition" parameterType="Map" resultMap="HolidayResult">
+        <include refid="selectHolidayVo"/>
+        <where>  
+             createdate <![CDATA[>= ]]> #{littledate} and createdate <![CDATA[<= ]]> #{bigdate}
+         </where>
+    </select>
     
     <select id="selectHolidayById" parameterType="Integer" resultMap="HolidayResult">
         <include refid="selectHolidayVo"/>

@@ -4,7 +4,9 @@ import com.ruoyi.system.domain.Holiday;
 import com.ruoyi.system.domain.RestHoliday;
 import com.ruoyi.system.domain.SysUser;
 
-import java.util.List;	
+import java.util.List;
+
+import org.apache.ibatis.annotations.Param;	
 
 /**
  * 假期 数据层
@@ -21,6 +23,14 @@ public interface HolidayMapper
      * @return 假期信息
      */
 	public Holiday selectHolidayById(Integer id);
+	
+	/**
+	 * 根据生效日期查询假期
+	 * @param littledate
+	 * @param bigdate
+	 * @return
+	 */
+	public List<Holiday> selectHolidayListByCondition(@Param("littledate")String littledate,@Param("bigdate")String bigdate);
 	
 	/**
      * 查询假期列表
