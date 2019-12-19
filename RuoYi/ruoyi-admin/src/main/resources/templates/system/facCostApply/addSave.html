@@ -5,21 +5,21 @@
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-    <form class="form-horizontal m" id="form-facCostApply-add">
-        <input id="id" name="id" class="form-control-static" type="hidden" th:value="${id}">
-        <input id="amount" name="amount" class="form-control-static" type="hidden" th:value="${amount}">
+    <form class="form-horizontal m" id="form-facCostApply-add"  th:object="${facCostApply}">
 
-        是否提交数据
+        <input id="moneyEs" name="moneyEs" class="form-control-static" type="hidden" th:value="${moneyEs}">
+        <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}">
+        是否提交差旅报销,提交金额为<a><font color="red">[[${moneyEs}]]</font></a>元
     </form>
 </div>
 <div th:include="include::footer"></div>
 <th:block th:include="include :: bootstrap-suggest-js"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script type="text/javascript">
-    var prefix = ctx + "system/facCostApply"
-    var dept = $("#dept").val();
-    var id = $("#id").val();
-    var amount = $("#amount").val();
+    var prefix = ctx + "system/facCostReimburse";
+    var num= $("#num").val();
+    var facCostApply= $("#facCostApply").val();
+    var facCostReimburseId = [[${facCostApply.id}]];
     $("#form-facCostApply-add").validate({
         rules: {
             xxxx: {
@@ -30,11 +30,42 @@
     });
 
     function submitHandler() {
-        if (amount > 0) {
-            $.operate.save(prefix + "/add", {"id": id});
-        } else {
-            alert("请补充数据");
+        if ($.validate.form()) {
+        	var config = {
+        		url: prefix + "/edit?id="+facCostReimburseId,
+        		type: "post",
+        		dataType: "json",
+        		async: false,
+        		data: $(facCostApply).serialize(),
+        		beforeSend: function () {
+        			$.modal.loading("正在处理中，请稍后...");
+        			$.modal.disable();
+        		},
+        		success: function(result) {
+        			if(result.code == 0){
+
+        				var config1 = {
+        					url: "/system/facReimburseApply/applyReimburse",
+        					type: "post",
+        					dataType: "json",
+        					async: false,
+        					data: {"num":num,"type":"chailv"},
+        					beforeSend: function () {
+        						$.modal.loading("正在处理中，请稍后...");
+        						$.modal.disable();
+        					},
+        					success: function(result) {
+        					}
+        				};
+        				$.ajax(config1);
+        			}
+
+        			$.operate.successCallback(result);
+        		}
+        	};
+        	$.ajax(config);
         }
+
     }
 
 </script>

@@ -18,6 +18,7 @@ import com.ruoyi.system.service.finance.IFacReimburseApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.text.SimpleDateFormat;
@@ -107,10 +108,22 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
             List<FacUserApproval> approvals = facUserApprovalMapper.selectFacUserApprovalList(nextFac);
             // 若无下一步则审批成功，否则审批中
             if (approvals.size() != 0) {
-
                 FacUserApproval next = approvals.get(0);
                 next.setApprovalSight("1");
                 facUserApprovalMapper.updateFacUserApproval(next);
+            if(approvals.get(0).getApproverId()==253||approvals.get(0).getApproverId()==257){
+
+                FacUserApproval nextFacs = new FacUserApproval();
+                nextFac.setApplyId(next.getApplyId());
+                nextFac.setApprovalLevel(next.getApprovalLevel() + 1);
+                approvals = facUserApprovalMapper.selectFacUserApprovalList(nextFacs);
+                FacUserApproval nexts = approvals.get(0);
+                nexts.setApprovalSight("1");
+                facUserApprovalMapper.updateFacUserApproval(nexts);
+
+
+            }
+
             } else {
                 //当前申请所有审批人已经同意
                 return 0;

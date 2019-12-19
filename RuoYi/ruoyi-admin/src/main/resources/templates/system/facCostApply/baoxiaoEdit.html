@@ -6,8 +6,8 @@
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
 	<form class="form-horizontal m" id="form-facCostApply-edit" th:object="${facCostApply}">
-<!--		<input id="id" name="id" th:field="*{id}"  type="hidden">-->
 		<div class="form-group">
+			<input id="id" name="id" th:field="*{id}"  type="hidden">
 			<label class="col-sm-3 control-label">出差编号：</label>
 			<div class="col-sm-8">
 				<input id="num" name="num" th:field="*{num}" class="form-control" type="text" readonly>
@@ -40,7 +40,7 @@
 			</div>
 		</div>
 		<div class="form-group">
-			<label class="col-sm-3 control-label">实际费用：</label>
+			<label class="col-sm-3 control-label">预计费用：</label>
 			<div class="col-sm-8">
 				<input id="moneyEs" name="moneyEs" th:field="*{moneyEs}" class="form-control" type="text" readonly>
 			</div>
@@ -76,10 +76,9 @@
 	var prefix = ctx + "system/facCostReimburse";
 	var prefix1 = ctx + "system/facCostDetailReimburse";
 	var prefix2 = ctx + "system/facCostPutupReimburse";
-
 	var facCostReimburseId = [[${facCostApply.id}]];
-
 	var num = $("#num").val();
+
 	$("#form-facCostApply-edit").validate({
 		rules:{
 			xxxx:{
@@ -109,7 +108,7 @@
 
 	var options1 = {
 		id: "bootstrap-table-1",
-		url: prefix1 + "/list",
+		url: prefix1 + "/lists",
 		showSearch: false,
 		showRefresh: false,
 		showToggle: false,
@@ -177,7 +176,7 @@
 
 	var options2 = {
 		id: "bootstrap-table-2",
-		url: prefix2 + "/list?num" + num,
+		url: prefix2 + "/lists?num" + num,
 		showSearch: false,
 		showRefresh: false,
 		showToggle: false,
@@ -313,41 +312,48 @@
 	});
 
 	function submitHandler() {
-		if ($.validate.form()) {
-			var config = {
-				url: prefix + "/edit?id="+facCostReimburseId,
-				type: "post",
-				dataType: "json",
-				async: false,
-				data: $('#form-facCostApply-edit').serialize(),
-				beforeSend: function () {
-					$.modal.loading("正在处理中，请稍后...");
-					$.modal.disable();
-				},
-				success: function(result) {
-					if(result.code == 0){
+		$.modal.open("报销", "/system/facCostApply/addSave?facCostApply=" +$('#form-facCostApply-edit').serialize());
 
-						var config1 = {
-							url: "/system/facReimburseApply/applyReimburse",
-							type: "post",
-							dataType: "json",
-							async: false,
-							data: {"num":num,"type":"chailv"},
-							beforeSend: function () {
-								$.modal.loading("正在处理中，请稍后...");
-								$.modal.disable();
-							},
-							success: function(result) {
-							}
-						};
-						$.ajax(config1);
-					}
+		//$.modal.open("报销", "/system/facCostApply/addSave?id=" +facCostReimburseId);
 
-					$.operate.successCallback(result);
-				}
-			};
-			$.ajax(config);
-		}
+
+		//  if ($.validate.form()) {
+		// 	var config = {
+		// 		url: prefix + "/edit?id="+facCostReimburseId,
+		// 		type: "post",
+		// 		dataType: "json",
+		// 		async: false,
+		// 		data: $('#form-facCostApply-edit').serialize(),
+		// 		beforeSend: function () {
+		// 			$.modal.loading("正在处理中，请稍后...");
+		// 			$.modal.disable();
+		// 		},
+		// 		success: function(result) {
+		// 			if(result.code == 0){
+		//
+		// 				var config1 = {
+		// 					url: "/system/facReimburseApply/applyReimburse",
+		// 					type: "post",
+		// 					dataType: "json",
+		// 					async: false,
+		// 					data: {"num":num,"type":"chailv"},
+		// 					beforeSend: function () {
+		// 						$.modal.loading("正在处理中，请稍后...");
+		// 						$.modal.disable();
+		// 					},
+		// 					success: function(result) {
+		// 					}
+		// 				};
+		// 				$.ajax(config1);
+		// 			}
+		//
+		// 			$.operate.successCallback(result);
+		// 		}
+		// 	};
+		// 	$.ajax(config);
+		// }
+
+
 	}
 </script>
 </body>

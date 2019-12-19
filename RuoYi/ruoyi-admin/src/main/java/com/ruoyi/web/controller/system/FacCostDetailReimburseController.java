@@ -55,8 +55,23 @@ public class FacCostDetailReimburseController extends BaseController
         List<FacCostDetailReimburse> list = facCostDetailReimburseService.selectFacCostDetailReimburseList(facCostDetailReimburse);
 		return getDataTable(list);
 	}
-	
-	
+
+
+	/**
+	 * 查询差旅申请详细报销列列表
+	 */
+	@PostMapping("/lists")
+	@ResponseBody
+	public TableDataInfo lists(String  num)
+	{
+		startPage();
+		FacCostDetailReimburse facCostDetailReimburse=new FacCostDetailReimburse();
+		facCostDetailReimburse.setNum(num);
+		facCostDetailReimburse.setReason(null);
+		List<FacCostDetailReimburse> list = facCostDetailReimburseService.selectFacCostDetailReimburseList(facCostDetailReimburse);
+		return getDataTable(list);
+	}
+
 	/**
 	 * 导出差旅申请详细报销列列表
 	 */

@@ -315,7 +315,10 @@ public class ApprovalProcessServiceImpl implements ApprovalProcessService {
         if (facSysUserApproval.getApprovalLevel() == 1) {
             facSysUserApproval.setApprovalSight("1");
         } else {
+
             facSysUserApproval.setApprovalSight("0");
+
+
         }
         facSysUserApproval.setDeptName(iSysUserService.selectDeptName(facSysUserApproval.getApplicantId()));
         approvalProcessMapper.insert(facSysUserApproval);

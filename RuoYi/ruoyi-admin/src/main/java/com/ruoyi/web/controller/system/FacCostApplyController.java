@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.system.mapper.finance.FacCostDetailApplyMapper;
+import com.ruoyi.system.service.finance.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,11 +30,6 @@ import com.ruoyi.system.domain.finance.FacCostPutupApply;
 import com.ruoyi.system.domain.finance.FacReimburseApply;
 import com.ruoyi.system.domain.finance.FacUserApproval;
 import com.ruoyi.system.service.ISysUserService;
-import com.ruoyi.system.service.finance.IFacCostApplyService;
-import com.ruoyi.system.service.finance.IFacCostPutupApplyService;
-import com.ruoyi.system.service.finance.IFacNumberTableService;
-import com.ruoyi.system.service.finance.IFacReimburseApplyService;
-import com.ruoyi.system.service.finance.IFacUserApprovalService;
 
 /**
  * 差旅申请 信息操作处理
@@ -60,6 +56,10 @@ public class FacCostApplyController extends BaseController {
     private IFacNumberTableService facNumberTableService;
     @Autowired
     private FacCostDetailApplyMapper facCostDetailApplyMapper;
+    @Autowired
+    private IFacCostDetailReimburseService facCostDetailReimburseService;
+    @Autowired
+    private IFacCostPutupReimburseService facCostPutupReimburseService;
 
     @GetMapping()
     public String facCostApply() {
@@ -148,10 +148,14 @@ public class FacCostApplyController extends BaseController {
     }
 
     @GetMapping("/addSave")
-    public String addSave(String id, ModelMap map) {
-        map.put("id", id);
-        FacCostApply facCostApply = facCostApplyService.selectFacCostApplyById(Long.valueOf(id).longValue());
-        map.put("amount", facCostApplyService.selectDouble(facCostApply.getNum()));
+    public String addSave(FacCostApply facCostApply,ModelMap map) {
+
+        Double sum1 = facCostDetailReimburseService.selectAmountByNum(facCostApply.getNum());
+        Double sum2 = facCostPutupReimburseService.selectAmountByNum(facCostApply.getNum());
+        facCostApply.setMoneyEs(sum1+sum2);
+        map.put("facCostApply",facCostApply);
+        map.put("num",facCostApply.getNum());
+        map.put("moneyEs",sum1+sum2);
         return prefix + "/addSave";
     }
 
