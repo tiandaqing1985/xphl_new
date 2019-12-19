@@ -439,7 +439,7 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 				else if(leaveType.equals("3") || leaveType.equals("4")){
 					Date starttime = userApproval1.getUserApply().getStarttime();
 					Date endtime = userApproval1.getUserApply().getEndtime();
-					Double leaveCount = userApplyService.leaveCount("本月", userApproval1.getUserApply().getUserId(), starttime, null);
+					Double leaveCount = userApplyService.leaveCount("本月", userApproval1.getUserApply().getUserId(), starttime);
 					if(leaveCount >= 15.0){
 						Holiday iholiday = new Holiday();
 						iholiday.setUserId(userApproval1.getUserApply().getUserId());
@@ -460,7 +460,7 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 						System.out.println("111111111");
 					}
 					else{
-						Double leaveCount2 = userApplyService.leaveCount("本月", userApproval1.getUserApply().getUserId(), endtime, null);
+						Double leaveCount2 = userApplyService.leaveCount("本月", userApproval1.getUserApply().getUserId(), endtime);
 						if(leaveCount2 >= 15.0){
 							Holiday iholiday = new Holiday();
 							iholiday.setUserId(userApproval1.getUserApply().getUserId());

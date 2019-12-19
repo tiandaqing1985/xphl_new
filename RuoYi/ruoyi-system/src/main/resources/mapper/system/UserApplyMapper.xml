@@ -644,10 +644,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	</where>
     </select>
     
+     <select id="selectLeaveUserApplyByuserId2" parameterType="UserApply" resultType="Double">
+    	SELECT sum(timelength) FROM sys_user_apply 
+    	<where>
+    	<if test="leaveType != null and leaveType != ''">and leave_type = #{leaveType}</if>
+    	<if test="userId != null "> and user_id = #{userId}</if>
+    	<if test="starttime != null  "><![CDATA[ and starttime >= #{starttime} ]]></if>
+    	<if test="endtime != null  "><![CDATA[ and endtime <= #{endtime} ]]></if>
+    	<if test="applyType != null  and applyType != ''  ">and apply_type = #{applyType}</if>
+    	AND apply_state = 3
+    	</where>
+    </select>
+    
     <select id="selectLeaveUserApplyByuserIdUp" parameterType="UserApply" resultMap="UserApplyResult">
     	SELECT * FROM sys_user_apply 
     	<where>
     	leave_type IN (3 , 4 ) 
+    	<if test="userId != null "> and user_id = #{userId}</if>
+    	<if test="starttime != null  "><![CDATA[ and starttime < #{starttime} ]]></if>
+    	<if test="endtime != null  "><![CDATA[ and endtime <= #{endtime} ]]></if>
+    	<if test="applyType != null  and applyType != ''  ">and apply_type = #{applyType}</if>
+    	AND apply_state = 3
+    	</where>
+    </select>
+    
+     <select id="selectLeaveUserApplyByuserIdUp2" parameterType="UserApply" resultMap="UserApplyResult">
+    	SELECT * FROM sys_user_apply 
+    	<where>
+    	<if test="leaveType != null and leaveType != ''">and leave_type = #{leaveType}</if>
     	<if test="userId != null "> and user_id = #{userId}</if>
     	<if test="starttime != null  "><![CDATA[ and starttime < #{starttime} ]]></if>
     	<if test="endtime != null  "><![CDATA[ and endtime <= #{endtime} ]]></if>
@@ -667,6 +691,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	AND apply_state = 3
     	</where>
     </select>
+    
+     <select id="selectLeaveUserApplyByuserIdDown2" parameterType="UserApply" resultMap="UserApplyResult">
+    	SELECT * FROM sys_user_apply 
+    	<where>
+    	<if test="leaveType != null and leaveType != ''">and leave_type = #{leaveType}</if>
+    	<if test="userId != null "> and user_id = #{userId}</if>
+    	<if test="starttime != null  "><![CDATA[ and starttime >= #{starttime} ]]></if>
+    	<if test="endtime != null  "><![CDATA[ and endtime > #{endtime} ]]></if>
+    	<if test="applyType != null  and applyType != ''  ">and apply_type = #{applyType}</if>
+    	AND apply_state = 3
+    	</where>
+    </select>
+    
     <!-- 查询是否在产假月份内 -->
    	<select id="selcetMaternityLeaveByUserApply" parameterType="UserApply" resultMap="UserApplyResult">
    		SELECT * FROM sys_user_apply 

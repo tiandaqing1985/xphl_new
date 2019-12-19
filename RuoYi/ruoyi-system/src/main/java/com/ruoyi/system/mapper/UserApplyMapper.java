@@ -125,10 +125,15 @@ public interface UserApplyMapper
 	 */
 	public Double selectLeaveUserApplyByuserId(UserApply userApply);
 	
+	public Double selectLeaveUserApplyByuserId2(UserApply userApply);
+	
 	public List<UserApply> selectLeaveUserApplyByuserIdUp(UserApply userApply);
 	
 	public List<UserApply> selectLeaveUserApplyByuserIdDown(UserApply userApply);
 	
+	public List<UserApply> selectLeaveUserApplyByuserIdUp2(UserApply userApply);
+	
+	public List<UserApply> selectLeaveUserApplyByuserIdDown2(UserApply userApply);
 	/**
 	 * 查出某日期是否在产假申请所占的月份里
 	 */

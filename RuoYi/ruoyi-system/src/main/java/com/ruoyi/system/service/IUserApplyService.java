@@ -114,7 +114,13 @@ public interface IUserApplyService
 	/**
 	 * 拿到某月病、事假的请假天数的和
 	 */
-	public Double leaveCount(String monthName, Long userId, Date date, String leaveType);
+	public Double leaveCount(String monthName, Long userId, Date date);
+	
+	/**
+	 * 拿到某年的请假天数的和
+	 */
+	public Double leaveCount(Date firstDay, Date lastDay, Long userId,String leaveType);
+	
 	
 	/**
 	 * 计算请假时长

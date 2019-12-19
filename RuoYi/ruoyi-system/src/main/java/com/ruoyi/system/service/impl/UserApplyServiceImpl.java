@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.impl;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -498,7 +499,7 @@ public class UserApplyServiceImpl implements IUserApplyService
 	 * 拿到某天上一个月份的 病、事假的请假天数的和
 	 */
 	@Override
-	public Double leaveCount(String monthName, Long userId, Date date, String leaveType){
+	public Double leaveCount(String monthName, Long userId, Date date){
 		
 		//拿到上个月的第一天和最后一天
 		Date firstDay = getDate(monthName, date ,"第一天");
@@ -510,7 +511,6 @@ public class UserApplyServiceImpl implements IUserApplyService
 		userApply.setStarttime(firstDay);
 		userApply.setEndtime(lastDay);
 		userApply.setApplyType("1");
-		userApply.setLeaveType(leaveType);
 		
 		//本月请假申请成功的天数
 		Double mid = 0.0;
@@ -1170,11 +1170,13 @@ public class UserApplyServiceImpl implements IUserApplyService
 			String checkTime1 = sdf2.format(checkDate1);
 			Date checkDate2 = dingList.get(1).getUserCheckTime();
 			String checkTime2 = sdf2.format(checkDate2);
-			long timelength = 0L;
+			double timelength = 0;
 			if(checkDate1.after(checkDate2)){
-				timelength = secondsBetween(checkTime2,checkTime1)/3600;
+				timelength = secondsBetween(checkTime2,checkTime1);
+				timelength = new BigDecimal((float)timelength/3600).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 			}else{
-				timelength = secondsBetween(checkTime1,checkTime2)/3600;
+				timelength = secondsBetween(checkTime1,checkTime2);
+				timelength = new BigDecimal((float)timelength/3600).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
 			}
 			if(timelength >= 11.5){
 				return true;
@@ -1284,5 +1286,72 @@ public class UserApplyServiceImpl implements IUserApplyService
 		}else{
 			return "1";
 		}
+	}
+
+	@Override
+	public Double leaveCount(Date firstDay, Date lastDay, Long userId, String leaveType) {
+			
+		//请假
+		UserApply userApply = new UserApply();
+		userApply.setUserId(userId);
+		userApply.setStarttime(firstDay);
+		userApply.setEndtime(lastDay);
+		userApply.setApplyType("1");
+		userApply.setLeaveType(leaveType);
+		
+		//本年请假申请成功的天数
+		Double mid = 0.0;
+		if(userApplyMapper.selectLeaveUserApplyByuserId2(userApply) != null) {
+			mid = userApplyMapper.selectLeaveUserApplyByuserId2(userApply);
+		}
+		
+		Double pre = 0.0;
+		List<UserApply> preList = userApplyMapper.selectLeaveUserApplyByuserIdUp2(userApply);
+		if (preList != null){
+			for(UserApply userApply1 : preList){
+				pre = pre + countTime(firstDay, userApply1.getEndtime(), userApply1.getTimeapart1(), userApply1.getTimeapart2());
+			}
+		}
+		
+		Double suf = 0.0;
+		List<UserApply> sufList = userApplyMapper.selectLeaveUserApplyByuserIdDown2(userApply);
+		if (sufList != null){
+			for(UserApply userApply2 : sufList){
+				suf = suf + countTime(userApply2.getStarttime(), lastDay, userApply2.getTimeapart1(), userApply2.getTimeapart2());
+			}
+		}
+		
+		Double result1 = mid + pre + suf;
+		//上月销假申请成功的天数
+		UserApply userApplyUndo = new UserApply();
+		userApplyUndo.setUserId(userId);
+		userApplyUndo.setStarttime(firstDay);
+		userApplyUndo.setEndtime(lastDay);
+		userApplyUndo.setApplyType("3");
+		userApplyUndo.setLeaveType(leaveType);
+		
+		Double umid = 0.0;
+		if(userApplyMapper.selectLeaveUserApplyByuserId2(userApplyUndo) != null) {
+			umid = userApplyMapper.selectLeaveUserApplyByuserId2(userApplyUndo);
+		}
+		Double upre = 0.0;
+		
+		List<UserApply> upreList = userApplyMapper.selectLeaveUserApplyByuserIdUp2(userApplyUndo);
+		if (upreList != null){
+			for(UserApply userApply1 : upreList){
+				upre = upre + countTime(firstDay, userApply1.getEndtime(), userApply1.getTimeapart1(), userApply1.getTimeapart2());
+			}
+		}
+		Double usuf = 0.0;
+		List<UserApply> usufList = userApplyMapper.selectLeaveUserApplyByuserIdDown2(userApplyUndo);
+		if (usufList != null){
+			for(UserApply userApply2 : usufList){
+				usuf = usuf + countTime(userApply2.getStarttime(), lastDay, userApply2.getTimeapart1(), userApply2.getTimeapart2());
+			}
+		}
+		Double result2 = umid + upre + usuf;
+		
+		Double total = result1 - result2;
+		return total;
 	}
 }
