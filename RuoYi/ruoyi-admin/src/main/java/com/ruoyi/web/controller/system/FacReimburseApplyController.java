@@ -746,7 +746,7 @@ public class FacReimburseApplyController extends BaseController {
         if (reiTrafficApply.getType().equals("加班")) {
             boolean a = userApplyService.ifSatisfied(ShiroUtils.getUserId(), reiTrafficApply.getDdDate());
             if (!a) {
-                return AjaxResult.success("加班时长不满足2.5小时或加班审批没有通过,保存失败");
+                return AjaxResult.success("加班时长不满足2.5小时保存失败");
             }
         }
         reiTrafficApply.setApplyUser(ShiroUtils.getUserId());

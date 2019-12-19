@@ -55,6 +55,14 @@
         						$.modal.disable();
         					},
         					success: function(result) {
+
+                                window.parent.location.reload();
+                                var index = parent.layer.getFrameIndex(window.name);
+                                parent.layer.close(index);
+                                $.modal.closeLoading();
+                                $.modal.closeTab();
+                                $.modal.close();
+                                $.modal.closeAll();
         					}
         				};
         				$.ajax(config1);

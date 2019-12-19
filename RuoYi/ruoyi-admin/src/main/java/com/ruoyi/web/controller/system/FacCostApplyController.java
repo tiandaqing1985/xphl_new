@@ -152,6 +152,7 @@ public class FacCostApplyController extends BaseController {
 
         Double sum1 = facCostDetailReimburseService.selectAmountByNum(facCostApply.getNum());
         Double sum2 = facCostPutupReimburseService.selectAmountByNum(facCostApply.getNum());
+        map.put("amount",facCostApply.getMoneyEs());
         facCostApply.setMoneyEs(sum1+sum2);
         map.put("facCostApply",facCostApply);
         map.put("num",facCostApply.getNum());
