@@ -2,6 +2,8 @@ package com.ruoyi.system.mapper;
 
 import com.ruoyi.system.domain.Dingding;
 import com.ruoyi.system.domain.OaDingding;
+
+import java.util.Date;
 import java.util.List;	
 
 /**
@@ -27,6 +29,20 @@ public interface OaDingdingMapper
      * @return 钉钉考勤数据集合
      */
 	public List<OaDingding> selectOaDingdingList(OaDingding oaDingding);
+	
+	/**
+	 * 查询某用户在某天打卡最大的时间
+	 * @param oaDingding
+	 * @return 打卡时间
+	 */
+	public Date selectMaxOaDingding(OaDingding oaDingding);
+	
+	/**
+	 * 查询某用户在某天打卡最小的时间
+	 * @param oaDingding
+	 * @return 打卡时间
+	 */
+	public Date selectMinOaDingding(OaDingding oaDingding);
 	
 	/**
 	 * 查询正常打卡记录

@@ -30,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="endtime != null"><!-- 结束时间检索 -->
 				AND date_format(date,'%y%m%d') &lt;= date_format(#{endtime},'%y%m%d')
 			</if> 
+			<if test="time != null">and date = #{time}</if>
          </where>
     </select>
     

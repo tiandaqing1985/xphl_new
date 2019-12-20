@@ -75,6 +75,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ORDER BY checkType DESC
     </select>
     
+    <select id="selectMaxOaDingding" parameterType="Dingding" resultType="Date">
+    	select max(userCheckTime) from oa_dingding
+    	where workDate =#{time} and user_name = #{userName}
+    </select>
+    
+     <select id="selectMinOaDingding" parameterType="Dingding" resultType="Date">
+    	select min(userCheckTime) from oa_dingding
+    	where workDate =#{time} and user_name = #{userName}
+    </select>
+    
     <select id="selectOaDingdingById" parameterType="Long" resultMap="OaDingdingResult">
         <include refid="selectOaDingdingVo"/>
         where user_id = #{userId}

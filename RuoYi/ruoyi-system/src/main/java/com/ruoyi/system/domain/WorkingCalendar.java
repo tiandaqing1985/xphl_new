@@ -31,6 +31,16 @@ public class WorkingCalendar extends BaseEntity
 	/** 加班结束时间 */
 	private Date endtime;
 	
+	private String time;
+	
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
 	public Date getStarttime() {
 		return starttime;
 	}
