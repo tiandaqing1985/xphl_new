@@ -487,8 +487,7 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 				userApproval4.setApprovalSight("1");
 				userApprovalMapper.updateUserApproval(userApproval4);
 				userApproval.setApprovalSight("0");
-			}
-			if(userApproval7 != null){
+			}else if(userApproval7 != null){
 				UserApproval userApproval4 = new UserApproval();
 				userApproval4.setApprovalId(userApproval7.getApprovalId());
 				userApproval4.setApprovalSight("1");
