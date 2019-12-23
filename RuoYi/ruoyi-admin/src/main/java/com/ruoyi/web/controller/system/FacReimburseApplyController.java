@@ -568,6 +568,7 @@ public class FacReimburseApplyController extends BaseController {
     @ResponseBody
     @Transactional
     public AjaxResult addSubmit2(FacReimburseApply facReimburseApply) {
+        facReimburseApply.setType("日常报销");
         if (facReimburseApply.getId() == null) {
             // 直接添加
             facReimburseApply.setLoanUser(ShiroUtils.getUserId());
@@ -742,7 +743,7 @@ public class FacReimburseApplyController extends BaseController {
         if(sysDeptService.selectDeptById(ShiroUtils.getDeptId())!=null){
             reiTrafficApply.setDeptName(sysDeptService.selectDeptById(ShiroUtils.getDeptId()).getDeptName());
         }
-        //此处需要改写代码
+       // 此处需要改写代码
         if (reiTrafficApply.getType().equals("加班")) {
             boolean a = userApplyService.ifSatisfied(ShiroUtils.getUserId(), reiTrafficApply.getDdDate());
             if (!a) {

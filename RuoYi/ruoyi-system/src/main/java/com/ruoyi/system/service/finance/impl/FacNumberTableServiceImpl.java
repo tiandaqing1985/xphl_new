@@ -1,6 +1,7 @@
 package com.ruoyi.system.service.finance.impl;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.core.text.Convert;
@@ -82,27 +83,31 @@ public class FacNumberTableServiceImpl implements IFacNumberTableService {
 	}
 
 	@Override
-	public String getNum(String head, String time) {
-		FacNumberTable facNumberTable = new FacNumberTable();
-		facNumberTable.setHead(head);
-		facNumberTable.setTime(time);
-		List<FacNumberTable> facNum = facNumberTableMapper
-				.selectFacNumberTableList(facNumberTable);
-		if (facNum == null||facNum.size()==0) {
-			facNumberTable.setNumber(0001);
-			facNumberTable.setNum(head + time + "0001");
-			facNumberTableMapper.insertFacNumberTable(facNumberTable);
-			return head + time + "0001";
-		} else {
-			int number = facNumberTableMapper.selectNumber(facNumberTable).getNumber() + 1;
-			FacNumberTable fac = new FacNumberTable();
-			fac.setNum(head + time + String.format("%04d", number));
-			fac.setHead(head);
-			fac.setTime(time);
-			fac.setNumber(number);
-			facNumberTableMapper.insertFacNumberTable(fac); 
-			return head + time + String.format("%04d", number); 
-		} 
+	public synchronized String getNum(String head, String time) {
+		try{
+			FacNumberTable facNumberTable = new FacNumberTable();
+			facNumberTable.setHead(head);
+			facNumberTable.setTime(time);
+			List<FacNumberTable> facNum = facNumberTableMapper
+					.selectFacNumberTableList(facNumberTable);
+			if (facNum == null||facNum.size()==0) {
+				facNumberTable.setNumber(0001);
+				facNumberTable.setNum(head + time + "0001");
+				facNumberTableMapper.insertFacNumberTable(facNumberTable);
+				return head + time + "0001";
+			} else {
+				int number = facNumberTableMapper.selectNumber(facNumberTable).getNumber() + 1;
+				FacNumberTable fac = new FacNumberTable();
+				fac.setNum(head + time + String.format("%04d", number));
+				fac.setHead(head);
+				fac.setTime(time);
+				fac.setNumber(number);
+				facNumberTableMapper.insertFacNumberTable(fac);
+				return head + time + String.format("%04d", number);
+			}
+		} catch (Exception e) {
+			throw e;
+		}
 	}
 
 }

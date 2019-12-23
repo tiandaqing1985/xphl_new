@@ -392,7 +392,8 @@
         if ($.validate.form()) {
             //index为1表示保存
             if(index==1){
-                mSave(prefix + "/addSave", $('#form-reiadd').serialize());
+              // mSave(prefix + "/addSave", $('#form-reiadd').serialize());
+                mSave(prefix + "/addSubmit2", $('#form-reiadd').serialize());
             }else if(index==2){
                 mSave(prefix + "/addSubmit2", $('#form-reiadd').serialize());
             }
