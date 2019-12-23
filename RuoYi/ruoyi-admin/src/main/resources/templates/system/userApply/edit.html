@@ -22,7 +22,7 @@
 			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>开始时间：</label>
 			<div class="col-sm-8">
 				<div class="select-time" style="width: 100%">
-                	<input id="starttime1" name="starttime1" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" readonly="readonly" required>
+                	<input id="starttime" name="starttime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.starttime, 'yyyy-MM-dd')}" readonly="readonly" required>
                 </div><span id="p01"></span>
 			</div>
 		</div>
@@ -38,7 +38,7 @@
 		<div class="form-group">
 			<label class="col-sm-2 control-label"><span style="color: red; ">*</span>结束时间：</label>
 			<div class="col-sm-8">
-                <input id="endtime1" name="endtime1" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" readonly="readonly" required>
+                <input id="endtime" name="endtime" class="time-input" type="text" maxlength="30" th:value="${#dates.format(userApply.endtime, 'yyyy-MM-dd')}" readonly="readonly" required>
 			</div><span id="p02"></span>
 		</div>
 		
@@ -522,7 +522,7 @@
            return currentdate;
        };
      //计算天数差的函数，通用  
-/*        function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式  
+      function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式  
            var  aDate,  oDate1,  oDate2,  iDays  
            aDate  =  sDate1.split("-")  
            oDate1  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])    //转换为12-18-2006格式  
@@ -530,17 +530,7 @@
            oDate2  =  new  Date(aDate[1]  +  '-'  +  aDate[2]  +  '-'  +  aDate[0])  
            iDays  =  parseInt(Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60  /24)    //把相差的毫秒数转换为天数  
            return  iDays 
-       }; */
-	 //计算小时差的函数，通用  
-       function  DateDiff(sDate1,  sDate2){    //sDate1和sDate2是2006-12-18格式 
-           var  aDate,  oDate1,  oDate2
-    		var iDays = 0.0;  
-           oDate1  =  new  Date(sDate1)    //转换为12-18-2006格式 
-           oDate2  =  new  Date(sDate2)  
-           iDays  =  Math.abs(oDate1  -  oDate2)  /  1000  /  60  /  60    //把相差的毫秒数转换为小时数  
-    		iDay = Math.floor(iDays * 10)/10
-           return  iDay  
-       };
+       }; 
     	
    	function Datelength(sDate1, sDate2, timeapart1, timeapart2){
 		debugger;
