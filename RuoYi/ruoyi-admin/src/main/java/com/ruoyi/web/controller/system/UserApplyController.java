@@ -124,9 +124,15 @@ public class UserApplyController extends BaseController
 		user2.setRoleId(3L);
 		user2.setArea(user.getArea());
 		Long personnelId = iSysRoleService.selectUserIdByRoleId(user2);//查询人事id
-		if(personnelId.equals(ShiroUtils.getUserId())){
-			showFlag = true;
+		if(personnelId==null){
+
+		}else{
+			if(personnelId.equals(ShiroUtils.getUserId())){
+				showFlag = true;
+			}
 		}
+
+
 		List<UserApply> applyList = userApplyService.selectUserApplyById(applyId);
 		for(UserApply apply : applyList){
 			if(apply.getRemark() != null)

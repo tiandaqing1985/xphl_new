@@ -8,6 +8,9 @@ import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.system.domain.finance.FacNumberTable;
 import com.ruoyi.system.mapper.finance.FacNumberTableMapper;
 import com.ruoyi.system.service.finance.IFacNumberTableService;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import javax.security.auth.login.LoginException;
 
 /**
  * 财务编号 服务层实现
@@ -106,7 +109,7 @@ public class FacNumberTableServiceImpl implements IFacNumberTableService {
 				return head + time + String.format("%04d", number);
 			}
 		} catch (Exception e) {
-			throw e;
+			return "000000000000";
 		}
 	}
 

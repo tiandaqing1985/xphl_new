@@ -114,14 +114,12 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
             if(approvals.get(0).getApproverId()==253||approvals.get(0).getApproverId()==257){
 
                 FacUserApproval nextFacs = new FacUserApproval();
-                nextFac.setApplyId(next.getApplyId());
-                nextFac.setApprovalLevel(next.getApprovalLevel() + 1);
+                nextFacs.setApplyId(next.getApplyId());
+                nextFacs.setApprovalLevel(next.getApprovalLevel() + 1);
                 approvals = facUserApprovalMapper.selectFacUserApprovalList(nextFacs);
                 FacUserApproval nexts = approvals.get(0);
                 nexts.setApprovalSight("1");
                 facUserApprovalMapper.updateFacUserApproval(nexts);
-
-
             }
 
             } else {
