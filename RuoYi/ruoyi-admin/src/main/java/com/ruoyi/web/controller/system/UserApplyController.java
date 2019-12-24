@@ -123,13 +123,12 @@ public class UserApplyController extends BaseController
 		SysUser user2 = new SysUser();
 		user2.setRoleId(3L);
 		user2.setArea(user.getArea());
+		if(user.getArea().equals("3")){//深圳的hr依然是北京hr
+			user2.setArea("2");
+		}
 		Long personnelId = iSysRoleService.selectUserIdByRoleId(user2);//查询人事id
-		if(personnelId==null){
-
-		}else{
-			if(personnelId.equals(ShiroUtils.getUserId())){
-				showFlag = true;
-			}
+		if(personnelId.equals(ShiroUtils.getUserId())){
+			showFlag = true;
 		}
 
 

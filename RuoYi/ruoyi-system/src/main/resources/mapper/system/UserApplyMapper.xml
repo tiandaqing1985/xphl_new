@@ -142,7 +142,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     		FROM sys_user_apply a
 			LEFT JOIN sys_user us ON us.user_id = a.user_id 
 		<where>
-			a.apply_state <![CDATA[ != ]]> 2
+			a.apply_state in(1,3)
 		    and a.apply_type = 5
 		     <if test="userId != null"> and a.user_id = #{userId}</if>
 		     <if test="time != null"> and a.starttime like concat('%',#{time},'%')</if>
