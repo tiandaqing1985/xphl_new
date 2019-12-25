@@ -434,7 +434,7 @@ public class FacUserApprovalController extends BaseController {
      * 批量财务审批
      */
     @Log(title = "批量财务审批", businessType = BusinessType.UPDATE)
-    @PostMapping("/piliangs4")
+    @PostMapping("/piliang4")
     @ResponseBody
     public AjaxResult piLiang4(String ids) {
 
@@ -490,6 +490,7 @@ public class FacUserApprovalController extends BaseController {
         return toAjax(1);
     }
 
+
     /**
      * 修改财务审批
      */
@@ -498,6 +499,51 @@ public class FacUserApprovalController extends BaseController {
         return prefix + "/piliang";
 
     }
+
+
+    /**
+     * 批量修改财务审批
+     */
+    @GetMapping("/approvalModer")
+    public String PLshenpi(String ids,ModelMap map) {
+        map.put("ids",ids);
+        map.put("approvalId",ids);
+        return prefix + "/approvalModer";
+    }
+
+
+    /**
+     * 批量财务审批
+     */
+    @Log(title = "批量财务审批", businessType = BusinessType.UPDATE)
+    @PostMapping("/approvalModer")
+    @ResponseBody
+    public AjaxResult PLshenpi(String ids,String approvalState) {
+        if (ids != null) {
+            List<FacUserApproval> fac = facUserApprovalService.selectApprovalByIds(ids);
+
+            if (ShiroUtils.getUserId() == 103L) {
+                if (fac != null && fac.size() > 0) {
+                    for (FacUserApproval f : fac) {
+                        f.setApprovalState(approvalState);
+                        facUserApprovalService.updatepiliang(f);
+                    }
+                }
+            } else {
+                if (fac != null && fac.size() > 0) {
+                    for (FacUserApproval f : fac) {
+                        f.setApprovalState(approvalState);
+                        facUserApprovalService.updateFacUserApproval(f);
+                    }
+                }
+            }
+
+            return toAjax(1);
+        }
+        return toAjax(1);
+    }
+
+
 
 
     /**

@@ -30,21 +30,22 @@
             <table id="bootstrap-table" data-mobile-responsive="true"></table>
         </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-sm-offset-5 col-sm-10">
-                                        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
-                                                class="fa fa-check"></i>同意
-                                        </button>&nbsp;
-                        <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
-                                class="fa fa-check"></i>驳回
-                        </button>&nbsp;
-                                        <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
-                                                class="fa fa-reply-all"></i>关 闭
-                                        </button>
+    <div class="row">
+        <div class="col-sm-offset-5 col-sm-10">
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(1)"><i
+                    class="fa fa-check"></i>同意
+            </button>&nbsp;
+            <button type="button" class="btn btn-sm btn-primary" onclick="submitHandler(2)"><i
+                    class="fa fa-check"></i>驳回
+            </button>&nbsp;
+            <button type="button" class="btn btn-sm btn-danger" onclick="closeItem()"><i
+                    class="fa fa-reply-all"></i>关 闭
+            </button>
 
+        </div>
     </div>
 </div>
+
 <div th:include="include :: footer"></div>
 <th:block th:include="include :: bootstrap-suggest-js"/>
 <th:block th:include="include :: bootstrap-select-js"/>
@@ -114,7 +115,6 @@
     function zAdd(approvalId) {
         console.log(approvalId)
         $.modal.openTab("审批", "/system/facUserApproval/detail?approvalId=" + approvalId);
-        console.log('end')
     }
 
     function submitHandler(id) {
@@ -123,16 +123,11 @@
         if(id==1){
 
             if ($.validate.form()) {
-
-
-
                 $.operate.save(prefix + "/piliang3",{"ids": zxy});
-
             }
-
         }else {
                 if ($.validate.form()) {
-                $.operate.save(prefix + "/piliang4", zxy);
+                $.operate.save(prefix + "/piliang4",{"ids": zxy});
             }
         }
 
