@@ -305,18 +305,20 @@
 
     function toSubmitAll(){
 
-        // debugger;
+         debugger;
+     	$.table._option.id = 'bootstrap-table-1';
         var ids = $.table.selectColumns('approvalId');
-        if (rows.length == 0) {
+        
+        if (ids.length == 0) {
             $.modal.alertWarning("请至少选择一条记录");
             return;
         }
-        $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function() {
+        $.modal.confirm("确认要提交选中的" + ids.length + "条数据吗?", function() {
             var url = $.table._option.toAllSubmitUrl;
-            var data = { "ids": rows.join() };
+            var data = { "ids": ids.join() };
             $.operate.submit(url, "post", "json", data);
         });
-        $.modal.open('审批', prefix + "/approvalModer?ids="+3119, '500', '320');
+        $.modal.open('审批', prefix + "/approvalModer?ids="+ids, '500', '320');
        // $.modal.open('审批', prefix + "/approvalModer?ids="+id+"&remark="+remark, '500', '320');
 
     }
