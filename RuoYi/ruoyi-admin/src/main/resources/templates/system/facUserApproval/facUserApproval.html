@@ -59,6 +59,7 @@
                                                 </li>
                                             </ul>
                                         </div>
+
                                     </form>
                                 </div>
                                 <div class="col-sm-12 select-table table-striped">
@@ -279,7 +280,6 @@
 
     function sAdd(id) {
         $.modal.open("审批", "/system/facUserApproval/editSa/" + id);
-
     }
 
     function mySearch(id) {
@@ -292,6 +292,12 @@
         }
         $.table.search('formId' + id);
     }
+
+    function shenpi() {
+        $.modal.openFull("批量审批", "/system/facUserApproval/piliang/");
+
+    }
+
 
 
     var testBsSuggest = $("#applicantId").bsSuggest({
