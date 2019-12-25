@@ -96,7 +96,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 			ding.setUserId(1L);
 			return oaDingdingMapper.selectDingData(ding);
 		}
-		ding.setArea(user.getArea());
+//		ding.setArea(user.getArea());
 		
 		//查询当前用户的角色id
 		List<Long> roleIdList = userRoleMapper.selectRoleIdByUserId(user);
