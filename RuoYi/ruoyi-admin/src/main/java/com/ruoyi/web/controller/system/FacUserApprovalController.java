@@ -72,7 +72,7 @@ public class FacUserApprovalController extends BaseController {
     public TableDataInfo list(FacUserApproval facUserApproval) {
         startPage();
 
-        if(ShiroUtils.getUserId()==1L){
+        if (ShiroUtils.getUserId() == 1L) {
             facUserApproval.setApprovalState("3");
             facUserApproval.setApprovalSight("1");
             List<FacUserApproval> list = facUserApprovalService
@@ -368,6 +368,139 @@ public class FacUserApprovalController extends BaseController {
 
 
     /**
+     * 批量财务审批
+     */
+    @Log(title = "批量财务审批", businessType = BusinessType.UPDATE)
+    @PostMapping("/piliang")
+    @ResponseBody
+    public AjaxResult piLiang() {
+
+        FacUserApproval facUserApproval = new FacUserApproval();
+        facUserApproval.setApproverId(ShiroUtils.getUserId());
+        facUserApproval.setApprovalState("3");
+        facUserApproval.setApprovalSight("1");
+        List<FacUserApproval> fac = facUserApprovalService.selectFacUserApprovalList(facUserApproval);
+        if (ShiroUtils.getUserId() == 103L) {
+            if (fac != null && fac.size() > 0) {
+                for (FacUserApproval f : fac) {
+                    f.setApprovalState("1");
+                    facUserApprovalService.updatepiliang(f);
+                }
+            }
+        } else {
+            if (fac != null && fac.size() > 0) {
+                for (FacUserApproval f : fac) {
+                    f.setApprovalState("1");
+                    facUserApprovalService.updateFacUserApproval(f);
+                }
+            }
+        }
+
+        return toAjax(1);
+    }
+
+    /**
+     * 批量财务审批
+     */
+    @Log(title = "批量财务审批", businessType = BusinessType.UPDATE)
+    @PostMapping("/piliang3")
+    @ResponseBody
+    public AjaxResult piLiang3(String ids) {
+        if (ids != null) {
+            List<FacUserApproval> fac = facUserApprovalService.selectApprovalByIds(ids);
+
+            if (ShiroUtils.getUserId() == 103L) {
+                if (fac != null && fac.size() > 0) {
+                    for (FacUserApproval f : fac) {
+                        f.setApprovalState("1");
+                        facUserApprovalService.updatepiliang(f);
+                    }
+                }
+            } else {
+                if (fac != null && fac.size() > 0) {
+                    for (FacUserApproval f : fac) {
+                        f.setApprovalState("1");
+                        facUserApprovalService.updateFacUserApproval(f);
+                    }
+                }
+            }
+
+            return toAjax(1);
+        }
+        return toAjax(1);
+    }
+
+    /**
+     * 批量财务审批
+     */
+    @Log(title = "批量财务审批", businessType = BusinessType.UPDATE)
+    @PostMapping("/piliangs4")
+    @ResponseBody
+    public AjaxResult piLiang4(String ids) {
+
+        List<FacUserApproval> fac = facUserApprovalService.selectApprovalByIds(ids);
+        if (ShiroUtils.getUserId() == 103L) {
+            if (fac != null && fac.size() > 0) {
+                for (FacUserApproval f : fac) {
+                    f.setApprovalState("2");
+                    facUserApprovalService.updatepiliang(f);
+                }
+            }
+        } else {
+            if (fac != null && fac.size() > 0) {
+                for (FacUserApproval f : fac) {
+                    f.setApprovalState("2");
+                    facUserApprovalService.updateFacUserApproval(f);
+                }
+            }
+        }
+
+        return toAjax(1);
+    }
+
+    /**
+     * 批量财务审批
+     */
+    @Log(title = "批量财务审批", businessType = BusinessType.UPDATE)
+    @PostMapping("/piliangs")
+    @ResponseBody
+    public AjaxResult piLiang2() {
+
+        FacUserApproval facUserApproval = new FacUserApproval();
+        facUserApproval.setApproverId(ShiroUtils.getUserId());
+        facUserApproval.setApprovalState("3");
+        facUserApproval.setApprovalSight("1");
+        List<FacUserApproval> fac = facUserApprovalService.selectFacUserApprovalList(facUserApproval);
+        if (ShiroUtils.getUserId() == 103L) {
+            if (fac != null && fac.size() > 0) {
+                for (FacUserApproval f : fac) {
+                    f.setApprovalState("2");
+                    facUserApprovalService.updatepiliang(f);
+                }
+            }
+        } else {
+            if (fac != null && fac.size() > 0) {
+                for (FacUserApproval f : fac) {
+                    f.setApprovalState("2");
+                    facUserApprovalService.updateFacUserApproval(f);
+                }
+            }
+        }
+
+        return toAjax(1);
+    }
+
+    /**
+     * 修改财务审批
+     */
+    @GetMapping("/piliang")
+    public String piLianga() {
+        return prefix + "/piliang";
+
+    }
+
+
+    /**
      * 修改保存财务审批
      */
     @Log(title = "财务审批", businessType = BusinessType.UPDATE)
@@ -538,7 +671,7 @@ public class FacUserApprovalController extends BaseController {
     @ResponseBody
     public TableDataInfo endfacUserApproval(FacUserApproval facUserApproval) {
         startPage();
-        if(ShiroUtils.getUserId()==1L){
+        if (ShiroUtils.getUserId() == 1L) {
             facUserApproval.setApprovalSight("1");
             List<FacUserApproval> list = facUserApprovalService
                     .selectApplicantIdList(facUserApproval);

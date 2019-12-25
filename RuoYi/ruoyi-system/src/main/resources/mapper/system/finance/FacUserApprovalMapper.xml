@@ -51,6 +51,13 @@
         order by approval_id desc
     </select>
 
+    <select id="selectApprovalByIds" parameterType="String"  resultMap="FacUserApprovalResult">
+        select * from fac_sys_user_approval where approval_id in
+        <foreach item="approvalId" collection="array" open="("
+                 separator="," close=")">
+            #{approvalId}
+        </foreach>
+    </select>
 
     <select id="selectBoHui" resultMap="FacUserApprovalResult">
         select approval_id, apply_id, approval_state, approver_id,

@@ -131,6 +131,12 @@ public interface FacUserApprovalMapper {
     public List<FacAmountApply> selectZD();
 
     public List<FacAmountApply> selectJT();
-
+    /**
+     * 批量查询财务审批
+     *
+     * @param approvalIds 需要查询的数据ID
+     * @return 结果
+     */
+    public List<FacUserApproval>  selectApprovalByIds(String[] approvalId);
 
 }

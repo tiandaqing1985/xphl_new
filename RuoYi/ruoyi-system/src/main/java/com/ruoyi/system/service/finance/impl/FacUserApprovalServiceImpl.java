@@ -133,6 +133,30 @@ public class FacUserApprovalServiceImpl implements IFacUserApprovalService {
         return 1;
     }
 
+
+    @Override
+    public int updatepiliang(FacUserApproval facUserApproval) {
+
+        // 更新当前审批步骤中的状态
+        facUserApproval.setApprovalTime(new Date());
+        facUserApprovalMapper.updateFacUserApproval(facUserApproval);
+        // 若是审批通过
+        return 1;
+    }
+
+    /**
+     * 查询财务审批对象
+     *
+     * @param ids 需要查询的数据ID
+     * @return 结果
+     */
+    @Override
+    public List<FacUserApproval> selectApprovalByIds(String ids) {
+        return facUserApprovalMapper
+                .selectApprovalByIds(Convert.toStrArray(ids));
+    }
+
+
     /**
      * 删除财务审批对象
      *

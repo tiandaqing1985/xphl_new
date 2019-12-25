@@ -106,4 +106,20 @@ public interface IFacUserApprovalService {
     public List<FacUserApproval> select(Long userId);
 
     public Map<String, FacAmountApply> selectDept(SysUser user);
+
+
+    /**
+     * 修改批量财务审批
+     *
+     * @param facUserApproval 财务审批信息
+     * @return 结果
+     */
+    public int updatepiliang(FacUserApproval facUserApproval);
+    /**
+     * 查询批量财务审批
+     *
+     * @param facUserApproval 财务审批信息
+     * @return 结果
+     */
+    public List<FacUserApproval> selectApprovalByIds(String ids);
 }
