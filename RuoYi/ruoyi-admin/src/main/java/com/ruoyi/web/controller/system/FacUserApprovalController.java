@@ -506,7 +506,7 @@ public class FacUserApprovalController extends BaseController {
      */
     @GetMapping("/approvalModer")
     public String PLshenpi(String ids,ModelMap map) {
-        map.put("ids",ids);
+        map.put("applyId",ids);
         map.put("approvalId",ids);
         return prefix + "/approvalModer";
     }
@@ -518,21 +518,23 @@ public class FacUserApprovalController extends BaseController {
     @Log(title = "批量财务审批", businessType = BusinessType.UPDATE)
     @PostMapping("/approvalModer")
     @ResponseBody
-    public AjaxResult PLshenpi(String ids,String approvalState) {
-        if (ids != null) {
-            List<FacUserApproval> fac = facUserApprovalService.selectApprovalByIds(ids);
+    public AjaxResult PLshenpi(FacUserApproval facUserApproval) {
+        if (facUserApproval.getApplyId() != null&&facUserApproval.getApplyId() !="") {
+            List<FacUserApproval> fac = facUserApprovalService.selectApprovalByIds(facUserApproval.getApplyId());
 
             if (ShiroUtils.getUserId() == 103L) {
                 if (fac != null && fac.size() > 0) {
                     for (FacUserApproval f : fac) {
-                        f.setApprovalState(approvalState);
+                        f.setApprovalState(facUserApproval.getApprovalState());
+                        f.setOpi(facUserApproval.getOpi());
                         facUserApprovalService.updatepiliang(f);
                     }
                 }
             } else {
                 if (fac != null && fac.size() > 0) {
                     for (FacUserApproval f : fac) {
-                        f.setApprovalState(approvalState);
+                        f.setApprovalState(facUserApproval.getApprovalState());
+                        f.setOpi(facUserApproval.getOpi());
                         facUserApprovalService.updateFacUserApproval(f);
                     }
                 }

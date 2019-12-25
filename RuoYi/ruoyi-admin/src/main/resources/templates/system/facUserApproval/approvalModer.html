@@ -5,12 +5,13 @@
 </head>
 <body class="white-bg">
 <form  class="form-horizontal m" id="form-facUserApproval-edit" >
-    <input id="approvalId" name="approvalId" class="form-control-static" type="hidden" th:value="${approvalId}">
+    <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${applyId}">
+
 <div class="col-md-12">
     <div class="form-group">
         <label class="col-sm-3 control-label"></label>
         <div class="col-sm-9">
-            <input id="ids" name="ids" th:field="*{ids}" type="hidden">
+
             <label class="radio-box">
                 <input type="radio" checked value="1" name="approvalState" style="position: absolute; opacity: 0;">
                 同意</label>
@@ -33,10 +34,16 @@
 <script type="text/javascript">
 
     var prefixs = ctx + "system/facUserApproval";
-    var ids = $("#ids").val();
-    alert(ids);
+    var applyId = $("#applyId").val();
+    var approvalState = $("#approvalState").val();
+    var opi = $("#opi").val();
+
+
+
     function submitHandler() {
         if ($.validate.form()) {
+
+           // $.operate.save(prefixs + "/approvalModer",{"ids":approvalId,"approvalState":approvalState,"opi":opi});
             $.operate.save(prefixs + "/approvalModer", $('#form-facUserApproval-edit').serialize());
         }
     }

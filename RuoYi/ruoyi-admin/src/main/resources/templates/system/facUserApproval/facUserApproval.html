@@ -314,11 +314,12 @@
             return;
         }
         $.modal.confirm("确认要提交选中的" + ids.length + "条数据吗?", function() {
-            var url = $.table._option.toAllSubmitUrl;
-            var data = { "ids": ids.join() };
-            $.operate.submit(url, "post", "json", data);
+            // var url = $.table._option.toAllSubmitUrl;
+            // var data = { "ids": ids.join() };
+            // $.operate.submit(url, "post", "json", data);
+            $.modal.open('审批', prefix + "/approvalModer?ids="+ids, '500', '320');
         });
-        $.modal.open('审批', prefix + "/approvalModer?ids="+ids, '500', '320');
+
        // $.modal.open('审批', prefix + "/approvalModer?ids="+id+"&remark="+remark, '500', '320');
 
     }
