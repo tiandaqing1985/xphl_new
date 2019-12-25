@@ -120,7 +120,12 @@ public class FacPayPublicApplyController extends BaseController {
                             sysUserService.selectUserById(name.getApproverId())
                                     .getUserName());
                 }
-                v.setApprovalStatus(name.getApprovalState());
+                if (name.getApprovalState().equals("3") && name.getApprovalLevel().equals(1)) {
+                    v.setApprovalStatus("4");
+                } else {
+                    v.setApprovalStatus(name.getApprovalState());
+                }
+              //  v.setApprovalStatus(name.getApprovalState());
                 if (ShiroUtils.getUserId() == 103
                         && ShiroUtils.getUserId() == 101) {
                     v.setApprovalStatus("1");
