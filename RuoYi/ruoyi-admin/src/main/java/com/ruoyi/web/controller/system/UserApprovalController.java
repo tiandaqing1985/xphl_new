@@ -315,6 +315,7 @@ public class UserApprovalController extends BaseController
 		if(!m.containsAttribute("userApply"))
 			m.addAttribute("userApply", applyList.get(0));
 		m.addAttribute("showFlag", showFlag);
+		m.addAttribute("approvalId", approvalId);
 	    return prefix + "/toView";
 	}
 	
