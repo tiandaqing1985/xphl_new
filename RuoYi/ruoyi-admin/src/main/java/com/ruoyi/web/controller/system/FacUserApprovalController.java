@@ -505,9 +505,9 @@ public class FacUserApprovalController extends BaseController {
      * 批量修改财务审批
      */
     @GetMapping("/approvalModer")
-    public String PLshenpi(String ids,ModelMap map) {
-        map.put("applyId",ids);
-        map.put("approvalId",ids);
+    public String PLshenpi(String ids, ModelMap map) {
+        map.put("applyId", ids);
+        map.put("approvalId", ids);
         return prefix + "/approvalModer";
     }
 
@@ -519,7 +519,7 @@ public class FacUserApprovalController extends BaseController {
     @PostMapping("/approvalModer")
     @ResponseBody
     public AjaxResult PLshenpi(FacUserApproval facUserApproval) {
-        if (facUserApproval.getApplyId() != null&&facUserApproval.getApplyId() !="") {
+        if (facUserApproval.getApplyId() != null && facUserApproval.getApplyId() != "") {
             List<FacUserApproval> fac = facUserApprovalService.selectApprovalByIds(facUserApproval.getApplyId());
 
             if (ShiroUtils.getUserId() == 103L) {
@@ -528,6 +528,24 @@ public class FacUserApprovalController extends BaseController {
                         f.setApprovalState(facUserApproval.getApprovalState());
                         f.setOpi(facUserApproval.getOpi());
                         facUserApprovalService.updatepiliang(f);
+                        if (f.getApplyId().startsWith("ZD")) {
+                            //招待费同意则生成招待费的报销信息
+                            FacHospitalityApply selectHospitalityApply = new FacHospitalityApply();
+                            selectHospitalityApply.setNum(f.getApplyId());
+                            List<FacHospitalityApply> facHospitalityApplies = facHospitalityApplyService.selectFacHospitalityApplyList(selectHospitalityApply);
+                            if (facHospitalityApplies.size() > 0) {
+                                selectHospitalityApply = facHospitalityApplies.get(0);
+                                ReiHospitalityApply reiHospitalityApply = new ReiHospitalityApply();
+                                reiHospitalityApply.setDdDate(selectHospitalityApply.getZdDate());
+                                reiHospitalityApply.setAmount(selectHospitalityApply.getAmount());
+                                reiHospitalityApply.setAddUser(selectHospitalityApply.getLoanId());
+                                reiHospitalityApply.setReason(selectHospitalityApply.getReason());
+                                reiHospitalityApply.setUser(selectHospitalityApply.getUserId());
+                                reiHospitalityApply.setApplyNum(selectHospitalityApply.getNum());
+                                facReimburseApplyService.insertReiHospitalityApply(reiHospitalityApply);
+                            }
+                        }
+
                     }
                 }
             } else {
@@ -544,8 +562,6 @@ public class FacUserApprovalController extends BaseController {
         }
         return toAjax(1);
     }
-
-
 
 
     /**
