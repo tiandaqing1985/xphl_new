@@ -52,14 +52,6 @@ public class AnnualLeaveTask {
 				// 更新在职天数
 				userMapper.updateUser(user);
 
-				// 现在是入职的第n个月
-				int n = userService.countMonth(intime);
-
-				// 新员工的当月不生成年假
-				if (n < 4) {
-					continue;
-				}
-
 				if (firstWorkTime.isEmpty())
 					continue;
 
@@ -83,7 +75,7 @@ public class AnnualLeaveTask {
 				 * 劳动法规定年假取整数，小数点后全部舍去，即0.5以上都舍去不进位
 				 */
 				String firstDay = today.substring(0, 4) + "-01-01";//元旦
-				String lastDay = today.substring(0, 4) + "-12-31";//當年最後一天
+				String lastDay = today.substring(0, 4) + "-12-31";//當年最後一天；年假失效时间
 
 				/**
 				 *  以下2种情况不能享受当年年休假
@@ -114,7 +106,7 @@ public class AnnualLeaveTask {
 				// 计算当年元旦到现在的天数
 				long days = secondsBetween(firstDay, today) / 3600 / 24;
 				// 计算可休年假天数
-				int selfAnnualLeave = (int) Math.floor(((float) days / 365 * statutoryAnnualLeave));
+				int selfAnnualLeave = (int) Math.floor(((float) onJobLength / 365 * statutoryAnnualLeave));
 
 				System.out.println("\n" + "可休年假:  " + Math.floor(selfAnnualLeave) + "元旦到今天的天数：  " + days + "入职时间：  "
 						+ intime + "首次工作时间：  " + firstWorkTime + "\n");
@@ -128,15 +120,6 @@ public class AnnualLeaveTask {
 				// 可休年假天数-系统现有年假天数=生成年假天数
 				int cycleNum = selfAnnualLeave - hList.size();
 				if(cycleNum <= 0) continue;
-
-				// 年假失效时间
-				String overDate = s.format(userService.getDate(today, 12));
-				// 年假失效时间超过下一年的3.31日，则将失效时间通通改成3.31日
-				String overDate2 = Integer.valueOf(today.substring(0, 4)) + 1 + "-03-31";
-
-				if (s.parse(overDate).getTime() > s.parse(overDate2).getTime()) {
-					overDate = overDate2;
-				}
 
 				/**
 				 *  员工连续休假时间超过15天（含），则所在月份当月没有年假。
@@ -157,7 +140,7 @@ public class AnnualLeaveTask {
 					holiday.setHolidayType("1");
 					holiday.setAvailability("0");// 无效
 					holiday.setCreatedate(today);
-					holiday.setOverdate(overDate);
+					holiday.setOverdate(lastDay);
 					holiday.setValue(0.0);
 					holiday.setHolidayDetail("员工一个月休假时间超过 15 天（含），则当月没有年假");
 					holidayMapper.insertHoliday(holiday);
@@ -166,7 +149,7 @@ public class AnnualLeaveTask {
 					holiday1.setUserId(user.getUserId()); // user_id
 					holiday1.setHolidayType("1"); // 类型为年假
 					holiday1.setCreatedate(today);
-					holiday1.setOverdate(overDate);
+					holiday1.setOverdate(lastDay);
 					holiday1.setAvailability("0");
 					holiday1.setValue(0.0);
 					holiday1.setHolidayDetail("员工产假期间的年假包含在产假内一并休完，不再额外计算年假");
@@ -178,7 +161,7 @@ public class AnnualLeaveTask {
 						holiday.setHolidayType("1");
 						holiday.setAvailability("1");// 有效
 						holiday.setCreatedate(today);
-						holiday.setOverdate(overDate);
+						holiday.setOverdate(lastDay);
 						holiday.setValue(1.0);
 						holidayMapper.insertHoliday(holiday);
 						cycleNum--;
@@ -204,7 +187,11 @@ public class AnnualLeaveTask {
 			}
 
 		}
-		// 处理年假、调休失效
+		
+		//当年未休年假有效期延长至次年3月31日？
+		
+		
+		// 超过有效期的年假：处理年假、调休失效？
 		// 根据当前时间（年假失效时间/调休失效时间）查询失效假期
 		Holiday holiday = new Holiday();
 		holiday.setOverdate(today);

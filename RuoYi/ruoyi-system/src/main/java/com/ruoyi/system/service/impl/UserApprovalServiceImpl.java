@@ -249,10 +249,12 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 	@Override
 	public void reject(Long ids, String remark) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String[] remarkArr = remark.split(",");//20191226 驳回意见重复了，且是以逗号连接的两个重复意见
 		UserApproval userApproval = new UserApproval();
 		userApproval.setApprovalId(ids);
 		userApproval.setApprovalState("2");//审批意见（1同意，2驳回 ，3未操作）
-		userApproval.setRemark(remark);
+//		userApproval.setRemark(remark);
+		userApproval.setRemark(remarkArr[0]);
 		userApproval.setApprovalTime(sdf.format(new Date()));
 		userApprovalMapper.updateUserApproval(userApproval);
 		

@@ -298,12 +298,21 @@ public class UserApprovalController extends BaseController
 	public String toCheck(@PathVariable("approvalId") Long approvalId,  Model m)
 	{
 		boolean showFlag = false;
+		if("1".equals(ShiroUtils.getUserId())){//管理员
+			showFlag = true;
+		}
 		SysUser user = iSysUserService.selectUserById(ShiroUtils.getUserId());
 		SysUser user2 = new SysUser();
 		user2.setRoleId(3L);
 		user2.setArea(user.getArea());
 		Long personnelId = iSysRoleService.selectUserIdByRoleId(user2);//查询人事id
 		if(personnelId.equals(ShiroUtils.getUserId())){
+			showFlag = true;
+		}
+		user2.setRoleId(6L);// 人事总监
+		user2.setArea("1");
+		Long hrId = iSysRoleService.selectUserIdByRoleId(user2);// 人事总监id
+		if(hrId.equals(ShiroUtils.getUserId())){
 			showFlag = true;
 		}
 		UserApproval approval = userApprovalService.selectUserApprovalById(approvalId);
