@@ -62,7 +62,7 @@ public class UserApprovalController extends BaseController
 	
 	
 	@GetMapping("/approvalModer")
-	public String approvalModer(Long ids,Model m)
+	public String approvalModer(String ids,Model m)
 	{
 		m.addAttribute("ids", ids);
 	    return prefix + "/approvalModer";
@@ -298,13 +298,18 @@ public class UserApprovalController extends BaseController
 	public String toCheck(@PathVariable("approvalId") Long approvalId,  Model m)
 	{
 		boolean showFlag = false;
+		boolean showFlag2 = false;
 		if("1".equals(ShiroUtils.getUserId())){//管理员
 			showFlag = true;
 		}
 		SysUser user = iSysUserService.selectUserById(ShiroUtils.getUserId());
 		SysUser user2 = new SysUser();
 		user2.setRoleId(3L);
-		user2.setArea(user.getArea());
+		if(user.getArea().equals("3")){
+			user2.setArea("1");
+		}else{
+			user2.setArea(user.getArea());
+		}
 		Long personnelId = iSysRoleService.selectUserIdByRoleId(user2);//查询人事id
 		if(personnelId.equals(ShiroUtils.getUserId())){
 			showFlag = true;
@@ -325,6 +330,11 @@ public class UserApprovalController extends BaseController
 			m.addAttribute("userApply", applyList.get(0));
 		m.addAttribute("showFlag", showFlag);
 		m.addAttribute("approvalId", approvalId);
+		
+		if(approval.getApproverId().equals(ShiroUtils.getUserId()) && approval.getApprovalState().equals("3")){
+			showFlag2 = true;
+		}
+		m.addAttribute("showFlag2", showFlag2);
 	    return prefix + "/toView";
 	}
 	
@@ -333,7 +343,7 @@ public class UserApprovalController extends BaseController
 	 */
 	@PostMapping("/agree")
 	@ResponseBody
-	public AjaxResult agree(Long ids)
+	public AjaxResult agree(String ids)
 	{	
 		userApprovalService.agree(ids);
 		return toAjax(1);
@@ -344,7 +354,7 @@ public class UserApprovalController extends BaseController
 	 */
 	@PostMapping("/reject")
 	@ResponseBody
-	public AjaxResult reject(Long ids, String remark)
+	public AjaxResult reject(String ids, String remark)
 	{	
 		userApprovalService.reject(ids, remark);					
 		return toAjax(1);

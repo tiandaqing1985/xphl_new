@@ -420,6 +420,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where approval_id = #{approvalId}
     </select>
         
+    <select id="selectMaxApprovalLevelById" parameterType="Long" resultType="Integer">
+        select max(approval_level) approval_level from sys_user_approval
+        where apply_id = #{applyId}
+    </select>
+        
     <insert id="insertUserApproval" parameterType="UserApproval" useGeneratedKeys="true" keyProperty="approvalId">
         insert into sys_user_approval
 		<trim prefix="(" suffix=")" suffixOverrides=",">

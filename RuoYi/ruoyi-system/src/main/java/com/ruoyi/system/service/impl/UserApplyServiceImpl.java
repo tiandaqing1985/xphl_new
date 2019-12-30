@@ -193,39 +193,13 @@ public class UserApplyServiceImpl implements IUserApplyService {
 				return 1;
 			}
 
-			// 人事审批
-			UserApproval personnel = new UserApproval();// 人事审批 *必审
-			personnel.setApplyId(userApply.getApplyId());
-			personnel.setApprovalLevel(++level);
-			SysUser user = userMapper.selectUserById(userApply.getUserId());
-			if (user.getArea().equals("3")) {
-				user.setArea("2");
-			}
-
-			SysUser user2 = new SysUser();
-			user2.setRoleId(6L);// 人事总监
-			user2.setArea("1");
-			Long hrId = iSysRoleService.selectUserIdByRoleId(user2);// 人事总监id
-
-			SysUser user3 = new SysUser();
-			user3.setRoleId(3L);// 人事
-			user3.setArea(user.getArea());
-
-			// 当前用户的上级是人事leader，不进行人事总监审批
-			if (upLeaderId.longValue() != hrId.longValue() && approvalId.longValue() != hrId.longValue()) {// 审批人是否是人事总监
-				// 人事总监审批
-				// personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user3));
-				personnel.setApproverId(hrId);
-				userApprovalMapper.insertUserApproval(personnel);
-			}
-
 			if (userApproval.getApproverId() != null && userApproval.getApproverId() == 103) { // 如果是审批人是
 																								// coo
 																								// 直接结束
 				return 1;
 			}
 
-			if (timeLength > 3) {
+			if (timeLength >= 3) {
 
 				// 二级审批记录
 				String leaveType = userApply.getLeaveType();
@@ -255,9 +229,9 @@ public class UserApplyServiceImpl implements IUserApplyService {
 					}
 				}
 
-				if (approverId2 == 103) { // 如果是审批人是 coo 直接结束
+				/*if (approverId2 == 103) { // 如果是审批人是 coo 直接结束
 					return 1;
-				}
+				}*/
 
 				// 中心负责人审批记录
 
@@ -280,38 +254,33 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
 					userApprovalMapper.deleteChongFuShenHe(userApply.getApplyId());
 				}
+			}
+			
+			// 最后进行人事审批
+			int maxlevel = userApprovalMapper.selectMaxApprovalLevelById(userApply.getApplyId());
+			UserApproval personnel = new UserApproval();// 人事审批 *必审
+			personnel.setApplyId(userApply.getApplyId());
+			personnel.setApprovalLevel(maxlevel+1);
+			SysUser user = userMapper.selectUserById(userApply.getUserId());
+			if (user.getArea().equals("3")) {
+				user.setArea("2");
+			}
 
-				//
-				// if(centerId.equals(userApproval.getApproverId()) ||
-				// centerId.equals(userApproval1.getApproverId()) ||
-				// centerId.equals(userId)){
-				// }
-				// else{
-				// if(centerId != null){
-				// center.setApproverId(centerId);
-				// center.setApprovalLevel(++level);
-				// center.setApplyId(userApply.getApplyId());
-				// userApprovalMapper.insertUserApproval(center);
-				// }
-				// }
-				//
-				//
-				// UserApproval COO = new UserApproval(); //COO审批人
-				// Long COOId = iSysUserService.selectUserIdByDeptId(100L);
-				//
-				// if(COOId.equals(userApproval.getApproverId()) ||
-				// COOId.equals(userApproval1.getApproverId()) ||
-				// COOId.equals(userId)){
-				// }
-				// else{
-				// if(COOId != null){
-				// COO.setApproverId(COOId);
-				// COO.setApprovalLevel(++level);
-				// COO.setApplyId(userApply.getApplyId());
-				// userApprovalMapper.insertUserApproval(COO);
-				// }
-				// }
+			SysUser user2 = new SysUser();
+			user2.setRoleId(6L);// 人事总监
+			user2.setArea("1");
+			Long hrId = iSysRoleService.selectUserIdByRoleId(user2);// 人事总监id
 
+			SysUser user3 = new SysUser();
+			user3.setRoleId(3L);// 人事
+			user3.setArea(user.getArea());
+
+			// 当前用户的上级是人事leader，不进行人事总监审批
+			if (upLeaderId.longValue() != hrId.longValue() && approvalId.longValue() != hrId.longValue()) {// 审批人是否是人事总监
+				// 人事总监审批
+				// personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user3));
+				personnel.setApproverId(hrId);
+				userApprovalMapper.insertUserApproval(personnel);
 			}
 
 		} catch (Exception e) {

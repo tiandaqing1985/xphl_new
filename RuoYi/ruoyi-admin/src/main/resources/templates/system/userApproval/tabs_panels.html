@@ -94,6 +94,9 @@
 												<li>
 													<a class="btn btn-primary btn-rounded btn-sm" onclick="mySearch(1)"><i class="fa fa-search"></i>&nbsp;搜索</a>
 													<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset('formId1')"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+													 <a class="btn btn-danger btn-rounded btn-sm" onclick="toSubmitAll()">
+                                                        <i class="fa fa-check"></i>批量审批
+                                                    </a>
 												</li>
 											</ul>
 										</div>
@@ -170,6 +173,22 @@
 <th:block th:include="include :: bootstrap-suggest-js"/>
 <th:block th:include="include :: bootstrap-select-js"/>
 <script th:inline="javascript">
+var prefix = ctx + "system/userApproval";
+
+function toSubmitAll() {
+
+    debugger;
+    $.table._option.id = 'bootstrap-table1';
+    var ids = $.table.selectColumns('approvalId');
+
+    if (ids.length == 0) {
+        $.modal.alertWarning("请至少选择一条记录");
+        return;
+    }
+    $.modal.confirm("确认要提交选中的" + ids.length + "条数据吗?", function () {
+        $.modal.open('审批', prefix + "/approvalModer?ids=" + ids, '500', '320');
+    });
+}
 
 function mySearch(id) {
 	$.table._option.id = 'bootstrap-table'+id;

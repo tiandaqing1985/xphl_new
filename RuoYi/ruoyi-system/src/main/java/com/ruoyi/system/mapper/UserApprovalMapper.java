@@ -13,6 +13,13 @@ import java.util.List;
 public interface UserApprovalMapper 
 {
 	/**
+	 * 根据申请id查询最高审批级别
+	 * @param applyId
+	 * @return
+	 */
+	public int selectMaxApprovalLevelById(Long applyId);
+	
+	/**
      * 查询审批信息
      * 
      * @param approvalId 审批ID

@@ -38,9 +38,16 @@ public class AnnualLeaveTask {
 
 		List<SysUser> userList = userService.selectAllUser();
 		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
-		String intime, firstWorkTime, today = "";
+		//入职日期、首次参加工作日期、现在的时间、元旦、最后一天、
+		String intime, firstWorkTime, today, firstDay, lastDay = "";
 		today = s.format(new Date());
-
+		//工龄、当年元旦到今天的天数、员工今年在职天数、可休年假天数
+		long workYears, days, workDay= 0;
+		// 法定年假天数、可休年假天数、仍需生成的年假天数
+		int statutoryAnnualLeave, selfAnnualLeave, cycleNum = 0;
+		//事假天数、病假天数、本月事病假总天数
+		Double cnum1, cnum2, holidayCount = 0.0;
+		
 		for (SysUser user : userList) {
 			try {
 				intime = s.format(user.getIntime());// 入职日期
@@ -56,10 +63,9 @@ public class AnnualLeaveTask {
 					continue;
 
 				// 计算工龄
-				long workYears = secondsBetween(firstWorkTime, today) / 3600 / 24 / 365;
+				workYears = secondsBetween(firstWorkTime, today) / 3600 / 24 / 365;
 
 				// 法定年假天数
-				int statutoryAnnualLeave = 0;
 				if (workYears >= 1 && workYears < 10) {
 					statutoryAnnualLeave = 5;
 				} else if (workYears >= 10 && workYears < 20) {
@@ -74,19 +80,19 @@ public class AnnualLeaveTask {
 				 * 2020年1月1日至2020年5月31日为152天核算可休年假天数为152/365*15=6天
 				 * 劳动法规定年假取整数，小数点后全部舍去，即0.5以上都舍去不进位
 				 */
-				String firstDay = today.substring(0, 4) + "-01-01";//元旦
-				String lastDay = today.substring(0, 4) + "-12-31";//當年最後一天；年假失效时间
+				firstDay = today.substring(0, 4) + "-01-01";//元旦
+				lastDay = today.substring(0, 4) + "-12-31";//當年最後一天；年假失效时间
 
 				/**
 				 *  以下2种情况不能享受当年年休假
 				 */
 				// 1、当年累计事假天数，临界值20天（含）
-				Double cnum1 = userApplyService.leaveCount(s.parse(firstDay), s.parse(lastDay), user.getUserId(), "3");
+				cnum1 = userApplyService.leaveCount(s.parse(firstDay), s.parse(lastDay), user.getUserId(), "3");
 				if (cnum1 >= 20)
 					continue;
 
 				// 2、当年累计病假天数，临界值2个月（工龄1~10年）、临界值3个月（工龄10~20年）、临界值4个月（工龄20年以上）
-				Double cnum2 = userApplyService.leaveCount(s.parse(firstDay), s.parse(lastDay), user.getUserId(), "4");
+				cnum2 = userApplyService.leaveCount(s.parse(firstDay), s.parse(lastDay), user.getUserId(), "4");
 				if (workYears >= 1 && workYears < 10) {
 					if (cnum2 >= 30)
 						continue;
@@ -102,13 +108,21 @@ public class AnnualLeaveTask {
 				} else {
 					continue;
 				}
-
+				
 				// 计算当年元旦到现在的天数
-				long days = secondsBetween(firstDay, today) / 3600 / 24;
+				days = secondsBetween(firstDay, today) / 3600 / 24;
+				
+				//计算员工今年在职天数
+				if(onJobLength - days > 0){//今年元旦之前（不含）入职的员工
+					workDay = days;
+				}else{//今年元旦之后（含）刚刚入职的员工
+					workDay = onJobLength;
+				}
+				
 				// 计算可休年假天数
-				int selfAnnualLeave = (int) Math.floor(((float) onJobLength / 365 * statutoryAnnualLeave));
+				selfAnnualLeave = (int) Math.floor(((float) workDay / 365 * statutoryAnnualLeave));
 
-				System.out.println("\n" + "可休年假:  " + Math.floor(selfAnnualLeave) + "元旦到今天的天数：  " + days + "入职时间：  "
+				System.out.println("\n" + "可休年假:  " + Math.floor(selfAnnualLeave) +"当年截止今天的在职天数:  "+workDay+ "元旦到今天的天数：  " + days + "入职时间：  "
 						+ intime + "首次工作时间：  " + firstWorkTime + "\n");
 
 				// 查询今年元旦到现在生成的年假天数
@@ -117,8 +131,8 @@ public class AnnualLeaveTask {
 				h.setOverdate(today);
 				h.setUserId(user.getUserId());
 				List<Holiday> hList = holidayMapper.selectHolidayListByCondition(h);
-				// 可休年假天数-系统现有年假天数=生成年假天数
-				int cycleNum = selfAnnualLeave - hList.size();
+				// 可休年假天数-系统现有年假天数=仍需生成的年假天数
+				cycleNum = selfAnnualLeave - hList.size();
 				if(cycleNum <= 0) continue;
 
 				/**
@@ -126,7 +140,7 @@ public class AnnualLeaveTask {
 				 *  产假期间不生成年假
 				 */
 				// 查出本月事、病假总天数
-				Double holidayCount = userApplyService.leaveCount("本月", user.getUserId(), s.parse(today));
+				holidayCount = userApplyService.leaveCount("本月", user.getUserId(), s.parse(today));
 
 				// 是否请产假
 				UserApply userApply = new UserApply();

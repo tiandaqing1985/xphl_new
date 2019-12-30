@@ -12,6 +12,7 @@
 			<label class="col-sm-2 control-label">审批id：</label>
 			  <input class="form-control-static" id="approvalId" type="text" th:value="${approvalId}" />
 			  <input class="form-control-static" id="applyState" type="text" th:value="${userApply.applyState}" />
+			  <input class="form-control-static" id="showFlag2" type="text" th:value="${showFlag2}" />
 		</div>
 		<div class="form-group">
 			<label class="col-sm-2 control-label">申请类型：</label>
@@ -75,7 +76,7 @@
 			<img alt="正在加载..." th:src="${file}"  class="img">
 		</div>
 	</form>
-	 <form class="form-horizontal m" id="form-facUserApproval-edit" th:style="'display:' + ${userApply.applyState == '待审批' ? 'block' : 'none'}">
+	 <form class="form-horizontal m" id="form-facUserApproval-edit" th:style="'display:' + ${showFlag2 == true ? 'block' : 'none'}">
         <div class="col-sm-12  col-sm-offset9" style="border:1px solid #f00">
             <h4 class="form-header h4">审批填写</h4>
             <div  class="form-group"  >
@@ -136,8 +137,8 @@ function mSave(url, data, callback) {
 
 function submitHandler() {
 debugger;
-	var applyState = $("#applyState").val();
-	if(applyState == "待审批"){
+	var showFlag2 = $("#showFlag2").val();
+	if(showFlag2 == "true"){
 		if ($.validate.form()) {
 	    	var approvalState = $("input[name='approvalState']:checked").val();
 	    	var url ;

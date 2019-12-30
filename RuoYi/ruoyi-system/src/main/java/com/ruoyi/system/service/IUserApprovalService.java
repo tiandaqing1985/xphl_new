@@ -81,12 +81,12 @@ public interface IUserApprovalService
 	 * @param ids
 	 * @param remark
 	 */
-	public void reject(Long ids, String remark);
+	public void reject(String ids, String remark);
 	
 	/**
 	 * 同意 
 	 * @param ids
 	 */
-	public void agree(Long ids);
+	public void agree(String ids);
 	
 }
