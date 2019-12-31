@@ -474,6 +474,37 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                 facUserApprovalMapper.deleteFacUserApprovalById(v.getApprovalId());
             }
         }
+
+
+        if(facReimburseApply.getType()==null){
+            String num = facReimburseApply.getNum();
+            FacReiAdiApply facReiAdiApply = new FacReiAdiApply();
+            facReiAdiApply.setNum(num);
+            List<FacReiAdiApply> listadi = facReiAdiApplyMapper.selectFacReiAdiApplyList(facReiAdiApply);
+            if (listadi != null && listadi.size() > 0) {
+                for (FacReiAdiApply v : listadi) {
+                    facReiAdiApplyMapper.deleteFacReiAdiApplyById(v.getId());
+                }
+            }
+
+            List<ReiTrafficApply> listTra = facReimburseApplyMapper.traTail(num);
+            if (listTra != null && listTra.size() > 0) {
+                for (ReiTrafficApply v : listTra) {
+                    facReimburseApplyMapper.deleteReiTrafficApplyById(v.getId());
+                }
+            }
+
+            ReiHospitalityApply reiHospitality = new ReiHospitalityApply();
+            reiHospitality.setNum(num);
+            List<ReiHospitalityApply> listHosp = facReimburseApplyMapper.selectReiHospitalityApplyList(reiHospitality);
+            if (listHosp != null && listHosp.size() > 0) {
+                for (ReiHospitalityApply v : listHosp) {
+                    facReimburseApplyMapper.deleteZhaodaiById(v.getId().toString());
+                }
+            }
+            return facReimburseApplyMapper
+                    .deleteFacReimburseApplyByIds(Convert.toStrArray(ids));
+        }
         if (facReimburseApply.getType().equals("团建报销")) {
             FacCollectApply facCollectApply = facCollectApplyMapper.selectFacCollectApplyByNum(facReimburseApply.getJKnum());
             facCollectApply.setStatus("1");
