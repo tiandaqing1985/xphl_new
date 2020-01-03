@@ -566,6 +566,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService
 					di2.setWorkDate(d.getWorkDate());
 //					di2.setCheckType("OnDuty");
 					di2.setTimeResult("Normal");
+					di2.setStatus("0");
 					oaDingdingMapper.updateOaDingDingByTime(di2);//修改上下班打卡结果
 				}
 									
