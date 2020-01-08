@@ -135,6 +135,36 @@ public class OaFileUploadController extends BaseController {
 	}
 
 	/**
+	 * 本地资源通用下载
+	 */
+	@GetMapping("/common/download/resource2")
+	public void resourceDownload2(String resource, HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
+		File file = null;
+
+		file = new File("download/2.pdf");
+
+		ServletOutputStream outputStream = null;
+		try {
+
+			// 下载名称
+			response.setCharacterEncoding("utf-8");
+			response.setContentType("multipart/form-data");
+			response.setHeader("Content-Disposition", "attachment;fileName=kaoqinzhidu.pdf");
+			outputStream = response.getOutputStream();
+			FileUtils.writeBytes(file.getAbsolutePath(), outputStream);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (outputStream != null) {
+				outputStream.close();
+			}
+		}
+
+	}
+	
+	/**
 	 * 导出文件上传记录列表
 	 */
 	@PostMapping("/export")
