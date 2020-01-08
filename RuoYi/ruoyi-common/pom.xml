@@ -19,7 +19,7 @@
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>6.0.0.Final</version>
+			<version>6.1.0.Final</version>
 		</dependency>
 		<!-- Spring框架基本的核心工具 -->
 		<dependency>
