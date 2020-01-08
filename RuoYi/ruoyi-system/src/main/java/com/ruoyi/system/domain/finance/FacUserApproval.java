@@ -65,6 +65,16 @@ public class FacUserApproval extends BaseEntity {
      * **/
     private String isnotice;
     private String deptName;
+    /**所有审批人姓名*/
+    private String allName;
+
+    public String getAllName() {
+        return allName;
+    }
+
+    public void setAllName(String allName) {
+        this.allName = allName;
+    }
 
     public String getDeptName() {
         return deptName;

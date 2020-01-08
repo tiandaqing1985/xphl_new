@@ -35,7 +35,7 @@
         <include refid="selectFacUserApprovalVo"/>
         <where>
             <if test="approvalId != null ">and approval_id = #{approvalId}</if>
-            <if test="applyId != null  and applyId != '' ">and apply_id = #{applyId}</if>
+            <if test="applyId != null  and applyId != '' ">and apply_id like concat('%',#{applyId}, '%')</if>
             <if test="approvalState != null  and approvalState != '' ">and approval_state = #{approvalState}</if>
             <if test="approverId != null ">and approver_id = #{approverId}</if>
             <if test="approvalTime != null ">and approval_time = #{approvalTime}</if>
@@ -45,7 +45,7 @@
             <if test="createTime != null ">and create_time = #{createTime}</if>
             <if test="applicantId != null ">and applicant_id = #{applicantId}</if>
             <if test="amount != null ">and amount = #{amount}</if>
-            <if test="projectName != null  and projectName != '' ">and projectName = #{projectName}</if>
+            <if test="projectName != null  and projectName != '' ">and projectName like concat('%',#{projectName}, '%')</if>
             <if test="isnotice != null  and isnotice != '' ">and isnotice = #{isnotice}</if>
         </where>
         order by approval_id desc
@@ -162,9 +162,9 @@ fac_sys_user_approval a left join fac_traffic_rei_apply b on a.apply_id = b.num 
             resultMap="FacUserApprovalResult">
         <include refid="selectFacUserApprovalVo"/>
         <where>
-            <if test="applyId != null  and applyId != '' ">and apply_id = #{applyId}</if>
+            <if test="applyId != null  and applyId != '' ">and apply_id like concat('%',#{applyId}, '%')</if>
             <if test="applicantId != null ">and applicant_id = #{applicantId}</if>
-            <if test="projectName != null  and projectName != '' ">and projectName = #{projectName}</if>
+            <if test="projectName != null  and projectName != '' ">and projectName like concat('%',#{projectName}, '%')</if>
             <if test="approverId != null ">and approver_id = #{approverId}</if>
             <if test="approvalSight != null  and approvalSight != '' ">and approval_sight = #{approvalSight}</if>
         </where>

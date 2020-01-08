@@ -59,6 +59,9 @@
                                     class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
+<!--                            <a class="btn btn-danger btn-rounded btn-sm" onclick="zAdd()">-->
+<!--                                <i class="fa fa-check"></i>冲抵借款-->
+<!--                            </a>-->
                         </li>
                     </ul>
                 </div>
@@ -218,7 +221,9 @@
     }
 
 
-
+    function zAdd() {
+        $.modal.openFull("冲抵借款", "/system/facLoanApply/offReiApply");
+    }
 
 
 

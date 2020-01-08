@@ -86,6 +86,7 @@ public class FacUserApprovalController extends BaseController {
                 if (approver != null) {
                     v.setApproverName(sysUserService.selectUserById(v.getApproverId()).getUserName());
                 }
+                v.setAllName(facUserApprovalService.approverName(v.getApplyId()));
             }
             return getDataTable(list);
         }
@@ -104,6 +105,7 @@ public class FacUserApprovalController extends BaseController {
             if (approver != null) {
                 v.setApproverName(sysUserService.selectUserById(v.getApproverId()).getUserName());
             }
+            v.setAllName(facUserApprovalService.approverName(v.getApplyId()));
         }
         return getDataTable(list);
     }
@@ -615,6 +617,8 @@ public class FacUserApprovalController extends BaseController {
                 if (approver != null) {
                     v.setApproverName(sysUserService.selectUserById(v.getApproverId()).getUserName());
                 }
+
+                v.setAllName(facUserApprovalService.approverName(v.getApplyId()));
             }
             return getDataTable(list);
         }
@@ -633,6 +637,7 @@ public class FacUserApprovalController extends BaseController {
             if (approver != null) {
                 v.setApproverName(sysUserService.selectUserById(v.getApproverId()).getUserName());
             }
+            v.setAllName(facUserApprovalService.approverName(v.getApplyId()));
         }
 
         return getDataTable(list);
