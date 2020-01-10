@@ -457,7 +457,7 @@ public class SysUserServiceImpl implements ISysUserService {
             month = month + n;
         }
 
-        c.set(year, month, 1);
+        c.set(year, month, 1); 
         int maxDay = c.getActualMaximum(Calendar.DAY_OF_MONTH);
 
         if (maxDay < day) {

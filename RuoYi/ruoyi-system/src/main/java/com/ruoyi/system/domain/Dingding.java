@@ -57,8 +57,30 @@ Normal：正常;Early：早退;Late：迟到;SeriousLate：严重迟到；Absent
 	
 	private Date endTime;
 	
+	//月初
+	private String firstDay;
+	
+	//月末
+	private String lastDay;
+	
 	/** 传入String类型的时间变量 */
 	private String time;
+
+	public String getFirstDay() {
+		return firstDay;
+	}
+
+	public void setFirstDay(String firstDay) {
+		this.firstDay = firstDay;
+	}
+
+	public String getLastDay() {
+		return lastDay;
+	}
+
+	public void setLastDay(String lastDay) {
+		this.lastDay = lastDay;
+	}
 
 	public String getTime() {
 		return time;

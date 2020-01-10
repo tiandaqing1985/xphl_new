@@ -143,6 +143,13 @@ public class DingDingTask{
         dingdingService.updateOaDingDingByOutAndApply();
         }
 	
+	/**
+	 * 计算当月三次迟到累计迟到时长是否满足小于等于60min
+	 * */
+	public void updateOaDingDingByCountLate(){
+		dingdingService.updateOaDingDingByCountLate();
+	}
+	
 	//弹性工作制
 	public void dingElasticTime(String num){
 		//弹性工作制

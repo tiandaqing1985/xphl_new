@@ -124,4 +124,11 @@ public interface OaDingdingMapper
 	 * @return
 	 */
 	public List<Dingding> selectOaDingByTime2(Dingding ding);
+	
+	/**
+	 * 10:00 之后的上班考勤
+	 * @param ding
+	 * @return
+	 */
+	public List<Dingding> selectOaDingByTime3(Dingding ding);
 }

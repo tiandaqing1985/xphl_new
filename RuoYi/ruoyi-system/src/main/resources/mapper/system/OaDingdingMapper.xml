@@ -154,8 +154,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="userCheckTime != null">userCheckTime = #{userCheckTime},</if>
 		</set>
 		<where>
-			<if test="userId != null">user_id = #{userId}</if>
-			<if test="userName != null and userName !=''">user_name = #{userName}</if>
+			<if test="userId != null"> and user_id = #{userId}</if>
+			<if test="userName != null and userName !=''">and user_name = #{userName}</if>
 			<if test="startTime != null and endTime != null">and userCheckTime <![CDATA[  >= #{startTime} ]]> and userCheckTime <![CDATA[ <= #{endTime} ]]> </if>
 			<if test="workDate != null">and workDate = #{workDate}</if>
 			<if test="checkType != null and checkType != ''">and checkType = #{checkType}</if>
@@ -292,4 +292,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			workDate
     </select>
     
+     <!-- 10:00以后的上班考勤 -->
+    <select id="selectOaDingByTime3"  parameterType="Dingding" resultMap="DingdingResult">
+		SELECT
+			* 
+		FROM
+			oa_dingding 
+		WHERE
+			workDate &gt;= #{firstDay}
+			and workDate &lt;= #{lastDay}
+			AND HOUR ( userCheckTime ) &gt;= 10 
+			AND timeResult = 'late' 
+			and checkType='OnDuty'
+			and user_name = #{userName}
+		ORDER BY
+			workDate, userCheckTime asc
+		limit 0,3
+    </select>
 </mapper>

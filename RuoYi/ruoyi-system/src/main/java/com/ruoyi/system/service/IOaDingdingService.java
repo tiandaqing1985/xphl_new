@@ -79,4 +79,6 @@ public interface IOaDingdingService
 	 * @return
 	 */
 	public int updateOaDingDingBySpecialTime(String time);
+	
+	public int updateOaDingDingByCountLate();
 }

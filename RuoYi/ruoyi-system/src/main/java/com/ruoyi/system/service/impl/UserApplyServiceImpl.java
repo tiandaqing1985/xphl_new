@@ -811,11 +811,11 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
 	@Override
 	public String selectUserApplyListByTime(UserApply userApply) {
-		Date nowDate = new Date();
+		/*Date nowDate = new Date();
 		// 判断起始时间是否是昨天的时间
 		if (userApply.getStarttime().getTime() > nowDate.getTime()) {
 			return "1";
-		}
+		}*/
 
 		SysUser user = userMapper.selectUserById(userApply.getUserId());
 		if (user.getArea().equals("3")) {
@@ -839,27 +839,40 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		if (wList.get(0).getIsWorkDay() == 0) {
 			return "0";
 		}
-
-		// 获取10:00 - 10:30之间的考勤
-		Dingding ding = new Dingding();
-		ding.setUserName(user.getUserName());
-		ding.setWorkDate(wDate);
-		List<Dingding> dingList = oaDingdingMapper.selectOaDingByTime2(ding);
-		if (dingList.size() == 0)
-			return "0";
-
-		Date onduty = dingList.get(0).getUserCheckTime();
-
-		// 9h之后的正常下班时间
-		Date normal = getWorkDate(onduty, 9);
-
-		// 判断申请加班起始时间是否在加班时间之后
-		if (userApply.getStarttime().after(normal)) {// a.after(b)返回一个boolean，如果a的时间在b之后（不包括等于）返回true
-			return "0";
-		} else if (userApply.getStarttime().equals(normal)) {
-			return "0";
+		
+		//2020.1.13开始加班时间从19:00开始
+		Date standardDate = null;
+		try {
+			standardDate = sd.parse("2020-01-13");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		return "1";
+		if (userApply.getStarttime().before(standardDate)) {
+			// 获取10:00 - 10:30之间的考勤
+			Dingding ding = new Dingding();
+			ding.setUserName(user.getUserName());
+			ding.setWorkDate(wDate);
+			List<Dingding> dingList = oaDingdingMapper.selectOaDingByTime2(ding);
+			if (dingList.size() == 0)
+				return "0";
+
+			Date onduty = dingList.get(0).getUserCheckTime();
+
+			// 9h之后的正常下班时间
+			Date normal = getWorkDate(onduty, 9);
+
+			// 判断申请加班起始时间是否在加班时间之后
+			if (userApply.getStarttime().after(normal)) {// a.after(b)返回一个boolean，如果a的时间在b之后（不包括等于）返回true
+				return "0";
+			} else if (userApply.getStarttime().equals(normal)) {
+				return "0";
+			}
+			return "1";
+
+		}
+
+		return "0";
 	}
 
 	/**
@@ -1137,7 +1150,10 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
 		Date maxCheckDate = oaDingdingMapper.selectMaxOaDingding(oaDingding);// 查询下班打卡时间
 		// 下班打卡时间是否满足晚于21:30
-		if (maxCheckDate.after(standardDate)) {
+		if (maxCheckDate.after(standardDate) || maxCheckDate.equals(standardDate)){
+			return true;
+		}
+		/*if (maxCheckDate.after(standardDate)) {
 			WorkingCalendar workingCalendar = new WorkingCalendar();
 			workingCalendar.setTime(date);
 			workingCalendar.setIsWorkDay(0);// 是否工作日（0：节假日或周六日，1：工作日）
@@ -1157,7 +1173,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
 					return true;
 				}
 			}
-		}
+		}*/
 		return false;
 	}
 
