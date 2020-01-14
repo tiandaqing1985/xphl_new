@@ -240,7 +240,7 @@ public class FacCollectApplyController extends BaseController {
     @PostMapping("/addEdit")
     @ResponseBody
     public AjaxResult addEdit(FacCollectApply facCollectApply) {
-        double money = facCollectInformationService.selectMoney(facCollectApply.getNum());
+        double money = facCollectApply.getAmount();
         FacCollectApply facCollectApplys = facCollectApplyService
                 .selectFacCollectApplyById(facCollectApply.getId());
         FacReimburseApply facReimburseApply = new FacReimburseApply();
@@ -290,7 +290,9 @@ public class FacCollectApplyController extends BaseController {
         facCollectApply.setApplicationTime(new Date());
         facCollectApply.setApplicant(ShiroUtils.getUserId());
         facCollectApply.setDeptCompany("新普互联（北京）科技有限公司");
-        facCollectApply.setAmount(facCollectInformationService.selectAmount(facCollectApply.getNum()));
+        if(facCollectInformationService.selectAmount(facCollectApply.getNum())>0){
+            facCollectApply.setAmount(facCollectInformationService.selectAmount(facCollectApply.getNum()));
+        }
         if (facCollectApply.getId() == null) {
             // 直接添加
 
