@@ -195,8 +195,37 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
 			if (userApproval.getApproverId() != null && userApproval.getApproverId() == 103) { // 如果是审批人是
 																								// coo
-																								// 直接结束
-				return 1;
+
+				// 最后进行人事审批
+				int maxlevel = userApprovalMapper.selectMaxApprovalLevelById(userApply.getApplyId());
+				UserApproval personnel = new UserApproval();// 人事审批 *必审
+				personnel.setApplyId(userApply.getApplyId());
+				personnel.setApprovalLevel(maxlevel+1);
+				SysUser user = userMapper.selectUserById(userApply.getUserId());
+				if (user.getArea().equals("3")) {
+					user.setArea("2");
+				}
+
+				SysUser user2 = new SysUser();
+				user2.setRoleId(6L);// 人事总监
+				user2.setArea("1");
+				Long hrId = iSysRoleService.selectUserIdByRoleId(user2);// 人事总监id
+				
+				if(userId.equals(hrId)){//当前用户就是人事总监自己
+					return 1;
+				}
+
+				SysUser user3 = new SysUser();
+				user3.setRoleId(3L);// 人事
+				user3.setArea(user.getArea());
+
+				// 当前用户的上级是人事leader，不进行人事总监审批
+				if (upLeaderId.longValue() != hrId.longValue() && approvalId.longValue() != hrId.longValue()) {// 审批人是否是人事总监
+					// 人事总监审批
+					// personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user3));
+					personnel.setApproverId(hrId);
+					return userApprovalMapper.insertUserApproval(personnel);
+				}
 			}
 
 			if (timeLength >= 3) {
@@ -229,9 +258,35 @@ public class UserApplyServiceImpl implements IUserApplyService {
 					}
 				}
 
-				/*if (approverId2 == 103) { // 如果是审批人是 coo 直接结束
-					return 1;
-				}*/
+				if (approverId2 == 103) { // 如果是审批人是 coo 直接结束
+
+					// 最后进行人事审批
+					int maxlevel = userApprovalMapper.selectMaxApprovalLevelById(userApply.getApplyId());
+					UserApproval personnel = new UserApproval();// 人事审批 *必审
+					personnel.setApplyId(userApply.getApplyId());
+					personnel.setApprovalLevel(maxlevel+1);
+					SysUser user = userMapper.selectUserById(userApply.getUserId());
+					if (user.getArea().equals("3")) {
+						user.setArea("2");
+					}
+
+					SysUser user2 = new SysUser();
+					user2.setRoleId(6L);// 人事总监
+					user2.setArea("1");
+					Long hrId = iSysRoleService.selectUserIdByRoleId(user2);// 人事总监id
+
+					SysUser user3 = new SysUser();
+					user3.setRoleId(3L);// 人事
+					user3.setArea(user.getArea());
+
+					// 当前用户的上级是人事leader，不进行人事总监审批
+					if (upLeaderId.longValue() != hrId.longValue() && approvalId.longValue() != hrId.longValue()) {// 审批人是否是人事总监
+						// 人事总监审批
+						// personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user3));
+						personnel.setApproverId(hrId);
+						return userApprovalMapper.insertUserApproval(personnel);
+					}
+				}
 
 				// 中心负责人审批记录
 
