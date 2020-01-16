@@ -1,6 +1,5 @@
 package com.ruoyi.system.service.impl;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,7 +36,6 @@ import com.ruoyi.system.domain.UserApplyList;
 import com.ruoyi.system.domain.UserApproval;
 import com.ruoyi.system.domain.WorkingCalendar;
 import com.ruoyi.system.service.IHolidayService;
-import com.ruoyi.system.service.IOaWorkingCalendarService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IUserApplyService;
@@ -96,9 +94,6 @@ public class UserApplyServiceImpl implements IUserApplyService {
 	private OaFileUploadMapper oaFileUploadMapper;
 	@Autowired
 	private ServerConfig serverConfig;
-	@Autowired
-	private IOaWorkingCalendarService workingCalendarService;
-
 	/**
 	 * 查询申请信息
 	 * 
@@ -188,6 +183,9 @@ public class UserApplyServiceImpl implements IUserApplyService {
 				userApproval.setApproverId(101L);
 			}
 			userApprovalMapper.insertUserApproval(userApproval); // 插入一级审批记录
+			
+			//加班只需要一级审批人
+			if(userApply.getLeaveType() == null) return 1;
 
 			if (upLeaderId == null) {
 				return 1;
@@ -1230,26 +1228,6 @@ public class UserApplyServiceImpl implements IUserApplyService {
 			}
 		}*/
 		return false;
-	}
-
-	/**
-	 * 字符串的日期格式的计算
-	 */
-	private long secondsBetween(String smdate, String bdate) {
-		long time1 = 0L;
-		long time2 = 0L;
-		try {
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Calendar cal = Calendar.getInstance();
-			cal.setTime(sdf.parse(smdate));
-			time1 = cal.getTimeInMillis();
-			cal.setTime(sdf.parse(bdate));
-			time2 = cal.getTimeInMillis();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return (time2 - time1) / 1000;
 	}
 
 	/**

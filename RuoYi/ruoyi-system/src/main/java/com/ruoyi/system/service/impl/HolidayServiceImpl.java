@@ -314,7 +314,7 @@ public class HolidayServiceImpl implements IHolidayService
 		double timelength = userApply.getTimelength();
 		//是年假
 		Holiday holiday = new Holiday();
-		if(userApply.getLeaveType().equals("1")){
+		if(userApply.getLeaveType() != null && userApply.getLeaveType().equals("1")){
 			//查找登录用户下所有有效年假
 			holiday.setUserId(userApply.getUserId());//申请人id
 			holiday.setHolidayType("1");//类型为年假假期
@@ -360,7 +360,7 @@ public class HolidayServiceImpl implements IHolidayService
 			}
 		}
 		//是调休
-		if(userApply.getLeaveType().equals("2")){
+		if(userApply.getLeaveType() != null && userApply.getLeaveType().equals("2")){
 			//查找登录用户下所有有效调休
 			holiday.setUserId(userApply.getUserId());
 			holiday.setHolidayType("2");
