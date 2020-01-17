@@ -360,9 +360,11 @@ public class UserApply extends BaseEntity
 				+ ", timeapart2=" + timeapart2 + ", timeapart3=" + timeapart3 + ", timelength=" + timelength
 				+ ", applyType=" + applyType + ", applyState=" + applyState + ", approvalState=" + approvalState
 				+ ", details=" + details + ", leaveType=" + leaveType + ", approvalS=" + approvalS + ", applyTime="
-				+ applyTime + ", forApplyId=" + forApplyId + ", prove=" + prove + ", timelengthPlus=" + timelengthPlus
-				+ ", sysUser=" + sysUser + ", sysDept=" + sysDept + ", userApproval=" + userApproval + ", approverName="
-				+ approverName + ", allAppNames=" + allAppNames + "]";
+				+ applyTime + ", forApplyId=" + forApplyId + ", prove=" + prove + ", ctype=" + ctype
+				+ ", timelengthPlus=" + timelengthPlus + ", sysUser=" + sysUser + ", sysDept=" + sysDept
+				+ ", userApproval=" + userApproval + ", approverName=" + approverName + ", allAppNames=" + allAppNames
+				+ ", fileList=" + fileList + ", time=" + time + "]";
 	}
+
 
 }

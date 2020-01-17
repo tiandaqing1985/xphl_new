@@ -13,11 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ruoyi.system.mapper.HolidayMapper;
 import com.ruoyi.system.mapper.HolidayRecordMapper;
+import com.ruoyi.system.mapper.OaDingdingMapper;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import com.ruoyi.system.mapper.SysUserMapper;
 import com.ruoyi.system.mapper.SysUserRoleMapper;
 import com.ruoyi.system.mapper.UserApplyMapper;
 import com.ruoyi.system.mapper.UserApprovalMapper;
+import com.ruoyi.system.domain.Dingding;
 import com.ruoyi.system.domain.Holiday;
 import com.ruoyi.system.domain.HolidayRecord;
 import com.ruoyi.system.domain.QueryConditions;
@@ -63,6 +65,8 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 	private IHolidayService holidayService;
 	@Autowired
 	private UserApplyMapper userApplyMapper;
+	@Autowired
+	private OaDingdingMapper oaDingdingMapper;
 	
 	/**
      * 查询审批信息
@@ -262,13 +266,34 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 			userApprovalMapper.updateUserApproval(userApproval);
 			
 			//根据审批id查询申请id
-			Long applyId = userApprovalMapper.selectUserApprovalById(Long.valueOf(id)).getApplyId();
+			UserApproval userApproval1 = userApprovalMapper.selectUserApprovalById(Long.valueOf(id));
+
+			Long applyId = userApproval1.getApplyId();
 			
 			//修改申请状态为驳回
 			UserApply userApply = new UserApply();
 			userApply.setApplyId(applyId);
 			userApply.setApplyState("4");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
 			userApplyMapper.updateUserApply(userApply);
+			
+			
+			//修改钉钉考勤数据
+			if(userApproval1.getUserApply().getApplyType().equals("5")){//申请类型（1请假，2加班，3销假，4外出，5补卡）
+				
+				Dingding ding = new Dingding();
+				ding.setUserName(userApproval1.getSysUser().getUserName());
+				if (userApproval1.getUserApply().getCtype().equals("上班")) {
+					ding.setCheckType("OnDuty");
+				} else {
+					ding.setCheckType("OffDuty");
+				}
+				SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+				String time = sdf2.format(userApproval1.getUserApply().getStarttime());
+				time.substring(0, 9);
+				ding.setTime(time);
+				ding.setApplyState("4");// 申请状态（1待审批，2已撤回，3申请成功，4申请失败）
+				oaDingdingMapper.updateOaDingDingByTime(ding);
+			}
 			
 			//先还原假期表，删除假期使用表
 			holidayService.restoreHoliday(applyId, null);
@@ -314,6 +339,25 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 				
 				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM");
 				String applyType = userApproval1.getUserApply().getApplyType();
+				
+				//修改钉钉考勤数据
+				if(applyType.equals("5")){//申请类型（1请假，2加班，3销假，4外出，5补卡）
+					
+					Dingding ding = new Dingding();
+					ding.setUserName(userApproval1.getSysUser().getUserName());
+					if (userApproval1.getUserApply().getCtype().equals("上班")) {
+						ding.setCheckType("OnDuty");
+					} else {
+						ding.setCheckType("OffDuty");
+					}
+					SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+					String time = sdf.format(userApproval1.getUserApply().getStarttime());
+					time.substring(0, 9);
+					ding.setTime(time);
+					ding.setApplyState("3");// 申请状态（1待审批，2已撤回，3申请成功，4申请失败）
+					ding.setUserCheckTime(userApproval1.getUserApply().getStarttime());
+					oaDingdingMapper.updateOaDingDingByTime(ding);
+				}
 				
 				//如果是加班申请，根据加班时长，生成调休
 				if( applyType.equals("2") ){

@@ -302,7 +302,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			workDate &gt;= #{firstDay}
 			and workDate &lt;= #{lastDay}
 			AND HOUR ( userCheckTime ) &gt;= 10 
-			AND timeResult = 'late' 
+			AND MINUTE ( userCheckTime ) &gt; 0 
+			AND timeResult IN ( 'Normal', 'Late' ) 
 			and checkType='OnDuty'
 			and user_name = #{userName}
 		ORDER BY

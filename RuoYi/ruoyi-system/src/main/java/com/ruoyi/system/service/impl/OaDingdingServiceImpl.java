@@ -659,8 +659,9 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 			if (dingList.size() == 0)
 				continue;
 
+			timeSum = 0;
 			for (Dingding d : dingList) {
-
+				
 				standardTime = s.format(d.getWorkDate()) + " 10:00:00";
 				userCheckTime = sdf.format(d.getUserCheckTime());
 				timeLength = secondsBetween(standardTime, userCheckTime) / 60;// 迟到时长（分钟）
@@ -673,11 +674,15 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 
 				if (timeSum > 60)
 					continue;
+				
+				if(d.getTimeResult().equals("NotSigned")) continue;
+
 				Dingding d2 = new Dingding();
+				d2.setUserName(d.getUserName());
 				d2.setTimeResult("normal");
 				d2.setStatus("1");
 				d2.setWorkDate(d.getWorkDate());
-				d2.setCheckType(d.getCheckType());
+				d2.setCheckType("OnDuty");
 				oaDingdingMapper.updateOaDingDingByTime(d2);
 			}
 

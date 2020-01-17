@@ -128,6 +128,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     		FROM sys_user_apply a
 			LEFT JOIN sys_user us ON us.user_id = a.user_id 
 		<where>
+			 <if test="applyId != null"> and a.apply_id = #{applyId}</if>
 		     <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
 			 <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
 			 <if test="userId != null"> and a.user_id = #{userId}</if>

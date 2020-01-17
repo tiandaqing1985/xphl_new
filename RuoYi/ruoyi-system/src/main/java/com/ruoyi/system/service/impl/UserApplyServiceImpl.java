@@ -1271,6 +1271,23 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		personnel.setApprovalSight("1");
 		userApprovalMapper.insertUserApproval(personnel);
 
+		//修改钉钉考勤数据
+		Dingding ding = new Dingding();
+		ding.setUserName(user.getUserName());
+		if (userApply.getCtype().equals("上班")) {
+			ding.setCheckType("OnDuty");
+		} else {
+			ding.setCheckType("OffDuty");
+		}
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String time = sdf.format(userApply.getStarttime());
+		time.substring(0, 9);
+		ding.setTime(time);
+		ding.setTimeResult("Clocked");
+		ding.setApplyState("1");// 申请状态（1待审批，2已撤回，3申请成功，4申请失败）
+		ding.setStatus("1");
+		oaDingdingMapper.updateOaDingDingByTime(ding);
+		
 		return userApply.getApplyId();
 	}
 
