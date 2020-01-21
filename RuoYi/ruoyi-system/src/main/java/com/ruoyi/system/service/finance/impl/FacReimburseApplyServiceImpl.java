@@ -197,10 +197,10 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     FacSysUserApproval facSysUserApproval2 = new FacSysUserApproval();
                     facSysUserApproval2.setCreateTime(new Date());
 
-                    if (area.equals("1")) {
-                        facSysUserApproval2.setApproverId(new Long("253"));// 审批id为人事
+                    if (area.equals("2")) {
+                        facSysUserApproval2.setApproverId(new Long("168"));// 审批id为人事
                     } else {
-                        center.setApproverId(new Long("257"));// 审批id为人事
+                        center.setApproverId(new Long("253"));// 审批id为人事
                     }
                     facSysUserApproval2.setApprovalTime(new Date());
                     facSysUserApproval2.setApprovalLevel(level++);
@@ -227,10 +227,10 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                             for (ReiTrafficApply reiTrafficApply : trafficReiApplyList) {
                                 if (reiTrafficApply.getType().equals("加班")) {
 
-                                    if (area.equals("1")) {
-                                        center.setApproverId(new Long("253"));// 审批id为人事
+                                    if (area.equals("2")) {
+                                        center.setApproverId(new Long("168"));// 审批id为人事
                                     } else {
-                                        center.setApproverId(new Long("257"));// 审批id为人事
+                                        center.setApproverId(new Long("253"));// 审批id为人事
                                     }
                                     center.setApprovalLevel(level++);
                                     center.setProjectName(
@@ -278,11 +278,11 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                     for (ReiTrafficApply reiTrafficApply : trafficReiApplyList) {
                                         if (reiTrafficApply.getType()
                                                 .equals("加班")) {
-                                            if (area.equals("1")) {
-                                                center.setApproverId(new Long("253"));// 审批id为人事
+                                            if (area.equals("2")) {
+                                                center.setApproverId(new Long("168"));// 审批id为人事
                                             } else {
                                                 center.setApproverId(
-                                                        new Long("257"));// 审批id为人事
+                                                        new Long("253"));// 审批id为人事
                                             }
                                             center.setApprovalLevel(level++);
                                             center.setProjectName(
@@ -335,12 +335,12 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                     for (ReiTrafficApply reiTrafficApply : trafficReiApplyList) {
                                         if (reiTrafficApply.getType()
                                                 .equals("加班")) {
-                                            if (area.equals("1")) {
+                                            if (area.equals("2")) {
                                                 center.setApproverId(
-                                                        new Long("253"));// 审批id为人事
+                                                        new Long("168"));// 审批id为人事
                                             } else {
                                                 center.setApproverId(
-                                                        new Long("257"));// 审批id为人事
+                                                        new Long("253"));// 审批id为人事
                                             }
                                             center.setApprovalLevel(level++);
                                             center.setProjectName(
@@ -401,12 +401,12 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                     for (ReiTrafficApply reiTrafficApply : trafficReiApplyList) {
                                         if (reiTrafficApply.getType()
                                                 .equals("加班")) {
-                                            if (area.equals("1")) {
+                                            if (area.equals("2")) {
                                                 center.setApproverId(
-                                                        new Long("253"));// 审批id为人事
+                                                        new Long("168"));// 审批id为人事
                                             } else {
                                                 center.setApproverId(
-                                                        new Long("257"));// 审批id为人事
+                                                        new Long("253"));// 审批id为人事
                                             }
                                             center.setApprovalLevel(level++);
                                             center.setProjectName(
