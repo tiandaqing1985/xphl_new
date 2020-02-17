@@ -56,6 +56,12 @@
                 <textarea id="details" name="details" class="form-control" maxlength="500" rows="3" th:field="*{details}"  required></textarea>
 			</div>
 		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" >销假重提理由：</label>
+			<div class="col-sm-8">
+                <textarea id="undodetails" name="undodetails" class="form-control" maxlength="500" rows="3" th:field="*{undodetails}"></textarea>
+			</div>
+		</div>
 		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出' or userApply.applyType == '补卡' ? 'none' : 'block'}">	<span id="p03"></span>
 			<label class="col-sm-2 control-label">证明附件：</label>
 			<div class="col-sm-8">

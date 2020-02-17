@@ -726,81 +726,87 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
 		return userApplyMapper.selectUserApplyListByEndTime(userApply);
 	}
-
+	/*
+	 * @Override
+	 * @Transactional
+	 * public int undoSave(UserApply userApply, Long userId) { // 原申请id Long applyId
+	 * = userApply.getApplyId();
+	 * 
+	 * // 查询原申请 UserApply oldUserApply =
+	 * userApplyMapper.selectUserApplyByApplyId(applyId);
+	 * 
+	 * // 修改原申请状态为销假 UserApply userApply2 = new UserApply();
+	 * userApply2.setApplyId(applyId); userApply2.setApplyType("3");//
+	 * 申请类型（1请假，2加班，3销假） userApply2.setApplyState("5");// 申请状态（1
+	 * 待审批，2已撤回，3申请成功，4申请失败，5已销假） userApplyMapper.updateUserApply(userApply2);
+	 * 
+	 * // 还原假期值,修改假期记录表状态 holidayService.restoreHoliday(applyId, "4");//
+	 * 使用状态(1申请中，2已使用，3撤销，4销假)
+	 * 
+	 * // 生成新请假记录 Date now = new Date(); UserApply userApply1 = new UserApply();
+	 * userApply1.setUserId(userId); // 申请人 userApply1.setApplyType("1"); // 类型为请假
+	 * userApply1.setApplyState("1"); // 状态待审批
+	 * 
+	 * String leaveType = oldUserApply.getLeaveType();
+	 * 
+	 * userApply1.setLeaveType(leaveType); // 请假类型
+	 * userApply1.setTimeapart1(userApply.getTimeapart1());
+	 * userApply1.setTimeapart2(userApply.getTimeapart2());
+	 * userApply1.setStarttime(userApply.getStarttime()); // 开始时间
+	 * userApply1.setEndtime(userApply.getEndtime()); // 结束时间
+	 * userApply1.setApplyTime(now); userApply1.setDetails(userApply.getDetails());
+	 * 
+	 * Double timeLength = countTime(userApply.getStarttime(),
+	 * userApply.getEndtime(), userApply.getTimeapart1(),
+	 * userApply.getTimeapart2());
+	 * 
+	 * userApply1.setTimelength(timeLength); // 时长
+	 * userApply1.setForApplyId(applyId);
+	 * 
+	 * // 生成一条新的销假申请 userApplyMapper.insertUserApply(userApply1);
+	 * 
+	 * // 新生成的销假申请id Long newAppLyId = userApply1.getApplyId();
+	 * 
+	 * // 审批记录 int level = 1;
+	 * 
+	 * UserApproval userApproval = new UserApproval();// 一级审批人 *必审
+	 * userApproval.setApplyId(newAppLyId); userApproval.setApprovalSight("1");
+	 * userApproval.setApprovalLevel(level); Long leaderId =
+	 * iSysUserService.selectApproverIdByApplyerId(userId);// 所在部门负责人id Long
+	 * upLeaderId = iSysUserService.selectUpApproverIdByApplyerId(userId);//
+	 * 所在部门负责人的上级leader if (leaderId.equals(userId)) { // 判断用户是否部门负责人 确定一、二级审批人id
+	 * userApproval.setApproverId(upLeaderId); // 一级审批人id } else {
+	 * userApproval.setApproverId(leaderId); } if (userId == 103L) {// COO
+	 * userApproval.setApproverId(101L); }
+	 * userApprovalMapper.insertUserApproval(userApproval); // 插入一级审批记录
+	 * 
+	 * if (leaveType.equals("1") || leaveType.equals("2")) { // 更新假期表、生成假期记录
+	 * holidayService.createHolidayAndRecord(userApply1); } return 1; }
+	 */
+	
 	@Override
-	@Transactional
-	public int undoSave(UserApply userApply, Long userId) {
-		// 原申请id
-		Long applyId = userApply.getApplyId();
-
-		// 查询原申请
-		UserApply oldUserApply = userApplyMapper.selectUserApplyByApplyId(applyId);
-
-		// 修改原申请状态为销假
+	public int undoSave(Long applyId) {
+		// 查询申请详情
+		UserApply userApply = userApplyMapper.selectUserApplyByApplyId(applyId);
+		
+		//请假：年假|调休
+		if(userApply.getApplyType().equals("1")) {
+			if(userApply.getLeaveType().equals("1") || userApply.getLeaveType().equals("2")) {
+				// 还原假期值,修改假期记录表状态
+				holidayService.restoreHoliday(applyId, "4");// 使用状态(1申请中，2已使用，3撤销，4销假)
+			}
+		}
+		
+		// 修改申请状态为销假
 		UserApply userApply2 = new UserApply();
 		userApply2.setApplyId(applyId);
 		userApply2.setApplyType("3");// 申请类型（1请假，2加班，3销假）
 		userApply2.setApplyState("5");// 申请状态（1 待审批，2已撤回，3申请成功，4申请失败，5已销假）
 		userApplyMapper.updateUserApply(userApply2);
 
-		// 还原假期值,修改假期记录表状态
-		holidayService.restoreHoliday(applyId, "4");// 使用状态(1申请中，2已使用，3撤销，4销假)
-
-		// 生成新请假记录
-		Date now = new Date();
-		UserApply userApply1 = new UserApply();
-		userApply1.setUserId(userId); // 申请人
-		userApply1.setApplyType("1"); // 类型为请假
-		userApply1.setApplyState("1"); // 状态待审批
-
-		String leaveType = oldUserApply.getLeaveType();
-
-		userApply1.setLeaveType(leaveType); // 请假类型
-		userApply1.setTimeapart1(userApply.getTimeapart1());
-		userApply1.setTimeapart2(userApply.getTimeapart2());
-		userApply1.setStarttime(userApply.getStarttime()); // 开始时间
-		userApply1.setEndtime(userApply.getEndtime()); // 结束时间
-		userApply1.setApplyTime(now);
-		userApply1.setDetails(userApply.getDetails());
-
-		Double timeLength = countTime(userApply.getStarttime(), userApply.getEndtime(), userApply.getTimeapart1(),
-				userApply.getTimeapart2());
-
-		userApply1.setTimelength(timeLength); // 时长
-		userApply1.setForApplyId(applyId);
-
-		// 生成一条新的销假申请
-		userApplyMapper.insertUserApply(userApply1);
-
-		// 新生成的销假申请id
-		Long newAppLyId = userApply1.getApplyId();
-
-		// 审批记录
-		int level = 1;
-
-		UserApproval userApproval = new UserApproval();// 一级审批人 *必审
-		userApproval.setApplyId(newAppLyId);
-		userApproval.setApprovalSight("1");
-		userApproval.setApprovalLevel(level);
-		Long leaderId = iSysUserService.selectApproverIdByApplyerId(userId);// 所在部门负责人id
-		Long upLeaderId = iSysUserService.selectUpApproverIdByApplyerId(userId);// 所在部门负责人的上级leader
-		if (leaderId.equals(userId)) { // 判断用户是否部门负责人 确定一、二级审批人id
-			userApproval.setApproverId(upLeaderId); // 一级审批人id
-		} else {
-			userApproval.setApproverId(leaderId);
-		}
-		if (userId == 103L) {// COO
-			userApproval.setApproverId(101L);
-		}
-		userApprovalMapper.insertUserApproval(userApproval); // 插入一级审批记录
-
-		if (leaveType.equals("1") || leaveType.equals("2")) {
-			// 更新假期表、生成假期记录
-			holidayService.createHolidayAndRecord(userApply1);
-		}
 		return 1;
 	}
-
+	
 	@Override
 	@Transactional
 	public int addOvertimeSave(UserApply userApply, Long userId) {
@@ -1400,4 +1406,6 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		Double total = result1 - result2;
 		return total;
 	}
+
+
 }

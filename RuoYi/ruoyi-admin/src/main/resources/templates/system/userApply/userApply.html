@@ -43,7 +43,32 @@
 				});
 			}
 		}
+		
 		function undo(applyId){
+			debugger;
+			if(confirm("确定销假吗？")){
+				$.ajax({
+					type:"post",
+					url:"/system/userApply/ifUndo",
+					data:{"applyId":applyId},
+					dataType:"json",
+					success:function(result){
+						if(result == "0"){
+							var data = { "ids": applyId };
+					 	    $.operate.submit("/system/userApply/undo", "post", "json", data);
+						}
+						else{
+							$.modal.alertWarning("不能执行此操作");
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				});
+			}
+		}	
+		
+	/* 	function undo(applyId){
 			$.ajax({
 				type:"post",
 				url:"/system/userApply/ifUndo",
@@ -62,7 +87,7 @@
 					$.modal.alertWarning("请联系管理员");
 				}
 			});
-		}	
+		}	 */
 		function del(applyId){
 			if(confirm("确定删除吗？")){
 				$.ajax({
