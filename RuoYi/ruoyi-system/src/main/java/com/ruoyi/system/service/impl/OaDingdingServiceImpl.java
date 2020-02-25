@@ -281,7 +281,23 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 
 			// 非哺乳假 上午(10:00——15:00) 下午(15:00——19:00)
 			if (!leaveType.equals("10")) {
-				if (a.getTimelength() % 1 == 0) {// 整数假期天数
+				if (timepart1.equals("2") && timepart2.equals("1")) {// starttime
+					// 15:00
+					// ---endtime
+					// 15:00
+					Date startDate = getWorkDate(startTime, 15);// 打卡标准值：15点前
+					Date endDate = getWorkDate(a.getEndtime(), 15);
+					System.out.println("\n 21" + startDate + "  " + endDate + "\n");
+
+					Dingding ding = new Dingding();
+					ding.setUserId(userId);
+					ding.setTimeResult(leaveType);
+					ding.setApplyState(applyState);
+					ding.setStartTime(startDate);
+					ding.setEndTime(endDate);
+					ding.setStatus("1");
+					oaDingdingMapper.updateOaDingDingByTime(ding);
+				} else if (timepart1.equals("1") && timepart2.equals("2")) {
 					Dingding ding = new Dingding();
 					ding.setUserId(userId);
 					ding.setTimeResult(leaveType);
@@ -290,63 +306,45 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 					ding.setEndTime(endTime);
 					ding.setStatus("1");
 					oaDingdingMapper.updateOaDingDingByTime(ding);
-				} else {
-					if (timepart1.equals("2") && timepart2.equals("1")) {// starttime
+				} else if (timepart1.equals("1") && timepart2.equals("1")) {// 上午
+																			// starttime
+																			// -
+																			// starttime
 																			// 15:00
-																			// ---endtime
+					Date startDate = startTime;// 打卡标准值：15点前
+					Date endDate = getWorkDate(a.getEndtime(), 15);
+					System.out.println("\n 11" + startDate + "  " + endDate + "\n");
+
+					Dingding ding = new Dingding();
+					ding.setUserId(userId);
+					ding.setTimeResult(leaveType);
+					ding.setApplyState(applyState);
+					ding.setStartTime(startDate);
+					ding.setEndTime(endDate);
+					ding.setStatus("1");
+					oaDingdingMapper.updateOaDingDingByTime(ding);
+				} else if (timepart1.equals("2") && timepart2.equals("2")) {// 22
+																			// 下午，第二天下午，
+																			// starttime
 																			// 15:00
-						Date startDate = getWorkDate(startTime, 15);// 打卡标准值：15点前
-						Date endDate = getWorkDate(endTime, 15);
-						System.out.println("\n 21" + startDate + "  " + endDate + "\n");
+																			// ---
+																			// endtime
+					Date startDate = getWorkDate(startTime, 15);// 打卡标准值：15点前
+					Date endDate = endTime;
+					if (timeLength < 1)
+						getWorkDate(endTime, 15);
+					System.out.println("\n 22" + startDate + "  " + endDate + "\n");
 
-						Dingding ding = new Dingding();
-						ding.setUserId(userId);
-						ding.setTimeResult(leaveType);
-						ding.setApplyState(applyState);
-						ding.setStartTime(startDate);
-						ding.setEndTime(endDate);
-						ding.setStatus("1");
-						oaDingdingMapper.updateOaDingDingByTime(ding);
-					} else if (timepart1.equals("1") && timepart2.equals("1")) {// 上午
-																				// starttime
-																				// -
-																				// starttime
-																				// 15:00
-						Date startDate = startTime;// 打卡标准值：15点前
-						Date endDate = getWorkDate(endTime, 15);
-						System.out.println("\n 11" + startDate + "  " + endDate + "\n");
-
-						Dingding ding = new Dingding();
-						ding.setUserId(userId);
-						ding.setTimeResult(leaveType);
-						ding.setApplyState(applyState);
-						ding.setStartTime(startDate);
-						ding.setEndTime(endDate);
-						ding.setStatus("1");
-						oaDingdingMapper.updateOaDingDingByTime(ding);
-					} else if (timepart1.equals("2") && timepart2.equals("2")) {// 22
-																				// 下午，第二天下午，
-																				// starttime
-																				// 15:00
-																				// ---
-																				// endtime
-						Date startDate = getWorkDate(startTime, 15);// 打卡标准值：15点前
-						Date endDate = endTime;
-						if (timeLength < 1)
-							getWorkDate(endTime, 15);
-						System.out.println("\n 22" + startDate + "  " + endDate + "\n");
-
-						Dingding ding = new Dingding();
-						ding.setUserId(userId);
-						ding.setTimeResult(leaveType);
-						ding.setApplyState(applyState);
-						ding.setStartTime(startDate);
-						ding.setEndTime(endDate);
-						ding.setStatus("1");
-						if (timeLength < 1)
-							ding.setCheckType("OffDuty");
-						oaDingdingMapper.updateOaDingDingByTime(ding);
-					}
+					Dingding ding = new Dingding();
+					ding.setUserId(userId);
+					ding.setTimeResult(leaveType);
+					ding.setApplyState(applyState);
+					ding.setStartTime(startDate);
+					ding.setEndTime(endDate);
+					ding.setStatus("1");
+					if (timeLength < 1)
+						ding.setCheckType("OffDuty");
+					oaDingdingMapper.updateOaDingDingByTime(ding);
 				}
 			}
 
@@ -661,7 +659,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 
 			timeSum = 0;
 			for (Dingding d : dingList) {
-				
+
 				standardTime = s.format(d.getWorkDate()) + " 10:00:00";
 				userCheckTime = sdf.format(d.getUserCheckTime());
 				timeLength = secondsBetween(standardTime, userCheckTime) / 60;// 迟到时长（分钟）
@@ -674,8 +672,9 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 
 				if (timeSum > 60)
 					continue;
-				
-				if(d.getTimeResult().equals("NotSigned")) continue;
+
+				if (d.getTimeResult().equals("NotSigned"))
+					continue;
 
 				Dingding d2 = new Dingding();
 				d2.setUserName(d.getUserName());
