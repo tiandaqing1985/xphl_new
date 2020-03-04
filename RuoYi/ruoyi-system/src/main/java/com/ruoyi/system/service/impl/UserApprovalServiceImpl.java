@@ -28,6 +28,7 @@ import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.UserApply;
 import com.ruoyi.system.domain.UserApproval;
 import com.ruoyi.system.service.IHolidayService;
+import com.ruoyi.system.service.IOaDingdingService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IUserApplyService;
 import com.ruoyi.system.service.IUserApprovalService;
@@ -67,6 +68,8 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 	private UserApplyMapper userApplyMapper;
 	@Autowired
 	private OaDingdingMapper oaDingdingMapper;
+	@Autowired
+	IOaDingdingService dingdingService;
 	
 	/**
      * 查询审批信息
@@ -276,9 +279,16 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 			userApply.setApplyState("4");//申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
 			userApplyMapper.updateUserApply(userApply);
 			
+			//还原钉钉考勤数据
+			dingdingService.restoreDingding(userApproval1.getUserApply());
+			
+			/*//修改钉钉考勤数据
+			UserApply apply = userApproval1.getUserApply();
+			apply.setApplyState("4");
+			dingdingService.updateDingding(apply);*/
 			
 			//修改钉钉考勤数据
-			if(userApproval1.getUserApply().getApplyType().equals("5")){//申请类型（1请假，2加班，3销假，4外出，5补卡）
+		/*	if(userApproval1.getUserApply().getApplyType().equals("5")){//申请类型（1请假，2加班，3销假，4外出，5补卡）
 				
 				Dingding ding = new Dingding();
 				ding.setUserName(userApproval1.getSysUser().getUserName());
@@ -293,7 +303,7 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 				ding.setTime(time);
 				ding.setApplyState("4");// 申请状态（1待审批，2已撤回，3申请成功，4申请失败）
 				oaDingdingMapper.updateOaDingDingByTime(ding);
-			}
+			}*/
 			
 			//先还原假期表，删除假期使用表
 			holidayService.restoreHoliday(applyId, null);
@@ -336,6 +346,11 @@ public class UserApprovalServiceImpl implements IUserApprovalService
 				userApply.setApplyState("3");
 				userApplyMapper.updateUserApply(userApply);
 				//通过申请后,判断该申请是什么申请
+				
+				//修改钉钉考勤数据
+				UserApply apply = userApproval1.getUserApply();
+				apply.setApplyState("3");
+				dingdingService.updateDingding(apply);
 				
 				SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM");
 				String applyType = userApproval1.getUserApply().getApplyType();

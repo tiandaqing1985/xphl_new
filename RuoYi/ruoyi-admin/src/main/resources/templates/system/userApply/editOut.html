@@ -109,6 +109,8 @@
 					$("#p02").css("color","red");
 					flag = false;
 					return;
+				}else{
+					flag = true;
 				}
 								
 				//验证所请假期 是否与已有申请时段重复 
@@ -116,7 +118,7 @@
 					type:"post",
 					async:false,
 					url:"/system/userApply/ifRepeat",
-					data:{"applyId":applyId,"applyType":applyType,"starttime":starttime,"endtime":endtime },
+					data:{"applyId":applyId,"applyType":4,"starttime":starttime,"endtime":endtime },
 					dataType:"json",
 					success:function(result){
 						 if(result == "0"){

@@ -36,6 +36,7 @@ import com.ruoyi.system.domain.UserApplyList;
 import com.ruoyi.system.domain.UserApproval;
 import com.ruoyi.system.domain.WorkingCalendar;
 import com.ruoyi.system.service.IHolidayService;
+import com.ruoyi.system.service.IOaDingdingService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IUserApplyService;
@@ -62,7 +63,8 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
 	@Autowired
 	private UserApplyMapper userApplyMapper;
-
+	@Autowired
+	IOaDingdingService dingdingService;
 	@Autowired
 	private HolidayMapper holidayMapper;
 
@@ -143,7 +145,13 @@ public class UserApplyServiceImpl implements IUserApplyService {
 			}
 			// 新增
 			if (userApply.getApplyId() == null) {
+				
 				userApplyMapper.insertUserApply(userApply);
+				
+				//修改钉钉考勤数据
+				userApply.setApplyState("1");
+				dingdingService.updateDingding(userApply);
+				
 			} else {// 修改
 				userApplyMapper.updateUserApply(userApply);
 			}
@@ -161,7 +169,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
 			// 更新假期表、生成假期记录
 			holidayService.createHolidayAndRecord(userApply);
-
+			
 			// 审批记录
 			int level = 1;
 
@@ -365,6 +373,10 @@ public class UserApplyServiceImpl implements IUserApplyService {
 				// 调休申请：先还原假期表，删除假期使用表
 				holidayService.restoreHoliday(userApply.getApplyId(), null);
 				holidayRecordMapper.deleteHolidayRecordByApplyId(userApply.getApplyId());
+				
+				//恢复钉钉考勤数据
+//				dingdingService.restoreDingding(userApply);
+				
 			}
 
 			// 查询所有图片路径
@@ -803,7 +815,9 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		userApply2.setApplyType("3");// 申请类型（1请假，2加班，3销假）
 		userApply2.setApplyState("5");// 申请状态（1 待审批，2已撤回，3申请成功，4申请失败，5已销假）
 		userApplyMapper.updateUserApply(userApply2);
-
+		
+		//还原考勤数据
+		dingdingService.restoreDingding(userApply);
 		return 1;
 	}
 	
@@ -1003,9 +1017,29 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		userApply.setApplyTime(new Date());
 		userApplyMapper.updateUserApply(userApply);
 		// 补卡
-		if (!applyType.equals("5")) {
+		if (!applyType.equals("补卡")) {
 			insertUserApply(userApply, userApply.getUserId());
 		}
+		
+		//申请类型（1请假，2加班，3销假，4外出，5补卡）
+		if(applyType.equals("请假")){
+			userApply.setApplyType("1");
+		}else if(applyType.equals("加班")){
+			userApply.setApplyType("2");
+		}else if(applyType.equals("销假")){
+			userApply.setApplyType("3");
+		}else if(applyType.equals("外出")){
+			userApply.setApplyType("4");
+		}else if(applyType.equals("补卡")){
+			userApply.setApplyType("5");
+		}
+		
+		//还原钉钉考勤数据
+//		dingdingService.restoreDingding(userApply);
+		
+		//修改钉钉考勤数据
+		dingdingService.updateDingding(userApply);
+		
 		return 1;
 	}
 
@@ -1076,6 +1110,21 @@ public class UserApplyServiceImpl implements IUserApplyService {
 				holidayService.restoreHoliday(userApply.getApplyId(), null);
 				holidayRecordMapper.deleteHolidayRecordByApplyId(userApply.getApplyId());
 			}
+			
+			//申请类型（1请假，2加班，3销假，4外出，5补卡）
+			if(userApply.getApplyType().equals("请假")){
+				userApply.setApplyType("1");
+			}else if(userApply.getApplyType().equals("加班")){
+				userApply.setApplyType("2");
+			}else if(userApply.getApplyType().equals("销假")){
+				userApply.setApplyType("3");
+			}else if(userApply.getApplyType().equals("外出")){
+				userApply.setApplyType("4");
+			}else if(userApply.getApplyType().equals("补卡")){
+				userApply.setApplyType("5");
+			}
+			//恢复钉钉考勤数据
+			dingdingService.restoreDingding(userApply);
 		}
 		return userApplyMapper.updateUserApplyStateById(ids);
 	}
@@ -1103,6 +1152,9 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		userApply.setApplyType("4");// 申请类型（1请假，2加班，3销假，4外出）
 		userApplyMapper.insertUserApply(userApply);
 
+		//修改钉钉考勤数据
+		dingdingService.updateDingding(userApply);
+		
 		SysUser user = userMapper.selectUserById(userId);// 查出当前用户的area值
 		if (user.getArea().equals("3")) {
 			user.setArea("2");
@@ -1278,7 +1330,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		userApprovalMapper.insertUserApproval(personnel);
 
 		//修改钉钉考勤数据
-		Dingding ding = new Dingding();
+		/*Dingding ding = new Dingding();
 		ding.setUserName(user.getUserName());
 		if (userApply.getCtype().equals("上班")) {
 			ding.setCheckType("OnDuty");
@@ -1292,7 +1344,8 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		ding.setTimeResult("Clocked");
 		ding.setApplyState("1");// 申请状态（1待审批，2已撤回，3申请成功，4申请失败）
 		ding.setStatus("1");
-		oaDingdingMapper.updateOaDingDingByTime(ding);
+		oaDingdingMapper.updateOaDingDingByTime(ding);*/
+		dingdingService.updateDingding(userApply);
 		
 		return userApply.getApplyId();
 	}

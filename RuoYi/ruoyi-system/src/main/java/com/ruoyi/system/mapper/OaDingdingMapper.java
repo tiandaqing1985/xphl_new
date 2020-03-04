@@ -59,12 +59,15 @@ public interface OaDingdingMapper
      */
 	public int insertOaDingding(OaDingding oaDingding);
 	
+	
 	/**
 	 * 批量插入钉钉考勤数据
 	 * @param dingList
 	 * @return
 	 */
 	public int insertForeach(List<OaDingding> dingList);
+	
+	public int insertForeachCopy(List<OaDingding> dingList);
 	
 	/**
      * 修改钉钉考勤数据
@@ -111,6 +114,8 @@ public interface OaDingdingMapper
 	 */
 	public List<Dingding> selectOaDingdingListByCondition(Dingding ding);
 	
+	public List<OaDingding> selectOaDingdingCopyListByCondition(Dingding ding);
+	
 	/**
 	 * 10:00 - 10:30之间的考勤
 	 * @param ding
@@ -131,4 +136,6 @@ public interface OaDingdingMapper
 	 * @return
 	 */
 	public List<Dingding> selectOaDingByTime3(Dingding ding);
+	
+	public int deleteOaDingdingListByCondition(Dingding ding);
 }
