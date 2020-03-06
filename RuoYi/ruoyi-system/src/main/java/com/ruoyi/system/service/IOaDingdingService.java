@@ -71,6 +71,12 @@ public interface IOaDingdingService
 	public int updateOaDingDingByOutAndApply();
 	
 	/**
+	 * 根据申请修改钉钉考勤数据
+	 * @return
+	 */
+	public void updateDingdingByApply();
+	
+	/**
 	 * 弹性工作制
 	 * @return
 	 */

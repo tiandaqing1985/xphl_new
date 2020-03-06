@@ -628,21 +628,24 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 		String applyState = userApply.getApplyState();
 
 		if(!applyType.equals("5")){
-			Dingding di = new Dingding();
-			di.setUserId(userId);
-			di.setStartTime(userApply.getStarttime());
-//			di.setEndTime(getWorkDate(userApply.getEndtime(), 24));
-			di.setEndTime(userApply.getEndtime());
-			List<Dingding> diList = oaDingdingMapper.selectOaDingdingListByCondition(di);// 查询实际打卡时间
-			if (diList.size() == 0)
-				return;// 请假时间区间在oa_dingding表中没有打卡记录	
-			
 			leaveType = userApply.getLeaveType();
 			startTime = userApply.getStarttime();
 			endTime = userApply.getEndtime();
 			timepart1 = userApply.getTimeapart1();
 			timepart2 = userApply.getTimeapart2();
 			timeLength = userApply.getTimelength();
+			
+			Dingding di = new Dingding();
+			di.setUserId(userId);
+			di.setStartTime(userApply.getStarttime());
+			if(timeLength <= 1){
+				di.setEndTime(getWorkDate(userApply.getEndtime(), 24));
+			}else{
+				di.setEndTime(userApply.getEndtime());
+			}
+			List<Dingding> diList = oaDingdingMapper.selectOaDingdingListByCondition(di);// 查询实际打卡时间
+			if (diList.size() == 0)
+				return;// 请假时间区间在oa_dingding表中没有打卡记录	
 		}
 
 		// 申请类型（1请假，2加班，3销假，4外出，5补卡）
@@ -919,6 +922,9 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 					ding.setEndTime(endDate);
 
 					List<OaDingding> dingList = oaDingdingMapper.selectOaDingdingCopyListByCondition(ding);
+					
+					if(dingList.size() == 0) return;
+					
 					oaDingdingMapper.deleteOaDingdingListByCondition(ding);
 					oaDingdingMapper.insertForeach(dingList);
 
@@ -929,6 +935,8 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 					ding.setEndTime(getWorkDate(endTime, 24));
 
 					List<OaDingding> dingList = oaDingdingMapper.selectOaDingdingCopyListByCondition(ding);
+					if(dingList.size() == 0) return;
+					
 					oaDingdingMapper.deleteOaDingdingListByCondition(ding);
 					oaDingdingMapper.insertForeach(dingList);
 
@@ -947,6 +955,8 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 					ding.setEndTime(endDate);
 
 					List<OaDingding> dingList = oaDingdingMapper.selectOaDingdingCopyListByCondition(ding);
+					if(dingList.size() == 0) return;
+					
 					oaDingdingMapper.deleteOaDingdingListByCondition(ding);
 					oaDingdingMapper.insertForeach(dingList);
 
@@ -970,6 +980,8 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 						ding.setCheckType("OffDuty");
 
 					List<OaDingding> dingList = oaDingdingMapper.selectOaDingdingCopyListByCondition(ding);
+					if(dingList.size() == 0) return; 
+					
 					oaDingdingMapper.deleteOaDingdingListByCondition(ding);
 					oaDingdingMapper.insertForeach(dingList);
 				}
@@ -988,6 +1000,8 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 				}
 
 				List<OaDingding> dingList = oaDingdingMapper.selectOaDingdingCopyListByCondition(ding);
+				if(dingList.size() == 0) return;
+				
 				oaDingdingMapper.deleteOaDingdingListByCondition(ding);
 				oaDingdingMapper.insertForeach(dingList);
 
@@ -1001,6 +1015,8 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 			ding.setEndTime(userApply.getEndtime());
 
 			List<OaDingding> dingList = oaDingdingMapper.selectOaDingdingCopyListByCondition(ding);
+			if(dingList.size() == 0) return;
+			
 			oaDingdingMapper.deleteOaDingdingListByCondition(ding);
 			oaDingdingMapper.insertForeach(dingList);
 			
@@ -1024,6 +1040,28 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 			
 			oaDingdingMapper.deleteOaDingdingListByCondition(ding);
 			oaDingdingMapper.insertForeach(dingList);
+		}
+
+	}
+
+	@Override
+	public void updateDingdingByApply() {
+		//申请状态（1 待审批，2已撤回，3申请成功，4申请失败，5已销假）
+		List<UserApply> applyList = applyMapper.selectApplyList(null);// 请假申请记录
+
+		for (UserApply a : applyList) {
+			// 申请类型（1请假，2加班，3销假，4外出，5补卡）
+			if(a.getApplyType().equals("2"))
+				continue;
+			
+			// 申请状态（1 待审批，2已撤回，3申请成功，4申请失败，5已销假）
+			if (a.getApplyState().equals("1") || a.getApplyState().equals("3")) {
+				// 修改钉钉考勤
+				updateDingding(a);
+			} else {
+				//还原钉钉考勤
+				restoreDingding(a);
+			}
 		}
 
 	}
