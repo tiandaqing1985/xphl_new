@@ -125,7 +125,6 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
     }
 
 
-
     @Override
     public double selectDouble(String num) {
         double a = facReiAdiApplyMapper.selectAmount(num);
@@ -175,7 +174,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                 roleName = roleName + "," + name.trim().toLowerCase();
             }
 
-                if (roleName.contains("coo")||roleName.contains("ceo")) {
+            if (roleName.contains("coo") || roleName.contains("ceo")) {
                 facReimburseApply.setStatus("1");
                 facReimburseApplyMapper.insertFacReimburseApply(facReimburseApply);
                 FacSysUserApproval facSysUserApproval = new FacSysUserApproval();
@@ -200,7 +199,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     if (area.equals("2")) {
                         facSysUserApproval2.setApproverId(new Long("168"));// 审批id为人事
                     } else {
-                        center.setApproverId(new Long("253"));// 审批id为人事
+                        center.setApproverId(new Long("241"));// 审批id为人事
                     }
                     facSysUserApproval2.setApprovalTime(new Date());
                     facSysUserApproval2.setApprovalLevel(level++);
@@ -230,7 +229,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                     if (area.equals("2")) {
                                         center.setApproverId(new Long("168"));// 审批id为人事
                                     } else {
-                                        center.setApproverId(new Long("253"));// 审批id为人事
+                                        center.setApproverId(new Long("241"));// 审批id为人事
                                     }
                                     center.setApprovalLevel(level++);
                                     center.setProjectName(
@@ -282,7 +281,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                                 center.setApproverId(new Long("168"));// 审批id为人事
                                             } else {
                                                 center.setApproverId(
-                                                        new Long("253"));// 审批id为人事
+                                                        new Long("241"));// 审批id为人事
                                             }
                                             center.setApprovalLevel(level++);
                                             center.setProjectName(
@@ -340,7 +339,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                                         new Long("168"));// 审批id为人事
                                             } else {
                                                 center.setApproverId(
-                                                        new Long("253"));// 审批id为人事
+                                                        new Long("241"));// 审批id为人事
                                             }
                                             center.setApprovalLevel(level++);
                                             center.setProjectName(
@@ -406,7 +405,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                                         new Long("168"));// 审批id为人事
                                             } else {
                                                 center.setApproverId(
-                                                        new Long("253"));// 审批id为人事
+                                                        new Long("241"));// 审批id为人事
                                             }
                                             center.setApprovalLevel(level++);
                                             center.setProjectName(
@@ -476,7 +475,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
         }
 
 
-        if(facReimburseApply.getType()==null){
+        if (facReimburseApply.getType() == null) {
             String num = facReimburseApply.getNum();
             FacReiAdiApply facReiAdiApply = new FacReiAdiApply();
             facReiAdiApply.setNum(num);
