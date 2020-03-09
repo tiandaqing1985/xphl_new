@@ -146,7 +146,9 @@ public interface IUserApplyService
 	
 	public List<UserApply> selectUserApplyListByEndTime(UserApply userApply);
 	
-	public int undoSave(UserApply userApply,Long userId);
+//	public int undoSave(UserApply userApply,Long userId);
+	
+	public int undoSave(Long applyId);
 	
 	public int addOvertimeSave(UserApply userApply,Long userId);
 	

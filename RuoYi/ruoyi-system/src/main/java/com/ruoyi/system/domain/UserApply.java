@@ -42,6 +42,8 @@ public class UserApply extends BaseEntity
 	private String approvalState;
 	/** 详情 */
 	private String details;
+	/** 销假重提理由 */
+	private String undodetails;
 	/** 请假类型 */
 	private String leaveType;
 	/** 请假类型 */
@@ -74,7 +76,17 @@ public class UserApply extends BaseEntity
 	/** 传入String类型的时间 */
 	private String time;
 	
-    public String getTime() {
+    public String getUndodetails() {
+		return undodetails;
+	}
+
+
+	public void setUndodetails(String undodetails) {
+		this.undodetails = undodetails;
+	}
+
+
+	public String getTime() {
 		return time;
 	}
 

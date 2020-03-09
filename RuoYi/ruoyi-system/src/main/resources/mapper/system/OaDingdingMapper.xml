@@ -75,6 +75,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		ORDER BY checkType DESC
     </select>
     
+    <select id="selectOaDingdingCopyListByCondition" parameterType="Dingding" resultMap="OaDingdingResult">
+    	select * from oa_dingding_copy
+		<where>
+			<if test="userId != null"> and user_id = #{userId}</if>
+			<if test="userName != null and userName !=''">and user_name = #{userName}</if>
+			<if test="startTime != null and endTime != null">and userCheckTime <![CDATA[  >= #{startTime} ]]> and userCheckTime <![CDATA[ <= #{endTime} ]]> </if>
+			<if test="workDate != null">and workDate = #{workDate}</if>
+			<if test="checkType != null and checkType != ''">and checkType = #{checkType}</if>
+			<if test="time != null">and workDate = #{time}</if>
+		</where>
+		ORDER BY checkType DESC
+    </select>
+    
+    <delete id="deleteOaDingdingListByCondition" parameterType="Dingding">
+    	delete from oa_dingding
+		<where>
+			<if test="userId != null"> and user_id = #{userId}</if>
+			<if test="userName != null and userName !=''">and user_name = #{userName}</if>
+			<if test="startTime != null and endTime != null">and userCheckTime <![CDATA[  >= #{startTime} ]]> and userCheckTime <![CDATA[ <= #{endTime} ]]> </if>
+			<if test="workDate != null">and workDate = #{workDate}</if>
+			<if test="checkType != null and checkType != ''">and checkType = #{checkType}</if>
+			<if test="time != null">and workDate = #{time}</if>
+		</where>
+    </delete>
+    
     <select id="selectMaxOaDingding" parameterType="Dingding" resultType="Date">
     	select max(userCheckTime) from oa_dingding
     	where workDate =#{time} and user_name = #{userName}
@@ -111,7 +136,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="applyState != null and applyState != ''"> #{applyState}, </if>
          </trim>
     </insert>
-    
+       
     <insert id="insertForeach" parameterType="List" useGeneratedKeys="false">
     	insert into oa_dingding 
     	(user_id, user_name, workDate, weekDay, checkType, userCheckTime, timeResult, status, apply_state)
@@ -130,7 +155,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     		)
     	</foreach>
     </insert>
-        	 
+        
+    <insert id="insertForeachCopy" parameterType="List" useGeneratedKeys="false">
+    	insert into oa_dingding_copy 
+    	(user_id, user_name, workDate, weekDay, checkType, userCheckTime, timeResult, status, apply_state)
+    	values
+    	<foreach collection="list" item="item" index="index" separator=",">
+    		(
+    		 #{item.userId}, 
+    		 #{item.userName},
+    		 #{item.workDate},
+    		 #{item.weekDay},
+    		 #{item.checkType},
+    		 #{item.userCheckTime},
+    		 #{item.timeResult},
+    		 #{item.status},
+    		 #{item.applyState}
+    		)
+    	</foreach>
+    </insert>
+    	 
     <update id="updateOaDingding" parameterType="OaDingding">
         update oa_dingding
         <trim prefix="SET" suffixOverrides=",">

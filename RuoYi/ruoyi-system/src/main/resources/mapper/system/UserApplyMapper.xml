@@ -19,6 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="applyState"    column="apply_state"    />
         <result property="approvalState"    column="approval_state"    />
         <result property="details"    column="details"    />
+        <result property="undodetails"    column="undodetails"    />
         <result property="leaveType"    column="leave_type"    />
         <result property="applyTime"    column="apply_time"    />
         <result property="approverName"   column="approver_name"/>
@@ -89,7 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<sql id="selectUserApplyVo">
-        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove,
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.details, a.undodetails, a.leave_type, a.apply_time,a.for_applyid,a.prove,
         		p.approval_id, p.apply_id, p.approval_state, p.approver_id,  p.approval_sight,p.approval_time,a.ctype,
         		u.user_id, u.dept_id, u.login_name, u.user_name, u.email, u.phonenumber, u.sex, u.avatar, u.password, u.salt, u.del_flag, u.login_ip, u.login_date, u.create_time, u.remark,u.record,u.intime,u.firstphase,u.secondphase,
         		s.user_id, s.dept_id, s.login_name, (s.user_name)approver_name, s.email, s.phonenumber, s.sex, s.avatar, s.password, s.salt, s.del_flag, s.login_ip, s.login_date, s.create_time, s.remark,s.record,s.intime,s.firstphase,s.secondphase
@@ -115,6 +116,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
              <if test="applyState != null  and applyState != '' "> and a.apply_state = #{applyState}</if>
              <if test="details != null  and details != '' "> and a.details = #{details}</if>
+             <if test="undodetails != null  and undodetails != '' "> and a.undodetails = #{undodetails}</if>
              <if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
              <if test="applyTime != null "> and a.apply_time = #{applyTime}</if>
              <if test="prove != null and prove != '' "> and a.prove = #{prove}</if>
@@ -213,7 +215,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         ELSE 
 		            ''
 		        END)apply_state, 
-		        a.details, 
+		        a.details, a.undodetails,
 		        (CASE
 		         WHEN a.leave_type = 1 THEN
 		          '年假'
@@ -359,7 +361,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         ELSE 
 		            ''
 		        END)apply_state, 
-		        a.details, 
+		        a.details, a.undodetails,
 		        (CASE
 		         WHEN a.leave_type = 1 THEN
 		          '年假'
@@ -455,7 +457,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		         ELSE 
 		            ''
 		        END)apply_state, 
-		        a.details, 
+		        a.details, a.undodetails,
 		        (CASE
 		         WHEN a.leave_type = 1 THEN
 		          '年假'
@@ -527,7 +529,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				ELSE '' 
 				END 
 				) approval_state,
-		        a.details, 
+		        a.details, a.undodetails,
 		        (CASE
 		         WHEN a.leave_type = 1 THEN
 		          '年假'
@@ -569,6 +571,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="applyType != null  and applyType != ''  ">apply_type,</if>
 			<if test="applyState != null  and applyState != ''  ">apply_state,</if>
 			<if test="details != null  and details != ''  ">details,</if>
+			<if test="undodetails != null  and undodetails != ''  ">undodetails,</if>
 			<if test="leaveType != null  and leaveType != ''  ">leave_type,</if>
 			<if test="forApplyId != null  and forApplyId != ''  ">for_applyid,</if>
 			<if test="prove != null and prove != '' ">prove,</if>
@@ -587,6 +590,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="applyType != null  and applyType != ''  ">#{applyType},</if>
 			<if test="applyState != null  and applyState != ''  ">#{applyState},</if>
 			<if test="details != null  and details != ''  ">#{details},</if>
+			<if test="undodetails != null  and undodetails != ''  ">#{undodetails},</if>
 			<if test="leaveType != null  and leaveType != ''  ">#{leaveType},</if>
 			<if test="forApplyId != null  and forApplyId != ''  ">#{forApplyId},</if>
 			<if test="prove != null and prove != '' ">#{prove},</if>
@@ -609,6 +613,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="applyType != null  and applyType != ''  ">apply_type = #{applyType},</if>
             <if test="applyState != null  and applyState != ''  ">apply_state = #{applyState},</if>
             <if test="details != null  and details != ''  ">details = #{details},</if>
+            <if test="details != null  and details != ''  ">undodetails = #{undodetails},</if>
             <if test="leaveType != null  and leaveType != ''  ">leave_type = #{leaveType},</if>
             <if test="applyTime != null  ">apply_time = #{applyTime},</if>
             <if test="prove != null and prove != '' ">prove = #{prove}</if>
@@ -735,7 +740,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
    	</select>
    	
    	<select id="selectUserApplyListByStartTime" parameterType="UserApply" resultMap="UserApplyResult">
-        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.details, a.undodetails, a.leave_type, a.apply_time,a.for_applyid,a.prove
         from sys_user_apply a		
         <where>
         	 <if test="applyId != null "> and a.apply_id = #{applyId}</if>
@@ -752,7 +757,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     
     <select id="selectUserApplyListByEndTime" parameterType="UserApply" resultMap="UserApplyResult">
-        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.details, a.leave_type, a.apply_time,a.for_applyid,a.prove
+        select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.details, a.undodetails, a.leave_type, a.apply_time,a.for_applyid,a.prove
         from sys_user_apply a	
         <where>
              <if test="userId != null "> and a.user_id = #{userId}</if>

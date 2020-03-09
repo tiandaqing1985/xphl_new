@@ -140,7 +140,8 @@ public class DingDingTask{
 
         
         //根据请假、外出报备、补卡修改钉钉打卡考勤结果
-        dingdingService.updateOaDingDingByOutAndApply();
+//        dingdingService.updateOaDingDingByOutAndApply();
+        dingdingService.updateDingdingByApply();
         }
 	
 	/**

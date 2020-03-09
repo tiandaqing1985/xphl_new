@@ -56,6 +56,12 @@
                 <textarea id="details" name="details" class="form-control" maxlength="500" rows="3" th:field="*{details}"  required></textarea>
 			</div>
 		</div>
+		<div class="form-group">
+			<label class="col-sm-2 control-label" >销假重提理由：</label>
+			<div class="col-sm-8">
+                <textarea id="undodetails" name="undodetails" class="form-control" maxlength="500" rows="3" th:field="*{undodetails}"></textarea>
+			</div>
+		</div>
 		<div class="form-group" th:style="'display:' + ${userApply.applyType == '加班' or userApply.applyType =='外出' or userApply.applyType == '补卡' ? 'none' : 'block'}">	<span id="p03"></span>
 			<label class="col-sm-2 control-label">证明附件：</label>
 			<div class="col-sm-8">
@@ -414,8 +420,8 @@
 					}
 				}); 
 				
-				//验证是否为销假申请且时长是否在原申请时长范围内
-				if(leaveType == "1" || leaveType == "2"){
+/* 				//验证是否为销假申请且时长是否在原申请时长范围内
+				if(applyType == "1" || leaveType == "2"){
 					$.ajax({
 						type:"post",
 						async:false,
@@ -436,7 +442,7 @@
 							$.modal.alertWarning("请联系管理员");
 						}
 					}); 
-				}
+				} */
 				
 				//验证所请假期 余额是否足够 
 				$.ajax({

@@ -23,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectOaDingdingUserById" parameterType="Long" resultMap="OaDingdingUserResult">
         <include refid="selectOaDingdingUserVo"/>
-        where user_id = #{userId}
+        where user_id = #{userId} limit 1
     </select>
         
     <insert id="insertOaDingdingUser" parameterType="OaDingdingUser">

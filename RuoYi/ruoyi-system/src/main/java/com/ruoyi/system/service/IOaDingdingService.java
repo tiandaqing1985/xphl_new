@@ -2,6 +2,8 @@ package com.ruoyi.system.service;
 
 import com.ruoyi.system.domain.Dingding;
 import com.ruoyi.system.domain.OaDingding;
+import com.ruoyi.system.domain.UserApply;
+
 import java.util.List;
 
 /**
@@ -69,6 +71,12 @@ public interface IOaDingdingService
 	public int updateOaDingDingByOutAndApply();
 	
 	/**
+	 * 根据申请修改钉钉考勤数据
+	 * @return
+	 */
+	public void updateDingdingByApply();
+	
+	/**
 	 * 弹性工作制
 	 * @return
 	 */
@@ -81,4 +89,16 @@ public interface IOaDingdingService
 	public int updateOaDingDingBySpecialTime(String time);
 	
 	public int updateOaDingDingByCountLate();
+	
+	/**
+	 * 根据请假申请修改考勤数据
+	 * */
+	public void updateDingding(UserApply userApply);
+	
+	
+	/**
+	 * 根据请假申请恢复考勤数据
+	 * */
+	public void restoreDingding(UserApply userApply);
+
 }

@@ -269,25 +269,35 @@ public class UserApplyController extends BaseController {
     /**
      * 销假申请
      */
-    @GetMapping("/undo/{applyId}")
-    public String undo(@PathVariable("applyId") Long applyId, ModelMap mmap) {
-        UserApply userApply = userApplyService.selectUserApplyByIdForUndo(applyId);
-        System.out.println(userApply.getTimeapart1());
-        System.out.println(userApply.getTimeapart2());
-        mmap.addAttribute(userApply);
-        return prefix + "/undo";
-    }
+    @PostMapping("/undo")
+    @ResponseBody
+    public AjaxResult undo(Long ids) {
+        int i = userApplyService.undoSave(ids);
+        return toAjax(i);  
+    } 
+    
+//    /**
+//     * 销假申请
+//     */
+//    @GetMapping("/undo/{applyId}")
+//    public String undo(@PathVariable("applyId") Long applyId, ModelMap mmap) {
+//        UserApply userApply = userApplyService.selectUserApplyByIdForUndo(applyId);
+//        System.out.println(userApply.getTimeapart1());
+//        System.out.println(userApply.getTimeapart2());
+//        mmap.addAttribute(userApply);
+//        return prefix + "/undo";
+//    }
 
     /**
      * 保存销假申请
      */
-    @PostMapping("/undo")
-    @ResponseBody
-    public AjaxResult undoSave(UserApply userApply) {
-        int i = userApplyService.undoSave(userApply, ShiroUtils.getUserId());
-
-        return toAjax(i);
-    }
+//    @PostMapping("/undo")
+//    @ResponseBody
+//    public AjaxResult undoSave(UserApply userApply) {
+//        int i = userApplyService.undoSave(userApply, ShiroUtils.getUserId());
+//
+//        return toAjax(i);
+//    }
 
     /**
      * 新增加班申请

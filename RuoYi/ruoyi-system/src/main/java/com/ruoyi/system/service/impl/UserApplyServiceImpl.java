@@ -36,6 +36,7 @@ import com.ruoyi.system.domain.UserApplyList;
 import com.ruoyi.system.domain.UserApproval;
 import com.ruoyi.system.domain.WorkingCalendar;
 import com.ruoyi.system.service.IHolidayService;
+import com.ruoyi.system.service.IOaDingdingService;
 import com.ruoyi.system.service.ISysRoleService;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.IUserApplyService;
@@ -62,7 +63,8 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
 	@Autowired
 	private UserApplyMapper userApplyMapper;
-
+	@Autowired
+	IOaDingdingService dingdingService;
 	@Autowired
 	private HolidayMapper holidayMapper;
 
@@ -143,7 +145,13 @@ public class UserApplyServiceImpl implements IUserApplyService {
 			}
 			// 新增
 			if (userApply.getApplyId() == null) {
+				
 				userApplyMapper.insertUserApply(userApply);
+				
+				//修改钉钉考勤数据
+				userApply.setApplyState("1");
+				dingdingService.updateDingding(userApply);
+				
 			} else {// 修改
 				userApplyMapper.updateUserApply(userApply);
 			}
@@ -161,7 +169,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
 			// 更新假期表、生成假期记录
 			holidayService.createHolidayAndRecord(userApply);
-
+			
 			// 审批记录
 			int level = 1;
 
@@ -365,6 +373,10 @@ public class UserApplyServiceImpl implements IUserApplyService {
 				// 调休申请：先还原假期表，删除假期使用表
 				holidayService.restoreHoliday(userApply.getApplyId(), null);
 				holidayRecordMapper.deleteHolidayRecordByApplyId(userApply.getApplyId());
+				
+				//恢复钉钉考勤数据
+//				dingdingService.restoreDingding(userApply);
+				
 			}
 
 			// 查询所有图片路径
@@ -726,81 +738,89 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
 		return userApplyMapper.selectUserApplyListByEndTime(userApply);
 	}
-
+	/*
+	 * @Override
+	 * @Transactional
+	 * public int undoSave(UserApply userApply, Long userId) { // 原申请id Long applyId
+	 * = userApply.getApplyId();
+	 * 
+	 * // 查询原申请 UserApply oldUserApply =
+	 * userApplyMapper.selectUserApplyByApplyId(applyId);
+	 * 
+	 * // 修改原申请状态为销假 UserApply userApply2 = new UserApply();
+	 * userApply2.setApplyId(applyId); userApply2.setApplyType("3");//
+	 * 申请类型（1请假，2加班，3销假） userApply2.setApplyState("5");// 申请状态（1
+	 * 待审批，2已撤回，3申请成功，4申请失败，5已销假） userApplyMapper.updateUserApply(userApply2);
+	 * 
+	 * // 还原假期值,修改假期记录表状态 holidayService.restoreHoliday(applyId, "4");//
+	 * 使用状态(1申请中，2已使用，3撤销，4销假)
+	 * 
+	 * // 生成新请假记录 Date now = new Date(); UserApply userApply1 = new UserApply();
+	 * userApply1.setUserId(userId); // 申请人 userApply1.setApplyType("1"); // 类型为请假
+	 * userApply1.setApplyState("1"); // 状态待审批
+	 * 
+	 * String leaveType = oldUserApply.getLeaveType();
+	 * 
+	 * userApply1.setLeaveType(leaveType); // 请假类型
+	 * userApply1.setTimeapart1(userApply.getTimeapart1());
+	 * userApply1.setTimeapart2(userApply.getTimeapart2());
+	 * userApply1.setStarttime(userApply.getStarttime()); // 开始时间
+	 * userApply1.setEndtime(userApply.getEndtime()); // 结束时间
+	 * userApply1.setApplyTime(now); userApply1.setDetails(userApply.getDetails());
+	 * 
+	 * Double timeLength = countTime(userApply.getStarttime(),
+	 * userApply.getEndtime(), userApply.getTimeapart1(),
+	 * userApply.getTimeapart2());
+	 * 
+	 * userApply1.setTimelength(timeLength); // 时长
+	 * userApply1.setForApplyId(applyId);
+	 * 
+	 * // 生成一条新的销假申请 userApplyMapper.insertUserApply(userApply1);
+	 * 
+	 * // 新生成的销假申请id Long newAppLyId = userApply1.getApplyId();
+	 * 
+	 * // 审批记录 int level = 1;
+	 * 
+	 * UserApproval userApproval = new UserApproval();// 一级审批人 *必审
+	 * userApproval.setApplyId(newAppLyId); userApproval.setApprovalSight("1");
+	 * userApproval.setApprovalLevel(level); Long leaderId =
+	 * iSysUserService.selectApproverIdByApplyerId(userId);// 所在部门负责人id Long
+	 * upLeaderId = iSysUserService.selectUpApproverIdByApplyerId(userId);//
+	 * 所在部门负责人的上级leader if (leaderId.equals(userId)) { // 判断用户是否部门负责人 确定一、二级审批人id
+	 * userApproval.setApproverId(upLeaderId); // 一级审批人id } else {
+	 * userApproval.setApproverId(leaderId); } if (userId == 103L) {// COO
+	 * userApproval.setApproverId(101L); }
+	 * userApprovalMapper.insertUserApproval(userApproval); // 插入一级审批记录
+	 * 
+	 * if (leaveType.equals("1") || leaveType.equals("2")) { // 更新假期表、生成假期记录
+	 * holidayService.createHolidayAndRecord(userApply1); } return 1; }
+	 */
+	
 	@Override
-	@Transactional
-	public int undoSave(UserApply userApply, Long userId) {
-		// 原申请id
-		Long applyId = userApply.getApplyId();
-
-		// 查询原申请
-		UserApply oldUserApply = userApplyMapper.selectUserApplyByApplyId(applyId);
-
-		// 修改原申请状态为销假
+	public int undoSave(Long applyId) {
+		// 查询申请详情
+		UserApply userApply = userApplyMapper.selectUserApplyByApplyId(applyId);
+		
+		//请假：年假|调休
+		if(userApply.getApplyType().equals("1")) {
+			if(userApply.getLeaveType().equals("1") || userApply.getLeaveType().equals("2")) {
+				// 还原假期值,修改假期记录表状态
+				holidayService.restoreHoliday(applyId, "4");// 使用状态(1申请中，2已使用，3撤销，4销假)
+			}
+		}
+		
+		// 修改申请状态为销假
 		UserApply userApply2 = new UserApply();
 		userApply2.setApplyId(applyId);
 		userApply2.setApplyType("3");// 申请类型（1请假，2加班，3销假）
 		userApply2.setApplyState("5");// 申请状态（1 待审批，2已撤回，3申请成功，4申请失败，5已销假）
 		userApplyMapper.updateUserApply(userApply2);
-
-		// 还原假期值,修改假期记录表状态
-		holidayService.restoreHoliday(applyId, "4");// 使用状态(1申请中，2已使用，3撤销，4销假)
-
-		// 生成新请假记录
-		Date now = new Date();
-		UserApply userApply1 = new UserApply();
-		userApply1.setUserId(userId); // 申请人
-		userApply1.setApplyType("1"); // 类型为请假
-		userApply1.setApplyState("1"); // 状态待审批
-
-		String leaveType = oldUserApply.getLeaveType();
-
-		userApply1.setLeaveType(leaveType); // 请假类型
-		userApply1.setTimeapart1(userApply.getTimeapart1());
-		userApply1.setTimeapart2(userApply.getTimeapart2());
-		userApply1.setStarttime(userApply.getStarttime()); // 开始时间
-		userApply1.setEndtime(userApply.getEndtime()); // 结束时间
-		userApply1.setApplyTime(now);
-		userApply1.setDetails(userApply.getDetails());
-
-		Double timeLength = countTime(userApply.getStarttime(), userApply.getEndtime(), userApply.getTimeapart1(),
-				userApply.getTimeapart2());
-
-		userApply1.setTimelength(timeLength); // 时长
-		userApply1.setForApplyId(applyId);
-
-		// 生成一条新的销假申请
-		userApplyMapper.insertUserApply(userApply1);
-
-		// 新生成的销假申请id
-		Long newAppLyId = userApply1.getApplyId();
-
-		// 审批记录
-		int level = 1;
-
-		UserApproval userApproval = new UserApproval();// 一级审批人 *必审
-		userApproval.setApplyId(newAppLyId);
-		userApproval.setApprovalSight("1");
-		userApproval.setApprovalLevel(level);
-		Long leaderId = iSysUserService.selectApproverIdByApplyerId(userId);// 所在部门负责人id
-		Long upLeaderId = iSysUserService.selectUpApproverIdByApplyerId(userId);// 所在部门负责人的上级leader
-		if (leaderId.equals(userId)) { // 判断用户是否部门负责人 确定一、二级审批人id
-			userApproval.setApproverId(upLeaderId); // 一级审批人id
-		} else {
-			userApproval.setApproverId(leaderId);
-		}
-		if (userId == 103L) {// COO
-			userApproval.setApproverId(101L);
-		}
-		userApprovalMapper.insertUserApproval(userApproval); // 插入一级审批记录
-
-		if (leaveType.equals("1") || leaveType.equals("2")) {
-			// 更新假期表、生成假期记录
-			holidayService.createHolidayAndRecord(userApply1);
-		}
+		
+		//还原考勤数据
+		dingdingService.restoreDingding(userApply);
 		return 1;
 	}
-
+	
 	@Override
 	@Transactional
 	public int addOvertimeSave(UserApply userApply, Long userId) {
@@ -997,9 +1017,29 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		userApply.setApplyTime(new Date());
 		userApplyMapper.updateUserApply(userApply);
 		// 补卡
-		if (!applyType.equals("5")) {
+		if (!applyType.equals("补卡")) {
 			insertUserApply(userApply, userApply.getUserId());
 		}
+		
+		//申请类型（1请假，2加班，3销假，4外出，5补卡）
+		if(applyType.equals("请假")){
+			userApply.setApplyType("1");
+		}else if(applyType.equals("加班")){
+			userApply.setApplyType("2");
+		}else if(applyType.equals("销假")){
+			userApply.setApplyType("3");
+		}else if(applyType.equals("外出")){
+			userApply.setApplyType("4");
+		}else if(applyType.equals("补卡")){
+			userApply.setApplyType("5");
+		}
+		
+		//还原钉钉考勤数据
+//		dingdingService.restoreDingding(userApply);
+		
+		//修改钉钉考勤数据
+		dingdingService.updateDingding(userApply);
+		
 		return 1;
 	}
 
@@ -1070,6 +1110,21 @@ public class UserApplyServiceImpl implements IUserApplyService {
 				holidayService.restoreHoliday(userApply.getApplyId(), null);
 				holidayRecordMapper.deleteHolidayRecordByApplyId(userApply.getApplyId());
 			}
+			
+			//申请类型（1请假，2加班，3销假，4外出，5补卡）
+			if(userApply.getApplyType().equals("请假")){
+				userApply.setApplyType("1");
+			}else if(userApply.getApplyType().equals("加班")){
+				userApply.setApplyType("2");
+			}else if(userApply.getApplyType().equals("销假")){
+				userApply.setApplyType("3");
+			}else if(userApply.getApplyType().equals("外出")){
+				userApply.setApplyType("4");
+			}else if(userApply.getApplyType().equals("补卡")){
+				userApply.setApplyType("5");
+			}
+			//恢复钉钉考勤数据
+			dingdingService.restoreDingding(userApply);
 		}
 		return userApplyMapper.updateUserApplyStateById(ids);
 	}
@@ -1097,6 +1152,9 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		userApply.setApplyType("4");// 申请类型（1请假，2加班，3销假，4外出）
 		userApplyMapper.insertUserApply(userApply);
 
+		//修改钉钉考勤数据
+		dingdingService.updateDingding(userApply);
+		
 		SysUser user = userMapper.selectUserById(userId);// 查出当前用户的area值
 		if (user.getArea().equals("3")) {
 			user.setArea("2");
@@ -1272,7 +1330,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		userApprovalMapper.insertUserApproval(personnel);
 
 		//修改钉钉考勤数据
-		Dingding ding = new Dingding();
+		/*Dingding ding = new Dingding();
 		ding.setUserName(user.getUserName());
 		if (userApply.getCtype().equals("上班")) {
 			ding.setCheckType("OnDuty");
@@ -1286,7 +1344,8 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		ding.setTimeResult("Clocked");
 		ding.setApplyState("1");// 申请状态（1待审批，2已撤回，3申请成功，4申请失败）
 		ding.setStatus("1");
-		oaDingdingMapper.updateOaDingDingByTime(ding);
+		oaDingdingMapper.updateOaDingDingByTime(ding);*/
+		dingdingService.updateDingding(userApply);
 		
 		return userApply.getApplyId();
 	}
@@ -1400,4 +1459,6 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		Double total = result1 - result2;
 		return total;
 	}
+
+
 }
