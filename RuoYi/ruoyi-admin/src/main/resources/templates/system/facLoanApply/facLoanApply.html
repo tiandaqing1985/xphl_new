@@ -87,6 +87,11 @@
                     sortable: true
                 },
                 {
+                    field: 'unit',
+                    title: '公司名称',
+                    sortable: true
+                },
+                {
                     field: 'userName',
                     title: '借款人',
                     sortable: false
@@ -121,7 +126,10 @@
                 {
                     field: 'reason',
                     title: '借款事由',
-                    sortable: true
+                    sortable: true,
+                    formatter: function(value, row, index) {
+                        return $.table.tooltip(value);
+                    }
                 },
                 {
                     field: 'allName',

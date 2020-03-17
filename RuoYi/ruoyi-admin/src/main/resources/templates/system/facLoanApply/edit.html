@@ -19,6 +19,17 @@
 					<input id="loanName" name="loanName" th:field="*{loanName}" class="form-control" type="text">
 				</div>
 			</div>
+			<div class="form-group">
+				<label class="col-sm-3 control-label">公司名称：</label>
+				<div class="col-sm-8">
+					<select id="unit" name="unit" th:field="*{unit}">
+						<option value="新普互联（北京）科技有限公司">新普互联（北京）科技有限公司</option>
+						<option value="普菲特（海南）科技有限公司">普菲特（海南）科技有限公司</option>
+						<option value="新疆普菲特网络科技有限公司">新疆普菲特网络科技有限公司</option>
+						<option value="上海优寰网络科技有限公司">上海优寰网络科技有限公司</option>
+					</select>
+				</div>
+			</div>
 			<div class="form-group">	
 				<label class="col-sm-3 control-label">借款金额：</label>
 				<div class="col-sm-8">

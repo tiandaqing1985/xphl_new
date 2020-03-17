@@ -22,10 +22,11 @@
         <form class="form-horizontal m" id="form-facUserApproval-edit" th:object="${facUserApproval}">
             <div class="col-sm-4  col-sm-offset-4" style="border:1px solid #f00">
                 <h4 class="form-header h4">审批填写</h4>
-                <div  class="form-group"  >
+                <div class="form-group">
                     <div class="col-sm-4 control-label" style="text-align:center;">
                         <label class="radio-box">
-                            <input type="radio" checked value="1" name="approvalState" style="position: absolute; opacity: 0;">
+                            <input type="radio" checked value="1" name="approvalState"
+                                   style="position: absolute; opacity: 0;">
                             同意</label>
                         <label class="radio-box">
                             <input type="radio" value="2" name="approvalState" style="position: absolute; opacity: 0;">
@@ -44,7 +45,7 @@
             </div>
         </form>
     </div>
-<div th:include="include::footer"></div>
+    <div th:include="include::footer"></div>
 
 
     <div th:include="include :: footer"></div>
@@ -81,6 +82,10 @@
                         field: 'loanName',
                         title: '借款名称',
                         sortable: true
+                    },
+                    {
+                        field: 'unit',
+                        title: '公司名称'
                     },
                     {
                         field: 'amount',
@@ -129,14 +134,14 @@
             $.table.init(options);
         });
 
-    $("#form-facLoanApply-add").validate({
-        rules: {
-            xxxx: {
-                required: true,
+        $("#form-facLoanApply-add").validate({
+            rules: {
+                xxxx: {
+                    required: true,
+                },
             },
-        },
-        focusCleanup: true
-    });
+            focusCleanup: true
+        });
 
         function mSave(url, data, callback) {
             debugger
@@ -155,7 +160,7 @@
                     }
                     $.modal.closeLoading();
                     $.modal.enable();
-                    
+
                     $.modal.closeTab();
                     $.modal.closeTab();
                     $.modal.closeAll();
@@ -173,7 +178,7 @@
 
 
         function submitHandler() {
-        debugger
+            debugger
 
             if ($.validate.form()) {
 

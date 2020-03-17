@@ -17,11 +17,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="reason" column="reason" />
 		<result property="applyStatus" column="apply_status" />
 		<result property="updateTime" column="update_time" />
+		<result property="unit"    column="unit"    />
 	</resultMap>
 
 	<sql id="selectFacLoanApplyVo">
 		select id, num, loan_name, amount, loan_user, create_time, loan_time,
-		repay_time, fac_operate, reason, apply_status, update_time from
+		repay_time, fac_operate, reason, apply_status, unit, update_time from
 		fac_loan_apply
 	</sql>
 
@@ -41,6 +42,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="reason != null  and reason != '' "> and reason = #{reason}</if>
 			<if test="applyStatus != null  and applyStatus != '' "> and apply_status = #{applyStatus}</if>
 			<if test="updateTime != null "> and update_time = #{updateTime}</if>
+			<if test="unit != null  and unit != '' "> and unit = #{unit}</if>
 		</where>
 		order by create_time desc
 	</select>
@@ -59,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	 
 	<select id="detail" resultMap="FacLoanApplyResult">
 		select id, num, loan_name, amount, loan_user, create_time, loan_time,
-		repay_time, fac_operate, reason, apply_status, update_time from
+		repay_time, fac_operate, reason, apply_status, unit, update_time from
 		fac_loan_apply
 		where  num =#{num}
 	</select>
@@ -80,6 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="reason != null  and reason != ''  ">reason,</if>
 			<if test="applyStatus != null  and applyStatus != ''  ">apply_status,</if>
 			<if test="updateTime != null  ">update_time,</if>
+			<if test="unit != null  and unit != ''  ">unit,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 		 	<if test="id != null">#{id},</if>
@@ -94,6 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="reason != null  and reason != ''  ">#{reason},</if>
 			<if test="applyStatus != null  and applyStatus != ''  ">#{applyStatus},</if>
 			<if test="updateTime != null  ">#{updateTime},</if>
+			<if test="unit != null  and unit != ''  ">#{unit},</if>
 		</trim>
 	</insert>
 
@@ -110,6 +114,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="facOperate != null  and facOperate != ''  ">fac_operate = #{facOperate},</if>
 			<if test="reason != null  and reason != ''  ">reason = #{reason},</if>
 			<if test="applyStatus != null  and applyStatus != ''  ">apply_status = #{applyStatus},</if>
+			<if test="unit != null  and unit != ''  ">unit = #{unit},</if>
 			<if test="updateTime != null  ">update_time = #{updateTime},</if>
 		</trim>
 		where id = #{id}

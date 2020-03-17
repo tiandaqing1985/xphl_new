@@ -11,7 +11,7 @@
         <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}"/>
         <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
         <div>
-            <h4 class="form-header h4">借款信息1</h4>
+            <h4 class="form-header h4">借款信息</h4>
 
 
             <div class="col-sm-12 select-table table-striped">
@@ -76,6 +76,10 @@
                         sortable: true
                     },
                     {
+                        field : 'unit',
+                        title : '公司名称'
+                    },
+                    {
                         field: 'amount',
                         title: '借款金额',
                         sortable: true
@@ -112,21 +116,21 @@
                             return newDate;
                         }
                     },
-                    {
-                        field: 'facOperate',
-                        title: '单据状态',
-                        sortable: true
-                    },
+                    // {
+                    //     field: 'facOperate',
+                    //     title: '单据状态',
+                    //     sortable: true
+                    // },
                     {
                         field: 'reason',
                         title: '借款事由',
                         sortable: true
-                    },
-                    {
-                        field: 'applyStatus',
-                        title: '申请人操作',
-                        sortable: true
                     }
+                    // {
+                    //     field: 'applyStatus',
+                    //     title: '申请人操作',
+                    //     sortable: true
+                    // }
                 ]
             };
             $.table.init(options);
