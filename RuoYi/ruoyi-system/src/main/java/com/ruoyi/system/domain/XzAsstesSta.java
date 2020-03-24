@@ -49,6 +49,18 @@ public class XzAsstesSta extends BaseEntity
 	/** 剩余 */
 	@Excel(name = "剩余", prompt = "剩余")
 	private int shengyuCount;
+
+	//固定资产为1 办公资产为2
+	private String sort;
+
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+
 	public Long getId() {
 		return id;
 	}

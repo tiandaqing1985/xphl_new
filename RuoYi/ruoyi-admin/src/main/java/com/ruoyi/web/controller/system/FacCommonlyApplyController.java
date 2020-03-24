@@ -129,7 +129,7 @@ public class FacCommonlyApplyController extends BaseController
 	@PostMapping("/edit")
 	@ResponseBody
 	public AjaxResult editSave(FacCommonlyApply facCommonlyApply)
-	{		
+	{
 		return toAjax(facCommonlyApplyService.updateFacCommonlyApply(facCommonlyApply));
 	}
 	
@@ -141,7 +141,7 @@ public class FacCommonlyApplyController extends BaseController
 	@PostMapping( "/remove")
 	@ResponseBody
 	public AjaxResult remove(String ids)
-	{		
+	{
 		return toAjax(facCommonlyApplyService.deleteFacCommonlyApplyByIds(ids));
 	}
 	

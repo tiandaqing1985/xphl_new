@@ -42,7 +42,19 @@ public class XzAssetRepair extends BaseEntity
 	private String assetsCode;
 	private String assetsName;
 	private XzAsstes xzAsstes;
-	public void setRepairId(Long repairId) 
+
+	//标识这条记录是否是历史记录
+	private String isHistory;
+
+	public String getIsHistory() {
+		return isHistory;
+	}
+
+	public void setIsHistory(String isHistory) {
+		this.isHistory = isHistory;
+	}
+
+	public void setRepairId(Long repairId)
 	{
 		this.repairId = repairId;
 	}

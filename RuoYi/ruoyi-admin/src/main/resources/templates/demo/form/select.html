@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<th:block th:include="include :: header('下拉框')" />
 	<th:block th:include="include :: select2-css" />
@@ -108,10 +108,11 @@
 						  
                         <div class="form-group">
                             <label class="font-noraml">多选</label>
-                            <select class="form-control noselect2 selectpicker" data-none-selected-text="请选择开发语言" multiple>
-                            	<option value="Java">Java</option>
+                            <select th:with="type=${@sysDeptServiceImpl.selectDeptList()}" class="form-control noselect2 selectpicker" data-none-selected-text="请选择开发语言" multiple>
+                            	<option value="Java">Java1</option>
                             	<option value="PHP">PHP</option>
                             	<option value=".NET">.NET</option>
+                                <option th:each="dict : ${type}" th:text="${dict.deptName}" th:value="${dict.deptId}"></option>
                             </select>
                         </div>
                         

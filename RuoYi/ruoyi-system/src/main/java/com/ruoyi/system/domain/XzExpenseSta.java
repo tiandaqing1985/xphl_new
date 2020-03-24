@@ -21,6 +21,10 @@ public class XzExpenseSta extends BaseEntity
 	private String region; 
 	/** 年*/
 	private String year;
+	/** 部门 */
+	private String dept;
+	/** 部门 查询用 */
+	private String[] depts;
 	/** 月总金额*/
 	private Double month1;
 	private Double month2;
@@ -36,6 +40,23 @@ public class XzExpenseSta extends BaseEntity
 	private Double month12;
 	/** 合计*/
 	private Double sum;
+
+	public String[] getDepts() {
+		return depts;
+	}
+
+	public void setDepts(String[] depts) {
+		this.depts = depts;
+	}
+
+	public String getDept() {
+		return dept;
+	}
+
+	public void setDept(String dept) {
+		this.dept = dept;
+	}
+
 	public String getYear() {
 		return year;
 	}

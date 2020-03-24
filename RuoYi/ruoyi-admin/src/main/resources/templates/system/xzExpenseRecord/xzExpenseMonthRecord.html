@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('费用记录列表')" />
+	<script type="text/javascript">
+	function detail(id){
+		$.modal.openTab("费用详情", $.table._option.detailUrl.replace("{id}",id));
+	}
+	
+	function edit(id){
+		$.modal.openTab("费用修改", $.table._option.updateUrl.replace("{id}",id));
+	}
+	
+	function remove(id) {
+		 $.modal.confirm("确定删除吗？", function() {
+	         var url = $.table._option.removeUrl.replace("{id}", id);
+	     	 var data = { "id": id };
+	     	 $.operate.submit(url, "post", "json", data);
+	 	});
+	} 
+	</script>
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var prefix = ctx + "system/xzExpenseRecord";
+
+		var expenseTypeParent = [[${expenseTypeParent}]];
+		var expenseType = [[${expenseType}]];
+		var startTime = [[${startTime}]];
+		var endTime = [[${endTime}]];
+		var month = [[${month}]];
+
+        var region = [[${@dict.getType('xz_assets_region')}]];
+        var submitType = [[${@dict.getType('xz_assets_submitType')}]];
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                detailUrl: prefix + "/detail/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "费用记录",
+		        showExport: true,
+				queryParams: function(params) {
+					var curParams = {
+						// 传递参数查询参数
+						pageSize:       params.limit,
+						pageNum:        params.offset / params.limit + 1,
+						searchValue:    params.search,
+						orderByColumn:  params.sort,
+						isAsc:          params.order
+					};
+					return $.extend(curParams, {params:{beginTime:startTime,endTime:endTime},expenseTypeParent:expenseTypeParent,expenseType:expenseType,month:month});
+				},
+                columns: [
+				{
+					field : 'id', 
+					title : '',
+					visible: false
+				},
+				{
+					field : 'expenseName', 
+					title : '款项名称',
+					sortable: true
+				},
+				{
+					field : 'expenseTypeName', 
+					title : '费用类型',
+					sortable: true
+				},
+				{
+					field : 'region', 
+					title : '地区',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(region, value);
+					}
+				},
+				{
+					field : 'useDate', 
+					title : '费用日期',
+					sortable: true
+				},
+				{
+					field : 'sumPrice', 
+					title : '总金额',
+					sortable: true
+				},
+				
+				{
+					field : 'applyUserName', 
+					title : '申请人',
+					sortable: true
+				},
+				{
+					field : 'submitType', 
+					title : '费用提交',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(submitType, value);
+					}
+				},
+				
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	if(row.submitType=="1"){
+
+		            	}else if(row.submitType=="2"){
+		            		actions.push('<a class="btn btn-success btn-xs ' + '" onclick="detail(\'' + row.id + '\')">查看</a> ');
+		            	}
+		            	
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -402,7 +402,7 @@
 	                trigger: 'axis'
 	            },
 	            legend: {
-	                data:['蒸发量','降水量']
+	                data:['蒸发量','降水量','s','f']
 	            },
 	            grid:{
 	                x:30,
@@ -453,7 +453,39 @@
 	                            {type : 'average', name : '平均值'}
 	                        ]
 	                    }
-	                }
+	                },
+                    {
+                        name:'s',
+                        type:'bar',
+                        data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                        markPoint : {
+                            data : [
+                                {type : 'max', name: '最大值'},
+                                {type : 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine : {
+                            data : [
+                                {type : 'average', name: '平均值'}
+                            ]
+                        }
+                    },
+                    {
+                        name:'f',
+                        type:'bar',
+                        data:[2.0, 4.9, 7.0, 23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+                        markPoint : {
+                            data : [
+                                {type : 'max', name: '最大值'},
+                                {type : 'min', name: '最小值'}
+                            ]
+                        },
+                        markLine : {
+                            data : [
+                                {type : 'average', name: '平均值'}
+                            ]
+                        }
+                    }
 	            ]
 	        };
 	        barChart.setOption(baroption);

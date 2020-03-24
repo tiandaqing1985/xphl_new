@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +46,15 @@ public class SysRoleServiceImpl implements ISysRoleService
 
     @Autowired
     private SysRoleDeptMapper roleDeptMapper;
+
+    /**
+     * 根据登录人角色
+     * @param userId
+     * @return
+     */
+    public List<String> queryRoleName(@Param("userId") Long userId){
+        return userRoleMapper.queryRoleName(userId);
+    }
 
     /**
      * 根据条件分页查询角色数据

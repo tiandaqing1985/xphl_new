@@ -1,7 +1,8 @@
 package com.ruoyi.system.mapper;
 
 import com.ruoyi.system.domain.XzPersonalAsset;
-import java.util.List;	
+import java.util.List;
+import java.util.Map;
 
 /**
  * 个人资产 数据层
@@ -72,5 +73,6 @@ public interface XzPersonalAssetMapper
 	 * @return
 	 */
 	public int updateByAssetId(XzPersonalAsset xzPersonalAsset);
-	
+
+	List<XzPersonalAsset> selectXzPersonalAssetByUserIds(Map map);
 }

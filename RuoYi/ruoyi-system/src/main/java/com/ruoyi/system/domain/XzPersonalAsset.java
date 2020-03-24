@@ -27,7 +27,7 @@ public class XzPersonalAsset extends BaseEntity
 	private String assetTypeName;
 	/** 领用时间 */
 	private Date useTime;
-	
+
 	private XzAsstes xzAsstes;
 	public XzAsstes getXzAsstes() {
 		return xzAsstes;

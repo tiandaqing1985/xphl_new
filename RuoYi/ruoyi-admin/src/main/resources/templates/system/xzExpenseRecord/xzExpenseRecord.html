@@ -32,7 +32,7 @@
 							</li>
 
 
-							<li>所在地域： <select name="region"
+							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域： <select name="region"
 								th:with="type=${@dict.getType('xz_assets_region')}">
 									<option value="">所有</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"

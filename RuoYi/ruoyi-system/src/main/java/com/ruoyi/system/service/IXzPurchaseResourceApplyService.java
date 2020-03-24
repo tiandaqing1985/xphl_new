@@ -26,7 +26,9 @@ public interface IXzPurchaseResourceApplyService
      * @return 采购资源申请集合
      */
 	public List<XzPurchaseResourceApply> selectXzPurchaseResourceApplyList(XzPurchaseResourceApply xzPurchaseResourceApply);
-	
+
+	List<XzPurchaseResourceApply> selectXzPurchaseResourceApplyListByApprover(XzPurchaseResourceApply xzPurchaseResourceApply);
+
 	/**
      * 新增采购资源申请
      * 

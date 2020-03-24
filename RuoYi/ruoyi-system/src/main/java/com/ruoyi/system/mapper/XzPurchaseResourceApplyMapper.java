@@ -87,5 +87,6 @@ public interface XzPurchaseResourceApplyMapper
 	 * @return
 	 */
 	public XzPurchaseResourceApply selectXzPurchaseResourceApplyByCode(String code);
-	
+
+	List<XzPurchaseResourceApply> selectXzPurchaseResourceApplyListByApprover(XzPurchaseResourceApply xzPurchaseResourceApply);
 }

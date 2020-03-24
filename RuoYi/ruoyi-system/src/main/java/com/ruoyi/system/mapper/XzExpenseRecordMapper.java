@@ -3,7 +3,8 @@ package com.ruoyi.system.mapper;
 import com.ruoyi.system.domain.XzExpenseRecord;
 import com.ruoyi.system.domain.XzExpenseSta;
 
-import java.util.List;	
+import java.util.List;
+import java.util.Map;
 
 /**
  * 费用记录 数据层
@@ -74,5 +75,8 @@ public interface XzExpenseRecordMapper
 	 * @return
 	 */
 	public List<XzExpenseSta> selectXzExpenseDetailList(XzExpenseSta xzExpenseSta);
-	
+
+    List<XzExpenseSta> selectCompareXzExpenseList(Map dataMap);
+
+    List<XzExpenseSta> selectCompareXzExpenseDetailList(Map map);
 }

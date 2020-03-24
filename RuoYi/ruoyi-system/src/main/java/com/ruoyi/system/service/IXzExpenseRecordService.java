@@ -4,6 +4,7 @@ import com.ruoyi.system.domain.XzExpenseRecord;
 import com.ruoyi.system.domain.XzExpenseSta;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 费用记录 服务层
@@ -61,5 +62,8 @@ public interface IXzExpenseRecordService
 	public List<XzExpenseSta> selectXzExpenseList(XzExpenseSta xzExpenseSta);
 
 	public List<XzExpenseSta> selectXzExpenseDetailList(XzExpenseSta xzExpenseSta);
-	
+
+    List<XzExpenseSta> selectCompareXzExpenseList(Map dataMap);
+
+	List<XzExpenseSta> selectCompareXzExpenseDetailList(Map map);
 }

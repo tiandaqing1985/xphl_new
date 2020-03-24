@@ -1,10 +1,24 @@
 package com.ruoyi.system.service.impl;
 
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.ruoyi.system.service.SeqService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +38,8 @@ import com.ruoyi.system.service.IXzAsstesService;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
+
+import javax.imageio.ImageIO;
 
 /**
  * 资产 服务层实现
@@ -51,6 +67,9 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
     @Autowired
     private XzPersonalAssetMapper xzPersonalAssetMapper;
 
+    @Autowired
+    private SeqService seqService;
+
     /**
      * 查询资产信息
      *
@@ -72,6 +91,85 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
     public List<XzAsstes> selectXzAsstesList(XzAsstes xzAsstes) {
 //		xzAsstes.setPurchaseBy(sysUserMapper.selectUserIdByUserNameOnly(xzAsstes.getPurchaseName()));
         return xzAsstesMapper.selectXzAsstesList(xzAsstes);
+    }
+
+    @Override
+    public boolean createQrCode(String id) {
+
+        final int width = 300;
+        final int height = 300;
+        final String format = "png";
+        String address = "192.168.104.252";
+        final String content = "http://" + address + "/system/xzAsstes/assetsCheck/" + id;
+        //定义二维码的参数
+        HashMap hints = new HashMap();
+        hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
+        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
+        hints.put(EncodeHintType.MARGIN, 2);
+        //生成二维码
+        try {
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, width, height, hints);
+            File dir = new File("qrCode");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            File qrCode = new File("qrCode/" + id + ".png");
+            Path file = qrCode.toPath();
+            MatrixToImageWriter.writeToPath(bitMatrix, format, file);
+
+
+            BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+            // 开始利用二维码数据创建Bitmap图片，分别设为黑（0xFFFFFFFF）白（0xFF000000）两色
+            for (int x = 0; x < width; x++) {
+                for (int y = 0; y < height; y++) {
+                    image.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
+                }
+            }
+
+            //创建一个带透明色的BufferedImage对象
+            BufferedImage outImage = new BufferedImage(width, height+10, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D outg = outImage.createGraphics();
+            setGraphics2D(outg);
+
+            // 画二维码到新的面板
+            outg.drawImage(image, 0, 0, image.getWidth(), image.getHeight(), null);
+            // 画文字到新的面板
+            Color color = new Color(183, 183, 183);
+            outg.setColor(color);
+            // 字体、字型、字号
+            outg.setFont(new Font("微软雅黑", Font.PLAIN, 18));
+            //文字长度
+            int strWidth = outg.getFontMetrics().stringWidth(id);
+            //总长度减去文字长度的一半  （居中显示）
+            int wordStartX = (width - strWidth) / 2;
+            //height + (outImage.getHeight() - height) / 2 + 12
+            int wordStartY = height + 10;
+            // 画文字
+            outg.drawString(id, wordStartX, wordStartY);
+            outg.dispose();
+            outImage.flush();
+            image = outImage;
+            image.flush();
+            ImageIO.write(image, "png", qrCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 设置 Graphics2D 属性  （抗锯齿）
+     *
+     * @param graphics2D
+     * 
+     */
+    private static void setGraphics2D(Graphics2D graphics2D) {
+        graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        graphics2D.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_DEFAULT);
+        Stroke s = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER);
+        graphics2D.setStroke(s);
     }
 
     /**
@@ -110,6 +208,8 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
         x.setSubmitType(xzAsstes.getSubmitType());
         x.setUnit(xzAsstes.getUnit());
         x.setUseStatus(xzAsstes.getUseStatus());
+        x.setIsReturn(xzAsstes.getIsReturn());
+        x.setIsRepair(xzAsstes.getIsRepair());
         try {
             // 固定资产
             if (xzAsstes.getSort().equals("1")) {
@@ -407,8 +507,9 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
     @Override
     @Transactional
     public String updateXzAsstesByAssetId(XzAsstes xzAsstes) {
-        String sort = xzAsstesMapper.selectXzAsstesById(xzAsstes.getId()).getSort();
-        if (("1").equals(sort)) {
+        XzAsstes selectResult = xzAsstesMapper.selectXzAsstesById(xzAsstes.getId());
+        String sort = selectResult.getSort();
+        if (("1").equals(sort) || "true".equals(selectResult.getIsReturn())) {
             xzAsstesMapper.updateXzAsstesByAssId(xzAsstes);
         } else if (("2").equals(sort)) {
             xzAsstesMapper.updateXzAsstesByStaId(xzAsstes);
@@ -428,43 +529,50 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
         return xzAsstesMapper.selectMaxCodeByType(xzAsstes);
     }
 
+    @Transactional
     public String createCode(XzAsstes xzAsstes) {
 
-        String code = null;
-        String region = null;
+        synchronized (XzAsstesServiceImpl.class) {
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
-        String date = format.format(new Date());
+            String code = null;
+            String region = null;
 
-        if (xzAsstes.getRegion() != null && xzAsstes.getRegion() != "") {
-            if (xzAsstes.getRegion().equals("1")) {
-                region = "BJ";
-            } else if (xzAsstes.getRegion().equals("2")) {
-                region = "SH";
-            } else if (xzAsstes.getRegion().equals("3")) {
-                region = "GZ";
-            } else if (xzAsstes.getRegion().equals("4")) {
-                region = "XJ";
-            } else {
+            SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+            String date = format.format(new Date());
+
+            if (xzAsstes.getRegion() != null && xzAsstes.getRegion() != "") {
+                if (xzAsstes.getRegion().equals("1")) {
+                    region = "BJ";
+                } else if (xzAsstes.getRegion().equals("2")) {
+                    region = "SH";
+                } else if (xzAsstes.getRegion().equals("3")) {
+                    region = "GZ";
+                } else if (xzAsstes.getRegion().equals("4")) {
+                    region = "SZ";
+                } else {
+                }
             }
-        }
-
-        // 查询类型编码
+            XzAssetData xzAssetData = xzAssetDataMapper.selectXzAssetDataById(xzAsstes.getAssetsType2());
+            // 查询类型编码
 //		String a = xzAssetTypeMapper.selectXzAssetTypeById(xzAsstes.getAssetsType()).getCode();
 //		String b = xzAssetDataMapper.selectXzAssetDataById(xzAsstes.getAssetsType2()).getCode();
-        // 查询此编码格式编号的最大值，然后加1 如果没有，则从0001开始
-        String maxNum = xzAsstesMapper.selectMaxCodeByType(xzAsstes);
+            // 查询此编码格式编号的最大值，然后加1 如果没有，则从0001开始
+            String maxNum = seqService.selectNumByType(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString());
 
-        if (maxNum == null || maxNum.isEmpty()) {
-            // 第一条数据
-            code = region + date + "0001";
-        } else {
-            // 编码加1
-            int num = 10000 + Integer.parseInt(maxNum) + 1;
-            // 截取：10001 截取后四位
-            code = region + date + String.valueOf(num).substring(1, 5);
+            if (maxNum == null || maxNum.isEmpty()) {
+                // 第一条数据
+                seqService.insertSeq(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString());
+                seqService.addSeqNumByType(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString());
+                code = region + xzAssetData.getCode() + date + "0001";
+            } else {
+                // 编码加1
+                int num = 10000 + Integer.parseInt(maxNum) + 1;
+                seqService.addSeqNumByType(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString());
+                // 截取：10001 截取后四位
+                code = region + xzAssetData.getCode() + date + String.valueOf(num).substring(1, 5);
+            }
+            return code;
         }
-        return code;
     }
 
     @Override

@@ -74,7 +74,9 @@ public class XzOfficeAsstesController extends BaseController {
 			xzOfficeAsstes.setRegion(xzOfficeAsstes.getRegion());
 		}else{
 			String region=ShiroUtils.getSysUser().getArea();
-			xzOfficeAsstes.setRegion(region);
+			if(xzOfficeAsstes.getRegion()==null || xzOfficeAsstes.getRegion().equals("")){
+				xzOfficeAsstes.setRegion(region);
+			}
 		}
 		startPage();
 		List<XzOfficeAsstes> list = xzOfficeAsstesService.selectXzOfficeAsstesList(xzOfficeAsstes);

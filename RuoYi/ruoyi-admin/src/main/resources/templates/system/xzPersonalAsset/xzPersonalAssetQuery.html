@@ -30,8 +30,38 @@
 				<form id="formId">
 					<div class="select-list">
 						<ul>
+<!--							<li>-->
+<!--								查询姓名：<input type="text" id="assetName" name="name"/>-->
+<!--							</li>-->
 							<li>
-								查询姓名：<input type="text" id="assetName" name="name"/>
+								<div>
+									查询姓名：
+									<input type="text" id="assetName" name="name"/>
+									<div class="input-group-btn" style="float: right">
+										<button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="menu">
+										</ul>
+									</div>
+								</div>
+							</li>
+							<li>
+								资产编号：<input type="text" id="assetCode" name="assetCode"/>
+							</li>
+							<li>所在地域： <select name="region"
+											  th:with="type=${@dict.getType('oa_area')}">
+								<option value="">所有</option>
+								<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+										th:value="${dict.dictValue}"></option>
+							</select>
+							</li>
+							<li>部门： <select name="dept"
+											  th:with="type=${@sysDeptServiceImpl.selectDeptList()}">
+								<option value="">所有</option>
+								<option th:each="dict : ${type}" th:text="${dict.deptName}"
+										th:value="${dict.deptId}"></option>
+							</select>
 							</li>
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -59,15 +89,31 @@
 		</div>
 	</div>
     <div th:include="include :: footer"></div>
+	 <th:block th:include="include :: bootstrap-suggest-js"/>
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:xzPersonalAsset:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:xzPersonalAsset:remove')}]];
         var prefix = ctx + "system/xzPersonalAsset";
-
+		var user = [[${@sysUserServiceImpl.selectUserList()}]];;
         var region = [[${@dict.getType('xz_assets_region')}]];
         var brand = [[${@dict.getType('xz_assets_brand')}]];
         var useStatus = [[${@dict.getType('xz_assets_useStatus')}]];
         var assetsStatus = [[${@dict.getType('xz_assets_assetsStatus')}]];
+		var testBsSuggest = $("#assetName").bsSuggest({
+			url: ctx + "system/user/userModel",
+			showBtn: false,
+			idField: "userName",
+			keyField: "userName",
+			effectiveFields: ["deptName", "userName"],
+			multiWord: true,
+			hideOnSelect: true
+		}).on('onDataRequestSuccess', function (e, result) {
+			console.log('onDataRequestSuccess: ', result);
+		}).on('onSetSelectValue', function (e, keyword) {
+			console.log('onSetSelectValue: ', keyword);
+		}).on('onUnsetSelectValue', function (e) {
+			console.log("onUnsetSelectValue");
+		});
         $(function() {
             var options = {
                 url: prefix + "/queryList",
@@ -83,9 +129,23 @@
 		            checkbox: true
 		        },
 				{
-					field : 'id', 
+					field : 'id',
 					title : '',
 					visible: false
+				},
+				{
+					field : 'userId',
+					title : '持有人',
+					formatter: function(value, row, index) {
+						var val = "";
+						$.each(user, function(index, dict) {
+							if (dict.userId == ('' + value)) {
+								val =  dict.userName;
+								return false;
+							}
+						});
+						return val;
+					}
 				},
 				{
 					field : 'xzAsstes.assetsCode', 

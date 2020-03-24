@@ -203,4 +203,6 @@ public interface SysUserMapper
 	public Long selectUserIdByUserNameOnly(String userName);
 
     List<UserModel> selectAllUserModel();
+
+    SysUser selectIsRoleByRoleId(Long roleId, Long userId);
 }

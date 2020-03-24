@@ -29,6 +29,13 @@
 								name="params[beginTime]" /> <span>-</span> <input type="text"
 								class="time-input" id="endTime" placeholder="结束时间"
 								name="params[endTime]" /></li>
+							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域：
+								<select name="region" th:with="type=${@dict.getType('xz_assets_region')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+											th:value="${dict.dictValue}"></option>
+								</select>
+							</li>
 							<li><a class="btn btn-primary btn-rounded btn-sm"
 								onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm"
@@ -76,6 +83,9 @@
 				exportUrl: prefix + "/export",
                 modalName: "资产归还",
 		        showExport: true,
+				onDblClickRow: function(row){
+					$.modal.open("申请信息",prefix+"/xzPersonalApply/"+row.xzAsstes.assetsCode);
+				},
                 columns: [{
 		            checkbox: true
 		        },

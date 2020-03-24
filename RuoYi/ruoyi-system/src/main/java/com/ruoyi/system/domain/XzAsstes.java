@@ -126,10 +126,40 @@ public class XzAsstes extends BaseEntity
 	private String storeWay;
 	/** 资产分类（1固定资产、2办公用品资产）**/
 	private String sort;
-	
+
+	private Date checkTime;
+
+	private String isReturn;
+
+	private String isRepair;
+
 	private SysUser user;
 	
 	private SysDept dept;
+
+	public Date getCheckTime() {
+		return checkTime;
+	}
+
+	public void setCheckTime(Date checkTime) {
+		this.checkTime = checkTime;
+	}
+
+	public String getIsRepair() {
+		return isRepair;
+	}
+
+	public void setIsRepair(String isRepair) {
+		this.isRepair = isRepair;
+	}
+
+	public String getIsReturn() {
+		return isReturn;
+	}
+
+	public void setIsReturn(String isReturn) {
+		this.isReturn = isReturn;
+	}
 
 	public SysUser getUser() {
 		return user;

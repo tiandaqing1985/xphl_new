@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzCheckMapper">
+    
+    <resultMap type="XzCheck" id="XzCheckResult">
+        <result property="id"    column="id"    />
+        <result property="asstesCode"    column="asstes_code"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <resultMap type="XzAsstes" id="XzAsstesResult">
+        <result property="id" column="id" />
+        <result property="assetsCode" column="assets_code" />
+        <result property="region" column="region" />
+        <result property="regionName" column="regionName" />
+        <result property="assetsName" column="assets_name" />
+        <result property="assetsType" column="assets_type" />
+        <result property="assetsTypeName" column="assets_type_name" />
+        <result property="assetsType2" column="assets_type2" />
+        <result property="assetsType2Name" column="assets_type2_name" />
+        <result property="assetsModel" column="assets_model" />
+        <result property="price" column="price" />
+        <result property="unit" column="unit" />
+        <result property="unitName" column="unit_name" />
+        <result property="count" column="count" />
+        <result property="attach" column="attach" />
+        <result property="attachName" column="attach_name" />
+        <result property="purchaseNum" column="purchase_num" />
+        <result property="category" column="category" />
+        <result property="brand" column="brand" />
+        <result property="brandName" column="brand_name" />
+        <result property="buyAddress" column="buy_address" />
+        <result property="manufacturer" column="manufacturer" />
+        <result property="supplier" column="supplier" />
+        <result property="invoiceType" column="invoice_type" />
+        <result property="invoiceTypeName" column="invoice_type_name" />
+        <result property="invoiceNum" column="invoice_num" />
+        <result property="purchaseBy" column="purchase_by" />
+        <result property="purchaseName" column="purchase_name" />
+        <result property="buyDate" column="buy_date" />
+        <result property="annex" column="annex" />
+        <result property="remarks" column="remarks" />
+        <result property="extendMoney" column="extend_money" />
+        <result property="extendTime" column="extend_time" />
+        <result property="extendContent" column="extend_content" />
+        <result property="assetsStatus" column="assets_status" />
+        <result property="assetsStatusName" column="assets_status_name" />
+        <result property="useStatus" column="use_status" />
+        <result property="useStatusName" column="use_status_name" />
+        <result property="useBy" column="use_by" />
+        <result property="useName" column="use_name" />
+        <result property="department" column="department" />
+        <result property="departmentName" column="department_name" />
+        <result property="useTime" column="use_time" />
+        <result property="submitType" column="submit_type" />
+        <result property="scrapDate" column="scrap_date" />
+        <result property="storeWay" column="store_way" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="subBy" column="sub_by" />
+        <result property="subTime" column="sub_time" />
+        <result property="sort" column="sort" />
+        <result property="isReturn" column="is_return" />
+        <result property="isReturn" column="is_repair" />
+        <result property="checkTime" column="check_time" />
+
+    </resultMap>
+    <sql id="selectXzAsstes">
+		select a.is_repair,a.is_return,a.id, a.assets_code, a.region, a.assets_name, a.assets_type,
+		a.assets_type2, a.assets_model, a.price, a.unit, a.count, a.attach,
+		a.purchase_num, a.category, a.brand, a.buy_address,
+		a.manufacturer, a.supplier, a.invoice_type, a.invoice_num, a.purchase_by, a.buy_date,
+		a.annex, a.remarks, a.extend_money, a.extend_time, a.extend_content,a.assets_status,
+		a.use_status, a.use_by, a.department, a.use_time, a.submit_type, a.scrap_date,
+		a.store_way, a.create_by, a.create_time, a.update_by, a.update_time,
+		a.sub_by, a.sub_time, a.sort,su.user_name purchase_name,user.user_name
+		use_name,d.dept_name department_name, at.name assets_type_name,ch.check_time from xz_asstes a
+		left join sys_user su on su.user_id =a.purchase_by
+		left join sys_user user on user.user_id =a.use_by
+		left join sys_dept d on d.dept_id = a.department
+		left join xz_asset_type at on at.id=a.assets_type
+		left join (select asstes_code,max(create_time) check_time from xz_check group by asstes_code) ch on ch.asstes_code = a.assets_code
+	</sql>
+	<sql id="selectXzCheckVo">
+        select id, asstes_code, create_time from xz_check
+    </sql>
+    <select id="selectXzAsstesList" parameterType="XzAsstes" resultMap="XzAsstesResult">
+        <include refid="selectXzAsstes" />
+        <where>
+            <if test="id != null "> and id = #{id}</if>
+            <if test="sort != null and sort !='' "> and a.sort =#{sort}</if>
+            <if test="submitType != null  and submitType != '' "> and a.submit_type = #{submitType}</if>
+            <if test="assetsCode != null  and assetsCode != '' "> and a.assets_code like concat('%', #{assetsCode}, '%')</if>
+            <if test="region != null  and region != '' "> and a.region = #{region}</if>
+            <if test="assetsName != null  and assetsName != '' "> and a.assets_name like concat('%', #{assetsName}, '%') </if>
+            <if test="assetsType != null  and assetsType != '' "> and a.assets_type = #{assetsType}</if>
+            <if test="assetsType2 != null  and assetsType2 != '' "> and a.assets_type2 = #{assetsType2}</if>
+            <if test="assetsModel != null  and assetsModel != '' "> and a.assets_model = #{assetsModel}</if>
+            <if test="attach != null  and attach != '' "> and a.attach = #{attach}</if>
+            <if test="category != null  and category != '' "> and a.category = #{category}</if>
+            <if test="brand != null  and brand != '' "> and a.brand = #{brand}</if>
+            <if test="purchaseName != null  and purchaseName != '' "> and su.user_name like concat('%', #{purchaseName}, '%')</if>
+            <if test="useName != null  and useName != '' "> and user.user_name like concat('%', #{useName}, '%')</if>
+            <!-- <if test="buyDate != null "> and buy_date = #{buyDate}</if> -->
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(a.buy_date,'%y%m%d') &gt;=
+                date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(a.buy_date,'%y%m%d') &lt;=
+                date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="params.bCheckTime != null and params.bCheckTime != ''"><!-- 开始时间检索 -->
+                AND ch.check_time &gt;= #{params.bCheckTime}
+            </if>
+            <if test="params.eCheckTime != null and params.eCheckTime != ''"><!-- 结束时间检索 -->
+                AND ch.check_time &lt;= #{params.eCheckTime}
+            </if>
+            <if test="assetsStatus != null  and assetsStatus != '' "> and a.assets_status = #{assetsStatus}</if>
+            <if test="useStatus != null  and useStatus != '' "> and a.use_status = #{useStatus}</if>
+            <if test="useTime != null "> and a.use_time = #{useTime}</if>
+            <if test="submitType != null  and submitType != '' "> and a.submit_type = #{submitType}</if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+    <select id="selectXzCheckList" parameterType="XzCheck" resultMap="XzCheckResult">
+        <include refid="selectXzCheckVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="asstesCode != null  and asstesCode != '' "> and asstes_code = #{asstesCode}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectXzCheckById" parameterType="Long" resultMap="XzCheckResult">
+        <include refid="selectXzCheckVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertXzCheck" parameterType="XzCheck" useGeneratedKeys="true" keyProperty="id">
+        insert into xz_check
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="asstesCode != null  and asstesCode != ''  ">asstes_code,</if>
+			<if test="createTime != null  ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="asstesCode != null  and asstesCode != ''  ">#{asstesCode},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzCheck" parameterType="XzCheck">
+        update xz_check
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="asstesCode != null  and asstesCode != ''  ">asstes_code = #{asstesCode},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteXzCheckById" parameterType="Long">
+        delete from xz_check where id = #{id}
+    </delete>
+	
+    <delete id="deleteXzCheckByIds" parameterType="String">
+        delete from xz_check where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

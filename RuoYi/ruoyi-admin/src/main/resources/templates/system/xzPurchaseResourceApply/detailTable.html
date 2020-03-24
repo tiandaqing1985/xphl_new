@@ -2,6 +2,17 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
 <th:block th:include="include :: header('采购资源申请')" />
+	<style>
+		table{
+			border:1px solid #000000;
+		}
+		tr{
+			border:1px solid #000000;
+		}
+		td{
+			border:1px solid #000000;
+		}
+	</style>
 </head>
 <body class="white-bg">
 	<div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -9,7 +20,7 @@
 			<input id="id" name="id" th:field="*{id}" type="hidden">
 			<h4 class="form-header h4">采购申请</h4>
 			<div>
-				<table id="tab" border="1" style="width:100%;">
+				<table id="tab" border="1" style="width:100%;" >
 					<tr>
 						<th colspan="6">审批单</th>
 					</tr>
@@ -24,17 +35,17 @@
 						<td colspan="2">[[${xzPurchaseResourceApply.applyUserName}]]</td>
 					</tr>
 					<tr>
-						<th colspan="6">采购清单</th>
+						<th colspan="6" style="text-align: center"><span style="font-size:20px;font-weight:bold;color:black;">采购清单</span></th>
 					</tr>
 					
-					<table id="tab2" border="1" style="width:100%;">
+					<table id="tab2" border="1" style="width:100%;" >
 						<tr>
 						<th>序号</th>
 						<th>物品</th>
 						<th>单价</th>
 						<th>件数</th>
-						<th>规格</th>
 						<th>合计</th>
+						<th>采购明细</th>
 					</tr>
 					</table>
 					<table id="tab3" border="1" style="width:100%;">
@@ -44,12 +55,13 @@
 						<th colspan="1">审批状态</th>
 						<th colspan="1">审批时间</th>
 					</tr>
-					<tr>
-						<td colspan="1">[[${xzPurchaseResourceApply.xzPurchaseApproval.approvalName}]]</td>
-						<td colspan="3">[[${xzPurchaseResourceApply.xzPurchaseApproval.remarks}]]</td>
-						<td colspan="1">[[${@dict.getLabel('sys_user_approval_state',xzPurchaseResourceApply.xzPurchaseApproval.approvalState)}]]</td>
-						<td colspan="1">[[${#dates.format(xzPurchaseResourceApply.xzPurchaseApproval.approvalDate, 'yyyy-MM-dd')}]]</td>
+					<tr th:each="item : ${xzApplyProcesses}">
+						<td colspan="1" th:text="${@sysUserServiceImpl.selectUserById(item.approverId).userName}"></td>
+						<td colspan="3" th:text="${item.remark}"></td>
+						<td colspan="1" th:text="${@xzApplyProcessServiceImpl.transferStatus(item.status)}"></td>
+						<td colspan="1" th:text="${#dates.format(item.appTime, 'yyyy-MM-dd')}"></td>
 					</tr>
+				</table>
 				</table>
 			</div>
 		</form>
@@ -60,6 +72,9 @@
             
         </div>
     </div>
+	<div id="contextDiv">
+
+	</div>
 	<div th:include="include::footer"></div>
 	 <script th:inline="javascript">
 		var prefix = ctx + "system/xzPurchaseResourceApply";
@@ -73,7 +88,7 @@
 		});
 		$(function() {
 			//展示数据
-			debugger;
+
 			var dataSum=[[${xzPurchaseResourceApply.xzPurchaseApproval}]];
 			var data =[[${xzPurchaseResourceApply.xzPurchaseResource}]];
 			var str = "";//定义用于拼接的字符串
@@ -83,12 +98,12 @@
 	        	sumPrice=data[i].resourcePrice*data[i].resourceCount;
 	            //拼接表格的行和列
 	            str = "<tr><td>" + (i+1) + "</td><td>" + data[i].resourceName + "</td><td>" + data[i].resourcePrice+"￥" + "</td><td>" 
-	            		+ data[i].resourceCount + "</td><td>" + data[i].resourceSpec + "</td><td>" + sumPrice +"￥"+ "</td></tr>";
+	            		+ data[i].resourceCount + "</td><td>" + sumPrice +"￥"+ "</td><td>"+data[i].detail+"</td></tr>";
 	            //追加到table中
 	            $("#tab2").append(str);
 	            sum+=sumPrice;
 			}
-	        str2 = "<tr><th>" + "合计" + "</th><td>" + sum+"￥" + "</td></tr>";
+	        str2 = "<tr><td colspan='2' style='text-align: center'>" + "合计" + "</td><td colspan='5'>" + sum+"￥" + "</td></tr>";
             $("#tab2").append(str2);
 		});
 		

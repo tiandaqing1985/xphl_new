@@ -61,7 +61,26 @@ public class XzOfficeAsstes extends BaseEntity
 	/** 提交人 */
 	private String subBy;
 
-	public void setId(Long id) 
+	private String isReturn;
+	private String isRepair;
+
+	public String getIsRepair() {
+		return isRepair;
+	}
+
+	public void setIsRepair(String isRepair) {
+		this.isRepair = isRepair;
+	}
+
+	public String getIsReturn() {
+		return isReturn;
+	}
+
+	public void setIsReturn(String isReturn) {
+		this.isReturn = isReturn;
+	}
+
+	public void setId(Long id)
 	{
 		this.id = id;
 	}

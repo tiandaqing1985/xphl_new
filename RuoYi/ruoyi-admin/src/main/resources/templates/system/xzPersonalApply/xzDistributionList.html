@@ -23,14 +23,20 @@
 					<div class="select-list">
 						<ul>
 
-							<li>申请类型： <select name="applyType"
+							<li hidden>申请类型： <select name="applyType"
 								th:with="type=${@dict.getType('xz_assets_applyType')}">
 									<option value="">所有</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
 							</select>
 							</li>
-							
+							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域：
+								<select name="region" th:with="type=${@dict.getType('xz_assets_region')}">
+								<option value="">所有</option>
+								<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+										th:value="${dict.dictValue}"></option>
+							</select>
+							</li>
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>

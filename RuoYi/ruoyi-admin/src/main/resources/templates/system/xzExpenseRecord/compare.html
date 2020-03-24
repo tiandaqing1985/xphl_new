@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('比较条件添加')"/>
+    <th:block th:include="include :: select2-css"/>
+    <th:block th:include="include :: bootstrap-select-css"/>
+    <script type="text/javascript">
+        function detail(expenseTypeParent) {
+
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+
+            if (startTime == undefined) {
+                startTime = "";
+            }
+            if (endTime == undefined) {
+                endTime = "";
+            }
+            $.modal.openTab("费用统计-详情", "/system/xzExpenseRecord/xzExpenseDataList?expenseTypeParent=" + expenseTypeParent + "&startTime=" + startTime + "&endTime=" + endTime);
+        }
+    </script>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <a class="btn btn-primary" onclick="add()">添加条件</a>
+    <div id="context">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li class="select-time"><label>购入时间：</label>
+                                <input type="text" class="time-input" id="startTime" placeholder="开始时间"
+                                       name="params[beginTime]"/>
+                                <span>-</span>
+                                <input type="text" class="time-input" id="endTime" placeholder="结束时间"
+                                       name="params[endTime]"/>
+                            </li>
+                            <li>部门：
+                                <select id="dept" name="depts" th:with="type=${@sysDeptServiceImpl.selectDeptList()}"
+                                        class="noselect2 selectpicker" data-none-selected-text="所有" multiple>
+                                    <option th:each="dict : ${type}" th:text="${dict.deptName}"
+                                            th:value="${dict.deptId}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                费用分类：
+                                <select id="expenseTypeParent" name="expenseTypeParent" onchange="selectAll()">
+                                    <option value="">请选择</option>
+                                    <option th:each="a:${@xzResourceTypeServiceImpl.selectByFeiList()}"
+                                            th:value="${a.id}"
+                                            th:text="${a.name}"></option>
+                                </select>
+                            </li>
+                            <li>
+                                费用类型：
+                                <select id="expenseType" name="expenseType" required="required">
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-danger">删除条件</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<th:block th:include="include :: select2-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script th:inline="javascript">
+    var editFlag = [[${@permission.hasPermi('system:xzExpenseRecord:edit')}]];
+    var removeFlag = [[${@permission.hasPermi('system:xzExpenseRecord:remove')}]];
+    var prefix = ctx + "system/xzExpenseRecord";
+    var index = 0;
+
+    var context = '<div id="row'+index+'" class="row"> ' +
+        '     <div class="col-sm-12 search-collapse"> ' +
+        '      <form id="formId'+index+'"> ' +
+        '       <div class="select-list"> ' +
+        '        <ul> ' +
+        '         <li class="select-time"><label>购入时间：</label> ' +
+        '          <input type="text" class="time-input"  placeholder="开始时间" name="params[beginTime]" /> ' +
+        '          <span>-</span> ' +
+        '          <input type="text" class="time-input"  placeholder="结束时间" name="params[endTime]" /> ' +
+        '         </li> ' +
+        '         <li>部门： ' +
+        '          <select  name="depts" th:with="type=${@sysDeptServiceImpl.selectDeptList()}" class="noselect2 selectpicker" data-none-selected-text="所有" multiple> ' +
+        '           <option th:each="dict : ${type}" th:text="${dict.deptName}" th:value="${dict.deptId}"></option> ' +
+        '          </select> ' +
+        '         </li> ' +
+        '         <li> ' +
+        '          费用分类： ' +
+        '          <select id="expenseTypeParent'+index+'" name="expenseTypeParent" onchange="selectAll('+index+')"> ' +
+        '           <option value="">请选择</option> ' +
+        '           <option th:each="a:${@xzResourceTypeServiceImpl.selectByFeiList()}" th:value="${a.id}" ' +
+        '             th:text="${a.name}"></option> ' +
+        '          </select> ' +
+        '         </li> ' +
+        '         <li> ' +
+        '          费用类型： ' +
+        '          <select id="expenseType'+index+'" name="expenseType" required="required"> ' +
+        '          </select> ' +
+        '         </li> ' +
+        '         <li> ' +
+        '          <a class="btn btn-danger">删除条件</a> ' +
+        '         </li> ' +
+        '        </ul> ' +
+        '       </div> ' +
+        '      </form> ' +
+        '     </div> ' +
+        '    </div>'
+
+    function add() {
+        $("#context").append(context);
+		index = index + 1;
+    }
+
+    //采购类型二级联动
+    function selectAll(index) {
+        var index = $('#expenseTypeParent'+index+' option:selected').text();
+        var index1 = $('#expenseTypeParent'+index+' option:selected').val();
+        var optionJson = [];
+        $.ajax({
+            url: "/system/xzPurchaseResourceApply/onSelect/" + index1,
+            type: "post",
+            data: {
+                "id": index1
+            },
+            datatype: "json",
+            success: function (data) {
+                optionJson = data;
+                var selectObj = document.getElementById("expenseType"+index);
+                selectObj.options.length = 0;
+                selectObj.options.add(new Option("--请选择--", 0));
+                for (var i = 0; i < data.length; i++) {
+                    selectObj.add(new Option(optionJson[i].name,
+                        optionJson[i].id));
+                }
+            }
+        });
+    };
+
+</script>
+</body>
+</html>

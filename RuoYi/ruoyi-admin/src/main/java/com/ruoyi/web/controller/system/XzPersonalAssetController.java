@@ -1,9 +1,8 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
+import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.service.ISysUserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,166 +27,181 @@ import com.ruoyi.framework.util.ShiroUtils;
 
 /**
  * 个人资产 信息操作处理
- * 
+ *
  * @author ruoyi
  * @date 2019-08-27
  */
 @Controller
 @RequestMapping("/system/xzPersonalAsset")
 public class XzPersonalAssetController extends BaseController {
-	private String prefix = "system/xzPersonalAsset";
+    private String prefix = "system/xzPersonalAsset";
 
-	@Autowired
-	private IXzPersonalAssetService xzPersonalAssetService;
+    @Autowired
+    private IXzPersonalAssetService xzPersonalAssetService;
 
-	@Autowired
-	private IXzAsstesService xzAsstesService;
+    @Autowired
+    private IXzAsstesService xzAsstesService;
 
-	@Autowired
-	private ISysUserService sysUserService;
+    @Autowired
+    private ISysUserService sysUserService;
 
-	@RequiresPermissions("system:xzPersonalAsset:view")
-	@GetMapping()
-	public String xzPersonalAsset() {
-		return prefix + "/xzPersonalAsset";
-	}
+    @RequiresPermissions("system:xzPersonalAsset:view")
+    @GetMapping()
+    public String xzPersonalAsset() {
+        return prefix + "/xzPersonalAsset";
+    }
 
-	@RequiresPermissions("system:xzPersonalAssetQuery:view")
-	@GetMapping("/queryByName")
-	public String queryXzPersonalAsset() {
-		return prefix + "/xzPersonalAssetQuery";
-	}
+    @RequiresPermissions("system:xzPersonalAssetQuery:view")
+    @GetMapping("/queryByName")
+    public String queryXzPersonalAsset() {
+        return prefix + "/xzPersonalAssetQuery";
+    }
 
-	/**
-	 * 查询个人资产列表
-	 */
-	@PostMapping("/list")
-	@ResponseBody
-	public TableDataInfo list(XzPersonalAsset xzPersonalAsset) {
-		startPage();
-		Long person=ShiroUtils.getUserId();
-		if(person==1){
-			//可查看全部
-		}else{
-			xzPersonalAsset.setUserId(ShiroUtils.getUserId());
-		}
-		List<XzPersonalAsset> list = xzPersonalAssetService.selectXzPersonalAssetList(xzPersonalAsset);
-		return getDataTable(list);
-	}
-	/**
-	 * 查询个人资产列表
-	 */
-	@PostMapping("/queryList")
-	@ResponseBody
-	public TableDataInfo queryList(String name) {
-		Long aLong = sysUserService.selectUserIdByUserNameOnly(name);
-		XzPersonalAsset xzPersonalAsset = new XzPersonalAsset();
-		xzPersonalAsset.setUserId(aLong);
-		if(aLong==null){
-			return getDataTable(new ArrayList<>());
-		}
-		startPage();
-		List<XzPersonalAsset> list = xzPersonalAssetService.selectXzPersonalAssetList(xzPersonalAsset);
-		return getDataTable(list);
-	}
+    /**
+     * 查询个人资产列表
+     */
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(XzPersonalAsset xzPersonalAsset) {
+        startPage();
+        Long person = ShiroUtils.getUserId();
+        if (person == 1) {
+            //可查看全部
+        } else {
+            xzPersonalAsset.setUserId(ShiroUtils.getUserId());
+        }
+        List<XzPersonalAsset> list = xzPersonalAssetService.selectXzPersonalAssetList(xzPersonalAsset);
+        return getDataTable(list);
+    }
 
-	/**
-	 * 导出个人资产列表
-	 */
-	@PostMapping("/export")
-	@ResponseBody
-	public AjaxResult export(XzPersonalAsset xzPersonalAsset) {
-		List<XzPersonalAsset> list = xzPersonalAssetService.selectXzPersonalAssetList(xzPersonalAsset);
-		ExcelUtil<XzPersonalAsset> util = new ExcelUtil<XzPersonalAsset>(XzPersonalAsset.class);
-		return util.exportExcel(list, "xzPersonalAsset");
-	}
+    /**
+     * 查询个人资产列表
+     */
+    @PostMapping("/queryList")
+    @ResponseBody
+    public TableDataInfo queryList(String name, String region, Long dept, String assetCode) {
+        if ("".equals(name) && "".equals(region) && dept == null && "".equals(assetCode)) {
+            return getDataTable(new ArrayList<>());
+        }
+        SysUser sysUser = new SysUser();
+        sysUser.setUserName(name);
+        sysUser.setDeptId(dept);
+        sysUser.setArea(region);
+        List<SysUser> sysUsers = sysUserService.selectUserList(sysUser);
+        Long[] longs = new Long[sysUsers.size()];
+        for (int i = 0; i < sysUsers.size(); i++) {
+            longs[i] = sysUsers.get(i).getUserId();
+        }
+        if (sysUsers.size() == 0) {
+            return getDataTable(new ArrayList<>());
+        }
+        startPage();
+        Map map = new HashMap();
+        if (!"".equals(name)||!"".equals(region) || dept != null) {
+            map.put("array", longs);
+        }
+        map.put("assetCode", assetCode);
+        List<XzPersonalAsset> list = xzPersonalAssetService.selectXzPersonalAssetByUserIds(map);
+        return getDataTable(list);
+    }
 
-	/**
-	 * 新增个人资产
-	 */
-	@GetMapping("/add")
-	public String add() {
-		return prefix + "/add";
-	}
+    /**
+     * 导出个人资产列表
+     */
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(XzPersonalAsset xzPersonalAsset) {
+        List<XzPersonalAsset> list = xzPersonalAssetService.selectXzPersonalAssetList(xzPersonalAsset);
+        ExcelUtil<XzPersonalAsset> util = new ExcelUtil<XzPersonalAsset>(XzPersonalAsset.class);
+        return util.exportExcel(list, "xzPersonalAsset");
+    }
 
-	/**
-	 * 新增保存个人资产
-	 */
-	@Log(title = "个人资产", businessType = BusinessType.INSERT)
-	@PostMapping("/add")
-	@ResponseBody
-	public AjaxResult addSave(XzPersonalAsset xzPersonalAsset) {
-		return toAjax(xzPersonalAssetService.insertXzPersonalAsset(xzPersonalAsset));
-	}
+    /**
+     * 新增个人资产
+     */
+    @GetMapping("/add")
+    public String add() {
+        return prefix + "/add";
+    }
 
-	/**
-	 * 修改个人资产
-	 */
-	@GetMapping("/edit/{id}")
-	public String edit(@PathVariable("id") Long id, ModelMap mmap) {
-		XzPersonalAsset xzPersonalAsset = xzPersonalAssetService.selectXzPersonalAssetById(id);
-		mmap.put("xzPersonalAsset", xzPersonalAsset);
-		return prefix + "/edit";
-	}
+    /**
+     * 新增保存个人资产
+     */
+    @Log(title = "个人资产", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult addSave(XzPersonalAsset xzPersonalAsset) {
+        return toAjax(xzPersonalAssetService.insertXzPersonalAsset(xzPersonalAsset));
+    }
 
-	/**
-	 * 修改保存个人资产
-	 */
-	@Log(title = "个人资产", businessType = BusinessType.UPDATE)
-	@PostMapping("/edit")
-	@ResponseBody
-	public AjaxResult editSave(XzPersonalAsset xzPersonalAsset) {
-		return toAjax(xzPersonalAssetService.updateXzPersonalAsset(xzPersonalAsset));
-	}
+    /**
+     * 修改个人资产
+     */
+    @GetMapping("/edit/{id}")
+    public String edit(@PathVariable("id") Long id, ModelMap mmap) {
+        XzPersonalAsset xzPersonalAsset = xzPersonalAssetService.selectXzPersonalAssetById(id);
+        mmap.put("xzPersonalAsset", xzPersonalAsset);
+        return prefix + "/edit";
+    }
 
-	/**
-	 * 删除个人资产
-	 */
-	@Log(title = "个人资产", businessType = BusinessType.DELETE)
-	@PostMapping("/remove")
-	@ResponseBody
-	public AjaxResult remove(String ids) {
-		return toAjax(xzPersonalAssetService.deleteXzPersonalAssetByIds(ids));
-	}
+    /**
+     * 修改保存个人资产
+     */
+    @Log(title = "个人资产", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(XzPersonalAsset xzPersonalAsset) {
+        return toAjax(xzPersonalAssetService.updateXzPersonalAsset(xzPersonalAsset));
+    }
 
-	/**
-	 * 个人资产-一键领取
-	 */
-	@Log(title = "个人资产", businessType = BusinessType.UPDATE)
-	@PostMapping("/allDraw")
-	@ResponseBody
-	public AjaxResult allDraw() {
-		Long userId=ShiroUtils.getUserId();
-		// 查询资产表中userID的个人未领取资产
-		if (xzAsstesService.countXzAsstesByAllDraw(userId) > 0) {
-			String str = xzAsstesService.updateXzAsstesByAllDraw(userId);
-			return success(str);
-		} else {
-			String mag = "暂无可领取资产";
-			return success(mag);
-		}
+    /**
+     * 删除个人资产
+     */
+    @Log(title = "个人资产", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    public AjaxResult remove(String ids) {
+        return toAjax(xzPersonalAssetService.deleteXzPersonalAssetByIds(ids));
+    }
 
-	}
+    /**
+     * 个人资产-一键领取
+     */
+    @Log(title = "个人资产", businessType = BusinessType.UPDATE)
+    @PostMapping("/allDraw")
+    @ResponseBody
+    public AjaxResult allDraw() {
+        Long userId = ShiroUtils.getUserId();
+        // 查询资产表中userID的个人未领取资产
+        if (xzAsstesService.countXzAsstesByAllDraw(userId) > 0) {
+            String str = xzAsstesService.updateXzAsstesByAllDraw(userId);
+            return success(str);
+        } else {
+            String mag = "暂无可领取资产";
+            return success(mag);
+        }
 
-	/**
-	 * 个人资产-领取
-	 */
-	@Log(title = "个人资产", businessType = BusinessType.UPDATE)
-	@PostMapping("/draw")
-	@ResponseBody
-	public AjaxResult draw(Long assetId) {
-		Long userId=ShiroUtils.getUserId();
-		if (userId.equals(xzAsstesService.selectXzAsstesById(assetId).getUseBy())){
-			XzAsstes asset=new XzAsstes();
-			asset.setId(assetId);
-			asset.setUseTime(new Date());
-			asset.setUseBy(userId);
-			String str = xzAsstesService.updateXzAsstesByAssetId(asset);
-			
-			return success(str);
-		}else{
-			return error("非本人不可领取");
-		}
-		
-	}
+    }
+
+    /**
+     * 个人资产-领取
+     */
+    @Log(title = "个人资产", businessType = BusinessType.UPDATE)
+    @PostMapping("/draw")
+    @ResponseBody
+    public AjaxResult draw(Long assetId) {
+        Long userId = ShiroUtils.getUserId();
+        if (userId.equals(xzAsstesService.selectXzAsstesById(assetId).getUseBy())) {
+            XzAsstes asset = new XzAsstes();
+            asset.setId(assetId);
+            asset.setUseTime(new Date());
+            asset.setUseBy(userId);
+            String str = xzAsstesService.updateXzAsstesByAssetId(asset);
+
+            return success(str);
+        } else {
+            return error("非本人不可领取");
+        }
+
+    }
 }

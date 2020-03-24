@@ -11,13 +11,13 @@
 				<form id="formId">
 					<div class="select-list">
 						<ul>
-							<li>资产编码：<input type="text" name="assetsId" />
+							<li>资产编码：<input type="text" name="assetsCode" />
 							</li>
 
 							<li>资产名称：<input type="text" name="assetsName" />
 							</li>
 
-							<li>所在地域： <select name="region"
+							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域： <select name="region"
 								th:with="type=${@dict.getType('xz_assets_region')}">
 									<option value="">所有</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -25,7 +25,20 @@
 							</select>
 							</li>
 
-							<li>采购人员：<input type="text" name="purchaseName" />
+<!--							<li>采购人员：<input type="text" name="purchaseName" />-->
+<!--							</li>-->
+							<li>
+								<div>
+									采购人员：
+									<input id="loanUser" type="text" name="purchaseName"/>
+									<div class="input-group-btn" style="float: right">
+										<button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="menu">
+										</ul>
+									</div>
+								</div>
 							</li>
 
 							<!-- <li>资产状态： <select name="assetsStatus"
@@ -57,28 +70,36 @@
 				</form>
 			</div>
 
-			<!-- <div class="btn-group-sm" id="toolbar" role="group">
-				<a class="btn btn-warning" onclick="$.table.exportExcel()"
-					shiro:hasPermission="system:xzAsstes:export"> <i
-					class="fa fa-download"></i> 导出
-				</a>
-			</div> -->
+			<div class="btn-group-sm" id="toolbar" role="group">
+<!--				<a class="btn btn-primary" onclick="$.table.exportExcel()">分配-->
+<!--				</a>-->
+			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
 			</div>
 		</div>
 	</div>
 	<div th:include="include :: footer"></div>
+	<th:block th:include="include :: bootstrap-suggest-js"/>
 	<script th:inline="javascript">
 	 var prefix = ctx + "system/xzAssetHandRecord";
      var prefix1 = ctx + "system/xzAsstes";
-     
-		var addHandFlag = [[${@permission.hasPermi('system:xzAssetHandRecord:add')}]];
-		var addFlag = [[${@permission.hasPermi('system:xzAssetHandRecord:add')}]];
-    	var detailFlag = [[${@permission.hasPermi('system:xzAssetHandRecord:detail')}]];
-        
+	 var testBsSuggest = $("#loanUser").bsSuggest({
+		 url: ctx + "system/user/userModel",
+		 showBtn: false,
+		 idField: "userName",
+		 keyField: "userName",
+		 effectiveFields: ["deptName", "userName"],
+		 multiWord: true,
+		 hideOnSelect: true
+	 }).on('onDataRequestSuccess', function (e, result) {
+		 console.log('onDataRequestSuccess: ', result);
+	 }).on('onSetSelectValue', function (e, keyword) {
+		 console.log('onSetSelectValue: ', keyword);
+	 }).on('onUnsetSelectValue', function (e) {
+		 console.log("onUnsetSelectValue");
+	 });
         var region = [[${@dict.getType('xz_assets_region')}]];
-        var assetsType = [[${@dict.getType('xz_assets_assetsType')}]];
         var brand = [[${@dict.getType('xz_assets_brand')}]];
         var assetsStatus = [[${@dict.getType('xz_assets_assetsStatus')}]];
         var useStatus = [[${@dict.getType('xz_assets_useStatus')}]];
@@ -183,12 +204,28 @@
                         if(row.assetsStatus=="2"){
 		            		actions.push('<a class="btn btn-primary btn-xs " href="#" onclick="$.operate.add(\'' + row.id + '\')"><i class="fa fa-add"></i>分配</a>');
 		            	}
+						// actions.push('<a class="btn btn-warning btn-xs " href="qrCodeDownload/'+row.assetsCode+'">二维码下载</a>');
 						return actions.join('');
 		            }
 		        }]
             };
             $.table.init(options);
         });
+
+	 // 批量分配
+	 function toSubmitAll() {
+		 var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
+		 if (rows.length == 0) {
+			 $.modal.alertWarning("请至少选择一条记录");
+			 return;
+		 }
+		 $.modal.confirm("确认要分配选中的" + rows.length + "条数据吗?", function() {
+			 var url = $.table._option.toAllSubmitUrl;
+			 var data = { "ids": rows.join() };
+			 $.operate.submit(url, "post", "json", data);
+		 });
+	 }
+
     </script>
 </body>
 <form id="importForm" enctype="multipart/form-data" class="mt20 mb10"

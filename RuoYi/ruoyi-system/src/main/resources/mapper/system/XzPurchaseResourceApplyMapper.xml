@@ -26,6 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
+        <result property="processId"    column="process_id"    />
         <collection  property="xzPurchaseResource" javaType="java.util.List" resultMap="XzPurchaseResourceResult" />
         <collection  property="xzPurchaseApproval" column="id" javaType="com.ruoyi.system.domain.XzPurchaseApproval" resultMap="XzPurchaseApprovalResult" />
     </resultMap>
@@ -92,7 +93,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from xz_purchase_resource_apply pra
         left join sys_user u on u.user_id= pra.apply_user_id
          left join (select code,GROUP_CONCAT(resource_name) as names from xz_purchase_resource group by code) b on b.code=pra.code
-        <where>  
+        <where>
+            <if test="deptId != null">and u.dept_id = #{deptId}</if>
             <if test="id != null "> and id = #{id}</if>
              <if test="code != null  and code != '' "> and pra.code like concat('%',#{code},'%') </if>
              <if test="applyUserName != null and applyUserName!='' "> and u.user_name like concat('%', #{applyUserName} ,'%') </if>
@@ -107,8 +109,76 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				date_format(#{params.endTime},'%y%m%d')
 			</if>
              <if test="approvalStatus != null and approvalStatus != '' "> and pra.approval_status = #{approvalStatus}</if>
+            <if test="region != null and region!=''">and u.area = #{region}</if>
          </where>
          order by  pra.create_time DESC 
+    </select>
+
+    <select id="selectXzPurchaseResourceApplyListByApprover" parameterType="XzPurchaseResourceApply" resultMap="XzPurchaseResourceApplyResult">
+        select  pra.id,
+        pra.code,
+        pra.purpose,
+        pra.purpose_comment,
+        pra.apply_id,
+        pra.apply_user_id,
+        pra.purchase_user_id,
+        pra.apply_price,
+        pra.actual_price,
+        pra.float_price,
+        pra.sub_time,
+        pra.sub_type,
+        pra.approval_time,
+        pra.approval_status,
+        pra.is_relation,
+        pra.create_by,
+        pra.create_time,
+        pra.update_by,
+        pra.update_time,
+        pra.process_id,
+        u.user_name apply_user_name,
+        b.names apply_name
+        from
+         (
+
+            SELECT
+            a.*,b.level,b.approver_id,b.id process_id
+            FROM
+            xz_purchase_resource_apply a
+            LEFT JOIN xz_apply_process b ON a.id = b.apply_id
+            where b.status = #{status}
+            <if test="status!='wait'">and b. approver_id = #{approverId}</if>
+            <if test="status=='wait'">
+                GROUP BY
+                a.id
+                HAVING
+                b.level = min( b.level )
+                <if test="approverId != null">
+                    and b.approver_id = #{approverId}
+                </if>
+            </if>
+        )
+
+         pra
+        left join sys_user u on u.user_id= pra.apply_user_id
+        left join (select code,GROUP_CONCAT(resource_name) as names from xz_purchase_resource group by code) b on b.code=pra.code
+        <where>
+            <if test="id != null "> and id = #{id}</if>
+            <if test="code != null  and code != '' "> and pra.code like concat('%',#{code},'%') </if>
+            <if test="applyUserName != null and applyUserName!='' "> and u.user_name like concat('%', #{applyUserName} ,'%') </if>
+            <if test="applyUserId != null and applyUserId !='' "> and pra.apply_user_id =#{applyUserId}</if>
+            <!--  <if test="subTime != null and subTime !=''  "> and pra.sub_time = #{subTime}</if> -->
+            <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+                AND date_format(pra.sub_time,'%y%m%d') &gt;=
+                date_format(#{params.beginTime},'%y%m%d')
+            </if>
+            <if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+                AND date_format(pra.sub_time,'%y%m%d') &lt;=
+                date_format(#{params.endTime},'%y%m%d')
+            </if>
+            <if test="approvalStatus != null and approvalStatus != '' "> and pra.approval_status = #{approvalStatus}</if>
+            <if test="region != null and region != '' "> and u.area = #{region}</if>
+        </where>
+        order by  pra.create_time DESC
     </select>
     
     <select id="selectXzPurchaseResourceApplyById" parameterType="Long" resultMap="XzPurchaseResourceApplyResult">

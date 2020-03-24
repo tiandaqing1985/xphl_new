@@ -33,6 +33,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="brand"    column="brand"    />
         <result property="sort"    column="sort"    />
         <result property="useTime"    column="use_time"    />
+        <result property="isReturn"    column="is_return"    />
+        <result property="isRepair"    column="is_repair"    />
     </resultMap>
 	
 	<sql id="selectXzPersonalAssetVo">
@@ -42,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectXzPersonalAssetList" parameterType="XzPersonalAsset" resultMap="XzPersonalAssetResult">
      <!-- <include refid="selectXzPersonalAssetVo"/> -->
         select pa.id, pa.user_id, pa.asset_id, pa.create_by, pa.create_time, pa.update_by, pa.update_time ,pa.asset_status,
-        xa.assets_code, xa.region, xa.assets_name, xa.assets_type, xa.assets_type2, xa.assets_model,  xa.unit ,xa.brand,
+        xa.is_return,xa.is_repair,xa.assets_code, xa.region, xa.assets_name, xa.assets_type, xa.assets_type2, xa.assets_model,  xa.unit ,xa.brand,
         xa.use_status,xa.assets_status,xa.sort,xa.use_time,at.name asset_type_name
         from xz_personal_asset pa
         left join xz_asstes xa on xa.id =pa.asset_id 
@@ -54,7 +56,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="userId != null "> and user_id = #{userId}</if>
          </where>
     </select>
-    
+    <select id="selectXzPersonalAssetByUserIds" resultMap="XzPersonalAssetResult" parameterType="Map">
+     <!-- <include refid="selectXzPersonalAssetVo"/> -->
+        select pa.id, pa.user_id, pa.asset_id, pa.create_by, pa.create_time, pa.update_by, pa.update_time ,pa.asset_status,
+        xa.assets_code, xa.region, xa.assets_name, xa.assets_type, xa.assets_type2, xa.assets_model,  xa.unit ,xa.brand,
+        xa.use_status,xa.assets_status,xa.sort,xa.use_time,at.name asset_type_name
+        from xz_personal_asset pa
+        left join xz_asstes xa on xa.id =pa.asset_id
+        left join xz_asset_type at on at.id =xa.assets_type
+        <where>
+            <if test="array != null">
+                <foreach collection="array" item="item" open="user_id in (" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="assetCode != null and assetCode != ''">and xa.assets_code = #{assetCode}</if>
+        </where>
+    </select>
+
     <select id="selectXzPersonalAssetById" parameterType="Long" resultMap="XzPersonalAssetResult">
         <include refid="selectXzPersonalAssetVo"/>
         where id = #{id}

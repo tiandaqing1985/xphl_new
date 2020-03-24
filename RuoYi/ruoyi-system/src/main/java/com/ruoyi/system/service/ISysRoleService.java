@@ -5,6 +5,7 @@ import java.util.Set;
 import com.ruoyi.system.domain.SysRole;
 import com.ruoyi.system.domain.SysUser;
 import com.ruoyi.system.domain.SysUserRole;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 角色业务层
@@ -13,6 +14,14 @@ import com.ruoyi.system.domain.SysUserRole;
  */
 public interface ISysRoleService
 {
+
+    /**
+     * 根据登录人角色
+     * @param userId
+     * @return
+     */
+    List<String> queryRoleName(@Param("userId") Long userId);
+
     /**
      * 根据条件分页查询角色数据
      * 
@@ -154,4 +163,6 @@ public interface ISysRoleService
      * 根据角色id查询用户id
      */
     public Long selectUserIdByRoleId(SysUser user);
+
+
 }

@@ -59,6 +59,17 @@ public class XzExpenseRecord extends BaseEntity
 	private Double sumPrice;
 	/** 关联费用时资源的id */
 	private String resourceId;
+
+	private String month;
+
+	public String getMonth() {
+		return month;
+	}
+
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
 	public Long getId() {
 		return id;
 	}

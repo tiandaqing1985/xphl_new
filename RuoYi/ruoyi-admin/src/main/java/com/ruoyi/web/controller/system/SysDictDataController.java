@@ -42,7 +42,6 @@ public class SysDictDataController extends BaseController
     }
 
     @PostMapping("/list")
-    @RequiresPermissions("system:dict:list")
     @ResponseBody
     public TableDataInfo list(SysDictData dictData)
     {
@@ -52,7 +51,6 @@ public class SysDictDataController extends BaseController
     }
 
     @Log(title = "字典数据", businessType = BusinessType.EXPORT)
-    @RequiresPermissions("system:dict:export")
     @PostMapping("/export")
     @ResponseBody
     public AjaxResult export(SysDictData dictData)
@@ -76,7 +74,6 @@ public class SysDictDataController extends BaseController
      * 新增保存字典类型
      */
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
-    @RequiresPermissions("system:dict:add")
     @PostMapping("/add")
     @ResponseBody
     public AjaxResult addSave(SysDictData dict)
@@ -99,7 +96,6 @@ public class SysDictDataController extends BaseController
      * 修改保存字典类型
      */
     @Log(title = "字典数据", businessType = BusinessType.UPDATE)
-    @RequiresPermissions("system:dict:edit")
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(SysDictData dict)
@@ -109,7 +105,6 @@ public class SysDictDataController extends BaseController
     }
 
     @Log(title = "字典数据", businessType = BusinessType.DELETE)
-    @RequiresPermissions("system:dict:remove")
     @PostMapping("/remove")
     @ResponseBody
     public AjaxResult remove(String ids)

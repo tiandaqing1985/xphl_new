@@ -1,6 +1,8 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.XzPersonalAssetMapper;
@@ -79,5 +81,9 @@ public class XzPersonalAssetServiceImpl implements IXzPersonalAssetService
 	{
 		return xzPersonalAssetMapper.deleteXzPersonalAssetByIds(Convert.toStrArray(ids));
 	}
-	
+
+	@Override
+	public List<XzPersonalAsset> selectXzPersonalAssetByUserIds(Map map) {
+		return xzPersonalAssetMapper.selectXzPersonalAssetByUserIds(map);
+	}
 }

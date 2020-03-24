@@ -58,7 +58,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="subBy" column="sub_by" />
 		<result property="subTime" column="sub_time" />
 		<result property="sort" column="sort" />
-		
+		<result property="isReturn" column="is_return" />
+		<result property="isReturn" column="is_repair" />
+
 		
 		
 	</resultMap>
@@ -70,11 +72,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		purchase_by, buy_date, annex, remarks, extend_money, extend_time,
 		extend_content, assets_status, use_status, use_by, department,
 		use_time, submit_type, scrap_date, store_way, create_by, create_time,
-		update_by, update_time, sub_by, sub_time ,sort from xz_asstes
+		update_by, update_time, sub_by, sub_time ,sort,is_retrun,is_repair from xz_asstes
 	</sql>
 
 	<sql id="selectXzAsstes">
-		select a.id, a.assets_code, a.region, a.assets_name, a.assets_type,
+		select a.is_repair,a.is_return,a.id, a.assets_code, a.region, a.assets_name, a.assets_type,
 		a.assets_type2, a.assets_model, a.price, a.unit, a.count, a.attach,
 		a.purchase_num, a.category, a.brand, a.buy_address,
 		a.manufacturer, a.supplier, a.invoice_type, a.invoice_num, a.purchase_by, a.buy_date,
@@ -89,8 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		left join xz_asset_type at on at.id=a.assets_type
 	</sql>
 
-	<select id="selectXzAsstesList" parameterType="XzAsstes"
-		resultMap="XzAsstesResult">
+	<select id="selectXzAsstesList" parameterType="XzAsstes" resultMap="XzAsstesResult">
 		<include refid="selectXzAsstes" />
 		<where>
 			<if test="id != null "> and id = #{id}</if>
@@ -129,7 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where a.id = #{id}
 	</select>
 
-	<insert id="insertXzAsstes" parameterType="XzAsstes">
+	<insert id="insertXzAsstes" parameterType="XzAsstes" useGeneratedKeys="true" keyColumn="id" keyProperty="id">
 		insert into xz_asstes
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="id != null  ">id,</if>
@@ -173,6 +174,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="subBy != null  and subBy != ''  ">sub_by,</if>
 			<if test="subTime != null  ">sub_time,</if>
 			<if test="sort != null and sort !='' ">sort,</if>
+			<if test="isReturn != null and isReturn !='' ">is_return,</if>
+			<if test="isRepair != null and isRepair !='' ">is_repair,</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides=",">
 			<if test="id != null  ">#{id},</if>
@@ -216,6 +219,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="subBy != null  and subBy != ''  ">#{subBy},</if>
 			<if test="subTime != null  ">#{subTime},</if>
 			<if test="sort != null and sort !='' ">#{sort},</if>
+			<if test="isReturn != null and isReturn !='' ">#{isReturn},</if>
+			<if test="isRepair != null and isRepair !='' ">#{isRepair},</if>
 		</trim>
 	</insert>
 
@@ -316,7 +321,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			use_status = '3',
 			use_time = #{useTime},
 		</trim>
-		where id=#{id} and sort='1'
+		where id=#{id}
 	</update>
 
 	<update id="updateXzAsstesByStaId" parameterType="XzAsstes">
@@ -325,7 +330,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			use_status = '5',
 			use_time = #{useTime},
 		</trim>
-		where id=#{id} and sort='2'
+		where id=#{id}
 	</update>
 
 	<select id="countXzAsstesByAllDraw" parameterType="Long"
@@ -367,13 +372,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</select>
 
 	 <select id="selectMaxCodeByType" parameterType="XzAsstes" resultType="java.lang.String">
-		select max(t.assetCode) assets_code
-		from (SELECT subString(a.assets_code,length(concat(0,concat(at.code,ad.code))),4)assetCode,at.code typeCode ,  ad.code dataCode ,concat(at.code,ad.code) www 
-				FROM `xz_asstes` a
-				left join xz_asset_type at on at.id=a.assets_type
-				left join xz_asset_data ad on ad.id=a.assets_type2
-				where at.id=#{assetsType} and  ad.id=#{assetsType2} and a.region =#{region}
-				)t
+		SELECT
+		max( t.assetCode ) assets_code
+	FROM
+		(
+		SELECT
+			subString( a.assets_code, length( a.assets_code ) - 3, 4 ) assetCode,
+			AT.CODE typeCode,
+			ad.CODE dataCode,
+			concat( AT.CODE, ad.CODE ) www
+		FROM
+			xz_asstes a
+			LEFT JOIN xz_asset_type AT ON AT.id = a.assets_type
+			LEFT JOIN xz_asset_data ad ON ad.id = a.assets_type2
+		WHERE
+			AT.id = #{assetsType} and  ad.id=#{assetsType2} and a.region =#{region}
+
+		) t
 	</select>
 	
 	<resultMap type="XzAsstesSta" id="XzAsstesStaResult">
@@ -394,8 +409,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	
-	<select id="selectXzStatisticsList" parameterType="XzAsstesSta"
-		resultMap="XzAsstesStaResult">
+	<select id="selectXzStatisticsList" parameterType="XzAsstesSta" resultMap="XzAsstesStaResult">
 		
 		select t.region,t.type2Id asset_type2_id,t.typeName2 asset_type2_id_name,t.type1Id asset_type_id,
 		t.typeName1 asset_type_id_name,t.brand,t.unit,t.chushiCount chushi_count,t.dangyueCount ruku_count,
@@ -404,33 +418,38 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		select a.region ,ad.id type2Id,ad.name typeName2,at.id type1Id ,at.name typeName1,a.brand,a.unit ,
 		IFNULL(count(*),0) sumCount,(IFNULL(count(*),0)-IFNULL(t2.dangyueCount,0)) chushiCount ,
 		IFNULL(t2.dangyueCount,0) dangyueCount,IFNULL(t3.fenpeiCount,0) sumFengpeiCount,IFNULL(t4.fenpeiCount,0) fengpeiCount,
-		IFNULL(null,0) guihuanCount, IFNULL(t5.shengyuCount,0) shengyuCount
-		from xz_asstes a 
+		IFNULL(t6.guihuan,0) guihuanCount, IFNULL(t5.shengyuCount,0) shengyuCount
+		from xz_asstes a
 		left join xz_asset_data ad on ad.id = a.assets_type2
 		left join xz_asset_type at on at.id = a.assets_type and at.id =ad.parent_id 
 		left join (SELECT a.region ,ad.id type2Id,ad.name typeName2,at.id type1Id ,at.name typeName1,IFNULL(count(*),0) dangyueCount  FROM xz_asstes a 
 								left join xz_asset_data ad on ad.id = a.assets_type2
 								left join xz_asset_type at on at.id = a.assets_type and at.id =ad.parent_id 
-								WHERE DATE_FORMAT( a.sub_time, '%Y-%m' ) = DATE_FORMAT( CURDATE( ) , '%Y-%m' )  and a.sort='2' and a.submit_type='2' 
+		WHERE DATE_FORMAT( a.sub_time, '%Y-%m' ) = DATE_FORMAT( CURDATE( ) , '%Y-%m' ) <if test="sort!=null and sort!=''"> and a.sort=#{sort}</if> and a.submit_type='2'
 								group by a.assets_type2,a.region  )t2 on t2.region=a.region and t2.type2Id=ad.id
 		left join (SELECT a.region ,ad.id type2Id,ad.name typeName2,at.id type1Id ,at.name typeName1,IFNULL(count(*),0) fenpeiCount  FROM xz_asstes a 
 								left join xz_asset_data ad on ad.id = a.assets_type2
 								left join xz_asset_type at on at.id = a.assets_type and at.id =ad.parent_id 
-								WHERE a.sort='2' and a.submit_type='2' and a.assets_status='3'
+								WHERE <if test="sort!=null and sort!=''">a.sort=#{sort} and</if> a.submit_type='2' and a.assets_status='3'
 								group by a.assets_type2,a.region )t3 on  t3.region=a.region and t3.type2Id=ad.id
 		left join (SELECT a.region ,ad.id type2Id,ad.name typeName2,at.id type1Id ,at.name typeName1,IFNULL(count(*),0) fenpeiCount  FROM xz_asstes a 
 								left join xz_asset_data ad on ad.id = a.assets_type2
 								left join xz_asset_type at on at.id = a.assets_type and at.id =ad.parent_id 
 								left join xz_asset_hand_record ahr on ahr.asset_id = a.id
-								WHERE DATE_FORMAT( ahr.distribution_date, '%Y-%m' ) = DATE_FORMAT( CURDATE( ) , '%Y-%m' ) 
-								and a.sort='2' and a.submit_type='2' and a.assets_status='3'
+								WHERE DATE_FORMAT( ahr.distribution_date, '%Y-%m' ) = DATE_FORMAT( CURDATE( ) , '%Y-%m' )
+								<if test="sort!=null and sort!=''">and a.sort=#{sort}</if> and a.submit_type='2'
 								group by a.assets_type2,a.region ) t4 on  t4.region=a.region and t4.type2Id=ad.id
 		left join (SELECT a.region ,ad.id type2Id,ad.name typeName2,at.id type1Id ,at.name typeName1,IFNULL(count(*),0) shengyuCount  FROM xz_asstes a 
 								left join xz_asset_data ad on ad.id = a.assets_type2
 								left join xz_asset_type at on at.id = a.assets_type and at.id =ad.parent_id 
-								WHERE a.sort='2' and a.submit_type='2' and a.assets_status='2'
+								WHERE <if test="sort!=null and sort!=''">a.sort=#{sort} and </if> a.submit_type='2' and a.assets_status='2'
 								group by a.assets_type2,a.region )t5 on  t5.region=a.region and t5.type2Id=ad.id
-		where a.sort="2" and a.submit_type='2'
+		left join (select c.assets_type2,c.region,ifnull(count(a.id),0) guihuan,a.* from xz_asset_return a
+								left join xz_personal_asset b on a.asset_id = b.id
+								left join xz_asstes c on b.asset_id = c.id
+								where a.return_status='1' <if test="sort!=null and sort!=''"> and c.sort=#{sort} </if> group by c.assets_type2,c.region) t6 on t6.assets_type2 = ad.id and t6.region = a.region
+
+		where <if test="sort!=null and sort!=''"> a.sort=#{sort} and </if> a.submit_type='2'
 		group by a.assets_type2,a.region
 		) t
 		where 1=1

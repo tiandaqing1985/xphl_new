@@ -7,21 +7,21 @@
 			var url = $.table._option.toDetailUrl.replace("{id}",id);
 			$.modal.openTab("采购物资-明细", url);
 		}
-		function toDetailList(id){
+		function toDetailList(id,flg){
 			var url = $.table._option.toDetailListUrl.replace("{id}",id);
-			$.modal.openTab("采购物资-费用关联", url);
+			$.modal.openTab("采购物资-费用关联", url + "/" + flg);
 		}
 		function edit(id){
 			$.modal.openTab("采购申请明细修改", $.table._option.updateUrl.replace("{id}",id));
 		}
-		
+
 		function remove(id) {
 			 $.modal.confirm("确定删除吗？", function() {
 		         var url = $.table._option.removeUrl.replace("{id}", id);
 		     	 var data = { "id": id };
 		     	 $.operate.submit(url, "post", "json", data);
 		 	});
-		} 
+		}
 	</script>
 </head>
 <body class="gray-bg">
@@ -34,11 +34,23 @@
 							<li>
 								申请编号：<input type="text" name="code"/>
 							</li>
-							
+
+<!--							<li>-->
+<!--								申请人：<input type="text" name="applyUserName"/>-->
+<!--							</li>-->
 							<li>
-								申请人：<input type="text" name="applyUserName"/>
+								<div>
+									申请人：
+									<input type="text" id="applyUserName" name="applyUserName"/>
+									<div class="input-group-btn" style="float: right">
+										<button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="menu">
+										</ul>
+									</div>
+								</div>
 							</li>
-							
 							<li>审批结果： <select name="approvalStatus"
 								th:with="type=${@dict.getType('sys_user_approval_state')}">
 									<option value="">所有</option>
@@ -52,6 +64,13 @@
 								name="params[beginTime]" /> <span>-</span> <input type="text"
 								class="time-input" id="endTime" placeholder="结束时间"
 								name="params[endTime]" /></li>
+							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域： <select name="region"
+																																					  th:with="type=${@dict.getType('xz_assets_region')}">
+								<option value="">所有</option>
+								<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+										th:value="${dict.dictValue}"></option>
+							</select>
+							</li>
 
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -61,7 +80,7 @@
 					</div>
 				</form>
 			</div>
-			
+
 	        <div class="btn-group-sm" id="toolbar" role="group">
 				<a class="btn btn-success" onclick="$.operate.addTab()">
 					<i class="fa fa-plus"></i> 采购申请
@@ -73,6 +92,7 @@
 		</div>
 	</div>
     <div th:include="include :: footer"></div>
+	 <th:block th:include="include :: bootstrap-suggest-js"/>
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:xzPurchaseResourceApply:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:xzPurchaseResourceApply:remove')}]];
@@ -81,6 +101,21 @@
         var approvalStatus = [[${@dict.getType('sys_user_approval_state')}]];
         var subType = [[${@dict.getType('xz_assets_submitType')}]];
         var isRelation = [[${@dict.getType('xz_assets_isRelation')}]];
+		var testBsSuggest = $("#applyUserName").bsSuggest({
+			url: ctx + "system/user/userModel",
+			showBtn: false,
+			idField: "userName",
+			keyField: "userName",
+			effectiveFields: ["deptName", "userName"],
+			multiWord: true,
+			hideOnSelect: true
+		}).on('onDataRequestSuccess', function (e, result) {
+			console.log('onDataRequestSuccess: ', result);
+		}).on('onSetSelectValue', function (e, keyword) {
+			console.log('onSetSelectValue: ', keyword);
+		}).on('onUnsetSelectValue', function (e) {
+			console.log("onUnsetSelectValue");
+		});
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -96,64 +131,68 @@
 		            checkbox: true
 		        },
 				{
-					field : 'id', 
+					field : 'id',
 					title : '',
 					visible: false
 				},
 				{
-					field : 'code', 
+					field : 'code',
 					title : '申请编号',
 					sortable: true
 				},
 				{
-					field : 'applyUserName', 
+					field : 'applyUserName',
 					title : '申请人',
 					sortable: true
 				},
 				{
-					field : 'purpose', 
+					field : 'purpose',
 					title : '申请主题',
 					sortable: true
 				},
 				{
-					field : 'applyName', 
+					field : 'applyName',
 					title : '申请物品',
 					sortable: true
 				},
-				
+
 				{
-					field : 'applyPrice', 
+					field : 'applyPrice',
 					title : '申请金额',
 					sortable: true
 				},
 				{
-					field : 'actualPrice', 
+					field : 'actualPrice',
 					title : '实际金额',
 					sortable: true
 				},
 				{
-					field : 'floatPrice', 
+					field : 'floatPrice',
 					title : '浮动金额',
 					sortable: true
 				},
-				
 				{
-					field : 'approvalStatus', 
+					field : 'approverName',
+					title : '审批人',
+					sortable: false
+				},
+				{
+					field : 'approvalStatus',
 					title : '审批状态',
 					formatter: function(value, row, index) {
 					    return $.table.selectDictLabel(approvalStatus, value);
 					}
 				},
-				
+
 				{
-					field : 'isRelation', 
+					field : 'isRelation',
 					title : '是否关联',
 					formatter: function(value, row, index) {
 					    return $.table.selectDictLabel(isRelation, value);
 					}
 				},
 				{
-					field : 'subType', 
+					field : 'subType',
 					title : '提交状态',
 					formatter: function(value, row, index) {
 					    return $.table.selectDictLabel(subType, value);
@@ -170,16 +209,15 @@
 		            	}else if(row.subType=="2"){
 		            		if(row.approvalStatus=="1"){
 		            			if(row.isRelation=="1"){
-		            				actions.push('<a class="btn btn-success btn-xs ' + '" onclick="toDetailList(\'' + row.id + '\')">关联列表</a> ');
+		            				actions.push('<a class="btn btn-success btn-xs ' + '" onclick="toDetailList(\'' + row.id + '\',true)">关联列表</a> ');
 		            			}else if(row.isRelation=="2"){
-		            				actions.push('<a class="btn btn-success btn-xs ' + '" onclick="toDetailList(\'' + row.id + '\')">关联费用</a> ');
+		            				actions.push('<a class="btn btn-success btn-xs ' + '" onclick="toDetailList(\'' + row.id + '\',false)">关联费用</a> ');
 		            			}
-		            			
+
 		            		}
 		            		actions.push('<a class="btn btn-success btn-xs ' + '" onclick="toDetail(\'' + row.id + '\')">查看</a> ');
-		            		
 		            	}
-		            	
+
 						return actions.join('');
 		            }
 		        }]

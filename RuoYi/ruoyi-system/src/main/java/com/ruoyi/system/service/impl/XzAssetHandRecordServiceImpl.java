@@ -188,7 +188,7 @@ public class XzAssetHandRecordServiceImpl implements IXzAssetHandRecordService
 							xzPersonalAssetMapper.insertXzPersonalAsset(person);
 							
 							//修改个人申请资产信息-状态
-							XzPersonalApply apply =new XzPersonalApply();
+							XzPersonalApply apply = new XzPersonalApply();
 							//分配成功为2，表示修改成功
 							apply.setApplyStatus("2");
 							apply.setApplyId(xzAssetHandRecord.getApplyId());
@@ -250,5 +250,9 @@ public class XzAssetHandRecordServiceImpl implements IXzAssetHandRecordService
 	public XzAssetHandRecord selectXzAssetHandRecordByAssetId(Long assetId) {
 		return xzAssetHandRecordMapper.selectXzAssetHandRecordByAssetId(assetId);
 	}
-	
+
+	@Override
+	public XzAssetHandRecord selectXzAssetHandRecordByAssetsCode(String id) {
+		return xzAssetHandRecordMapper.selectXzAssetHandRecordByAssetsCode(id);
+	}
 }

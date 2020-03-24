@@ -30,7 +30,9 @@ public interface IXzAsstesService {
 	 */
 	public List<XzAsstes> selectXzAsstesList(XzAsstes xzAsstes);
 
-	/**
+    boolean createQrCode(String id);
+
+    /**
 	 * 新增固定资产
 	 * 
 	 * @param xzAsstes

@@ -7,7 +7,7 @@
 function edit(id) {
 	var url = $.table._option.updateUrl.replace("{id}",id);
 	$.modal.open("采购物资修改", url);
-} 
+}
 
  function remove(id) {
 	 $.modal.confirm("确定删除该条" + $.table._option.modalName + "信息吗？", function() {
@@ -19,15 +19,15 @@ function edit(id) {
      	    $.operate.submit(url, "post", "json", data);
          }
  	});
-} 
- 
+}
+
 </script>
 </head>
 <body class="white-bg">
 	 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
 	 	<form class="form-horizontal m" id="form-xzPurchaseResourceApply-add">
 	 	<input id="code" name="code" class="form-control-static" type="hidden" th:value="${code}"/>
-	 	<h4 class="form-header h4">采购用途</h4> 
+	 	<h4 class="form-header h4">采购用途</h4>
 			<div class="row">
 					<div class="col-sm-6">
 						<div class="form-group">
@@ -52,8 +52,8 @@ function edit(id) {
 	 	</form>
 		<form class="form-horizontal m" id="form-xzPurchaseResource-add">
 		 <input id="code" name="code" class="form-control-static" type="hidden" th:value="${code}"/>
-		  	
-			<h4 class="form-header h4">采购申请</h4> 
+
+			<h4 class="form-header h4">采购申请</h4>
 			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group">
@@ -95,7 +95,7 @@ function edit(id) {
 				</div>
 			</div>
 			<h4 class="form-header h4"></h4>
-			
+
 			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group">
@@ -210,9 +210,9 @@ function edit(id) {
 			<div class="row">
 				<div class="col-sm-6">
 					<div class="form-group">
-						<label class="col-sm-4 control-label">购买明细：</label>
+						<label class="col-sm-4 control-label"><span style="color: red;">*</span>购买明细：</label>
 						<div class="col-sm-8">
-							<textarea id="detail" name="detail" class="form-control"></textarea>
+							<textarea id="detail" name="detail" class="form-control" required></textarea>
 						</div>
 					</div>
 				</div>
@@ -226,12 +226,12 @@ function edit(id) {
 		</div>
 		</form>
 		</div>
-		
+
 		<div class="col-sm-12 select-table table-striped">
 			<h4 class="form-header h4">采购申请列表</h4>
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
 		</div>
-		
+
 		<div class="row">
 			<div class="col-sm-offset-5 col-sm-10">
 				<button type="button" class="btn btn-sm btn-danger"
@@ -255,11 +255,11 @@ function edit(id) {
 		<script th:inline="javascript">
 		var prefix = ctx + "system/xzPurchaseResourceApply";
 		var prefix1 = ctx + "system/xzPurchaseResource";
-	
+
 	 	var datas = [[${@dict.getType('xz_assets_purchaseChannel')}]];
-		
+
 		var code = $("#code").val();
-		
+
 		$(function() {
 			var options = {
 				id: "bootstrap-table",
@@ -304,7 +304,7 @@ function edit(id) {
 							formatter: function(value, item, index) {
 							    return $.table.selectDictLabel(datas, value);
 							}
-						}, 
+						},
 
 						{
 							title : '操作',
@@ -351,7 +351,7 @@ function edit(id) {
 				}
 			});
 		};
-		
+
 		//附件上传
 		function shangchuan() {
 			var formData = new FormData();
@@ -378,10 +378,12 @@ function edit(id) {
 				}
 			});
 		}
-		
-		 
+
+
 		function submitHandler() {
-			if ($.validate.form('form-xzPurchaseResource-add')) {
+			 var form1 = $.validate.form('form-xzPurchaseResourceApply-add');
+			 var form2 = $.validate.form('form-xzPurchaseResource-add');
+			if (form1 && form2) {
 				save(prefix1 + "/add", $('#form-xzPurchaseResource-add').serialize());
 			}
 		}
@@ -395,8 +397,8 @@ function edit(id) {
 			if ($.validate.form('form-xzPurchaseResourceApply-add')) {
 				$.operate.saveTab(prefix + "/add", $('#form-xzPurchaseResourceApply-add').serialize());
 			}
-			
-			
+
+
 		}
 
 		function submitHandlerSub() {
@@ -404,8 +406,8 @@ function edit(id) {
 				$.operate.saveTab(prefix + "/addSub", $('#form-xzPurchaseResourceApply-add').serialize());
 			}
 		}
-		
-		
+
+
 		  // 保存信息 刷新表格
        function save(url, data, callback) {
     	   debugger;
@@ -425,11 +427,11 @@ function edit(id) {
      	        		$.table.refresh();
  	        			$.modal.closeLoading();
      	        	}
-     	        	
+
      	        }
     	    });
-        } 
-    
+        }
+
 	</script>
 </body>
 </html>

@@ -55,7 +55,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectXzAssetHandRecordVo"/>
         where id = #{id}
     </select>
-    
+
+    <select id="selectXzAssetHandRecordByAssetsCode" parameterType="String" resultMap="XzAssetHandRecordResult">
+        <include refid="selectXzAssetHandRecordVo"/>
+        WHERE
+            id = (
+                SELECT
+                    max( a.id )
+                FROM
+                    xz_asset_hand_record a
+                LEFT JOIN
+                    xz_asstes c ON a.asset_id = c.id
+                WHERE
+                    c.assets_code = #{param1}
+        )
+    </select>
+
     <select id="selectXzAssetHandRecordByAssetId" parameterType="Long" resultMap="XzAssetHandRecordResult">
         <include refid="selectXzAssetHandRecord"/>
         where ahr.id in (select max(id) from xz_asset_hand_record where asset_id = #{assetId}) 

@@ -50,5 +50,8 @@ public interface IXzPurchaseApprovalService
      * @return 结果
      */
 	public int deleteXzPurchaseApprovalByIds(String ids);
-	
+
+	void agreeApply(Long applyId, String remark, String processId);
+
+	void rejectApply(Long applyId, String remark, String processId);
 }

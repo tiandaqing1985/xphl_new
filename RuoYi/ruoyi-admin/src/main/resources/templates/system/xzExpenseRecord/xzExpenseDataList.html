@@ -20,89 +20,100 @@
     <div th:include="include :: footer"></div>
     <script th:inline="javascript">
         var prefix = ctx + "system/xzExpenseRecord";
-		var expenseTypeParent=[[${expenseTypeParent}]];
+		var xzExpenseDetailRequestVO=[[${xzExpenseDetailRequestVO}]];
+		var urlStr = "?expenseTypeParent="+xzExpenseDetailRequestVO.expenseTypeParent+"&startTime=" + xzExpenseDetailRequestVO.startTime + "&endTime=" + xzExpenseDetailRequestVO.endTime+"&region="+xzExpenseDetailRequestVO.region+"&depts="+xzExpenseDetailRequestVO.depts+"&regionCompare="+xzExpenseDetailRequestVO.regionCompare+"&startTimeCompare="+xzExpenseDetailRequestVO.startTimeCompare
+				+"&endTimeCompare="+xzExpenseDetailRequestVO.endTimeCompare+"&deptsCompare="+xzExpenseDetailRequestVO.deptsCompare+"&flg="+xzExpenseDetailRequestVO.flg;
 		debugger;
-		var region=[[${region}]];
         $(function() {
             var options = {
-                url: prefix + "/xzExpenseDataList?expenseTypeParent="+expenseTypeParent+"&region="+region,
+                url: prefix + "/xzExpenseDataList"+urlStr,
                 modalName: "费用记录",
 		        showExport: true,
+				onDblClickCell: function(data,d1,d2){
+                	if(xzExpenseDetailRequestVO.flg=='compare'){
+
+					}else{
+						data = data.replace("month","");
+						if(!isNaN(data)){
+							$.modal.openTab(data+"月份费用明细",prefix + "/xzExpenseMonthRecord?expenseTypeParent="+xzExpenseDetailRequestVO.expenseTypeParent+"&startTime="+xzExpenseDetailRequestVO.startTime+"&endTime="+xzExpenseDetailRequestVO.endTime+"&expenseType="+d2.expenseType+"&month="+data)
+						}
+					}
+				},
                 columns: [{
 		            checkbox: true
 		        },
 		        {
-					field : 'expenseType', 
+					field : 'expenseType',
 					title : '类型id',
 					visible: false
 				},
 				{
-					field : 'expenseTypeName', 
+					field : 'expenseTypeName',
 					title : '类型名称',
 					sortable: true
 				},
 				{
-					field : 'month1', 
+					field : 'month1',
 					title : '一月',
 					sortable: true
 				},
 				{
-					field : 'month2', 
+					field : 'month2',
 					title : '二月',
 					sortable: true
 				},
 				{
-					field : 'month3', 
+					field : 'month3',
 					title : '三月',
 					sortable: true
 				},
 				{
-					field : 'month4', 
+					field : 'month4',
 					title : '四月',
 					sortable: true
 				},
 				{
-					field : 'month5', 
+					field : 'month5',
 					title : '五月',
 					sortable: true
 				},
 				{
-					field : 'month6', 
+					field : 'month6',
 					title : '六月',
 					sortable: true
 				},
 				{
-					field : 'month7', 
+					field : 'month7',
 					title : '七月',
 					sortable: true
 				},
 				{
-					field : 'month8', 
+					field : 'month8',
 					title : '八月',
 					sortable: true
 				},
 				{
-					field : 'month9', 
+					field : 'month9',
 					title : '九月',
 					sortable: true
 				},
 				{
-					field : 'month10', 
+					field : 'month10',
 					title : '十月',
 					sortable: true
 				},
 				{
-					field : 'month11', 
+					field : 'month11',
 					title : '十一月',
 					sortable: true
 				},
 				{
-					field : 'month12', 
+					field : 'month12',
 					title : '十二月',
 					sortable: true
 				},
 				{
-					field : 'sum', 
+					field : 'sum',
 					title : '合计',
 					sortable: true
 				}]

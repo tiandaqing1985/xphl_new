@@ -45,9 +45,10 @@ public class XzPurchaseApprovalController extends BaseController
 	}
 	
 	@GetMapping("/approvalModer")
-	public String approvalModer(Long id,Model m)
+	public String approvalModer(Long id,Model m,Long processId)
 	{
 		m.addAttribute("id", id);
+		m.addAttribute("processId", processId);
 	    return prefix + "/approvalModer";
 	}
 	
@@ -68,18 +69,9 @@ public class XzPurchaseApprovalController extends BaseController
 	 */
 	@PostMapping("/agree")
 	@ResponseBody
-	public AjaxResult agree(Long applyId,String remark)
+	public AjaxResult agree(Long applyId,String remark,String processId)
 	{	
-		XzPurchaseApproval xz = new XzPurchaseApproval();
-		xz.setApplyId(applyId);
-		xz.setApprovalState("1");//1同意 2驳回 3未操作
-		xz.setApprovalId(ShiroUtils.getUserId());//审批人id
-		xz.setRemarks(remark);
-		xz.setApprovalDate(new Date());
-		xz.setCreateBy(ShiroUtils.getUserId().toString());
-		xz.setCreateTime(new Date());
-		//新增一条审批记录
-		xzPurchaseApprovalService.insertXzPurchaseApproval(xz);
+		xzPurchaseApprovalService.agreeApply(applyId,remark,processId);
 		return toAjax(1);
 	}
 	
@@ -89,18 +81,9 @@ public class XzPurchaseApprovalController extends BaseController
 	 */
 	@PostMapping("/reject")
 	@ResponseBody
-	public AjaxResult reject(Long applyId, String remark)
+	public AjaxResult reject(Long applyId, String remark,String processId)
 	{	
-		XzPurchaseApproval xz = new XzPurchaseApproval();
-		xz.setApplyId(applyId);
-		xz.setApprovalState("2");//1同意 2驳回 3未操作
-		xz.setApprovalId(ShiroUtils.getUserId());//审批人id
-		xz.setRemarks(remark);
-		xz.setApprovalDate(new Date());
-		xz.setCreateBy(ShiroUtils.getUserId().toString());
-		xz.setCreateTime(new Date());
-		//新增一条审批记录
-		xzPurchaseApprovalService.insertXzPurchaseApproval(xz);
+		xzPurchaseApprovalService.rejectApply(applyId,remark,processId);
 		return toAjax(1);
 	}
 	

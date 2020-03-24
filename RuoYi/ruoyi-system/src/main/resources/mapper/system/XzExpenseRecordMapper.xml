@@ -3,7 +3,7 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.system.mapper.XzExpenseRecordMapper">
-    
+
     <resultMap type="XzExpenseRecord" id="XzExpenseRecordResult">
         <result property="id"    column="id"    />
         <result property="expenseName"    column="expense_name"    />
@@ -33,11 +33,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
-	
+
 	<sql id="selectXzExpenseRecordVo">
         select id, expense_name, expense_type_parent, expense_type, region, dev_desc, purchase_channel, unit_price, count, mark_date, use_date, mark_user, apply_user, comment, submit_type, place, end_date, start_date, active_name, sum_price, resource_id, create_by, create_time, update_by, update_time from xz_expense_record
     </sql>
-	
+
     <select id="selectXzExpenseRecordList" parameterType="XzExpenseRecord" resultMap="XzExpenseRecordResult">
         select  er.id,
 				er.expense_name,
@@ -70,17 +70,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				left join sys_user u on u.user_id= er.apply_user
 				left join xz_resource_type rt on rt.id=er.expense_type
 				left join xz_resource_type xrt on xrt.id=er.expense_type_parent
-        <where>  
+        <where>
              <if test="expenseType != null "> and rt.id = #{expenseType}</if>
              <if test="expenseTypeParent != null "> and xrt.id = #{expenseTypeParent}</if>
              <if test="expenseName != null  and expenseName != '' "> and er.expense_name like concat('%' ,#{expenseName} ,'%') </if>
              <if test="region != null and region != '' "> and er.region = #{region}</if>
              <if test="applyUserName != null and applyUserName != ''"> and u.user_name like concat('%' ,#{applyUserName} ,'%') </if>
-             <if test="useDate != null "> and er.useDate = #{useDate}</if>
+             <if test="useDate != null "> and er.use_date = #{useDate}</if>
+             <if test="month != null and month != ''"> and month (er.use_date) = #{month}</if>
+			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND date_format(er.use_date,'%y%m%d') &gt;=
+				date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				AND date_format(er.use_date,'%y%m%d') &lt;=
+				date_format(#{params.endTime},'%y%m%d')
+			</if>
          </where>
          ORDER BY er.use_date DESC
     </select>
-    
+
     <select id="selectXzExpenseRecordById" parameterType="Long" resultMap="XzExpenseRecordResult">
         select  er.id,
 				er.expense_name,
@@ -115,7 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				left join xz_resource_type xrt on xrt.id=er.expense_type_parent
         where er.id = #{id}
     </select>
-        
+
     <insert id="insertXzExpenseRecord" parameterType="XzExpenseRecord" useGeneratedKeys="true" keyProperty="id">
         insert into xz_expense_record
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -171,7 +180,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="updateTime != null  ">#{updateTime},</if>
          </trim>
     </insert>
-	 
+
     <update id="updateXzExpenseRecord" parameterType="XzExpenseRecord">
         update xz_expense_record
         <trim prefix="SET" suffixOverrides=",">
@@ -206,14 +215,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteXzExpenseRecordById" parameterType="Long">
         delete from xz_expense_record where id = #{id}
     </delete>
-	
+
     <delete id="deleteXzExpenseRecordByIds" parameterType="String">
-        delete from xz_expense_record where id in 
+        delete from xz_expense_record where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
     <resultMap type="XzExpenseSta" id="XzExpenseStaResult">
         <result property="expenseTypeParent"    column="expense_type_parent"    />
         <result property="expenseTypeParentName"    column="expense_type_parent_name"    />
@@ -234,7 +243,108 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="month11" column="month11"/>
         <result property="month12" column="month12"/>
     </resultMap>
-    
+
+	<select id="selectCompareXzExpenseList" parameterType="Map" resultMap="XzExpenseStaResult">
+		select
+		t1.expense_type_parent, t1.expense_type_parent_name, t1.expense_type, t1.expense_type_name,
+		t1.year, ifnull(t1.month1,0)-ifnull(t2.month1,0) month1, ifnull(t1.month2,0)-ifnull(t2.month2,0) month2, ifnull(t1.month3,0)-ifnull(t2.month3,0) month3, ifnull(t1.month4,0)-ifnull(t2.month4,0) month4, ifnull(t1.month5,0)-ifnull(t2.month5,0) month5, ifnull(t1.month6,0)-ifnull(t2.month6,0) month6, ifnull(t1.month7,0)-ifnull(t2.month7,0) month7, ifnull(t1.month8,0)-ifnull(t2.month8,0) month8, ifnull(t1.month9,0)-ifnull(t2.month9,0) month9,
+		ifnull(t1.month10,0)-ifnull(t2.month10,0) month10, ifnull(t1.month11,0)-ifnull(t2.month11,0) month11, ifnull(t1.month12,0)-ifnull(t2.month12,0) month12, ifnull(t1.sum,0)-ifnull(t2.sum,0) sum
+		from (
+
+		select  a.region,a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
+		a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
+		a.month10, a.month11, a.month12, (a.month1+a.month2+a.month3+a.month4+a.month5+a.month6+a.month7+
+		a.month8+a.month9+a.month10+a.month11+a.month12) sum
+		from (SELECT er.expense_type_parent,rt.name expense_type_parent_name,
+		er.expense_type,xrt.name expense_type_name,YEAR(use_date) as year,
+		sum(CASE WHEN MONTH(er.use_date) =1 THEN   er.sum_price ELSE 0 END) month1,
+		sum(CASE WHEN MONTH(er.use_date) =2 THEN   er.sum_price ELSE 0 END) month2,
+		sum(CASE WHEN MONTH(er.use_date) =3 THEN   er.sum_price ELSE 0 END) month3,
+		sum(CASE WHEN MONTH(er.use_date) =4 THEN   er.sum_price ELSE 0 END) month4,
+		sum(CASE WHEN MONTH(er.use_date) =5 THEN   er.sum_price ELSE 0 END) month5,
+		sum(CASE WHEN MONTH(er.use_date) =6 THEN   er.sum_price ELSE 0 END) month6,
+		sum(CASE WHEN MONTH(er.use_date) =7 THEN   er.sum_price ELSE 0 END) month7,
+		sum(CASE WHEN MONTH(er.use_date) =8 THEN   er.sum_price ELSE 0 END) month8,
+		sum(CASE WHEN MONTH(er.use_date) =9 THEN   er.sum_price ELSE 0 END) month9,
+		sum(CASE WHEN MONTH(er.use_date) =10 THEN  er.sum_price ELSE 0 END) month10,
+		sum(CASE WHEN MONTH(er.use_date) =11 THEN  er.sum_price ELSE 0 END) month11,
+		sum(CASE WHEN MONTH(er.use_date) =12 THEN  er.sum_price  ELSE 0 END) month12,
+		er.region,er.use_date
+		FROM xz_expense_record er
+		LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent
+		LEFT JOIN xz_resource_type xrt on xrt.id=er.expense_type
+		LEFT JOIN sys_user b on er.apply_user = b.user_id
+		where er.submit_type='2'
+		<if test="xzExpenseSta.params.beginTime != null and xzExpenseSta.params.beginTime != ''"><!-- 开始时间检索 -->
+			AND date_format(er.use_date,'%y%m%d') &gt;=
+			date_format(#{xzExpenseSta.params.beginTime},'%y%m%d')
+		</if>
+		<if test="xzExpenseSta.params.endTime != null and xzExpenseSta.params.endTime != ''"><!-- 结束时间检索 -->
+			AND date_format(er.use_date,'%y%m%d') &lt;=
+			date_format(#{xzExpenseSta.params.endTime},'%y%m%d')
+		</if>
+		<if test="xzExpenseSta.dept!=null and xzExpenseSta.dept!=''">and b.dept_id=#{xzExpenseSta.dept}</if>
+		<if test="xzExpenseSta.depts != null and xzExpenseSta.depts.length != 0">and b.dept_id in
+			<foreach collection="xzExpenseSta.depts" open="(" separator="," close=")" item="item">
+				#{item}
+			</foreach>
+		</if>
+		<if test="xzExpenseSta.region ==null or xzExpenseSta.region ==''">GROUP BY  er.expense_type_parent)a</if>
+		<if test="xzExpenseSta.region !=null and xzExpenseSta.region !=''">GROUP BY er.region, er.expense_type_parent)a</if>
+
+		<where>
+			<!--        	 <if test="year != null and year != '' "> and a.year = #{year}</if> -->
+			<if test="xzExpenseSta.region != null and xzExpenseSta.region != '' "> and a.region = #{xzExpenseSta.region}</if>
+		</where>
+		) t1 left join
+		(
+		select  a.region,a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
+		a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
+		a.month10, a.month11, a.month12, (a.month1+a.month2+a.month3+a.month4+a.month5+a.month6+a.month7+
+		a.month8+a.month9+a.month10+a.month11+a.month12) sum
+		from (SELECT er.expense_type_parent,rt.name expense_type_parent_name,
+		er.expense_type,xrt.name expense_type_name,YEAR(use_date) as year,
+		sum(CASE WHEN MONTH(er.use_date) =1 THEN   er.sum_price ELSE 0 END) month1,
+		sum(CASE WHEN MONTH(er.use_date) =2 THEN   er.sum_price ELSE 0 END) month2,
+		sum(CASE WHEN MONTH(er.use_date) =3 THEN   er.sum_price ELSE 0 END) month3,
+		sum(CASE WHEN MONTH(er.use_date) =4 THEN   er.sum_price ELSE 0 END) month4,
+		sum(CASE WHEN MONTH(er.use_date) =5 THEN   er.sum_price ELSE 0 END) month5,
+		sum(CASE WHEN MONTH(er.use_date) =6 THEN   er.sum_price ELSE 0 END) month6,
+		sum(CASE WHEN MONTH(er.use_date) =7 THEN   er.sum_price ELSE 0 END) month7,
+		sum(CASE WHEN MONTH(er.use_date) =8 THEN   er.sum_price ELSE 0 END) month8,
+		sum(CASE WHEN MONTH(er.use_date) =9 THEN   er.sum_price ELSE 0 END) month9,
+		sum(CASE WHEN MONTH(er.use_date) =10 THEN  er.sum_price ELSE 0 END) month10,
+		sum(CASE WHEN MONTH(er.use_date) =11 THEN  er.sum_price ELSE 0 END) month11,
+		sum(CASE WHEN MONTH(er.use_date) =12 THEN  er.sum_price  ELSE 0 END) month12,
+		er.region,er.use_date
+		FROM xz_expense_record er
+		LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent
+		LEFT JOIN xz_resource_type xrt on xrt.id=er.expense_type
+		LEFT JOIN sys_user b on er.apply_user = b.user_id
+		where er.submit_type='2'
+		<if test="compareData.paramsCompare.beginTime != null and compareData.paramsCompare.beginTime != ''"><!-- 开始时间检索 -->
+			AND date_format(er.use_date,'%y%m%d') &gt;=
+			date_format(#{compareData.paramsCompare.beginTime},'%y%m%d')
+		</if>
+		<if test="compareData.paramsCompare.endTime != null and compareData.paramsCompare.endTime != ''"><!-- 结束时间检索 -->
+			AND date_format(er.use_date,'%y%m%d') &lt;=
+			date_format(#{compareData.paramsCompare.endTime},'%y%m%d')
+		</if>
+		<if test="compareData.deptsCompare != null and compareData.deptsCompare.length != 0">and b.dept_id in
+			<foreach collection="compareData.deptsCompare" open="(" separator="," close=")" item="item">
+				#{item}
+			</foreach>
+		</if>
+		<if test="compareData.regionCompare ==null or compareData.regionCompare ==''">GROUP BY  er.expense_type_parent)a</if>
+		<if test="compareData.regionCompare !=null and compareData.regionCompare !=''">GROUP BY er.region, er.expense_type_parent)a</if>
+
+		<where>
+			<!--        	 <if test="year != null and year != '' "> and a.year = #{year}</if> -->
+			<if test="compareData.regionCompare != null and compareData.regionCompare != '' "> and a.region = #{compareData.regionCompare}</if>
+		</where>
+		)t2 on t1.expense_type_parent = t2.expense_type_parent and t1.expense_type = t2.expense_type
+	</select>
+
 	<select id="selectXzExpenseList" parameterType="XzExpenseSta" resultMap="XzExpenseStaResult">
 		select  a.region,a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
 			a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
@@ -242,43 +352,142 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			a.month8+a.month9+a.month10+a.month11+a.month12) sum
 		  from (SELECT er.expense_type_parent,rt.name expense_type_parent_name,
 				 er.expense_type,xrt.name expense_type_name,YEAR(use_date) as year,
-				sum(CASE WHEN MONTH(er.use_date) =1 THEN   er.unit_price * er.count ELSE 0 END) month1,
-				sum(CASE WHEN MONTH(er.use_date) =2 THEN   er.unit_price * er.count ELSE 0 END) month2,
-				sum(CASE WHEN MONTH(er.use_date) =3 THEN   er.unit_price * er.count ELSE 0 END) month3,
-				sum(CASE WHEN MONTH(er.use_date) =4 THEN   er.unit_price * er.count ELSE 0 END) month4,
-				sum(CASE WHEN MONTH(er.use_date) =5 THEN   er.unit_price * er.count ELSE 0 END) month5,
-				sum(CASE WHEN MONTH(er.use_date) =6 THEN   er.unit_price * er.count ELSE 0 END) month6,
-				sum(CASE WHEN MONTH(er.use_date) =7 THEN   er.unit_price * er.count ELSE 0 END) month7,
-				sum(CASE WHEN MONTH(er.use_date) =8 THEN   er.unit_price * er.count ELSE 0 END) month8,
-				sum(CASE WHEN MONTH(er.use_date) =9 THEN   er.unit_price * er.count ELSE 0 END) month9,
-				sum(CASE WHEN MONTH(er.use_date) =10 THEN  er.unit_price * er.count ELSE 0 END) month10,
-				sum(CASE WHEN MONTH(er.use_date) =11 THEN  er.unit_price * er.count ELSE 0 END) month11,
-				sum(CASE WHEN MONTH(er.use_date) =12 THEN  er.unit_price * er.count  ELSE 0 END) month12,
+				sum(CASE WHEN MONTH(er.use_date) =1 THEN   er.sum_price ELSE 0 END) month1,
+				sum(CASE WHEN MONTH(er.use_date) =2 THEN   er.sum_price ELSE 0 END) month2,
+				sum(CASE WHEN MONTH(er.use_date) =3 THEN   er.sum_price ELSE 0 END) month3,
+				sum(CASE WHEN MONTH(er.use_date) =4 THEN   er.sum_price ELSE 0 END) month4,
+				sum(CASE WHEN MONTH(er.use_date) =5 THEN   er.sum_price ELSE 0 END) month5,
+				sum(CASE WHEN MONTH(er.use_date) =6 THEN   er.sum_price ELSE 0 END) month6,
+				sum(CASE WHEN MONTH(er.use_date) =7 THEN   er.sum_price ELSE 0 END) month7,
+				sum(CASE WHEN MONTH(er.use_date) =8 THEN   er.sum_price ELSE 0 END) month8,
+				sum(CASE WHEN MONTH(er.use_date) =9 THEN   er.sum_price ELSE 0 END) month9,
+				sum(CASE WHEN MONTH(er.use_date) =10 THEN  er.sum_price ELSE 0 END) month10,
+				sum(CASE WHEN MONTH(er.use_date) =11 THEN  er.sum_price ELSE 0 END) month11,
+				sum(CASE WHEN MONTH(er.use_date) =12 THEN  er.sum_price  ELSE 0 END) month12,
 				er.region,er.use_date
 			FROM xz_expense_record er
 			LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent
 			LEFT JOIN xz_resource_type xrt on xrt.id=er.expense_type
+			LEFT JOIN sys_user b on er.apply_user = b.user_id
 			where er.submit_type='2'
-			<if test="region ==null or region ==''">GROUP BY  er.expense_type_parent)a</if>
-			<if test="region !=null and region !=''">GROUP BY er.region, er.expense_type_parent)a</if>
-			
-			
-		
-        <where>
-        	 <if test="year != null and year != '' "> and a.year = #{year}</if> 
-        	 <if test="region != null and region != '' "> and a.region = #{region}</if>
-             <if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
-				AND date_format(a.use_date,'%y%m%d') &gt;=
+			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND date_format(er.use_date,'%y%m%d') &gt;=
 				date_format(#{params.beginTime},'%y%m%d')
 			</if>
 			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
-				AND date_format(a.use_date,'%y%m%d') &lt;=
+				AND date_format(er.use_date,'%y%m%d') &lt;=
 				date_format(#{params.endTime},'%y%m%d')
 			</if>
+			<if test="dept!=null and dept!=''">and b.dept_id=#{dept}</if>
+			<if test="depts != null and depts.length != 0">and b.dept_id in
+				<foreach collection="depts" open="(" separator="," close=")" item="item">
+					#{item}
+				</foreach>
+			</if>
+			<if test="region ==null or region ==''">GROUP BY  er.expense_type_parent)a</if>
+			<if test="region !=null and region !=''">GROUP BY er.region, er.expense_type_parent)a</if>
+
+        <where>
+<!--        	 <if test="year != null and year != '' "> and a.year = #{year}</if> -->
+        	 <if test="region != null and region != '' "> and a.region = #{region}</if>
         </where>
-        
+
     </select>
-    
+
+    <select id="selectCompareXzExpenseDetailList" parameterType="Map" resultMap="XzExpenseStaResult">
+		select
+		t1.expense_type_parent, t1.expense_type_parent_name, t1.expense_type, t1.expense_type_name,
+		t1.year, ifnull(t1.month1,0)-ifnull(t2.month1,0) month1, ifnull(t1.month2,0)-ifnull(t2.month2,0) month2, ifnull(t1.month3,0)-ifnull(t2.month3,0) month3, ifnull(t1.month4,0)-ifnull(t2.month4,0) month4, ifnull(t1.month5,0)-ifnull(t2.month5,0) month5, ifnull(t1.month6,0)-ifnull(t2.month6,0) month6, ifnull(t1.month7,0)-ifnull(t2.month7,0) month7, ifnull(t1.month8,0)-ifnull(t2.month8,0) month8, ifnull(t1.month9,0)-ifnull(t2.month9,0) month9,
+		ifnull(t1.month10,0)-ifnull(t2.month10,0) month10, ifnull(t1.month11,0)-ifnull(t2.month11,0) month11, ifnull(t1.month12,0)-ifnull(t2.month12,0) month12, ifnull(t1.sum,0)-ifnull(t2.sum,0) sum
+		 from (
+
+		select a.region,a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
+			a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
+			a.month10, a.month11, a.month12, (a.month1+a.month2+a.month3+a.month4+a.month5+a.month6+a.month7+
+			a.month8+a.month9+a.month10+a.month11+a.month12) sum
+		  from (SELECT er.expense_type_parent,rt.name expense_type_parent_name,
+				 er.expense_type,xrt.name expense_type_name,YEAR(use_date) as year,
+				sum(CASE WHEN MONTH(er.use_date) =1 THEN   er.sum_price ELSE 0 END) month1,
+				sum(CASE WHEN MONTH(er.use_date) =2 THEN   er.sum_price ELSE 0 END) month2,
+				sum(CASE WHEN MONTH(er.use_date) =3 THEN   er.sum_price ELSE 0 END) month3,
+				sum(CASE WHEN MONTH(er.use_date) =4 THEN   er.sum_price ELSE 0 END) month4,
+				sum(CASE WHEN MONTH(er.use_date) =5 THEN   er.sum_price ELSE 0 END) month5,
+				sum(CASE WHEN MONTH(er.use_date) =6 THEN   er.sum_price ELSE 0 END) month6,
+				sum(CASE WHEN MONTH(er.use_date) =7 THEN   er.sum_price ELSE 0 END) month7,
+				sum(CASE WHEN MONTH(er.use_date) =8 THEN   er.sum_price ELSE 0 END) month8,
+				sum(CASE WHEN MONTH(er.use_date) =9 THEN   er.sum_price ELSE 0 END) month9,
+				sum(CASE WHEN MONTH(er.use_date) =10 THEN  er.sum_price ELSE 0 END) month10,
+				sum(CASE WHEN MONTH(er.use_date) =11 THEN  er.sum_price ELSE 0 END) month11,
+				sum(CASE WHEN MONTH(er.use_date) =12 THEN  er.sum_price  ELSE 0 END) month12,
+				er.region,er.use_date
+			FROM xz_expense_record er
+			LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent
+			LEFT JOIN xz_resource_type xrt on xrt.id=er.expense_type
+			LEFT JOIN sys_user b on er.apply_user = b.user_id
+			where er.submit_type='2'
+			<if test="xzExpenseSta.params.beginTime != null and xzExpenseSta.params.beginTime != ''"><!-- 开始时间检索 -->
+				AND date_format(er.use_date,'%y%m%d') &gt;=
+				date_format(#{xzExpenseSta.params.beginTime},'%y%m%d')
+			</if>
+			<if test="xzExpenseSta.params.endTime != null and xzExpenseSta.params.endTime != ''"><!-- 结束时间检索 -->
+				AND date_format(er.use_date,'%y%m%d') &lt;=
+				date_format(#{xzExpenseSta.params.endTime},'%y%m%d')
+			</if>
+			<if test="xzExpenseSta.depts != null and xzExpenseSta.depts.length != 0">and b.dept_id in
+				<foreach collection="xzExpenseSta.depts" open="(" separator="," close=")" item="item">
+					#{item}
+				</foreach>
+			</if>
+			<if test="xzExpenseSta.region ==null or xzExpenseSta.region ==''">GROUP BY er.expense_type_parent,er.expense_type)a</if>
+			<if test="xzExpenseSta.region !=null and xzExpenseSta.region !=''">GROUP BY  er.region,er.expense_type_parent, er.expense_type)a</if>
+			where a.expense_type_parent=#{xzExpenseSta.expenseTypeParent}
+			<if test="xzExpenseSta.region !=null and xzExpenseSta.region !=''">and a.region = #{xzExpenseSta.region}</if>
+
+		)t1 left join (
+		select a.region,a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
+		a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
+		a.month10, a.month11, a.month12, (a.month1+a.month2+a.month3+a.month4+a.month5+a.month6+a.month7+
+		a.month8+a.month9+a.month10+a.month11+a.month12) sum
+		from (SELECT er.expense_type_parent,rt.name expense_type_parent_name,
+		er.expense_type,xrt.name expense_type_name,YEAR(use_date) as year,
+		sum(CASE WHEN MONTH(er.use_date) =1 THEN   er.sum_price ELSE 0 END) month1,
+		sum(CASE WHEN MONTH(er.use_date) =2 THEN   er.sum_price ELSE 0 END) month2,
+		sum(CASE WHEN MONTH(er.use_date) =3 THEN   er.sum_price ELSE 0 END) month3,
+		sum(CASE WHEN MONTH(er.use_date) =4 THEN   er.sum_price ELSE 0 END) month4,
+		sum(CASE WHEN MONTH(er.use_date) =5 THEN   er.sum_price ELSE 0 END) month5,
+		sum(CASE WHEN MONTH(er.use_date) =6 THEN   er.sum_price ELSE 0 END) month6,
+		sum(CASE WHEN MONTH(er.use_date) =7 THEN   er.sum_price ELSE 0 END) month7,
+		sum(CASE WHEN MONTH(er.use_date) =8 THEN   er.sum_price ELSE 0 END) month8,
+		sum(CASE WHEN MONTH(er.use_date) =9 THEN   er.sum_price ELSE 0 END) month9,
+		sum(CASE WHEN MONTH(er.use_date) =10 THEN  er.sum_price ELSE 0 END) month10,
+		sum(CASE WHEN MONTH(er.use_date) =11 THEN  er.sum_price ELSE 0 END) month11,
+		sum(CASE WHEN MONTH(er.use_date) =12 THEN  er.sum_price  ELSE 0 END) month12,
+		er.region,er.use_date
+		FROM xz_expense_record er
+		LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent
+		LEFT JOIN xz_resource_type xrt on xrt.id=er.expense_type
+		LEFT JOIN sys_user b on er.apply_user = b.user_id
+		where er.submit_type='2'
+		<if test="compareData.params.beginTime != null and compareData.params.beginTime != ''"><!-- 开始时间检索 -->
+			AND date_format(er.use_date,'%y%m%d') &gt;=
+			date_format(#{compareData.params.beginTime},'%y%m%d')
+		</if>
+		<if test="compareData.params.endTime != null and compareData.params.endTime != ''"><!-- 结束时间检索 -->
+			AND date_format(er.use_date,'%y%m%d') &lt;=
+			date_format(#{compareData.params.endTime},'%y%m%d')
+		</if>
+		<if test="compareData.depts != null and compareData.depts.length != 0">and b.dept_id in
+			<foreach collection="compareData.depts" open="(" separator="," close=")" item="item">
+				#{item}
+			</foreach>
+		</if>
+		<if test="compareData.region ==null or compareData.region ==''">GROUP BY er.expense_type_parent,er.expense_type)a</if>
+		<if test="compareData.region !=null and compareData.region !=''">GROUP BY  er.region,er.expense_type_parent, er.expense_type)a</if>
+		where a.expense_type_parent=#{compareData.expenseTypeParent}
+		<if test="compareData.region !=null and compareData.region !=''">and a.region = #{compareData.region}</if>
+		) t2 on  t1.expense_type = t2.expense_type
+    </select>
+
     <select id="selectXzExpenseDetailList" parameterType="XzExpenseSta" resultMap="XzExpenseStaResult">
 		select a.region,a.expense_type_parent, a.expense_type_parent_name, a.expense_type, a.expense_type_name,
 			a.year, a.month1, a.month2, a.month3, a.month4, a.month5, a.month6, a.month7, a.month8, a.month9,
@@ -286,27 +495,36 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			a.month8+a.month9+a.month10+a.month11+a.month12) sum
 		  from (SELECT er.expense_type_parent,rt.name expense_type_parent_name,
 				 er.expense_type,xrt.name expense_type_name,YEAR(use_date) as year,
-				sum(CASE WHEN MONTH(er.use_date) =1 THEN   er.unit_price * er.count ELSE 0 END) month1,
-				sum(CASE WHEN MONTH(er.use_date) =2 THEN   er.unit_price * er.count ELSE 0 END) month2,
-				sum(CASE WHEN MONTH(er.use_date) =3 THEN   er.unit_price * er.count ELSE 0 END) month3,
-				sum(CASE WHEN MONTH(er.use_date) =4 THEN   er.unit_price * er.count ELSE 0 END) month4,
-				sum(CASE WHEN MONTH(er.use_date) =5 THEN   er.unit_price * er.count ELSE 0 END) month5,
-				sum(CASE WHEN MONTH(er.use_date) =6 THEN   er.unit_price * er.count ELSE 0 END) month6,
-				sum(CASE WHEN MONTH(er.use_date) =7 THEN   er.unit_price * er.count ELSE 0 END) month7,
-				sum(CASE WHEN MONTH(er.use_date) =8 THEN   er.unit_price * er.count ELSE 0 END) month8,
-				sum(CASE WHEN MONTH(er.use_date) =9 THEN   er.unit_price * er.count ELSE 0 END) month9,
-				sum(CASE WHEN MONTH(er.use_date) =10 THEN  er.unit_price * er.count ELSE 0 END) month10,
-				sum(CASE WHEN MONTH(er.use_date) =11 THEN  er.unit_price * er.count ELSE 0 END) month11,
-				sum(CASE WHEN MONTH(er.use_date) =12 THEN  er.unit_price * er.count  ELSE 0 END) month12,
+				sum(CASE WHEN MONTH(er.use_date) =1 THEN   er.sum_price ELSE 0 END) month1,
+				sum(CASE WHEN MONTH(er.use_date) =2 THEN   er.sum_price ELSE 0 END) month2,
+				sum(CASE WHEN MONTH(er.use_date) =3 THEN   er.sum_price ELSE 0 END) month3,
+				sum(CASE WHEN MONTH(er.use_date) =4 THEN   er.sum_price ELSE 0 END) month4,
+				sum(CASE WHEN MONTH(er.use_date) =5 THEN   er.sum_price ELSE 0 END) month5,
+				sum(CASE WHEN MONTH(er.use_date) =6 THEN   er.sum_price ELSE 0 END) month6,
+				sum(CASE WHEN MONTH(er.use_date) =7 THEN   er.sum_price ELSE 0 END) month7,
+				sum(CASE WHEN MONTH(er.use_date) =8 THEN   er.sum_price ELSE 0 END) month8,
+				sum(CASE WHEN MONTH(er.use_date) =9 THEN   er.sum_price ELSE 0 END) month9,
+				sum(CASE WHEN MONTH(er.use_date) =10 THEN  er.sum_price ELSE 0 END) month10,
+				sum(CASE WHEN MONTH(er.use_date) =11 THEN  er.sum_price ELSE 0 END) month11,
+				sum(CASE WHEN MONTH(er.use_date) =12 THEN  er.sum_price  ELSE 0 END) month12,
 				er.region,er.use_date
 			FROM xz_expense_record er
 			LEFT JOIN xz_resource_type rt on rt.id=er.expense_type_parent
 			LEFT JOIN xz_resource_type xrt on xrt.id=er.expense_type
+			LEFT JOIN sys_user b on er.apply_user = b.user_id
 			where er.submit_type='2'
-			<if test="region ==null or region ==''">GROUP BY  er.expense_type)a</if>
-			<if test="region !=null and region !=''">GROUP BY er.region, er.expense_type)a</if>
-			where a.expense_type_parent=#{expenseTypeParent} 
+			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
+				AND date_format(er.use_date,'%y%m%d') &gt;=
+				date_format(#{params.beginTime},'%y%m%d')
+			</if>
+			<if test="params.endTime != null and params.endTime != ''"><!-- 结束时间检索 -->
+				AND date_format(er.use_date,'%y%m%d') &lt;=
+				date_format(#{params.endTime},'%y%m%d')
+			</if>
+			<if test="region ==null or region ==''">GROUP BY er.expense_type_parent,er.expense_type)a</if>
+			<if test="region !=null and region !=''">GROUP BY  er.region,er.expense_type_parent, er.expense_type)a</if>
+			where a.expense_type_parent=#{expenseTypeParent}
 			<if test="region !=null and region !=''">and a.region = #{region}</if>
     </select>
-    
+
 </mapper>

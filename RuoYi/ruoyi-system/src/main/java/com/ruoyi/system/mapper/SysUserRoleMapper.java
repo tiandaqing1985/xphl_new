@@ -22,6 +22,13 @@ public interface SysUserRoleMapper
     public int deleteUserRoleByUserId(Long userId);
 
     /**
+     * 根据登录人角色
+     * @param userId
+     * @return
+     */
+    List<String> queryRoleName(@Param("userId") Long userId);
+
+    /**
      * 批量删除用户和角色关联
      * 
      * @param ids 需要删除的数据ID

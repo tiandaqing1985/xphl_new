@@ -6,6 +6,7 @@ import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.security.Md5Utils;
+import com.ruoyi.common.utils.security.PermissionUtils;
 import com.ruoyi.system.domain.*;
 import com.ruoyi.system.mapper.*;
 import com.ruoyi.system.service.ISysConfigService;
@@ -61,6 +62,11 @@ public class SysUserServiceImpl implements ISysUserService {
     @DataScope(tableAlias = "u")
     public List<SysUser> selectUserList(SysUser user) {
         return userMapper.selectUserList(user);
+    }
+
+    @Override
+    public List<SysUser> selectUserList() {
+        return userMapper.selectUserList(new SysUser());
     }
 
     /**
@@ -635,5 +641,20 @@ public class SysUserServiceImpl implements ISysUserService {
         return sysDeptService.selectDeptById(user.getDeptId()).getDeptName();
     }
 
+    /**
+     * 根据角色id查询当前用户是否有这个角色
+     * @param roleId
+     * @return
+     */
+    @Override
+    public boolean selectIsRoleByRoleId(Long roleId) {
 
+        Long userId = (Long) PermissionUtils.getPrincipalProperty("userId");
+        SysUser sysUser = userMapper.selectIsRoleByRoleId(roleId,userId);
+        if(sysUser!=null){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

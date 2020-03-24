@@ -18,7 +18,9 @@ public interface XzAssetHandRecordMapper
      * @return 资产分配记录信息
      */
 	public XzAssetHandRecord selectXzAssetHandRecordById(Long id);
-	
+
+	public XzAssetHandRecord selectXzAssetHandRecordByAssetsCode(String id);
+
 	/**
      * 查询资产分配记录列表
      * 

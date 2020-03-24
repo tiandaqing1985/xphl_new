@@ -20,10 +20,10 @@
 				<div class="col-sm-offset-5 col-sm-10">
 					<button type="button" class="btn btn-sm btn-danger"
 						onclick="closeItem()">
-						<i class="fa fa-reply-all"></i>取消
+						<i class="fa fa-reply-all"></i>返回
 					</button>
 					&nbsp;&nbsp;
-					<button type="button" class="btn btn-sm btn-success"
+					<button type="button" class="btn btn-sm btn-success" th:style="${flg=='true'}?'display: none':''"
 						onclick="submitHandlerSub()">
 						<i class="fa fa-check"></i>提交
 					</button>

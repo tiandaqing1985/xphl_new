@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org"
+	xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+<th:block th:include="include :: header('所有类型资产统计列表')" />
+<script type="text/javascript">
+function toStaHand(assetTypeId,assetType2Id,shengyuCount){
+	$.modal.open("办公用品分配", "/system/xzAssetHandRecord/toStaHand?assetTypeId="+assetTypeId+"&assetType2Id="+assetType2Id+"&shengyuCount="+shengyuCount);
+}
+
+</script>
+</head>
+<body class="gray-bg">
+	<div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+
+							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域： <select name="region"
+								th:with="type=${@dict.getType('xz_assets_region')}">
+									<option value="">所有</option>
+									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+										th:value="${dict.dictValue}"></option>
+							</select>
+							</li>
+
+
+							<li><a class="btn btn-primary btn-rounded btn-sm"
+								onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm"
+								onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+	<div th:include="include :: footer"></div>
+	<script th:inline="javascript">
+        var region = [[${@dict.getType('xz_assets_region')}]];
+        var brand = [[${@dict.getType('xz_assets_brand')}]];
+        var unit = [[${@dict.getType('xz_assets_unit')}]];
+        
+        var prefix = ctx + "system/xzAsstes";
+        $(function() {
+            var options = {
+                url: prefix + "/xzStatisticsList",
+                toStaHandUrl: "/system/xzAssetHandRecord/toStaHand/{id}",
+                modalName: "办公用品分配记录",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'id', 
+					title : '主键',
+					visible: false
+				},
+				{
+					field : 'region', 
+					title : '地域',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(region, value);
+					}
+				},
+				{
+					field : 'assetType2IdName', 
+					title : '资产',
+					sortable: true
+				},
+				{
+					field : 'assetTypeIdName', 
+					title : '资产类型',
+					sortable: true
+				},
+				{
+					field : 'unit', 
+					title : '单位',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(unit, value);
+					}
+				},
+				{
+					field : 'brand', 
+					title : '品牌',
+					formatter: function(value, row, index) {
+					    return $.table.selectDictLabel(brand, value);
+					}
+				},
+				{
+					field : 'assetsModel', 
+					title : '资产型号',
+					sortable: true
+				},
+				
+				{
+					field : 'chushiCount', 
+					title : '当月初始',
+					sortable: true
+				},
+				{
+					field : 'fenpeiCount', 
+					title : '当月分配',
+					sortable: true
+				},
+				{
+					field : 'rukuCount', 
+					title : '当月入库',
+					sortable: true
+				},
+				{
+					field : 'guihuanCount', 
+					title : '当月归还',
+					sortable: true
+				},
+				{
+					field : 'shengyuCount', 
+					title : '当月剩余',
+					sortable: true
+				}
+				// ,
+		        // {
+		        //     title: '操作',
+		        //     align: 'center',
+		        //     formatter: function(value, row, index) {
+		        //     	var actions = [];
+                //         return actions.join('');
+		        //     }
+		        // }
+				]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

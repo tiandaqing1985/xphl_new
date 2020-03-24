@@ -80,4 +80,6 @@ public interface IXzAssetHandRecordService {
 	 */
 	public String cancelHandRecord(XzAssetHandRecord xzAssetHandRecord);
 
+	public XzAssetHandRecord selectXzAssetHandRecordByAssetsCode(String id);
+
 }

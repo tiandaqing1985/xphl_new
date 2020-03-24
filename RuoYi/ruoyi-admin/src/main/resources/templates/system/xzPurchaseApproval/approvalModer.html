@@ -26,7 +26,8 @@
 	</div>
 </body>
 <th:block th:include="include :: footer" />
-<script type="text/javascript">
+<script th:inline="javascript">
+	var processId = [[${processId}]];
 	function submitHandler() {
 		var shenpi = $("input[name='shenpi']:checked").val();
 		var prefix = ctx + "system/xzPurchaseApproval";
@@ -35,7 +36,6 @@
 			shenpiUrl = "/system/xzPurchaseApproval/reject";
 		}
 
-		debugger;
 		var applyId = $("#id").val();
 		var remark = $('textarea[name=remark]').val();
 		$.ajax({
@@ -44,7 +44,8 @@
 			url : shenpiUrl,
 			data : {
 				"applyId" : applyId,
-				"remark" : remark
+				"remark" : remark,
+				"processId" : processId
 			},
 			async : false,
 			error : function(request) {

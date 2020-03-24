@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzApplyProcessMapper">
+    
+    <resultMap type="XzApplyProcess" id="XzApplyProcessResult">
+        <result property="id"    column="id"    />
+        <result property="approverId"    column="approver_id"    />
+        <result property="level"    column="level"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="appTime"    column="app_time"    />
+        <result property="applyId"    column="apply_id"    />
+    </resultMap>
+	
+	<sql id="selectXzApplyProcessVo">
+        select apply_id,id, approver_id, level, status, remark, app_time from xz_apply_process
+    </sql>
+	
+    <select id="selectXzApplyProcessList" parameterType="XzApplyProcess" resultMap="XzApplyProcessResult">
+        <include refid="selectXzApplyProcessVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="approverId != null  and approverId != '' "> and approver_id = #{approverId}</if>
+             <if test="level != null  and level != '' "> and level = #{level}</if>
+             <if test="status != null  and status != '' "> and status = #{status}</if>
+             <if test="remark != null  and remark != '' "> and remark = #{remark}</if>
+             <if test="appTime != null "> and app_time = #{appTime}</if>
+             <if test="applyId != null "> and apply_id = #{applyId}</if>
+         </where>
+    </select>
+
+    <select id="selectApplyProcessApproverNameByApplyId" resultType="String" parameterType="Long">
+        select GROUP_CONCAT(c.user_name,'(',c.state,')' order by c.level) from (
+        SELECT
+            a.level,b.user_name,(case when a.status='wait' then '待审批' when a.status='success' then '同意' when a.status='FAIL' then '驳回' else '' end) state
+        FROM
+            xz_apply_process a
+            left join sys_user b on a.approver_id = b.user_id
+        WHERE
+            apply_id = #{param1}) c
+    </select>
+
+    <select id="selectXzApplyProcessById" parameterType="Long" resultMap="XzApplyProcessResult">
+        <include refid="selectXzApplyProcessVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertXzApplyProcess" parameterType="XzApplyProcess">
+        insert into xz_apply_process
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">id,</if>
+			<if test="approverId != null  and approverId != ''  ">approver_id,</if>
+			<if test="level != null  and level != ''  ">level,</if>
+			<if test="status != null  and status != ''  ">status,</if>
+			<if test="remark != null  and remark != ''  ">remark,</if>
+			<if test="appTime != null  ">app_time,</if>
+			<if test="applyId != null  ">apply_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null  ">#{id},</if>
+			<if test="approverId != null  and approverId != ''  ">#{approverId},</if>
+			<if test="level != null  and level != ''  ">#{level},</if>
+			<if test="status != null  and status != ''  ">#{status},</if>
+			<if test="remark != null  and remark != ''  ">#{remark},</if>
+			<if test="appTime != null  ">#{appTime},</if>
+			<if test="applyId != null  ">#{applyId},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzApplyProcess" parameterType="XzApplyProcess">
+        update xz_apply_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="approverId != null  and approverId != ''  ">approver_id = #{approverId},</if>
+            <if test="level != null  and level != ''  ">level = #{level},</if>
+            <if test="status != null  and status != ''  ">status = #{status},</if>
+            <if test="remark != null  and remark != ''  ">remark = #{remark},</if>
+            <if test="appTime != null  ">app_time = #{appTime},</if>
+            <if test="applyId != null  ">apply_id = #{applyId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteXzApplyProcessById" parameterType="Long">
+        delete from xz_apply_process where id = #{id}
+    </delete>
+	
+    <delete id="deleteXzApplyProcessByIds" parameterType="String">
+        delete from xz_apply_process where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

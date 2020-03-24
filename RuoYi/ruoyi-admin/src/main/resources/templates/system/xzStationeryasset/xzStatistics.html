@@ -18,7 +18,7 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
 					<div class="select-list">
 						<ul>
 
-							<li>所在地域： <select name="region"
+							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域： <select name="region"
 								th:with="type=${@dict.getType('xz_assets_region')}">
 									<option value="">所有</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -70,7 +70,7 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
         var prefix = ctx + "system/xzAsstes";
         $(function() {
             var options = {
-                url: prefix + "/xzStatisticsList",
+                url: prefix + "/xzStatisticsList?sort=2",
                 toStaHandUrl: "/system/xzAssetHandRecord/toStaHand/{id}",
                 modalName: "办公用品分配记录",
 		        showExport: true,
@@ -91,7 +91,7 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
 				},
 				{
 					field : 'assetType2IdName', 
-					title : '资产名称',
+					title : '资产',
 					sortable: true
 				},
 				{

@@ -52,6 +52,67 @@ public class XzPurchaseResourceApply extends BaseEntity
 	private List<XzPurchaseResource> xzPurchaseResource;
 	private XzPurchaseApproval xzPurchaseApproval;
 
+	//审批人id，查询用
+	private Long approverId;
+	//审批人 类似 田大庆(同意),任志刚(待审批)，显示用
+	private String approverName;
+	//审批流程id 显示用
+	private Long processId;
+	//审批状态 查询用
+	private String status;
+	//申请人部门id 查询用
+	private Long deptId;
+	//地区 查询用
+	private String region;
+
+	public String getRegion() {
+		return region;
+	}
+
+	public void setRegion(String region) {
+		this.region = region;
+	}
+
+	public Long getDeptId() {
+		return deptId;
+	}
+
+	public void setDeptId(Long deptId) {
+		this.deptId = deptId;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Long getProcessId() {
+		return processId;
+	}
+
+	public void setProcessId(Long processId) {
+		this.processId = processId;
+	}
+
+	public String getApproverName() {
+		return approverName;
+	}
+
+	public void setApproverName(String approverName) {
+		this.approverName = approverName;
+	}
+
+	public Long getApproverId() {
+		return approverId;
+	}
+
+	public void setApproverId(Long approverId) {
+		this.approverId = approverId;
+	}
+
 	public String getPurposeComment() {
 		return purposeComment;
 	}

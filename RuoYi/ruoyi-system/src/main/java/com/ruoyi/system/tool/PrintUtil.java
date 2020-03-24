@@ -22,6 +22,7 @@ public class PrintUtil {
             // 设定去哪里读取相应的ftl模板文件
             //    cfg.setDirectoryForTemplateLoading(new File(path + File.separator + "templates" + File.separator + "printModel"));
             //            System.out.println(new File("model").getAbsolutePath());
+            String s = new File("model").getAbsolutePath();
                     cfg.setDirectoryForTemplateLoading(new File("model"));
 //            cfg.setDirectoryForTemplateLoading(new File("G:\\testdmeo\\模板"));
             //获取模板（template）

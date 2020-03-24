@@ -70,6 +70,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 LEFT JOIN sys_user_post p on p.user_id = u.user_id
     </sql>
 
+	<select id="selectIsRoleByRoleId" parameterType="Long" resultMap="SysUserResult">
+		select b.* from sys_user_role a left join sys_user b on a.user_id = b.user_id where a.role_id = #{param1} and user_id = #{param2}
+	</select>
+
 	<select id="selectAllUserModel" resultMap="userModelMap">
 		select u.user_id,u.user_name,d.dept_id,d.dept_name from sys_user u left join sys_dept d on u.dept_id = d.dept_id
 	</select>

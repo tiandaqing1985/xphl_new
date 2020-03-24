@@ -1,6 +1,8 @@
 package com.ruoyi.system.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -90,6 +92,13 @@ public class XzAssetRepairServiceImpl implements IXzAssetRepairService {
 	@Override
 	@Transactional
 	public int updateXzAssetRepair(XzAssetRepair xzAssetRepair) {
+		XzAssetRepair repair = xzAssetRepairMapper.selectXzAssetRepairById(xzAssetRepair.getRepairId());
+		repair.setIsHistory("history");
+		xzAssetRepairMapper.updateXzAssetRepair(repair);
+		repair.setRepairId(null);
+		repair.setCreateTime(DateUtils.getNowDate());
+		xzAssetRepairMapper.insertXzAssetRepair(repair);
+		xzAssetRepair.setRepairId(repair.getRepairId());
 		xzAssetRepair.setInspectorId(sysUserMapper.selectUserIdByUserNameOnly(xzAssetRepair.getInspectorName()));
 		// 资产表要变更资产使用状态
 		XzAsstes xzAsstes = new XzAsstes();

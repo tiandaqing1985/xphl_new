@@ -3,6 +3,7 @@ package com.ruoyi.web.controller.system;
 import java.util.Date;
 import java.util.List;
 
+import com.ruoyi.system.domain.XzAssetHandRecord;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -119,7 +120,11 @@ public class XzAssetRepairController extends BaseController {
         XzPersonalAsset xzPersonalAsset = xzPersonalAssetService.selectXzPersonalAssetById(id);
         mmap.put("id", id);
         mmap.put("xzAsstes", xzAsstesService.selectXzAsstesById(xzPersonalAsset.getAssetId()));
-        mmap.put("xzHand", xzAssetHandRecordService.selectXzAssetHandRecordByAssetId(xzPersonalAsset.getAssetId()));
+        XzAssetHandRecord xzAssetHandRecord = xzAssetHandRecordService.selectXzAssetHandRecordByAssetId(xzPersonalAsset.getAssetId());
+        if(xzAssetHandRecord == null){
+            xzAssetHandRecord = new XzAssetHandRecord();
+        }
+        mmap.put("xzHand", xzAssetHandRecord);
         return prefix + "/add";
     }
 

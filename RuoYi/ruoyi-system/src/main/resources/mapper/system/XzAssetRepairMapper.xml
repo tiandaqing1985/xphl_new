@@ -68,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="region != null  and region != '' "> and xa.region = #{region}</if>
 			<if test="assetsCode != null and assetsCode !='' "> and xa.assets_code like concat('%', #{assetsCode}, '%')</if>
 			<if test="assetsName != null and assetsName !='' "> and xa.assets_name like concat('%', #{assetsName}, '%')</if>
-			
+			and ar.is_history is null
 		</where>
 	</select>
 
@@ -100,7 +100,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where repair_id = #{repairId}
 	</select>
 
-	<insert id="insertXzAssetRepair" parameterType="XzAssetRepair">
+	<insert id="insertXzAssetRepair" parameterType="XzAssetRepair" useGeneratedKeys="true" keyProperty="repairId" keyColumn="repair_id">
 		insert into xz_asset_repair
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="repairId != null  ">repair_id,</if>
@@ -155,6 +155,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="createTime != null  ">create_time = #{createTime},</if>
 			<if test="updateBy != null  ">update_by = #{updateBy},</if>
 			<if test="updateTime != null  ">update_time = #{updateTime},</if>
+			<if test="isHistory != null and isHistory != ''">is_history = #{isHistory},</if>
 		</trim>
 		where repair_id = #{repairId}
 	</update>

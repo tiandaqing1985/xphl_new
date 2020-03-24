@@ -42,7 +42,18 @@
 							<li>资产型号：<input type="text" name="assetsModel" />
 							</li>
 
-							<li>前当使用人：<input type="text" name="useBy" />
+							<li>
+								<div>
+									前当使用人：
+									<input id="useBy" type="text" name="useBy" />
+									<div class="input-group-btn" style="float: right">
+										<button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="menu">
+										</ul>
+									</div>
+								</div>
 							</li>
 
 
@@ -76,6 +87,7 @@
 		</div>
 	</div>
     <div th:include="include :: footer"></div>
+	 <th:block th:include="include :: bootstrap-suggest-js"/>
     <script th:inline="javascript">
        /*  var editFlag = [[${@permission.hasPermi('system:xzOfficeAsstes:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:xzOfficeAsstes:remove')}]]; */
@@ -86,6 +98,21 @@
         var brand = [[${@dict.getType('xz_assets_brandSta')}]];
         var unit = [[${@dict.getType('xz_assets_unit')}]];
         var submitType = [[${@dict.getType('xz_assets_submitType')}]];
+	   var testBsSuggest = $("#useBy").bsSuggest({
+		   url: ctx + "system/user/userModel",
+		   showBtn: false,
+		   idField: "userName",
+		   keyField: "userName",
+		   effectiveFields: ["deptName", "userName"],
+		   multiWord: true,
+		   hideOnSelect: true
+	   }).on('onDataRequestSuccess', function (e, result) {
+		   console.log('onDataRequestSuccess: ', result);
+	   }).on('onSetSelectValue', function (e, keyword) {
+		   console.log('onSetSelectValue: ', keyword);
+	   }).on('onUnsetSelectValue', function (e) {
+		   console.log("onUnsetSelectValue");
+	   });
         $(function() {
             var options = {
                 url: prefix + "/list",

@@ -2,6 +2,8 @@ package com.ruoyi.system.service.impl;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.system.mapper.XzExpenseRecordMapper;
@@ -99,4 +101,13 @@ public class XzExpenseRecordServiceImpl implements IXzExpenseRecordService {
 		return xzExpenseRecordMapper.selectXzExpenseDetailList(xzExpenseSta);
 	}
 
+	@Override
+	public List<XzExpenseSta> selectCompareXzExpenseList(Map dataMap) {
+		return xzExpenseRecordMapper.selectCompareXzExpenseList(dataMap);
+	}
+
+	@Override
+	public List<XzExpenseSta> selectCompareXzExpenseDetailList(Map map) {
+		return xzExpenseRecordMapper.selectCompareXzExpenseDetailList(map);
+	}
 }

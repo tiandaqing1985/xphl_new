@@ -43,7 +43,7 @@
 							</select>
 							</li>
 
-							<li>所在地域： <select name="region"
+							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域： <select name="region"
 								th:with="type=${@dict.getType('xz_assets_region')}">
 									<option value="">所有</option>
 									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
@@ -51,8 +51,21 @@
 							</select>
 							</li>
 
-							<li>采购人员：<input type="text" name="purchaseName" />
+							<li>
+								<div>
+									采购人员：
+									<input id="loanUser" type="text" name="purchaseName"/>
+									<div class="input-group-btn" style="float: right">
+										<button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="menu">
+										</ul>
+									</div>
+								</div>
 							</li>
+<!--							<li>采购人员：<input type="text" name="purchaseName" />-->
+<!--							</li>-->
 
 
 							<li>资产名称：<input type="text" name="assetsName" />
@@ -106,6 +119,7 @@
 		</div>
 	</div>
 	<div th:include="include :: footer"></div>
+	<th:block th:include="include :: bootstrap-suggest-js"/>
 	<script th:inline="javascript">
     	var detailFlag = [[${@permission.hasPermi('system:xzAsstes:detail')}]];
         var editFlag = [[${@permission.hasPermi('system:xzAsstes:edit')}]];
@@ -117,7 +131,21 @@
         var assetsStatus = [[${@dict.getType('xz_assets_assetsStatus')}]];
         var useStatus = [[${@dict.getType('xz_assets_useStatus')}]];
         var submitType = [[${@dict.getType('xz_assets_submitType')}]];
-        
+		var testBsSuggest = $("#loanUser").bsSuggest({
+			url: ctx + "system/user/userModel",
+			showBtn: false,
+			idField: "userName",
+			keyField: "userName",
+			effectiveFields: ["deptName", "userName"],
+			multiWord: true,
+			hideOnSelect: true
+		}).on('onDataRequestSuccess', function (e, result) {
+			console.log('onDataRequestSuccess: ', result);
+		}).on('onSetSelectValue', function (e, keyword) {
+			console.log('onSetSelectValue: ', keyword);
+		}).on('onUnsetSelectValue', function (e) {
+			console.log("onUnsetSelectValue");
+		});
         var prefix = ctx + "system/xzAsstes";
         $(function() {
             var options = {
