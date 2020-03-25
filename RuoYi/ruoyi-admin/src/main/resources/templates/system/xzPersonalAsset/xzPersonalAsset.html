@@ -155,7 +155,7 @@
 		            	if(row.assetStatus=='2'){
 		            		actions.push('<a class="btn btn-success btn-xs ' + '" onclick="draw(\'' + row.assetId + '\')">领取</a> ');
 		            	}
-		            	if(row.assetStatus=='3'){
+		            	if(row.assetStatus=='3'||row.assetStatus=='5'){
 		            		if(row.xzAsstes.isRepair!='false'){
 								actions.push('<a class="btn btn-danger btn-xs ' + '" onclick="toRepair(\'' + row.id + '\')">报修</a> ');
 							}

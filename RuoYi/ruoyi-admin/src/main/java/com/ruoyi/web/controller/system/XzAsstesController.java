@@ -62,17 +62,20 @@ public class XzAsstesController extends BaseController {
 
     @RequiresPermissions("system:xzAsstes:view")
     @GetMapping()
-    public String xzAsstes() {
+    public String xzAsstes(ModelMap modelMap) {
+        modelMap.put("userid",ShiroUtils.getUserId());
         return prefix + "/xzAsstes";
     }
 
     @GetMapping("/xzAsstesHand")
-    public String xzAsstesHand() {
+    public String xzAsstesHand(ModelMap modelMap) {
+        modelMap.put("userid",ShiroUtils.getUserId());
         return prefix + "/xzAsstesHand";
     }
 
     @GetMapping("/xzStatistics")
-    public String xzStatistics() {
+    public String xzStatistics(ModelMap modelMap) {
+        modelMap.put("userid",ShiroUtils.getUserId());
         return "system/xzStationeryasset/xzStatistics";
     }
 
@@ -82,9 +85,11 @@ public class XzAsstesController extends BaseController {
     }
 
     @GetMapping("/xzStationeryasset")
-    public String xzStationeryasset() {
+    public String xzStationeryasset(ModelMap modelMap) {
+        modelMap.put("userid",ShiroUtils.getUserId());
         return "system/xzStationeryasset/xzStationeryasset";
     }
+
 
     /**
      * 查询资产列表
@@ -147,9 +152,9 @@ public class XzAsstesController extends BaseController {
     @PostMapping("/xzStationeryassetList")
     @ResponseBody
     public TableDataInfo xzStationeryassetList(XzAsstes xzAsstes) {
-        startPage();
-        xzAsstes.setSort("2");// 办公用品资产
+//        xzAsstes.setSort("2");// 办公用品资产
         xzAsstes.setPurchaseBy(sysUserService.selectUserIdByUserNameOnly(xzAsstes.getPurchaseName()));
+        startPage();
         List<XzAsstes> list = xzAsstesService.selectXzAsstesList(xzAsstes);
         return getDataTable(list);
     }
@@ -318,7 +323,11 @@ public class XzAsstesController extends BaseController {
         xzAsstes.setSubmitType("2");
         xzAsstes.setSort("1");
         String str = xzAsstesService.insertXzAsstes(xzAsstes);
-        return success(str);
+        if(str.equals("1")){
+            return AjaxResult.success("录入成功");
+        }else {
+            return AjaxResult.error(str);
+        }
     }
 
     //办公资产二维码下载

@@ -58,7 +58,8 @@ public class XzOfficeAsstesController extends BaseController {
 
 	@RequiresPermissions("system:xzOfficeAsstes:view")
 	@GetMapping()
-	public String xzOfficeAsstes() {
+	public String xzOfficeAsstes(ModelMap modelMap) {
+		modelMap.put("userid",ShiroUtils.getUserId());
 		return prefix + "/xzOfficeAsstes";
 	}
 
@@ -138,18 +139,20 @@ public class XzOfficeAsstesController extends BaseController {
 		xzAsstes.setUseStatus("1");
 		xzAsstes.setSubmitType(xzOfficeAsstes.getSubmitType());
 		xzAsstes.setSort("2");
+		int res = 0;
 		try {
 			BeanUtils.copyProperties(xzAsstes, xzOfficeAsstes);
 
 			System.out.println(xzAsstes + "*******************************");
 			xzAsstesService.insertXzAsstes(xzAsstes);
+			res = xzOfficeAsstesService.insertXzOfficeAsstes(xzOfficeAsstes);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 
-		return toAjax(xzOfficeAsstesService.insertXzOfficeAsstes(xzOfficeAsstes));
+		return toAjax(res);
 	}
 
 	/**

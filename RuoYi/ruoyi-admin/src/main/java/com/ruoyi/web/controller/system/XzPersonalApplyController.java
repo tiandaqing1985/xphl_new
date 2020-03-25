@@ -60,7 +60,8 @@ public class XzPersonalApplyController extends BaseController {
     }
 
     @GetMapping("/toDistributionList")
-    public String distributionList() {
+    public String distributionList(ModelMap modelMap) {
+        modelMap.put("userid",ShiroUtils.getUserId());
         return prefix + "/xzDistributionList";
     }
 

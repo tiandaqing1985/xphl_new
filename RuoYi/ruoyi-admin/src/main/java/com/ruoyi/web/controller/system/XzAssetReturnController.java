@@ -56,7 +56,8 @@ public class XzAssetReturnController extends BaseController {
 
     @RequiresPermissions("system:xzAssetReturn:view")
     @GetMapping()
-    public String xzAssetReturn() {
+    public String xzAssetReturn(ModelMap modelMap) {
+        modelMap.put("userid",ShiroUtils.getUserId());
         return prefix + "/xzAssetReturn";
     }
 

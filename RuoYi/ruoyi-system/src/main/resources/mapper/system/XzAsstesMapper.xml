@@ -107,7 +107,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="category != null  and category != '' "> and a.category = #{category}</if>
 			<if test="brand != null  and brand != '' "> and a.brand = #{brand}</if>
 			<if test="purchaseName != null  and purchaseName != '' "> and su.user_name like concat('%', #{purchaseName}, '%')</if>
-			<if test="useName != null  and useName != '' "> and user.user_name like concat('%', #{useName}, '%')</if>
+			<if test="useName != null  and useName != '' "> and user.user_name = #{useName}</if>
 			<!-- <if test="buyDate != null "> and buy_date = #{buyDate}</if> -->
 			<if test="params.beginTime != null and params.beginTime != ''"><!-- 开始时间检索 -->
 				AND date_format(a.buy_date,'%y%m%d') &gt;=
@@ -442,7 +442,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		left join (SELECT a.region ,ad.id type2Id,ad.name typeName2,at.id type1Id ,at.name typeName1,IFNULL(count(*),0) shengyuCount  FROM xz_asstes a 
 								left join xz_asset_data ad on ad.id = a.assets_type2
 								left join xz_asset_type at on at.id = a.assets_type and at.id =ad.parent_id 
-								WHERE <if test="sort!=null and sort!=''">a.sort=#{sort} and </if> a.submit_type='2' and a.assets_status='2'
+								WHERE <if test="sort!=null and sort!=''">a.sort=#{sort} and </if> a.submit_type='2' and a.assets_status='2' and a.use_status = '1'
 								group by a.assets_type2,a.region )t5 on  t5.region=a.region and t5.type2Id=ad.id
 		left join (select c.assets_type2,c.region,ifnull(count(a.id),0) guihuan,a.* from xz_asset_return a
 								left join xz_personal_asset b on a.asset_id = b.id

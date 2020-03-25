@@ -18,10 +18,10 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
 					<div class="select-list">
 						<ul>
 
-							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域： <select name="region"
+							<li>所在地域： <select name="region"
 								th:with="type=${@dict.getType('xz_assets_region')}">
 									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+									<option th:id="'opt'+${dict.dictValue}" th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
 							</select>
 							</li>
@@ -66,9 +66,26 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
         var region = [[${@dict.getType('xz_assets_region')}]];
         var brand = [[${@dict.getType('xz_assets_brand')}]];
         var unit = [[${@dict.getType('xz_assets_unit')}]];
-        
+
+		var role = [[${@sysRoleServiceImpl.selectRoleKeys(userid)}]]
+
+		var area = [[${@permission.getPrincipalProperty('area')}]];
+
         var prefix = ctx + "system/xzAsstes";
         $(function() {
+
+			if(role.indexOf("admin")==-1&&role.indexOf("xzzj")==-1){
+				if(area==1){
+					$("#opt2").hide();
+				}else if(area==2){
+					$("#opt1").hide();
+					$("#opt3").hide();
+				}else if(area==3){
+					$("#opt1").hide();
+					$("#opt2").hide();
+				}
+			}
+
             var options = {
                 url: prefix + "/xzStatisticsList?sort=2",
                 toStaHandUrl: "/system/xzAssetHandRecord/toStaHand/{id}",
@@ -92,12 +109,12 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
 				{
 					field : 'assetType2IdName', 
 					title : '资产',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'assetTypeIdName', 
 					title : '资产类型',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'unit', 
@@ -122,27 +139,28 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
 				{
 					field : 'chushiCount', 
 					title : '当月初始',
-					sortable: true
+					sortable: false,
+					visible: false
 				},
 				{
 					field : 'fenpeiCount', 
 					title : '当月分配',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'rukuCount', 
 					title : '当月入库',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'guihuanCount', 
 					title : '当月归还',
-					sortable: true
+					sortable: false
 				},
 				{
 					field : 'shengyuCount', 
 					title : '当月剩余',
-					sortable: true
+					sortable: false
 				},
 				
 		        {

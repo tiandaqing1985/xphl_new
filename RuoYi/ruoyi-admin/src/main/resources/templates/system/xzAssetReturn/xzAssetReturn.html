@@ -29,10 +29,10 @@
 								name="params[beginTime]" /> <span>-</span> <input type="text"
 								class="time-input" id="endTime" placeholder="结束时间"
 								name="params[endTime]" /></li>
-							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域：
+							<li>所在地域：
 								<select name="region" th:with="type=${@dict.getType('xz_assets_region')}">
 									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+									<option th:id="'opt'+${dict.dictValue}" th:each="dict : ${type}" th:text="${dict.dictLabel}"
 											th:value="${dict.dictValue}"></option>
 								</select>
 							</li>
@@ -72,8 +72,24 @@
 	<script th:inline="javascript">
         var prefix = ctx + "system/xzAssetReturn";
 
+		var role = [[${@sysRoleServiceImpl.selectRoleKeys(userid)}]]
+
+		var area = [[${@permission.getPrincipalProperty('area')}]];
+
         var region = [[${@dict.getType('xz_assets_region')}]];
         $(function() {
+			if(role.indexOf("admin")==-1&&role.indexOf("xzzj")==-1){
+				if(area==1){
+					$("#opt2").hide();
+				}else if(area==2){
+					$("#opt1").hide();
+					$("#opt3").hide();
+				}else if(area==3){
+					$("#opt1").hide();
+					$("#opt2").hide();
+				}
+			}
+
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",

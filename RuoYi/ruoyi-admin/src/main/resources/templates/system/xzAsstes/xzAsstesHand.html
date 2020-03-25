@@ -17,10 +17,10 @@
 							<li>资产名称：<input type="text" name="assetsName" />
 							</li>
 
-							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域： <select name="region"
+							<li>所在地域： <select name="region"
 								th:with="type=${@dict.getType('xz_assets_region')}">
 									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+									<option th:id="'opt'+${dict.dictValue}" th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
 							</select>
 							</li>
@@ -103,7 +103,25 @@
         var brand = [[${@dict.getType('xz_assets_brand')}]];
         var assetsStatus = [[${@dict.getType('xz_assets_assetsStatus')}]];
         var useStatus = [[${@dict.getType('xz_assets_useStatus')}]];
+
+	 var role = [[${@sysRoleServiceImpl.selectRoleKeys(userid)}]]
+
+	 var area = [[${@permission.getPrincipalProperty('area')}]];
+
         $(function() {
+
+			if(role.indexOf("admin")==-1&&role.indexOf("xzzj")==-1){
+				if(area==1){
+					$("#opt2").hide();
+				}else if(area==2){
+					$("#opt1").hide();
+					$("#opt3").hide();
+				}else if(area==3){
+					$("#opt1").hide();
+					$("#opt2").hide();
+				}
+			}
+
             var options = {
                 url: prefix1 + "/handlist",
                 createUrl: prefix + "/add/{id}",

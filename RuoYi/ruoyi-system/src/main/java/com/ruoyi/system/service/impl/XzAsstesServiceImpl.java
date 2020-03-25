@@ -223,6 +223,7 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
                     if (xzAsstes.getSubmitType().equals("1")) {
                         if (Integer.parseInt(xzAsstes.getCount()) == split.length) {
                             for (int sn = 0; sn < category.size(); sn++) {
+                                x.setId(null);
                                 x.setCount("1");
                                 x.setCategory(category.get(sn));
                                 System.out.println(category.get(sn) + "*************************");
@@ -231,7 +232,7 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
 
                         } else {
                             // 错误返回1
-                            return "1";
+                            return "物品数量和s/n码数量不一致";
                         }
 
                     }
@@ -239,6 +240,7 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
                     if (xzAsstes.getSubmitType().equals("2")) {
                         if (Integer.parseInt(xzAsstes.getCount()) == split.length) {
                             for (int sn = 0; sn < category.size(); sn++) {
+                                x.setId(null);
                                 x.setCount("1");
                                 x.setCategory(category.get(sn));
                                 // 需要加上资产编码
@@ -250,7 +252,7 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
                             }
                         } else {
                             // 错误返回1
-                            return "1";
+                            return "物品数量和s/n码数量不一致";
                         }
                     }
                 }
@@ -260,6 +262,7 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
                 // 办公资产
                 if (xzAsstes.getSubmitType().equals("1")) {
                     for (int i = 0; i < Integer.parseInt(xzAsstes.getCount()); i++) {
+                        x.setId(null);
                         x.setCount("1");
                         xzAsstesMapper.insertXzAsstes(x);
                     }
@@ -269,6 +272,7 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
                 // 提交状态为2时，说明是数据提交入库
                 if (xzAsstes.getSubmitType().equals("2")) {
                     for (int i = 0; i < Integer.parseInt(xzAsstes.getCount()); i++) {
+                        x.setId(null);
                         x.setCount("1");
                         // 需要加上资产编码
                         x.setAssetsCode(createCode(xzAsstes));
@@ -280,10 +284,10 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
                 }
             }
 
-            return "录入成功";
+            return "1";
         } catch (Exception e) {
             e.printStackTrace();
-            return "录入失败";
+            throw e;
         }
 
     }
