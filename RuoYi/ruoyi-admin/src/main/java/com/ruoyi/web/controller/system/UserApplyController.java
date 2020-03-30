@@ -273,9 +273,9 @@ public class UserApplyController extends BaseController {
     @ResponseBody
     public AjaxResult undo(Long ids) {
         int i = userApplyService.undoSave(ids);
-        return toAjax(i);  
-    } 
-    
+        return toAjax(i);
+    }
+
 //    /**
 //     * 销假申请
 //     */
@@ -456,6 +456,23 @@ public class UserApplyController extends BaseController {
             return "1";
         }
     }
+
+
+    /**
+     * 验证选择的
+     */
+    @PostMapping("/ifOverdue")
+    @ResponseBody
+    public String ifOverdue(UserApply userApply) {
+        userApply.setUserId(ShiroUtils.getUserId());
+        String over = userApplyService.ifOverdue(userApply);
+        if (over.equals("1")) {
+            return "0";
+        } else {
+            return "1";
+        }
+    }
+
 
     /**
      * 验证选择的

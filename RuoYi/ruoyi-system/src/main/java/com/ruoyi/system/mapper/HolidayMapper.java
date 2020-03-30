@@ -29,6 +29,15 @@ public interface HolidayMapper
 	 * @return
 	 */
 	public List<Holiday> selectHolidayListByCondition(Holiday holiday);
+
+
+	/**
+	 * 根据请假最后时间确定年假是否过期
+	 * @param littledate
+	 * @param bigdate
+	 * @return
+	 */
+	public List<Holiday> selectHolidayOverdue(Holiday holiday);
 	
 	/**
      * 查询假期列表

@@ -172,7 +172,15 @@ public interface IUserApplyService
 	 * @return
 	 */
 	public String ifHolidayEnough(UserApply userApply);
-	
+
+	/**
+	 * 验证年假时间是否过期
+	 * @param userApply
+	 * @return
+	 */
+	public String ifOverdue(UserApply userApply);
+
+
 	/**
 	 * 撤回
 	 * @param userApply

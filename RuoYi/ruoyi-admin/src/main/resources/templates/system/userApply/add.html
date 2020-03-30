@@ -455,7 +455,32 @@
 					error:function(){
 						$.modal.alertWarning("请联系管理员");
 					}
-				}); 
+				});
+
+				//验证所请年假 是否时间已过期
+				$.ajax({
+					type:"post",
+					async:false,
+					url:"/system/userApply/ifOverdue",
+					data:{"applyType":applyType,"leaveType":leaveType,"starttime":starttime,"endtime":endtime,"timeapart1":timeapart1, "timeapart2":timeapart2 },
+					dataType:"json",
+					success:function(result){
+						if(result == "0"){
+							repeatFlag = true;
+						}
+						else{
+							repeatFlag = false;
+							$.modal.alertWarning("年假已过期!");
+							return;
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				});
+
+
+
 				//验证所请假期 余额是否足够 
 				$.ajax({
 					type:"post",

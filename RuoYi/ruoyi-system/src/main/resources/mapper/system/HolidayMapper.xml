@@ -38,11 +38,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	
     <select id="selectHolidayListByCondition" parameterType="Holiday" resultMap="HolidayResult">
         <include refid="selectHolidayVo"/>
-        <where>  
+        <where>
              createdate <![CDATA[>= ]]> #{createdate} and createdate <![CDATA[<= ]]> #{overdate}
              and user_id = #{userId}
          </where>
     </select>
+
+
+	<select id="selectHolidayOverdue" parameterType="Holiday" resultMap="HolidayResult">
+		<include refid="selectHolidayVo"/>
+		<where>
+			overdate <![CDATA[>= ]]> #{overdate}
+			and user_id = #{userId}
+		</where>
+	</select>
+
     
     <select id="selectHolidayById" parameterType="Integer" resultMap="HolidayResult">
         <include refid="selectHolidayVo"/>
