@@ -168,7 +168,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			( CASE WHEN t.VALUE IS NULL THEN 0 ELSE TRUNCATE ( t.VALUE / 2, 0 )/ 4 END ) t_value,
 			( CASE WHEN ty.VALUE IS NULL THEN 0 ELSE TRUNCATE ( ty.VALUE / 2, 0 )/ 4 END ) ty_value 
 		FROM
-			( SELECT u.dept_id,u.`user_id`, u.`user_name` FROM `sys_user` u  where u.`status`=0 ) nu
+			( SELECT u.dept_id,u.`user_id`, u.`user_name` FROM `sys_user` u) nu
 			LEFT JOIN (
 			SELECT
 				SUM( h.VALUE ) `value`,
