@@ -2,6 +2,9 @@ package com.ruoyi.web.controller.system;
 
 import java.util.List;
 
+import com.ruoyi.framework.web.service.PermissionService;
+import com.ruoyi.system.domain.XzPersonalApply;
+import com.ruoyi.system.service.IXzPersonalApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -31,6 +34,10 @@ public class SysIndexController extends BaseController
 	private IUserApprovalService userApprovalService;
 	@Autowired
 	private IFacUserApprovalService facUserApprovalService;
+	@Autowired
+	private PermissionService permission;
+	@Autowired
+	private IXzPersonalApplyService xzPersonalApplyService;
     
     // 系统首页
     @GetMapping("/index")
@@ -109,6 +116,32 @@ public class SysIndexController extends BaseController
     	}
     	
         mmap.put("version", Global.getVersion());
+
+    	//行政系统
+		int xzApplyNum = 0;
+		XzPersonalApply xzPersonalApply = new XzPersonalApply();
+		xzPersonalApply.setApplyStatus("1");//查看申请状态为 1待审批 的数据
+		String region = null;
+		if(permission.hasRole("xzzj").equals("")||permission.hasRole("xzfenpei").equals("")||permission.hasRole("admin").equals("")){
+			if (permission.hasRole("xzzj").equals("") || ShiroUtils.getUserId() == 1 || ShiroUtils.getUserId() == 103) { //超级管理员 和 任总 行政部门leader看所有数据
+
+			} else {
+				region = ShiroUtils.getSysUser().getArea();
+			}
+			if("1".equals(region)){
+				xzPersonalApply.setRegion("1");
+				List<XzPersonalApply> xzPersonalApplies = xzPersonalApplyService.selectXzPersonalApplyList(xzPersonalApply);
+				xzApplyNum = xzApplyNum + xzPersonalApplies.size();
+				xzPersonalApply.setRegion("3");
+				xzPersonalApplies = xzPersonalApplyService.selectXzPersonalApplyList(xzPersonalApply);
+				xzApplyNum = xzApplyNum + xzPersonalApplies.size();
+			}else{
+				xzPersonalApply.setRegion(region);
+				List<XzPersonalApply> xzPersonalApplies = xzPersonalApplyService.selectXzPersonalApplyList(xzPersonalApply);
+				xzApplyNum = xzApplyNum + xzPersonalApplies.size();
+			}
+		}
+		mmap.put("xzApplyNum", xzApplyNum);
         return "main";
     }
 }

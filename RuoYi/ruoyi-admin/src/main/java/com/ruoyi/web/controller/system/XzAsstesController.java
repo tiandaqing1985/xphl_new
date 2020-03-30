@@ -448,7 +448,7 @@ public class XzAsstesController extends BaseController {
     public String detail(@PathVariable("id") Long id, ModelMap mmap) {
         XzAsstes xzAsstes = xzAsstesService.selectXzAsstesById(id);
         mmap.put("xzAsstes", xzAsstes);
-        System.out.println(xzAsstes);
+//        System.out.println(xzAsstes);
         return prefix + "/detail";
     }
 

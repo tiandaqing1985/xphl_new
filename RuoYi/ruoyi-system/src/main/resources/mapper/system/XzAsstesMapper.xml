@@ -60,7 +60,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="sort" column="sort" />
 		<result property="isReturn" column="is_return" />
 		<result property="isReturn" column="is_repair" />
-
+		<collection property="xzAssetExtends" javaType="java.util.List" ofType="XzAssetExtend"
+					select="com.ruoyi.system.mapper.XzAssetExtendMapper.selectXzAssetExtendByAssetId" column="id"></collection>
 		
 		
 	</resultMap>
@@ -256,7 +257,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="useStatus != null  and useStatus != ''  ">use_status = #{useStatus},</if>
 			<if test="useBy != ''  ">use_by = #{useBy},</if>
 			<if test="department != ''  ">department = #{department},</if>
-			<if test="useTime != ''  ">use_time = #{useTime},</if>
+			<if test="useTime != null  ">use_time = #{useTime},</if>
 			<if test="submitType != null  and submitType != ''  ">submit_type = #{submitType},</if>
 			<if test="scrapDate != null  ">scrap_date = #{scrapDate},</if>
 			<if test="storeWay != null  and storeWay != ''  ">store_way = #{storeWay},</if>

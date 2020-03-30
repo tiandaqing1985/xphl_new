@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.XzAssetExtendMapper">
+    
+    <resultMap type="XzAssetExtend" id="XzAssetExtendResult">
+        <result property="id"    column="id"    />
+        <result property="assetId"    column="asset_id"    />
+        <result property="extendDesc"    column="extend_desc"    />
+        <result property="extendPrice"    column="extend_price"    />
+        <result property="extendDate"    column="extend_date"    />
+        <result property="lastUpdateTime"    column="last_update_time"    />
+        <result property="extendDateFormat"    column="extend_date_format"    />
+    </resultMap>
+	
+	<sql id="selectXzAssetExtendVo">
+        select id, asset_id, extend_desc, extend_price, extend_date, last_update_time, extend_date_format from xz_asset_extend
+    </sql>
+	
+    <select id="selectXzAssetExtendList" parameterType="XzAssetExtend" resultMap="XzAssetExtendResult">
+        <include refid="selectXzAssetExtendVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="assetId != null "> and asset_id = #{assetId}</if>
+             <if test="extendDesc != null  and extendDesc != '' "> and extend_desc = #{extendDesc}</if>
+             <if test="extendPrice != null "> and extend_price = #{extendPrice}</if>
+             <if test="extendDate != null "> and extend_date = #{extendDate}</if>
+             <if test="lastUpdateTime != null "> and last_update_time = #{lastUpdateTime}</if>
+             <if test="extendDateFormat != null  and extendDateFormat != '' "> and extend_date_format = #{extendDateFormat}</if>
+         </where>
+    </select>
+    
+    <select id="selectXzAssetExtendById" parameterType="Long" resultMap="XzAssetExtendResult">
+        <include refid="selectXzAssetExtendVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectXzAssetExtendByAssetId" parameterType="Long" resultMap="XzAssetExtendResult">
+        <include refid="selectXzAssetExtendVo"/>
+        where asset_id = #{id}
+    </select>
+
+    <insert id="insertXzAssetExtend" parameterType="XzAssetExtend" useGeneratedKeys="true" keyProperty="id">
+        insert into xz_asset_extend
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="assetId != null  ">asset_id,</if>
+			<if test="extendDesc != null  and extendDesc != ''  ">extend_desc,</if>
+			<if test="extendPrice != null  ">extend_price,</if>
+			<if test="extendDate != null  ">extend_date,</if>
+			<if test="lastUpdateTime != null  ">last_update_time,</if>
+			<if test="extendDateFormat != null  and extendDateFormat != ''  ">extend_date_format,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="assetId != null  ">#{assetId},</if>
+			<if test="extendDesc != null  and extendDesc != ''  ">#{extendDesc},</if>
+			<if test="extendPrice != null  ">#{extendPrice},</if>
+			<if test="extendDate != null  ">#{extendDate},</if>
+			<if test="lastUpdateTime != null  ">#{lastUpdateTime},</if>
+			<if test="extendDateFormat != null  and extendDateFormat != ''  ">#{extendDateFormat},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateXzAssetExtend" parameterType="XzAssetExtend">
+        update xz_asset_extend
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="assetId != null  ">asset_id = #{assetId},</if>
+            <if test="extendDesc != null  and extendDesc != ''  ">extend_desc = #{extendDesc},</if>
+            <if test="extendPrice != null  ">extend_price = #{extendPrice},</if>
+            <if test="extendDate != null  ">extend_date = #{extendDate},</if>
+            <if test="lastUpdateTime != null  ">last_update_time = #{lastUpdateTime},</if>
+            <if test="extendDateFormat != null  and extendDateFormat != ''  ">extend_date_format = #{extendDateFormat},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+	<delete id="deleteXzAssetExtendById" parameterType="Long">
+        delete from xz_asset_extend where id = #{id}
+    </delete>
+	
+    <delete id="deleteXzAssetExtendByIds" parameterType="String">
+        delete from xz_asset_extend where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -32,7 +32,14 @@
             </div>
         </div>
     </div>
-    
+    <div th:style="'margin-left:30px;display:'+${xzApplyNum==0 ? 'none':'block'}">
+        <div>
+            <br>
+            <div style="font-size:16px;">行政系统待审批条数：<font color="red">[[${xzApplyNum}]]</font>条
+            </div>
+        </div>
+    </div>
+
         
    <div style="margin-left:30px;display:block">
         <div class="col-sm-5">

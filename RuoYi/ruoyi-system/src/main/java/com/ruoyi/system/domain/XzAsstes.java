@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 资产表 xz_asstes
@@ -136,6 +137,16 @@ public class XzAsstes extends BaseEntity
 	private SysUser user;
 	
 	private SysDept dept;
+
+	private List<XzAssetExtend> xzAssetExtends;
+
+	public List<XzAssetExtend> getXzAssetExtends() {
+		return xzAssetExtends;
+	}
+
+	public void setXzAssetExtends(List<XzAssetExtend> xzAssetExtends) {
+		this.xzAssetExtends = xzAssetExtends;
+	}
 
 	public Date getCheckTime() {
 		return checkTime;
