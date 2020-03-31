@@ -33,7 +33,7 @@ public class Test {
 		int year = ca.get(Calendar.YEAR);//年份数值
 		
 		System.out.println("年："+year+" 月："+(month+1)+" 日："+day+" 周"+week);*/
-		
+
 	}
 
 }

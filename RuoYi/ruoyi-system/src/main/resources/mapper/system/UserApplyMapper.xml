@@ -152,7 +152,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		     <if test="ctype != null and ctype != ''"> and a.ctype = #{ctype}</if>
 		</where>
     </select>
-    
+
     <select id="selectOtherApplyList" parameterType="Map" resultMap="UserApplyResult">
     	SELECT us.user_name,a.* 
     		FROM sys_user_apply a
@@ -163,7 +163,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		     <if test="starttime != null"> and a.starttime like concat('%',#{starttime},'%')</if>
 		</where>
     </select>
-    
+
     <select id="selectUserApplyByApplyId" parameterType="Long" resultMap="UserApplyResult">
     	select * from sys_user_apply where apply_id=#{applyId}
     </select>

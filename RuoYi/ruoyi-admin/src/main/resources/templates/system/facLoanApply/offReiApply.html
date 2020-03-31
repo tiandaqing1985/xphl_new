@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('初始多表格')"/>
+    <th:block th:include="include :: layout-latest-css"/>
+    <th:block th:include="include :: ztree-css"/>
+</head>
+<body class="gray-bg">
+<div class="container-div">
+    <div class="row">
+        <input id="payer" name="payer" class="form-control-static" type="hidden" th:value="${payer}"/>
+        <div>
+            <h4 class="form-header h4">选择冲抵</h4>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include :: footer"></div>
+<script th:inline="javascript">
+    var prefix = ctx + "system/facLoanApply";
+    var datas = [[${@dict.getType('sys_normal_disable')}]];
+    var payer = $("#payer").val();
+    $(function () {
+        var options = {
+            id: "bootstrap-table-1",
+            url: prefix + "/offset?payer=" + payer,
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            modalName: "借款申请",
+            columns: [{
+                checkbox: true
+            },
+                {
+                    field: 'id',
+                    title: 'ID',
+                    visible: false
+                },
+                {
+                    field: 'num',
+                    title: '借款编号',
+                    sortable: true
+                },
+                {
+                    field: 'loanName',
+                    title: '借款名称',
+                    sortable: true
+                },
+                {
+                    field: 'amount',
+                    title: '借款金额',
+                    sortable: true
+                },
+                {
+                    field: 'userName',
+                    title: '借款人',
+                    sortable: true
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
+                    }
+                },
+                {
+                    field: 'loanTime',
+                    title: '借款时间',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
+                    }
+                },
+                {
+                    field: 'repayTime',
+                    title: '预计还款时间',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
+                    }
+                } ,
+                {
+                    field: 'reason',
+                    title: '借款事由',
+                    sortable: true
+                },
+                {
+                    field: 'approver',
+                    title: '当前审批人',
+                    sortable: true
+                },{
+                    field: 'approvalStatus',
+                    title: '当前审批状态',
+                    sortable: true,
+                    formatter: function (value, row, index) {
+                        if (value == 1) {
+                            return "审批成功";
+                        } else if (value == 2) {
+                            return "驳回";
+                        }   else {
+                            return "待审批";
+                        }
+                    }
+                }
+                ,
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        var actions = [];
+                        if (row.approvalStatus == 1) {
+                            actions.push('<a class="btn btn-success btn-xs' + '" href="javascript:void(0)" onclick="add(\'' + row.id + '\')"><i class="fa fa-remove"></i>还款</a>');
+                        }
+                        return actions.join('');
+                    }
+                }
+            ]
+        };
+        $.table.init(options);
+    });
+
+    // function add(id) {
+    //     debugger;
+    //     var options = {
+    //         title: "借款申请详情",
+    //         url: prefix + "/off?id=" + id,
+    //         skin: 'layui-layer-gray',
+    //         btn: ['关闭'],
+    //         yes: function (index, layero) {
+    //             layer.close(index);
+    //         }
+    //     };
+    //     $.modal.openOptions(options);
+    // }
+
+    function add(id) {
+        var width;
+        var height;
+        if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+            width = 'auto';
+            height = 'auto';
+        }
+        var index = layer.open({
+            type: 2,
+            area: [width, height],
+            fix: false,
+            //不固定
+            maxmin: true,
+            shade: 0.3,
+            title: "冲抵借款",
+            content: "/system/facLoanApply/off?id=" + id,
+            btn: ['提交', '保存', '关闭'],
+            // 弹层外区域关闭
+            shadeClose: true,
+            yes: function (index, layero) {
+                var body = layer.getChildFrame('body', index);
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var result = iframeWin.submitHandler();
+                if (result) {
+                    layer.close(index);
+                    $.table.refresh();
+                }
+            },
+            btn2: function (index, layero) {
+                var body = layer.getChildFrame('body', index);
+                var iframeWin = window[layero.find('iframe')[0]['name']];
+                var result = iframeWin.sub();
+                if (result) {
+                    layer.close(index);
+                    $.table.refresh();
+                }
+                return false;
+            },
+            cancel: function (index) {
+                return true;
+            }
+        });
+        layer.full(index);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function submitHandler(index) {
+        if ($.validate.form()) {
+
+            mSave(prefix + "/off", $('').serialize());
+
+            $.modal.close();
+        }
+    }
+
+
+    function mSave(url, data, callback) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+                $.modal.disable();
+            },
+            success: function (result) {
+                if (typeof callback == "function") {
+                    callback(result);
+                }
+                $.modal.closeLoading();
+                $.modal.enable();
+                $.modal.msg(result.msg);
+                $.modal.close();
+            }
+        };
+        $.ajax(config)
+    }
+
+
+</script>
+
+</body>
+</html>
