@@ -104,7 +104,10 @@ public class DingDingTask{
 				OaDingdingUser dingUser = new OaDingdingUser();
 				if("12485610011037053255".equals(user.getUserid()))continue;
 				if(!"manager8676".equals(user.getUserid())){
-					dingUser.setUserId(Long.parseLong(user.getUserid()));
+					if("3144041311-1058488227".equals(user.getUserid())){						
+						dingUser.setUserId(Long.parseLong("314404131110584882"));
+					}else
+						dingUser.setUserId(Long.parseLong(user.getUserid()));
 				}else{
 					dingUser.setUserId(8676L);
 				}
@@ -197,7 +200,10 @@ public class DingDingTask{
                   dingding.setCheckType(record.getString("checkType"));
                   if("12485610011037053255".equals(record.getString("userId")))continue;
                   if(!"manager8676".equals(record.getString("userId"))){
-                	  dingding.setUserId(Long.parseLong(record.getString("userId")));
+                	  if("3144041311-1058488227".equals(record.getString("userId"))){						
+                		  dingding.setUserId(Long.parseLong("314404131110584882"));
+  					  }else
+  						  dingding.setUserId(Long.parseLong(record.getString("userId")));
 	  			  }else{
 	  					dingding.setUserId(8676L);
 	  			  }
