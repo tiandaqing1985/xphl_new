@@ -434,6 +434,143 @@
 					});	
 				}
 				
+				//验证员工是否通过试用一期
+				if(leaveType == "5"){
+					$.ajax({
+						type:"post",
+						async:false,
+						url:"/system/userApply/ifPass",					
+						dataType:"json",
+						success:function(result){
+							 if(result == "0"){
+								 passFlag = true;
+							}
+							else{
+								passFlag = false;
+								$.modal.alertWarning("您还未通过试用一期，暂不能申请婚假!");
+								return;
+							}
+						},
+						error:function(){
+							$.modal.alertWarning("请联系管理员");
+						}
+					});	
+				}
+				
+				//验证员工是否通过试用一期
+				if(leaveType == "6"){
+					$.ajax({
+						type:"post",
+						async:false,
+						url:"/system/userApply/ifPass",					
+						dataType:"json",
+						success:function(result){
+							 if(result == "0"){
+								 passFlag = true;
+							}
+							else{
+								passFlag = false;
+								$.modal.alertWarning("您还未通过试用一期，暂不能申请产假!");
+								return;
+							}
+						},
+						error:function(){
+							$.modal.alertWarning("请联系管理员");
+						}
+					});	
+				}
+				
+				//验证员工是否通过试用一期
+				if(leaveType == "7"){
+					$.ajax({
+						type:"post",
+						async:false,
+						url:"/system/userApply/ifPass",					
+						dataType:"json",
+						success:function(result){
+							 if(result == "0"){
+								 passFlag = true;
+							}
+							else{
+								passFlag = false;
+								$.modal.alertWarning("您还未通过试用一期，暂不能申请陪产假!");
+								return;
+							}
+						},
+						error:function(){
+							$.modal.alertWarning("请联系管理员");
+						}
+					});	
+				}
+				
+				//验证员工是否通过试用一期
+				if(leaveType == "8"){
+					$.ajax({
+						type:"post",
+						async:false,
+						url:"/system/userApply/ifPass",					
+						dataType:"json",
+						success:function(result){
+							 if(result == "0"){
+								 passFlag = true;
+							}
+							else{
+								passFlag = false;
+								$.modal.alertWarning("您还未通过试用一期，暂不能申请产检假!");
+								return;
+							}
+						},
+						error:function(){
+							$.modal.alertWarning("请联系管理员");
+						}
+					});	
+				}
+				
+				//验证员工是否通过试用一期
+				if(leaveType == "9"){
+					$.ajax({
+						type:"post",
+						async:false,
+						url:"/system/userApply/ifPass",					
+						dataType:"json",
+						success:function(result){
+							 if(result == "0"){
+								 passFlag = true;
+							}
+							else{
+								passFlag = false;
+								$.modal.alertWarning("您还未通过试用一期，暂不能申请丧假!");
+								return;
+							}
+						},
+						error:function(){
+							$.modal.alertWarning("请联系管理员");
+						}
+					});	
+				}
+				
+				//验证员工是否通过试用一期
+				if(leaveType == "10"){
+					$.ajax({
+						type:"post",
+						async:false,
+						url:"/system/userApply/ifPass",					
+						dataType:"json",
+						success:function(result){
+							 if(result == "0"){
+								 passFlag = true;
+							}
+							else{
+								passFlag = false;
+								$.modal.alertWarning("您还未通过试用一期，暂不能申请哺乳假!");
+								return;
+							}
+						},
+						error:function(){
+							$.modal.alertWarning("请联系管理员");
+						}
+					});	
+				}
 				
 				//验证所请假期 是否与已有申请时段重复 
 				$.ajax({
