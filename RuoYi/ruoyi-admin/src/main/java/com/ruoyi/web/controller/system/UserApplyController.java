@@ -459,7 +459,7 @@ public class UserApplyController extends BaseController {
 
 
     /**
-     * 验证选择的
+     * 验证选择的年假是否过期
      */
     @PostMapping("/ifOverdue")
     @ResponseBody

@@ -525,7 +525,7 @@
                 });
 
 
-            debugger
+
             if (leaveType == "1") {  //年假
                 //验证所请年假 是否时间已过期
                 $.ajax({
@@ -556,6 +556,36 @@
                 });
             }
 
+
+            if (leaveType == "2") {  //年假
+                //验证所请年假 是否时间已过期
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: "/system/userApply/ifOverdue",
+                    data: {
+                        "applyType": applyType,
+                        "leaveType": leaveType,
+                        "starttime": starttime,
+                        "endtime": endtime
+
+                    },
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == "0") {
+                            repeatFlag = true;
+                        } else {
+                            repeatFlag = false;
+                            $.modal.alertWarning("调休已过期!");
+                            flag =false;
+                            return;
+                        }
+                    },
+                    error: function () {
+                        $.modal.alertWarning("请联系管理员");
+                    }
+                });
+            }
 
 
                 if (confirmFlag) {
