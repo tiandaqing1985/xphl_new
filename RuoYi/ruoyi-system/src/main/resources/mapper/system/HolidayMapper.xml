@@ -39,6 +39,7 @@
     <select id="selectHolidayListByCondition" parameterType="Holiday" resultMap="HolidayResult">
         <include refid="selectHolidayVo"/>
         <where>
+        	holiday_type=1 and
             createdate <![CDATA[>= ]]> #{createdate} and createdate <![CDATA[<= ]]> #{overdate}
             and user_id = #{userId}
         </where>
