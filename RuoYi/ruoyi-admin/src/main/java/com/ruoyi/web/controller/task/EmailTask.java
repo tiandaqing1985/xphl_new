@@ -291,7 +291,7 @@ public class EmailTask {
             //leader
             SysDept dept = deptMapper.selectDeptByUserId(user.getUserId());//根据审批人id查询其下所有部门
 
-            if (dept == null || "".equals(dept)) continue;
+            if (dept == null || "".equals(dept) || !dept.getLeader().equals(user.getUserName())) continue;
 
             dept = new SysDept();
             dept.setLeader(user.getUserName());

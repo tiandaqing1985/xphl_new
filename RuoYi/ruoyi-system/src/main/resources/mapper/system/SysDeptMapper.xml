@@ -167,6 +167,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			sys_dept d
 			LEFT JOIN sys_user us ON us.dept_id = d.dept_id 
 		WHERE
+			d.del_flag = 0 AND
 			us.user_id = #{userId}
 	</select>
 </mapper> 
