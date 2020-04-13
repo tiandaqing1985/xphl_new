@@ -244,7 +244,10 @@ public class EmailTask {
                 //今天是否是满一年的日期
                 String today = s.format(new Date());
                 if (creatDate.equals(today)) {
-                    int year = today.compareTo(intime);//满几年
+                   // int year = today.compareTo(intime);//满几年
+
+                    int year =Integer.parseInt(today.substring(0, 4))-Integer.parseInt(intime.substring(0, 4));//满几年
+
                     long second = secondsBetween(intime, today);
                     long minute = second / 60;
                     long hour = minute / 60;
