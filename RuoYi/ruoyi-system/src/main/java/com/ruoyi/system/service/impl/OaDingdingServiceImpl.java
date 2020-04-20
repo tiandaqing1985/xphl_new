@@ -484,7 +484,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 
 				System.out.println("\n" + onduty + " " + offduty + "  " + hour + "\n");
 
-				// 早晚打卡时间差大于等于6h
+				// 早晚打卡时间差大于等于7h  17点下班
 				if (hour >= 7) {
 					Dingding di2 = new Dingding();
 					di2.setUserId(d.getUserId());

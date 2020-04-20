@@ -302,7 +302,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			AND date_format(ding.workDate,'%y%m%d') &lt;= date_format(#{params.endTime},'%y%m%d')
 		</if>
          	</where>   
-    ) a ORDER BY a.user_id,a.intime,a.userCheckTime
+    ) a ORDER BY a.user_id,a.intime,a.userCheckTime desc
     </select>
     
     <!-- 10:00 - 10:30之间的考勤 -->
