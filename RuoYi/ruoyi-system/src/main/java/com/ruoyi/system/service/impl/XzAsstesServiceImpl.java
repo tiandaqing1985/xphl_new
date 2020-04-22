@@ -561,17 +561,17 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
 //		String a = xzAssetTypeMapper.selectXzAssetTypeById(xzAsstes.getAssetsType()).getCode();
 //		String b = xzAssetDataMapper.selectXzAssetDataById(xzAsstes.getAssetsType2()).getCode();
             // 查询此编码格式编号的最大值，然后加1 如果没有，则从0001开始
-            String maxNum = seqService.selectNumByType(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString());
+            String maxNum = seqService.selectNumByType(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString(),xzAsstes.getRegion());
 
             if (maxNum == null || maxNum.isEmpty()) {
                 // 第一条数据
-                seqService.insertSeq(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString());
-                seqService.addSeqNumByType(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString());
+                seqService.insertSeq(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString(),xzAsstes.getRegion());
+                seqService.addSeqNumByType(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString(),xzAsstes.getRegion());
                 code = region + xzAssetData.getCode() + date + "0001";
             } else {
                 // 编码加1
                 int num = 10000 + Integer.parseInt(maxNum) + 1;
-                seqService.addSeqNumByType(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString());
+                seqService.addSeqNumByType(xzAsstes.getAssetsType().toString(), xzAsstes.getAssetsType2().toString(),xzAsstes.getRegion());
                 // 截取：10001 截取后四位
                 code = region + xzAssetData.getCode() + date + String.valueOf(num).substring(1, 5);
             }

@@ -5,15 +5,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.system.mapper.SeqMapper">
     
 	<select id="selectNumByType" parameterType="String" resultType="String">
-		select num from xz_seq where type1 = #{param1} and type2 = #{param2}
+		select num from xz_seq where type1 = #{param1} and type2 = #{param2} and region = #{param3}
 	</select>
 
 	<insert id="insertSeq" parameterType="String">
-		insert into xz_seq(type1,type2,num) values(#{param1},#{param2},0)
+		insert into xz_seq(type1,type2,num,region) values(#{param1},#{param2},0,#{param3})
 	</insert>
 
 	<update id="addSeqNumByType" parameterType="String">
-		update xz_seq set num = num + 1 where type1 = #{param1} and type2 = #{param2}
+		update xz_seq set num = num + 1 where type1 = #{param1} and type2 = #{param2} and region = #{param3}
 	</update>
    
 </mapper>

@@ -125,7 +125,7 @@ public class XzAsstesController extends BaseController {
     @ResponseBody
     public TableDataInfo handlist(XzAsstes xzAsstes) {
         xzAsstes.setSort("1");// 固定资产
-        xzAsstes.setSubmitType("2");
+//        xzAsstes.setSubmitType("2");
         SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
 
         if (ShiroUtils.getUserId() == 1 || ShiroUtils.getUserId() == 103) { //超级管理员 和 任总看所有数据
@@ -265,9 +265,9 @@ public class XzAsstesController extends BaseController {
         xzAsstes.setSort("1");
         String str = xzAsstesService.insertXzAsstes(xzAsstes);
         if (str.equals("1")) {
-            return error("s/n数量与录入资产数量不统一，请确认后重新录入！");
+            return success();
         } else {
-            return success(str);
+            return error("s/n数量与录入资产数量不统一，请确认后重新录入！");
         }
 
     }

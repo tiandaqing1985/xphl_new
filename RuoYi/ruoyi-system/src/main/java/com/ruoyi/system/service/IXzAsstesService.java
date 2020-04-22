@@ -21,16 +21,16 @@ public interface IXzAsstesService {
 	 */
 	public XzAsstes selectXzAsstesById(Long id);
 
+    boolean createQrCode(String id);
+
 	/**
 	 * 查询资产列表
-	 * 
+	 *
 	 * @param xzAsstes
 	 *            资产信息
 	 * @return 资产集合
 	 */
 	public List<XzAsstes> selectXzAsstesList(XzAsstes xzAsstes);
-
-    boolean createQrCode(String id);
 
     /**
 	 * 新增固定资产

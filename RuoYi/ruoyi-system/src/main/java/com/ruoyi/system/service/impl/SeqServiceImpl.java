@@ -12,17 +12,17 @@ public class SeqServiceImpl implements SeqService {
     private SeqMapper seqMapper;
 
     @Override
-    public String selectNumByType(String type1, String type2) {
-        return seqMapper.selectNumByType(type1, type2);
+    public String selectNumByType(String type1, String type2, String region) {
+        return seqMapper.selectNumByType(type1, type2, region);
     }
 
     @Override
-    public void insertSeq(String type1, String type2) {
-        seqMapper.insertSeq(type1, type2);
+    public void insertSeq(String type1, String type2, String region) {
+        seqMapper.insertSeq(type1, type2,region);
     }
 
     @Override
-    public void addSeqNumByType(String type1, String type2) {
-        seqMapper.addSeqNumByType(type1, type2);
+    public void addSeqNumByType(String type1, String type2, String region) {
+        seqMapper.addSeqNumByType(type1, type2,region);
     }
 }

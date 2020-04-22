@@ -26,31 +26,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="departmentName"    column="department_name"    />
         <result property="reason"    column="reason"    />
     </resultMap>
-	
+
 	<sql id="selectXzAssetHandRecordVo">
         select id, apply_id, asset_id, distributor, recipient, distribution_date, confirm_date, plan_return_date, is_claim, is_msg, source_type, create_by, create_time, update_by, update_time from xz_asset_hand_record
     </sql>
-    
+
     <sql id="selectXzAssetHandRecord">
-        select ahr.id, ahr.apply_id, ahr.asset_id, ahr.distributor, ahr.recipient, ahr.distribution_date, ahr.confirm_date, ahr.plan_return_date, ahr.is_claim, ahr.is_msg, ahr.source_type, ahr.create_by, ahr.create_time, ahr.update_by, ahr.update_time, 
+        select ahr.id, ahr.apply_id, ahr.asset_id, ahr.distributor, ahr.recipient, ahr.distribution_date, ahr.confirm_date, ahr.plan_return_date, ahr.is_claim, ahr.is_msg, ahr.source_type, ahr.create_by, ahr.create_time, ahr.update_by, ahr.update_time,
         a.assets_name asset_name,d.dept_name department_name, u.user_name distributor_name,ur.user_name recipient_name
-        from xz_asset_hand_record ahr 
+        from xz_asset_hand_record ahr
         left join xz_asstes a on a.id =ahr.asset_id
         left join sys_user u on u.user_id= ahr.distributor
         left join sys_user ur on ur.user_id= ahr.recipient
         left join sys_dept d on d.dept_id=a.department
         left join xz_personal_apply xpa on xpa.apply_id=ahr.apply_id
     </sql>
-	
+
     <select id="selectXzAssetHandRecordList" parameterType="XzAssetHandRecord" resultMap="XzAssetHandRecordResult">
         <include refid="selectXzAssetHandRecord"/>
-        <where>  
+        <where>
              <if test="assetName != null  and assetName != '' "> and a.assets_name = #{assetName}</if>
              <if test="region != null  and region != '' "> and a.region = #{region}</if>
               and a.sort = '2'
          </where>
     </select>
-    
+
     <select id="selectXzAssetHandRecordById" parameterType="Long" resultMap="XzAssetHandRecordResult">
         <include refid="selectXzAssetHandRecordVo"/>
         where id = #{id}
@@ -73,9 +73,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectXzAssetHandRecordByAssetId" parameterType="Long" resultMap="XzAssetHandRecordResult">
         <include refid="selectXzAssetHandRecord"/>
-        where ahr.id in (select max(id) from xz_asset_hand_record where asset_id = #{assetId}) 
+        where ahr.id in (select max(id) from xz_asset_hand_record where asset_id = #{assetId})
     </select>
-        
+
     <insert id="insertXzAssetHandRecord" parameterType="XzAssetHandRecord" useGeneratedKeys="true" keyProperty="id">
         insert into xz_asset_hand_record
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -115,7 +115,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="distributorStatus != null  and distributorStatus != ''  ">#{distributorStatus},</if>
          </trim>
     </insert>
-	 
+
     <update id="updateXzAssetHandRecord" parameterType="XzAssetHandRecord">
         update xz_asset_hand_record
         <trim prefix="SET" suffixOverrides=",">
@@ -140,12 +140,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id="deleteXzAssetHandRecordById" parameterType="Long">
         delete from xz_asset_hand_record where id = #{id}
     </delete>
-	
+
     <delete id="deleteXzAssetHandRecordByIds" parameterType="String">
-        delete from xz_asset_hand_record where id in 
+        delete from xz_asset_hand_record where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
-    
+
 </mapper>

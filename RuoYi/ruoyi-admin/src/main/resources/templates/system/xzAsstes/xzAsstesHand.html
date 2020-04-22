@@ -14,19 +14,22 @@
 							<li>资产编码：<input type="text" name="assetsCode" />
 							</li>
 
-							<li>资产名称：<input type="text" name="assetsName" />
-							</li>
-
-							<li>所在地域： <select name="region"
-								th:with="type=${@dict.getType('xz_assets_region')}">
-									<option value="">所有</option>
-									<option th:id="'opt'+${dict.dictValue}" th:each="dict : ${type}" th:text="${dict.dictLabel}"
+							<li>资产状态： <select name="assetsStatus"
+											  th:with="type=${@dict.getType('xz_assets_assetsStatus')}">
+								<option value="">所有</option>
+								<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
 							</select>
 							</li>
 
-<!--							<li>采购人员：<input type="text" name="purchaseName" />-->
-<!--							</li>-->
+							<li>所在地域： <select name="region" id="region"
+											  th:with="type=${@dict.getType('xz_assets_region')}">
+								<option id="optall" value="">所有</option>
+								<option th:id="'opt'+${dict.dictValue}" th:each="dict : ${type}" th:text="${dict.dictLabel}"
+										th:value="${dict.dictValue}"></option>
+							</select>
+							</li>
+
 							<li>
 								<div>
 									采购人员：
@@ -40,26 +43,36 @@
 									</div>
 								</div>
 							</li>
+							<li>
+								<div>
+									使用人：
+									<input id="useName" type="text" name="useName"/>
+									<div class="input-group-btn" style="float: right">
+										<button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+											<span class="caret"></span>
+										</button>
+										<ul class="dropdown-menu dropdown-menu-right" role="menu">
+										</ul>
+									</div>
+								</div>
+							</li>
 
-							<!-- <li>资产状态： <select name="assetsStatus"
-								th:with="type=${@dict.getType('xz_assets_assetsStatus')}">
-									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+							<li>资产名称：<input type="text" name="assetsName" />
+							</li>
+
+							<li>使用状态： <select name="useStatus" id="useStatus"
+											  th:with="type=${@dict.getType('xz_assets_useStatus')}">
+								<option value="">所有</option>
+								<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
 							</select>
 							</li>
-							<li>使用状态： <select name="useStatus"
-								th:with="type=${@dict.getType('xz_assets_useStatus')}">
-									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-										th:value="${dict.dictValue}"></option>
-							</select>
-							</li> -->
 							<li class="select-time"><label>购入时间：</label> <input
-								type="text" class="time-input" id="startTime" placeholder="开始时间"
-								name="params[beginTime]" /> <span>-</span> <input type="text"
-								class="time-input" id="endTime" placeholder="结束时间"
-								name="params[endTime]" /></li>
+									type="text" class="time-input" id="startTime" placeholder="开始时间"
+									name="params[beginTime]" /> <span>-</span> <input type="text"
+								  class="time-input" id="endTime" placeholder="结束时间"
+								  name="params[endTime]" />
+							</li>
 							<li><a class="btn btn-primary btn-rounded btn-sm"
 								onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm"
@@ -71,8 +84,12 @@
 			</div>
 
 			<div class="btn-group-sm" id="toolbar" role="group">
-<!--				<a class="btn btn-primary" onclick="$.table.exportExcel()">分配-->
-<!--				</a>-->
+				<a class="btn btn-success" onclick="$.operate.addTab()">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-danger btn-del disabled"  onclick="toSubmitAll()">
+					<i class="fa fa-check"></i>一键提交
+				</a>
 			</div>
 			<div class="col-sm-12 select-table table-striped">
 				<table id="bootstrap-table" data-mobile-responsive="true"></table>
@@ -99,6 +116,21 @@
 	 }).on('onUnsetSelectValue', function (e) {
 		 console.log("onUnsetSelectValue");
 	 });
+	 var testBsSuggest = $("#useName").bsSuggest({
+		 url: ctx + "system/user/userModel",
+		 showBtn: false,
+		 idField: "userName",
+		 keyField: "userName",
+		 effectiveFields: ["deptName", "userName"],
+		 multiWord: true,
+		 hideOnSelect: true
+	 }).on('onDataRequestSuccess', function (e, result) {
+		 console.log('onDataRequestSuccess: ', result);
+	 }).on('onSetSelectValue', function (e, keyword) {
+		 console.log('onSetSelectValue: ', keyword);
+	 }).on('onUnsetSelectValue', function (e) {
+		 console.log("onUnsetSelectValue");
+	 });
         var region = [[${@dict.getType('xz_assets_region')}]];
         var brand = [[${@dict.getType('xz_assets_brand')}]];
         var assetsStatus = [[${@dict.getType('xz_assets_assetsStatus')}]];
@@ -111,23 +143,29 @@
         $(function() {
 
 			if(role.indexOf("admin")==-1&&role.indexOf("xzzj")==-1){
+				$("#region option[id='optall']").remove();
 				if(area==1){
-					$("#opt2").hide();
+					$("#region option[id='opt2']").remove();
 				}else if(area==2){
-					$("#opt1").hide();
-					$("#opt3").hide();
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt3']").remove();
 				}else if(area==3){
-					$("#opt1").hide();
-					$("#opt2").hide();
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt2']").remove();
 				}
 			}
 
             var options = {
                 url: prefix1 + "/handlist",
-                createUrl: prefix + "/add/{id}",
+				updateUrl: prefix1 + "/edit/{id}",
+				toSubmitUrl:prefix1 + "/addSub",
+				toAllSubmitUrl:prefix1 + "/toAllSubmit",
+                createUrl: prefix1 + "/add",
                 updateSubUrl: prefix + "/editSub/{id}",
-                detailUrl: prefix + "/detail/{id}",
+                detailUrl: prefix1 + "/detail/{id}",
 				exportUrl: prefix1 + "/export",
+				editPartUrl: prefix1 + "/editPart/{id}",
+				removeUrl: prefix1 + "/remove",
                 modalName: "资产",
 		        showExport: true,
                 columns: [{
@@ -220,8 +258,16 @@
 		            	/* actions.push('<a class="btn btn-success btn-xs ' + detailFlag + '" href="#" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-edit"></i>查看</a> ');
                         actions.push('<a class="btn btn-warning btn-xs ' + addFlag + '" href="#" onclick="$.operate.add(\'' + row.id + '\')"><i class="fa fa-add"></i>台账</a>'); */
                         if(row.assetsStatus=="2"){
-		            		actions.push('<a class="btn btn-primary btn-xs " href="#" onclick="$.operate.add(\'' + row.id + '\')"><i class="fa fa-add"></i>分配</a>');
+		            		actions.push('<a class="btn btn-primary btn-xs " href="#" onclick="put(\'' + row.id + '\')"><i class="fa fa-add"></i>分配</a> ');
 		            	}
+						if(row.submitType=="2"){
+							actions.push('<a class="btn btn-primary btn-xs ' + '" href="#" onclick="editPart(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+						}else{
+							actions.push('<a class="btn btn-success btn-xs ' + '" href="#" onclick="submit(\'' + row.id + '\')"><i class="fa fa-check"></i>提交</a> ');
+							actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a> ');
+							actions.push('<a class="btn btn-info btn-xs " href="javascript:void(0)" onclick="$.operate.editTab(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+						}
+						actions.push('<a class="btn btn-warning btn-xs" href="javascript:void(0)" onclick="$.operate.detail(\'' + row.id + '\')"><i class="fa fa-search"></i>详细</a>');
 						// actions.push('<a class="btn btn-warning btn-xs " href="qrCodeDownload/'+row.assetsCode+'">二维码下载</a>');
 						return actions.join('');
 		            }
@@ -230,6 +276,10 @@
             $.table.init(options);
         });
 
+	 function put(id){
+		 $.modal.open("分配" + $.table._option.modalName, prefix + "/add/"+id);
+	 }
+
 	 // 批量分配
 	 function toSubmitAll() {
 		 var rows = $.common.isEmpty($.table._option.uniqueId) ? $.table.selectFirstColumns() : $.table.selectColumns($.table._option.uniqueId);
@@ -237,13 +287,19 @@
 			 $.modal.alertWarning("请至少选择一条记录");
 			 return;
 		 }
-		 $.modal.confirm("确认要分配选中的" + rows.length + "条数据吗?", function() {
+		 $.modal.confirm("确认要提交选中的" + rows.length + "条数据吗?", function() {
 			 var url = $.table._option.toAllSubmitUrl;
 			 var data = { "ids": rows.join() };
 			 $.operate.submit(url, "post", "json", data);
 		 });
 	 }
-
+	 function editPart(id){
+		 $.modal.openTab("提交后修改", $.table._option.editPartUrl.replace("{id}",id));
+	 }
+	 function submit(id){
+		 $.operate.post(prefix1 + "/toSubmit", {"id": id});
+		 $.table.refresh();
+	 }
     </script>
 </body>
 <form id="importForm" enctype="multipart/form-data" class="mt20 mb10"
