@@ -98,8 +98,8 @@ public class XzPersonalApplyController extends BaseController {
         if (permission.hasRole("xzzj").equals("") || ShiroUtils.getUserId() == 1 || ShiroUtils.getUserId() == 103 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())) { //超级管理员 和 任总 行政部门leader看所有数据
 
         } else {
-            String region = ShiroUtils.getSysUser().getArea();
-            xzPersonalApply.setRegion(region);
+//            String region = ShiroUtils.getSysUser().getArea();
+//            xzPersonalApply.setRegion(region);
         }
 
         startPage();
@@ -147,6 +147,7 @@ public class XzPersonalApplyController extends BaseController {
     public String add(ModelMap mmap) {
         //获取办公用品资产父级类型
         mmap.put("typeList", xzAssetTypeService.selectXzAssetTypeByStaAll());
+        mmap.put("area",ShiroUtils.getSysUser().getArea());
         return prefix + "/add";
     }
 

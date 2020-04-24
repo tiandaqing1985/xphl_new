@@ -20,7 +20,6 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
 
 							<li>所在地域： <select name="region"
 								th:with="type=${@dict.getType('xz_assets_region')}">
-									<option value="">所有</option>
 									<option th:id="'opt'+${dict.dictValue}" th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
 							</select>

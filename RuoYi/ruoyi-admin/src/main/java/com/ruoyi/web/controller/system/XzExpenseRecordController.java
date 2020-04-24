@@ -66,7 +66,8 @@ public class XzExpenseRecordController extends BaseController {
     }
 
     @GetMapping("/xzExpenseSta")
-    public String xzExpenseSta() {
+    public String xzExpenseSta(ModelMap modelMap) {
+        modelMap.put("userid",ShiroUtils.getUserId());
         return "system/xzExpenseRecord/xzExpenseList";
     }
 
@@ -128,9 +129,7 @@ public class XzExpenseRecordController extends BaseController {
             if (ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())) {  //行政部门leader查看所有
 
             } else {
-                String region = ShiroUtils.getSysUser().getArea();
-                xzExpenseSta.setRegion(region);
-                compareData.setRegionCompare(region);
+
             }
         }
         startPage();

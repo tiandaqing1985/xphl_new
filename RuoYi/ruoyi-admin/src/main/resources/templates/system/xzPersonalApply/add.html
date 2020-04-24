@@ -38,12 +38,8 @@
 					style="color: red;">*</span>所属地域：</label>
 				<div class="col-sm-8">
 					<div class="input-group" style="width: 100%">
-						<select name="region" class="form-control m-b"
-							th:with="type=${@dict.getType('xz_assets_region')}" required>
-							<option value="">请选择</option>
-							<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
-								th:value="${dict.dictValue}"></option>
-						</select>
+						<input  th:value="${@dict.getLabel('xz_assets_region',area)}" name="regionName" class="form-control" readonly>
+						<input id="region" th:value="${area}" name="region" class="form-control" style="display: none" readonly>
 					</div>
 				</div>
 			</div>

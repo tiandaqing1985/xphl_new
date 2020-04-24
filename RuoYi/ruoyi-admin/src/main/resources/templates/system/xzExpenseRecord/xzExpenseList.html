@@ -55,8 +55,8 @@
 						<ul>
 							<li>所在地域： <select name="region" id="region"
 								th:with="type=${@dict.getType('xz_assets_region')}">
-									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+									<option id="optall" value="">所有</option>
+									<option th:id="'opt'+${dict.dictValue}" th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
 							</select>
 							</li>
@@ -78,7 +78,7 @@
 							<li id="searchBtns">
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="mSearch()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="mReset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="compareBtnClick()"><i class="fa"></i>比较</a>
+<!--								<a class="btn btn-warning btn-rounded btn-sm" onclick="compareBtnClick()"><i class="fa"></i>比较</a>-->
 							</li>
 						</ul>
 					</div>
@@ -178,8 +178,23 @@
 			$('#dept').selectpicker('deselectAll');
 			$.form.reset();
 		}
-
+		var role = [[${@sysRoleServiceImpl.selectRoleKeys(userid)}]];
+		var area = [[${@permission.getPrincipalProperty('area')}]];
         $(function() {
+
+			if(role.indexOf("admin")==-1&&role.indexOf("xzzj")==-1){
+				$("#region option[id='optall']").remove();
+				if(area==1){
+					$("#region option[id='opt2']").remove();
+				}else if(area==2){
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt3']").remove();
+				}else if(area==3){
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt2']").remove();
+				}
+			}
+
             var options = {
                 url: prefix + "/xzExpenseList",
                 detailUrl:prefix + "/xzExpenseDataList/{expenseTypeParent}",

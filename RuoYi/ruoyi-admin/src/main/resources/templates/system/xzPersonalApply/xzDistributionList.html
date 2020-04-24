@@ -31,8 +31,8 @@
 							</select>
 							</li>
 							<li>所在地域：
-								<select name="region" th:with="type=${@dict.getType('xz_assets_region')}">
-								<option value="">所有</option>
+								<select id="region" name="region" th:with="type=${@dict.getType('xz_assets_region')}">
+								<option id="optall" value="">所有</option>
 								<option th:id="'opt'+${dict.dictValue}" th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
 							</select>
@@ -79,14 +79,15 @@
         $(function() {
 
 			if(role.indexOf("admin")==-1&&role.indexOf("xzzj")==-1){
+				$("#region option[id='optall']").remove();
 				if(area==1){
-					$("#opt2").hide();
+					$("#region option[id='opt2']").remove();
 				}else if(area==2){
-					$("#opt1").hide();
-					$("#opt3").hide();
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt3']").remove();
 				}else if(area==3){
-					$("#opt1").hide();
-					$("#opt2").hide();
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt2']").remove();
 				}
 			}
 

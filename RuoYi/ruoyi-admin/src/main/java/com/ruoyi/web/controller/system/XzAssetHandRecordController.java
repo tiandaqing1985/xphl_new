@@ -68,7 +68,6 @@ public class XzAssetHandRecordController extends BaseController
 	@ResponseBody
 	public TableDataInfo list(XzAssetHandRecord xzAssetHandRecord)
 	{
-		startPage();
 		SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
 		
 		if(ShiroUtils.getUserId()==1 || ShiroUtils.getUserId()==103 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())){ //超级管理员 和 任总 行政部门leader看所有数据  
@@ -77,6 +76,7 @@ public class XzAssetHandRecordController extends BaseController
 			String region=ShiroUtils.getSysUser().getArea();
 			xzAssetHandRecord.setRegion(region);
 		}
+		startPage();
         List<XzAssetHandRecord> list = xzAssetHandRecordService.selectXzAssetHandRecordList(xzAssetHandRecord);
 		return getDataTable(list);
 	}
