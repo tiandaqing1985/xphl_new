@@ -24,10 +24,10 @@
 							style="color: red;">*</span>地域：</label>
 						<div class="col-sm-8">
 							<div class="input-group" style="width: 100%">
-								<select name="region" class="form-control m-b"
+								<select id="region" name="region" class="form-control m-b"
 									th:with="type=${@dict.getType('xz_assets_region')}" required>
 									<option value=""></option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+									<option th:id="'opt'+${dict.dictValue}" th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
 								</select>
 							</div>
@@ -407,8 +407,27 @@
 			};
 			$.ajax(config)
 		}
-
+		var area = [[${@permission.getPrincipalProperty('area')}]];
+		var role = [[${@sysRoleServiceImpl.selectRoleKeys(userid)}]];
 		$(function() {
+			if(role.indexOf("admin")==-1&&role.indexOf("xzzj")==-1){
+				$("#region option[id='optall']").remove();
+				if(area==1){
+					$("#region option[id='opt2']").remove();
+				}else if(area==2){
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt3']").remove();
+					$("#region option[id='opt5']").remove();
+				}else if(area==3){
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt2']").remove();
+					$("#region option[id='opt5']").remove();
+				}else if(area==5){
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt2']").remove();
+					$("#region option[id='opt3']").remove();
+				}
+			}
 			//初始化日期选择器
 			layui.use('laydate', function() {
 				var laydate = layui.laydate;

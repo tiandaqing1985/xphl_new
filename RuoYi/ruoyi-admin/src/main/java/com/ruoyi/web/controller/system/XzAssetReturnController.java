@@ -91,8 +91,8 @@ public class XzAssetReturnController extends BaseController {
         if (permission.hasRole("xzzj").equals("") || ShiroUtils.getUserId() == 1 || ShiroUtils.getUserId() == 103 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())) { //超级管理员 和 任总 行政部门leader看所有数据
 
         } else {
-            String region = ShiroUtils.getSysUser().getArea();
-            xzAssetReturn.setRegion(region);
+//            String region = ShiroUtils.getSysUser().getArea();
+//            xzAssetReturn.setRegion(region);
         }
         List<XzAssetReturn> list = xzAssetReturnService.selectXzAssetReturnList(xzAssetReturn);
         return getDataTable(list);
