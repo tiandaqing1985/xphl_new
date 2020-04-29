@@ -550,10 +550,13 @@ public class XzAsstesServiceImpl implements IXzAsstesService {
                 } else if (xzAsstes.getRegion().equals("2")) {
                     region = "SH";
                 } else if (xzAsstes.getRegion().equals("3")) {
-                    region = "GZ";
-                } else if (xzAsstes.getRegion().equals("4")) {
                     region = "SZ";
+                } else if (xzAsstes.getRegion().equals("4")) {
+                    region = "XJ";
+                } else if (xzAsstes.getRegion().equals("5")) {
+                    region = "HZ";
                 } else {
+
                 }
             }
             XzAssetData xzAssetData = xzAssetDataMapper.selectXzAssetDataById(xzAsstes.getAssetsType2());

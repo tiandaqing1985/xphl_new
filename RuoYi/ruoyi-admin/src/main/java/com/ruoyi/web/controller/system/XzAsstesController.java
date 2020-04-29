@@ -235,6 +235,7 @@ public class XzAsstesController extends BaseController {
     public String add(ModelMap mmap) {
         // 获取办公用品资产父级类型
         mmap.put("typeList", xzAssetTypeService.selectXzAssetTypeByAssAll());
+        mmap.put("userid",ShiroUtils.getUserId());
         return prefix + "/add";
     }
 

@@ -18,8 +18,9 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
 					<div class="select-list">
 						<ul>
 
-							<li>所在地域： <select name="region"
+							<li>所在地域： <select name="region" id="region"
 								th:with="type=${@dict.getType('xz_assets_region')}">
+									<option id="optall" value="">所有</option>
 									<option th:id="'opt'+${dict.dictValue}" th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
 							</select>
@@ -74,14 +75,21 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
         $(function() {
 
 			if(role.indexOf("admin")==-1&&role.indexOf("xzzj")==-1){
+				$("#region option[id='optall']").remove();
 				if(area==1){
-					$("#opt2").hide();
+					$("#region option[id='opt2']").remove();
 				}else if(area==2){
-					$("#opt1").hide();
-					$("#opt3").hide();
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt3']").remove();
+					$("#region option[id='opt5']").remove();
 				}else if(area==3){
-					$("#opt1").hide();
-					$("#opt2").hide();
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt2']").remove();
+					$("#region option[id='opt5']").remove();
+				}else if(area==5){
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt2']").remove();
+					$("#region option[id='opt3']").remove();
 				}
 			}
 
