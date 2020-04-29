@@ -194,7 +194,7 @@
                         if (row.submitStatus == "submit") {
                             if (row.status == 1) {
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\',\''+row.type+'\',\''+row.jknum+'\')"><i class="fa fa-detail"></i>打印</a>');
-                                actions.push('<a class="btn btn-success btn-xs " onclick="xiazai(\'' + row.num + '\')"><i class="fa fa-detail"></i>图片下载</a>');
+                                actions.push('<a class="btn btn-success btn-xs " href="facFileUpload/xaizai?num='+row.num+'"><i class="fa fa-detail"></i>图片下载</a>');
 
                             }else if (row.status == 2) {
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\',\''+row.type+'\',\''+row.jknum+'\')"><i class="fa fa-detail"></i>打印</a>');

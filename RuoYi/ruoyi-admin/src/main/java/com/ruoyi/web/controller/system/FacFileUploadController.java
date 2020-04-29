@@ -136,9 +136,9 @@ public class FacFileUploadController extends BaseController {
 
 
     @Log(title = "下载图片")
-    @GetMapping("/xaizai/num")
+    @GetMapping("/xaizai")
     @ResponseBody
-    public void xaizai(@PathVariable("num") String num, HttpServletResponse response) throws Exception {
+    public void xaizai(@RequestParam("num") String num, HttpServletResponse response) throws Exception {
         facFileUploadService.xaizainum(num);
         File file = null;
         String filePath = Global.getUploadPath();
