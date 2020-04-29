@@ -1,5 +1,6 @@
 package com.ruoyi.system.service.finance.impl;
 
+import com.ruoyi.common.config.Global;
 import com.ruoyi.common.core.text.Convert;
 import com.ruoyi.system.domain.finance.FacFileUpload;
 import com.ruoyi.system.mapper.finance.FacFileUploadMapper;
@@ -108,37 +109,46 @@ public class FacFileUploadServiceImpl implements IFacFileUploadService {
         fileUpload.setNum(num);
         List<FacFileUpload> list = facFileUploadMapper.selectFacFileUploadList(fileUpload);
         if (list != null && list.size() > 0) {
-            String[] urls = new String[list.size()];
+            String filePath = Global.getUploadPath();
+            File file = new File(filePath+num);
+            file.mkdirs();
+            //String[] urls = new String[list.size()];
             for (int i = 0; list.size() > i; i++) {
-                urls = insert(urls, list.get(i).getFilePath());
+               // urls = insert(urls, list.get(i).getFilePath());
                 FacFileUploadServiceImpl aaa = new FacFileUploadServiceImpl();
                 try{
-                    aaa.xiazai(num + i, list.get(i).getFilePath());
+                    aaa.xiazai(num + i, list.get(i).getFilePath(),filePath);
                 }catch (IOException e){
                     e.printStackTrace();
                 }
-
             }
-            FileUtilsTest.compressToZip("E:\\b","E:\\a",num+".zip");
+            FileUtilsTest.compressToZip(filePath+num,filePath+num+1,num+".zip");
             // sourceFilePath 源文件路径 zipFilePath    压缩后文件存储路径  zipFilename    压缩文件名
+
             return "下载成功";
         }
         return "无图片文件";
     }
 
-    public void xiazai(String num, String path) throws IOException{
-        path = "http://192.168.88.191/upload/2020/04/24/04b9509fb271b6b2755a7905276ff71a.jpg";
+
+
+
+
+    public void xiazai(String num, String path,String filePath) throws IOException{
+       // path = "http://192.168.88.191/upload/2020/04/24/04b9509fb271b6b2755a7905276ff71a.jpg";
         URL url = null;
         //从网络上下载一张图片
         InputStream inputStream = null;
         OutputStream outputStream = null;
+
+
         //建立一个网络链接
         HttpURLConnection con = null;
         try {
             url = new URL(path);
             con = (HttpURLConnection) url.openConnection();
             inputStream = con.getInputStream();
-            outputStream = new FileOutputStream(new File("E:"+File.separator+"a"+File.separator+"ccccc.jpg"));
+            outputStream = new FileOutputStream(new File(filePath+File.separator+num+".jpg"));
             int n = -1;
             byte b[] = new byte[1024];
             while ((n = inputStream.read(b)) != -1) {
