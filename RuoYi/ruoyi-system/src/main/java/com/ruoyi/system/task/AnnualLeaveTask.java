@@ -66,10 +66,10 @@ public class AnnualLeaveTask {
                     continue;
 
                 // 计算工龄
-                workYears = secondsBetween(intime, today) / 3600 / 24 / 365;
+                workYears = secondsBetween(firstWorkTime, today) / 3600 / 24 / 365;
 
                 // 法定年假天数
-                if (workYears >= 0 && workYears < 10) {
+                if (workYears >= 1 && workYears < 10) {
                     statutoryAnnualLeave = 5;
                 } else if (workYears >= 10 && workYears < 20) {
                     statutoryAnnualLeave = 10;

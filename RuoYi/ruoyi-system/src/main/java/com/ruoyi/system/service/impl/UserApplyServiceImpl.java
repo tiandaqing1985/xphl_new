@@ -7,7 +7,9 @@ import com.ruoyi.common.utils.file.FileUploadUtils;
 import com.ruoyi.common.utils.file.FileUtils;
 import com.ruoyi.common.utils.security.PermissionUtils;
 import com.ruoyi.system.domain.*;
+import com.ruoyi.system.domain.finance.FacFileUpload;
 import com.ruoyi.system.mapper.*;
+import com.ruoyi.system.mapper.finance.FacFileUploadMapper;
 import com.ruoyi.system.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -72,6 +75,8 @@ public class UserApplyServiceImpl implements IUserApplyService {
     private OaFileUploadMapper oaFileUploadMapper;
     @Autowired
     private ServerConfig serverConfig;
+    @Autowired
+    private FacFileUploadMapper facFileUploadMapper;
 
     /**
      * 查询申请信息
@@ -1252,6 +1257,12 @@ public class UserApplyServiceImpl implements IUserApplyService {
         }
 
         Date maxCheckDate = oaDingdingMapper.selectMaxOaDingding(oaDingding);// 查询下班打卡时间
+
+        if(maxCheckDate==null){
+            return false;
+        }
+
+
         // 下班打卡时间是否满足晚于21:30
         if (maxCheckDate.after(standardDate) || maxCheckDate.equals(standardDate)) {
             return true;
@@ -1279,6 +1290,43 @@ public class UserApplyServiceImpl implements IUserApplyService {
 		}*/
         return false;
     }
+
+
+    @Override
+    public String  Satisfied(Long userId, Date time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(time);
+        date.substring(0, 10);
+        // 验证加班审批是否已通过且满足2.5小时 20191219注释
+
+        SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SysUser user = userMapper.selectUserById(userId);
+        OaDingding oaDingding = new OaDingding();
+        oaDingding.setTime(date);
+        oaDingding.setUserName(user.getUserName());
+
+        String standardTime = date + " 21:30:00";
+        Date standardDate = null;
+        try {
+            standardDate = sdf2.parse(standardTime);
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Date maxCheckDate = oaDingdingMapper.selectMaxOaDingding(oaDingding);// 查询下班打卡时间
+
+        if(maxCheckDate==null){
+            return "考勤日期有误";
+        }
+        // 下班打卡时间是否满足晚于21:30
+        if (maxCheckDate.after(standardDate) || maxCheckDate.equals(standardDate)) {
+            return "true";
+        }
+
+        return "加班时长不满足2.5小时保存失败";
+    }
+
 
     /**
      * 新增补卡申请
@@ -1358,6 +1406,37 @@ public class UserApplyServiceImpl implements IUserApplyService {
             fileUpload.setFilePath(url);
             oaFileUploadMapper.insertOaFileUpload(fileUpload);
             id = fileUpload.getFileId();
+        } catch (Exception e) {
+            logger.error("上传文件" + fileId + "出现异常：", e);
+            throw e;
+        } finally {
+
+        }
+        return id;
+    }
+
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Long facuploadMateria(MultipartFile file_data, String fileId, String num) throws Exception {
+        Long id = null;
+        try {
+            // 上传文件路径
+            String filePath = Global.getUploadPath();
+           // String filePath = new File("").getAbsolutePath();
+            // 上传并返回新文件名称
+            String fileName = FileUploadUtils.upload(filePath, file_data);
+            String url = serverConfig.getUrl() + UPLOAD_PATH + fileName;
+
+            FacFileUpload fileUpload = new FacFileUpload();
+            //fileUpload.setFileName();
+            fileUpload.setFileName(fileId);
+            fileUpload.setFilePath(url);
+            fileUpload.setNum(num);
+            fileUpload.setCreateTime(new Date());
+
+            facFileUploadMapper.insertFacFileUpload(fileUpload);
+            id = fileUpload.getLoadId();
         } catch (Exception e) {
             logger.error("上传文件" + fileId + "出现异常：", e);
             throw e;

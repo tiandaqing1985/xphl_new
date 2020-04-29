@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.finance.FacFileUploadMapper">
+    
+    <resultMap type="FacFileUpload" id="FacFileUploadResult">
+        <result property="id"    column="id"    />
+        <result property="loadId"    column="loadId"    />
+        <result property="num"    column="num"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+	
+	<sql id="selectFacFileUploadVo">
+        select id, loadId, num, file_name, file_path, create_time from fac_file_upload
+    </sql>
+	
+    <select id="selectFacFileUploadList" parameterType="FacFileUpload" resultMap="FacFileUploadResult">
+        <include refid="selectFacFileUploadVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+             <if test="loadId != null "> and loadId = #{loadId}</if>
+             <if test="num != null  and num != '' "> and num = #{num}</if>
+             <if test="fileName != null  and fileName != '' "> and file_name = #{fileName}</if>
+             <if test="filePath != null  and filePath != '' "> and file_path = #{filePath}</if>
+             <if test="createTime != null "> and create_time = #{createTime}</if>
+         </where>
+    </select>
+    
+    <select id="selectFacFileUploadById" parameterType="Long" resultMap="FacFileUploadResult">
+        <include refid="selectFacFileUploadVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFacFileUpload" parameterType="FacFileUpload" useGeneratedKeys="true" keyProperty="id">
+        insert into fac_file_upload
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="loadId != null  ">loadId,</if>
+			<if test="num != null  and num != ''  ">num,</if>
+			<if test="fileName != null  and fileName != ''  ">file_name,</if>
+			<if test="filePath != null  and filePath != ''  ">file_path,</if>
+			<if test="createTime != null  ">create_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="loadId != null  ">#{loadId},</if>
+			<if test="num != null  and num != ''  ">#{num},</if>
+			<if test="fileName != null  and fileName != ''  ">#{fileName},</if>
+			<if test="filePath != null  and filePath != ''  ">#{filePath},</if>
+			<if test="createTime != null  ">#{createTime},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateFacFileUpload" parameterType="FacFileUpload">
+        update fac_file_upload
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="loadId != null  ">loadId = #{loadId},</if>
+            <if test="num != null  and num != ''  ">num = #{num},</if>
+            <if test="fileName != null  and fileName != ''  ">file_name = #{fileName},</if>
+            <if test="filePath != null  and filePath != ''  ">file_path = #{filePath},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+
+    <update id="updateNum" parameterType="FacFileUpload">
+        update fac_file_upload
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="loadId != null  ">loadId = #{loadId},</if>
+            <if test="num != null  and num != ''  ">num = #{num},</if>
+            <if test="fileName != null  and fileName != ''  ">file_name = #{fileName},</if>
+            <if test="filePath != null  and filePath != ''  ">file_path = #{filePath},</if>
+            <if test="createTime != null  ">create_time = #{createTime},</if>
+        </trim>
+        where num = #{num}
+    </update>
+
+
+
+	<delete id="deleteFacFileUploadById" parameterType="Long">
+        delete from fac_file_upload where id = #{id}
+    </delete>
+	
+    <delete id="deleteFacFileUploadByIds" parameterType="String">
+        delete from fac_file_upload where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <select id="ifPicUpload" parameterType="FacFileUpload" resultMap="FacFileUploadResult">
+        <include refid="selectFacFileUploadVo"/>
+        <where>
+            loadId is null
+            and num = #{num}
+        </where>
+    </select>
+
+
+</mapper>

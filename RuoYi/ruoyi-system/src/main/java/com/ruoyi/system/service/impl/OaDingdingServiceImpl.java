@@ -123,9 +123,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 			return oaDingdingMapper.selectDingData(ding);
 		}
 
-		if (user.getArea().equals("3")) {
-			user.setArea("2");
-		}
+
 		SysUser user3 = new SysUser();
 		user3.setRoleId(3L);// 人事专员
 		user3.setArea(user.getArea());
@@ -728,6 +726,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 				List<Dingding> dingList = oaDingdingMapper.selectOaDingdingListByCondition(ding);// 查询实际打卡时间
 
 				if (dingList != null) {
+					userApply.setTimeapart3("1");
 					if (userApply.getTimeapart3().equals("1")) {// 上午请假
 						Date startDate = getWorkDate(startTime, 11);// 打卡标准值：11点前
 						for (Dingding d : dingList) {

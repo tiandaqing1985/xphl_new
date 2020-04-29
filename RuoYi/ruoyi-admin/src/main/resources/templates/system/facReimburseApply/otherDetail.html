@@ -2,6 +2,8 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('报销申请添加')"/>
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -10,13 +12,15 @@
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>日期：</label>
             <div class="col-sm-8">
-                <input id="ddDate" name="ddDate" class="time-input form-control" required  readonly style="background-color: white">
+                <input id="ddDate" name="ddDate" class="time-input form-control" required readonly
+                       style="background-color: white">
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>金额：</label>
             <div class="col-sm-8">
-                <input id="amount" name="amount" class="form-control" type="text" onkeyup="chkPrice(this);" onblur="chkLast(this)" required>
+                <input id="amount" name="amount" class="form-control" type="text" onkeyup="chkPrice(this);"
+                       onblur="chkLast(this)" required>
             </div>
         </div>
         <div class="form-group">
@@ -28,7 +32,8 @@
         <div class="form-group">
             <label class="col-sm-3 control-label"><span style="color: red; ">*</span>单据数：</label>
             <div class="col-sm-8">
-                <input id="documentNum" name="documentNum" class="form-control" type="text" onkeyup="chkPrice(this);" onblur="chkLast(this)" required>
+                <input id="documentNum" name="documentNum" class="form-control" type="text" onkeyup="chkPrice(this);"
+                       onblur="chkLast(this)" required>
             </div>
         </div>
         <div class="form-group">
@@ -37,13 +42,26 @@
                 <textarea id="reason" name="reason" class="form-control" type="text"></textarea>
             </div>
         </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="ibox float-e-margins">
+                <div class="form-group" >
+                    <label class="font-noraml"><span style="color: red; ">*</span>上传图片</label>
+                    <div class="file-loading">
+                        <input id="fileinput-demo-1" type="file" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </form>
 </div>
 <div th:include="include::footer"></div>
-<th:block th:include="include :: bootstrap-select-js" />
+<th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: datetimepicker-js" />
+<th:block th:include="include :: bootstrap-fileinput-js"/>
 <script type="text/javascript">
     var prefix = ctx + "system/facReimburseApply";
-    var num =$("#num").val();
+    var num = $("#num").val();
     $(function () {
         $("#reimburseTime").datetimepicker({
             format: "yyyy-mm-dd ",
@@ -63,24 +81,72 @@
         focusCleanup: true
     });
 
+
+
+
+
+
+    $(document).ready(function () {
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': prefix + "/uploadList?num=" + num,
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            previewFileIcon:'图片预览'
+        });
+    });
+
+    // function submitHandler() {
+    //     if ($.validate.form()) {
+    //
+    //         $.operate.save(prefix + "/Arbitrarily", $('#form-add').serialize());
+    //     }
+    // }
+
     function submitHandler() {
         if ($.validate.form()) {
+            // var picFlag = true;
+            // //验证图片是否上传
+            // $.ajax({
+            //     type:"post",
+            //     async:false,
+            //     url:"/system/facFileUpload/ifPicUpload?num=" + num,
+            //     data:{},
+            //     dataType:"json",
+            //     success:function(result){
+            //         if(result){
+            //             picFlag = true;
+            //         }
+            //         else{
+            //             picFlag = false;
+            //             $.modal.alertWarning("请先上传图片再提交!");
+            //             return;
+            //         }
+            //     },
+            //     error:function(){
+            //         $.modal.alertWarning("请联系管理员");
+            //     }
+            // });
             $.operate.save(prefix + "/Arbitrarily", $('#form-add').serialize());
         }
     }
-    function chkPrice(obj){
-        obj.value = obj.value.replace(/[^\d.]/g,"");
+
+
+
+    function chkPrice(obj) {
+        obj.value = obj.value.replace(/[^\d.]/g, "");
 //必须保证第一位为数字而不是.
-        obj.value = obj.value.replace(/^\./g,"");
+        obj.value = obj.value.replace(/^\./g, "");
 //保证只有出现一个.而没有多个.
-        obj.value = obj.value.replace(/\.{2,}/g,".");
+        obj.value = obj.value.replace(/\.{2,}/g, ".");
 //保证.只出现一次，而不能出现两次以上
-        obj.value = obj.value.replace(".","$#$").replace(/\./g,"").replace("$#$",".");
+        obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
     }
-    function chkLast(obj){
+
+    function chkLast(obj) {
 // 如果出现非法字符就截取掉
-        if(obj.value.substr((obj.value.length - 1), 1) == '.')
-            obj.value = obj.value.substr(0,(obj.value.length - 1));
+        if (obj.value.substr((obj.value.length - 1), 1) == '.')
+            obj.value = obj.value.substr(0, (obj.value.length - 1));
     }
 
 

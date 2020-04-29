@@ -199,7 +199,12 @@ public interface IUserApplyService
 	 * 验证加班审批是否已通过且满足2.5小时
 	 * */
 	public boolean ifSatisfied(Long userId, Date time);
-	
+
+
+	/**
+	 * 验证加班审批是否已通过且满足2.5小时
+	 * */
+	public String  Satisfied(Long userId, Date time);
 	
     /**
      * 上传图片
@@ -212,4 +217,16 @@ public interface IUserApplyService
     
     /** 验证是否重复提交补卡申请 */
     public String ifPicRepeat(UserApply userApply);
+
+
+	/**
+	 * 上传图片
+	 * @param file_data
+	 * @param fileId
+	 * @return
+	 * @throws Exception
+	 */
+	public Long facuploadMateria(MultipartFile file_data, String fileId,String num) throws Exception;
+
+
 }

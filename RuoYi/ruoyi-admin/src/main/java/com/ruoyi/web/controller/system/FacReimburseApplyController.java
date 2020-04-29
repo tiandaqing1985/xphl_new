@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -745,9 +746,9 @@ public class FacReimburseApplyController extends BaseController {
         }
        // 此处需要改写代码
         if (reiTrafficApply.getType().equals("加班")) {
-            boolean a = userApplyService.ifSatisfied(ShiroUtils.getUserId(), reiTrafficApply.getDdDate());
-            if (!a) {
-                return AjaxResult.success("加班时长不满足2.5小时保存失败");
+            String a = userApplyService.Satisfied(ShiroUtils.getUserId(), reiTrafficApply.getDdDate());
+            if (!a.equals("true")) {
+                return AjaxResult.success(a);
             }
         }
         reiTrafficApply.setApplyUser(ShiroUtils.getUserId());
@@ -1117,4 +1118,16 @@ public class FacReimburseApplyController extends BaseController {
         facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
         return toAjax(facReimburseApplyService.insertApply(facReimburseApply));
     }
+
+    /**
+     * 上传多张图片
+     */
+    @PostMapping("/uploadList")
+    @ResponseBody
+    public AjaxResult uploadList(MultipartFile file_data, String fileId,String num) throws Exception {
+        userApplyService.facuploadMateria(file_data, fileId,num);
+        return AjaxResult.error();
+    }
+
+
 }

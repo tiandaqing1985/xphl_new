@@ -199,7 +199,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                     if (area.equals("2")) {
                         facSysUserApproval2.setApproverId(new Long("168"));// 审批id为人事
                     } else {
-                        center.setApproverId(new Long("241"));// 审批id为人事
+                        center.setApproverId(new Long("675"));// 审批id为人事
                     }
                     facSysUserApproval2.setApprovalTime(new Date());
                     facSysUserApproval2.setApprovalLevel(level++);
@@ -229,7 +229,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                     if (area.equals("2")) {
                                         center.setApproverId(new Long("168"));// 审批id为人事
                                     } else {
-                                        center.setApproverId(new Long("241"));// 审批id为人事
+                                        center.setApproverId(new Long("675"));// 审批id为人事
                                     }
                                     center.setApprovalLevel(level++);
                                     center.setProjectName(
@@ -281,7 +281,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                                 center.setApproverId(new Long("168"));// 审批id为人事
                                             } else {
                                                 center.setApproverId(
-                                                        new Long("241"));// 审批id为人事
+                                                        new Long("675"));// 审批id为人事
                                             }
                                             center.setApprovalLevel(level++);
                                             center.setProjectName(
@@ -339,7 +339,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                                         new Long("168"));// 审批id为人事
                                             } else {
                                                 center.setApproverId(
-                                                        new Long("241"));// 审批id为人事
+                                                        new Long("675"));// 审批id为人事
                                             }
                                             center.setApprovalLevel(level++);
                                             center.setProjectName(
@@ -405,7 +405,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                                                         new Long("168"));// 审批id为人事
                                             } else {
                                                 center.setApproverId(
-                                                        new Long("241"));// 审批id为人事
+                                                        new Long("675"));// 审批id为人事
                                             }
                                             center.setApprovalLevel(level++);
                                             center.setProjectName(
