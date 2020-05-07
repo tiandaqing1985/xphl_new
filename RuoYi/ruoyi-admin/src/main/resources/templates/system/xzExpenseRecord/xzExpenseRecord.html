@@ -34,12 +34,16 @@
 
 							<li th:hidden="${@permission.hasRole('xzzj')=='hidden'&&@permission.hasRole('admin')=='hidden'?true:false}">所在地域： <select name="region"
 								th:with="type=${@dict.getType('xz_assets_region')}">
-									<option value="">所有</option>
-									<option th:each="dict : ${type}" th:text="${dict.dictLabel}"
+									<option id="optall" value="">所有</option>
+									<option th:id="'opt'+${dict.dictValue}" th:each="dict : ${type}" th:text="${dict.dictLabel}"
 										th:value="${dict.dictValue}"></option>
 							</select>
 							</li>
-
+							<li class="select-time"><label>费用日期：</label>
+								<input type="text" class="time-input" id="startTimeCompare"  placeholder="开始时间" name="startDate" />
+								<span>-</span>
+								<input type="text" class="time-input" id="endTimeCompare" placeholder="结束时间" name="endDate" />
+							</li>
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
@@ -67,7 +71,31 @@
 
         var region = [[${@dict.getType('xz_assets_region')}]];
         var submitType = [[${@dict.getType('xz_assets_submitType')}]];
+
+		var role = [[${@sysRoleServiceImpl.selectRoleKeys(userid)}]];
+
+		var area = [[${@permission.getPrincipalProperty('area')}]];
         $(function() {
+
+			if(role.indexOf("admin")==-1&&role.indexOf("xzzj")==-1){
+				$("#region option[id='optall']").remove();
+				if(area==1){
+					$("#region option[id='opt2']").remove();
+				}else if(area==2){
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt3']").remove();
+					$("#region option[id='opt5']").remove();
+				}else if(area==3){
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt2']").remove();
+					$("#region option[id='opt5']").remove();
+				}else if(area==5){
+					$("#region option[id='opt1']").remove();
+					$("#region option[id='opt2']").remove();
+					$("#region option[id='opt3']").remove();
+				}
+			}
+
             var options = {
                 url: prefix + "/list",
                 createUrl: prefix + "/add",
