@@ -51,7 +51,8 @@ public class XzExpenseRecordController extends BaseController {
 
     @RequiresPermissions("system:xzExpenseRecord:view")
     @GetMapping()
-    public String xzExpenseRecord() {
+    public String xzExpenseRecord(ModelMap modelMap) {
+        modelMap.put("userid",ShiroUtils.getUserId());
         return prefix + "/xzExpenseRecord";
     }
 
@@ -94,7 +95,6 @@ public class XzExpenseRecordController extends BaseController {
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(XzExpenseRecord xzExpenseRecord) {
-        startPage();
 
         SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
 
@@ -110,6 +110,7 @@ public class XzExpenseRecordController extends BaseController {
                 }
             }
         }
+        startPage();
         List<XzExpenseRecord> list = xzExpenseRecordService.selectXzExpenseRecordList(xzExpenseRecord);
         return getDataTable(list);
     }

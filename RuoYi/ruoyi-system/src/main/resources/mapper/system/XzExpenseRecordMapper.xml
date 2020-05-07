@@ -86,6 +86,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND date_format(er.use_date,'%y%m%d') &lt;=
 				date_format(#{params.endTime},'%y%m%d')
 			</if>
+			<if test="startDate != null"><!-- 开始时间检索 -->
+				AND date_format(er.use_date,'%y%m%d') &gt;=
+				date_format(#{startDate},'%y%m%d')
+			</if>
+			<if test="endDate != null"><!-- 结束时间检索 -->
+				AND date_format(er.use_date,'%y%m%d') &lt;=
+				date_format(#{endDate},'%y%m%d')
+			</if>
          </where>
          ORDER BY er.use_date DESC
     </select>
