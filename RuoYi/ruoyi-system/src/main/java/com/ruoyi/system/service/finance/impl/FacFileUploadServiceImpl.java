@@ -6,8 +6,6 @@ import com.ruoyi.system.domain.finance.FacFileUpload;
 import com.ruoyi.system.mapper.finance.FacFileUploadMapper;
 import com.ruoyi.system.service.finance.IFacFileUploadService;
 import com.ruoyi.system.task.FileUtilsTest;
-import net.coobird.thumbnailator.Thumbnails;
-import org.apache.poi.hpsf.Thumbnail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +31,28 @@ public class FacFileUploadServiceImpl implements IFacFileUploadService {
         System.arraycopy(arr, 0, tmp, 0, size);
         tmp[size] = str;
         return tmp;
+    }
+
+    static void copy(String srcPathStr, String desPathStr) {
+        //获取源文件的名称
+        String newFileName = srcPathStr.substring(srcPathStr.lastIndexOf("29") + 1); //目标文件地址
+        System.out.println("源文件:" + newFileName);
+        desPathStr = desPathStr + File.separator + newFileName; //源文件地址
+        System.out.println("目标文件地址:" + desPathStr);
+        try {
+            FileInputStream fis = new FileInputStream(srcPathStr);//创建输入流对象
+            FileOutputStream fos = new FileOutputStream(desPathStr); //创建输出流对象
+            byte datas[] = new byte[1024 * 8];//创建搬运工具
+            int len = 0;//创建长度
+            while ((len = fis.read(datas)) != -1)//循环读取数据
+            {
+                fos.write(datas, 0, len);
+            }
+            fis.close();//释放资源
+            fis.close();//释放资源
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -110,37 +130,62 @@ public class FacFileUploadServiceImpl implements IFacFileUploadService {
         List<FacFileUpload> list = facFileUploadMapper.selectFacFileUploadList(fileUpload);
         if (list != null && list.size() > 0) {
             String filePath = Global.getUploadPath();
-            File file = new File(filePath+num);
+            File file = new File(filePath + num);
             file.mkdirs();
-            //String[] urls = new String[list.size()];
+            String filePaths = "/opt/tomcat_prod/webapps/upload/upload/";
             for (int i = 0; list.size() > i; i++) {
-               // urls = insert(urls, list.get(i).getFilePath());
+
                 FacFileUploadServiceImpl aaa = new FacFileUploadServiceImpl();
-                try{
-                    aaa.xiazai(num + i, list.get(i).getFilePath(),filePath);
-                }catch (IOException e){
+                try {
+                    aaa.transferFile(filePaths +  list.get(i).getFilePath().substring(list.get(i).getFilePath().indexOf("202")), "/opt/tomcat_prod/webapps/upload/upload/" + num + File.separator + num+i + ".jpg");
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            FileUtilsTest.compressToZip(filePath+num,filePath+num+1,num+".zip");
-            // sourceFilePath 源文件路径 zipFilePath    压缩后文件存储路径  zipFilename    压缩文件名
+            FileUtilsTest.compressToZip(filePath + num, filePath + num + "aaa", num + ".zip");
 
             return "下载成功";
         }
         return "无图片文件";
     }
+    private void transferFile(String oldPath, String newPath) throws Exception {
 
+        int byteread = 0;
+        File oldFile = new File(oldPath);
+        FileInputStream fin = null;
+        FileOutputStream fout = null;
+        System.out.println(oldPath);
+        System.out.println(newPath);
+        try {
+            if (oldFile.exists()) {
+                fin = new FileInputStream(oldFile);
+                fout = new FileOutputStream(newPath);
+                byte[] buffer = new byte[1444];
+                while ((byteread = fin.read(buffer)) != -1) {
+                    fout.write(buffer, 0, byteread);
+                }
+                if (fin != null) {
+                    fin.close();//如果流不关闭,则删除不了旧文件
+                }
+            } else {
+                throw new Exception("需要转移的文件不存在!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (fin != null) {
+                fin.close();
+            }
+        }
+    }
 
+    public void xiazai(String num, String nums, String path, String filePath) throws IOException {
 
-
-
-    public void xiazai(String num, String path,String filePath) throws IOException{
-       // path = "http://192.168.88.191/upload/2020/04/24/04b9509fb271b6b2755a7905276ff71a.jpg";
         URL url = null;
         //从网络上下载一张图片
         InputStream inputStream = null;
         OutputStream outputStream = null;
-
 
         //建立一个网络链接
         HttpURLConnection con = null;
@@ -148,7 +193,7 @@ public class FacFileUploadServiceImpl implements IFacFileUploadService {
             url = new URL(path);
             con = (HttpURLConnection) url.openConnection();
             inputStream = con.getInputStream();
-            outputStream = new FileOutputStream(new File(filePath+File.separator+num+".jpg"));
+            outputStream = new FileOutputStream(new File(filePath + num + File.separator + nums + ".jpg"));
             int n = -1;
             byte b[] = new byte[1024];
             while ((n = inputStream.read(b)) != -1) {

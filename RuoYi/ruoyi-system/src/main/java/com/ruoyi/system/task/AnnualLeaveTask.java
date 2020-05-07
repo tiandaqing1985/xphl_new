@@ -53,6 +53,21 @@ public class AnnualLeaveTask {
                 intime = s.format(user.getIntime());// 入职日期
                 firstWorkTime = s.format(user.getFirstWorkDate());// 首次参加工作日期
 
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                Date strDate = simpleDateFormat.parse(firstWorkTime);
+                long nd = 1000 * 24 * 60 * 60;
+                // 获得两个时间的毫秒时间差异
+                long diff = new Date().getTime() -strDate.getTime() ;
+                // 计算差多少天
+                long day = diff / nd;
+
+                if(day<438){
+                    continue;
+                }
+
+
+
+
                 // 计算在职天数
                 long onJobLength = secondsBetween(intime, today) / 3600 / 24;
                 user.setOnJobLength(onJobLength);

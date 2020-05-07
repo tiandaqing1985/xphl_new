@@ -223,6 +223,7 @@ public class FacReimburseApplyController extends BaseController {
                 List<FacReimburseApply> list = facReimburseApplyService.selectFacReimburseApplyList(facReimburseApply);
                 FacUserApproval facUserApproval = null;
                 for (FacReimburseApply facReimburseApply1 : list) {
+                    facReimburseApply1.setUserId("1");
                     facUserApproval = new FacUserApproval();
                     facUserApproval.setApprovalSight("1");
                     facUserApproval.setApplyId(facReimburseApply1.getNum());
@@ -264,6 +265,7 @@ public class FacReimburseApplyController extends BaseController {
         FacUserApproval facUserApproval = null;
         for (FacReimburseApply facReimburseApply1 : list) {
             facUserApproval = new FacUserApproval();
+            facReimburseApply1.setUserId("0");
             facUserApproval.setApprovalSight("1");
             facUserApproval.setApplyId(facReimburseApply1.getNum());
             facUserApproval.setApprovalState("3");

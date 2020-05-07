@@ -142,7 +142,7 @@ public class FacFileUploadController extends BaseController {
         facFileUploadService.xaizainum(num);
         File file = null;
         String filePath = Global.getUploadPath();
-        file = new File(filePath+num+1+File.separator+num+".zip");
+        file = new File(filePath+num+"aaa"+File.separator+num+".zip");
 
         ServletOutputStream outputStream = null;
         try {

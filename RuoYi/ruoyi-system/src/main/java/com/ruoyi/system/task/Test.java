@@ -1,18 +1,17 @@
 package com.ruoyi.system.task;
 
+import com.ruoyi.system.service.ISysUserService;
 import net.coobird.thumbnailator.Thumbnails;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Test {
+
     public static void merge(String srcFiles, String destFilePath) {
         //判断原文件路径是否为空
         if (srcFiles == null) {
@@ -91,19 +90,100 @@ public class Test {
     }
 
 
+    public static void main(String[] args) throws  Exception {
 
+       String str="http://192.168.88.192:8080/profile/upload/2020/05/06/91f5b6285d99d07d60fd330761b7e7e6.jpg";
 
+        int index = str.indexOf("202");
+        String newStr = str.substring(index);
+        System.out.println(newStr);
+        System.out.println(str.substring(42));
 
+        //String srcPathStr = "http://192.168.88.192:8080/profile/upload/2020/04/29/63bd621fc7c8e987d6bb07b66a90177a.jpg"; //源文件地址
+        //System.out.println( srcPathStr.substring(42));
 
-    public static void main(String [] args) throws IOException{
-        String path = "RuoYi\\aaaa.jpg";
-        Thumbnails.of(path).scale(1f)
-                .outputQuality(0.5f)
-                .toFile("E:"+File.separator+"image_200x300.jpg");
 
     }
 
+    public  long getDatePoor(Date endDate, Date nowDate) {
+        long nd = 1000 * 24 * 60 * 60;
+        // 获得两个时间的毫秒时间差异
+        long diff = endDate.getTime() - nowDate.getTime();
+        // 计算差多少天
+        long day = diff / nd;
+        return day;
+    }
 
+
+
+
+
+    static void copy(String srcPathStr, String desPathStr)
+    {
+        //获取源文件的名称
+        String newFileName = srcPathStr.substring(srcPathStr.lastIndexOf("\\")+1); //目标文件地址
+        System.out.println("源文件:"+newFileName);
+        desPathStr = desPathStr + File.separator + newFileName; //源文件地址
+        System.out.println("目标文件地址:"+desPathStr);
+        try
+        {
+            FileInputStream fis = new FileInputStream(srcPathStr);//创建输入流对象
+            FileOutputStream fos = new FileOutputStream(desPathStr); //创建输出流对象
+            byte datas[] = new byte[1024*8];//创建搬运工具
+            int len = 0;//创建长度
+            while((len = fis.read(datas))!=-1)//循环读取数据
+            {
+                fos.write(datas,0,len);
+            }
+            fis.close();//释放资源
+            fis.close();//释放资源
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+
+    public void xiazai(String num, String path, String filePath) throws IOException {
+        path = "http://192.168.88.191/profile/upload/2020/04/29/48e32cb1cfcc51be2d461a1a97e17fb1.jpg";
+        URL url = null;
+        //从网络上下载一张图片
+        InputStream inputStream = null;
+        OutputStream outputStream = null;
+
+
+        //建立一个网络链接
+        HttpURLConnection con = null;
+        try {
+            url = new URL(path);
+            con = (HttpURLConnection) url.openConnection();
+            inputStream = con.getInputStream();
+            outputStream = new FileOutputStream(new File("E:"+File.separator+"a"+File.separator+"ccccc.jpg"));
+            int n = -1;
+            byte b[] = new byte[1024];
+            while ((n = inputStream.read(b)) != -1) {
+                outputStream.write(b, 0, n);
+            }
+            outputStream.flush();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } finally {
+            try {
+                inputStream.close();
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }
 
 
 }

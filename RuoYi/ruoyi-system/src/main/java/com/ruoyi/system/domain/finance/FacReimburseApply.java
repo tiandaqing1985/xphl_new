@@ -114,6 +114,17 @@ public class FacReimburseApply extends BaseEntity {
 	/**所有审批人姓名*/
 	private String allName;
 
+	/**查勘人标志*/
+	private String userId;
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
 	public String getAllName() {
 		return allName;
 	}

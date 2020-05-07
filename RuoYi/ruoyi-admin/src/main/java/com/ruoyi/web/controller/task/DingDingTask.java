@@ -143,6 +143,25 @@ public class DingDingTask {
         dingdingService.updateOaDingDingByCountLate();
     }
 
+
+
+
+
+    public void dingDingUpdateName() throws Exception {
+        Long wangzhenzhen=12333319631237216L;//王震震
+        Long weiyuanhao=1248012138879414L;//隗元昊
+        OaDingding  dingding = new OaDingding();
+        dingding.setUserId(wangzhenzhen);
+        dingding.setUserName("王震震");
+        dingdingService.updateOaDingding(dingding);
+        OaDingding  dingding2 = new OaDingding();
+        dingding2.setUserId(weiyuanhao);
+        dingding2.setUserName("隗元昊");
+        dingdingService.updateOaDingding(dingding2);
+    }
+
+
+
     //弹性工作制
     public void dingElasticTime(String num) {
         //弹性工作制
@@ -250,6 +269,17 @@ public class DingDingTask {
 
         return weekDays[w];
     }
+
+
+
+
+
+
+
+
+
+
+
 
     public String doPost(String requestUrl, JSONObject json) {
         @SuppressWarnings({"resource"})
