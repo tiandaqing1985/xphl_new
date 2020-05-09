@@ -61,7 +61,7 @@ public class AnnualLeaveTask {
                 // 计算差多少天
                 long day = diff / nd;
 
-                if(day<438){
+                if(day<438){//判断是否从首次工作时间到今天是否可以生成年假
                     continue;
                 }
 
@@ -99,7 +99,7 @@ public class AnnualLeaveTask {
                  * 劳动法规定年假取整数，小数点后全部舍去，即0.5以上都舍去不进位
                  */
                 firstDay = today.substring(0, 4) + "-01-01";//元旦
-                lastDay = today.substring(0, 4) + "-12-31";//當年最後一天；年假失效时间
+                lastDay = today.substring(0, 3) + "1-03-31";//當年最後一天；年假失效时间
 
                 /**
                  *  以下2种情况不能享受当年年休假

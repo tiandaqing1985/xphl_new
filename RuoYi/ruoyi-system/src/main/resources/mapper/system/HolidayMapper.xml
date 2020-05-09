@@ -33,6 +33,7 @@
             <if test="overdate != null ">and overdate = #{overdate}</if>
             <if test="value != null ">and value = #{value}</if>
             <if test="holidayDetail != null  and holidayDetail != '' ">and holiday_detail = #{holidayDetail}</if>
+            order by  id desc
         </where>
     </select>
 

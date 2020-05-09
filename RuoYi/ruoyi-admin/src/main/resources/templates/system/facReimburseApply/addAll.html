@@ -2,6 +2,8 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('报销申请添加')"/>
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -49,11 +51,23 @@
                 <textarea id="reason" name="reason"  class="form-control" type="text"></textarea>
             </div>
         </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="ibox float-e-margins">
+                <div class="form-group" >
+                    <label class="font-noraml"><span style="color: red; ">*</span>上传图片</label>
+                    <div class="file-loading">
+                        <input id="fileinput-demo-1" type="file" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 <div th:include="include::footer"></div>
 <th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
 <th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: datetimepicker-js" />
 <script type="text/javascript">
     var prefix = ctx + "system/facReimburseApply";
     var num =$("#num").val();
@@ -76,12 +90,20 @@
         focusCleanup: true
     });
 
+    $(document).ready(function () {
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': prefix + "/uploadList?num=" + num,
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            previewFileIcon:'图片预览'
+        });
+    });
     function submitHandler() {
         if ($.validate.form()) {
             $.operate.save(prefix + "/addAllSave", $('#form-add').serialize());
         }
     }
-
     function chkPrice(obj){
         obj.value = obj.value.replace(/[^\d.]/g,"");
 //必须保证第一位为数字而不是.
