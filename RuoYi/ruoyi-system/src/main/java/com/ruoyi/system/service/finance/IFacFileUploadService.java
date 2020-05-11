@@ -60,4 +60,9 @@ public interface IFacFileUploadService {
      */
     public String xaizainum(String num);
 
+    /**
+     * 修改上传信息
+     */
+    public int updateNum(String num , String fileNum);
+
 }

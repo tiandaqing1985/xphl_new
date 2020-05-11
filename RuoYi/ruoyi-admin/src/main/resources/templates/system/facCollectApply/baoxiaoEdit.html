@@ -2,6 +2,8 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
 	<th:block th:include="include :: header('修改团建申请')" />
+	<th:block th:include="include :: datetimepicker-css" />
+	<th:block th:include="include :: bootstrap-fileinput-css" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
@@ -68,27 +70,43 @@
 				</div>
 			</div>
 
-
-<!--			<div class="col-sm-12 select-table table-striped">-->
-<!--				<a id="addzhusu" class="btn btn-success" onclick="zAdd()">-->
-<!--					<i class="fa fa-plus"></i> 团建费报销信息-->
-<!--				</a>-->
-<!--				<table id="bootstrap-table-1" data-mobile-responsive="true"></table>-->
-<!--			</div>-->
+			<div class="wrapper wrapper-content animated fadeInRight">
+				<div class="ibox float-e-margins">
+					<div class="form-group" >
+						<label class="font-noraml"><span style="color: red; ">*</span>上传图片</label>
+						<div class="file-loading">
+							<input id="fileinput-demo-1" type="file" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple>
+						</div>
+					</div>
+				</div>
+			</div>
 		</form>
     </div>
 
     <div th:include="include::footer"></div>
 	<th:block th:include="include :: bootstrap-suggest-js" />
 	<th:block th:include="include :: bootstrap-select-js" />
+	<th:block th:include="include :: datetimepicker-js" />
+	<th:block th:include="include :: bootstrap-fileinput-js"/>
     <script type="text/javascript">
 		var prefix = ctx + "system/facCollectApply";
 		var prefixs = ctx + "system/facCollectInformation";
+		var prefixsa = ctx + "system/facReimburseApply";
 		var num = $("#num").val();
-
 		function zAdd() {
 			$.modal.open("团建费报销详细信息", "/system/facCollectInformation/add?num=" + num);
 		}
+
+		$(document).ready(function () {
+			$("#fileinput-demo-1").fileinput({
+				'theme': 'explorer-fas',
+				'uploadUrl': prefixsa + "/uploadList?num=" + num,
+				overwriteInitial: false,
+				initialPreviewAsData: true,
+				previewFileIcon:'图片预览'
+			});
+		});
+
 		$(function() {
 			var options = {
 				id: "bootstrap-table-1",

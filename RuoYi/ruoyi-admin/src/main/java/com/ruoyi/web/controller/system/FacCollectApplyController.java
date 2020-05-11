@@ -56,6 +56,8 @@ public class FacCollectApplyController extends BaseController {
     private IFacCollectInformationService facCollectInformationService;
     @Autowired
     private ApprovalProcessService approvalProcessService;
+    @Autowired
+    private IFacFileUploadService facFileUploadService;
 
     //@RequiresPermissions("system:facCollectApply:view")
     @GetMapping()
@@ -272,6 +274,9 @@ public class FacCollectApplyController extends BaseController {
             center.setApprovalSight("1");
             center.setAmount(facCollectApply.getAmount());
             approvalProcessService.insert(center);
+            if(facFileUploadService.ifPicUpload(facReimburseApply.getJKnum())){
+                facFileUploadService.updateNum(facReimburseApply.getJKnum(),facReimburseApply.getNum());
+            }
         } else {
             //需要二次审批
             facReimburseApply.setSubmitStatus("submit");

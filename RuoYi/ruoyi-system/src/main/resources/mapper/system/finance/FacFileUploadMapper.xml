@@ -95,7 +95,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="ifPicUpload" parameterType="FacFileUpload" resultMap="FacFileUploadResult">
         <include refid="selectFacFileUploadVo"/>
         <where>
-            loadId is null
             and num = #{num}
         </where>
     </select>

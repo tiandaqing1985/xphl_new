@@ -81,6 +81,8 @@ public class FacReimburseApplyController extends BaseController {
     private IFacCollectApplyService facCollectApplyService;
     @Autowired
     private IUserApplyService userApplyService;
+    @Autowired
+    private IFacFileUploadService facFileUploadService;
 
     @GetMapping()
     public String facReimburseApply() {
@@ -157,6 +159,10 @@ public class FacReimburseApplyController extends BaseController {
                     approvalProcessService.insert(center);
                 } else {
                     facReimburseApplyService.insertFacReimburseApply(facReimburseApply);
+                }
+
+                if(facFileUploadService.ifPicUpload(facReimburseApply.getJKnum())){
+                    facFileUploadService.updateNum(facReimburseApply.getJKnum(),facReimburseApply.getNum());
                 }
                 FacCostApply facCostApply = new FacCostApply();
                 facCostApply.setNum(facCostReimburse.getNum());

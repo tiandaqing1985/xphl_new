@@ -100,6 +100,26 @@ public class FacFileUploadServiceImpl implements IFacFileUploadService {
     }
 
     /**
+     * 修改上传信息
+     *
+     * @return 结果
+     */
+    @Override
+    public int updateNum(String num, String fileNum) {
+        List<FacFileUpload> list = facFileUploadMapper.ifPicUpload(num);
+        if (list != null) {
+            for (FacFileUpload a : list) {
+                a.setNum(fileNum);
+                facFileUploadMapper.updateFacFileUpload(a);
+            }
+            return 1;
+        } else {
+            return 2;
+        }
+
+    }
+
+    /**
      * 删除财务文件上传记录对象
      *
      * @param ids 需要删除的数据ID
@@ -137,7 +157,7 @@ public class FacFileUploadServiceImpl implements IFacFileUploadService {
 
                 FacFileUploadServiceImpl aaa = new FacFileUploadServiceImpl();
                 try {
-                    aaa.transferFile(filePaths +  list.get(i).getFilePath().substring(list.get(i).getFilePath().indexOf("202")), "/opt/tomcat_prod/webapps/upload/upload/" + num + File.separator + num+i + ".jpg");
+                    aaa.transferFile(filePaths + list.get(i).getFilePath().substring(list.get(i).getFilePath().indexOf("202")), "/opt/tomcat_prod/webapps/upload/upload/" + num + File.separator + num + i + ".jpg");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -148,6 +168,7 @@ public class FacFileUploadServiceImpl implements IFacFileUploadService {
         }
         return "无图片文件";
     }
+
     private void transferFile(String oldPath, String newPath) throws Exception {
 
         int byteread = 0;
