@@ -1339,9 +1339,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
         userApplyMapper.insertUserApply(userApply);
 
         SysUser user = userMapper.selectUserById(userId);// 查出当前用户的area值
-        if (user.getArea().equals("3")) {
-            user.setArea("2");
-        }
+
 
         // 补卡申请id与上传图片关联
         OaFileUpload oaFileUpload = new OaFileUpload();
