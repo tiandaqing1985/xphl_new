@@ -127,26 +127,26 @@
 				});  
 				
 				//验证图片是否上传
-				// $.ajax({
-				// 	type:"post",
-				// 	async:false,
-				// 	url:"/system/oaFileUpload/ifPicUpload",
-				// 	data:{},
-				// 	dataType:"json",
-				// 	success:function(result){
-				// 		 if(result){
-				// 			 picFlag = true;
-				// 		}
-				// 		else{
-				// 			picFlag = false;
-				// 			$.modal.alertWarning("请先上传图片再提交!");
-				// 			return;
-				// 		}
-				// 	},
-				// 	error:function(){
-				// 		$.modal.alertWarning("请联系管理员");
-				// 	}
-				// });
+				$.ajax({
+					type:"post",
+					async:false,
+					url:"/system/oaFileUpload/ifPicUpload",
+					data:{},
+					dataType:"json",
+					success:function(result){
+						 if(result){
+							 picFlag = true;
+						}
+						else{
+							picFlag = false;
+							$.modal.alertWarning("请先上传图片再提交!");
+							return;
+						}
+					},
+					error:function(){
+						$.modal.alertWarning("请联系管理员");
+					}
+				});
 				
 				if(repeatFlag && picFlag){
 					save(prefix + "/addPic", $('#form-userApply-addPic').serialize());
