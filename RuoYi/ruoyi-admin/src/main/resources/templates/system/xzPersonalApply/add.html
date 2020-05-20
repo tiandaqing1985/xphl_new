@@ -35,11 +35,15 @@
 
 			<div class="form-group">
 				<label class="col-sm-3 control-label"><span
-					style="color: red;">*</span>所属地域：</label>
+					style="color: red;">*</span>资产所属地区：</label>
 				<div class="col-sm-8">
 					<div class="input-group" style="width: 100%">
-						<input  th:value="${@dict.getLabel('xz_assets_region',area)}" name="regionName" class="form-control" readonly>
-						<input id="region" th:value="${area}" name="region" class="form-control" style="display: none" readonly>
+						<select id="region" name="region"
+								class="form-control m-b" required="required">
+							<option th:each="a:${areas}" th:value="${a}"
+									th:text="${@dict.getLabel('xz_assets_region',a)}"></option>
+						</select>
+
 					</div>
 				</div>
 			</div>

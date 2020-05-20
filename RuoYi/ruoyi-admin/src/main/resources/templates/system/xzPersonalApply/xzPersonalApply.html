@@ -49,6 +49,7 @@
         var applyStatus = [[${@dict.getType('xz_assets_applyStatus')}]];
         var applyType = [[${@dict.getType('xz_assets_applyType')}]];
         var submitType = [[${@dict.getType('xz_assets_submitType')}]];
+		var area = [[${@dict.getType('xz_assets_region')}]];
         $(function() {
             var options = {
                 url: prefix + "/list",
@@ -71,7 +72,13 @@
 					title : '资产名称',
 					sortable: true
 				},
-				
+				{
+					field : 'region',
+					title : '申请资产所属地区',
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(area, value);
+					}
+				},
 				{
 					field : 'applyType', 
 					title : '申请类型',

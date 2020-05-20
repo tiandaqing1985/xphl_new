@@ -1,5 +1,7 @@
 package com.ruoyi.web.controller.system;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -147,7 +149,12 @@ public class XzPersonalApplyController extends BaseController {
     public String add(ModelMap mmap) {
         //获取办公用品资产父级类型
         mmap.put("typeList", xzAssetTypeService.selectXzAssetTypeByStaAll());
-        mmap.put("area",ShiroUtils.getSysUser().getArea());
+        List<String> areas = new ArrayList<>();
+        areas.add(ShiroUtils.getSysUser().getArea());
+        if(ShiroUtils.getSysUser().getArea().equals("1")){
+            areas.add("5");
+        }
+        mmap.put("areas",areas);
         return prefix + "/add";
     }
 

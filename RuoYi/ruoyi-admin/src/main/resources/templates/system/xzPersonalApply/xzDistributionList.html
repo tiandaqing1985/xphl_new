@@ -71,7 +71,7 @@
         var applyStatus = [[${@dict.getType('xz_assets_applyStatus')}]];
         var applyType = [[${@dict.getType('xz_assets_applyType')}]];
         var submitType = [[${@dict.getType('xz_assets_submitType')}]];
-
+		var region = [[${@dict.getType('xz_assets_region')}]];
 		var role = [[${@sysRoleServiceImpl.selectRoleKeys(userid)}]]
 
 		var area = [[${@permission.getPrincipalProperty('area')}]];
@@ -106,10 +106,7 @@
                 removeUrl: prefix + "/remove",
 				exportUrl: prefix + "/export",
                 modalName: "个人申请",
-		        showExport: true,
-                columns: [{
-		            checkbox: true
-		        },
+                columns: [
 				{
 					field : 'applyId', 
 					title : '唯一标识',
@@ -124,13 +121,18 @@
 				},
 				{
 					field : 'assetType2Name', 
-					title : '资产名称',
-					sortable: true
+					title : '资产名称'
+				},
+				{
+					field : 'region',
+					title : '申请资产所在地域',
+					formatter: function(value, row, index) {
+						return $.table.selectDictLabel(region, value);
+					}
 				},
 				{
 					field : 'count', 
-					title : '数量',
-					sortable: true
+					title : '数量'
 				},
 				{
 					field : 'applyStatus', 
@@ -141,8 +143,7 @@
 				},
 				{
 					field : 'createByName', 
-					title : '提交人',
-					sortable: true
+					title : '提交人'
 				},
 		        {
 		            title: '操作',
