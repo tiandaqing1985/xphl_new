@@ -92,16 +92,9 @@ public class Test {
 
     public static void main(String[] args) throws  Exception {
 
-       String str="http://192.168.88.192:8080/profile/upload/2020/05/06/91f5b6285d99d07d60fd330761b7e7e6.jpg";
-
-        int index = str.indexOf("202");
-        String newStr = str.substring(index);
-        System.out.println(newStr);
-        System.out.println(str.substring(42));
-
-        //String srcPathStr = "http://192.168.88.192:8080/profile/upload/2020/04/29/63bd621fc7c8e987d6bb07b66a90177a.jpg"; //源文件地址
-        //System.out.println( srcPathStr.substring(42));
-
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyyMMdd");
+        String newDate = dateformat.format(new Date());
+        System.out.println(newDate.substring(4,6));
 
     }
 

@@ -103,7 +103,32 @@
 				var starttime = $("#starttime").val();
 				var repeatFlag = true;
 				var picFlag = true;
-					
+				 var chaoshiFlag = false;
+				 if(chaoshiFlag){
+					 //验证所申请是否超过时效
+					 $.ajax({
+						 type:"post",
+						 async:false,
+						 url:"/system/userApply/overtime",
+						 data:{"starttime":starttime},
+						 dataType:"json",
+						 success:function(result){
+							 if(result == "0"){
+								 repeatFlag = true;
+							 }
+							 else{
+								 repeatFlag = false;
+								 $.modal.alertWarning("申请中部分时段已过期");
+								 return;
+							 }
+						 },
+						 error:function(){
+							 $.modal.alertWarning("请联系管理员");
+						 }
+					 });
+
+
+				 }
 				 //验证补卡申请是否重复
 				$.ajax({
 					type:"post",

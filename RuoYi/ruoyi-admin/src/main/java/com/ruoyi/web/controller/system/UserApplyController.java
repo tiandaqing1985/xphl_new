@@ -20,6 +20,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -473,6 +474,42 @@ public class UserApplyController extends BaseController {
         }
     }
 
+    /**
+     * 判断是否时间超过27号,超过27号则不可以提交本月申请
+     * 如果提交时间没有超过27号则可以更改上月26日至本月25日
+     */
+    @PostMapping("/overtime")
+    @ResponseBody
+    public String overtime(UserApply userApply) {
+        SimpleDateFormat dateformat = new SimpleDateFormat("yyyyMMdd");
+        String newDate = dateformat.format(new Date());
+        String starttime = dateformat.format(userApply.getStarttime());
+        int newNumber = Integer.valueOf(newDate.substring(newDate.length() - 2));
+        int start = Integer.valueOf(starttime);
+        int startNumber = Integer.valueOf(starttime.substring(starttime.length() - 2));
+        int newnum = Integer.valueOf(newDate);
+        int newNumber4 = Integer.valueOf(newDate.substring(4, 6));
+        int startNumber4 = Integer.valueOf(starttime.substring(4, 6));
+        if (start >= newnum) {//提前申请直接通过
+            return "0";
+        }
+        if (newNumber >= 27 && newNumber4 == startNumber4) {
+            if (startNumber > 25) {
+                return "0";
+            } else {
+                return "1";
+            }
+        } else {
+            if (startNumber < 25 && newNumber4 == startNumber4) {
+                return "0";
+            } else if (startNumber > 25 && (newNumber4 - startNumber4) <= 1) {
+                return "0";
+            } else {
+                return "1";
+            }
+        }
+
+    }
 
     /**
      * 验证选择的

@@ -83,11 +83,35 @@
 		   var repeatFlag = false;
 		   var startFlag = false;
 		   var beforeFlag = true;
+		   var chaoshiFlag = false;
+
 	       if ($.validate.form()) {
 	    	   var applyType = $("#applyType").val();
 	    	   var starttime = $("#starttime").val();
-			   var endtime = $("#endtime").val();			 
-			   
+			   var endtime = $("#endtime").val();
+			   if(chaoshiFlag){
+				   //验证所申请是否超过时效
+				   $.ajax({
+					   type:"post",
+					   async:false,
+					   url:"/system/userApply/overtime",
+					   data:{"applyType":applyType,"starttime":starttime,"endtime":endtime },
+					   dataType:"json",
+					   success:function(result){
+						   if(result == "0"){
+							   repeatFlag = true;
+						   }
+						   else{
+							   repeatFlag = false;
+							   $.modal.alertWarning("申请中部分时段已过期");
+							   return;
+						   }
+					   },
+					   error:function(){
+						   $.modal.alertWarning("请联系管理员");
+					   }
+				   });
+			   }
 			   if(endtime < starttime){
 					p02.innerText="结束时间不能小于开始时间";
 					$("#p02").css("color","red");

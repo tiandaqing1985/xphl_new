@@ -91,9 +91,9 @@ public class DingDingTask {
                     if ("3144041311-1058488227".equals(user.getUserid())) {
                         dingUser.setUserId(Long.parseLong("314404131110584882"));
                     } else {
-                        if(user.getUserid().length()>19){
-                            dingUser.setUserId(Long.parseLong(user.getUserid().substring(0,19)));
-                        }else{
+                        if (user.getUserid().length() > 19) {
+                            dingUser.setUserId(Long.parseLong(user.getUserid().substring(0, 19)));
+                        } else {
                             dingUser.setUserId(Long.parseLong(user.getUserid()));
                         }
                     }
@@ -144,22 +144,28 @@ public class DingDingTask {
     }
 
 
-
-
-
     public void dingDingUpdateName() throws Exception {
-        Long wangzhenzhen=12333319631237216L;//王震震
-        Long weiyuanhao=1248012138879414L;//隗元昊
-        OaDingding  dingding = new OaDingding();
+        Long wangzhenzhen = 12333319631237216L;//王震震
+        Long weiyuanhao = 1248012138879414L;//隗元昊
+        Long quyilin1 = 135416124323359665L;//屈伊琳1
+        Long liyang01=1765181417846298L;
+        OaDingding dingding = new OaDingding();
         dingding.setUserId(wangzhenzhen);
         dingding.setUserName("王震震");
         dingdingService.updateOaDingding(dingding);
-        OaDingding  dingding2 = new OaDingding();
+        OaDingding dingding2 = new OaDingding();
         dingding2.setUserId(weiyuanhao);
         dingding2.setUserName("隗元昊");
         dingdingService.updateOaDingding(dingding2);
+        OaDingding dingding3 = new OaDingding();
+        dingding3.setUserId(quyilin1);
+        dingding3.setUserName("屈伊琳1");
+        dingdingService.updateOaDingding(dingding3);
+        OaDingding dingding4 = new OaDingding();
+        dingding4.setUserId(liyang01);
+        dingding4.setUserName("李扬01");
+        dingdingService.updateOaDingding(dingding4);
     }
-
 
 
     //弹性工作制
@@ -210,10 +216,10 @@ public class DingDingTask {
                     if (!"manager8676".equals(record.getString("userId"))) {
                         if ("3144041311-1058488227".equals(record.getString("userId"))) {
                             dingding.setUserId(Long.parseLong("314404131110584882"));
-                        } else{
-                            if(record.getString("userId").length()>19){
-                                dingding.setUserId(Long.parseLong(record.getString("userId").substring(0,19)));
-                            }else{
+                        } else {
+                            if (record.getString("userId").length() > 19) {
+                                dingding.setUserId(Long.parseLong(record.getString("userId").substring(0, 19)));
+                            } else {
                                 dingding.setUserId(Long.parseLong(record.getString("userId")));
                             }
                         }
@@ -269,16 +275,6 @@ public class DingDingTask {
 
         return weekDays[w];
     }
-
-
-
-
-
-
-
-
-
-
 
 
     public String doPost(String requestUrl, JSONObject json) {

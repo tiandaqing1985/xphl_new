@@ -213,7 +213,32 @@
             var applyType = $("#applyType").val();
             var datelength = 0.0;
             var restlength = 0.0;
+            var chaoshiFlag = false;
+            if(chaoshiFlag){
+                //验证所申请是否超过时效
+                $.ajax({
+                    type:"post",
+                    async:false,
+                    url:"/system/userApply/overtime",
+                    data:{"applyType":applyType,"starttime":starttime,"endtime":endtime },
+                    dataType:"json",
+                    success:function(result){
+                        if(result == "0"){
+                            repeatFlag = true;
+                        }
+                        else{
+                            repeatFlag = false;
+                            $.modal.alertWarning("申请中部分时段已过期");
+                            return;
+                        }
+                    },
+                    error:function(){
+                        $.modal.alertWarning("请联系管理员");
+                    }
+                });
 
+
+            }
             if (starttime == "" && endtime == "") {
                 p01.innerText = "开始时间不能为空，请填写！";
                 $("#p01").css("color", "red");
