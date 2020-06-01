@@ -213,32 +213,8 @@
             var applyType = $("#applyType").val();
             var datelength = 0.0;
             var restlength = 0.0;
-            var chaoshiFlag = false;
-            if(chaoshiFlag){
-                //验证所申请是否超过时效
-                $.ajax({
-                    type:"post",
-                    async:false,
-                    url:"/system/userApply/overtime",
-                    data:{"applyType":applyType,"starttime":starttime,"endtime":endtime },
-                    dataType:"json",
-                    success:function(result){
-                        if(result == "0"){
-                            repeatFlag = true;
-                        }
-                        else{
-                            repeatFlag = false;
-                            $.modal.alertWarning("申请中部分时段已过期");
-                            return;
-                        }
-                    },
-                    error:function(){
-                        $.modal.alertWarning("请联系管理员");
-                    }
-                });
-
-
-            }
+            var chaoshiFlag = true;
+            var chaoshi = false;
             if (starttime == "" && endtime == "") {
                 p01.innerText = "开始时间不能为空，请填写！";
                 $("#p01").css("color", "red");
@@ -256,7 +232,29 @@
             } else {
 
             }
+            if (chaoshiFlag) {
+                //验证所申请是否超过时效
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: "/system/userApply/overtime",
+                    data: {"applyType": applyType, "starttime": starttime, "endtime": endtime},
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == "0") {
+                            chaoshi = true;
+                        } else {
+                            chaoshi = false;
+                            $.modal.alertWarning("申请中部分时段已过期");
+                            return;
+                        }
+                    },
+                    error: function () {
+                        $.modal.alertWarning("请联系管理员");
+                    }
+                });
 
+            }
 
             //计算休息日时长
             //年假、调休、事假、病假需要计算休息日
@@ -309,246 +307,243 @@
             }  */
 
 
-
-
-                if (endtime < starttime) {
+            if (endtime < starttime) {
+                p02.innerText = "结束日期不能小于开始日期";
+                $("#p02").css("color", "red");
+                flag = false;
+                return;
+            } else if (endtime == starttime) {
+                if (timeapart1 == "2" && timeapart2 == "1") {
                     p02.innerText = "结束日期不能小于开始日期";
                     $("#p02").css("color", "red");
                     flag = false;
                     return;
-                } else if (endtime == starttime) {
-                    if (timeapart1 == "2" && timeapart2 == "1") {
-                        p02.innerText = "结束日期不能小于开始日期";
-                        $("#p02").css("color", "red");
+                }
+            } else {
+                if (leaveType == "1") {  //年假
+
+
+                    if (datelength > 3) {
+                        if (DateDiff(getNowFormatDate(), $("#starttime").val()) < 2) {
+                            p01.innerText = "超过3天的年假需提前2天提交申请";
+                            $("#p01").css("color", "red");
+                            flag = false;
+                            return;
+                        }
+                    } else if (datelength > 1) {
+                        if (DateDiff(getNowFormatDate(), $("#starttime").val()) < 1) {
+                            p01.innerText = "超过1天的年假需提前提交申请";
+                            $("#p01").css("color", "red");
+                            flag = false;
+                            return;
+                        }
+                    }
+
+                } else if (leaveType == "4") {//病假
+                    if (datelength >= 2) {
+                        //是否提交证明附件
+                        if (proveFlag) {
+
+                        } else {
+                            p03.innerText = "超过一天的病假需提交证明附件";
+                            $("#p03").css("color", "red");
+                            return;
+                        }
+                    }
+                } else if (leaveType == "5") { //婚假
+                    if (DateDiff(getNowFormatDate(), $("#starttime").val()) < 7) {
+                        p01.innerText = "婚假需提前一周提交申请";
+                        $("#p01").css("color", "red");
                         flag = false;
                         return;
                     }
-                } else {
-                    if (leaveType == "1") {  //年假
-
-
-                        if (datelength > 3) {
-                            if (DateDiff(getNowFormatDate(), $("#starttime").val()) < 2) {
-                                p01.innerText = "超过3天的年假需提前2天提交申请";
-                                $("#p01").css("color", "red");
-                                flag = false;
-                                return;
-                            }
-                        } else if (datelength > 1) {
-                            if (DateDiff(getNowFormatDate(), $("#starttime").val()) < 1) {
-                                p01.innerText = "超过1天的年假需提前提交申请";
-                                $("#p01").css("color", "red");
-                                flag = false;
-                                return;
-                            }
-                        }
-
-                    } else if (leaveType == "4") {//病假
-                        if (datelength >= 2) {
-                            //是否提交证明附件
-                            if (proveFlag) {
-
-                            } else {
-                                p03.innerText = "超过一天的病假需提交证明附件";
-                                $("#p03").css("color", "red");
-                                return;
-                            }
-                        }
-                    } else if (leaveType == "5") { //婚假
-                        if (DateDiff(getNowFormatDate(), $("#starttime").val()) < 7) {
-                            p01.innerText = "婚假需提前一周提交申请";
-                            $("#p01").css("color", "red");
-                            flag = false;
-                            return;
-                        }
-                        if (datelength > 10) {
-                            $.modal.alertWarning("超出婚假可享受休假时长");
-                            return;
-                        } else if (datelength < 10) {
-                            confirmFlag = true;
-                            confirmText = "婚假可享受10天";
-                        }
-                        //是否提交证明附件
-                        if (proveFlag) {
-
-                        } else {
-                            p03.innerText = "婚假需提交证明附件";
-                            $("#p03").css("color", "red");
-                            return;
-                        }
-                    } else if (leaveType == "6") {//产假
-                        if (DateDiff(getNowFormatDate(), $("#starttime").val()) < 15) {
-                            p01.innerText = "产假需提前15天提交申请";
-                            $("#p01").css("color", "red");
-                            flag = false;
-                            return;
-                        }
-
-                        //是否提交证明附件
-                        if (proveFlag) {
-
-                        } else {
-                            p03.innerText = "产假需提交证明附件";
-                            $("#p03").css("color", "red");
-                            return;
-                        }
-
-                        if (datelength > 128) {
-                            $.modal.alertWarning("超出产假可享受休假时长");
-                            return;
-                        } else if (datelength < 128) {
-                            confirmFlag = true;
-                            confirmText = "产假可享受128天";
-                        }
-                    } else if (leaveType == "7") {
-                        //是否提交证明附件
-                        if (proveFlag) {
-
-                        } else {
-                            p03.innerText = "陪产假需提交证明附件";
-                            $("#p03").css("color", "red");
-                            return;
-                        }
-
-                        if (datelength > 15) {
-                            $.modal.alertWarning("超出陪产假可享受休假时长");
-                            return;
-                        } else if (datelength < 15) {
-                            confirmFlag = true;
-                            confirmText = "陪产假可享受15天";
-                        }
-                    } else if (leaveType == "9") {
-                        //是否提交证明附件
-                        if (proveFlag) {
-
-                        } else {
-                            p03.innerText = "丧假需提交证明附件";
-                            $("#p03").css("color", "red");
-                            return;
-                        }
-                        if (datelength > 3) {
-                            $.modal.alertWarning("超出丧假可请假时长");
-                            return;
-                        }
-                    } else if (leaveType == "10") {
-                        if (DateDiff(starttime, endtime) - restlength > 365) {
-                            $.modal.alertWarning("超出哺乳假可选择日期");
-                            return;
-                        } else if (DateDiff(starttime, endtime) - restlength < 365) {
-                            confirmFlag = true;
-                            confirmText = "哺乳假可享受365天";
-                        }
-
+                    if (datelength > 10) {
+                        $.modal.alertWarning("超出婚假可享受休假时长");
+                        return;
+                    } else if (datelength < 10) {
+                        confirmFlag = true;
+                        confirmText = "婚假可享受10天";
                     }
-                }
+                    //是否提交证明附件
+                    if (proveFlag) {
 
-                //验证员工是否通过试用一期
-                if (leaveType == "1") {
-                    $.ajax({
-                        type: "post",
-                        async: false,
-                        url: "/system/userApply/ifPass",
-                        dataType: "json",
-                        success: function (result) {
-                            if (result == "0") {
-                                passFlag = true;
-                            } else if (result == "1") {
-                                passFlag = false;
-                                $.modal.alertWarning("您还未通过试用一期，暂不能申请年假!");
-                                return;
-                            } else {
-                                passFlag = false;
-                                $.modal.alertWarning("本月通过试用一期的员工请于下月1号以后提交年假申请，本月不能申请年假!");
-                                return;
-                            }
-                        },
-                        error: function () {
+                    } else {
+                        p03.innerText = "婚假需提交证明附件";
+                        $("#p03").css("color", "red");
+                        return;
+                    }
+                } else if (leaveType == "6") {//产假
+                    if (DateDiff(getNowFormatDate(), $("#starttime").val()) < 15) {
+                        p01.innerText = "产假需提前15天提交申请";
+                        $("#p01").css("color", "red");
+                        flag = false;
+                        return;
+                    }
+
+                    //是否提交证明附件
+                    if (proveFlag) {
+
+                    } else {
+                        p03.innerText = "产假需提交证明附件";
+                        $("#p03").css("color", "red");
+                        return;
+                    }
+
+                    if (datelength > 128) {
+                        $.modal.alertWarning("超出产假可享受休假时长");
+                        return;
+                    } else if (datelength < 128) {
+                        confirmFlag = true;
+                        confirmText = "产假可享受128天";
+                    }
+                } else if (leaveType == "7") {
+                    //是否提交证明附件
+                    if (proveFlag) {
+
+                    } else {
+                        p03.innerText = "陪产假需提交证明附件";
+                        $("#p03").css("color", "red");
+                        return;
+                    }
+
+                    if (datelength > 15) {
+                        $.modal.alertWarning("超出陪产假可享受休假时长");
+                        return;
+                    } else if (datelength < 15) {
+                        confirmFlag = true;
+                        confirmText = "陪产假可享受15天";
+                    }
+                } else if (leaveType == "9") {
+                    //是否提交证明附件
+                    if (proveFlag) {
+
+                    } else {
+                        p03.innerText = "丧假需提交证明附件";
+                        $("#p03").css("color", "red");
+                        return;
+                    }
+                    if (datelength > 3) {
+                        $.modal.alertWarning("超出丧假可请假时长");
+                        return;
+                    }
+                } else if (leaveType == "10") {
+                    if (DateDiff(starttime, endtime) - restlength > 365) {
+                        $.modal.alertWarning("超出哺乳假可选择日期");
+                        return;
+                    } else if (DateDiff(starttime, endtime) - restlength < 365) {
+                        confirmFlag = true;
+                        confirmText = "哺乳假可享受365天";
+                    }
+
+                }
+            }
+
+            //验证员工是否通过试用一期
+            if (leaveType == "1") {
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: "/system/userApply/ifPass",
+                    dataType: "json",
+                    success: function (result) {
+                        if (result == "0") {
+                            passFlag = true;
+                        } else if (result == "1") {
+                            passFlag = false;
+                            $.modal.alertWarning("您还未通过试用一期，暂不能申请年假!");
+                            return;
+                        } else {
+                            passFlag = false;
+                            $.modal.alertWarning("本月通过试用一期的员工请于下月1号以后提交年假申请，本月不能申请年假!");
+                            return;
+                        }
+                    },
+                    error: function () {
+                        $.modal.alertWarning("请联系管理员");
+                    }
+                });
+            }
+
+
+            //验证所请假期 是否与已有申请时段重复
+            $.ajax({
+                type: "post",
+                async: false,
+                url: "/system/userApply/ifRepeat",
+                data: {
+                    "applyType": applyType,
+                    "leaveType": leaveType,
+                    "starttime": starttime,
+                    "endtime": endtime,
+                    "timeapart1": timeapart1,
+                    "timeapart2": timeapart2
+                },
+                dataType: "json",
+                success: function (result) {
+                    if (result == "0") {
+                        repeatFlag = true;
+                    } else {
+                        repeatFlag = false;
+                        $.modal.alertWarning("申请中部分时段已经申请过，不能再次申请!");
+                        return;
+                    }
+                },
+                error: function () {
+                    $.modal.alertWarning("请联系管理员");
+                }
+            });
+
+            // //验证所请年假 是否时间已过期
+            // $.ajax({
+            // 	type:"post",
+            // 	async:false,
+            // 	url:"/system/userApply/ifOverdue",
+            // 	data:{"applyType":applyType,"leaveType":leaveType,"starttime":starttime,"endtime":endtime,"timeapart1":timeapart1, "timeapart2":timeapart2 },
+            // 	dataType:"json",
+            // 	success:function(result){
+            // 		if(result == "0"){
+            // 			repeatFlag = true;
+            // 		}
+            // 		else{
+            // 			repeatFlag = false;
+            // 			$.modal.alertWarning("年假已过期!");
+            // 			return;
+            // 		}
+            // 	},
+            // 	error:function(){
+            // 		$.modal.alertWarning("请联系管理员");
+            // 	}
+            // });
+
+
+            //验证所请假期 余额是否足够
+            $.ajax({
+                type: "post",
+                async: false,
+                url: "/system/userApply/ifHolidayEnough",
+                data: {"leaveType": leaveType, "starttime": starttime, "timelength": $("#timelength").val()},
+                dataType: "json",
+                success: function (result) {
+                    if (result == "0") {
+                        flag = true;
+                    } else {
+                        flag = false;
+                        if (leaveType == "1") {
+                            $.modal.alertWarning("年假余额不足");
+                        } else if (leaveType == "2") {
+                            $.modal.alertWarning("调休余额不足");
+                        } else if (leaveType == "4") {
+                            $.modal.alertWarning("每月只能请一次少于一天的病假");
+                        } else {
                             $.modal.alertWarning("请联系管理员");
                         }
-                    });
+
+                    }
+                },
+                error: function () {
+                    $.modal.alertWarning("请联系管理员");
                 }
-
-
-                //验证所请假期 是否与已有申请时段重复
-                $.ajax({
-                    type: "post",
-                    async: false,
-                    url: "/system/userApply/ifRepeat",
-                    data: {
-                        "applyType": applyType,
-                        "leaveType": leaveType,
-                        "starttime": starttime,
-                        "endtime": endtime,
-                        "timeapart1": timeapart1,
-                        "timeapart2": timeapart2
-                    },
-                    dataType: "json",
-                    success: function (result) {
-                        if (result == "0") {
-                            repeatFlag = true;
-                        } else {
-                            repeatFlag = false;
-                            $.modal.alertWarning("申请中部分时段已经申请过，不能再次申请!");
-                            return;
-                        }
-                    },
-                    error: function () {
-                        $.modal.alertWarning("请联系管理员");
-                    }
-                });
-
-                // //验证所请年假 是否时间已过期
-                // $.ajax({
-                // 	type:"post",
-                // 	async:false,
-                // 	url:"/system/userApply/ifOverdue",
-                // 	data:{"applyType":applyType,"leaveType":leaveType,"starttime":starttime,"endtime":endtime,"timeapart1":timeapart1, "timeapart2":timeapart2 },
-                // 	dataType:"json",
-                // 	success:function(result){
-                // 		if(result == "0"){
-                // 			repeatFlag = true;
-                // 		}
-                // 		else{
-                // 			repeatFlag = false;
-                // 			$.modal.alertWarning("年假已过期!");
-                // 			return;
-                // 		}
-                // 	},
-                // 	error:function(){
-                // 		$.modal.alertWarning("请联系管理员");
-                // 	}
-                // });
-
-
-                //验证所请假期 余额是否足够
-                $.ajax({
-                    type: "post",
-                    async: false,
-                    url: "/system/userApply/ifHolidayEnough",
-                    data: {"leaveType": leaveType, "starttime": starttime, "timelength": $("#timelength").val()},
-                    dataType: "json",
-                    success: function (result) {
-                        if (result == "0") {
-                            flag = true;
-                        } else {
-                            flag = false;
-                            if (leaveType == "1") {
-                                $.modal.alertWarning("年假余额不足");
-                            } else if (leaveType == "2") {
-                                $.modal.alertWarning("调休余额不足");
-                            } else if (leaveType == "4") {
-                                $.modal.alertWarning("每月只能请一次少于一天的病假");
-                            } else {
-                                $.modal.alertWarning("请联系管理员");
-                            }
-
-                        }
-                    },
-                    error: function () {
-                        $.modal.alertWarning("请联系管理员");
-                    }
-                });
-
+            });
 
 
             if (leaveType == "1") {  //年假
@@ -571,7 +566,7 @@
                         } else {
                             repeatFlag = false;
                             $.modal.alertWarning("年假已过期!");
-                            flag =false;
+                            flag = false;
                             return;
                         }
                     },
@@ -602,7 +597,7 @@
                         } else {
                             repeatFlag = false;
                             $.modal.alertWarning("调休已过期!");
-                            flag =false;
+                            flag = false;
                             return;
                         }
                     },
@@ -613,92 +608,92 @@
             }
 
 
-                if (confirmFlag) {
-                    $.modal.confirm(confirmText + "，该假期只能一次申请一次休完，您选择日期少于可享受假期，确定提交申请吗？", function () {
-                        save(prefix + "/add", $('#form-userApply-add').serialize());
+            if (confirmFlag) {
+                $.modal.confirm(confirmText + "，该假期只能一次申请一次休完，您选择日期少于可享受假期，确定提交申请吗？", function () {
+                    save(prefix + "/add", $('#form-userApply-add').serialize());
 
-                    })
-                } else {
-                    if (flag && repeatFlag && passFlag) {
-                        save(prefix + "/add", $('#form-userApply-add').serialize());
-                    }
+                })
+            } else {
+                if (flag && repeatFlag && passFlag && chaoshi) {
+                    save(prefix + "/add", $('#form-userApply-add').serialize());
                 }
-
-
             }
+
 
         }
-        ;
 
-        function save(url, data) {
-            var config = {
-                url: url,
-                type: "post",
-                dataType: "json",
-                data: data,
-                beforeSend: function () {
-                    $.modal.loading("正在处理中，请稍后...");
-                    $.modal.disable();
-                },
-                success: function (result) {
-                    $.operate.successCallback(result);
+    }
+    ;
 
-                }
-            };
-            $.ajax(config)
-        };
+    function save(url, data) {
+        var config = {
+            url: url,
+            type: "post",
+            dataType: "json",
+            data: data,
+            beforeSend: function () {
+                $.modal.loading("正在处理中，请稍后...");
+                $.modal.disable();
+            },
+            success: function (result) {
+                $.operate.successCallback(result);
 
-        function CompareDate(d1, d2) {
-            return ((new Date(d1.replace(/-/g, "\/"))) > (new Date(d2.replace(/-/g, "\/"))));
-        };
-
-        //获取当前时间，格式YYYY-MM-DD
-        function getNowFormatDate() {
-            var date = new Date();
-            var seperator1 = "-";
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var strDate = date.getDate();
-            if (month >= 1 && month <= 9) {
-                month = "0" + month;
             }
-            if (strDate >= 0 && strDate <= 9) {
-                strDate = "0" + strDate;
-            }
-            var currentdate = year + seperator1 + month + seperator1 + strDate;
-            return currentdate;
         };
+        $.ajax(config)
+    };
 
-        //计算天数差的函数，通用  
-        function DateDiff(sDate1, sDate2) {    //sDate1和sDate2是2006-12-18格式  
-            var aDate, oDate1, oDate2, iDays
-            aDate = sDate1.split("-")
-            oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])    //转换为12-18-2006格式  
-            aDate = sDate2.split("-")
-            oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
-            iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)    //把相差的毫秒数转换为天数  
-            return iDays
-        };
+    function CompareDate(d1, d2) {
+        return ((new Date(d1.replace(/-/g, "\/"))) > (new Date(d2.replace(/-/g, "\/"))));
+    };
 
-        function Datelength(sDate1, sDate2, timeapart1, timeapart2) {
-            debugger;
-            var timep1 = 0;
-            var timep2 = 0;
-
-            if (timeapart1 == "1") {
-                timep1 = 0;
-            } else {
-                timep1 = 0.5;
-            }
-
-            if (timeapart2 == "1") {
-                timep2 = 0.5;
-            } else {
-                timep2 = 1;
-            }
-            days = DateDiff(sDate1, sDate2) - timep1 + timep2;
-            return days;
+    //获取当前时间，格式YYYY-MM-DD
+    function getNowFormatDate() {
+        var date = new Date();
+        var seperator1 = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
         }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator1 + month + seperator1 + strDate;
+        return currentdate;
+    };
+
+    //计算天数差的函数，通用  
+    function DateDiff(sDate1, sDate2) {    //sDate1和sDate2是2006-12-18格式  
+        var aDate, oDate1, oDate2, iDays
+        aDate = sDate1.split("-")
+        oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])    //转换为12-18-2006格式  
+        aDate = sDate2.split("-")
+        oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0])
+        iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24)    //把相差的毫秒数转换为天数  
+        return iDays
+    };
+
+    function Datelength(sDate1, sDate2, timeapart1, timeapart2) {
+        debugger;
+        var timep1 = 0;
+        var timep2 = 0;
+
+        if (timeapart1 == "1") {
+            timep1 = 0;
+        } else {
+            timep1 = 0.5;
+        }
+
+        if (timeapart2 == "1") {
+            timep2 = 0.5;
+        } else {
+            timep2 = 1;
+        }
+        days = DateDiff(sDate1, sDate2) - timep1 + timep2;
+        return days;
+    }
 </script>
 </body>
 </html>

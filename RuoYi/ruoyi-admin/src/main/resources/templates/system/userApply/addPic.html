@@ -103,7 +103,8 @@
 				var starttime = $("#starttime").val();
 				var repeatFlag = true;
 				var picFlag = true;
-				 var chaoshiFlag = false;
+				 var chaoshiFlag = true;
+				 var chaoshi = true;
 				 if(chaoshiFlag){
 					 //验证所申请是否超过时效
 					 $.ajax({
@@ -114,10 +115,10 @@
 						 dataType:"json",
 						 success:function(result){
 							 if(result == "0"){
-								 repeatFlag = true;
+								 chaoshi = true;
 							 }
 							 else{
-								 repeatFlag = false;
+								 chaoshi = false;
 								 $.modal.alertWarning("申请中部分时段已过期");
 								 return;
 							 }
@@ -173,7 +174,7 @@
 					}
 				});
 				
-				if(repeatFlag && picFlag){
+				if(repeatFlag && picFlag && chaoshi){
 					save(prefix + "/addPic", $('#form-userApply-addPic').serialize());
 				}				   
 	        } 
