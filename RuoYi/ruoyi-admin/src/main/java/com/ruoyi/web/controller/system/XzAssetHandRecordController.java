@@ -1,6 +1,9 @@
 package com.ruoyi.web.controller.system;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.framework.web.service.DictService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -53,6 +56,9 @@ public class XzAssetHandRecordController extends BaseController
 	
 	@Autowired
 	private ISysDeptService sysDeptService;
+
+	@Autowired
+	private DictService dict;
 	
 	@RequiresPermissions("system:xzAssetHandRecord:view")
 	@GetMapping()
@@ -124,14 +130,19 @@ public class XzAssetHandRecordController extends BaseController
 	 * 新增办公用品资产分配记录(主动分配)
 	 */
 	@GetMapping("/toStaHand")
-	public String toStaHand(Long assetTypeId,Long assetType2Id,String shengyuCount, ModelMap mmap)
+	public String toStaHand(String assetType2IdName,String region,Long assetTypeId,Long assetType2Id,String shengyuCount, ModelMap mmap)
 	{
 		XzAsstes xz =new XzAsstes();
 		xz.setAssetsType(assetTypeId);
 		xz.setAssetsType2(assetType2Id);
+
 		mmap.put("assetTypeId", assetTypeId);
 		mmap.put("assetType2Id", assetType2Id);
 		mmap.put("sum", shengyuCount);
+		String xz_assets_region = dict.getLabel("xz_assets_region", region);
+		mmap.put("xz_assets_region", xz_assets_region);
+		mmap.put("region", region);
+		mmap.put("assetType2IdName", assetType2IdName);
 		return prefix + "/toStaHand";
 	}
 	
@@ -196,7 +207,9 @@ public class XzAssetHandRecordController extends BaseController
 		String region=sysUserService.selectUserById(recipientId).getArea();
 		xzAssetHandRecord.setDistributor(ShiroUtils.getUserId());
 		xzAssetHandRecord.setRecipient(recipientId);
-		xzAssetHandRecord.setRegion(region);
+		if(StringUtils.isEmpty(region)){
+			xzAssetHandRecord.setRegion(region);
+		}
 		String str= xzAssetHandRecordService.insertXzAssetHandStaRecord(xzAssetHandRecord);
 		if(str=="1"){
 			return success("分配成功");

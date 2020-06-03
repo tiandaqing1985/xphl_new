@@ -4,8 +4,8 @@
 <head>
 <th:block th:include="include :: header('办公用品资产列表')" />
 <script type="text/javascript">
-function toStaHand(assetTypeId,assetType2Id,shengyuCount){
-	$.modal.open("办公用品分配", "/system/xzAssetHandRecord/toStaHand?assetTypeId="+assetTypeId+"&assetType2Id="+assetType2Id+"&shengyuCount="+shengyuCount);
+function toStaHand(assetType2IdName,assetTypeId,region,assetType2Id,shengyuCount){
+	$.modal.open("办公用品分配", "/system/xzAssetHandRecord/toStaHand?assetTypeId="+assetTypeId+"&assetType2Id="+assetType2Id+"&shengyuCount="+shengyuCount+"&region="+region+"&assetType2IdName="+assetType2IdName);
 }
 
 </script>
@@ -28,7 +28,7 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
 
 							<li>资产名称：<input type="text" name="assetType2IdName" />
 							</li>
-							
+
 							<li><a class="btn btn-primary btn-rounded btn-sm"
 								onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
 								<a class="btn btn-warning btn-rounded btn-sm"
@@ -102,80 +102,80 @@ function toStaHand(assetTypeId,assetType2Id,shengyuCount){
 		            checkbox: true
 		        },
 				{
-					field : 'id', 
+					field : 'id',
 					title : '主键',
 					visible: false
 				},
 				{
-					field : 'region', 
+					field : 'region',
 					title : '地域',
 					formatter: function(value, row, index) {
 					    return $.table.selectDictLabel(region, value);
 					}
 				},
 				{
-					field : 'assetType2IdName', 
+					field : 'assetType2IdName',
 					title : '资产',
 					sortable: false
 				},
 				{
-					field : 'assetTypeIdName', 
+					field : 'assetTypeIdName',
 					title : '资产类型',
 					sortable: false
 				},
 				{
-					field : 'unit', 
+					field : 'unit',
 					title : '单位',
 					formatter: function(value, row, index) {
 					    return $.table.selectDictLabel(unit, value);
 					}
 				},
 				{
-					field : 'brand', 
+					field : 'brand',
 					title : '品牌',
 					formatter: function(value, row, index) {
 					    return $.table.selectDictLabel(brand, value);
 					}
 				},
 				{
-					field : 'assetsModel', 
+					field : 'assetsModel',
 					title : '资产型号',
 					sortable: true
 				},
-				
+
 				{
-					field : 'chushiCount', 
+					field : 'chushiCount',
 					title : '当月初始',
 					sortable: false,
 					visible: false
 				},
 				{
-					field : 'fenpeiCount', 
+					field : 'fenpeiCount',
 					title : '当月分配',
 					sortable: false
 				},
 				{
-					field : 'rukuCount', 
+					field : 'rukuCount',
 					title : '当月入库',
 					sortable: false
 				},
 				{
-					field : 'guihuanCount', 
+					field : 'guihuanCount',
 					title : '当月归还',
 					sortable: false
 				},
 				{
-					field : 'shengyuCount', 
+					field : 'shengyuCount',
 					title : '当月剩余',
 					sortable: false
 				},
-				
+
 		        {
 		            title: '操作',
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		            	var actions = [];
-                        actions.push('<a class="btn btn-primary btn-xs ' +  '" onclick="toStaHand(\'' + row.assetTypeId + '\',\'' + row.assetType2Id + '\',\'' + row.shengyuCount + '\')"><i class="fa fa-add"></i>分配</a>');
+                        actions.push('<a class="btn btn-primary btn-xs ' +  '" onclick="toStaHand(\'' + row.assetType2IdName + '\',\'' + row.assetTypeId + '\',\'' + row.region + '\',\'' + row.assetType2Id + '\',\'' + row.shengyuCount + '\')"><i class="fa fa-add"></i>分配</a>');
                         return actions.join('');
 		            }
 		        }
