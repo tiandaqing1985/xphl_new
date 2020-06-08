@@ -159,4 +159,7 @@ public interface UserApplyMapper
 	public List<UserApply> selectUserApplyListByStartTime(UserApply userApply);
 	
 	public List<UserApply> selectUserApplyListByEndTime(UserApply userApply);
+
+	public List<UserApply> selectFrequency(UserApply userApply);
+
 }

@@ -346,6 +346,16 @@ public class UserApplyController extends BaseController {
         return prefix + "/addPic";
     }
 
+
+    /**
+     * 新增补卡申请3次版
+     */
+    @GetMapping("/addPicPro")
+    public String addPicPro() {
+        return prefix + "/addPicPro";
+    }
+
+
     /**
      * 新增保存补卡申请
      */
@@ -356,6 +366,19 @@ public class UserApplyController extends BaseController {
         Long i = userApplyService.addPicSave(userApply, ShiroUtils.getUserId());
         return toAjax(i.intValue());
     }
+
+
+    /**
+     * 新增保存补卡申请
+     */
+    @Log(title = "补卡申请", businessType = BusinessType.INSERT)
+    @PostMapping("/addPicPro")
+    @ResponseBody
+    public AjaxResult addPicProSave(UserApply userApply) {
+        Long i = userApplyService.addPicProSave(userApply, ShiroUtils.getUserId());
+        return toAjax(i.intValue());
+    }
+
 
     /**
      * 上传多张图片
@@ -473,6 +496,22 @@ public class UserApplyController extends BaseController {
             return "1";
         }
     }
+
+
+    /**
+     * 判断是否时间超过27号,超过27号则不可以提交本月申请
+     * 如果提交时间没有超过27号则可以更改上月26日至本月25日
+     */
+    @PostMapping("/frequency")
+    @ResponseBody
+    public String frequency(UserApply userApply) {
+        userApply.setUserId(ShiroUtils.getUserId());
+        if (userApplyService.frequency(userApply) > 2) {
+            return "1";
+        }
+        return "0";
+    }
+
 
     /**
      * 判断是否时间超过27号,超过27号则不可以提交本月申请

@@ -134,7 +134,7 @@ public interface IUserApplyService
 	 */
 	public UserApply selcetSickLeaveByUserApply(UserApply userApply);
 
-	
+	public int  frequency(UserApply userApply);
 	public String changeChar(String leaveTypeName);
 	
 	public  int compare(Date date1 ,Date date2,int n);
@@ -155,6 +155,8 @@ public interface IUserApplyService
 	public int addOutSave(UserApply userApply,Long userId);
 
 	public Long addPicSave(UserApply userApply,Long userId);
+
+	public Long addPicProSave(UserApply userApply,Long userId);
 	
 	/**
 	 * 判断起始时间是否在加班时间范围内

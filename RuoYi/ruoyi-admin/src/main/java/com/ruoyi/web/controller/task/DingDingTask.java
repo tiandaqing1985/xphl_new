@@ -104,7 +104,7 @@ public class DingDingTask {
                 dingUserList.add(dingUser);
             }
         }
-        dingdingUserService.insertForeach(dingUserList);//用户总数172
+         dingdingUserService.insertForeach(dingUserList);//用户总数172
 
 
         //设置查询时间

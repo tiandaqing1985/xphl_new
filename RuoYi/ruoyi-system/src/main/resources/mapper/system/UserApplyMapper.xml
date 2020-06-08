@@ -768,5 +768,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
              <if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
          </where>
     </select>
+
+	<select id="selectFrequency" parameterType="UserApply" resultMap="UserApplyResult">
+		select a.apply_id, a.user_id, a.list_num, a.starttime, a.endtime, a.timeapart1, a.timeapart2, a.timeapart3, a.timelength, a.apply_type, a.apply_state, a.details, a.undodetails, a.leave_type, a.apply_time,a.for_applyid,a.prove
+		from sys_user_apply a
+		<where>
+			<if test="userId != null "> and a.user_id = #{userId}</if>
+			<if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
+			<if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
+			and a.starttime >'2020-06-07' and a.apply_state not in (2,4)
+		</where>
+	</select>
     
 </mapper>

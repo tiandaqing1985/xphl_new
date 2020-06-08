@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -1089,7 +1088,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         holiday.setOverdate(sdf.format(userApply.getEndtime()));
         List<Holiday> list = holidayMapper.selectHolidayOverdue(holiday);
-        if (list != null && list.size()!=0) {
+        if (list != null && list.size() != 0) {
             return "1";
         } else {
             return "0";
@@ -1153,9 +1152,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
         dingdingService.updateDingding(userApply);
 
         SysUser user = userMapper.selectUserById(userId);// 查出当前用户的area值
-        if (user.getArea().equals("3")) {
-            user.setArea("2");
-        }
+
         // 生成审批记录
         Long approvalId = 0L;// 审批人id
 
@@ -1258,7 +1255,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
         Date maxCheckDate = oaDingdingMapper.selectMaxOaDingding(oaDingding);// 查询下班打卡时间
 
-        if(maxCheckDate==null){
+        if (maxCheckDate == null) {
             return false;
         }
 
@@ -1291,9 +1288,16 @@ public class UserApplyServiceImpl implements IUserApplyService {
         return false;
     }
 
+    @Override
+    public int frequency(UserApply userApply) {
+        userApply.getUserId();
+        userApply.getStarttime();
+        userApply.setApplyType("5");
+        return userApplyMapper.selectFrequency(userApply).size();
+    }
 
     @Override
-    public String  Satisfied(Long userId, Date time) {
+    public String Satisfied(Long userId, Date time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(time);
         date.substring(0, 10);
@@ -1316,7 +1320,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
 
         Date maxCheckDate = oaDingdingMapper.selectMaxOaDingding(oaDingding);// 查询下班打卡时间
 
-        if(maxCheckDate==null){
+        if (maxCheckDate == null) {
             return "考勤日期有误";
         }
         // 下班打卡时间是否满足晚于21:30
@@ -1327,6 +1331,62 @@ public class UserApplyServiceImpl implements IUserApplyService {
         return "加班时长不满足2.5小时保存失败";
     }
 
+    /**
+     * 新增补卡申请
+     */
+    @Override
+    public Long addPicProSave(UserApply userApply, Long userId) {
+        userApply.setUserId(userId);
+        userApply.setApplyState("1");// 申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+        userApply.setApplyType("5");// 申请类型（1请假，2加班，3销假，4外出，5补卡）
+        userApplyMapper.insertUserApply(userApply);
+        SysUser user = userMapper.selectUserById(userId);// 查出当前用户的area值
+
+        // 生成审批记录
+        Long approvalId = 0L;// 审批人id
+
+        // 直属上级审批
+        Long leaderId = userMapper.selectApproverIdByApplyerId(user.getUserId());// 所在部门负责人id(上级)
+        Long upLeaderId = userMapper.selectUpApproverIdByApplyerId(user.getUserId());// 所在部门负责人的上级（上上级）
+        if (leaderId.equals(user.getUserId())) { // 判断用户是否部门负责人
+            approvalId = upLeaderId; // 上上级作为一级审批人
+        } else {
+            approvalId = leaderId;// 上级作为一级审批人
+        }
+
+        // 生成一级审批记录
+        UserApproval userApproval = new UserApproval();
+        userApproval.setApproverId(approvalId);
+        userApproval.setApplyId(userApply.getApplyId());
+        userApproval.setApprovalSight("1");// 可视
+        userApproval.setApprovalLevel(1);// 审批等级 —— 上级审批 1级
+        userApproval.setApprovalState("3");// 审批意见（1同意，2驳回 ，3未操作）
+
+        if (userId == 103L) {// COO
+            userApproval.setApprovalId(101L);
+        }
+
+        userApprovalMapper.insertUserApproval(userApproval);
+
+        if (upLeaderId == null) {
+            return 1L;
+        }
+
+        // 如果是审批人是 coo 直接结束
+        if (approvalId != null && approvalId.longValue() == 103) {
+            return 1L;
+        }
+
+        SysUser user2 = new SysUser();
+        user2.setRoleId(6L);// 人事总监
+        Long hrId = userRoleMapper.selectUserIdByRoleId(user2);// 人事总监id
+
+        if (upLeaderId.longValue() == hrId.longValue()) {
+            return 1L;
+        }
+
+        return userApply.getApplyId();
+    }
 
     /**
      * 新增补卡申请
@@ -1421,7 +1481,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
         try {
             // 上传文件路径
             String filePath = Global.getUploadPath();
-           // String filePath = new File("").getAbsolutePath();
+            // String filePath = new File("").getAbsolutePath();
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file_data);
             String url = serverConfig.getUrl() + UPLOAD_PATH + fileName;

@@ -13,10 +13,12 @@
 		function addOut(){
 			$.modal.open("外出报备申请","/system/userApply/addOut")
 		}
+		// function addPic(){
+		// 	$.modal.open("补卡申请","/system/userApply/addPic")
+		// }
 		function addPic(){
-			$.modal.open("补卡申请","/system/userApply/addPic")
+			$.modal.open("补卡申请","/system/userApply/addPicPro")
 		}
-		
 		function toView(applyId){
 			var url = $.table._option.toViewUrl.replace("{applyId}",applyId);
 			$.modal.open("查看申请", url);
