@@ -65,7 +65,7 @@
                         <label class="col-sm-4 control-label"><span style="color: red; ">*</span>区域：</label>
                         <div class="col-sm-8">
                             <div class="input-group" style="width: 100%">
-                                <select name="area" class="form-control m-b" th:with="type=${@dict.getType('oa_area')}">
+                                <select name="area" class="form-control m-b" th:with="type=${@dict.getType('xz_assets_region')}">
 				                    <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}" th:field="*{area}"></option>
 				                </select> 
                             </div>

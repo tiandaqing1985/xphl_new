@@ -716,8 +716,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     	<where>
     	leave_type = 6 AND apply_state = 3 
     	<if test="userId != null "> and user_id = #{userId}</if>
-    	<if test="starttime != null  "><![CDATA[ and DATE_FORMAT(starttime, '%Y-%m') <= #{timeapart1} ]]></if>
-    	<if test="endtime != null  "><![CDATA[ and DATE_FORMAT(endtime, '%Y-%m') >= #{timeapart1} ]]></if>
+    	<if test="starttime != null  "><![CDATA[ and DATE_FORMAT(starttime, '%Y-%m') <= #{starttime} ]]></if>
+    	<if test="endtime != null  "><![CDATA[ and DATE_FORMAT(endtime, '%Y-%m') >= #{starttime} ]]></if>
     	</where>
    	</select>
    	

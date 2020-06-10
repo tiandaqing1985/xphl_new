@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -35,8 +36,11 @@ public class AnnualLeaveTask {
 
     public void newAnnualLeaveTask() {
 
-        List<SysUser> userList = userService.selectAllUser();
-
+         List<SysUser> userList = userService.selectAllUser();
+//        List<SysUser> userList =new ArrayList<>();
+//
+//        SysUser sysUser = userService.selectUserById(152L);
+//        userList.add(sysUser);
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
         //入职日期、首次参加工作日期、现在的时间、元旦、最后一天、
         String intime, firstWorkTime, today, firstDay, lastDay = "";
@@ -57,15 +61,13 @@ public class AnnualLeaveTask {
                 Date strDate = simpleDateFormat.parse(firstWorkTime);
                 long nd = 1000 * 24 * 60 * 60;
                 // 获得两个时间的毫秒时间差异
-                long diff = new Date().getTime() -strDate.getTime() ;
+                long diff = new Date().getTime() - strDate.getTime();
                 // 计算差多少天
                 long day = diff / nd;
 
-                if(day<438){//判断是否从首次工作时间到今天是否可以生成年假
+                if (day < 438) {//判断是否从首次工作时间到今天是否可以生成年假
                     continue;
                 }
-
-
 
 
                 // 计算在职天数
@@ -164,6 +166,8 @@ public class AnnualLeaveTask {
                 UserApply userApply = new UserApply();
                 userApply.setUserId(user.getUserId());
                 userApply.setTimeapart1(today);
+                userApply.setStarttime(new Date());
+                userApply.setEndtime(new Date());
                 UserApply isMaternityLeave = userApplyService.selcetMaternityLeaveByUserApply(userApply);// 是否在产假
 
                 if (holidayCount >= 15) {
@@ -176,7 +180,8 @@ public class AnnualLeaveTask {
                     holiday.setValue(0.0);
                     holiday.setHolidayDetail("员工一个月休假时间超过 15 天（含），则当月没有年假");
                     holidayMapper.insertHoliday(holiday);
-                } else if (isMaternityLeave != null) {
+                }
+                else if (isMaternityLeave != null) {
                     Holiday holiday1 = new Holiday();
                     holiday1.setUserId(user.getUserId()); // user_id
                     holiday1.setHolidayType("1"); // 类型为年假
@@ -186,7 +191,8 @@ public class AnnualLeaveTask {
                     holiday1.setValue(0.0);
                     holiday1.setHolidayDetail("员工产假期间的年假包含在产假内一并休完，不再额外计算年假");
                     holidayService.insertHoliday(holiday1);
-                } else {
+                }
+                else {
                     while (cycleNum > 0) {
                         Holiday holiday = new Holiday();
                         holiday.setUserId(user.getUserId());

@@ -7,7 +7,10 @@ import org.apache.http.impl.client.HttpClients;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 /**
@@ -18,21 +21,33 @@ import java.util.zip.ZipOutputStream;
 public class testaa {
 
 
-
-    /**
-     * @param args
-     * @throws Exception
-     */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         // TODO Auto-generated method stub
 
-        String url3 = "http://119.61.22.42:5555/profile/upload/2019/12/16/416b69775f16a8f64469ec824bc02b56.jpg";
 
+        /* 3.List中的使用 */
+        List<String> list = new ArrayList<String>();
+        list.add("我1");
+        list.add("爱2");
+        list.add("中3");
+        list.add("国4");
 
-        downPictor(url3,"1111.jpg");
-        System.out.println("1111.jpg");
+        // 增强for循环
+        for (String item : list){
+            System.out.println(item);
+        }
+
+        //普通for循环
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i));
+        }
+
+        //迭代器遍历
+        Iterator<String> it = list.iterator();
+        while (it.hasNext()) {
+            System.out.println(it.next());
+        }
     }
-
 
 
     public static void downPictor(String url,String name){
