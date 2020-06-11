@@ -38,7 +38,6 @@ public class AnnualLeaveTask {
 
          List<SysUser> userList = userService.selectAllUser();
 //        List<SysUser> userList =new ArrayList<>();
-//
 //        SysUser sysUser = userService.selectUserById(152L);
 //        userList.add(sysUser);
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");

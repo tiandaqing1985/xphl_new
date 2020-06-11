@@ -1,20 +1,13 @@
 package com.ruoyi.system.service.finance.impl;
 
 import com.ruoyi.common.core.text.Convert;
-import com.ruoyi.system.domain.finance.FacCostApply;
-import com.ruoyi.system.domain.finance.FacCostDetailApply;
-import com.ruoyi.system.domain.finance.FacCostPutupApply;
-import com.ruoyi.system.domain.finance.FacSysUserApproval;
-import com.ruoyi.system.mapper.finance.ApprovalProcessMapper;
-import com.ruoyi.system.mapper.finance.FacCostApplyMapper;
-import com.ruoyi.system.mapper.finance.FacCostDetailApplyMapper;
-import com.ruoyi.system.mapper.finance.FacCostPutupApplyMapper;
+import com.ruoyi.system.domain.finance.*;
+import com.ruoyi.system.mapper.finance.*;
 import com.ruoyi.system.service.ISysUserService;
 import com.ruoyi.system.service.finance.IFacCostApplyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.ruoyi.system.mapper.finance.FacUserApprovalMapper;
-import com.ruoyi.system.domain.finance.FacUserApproval;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
@@ -132,6 +125,9 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
             if (approverId2.equals(facCostApply.getUserId())) {
                 centerId.remove(approverId2);
             }
+            if (approverId2 == 122L && centerId.size() > 4) {
+                centerId.remove(approverId2);
+            }
 
             for (int i = centerId.size() - 1; i >= 0; i--) {
                 FacSysUserApproval center = new FacSysUserApproval();// 中心负责人
@@ -175,11 +171,11 @@ public class FacCostApplyServiceImpl implements IFacCostApplyService {
     @Override
     public int deleteFacCostApplyByIds(String ids) {
         FacCostApply facCostApply = facCostApplyMapper.selectFacCostApplyById(Long.valueOf(ids));
-        FacUserApproval facUserApproval= new FacUserApproval();
+        FacUserApproval facUserApproval = new FacUserApproval();
         facUserApproval.setApplyId(facCostApply.getNum());
-        List<FacUserApproval> list =facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
-        if(list!=null&&list.size()>0){
-            for(FacUserApproval v :list){
+        List<FacUserApproval> list = facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
+        if (list != null && list.size() > 0) {
+            for (FacUserApproval v : list) {
                 facUserApprovalMapper.deleteFacUserApprovalById(v.getApprovalId());
             }
         }

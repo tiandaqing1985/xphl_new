@@ -72,10 +72,10 @@ public class EmailTask {
                 leaderEmail = leader.getEmail();
             }
 
-            if (leaderEmail != null && "songbin@perfect-cn.cn".equals(leaderEmail)) {
+            if (leaderEmail != null && "liuxiaodong@perfect-cn.cn".equals(leaderEmail)) {
                 copyto = "luyaoyao@perfect-cn.cn,wufan@perfect-cn.cn";//抄送人邮箱
             } else {
-                copyto = "songbin@perfect-cn.cn,luyaoyao@perfect-cn.cn,wufan@perfect-cn.cn";//抄送人邮箱
+                copyto = "liuxiaodong@perfect-cn.cn,luyaoyao@perfect-cn.cn,wufan@perfect-cn.cn";//抄送人邮箱
             }
 
             if (day == 14L) {//提前两周通知
