@@ -64,9 +64,9 @@ public class AnnualLeaveTask {
                 // 计算差多少天
                 long day = diff / nd;
 
-                if (day < 438) {//判断是否从首次工作时间到今天是否可以生成年假
-                    continue;
-                }
+//                if (day < 438) {//判断是否从首次工作时间到今天是否可以生成年假
+//                    continue;
+//                }
 
 
                 // 计算在职天数
@@ -193,15 +193,28 @@ public class AnnualLeaveTask {
                 }
                 else {
                     while (cycleNum > 0) {
-                        Holiday holiday = new Holiday();
-                        holiday.setUserId(user.getUserId());
-                        holiday.setHolidayType("1");
-                        holiday.setAvailability("1");// 有效
-                        holiday.setCreatedate(today);
-                        holiday.setOverdate(lastDay);
-                        holiday.setValue(1.0);
-                        holidayMapper.insertHoliday(holiday);
-                        cycleNum--;
+                        if(day > 438){
+                            Holiday holiday = new Holiday();
+                            holiday.setUserId(user.getUserId());
+                            holiday.setHolidayType("1");
+                            holiday.setAvailability("1");// 有效
+                            holiday.setCreatedate(today);
+                            holiday.setOverdate(lastDay);
+                            holiday.setValue(1.0);
+                            holidayMapper.insertHoliday(holiday);
+                            cycleNum--;
+                        }else{
+                            Holiday holiday = new Holiday();
+                            holiday.setUserId(user.getUserId());
+                            holiday.setHolidayType("1");
+                            holiday.setAvailability("0");// 无效
+                            holiday.setCreatedate(today);
+                            holiday.setOverdate(lastDay);
+                            holiday.setValue(0.0);
+                            holidayMapper.insertHoliday(holiday);
+                            cycleNum--;
+                        }
+
                     }
                 }
 

@@ -149,28 +149,34 @@
             },
                 {
                     field: 'approvalId',
-                    title: '审批记录ID'
+                    title: '审批记录ID',
+                    visible: true
                 },
                 {
                     field: 'applyId',
-                    title: '申请编号'
+                    title: '申请编号',
+                    sortable: true
                 },
                 {
                     field: 'projectName',
-                    title: '审批项目名称'
+                    title: '审批项目名称',
+                    sortable: true
                 },
                 {
                     field: 'amount',
-                    title: '审批总金额'
+                    title: '审批总金额',
+                    sortable: true
 
                 },
                 {
                     field: 'applicantName',
-                    title: '申请人'
+                    title: '申请人',
+                    sortable: true
                 },
                 {
                     field: 'approverName',
-                    title: '审批人'
+                    title: '审批人',
+                    sortable: true
                 }, {
                     field: 'allName',
                     title: '所有审批人',
@@ -220,11 +226,13 @@
                 },
                 {
                     field: 'applyId',
-                    title: '申请编号'
+                    title: '申请编号',
+                    sortable: true
                 },
                 {
                     field: 'projectName',
-                    title: '审批项目名称'
+                    title: '审批项目名称',
+                    sortable: true
                 },
                 {
                     field: 'approvalState',
@@ -241,11 +249,13 @@
                 },
                 {
                     field: 'applicantName',
-                    title: '申请人'
+                    title: '申请人',
+                    sortable: true
                 },
                 {
                     field: 'approverName',
-                    title: '审批人'
+                    title: '审批人',
+                    sortable: true
                 }, {
                     field: 'allName',
                     title: '所有审批人',
@@ -256,7 +266,8 @@
                 },
                 {
                     field: 'approvalTime',
-                    title: '审批操作时间'
+                    title: '审批操作时间',
+                    sortable: true,
                     formatter: function (value, row, index) {
                         var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                         return newDate;
@@ -264,7 +275,8 @@
                 },
                 {
                     field: 'opi',
-                    title: '审批意见'
+                    title: '审批意见',
+                    sortable: true
                 },
                 {
                     title: '操作',

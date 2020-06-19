@@ -148,7 +148,8 @@ public class DingDingTask {
         Long wangzhenzhen = 12333319631237216L;//王震震
         Long weiyuanhao = 1248012138879414L;//隗元昊
         Long quyilin1 = 135416124323359665L;//屈伊琳1
-        Long liyang01=1765181417846298L;
+        Long liyang01=1765181417846298L;//李扬01
+        Long chenchao01=4162903061228861L;//陈超01
         OaDingding dingding = new OaDingding();
         dingding.setUserId(wangzhenzhen);
         dingding.setUserName("王震震");
@@ -165,6 +166,10 @@ public class DingDingTask {
         dingding4.setUserId(liyang01);
         dingding4.setUserName("李扬01");
         dingdingService.updateOaDingding(dingding4);
+        OaDingding dingding5 = new OaDingding();
+        dingding4.setUserId(chenchao01);
+        dingding4.setUserName("陈超01");
+        dingdingService.updateOaDingding(dingding5);
     }
 
 
