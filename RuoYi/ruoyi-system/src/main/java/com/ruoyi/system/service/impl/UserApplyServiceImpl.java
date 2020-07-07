@@ -1292,6 +1292,21 @@ public class UserApplyServiceImpl implements IUserApplyService {
     public int frequency(UserApply userApply) {
         userApply.getUserId();
         userApply.getStarttime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String date = sdf.format(new Date());
+
+        int a= Integer.valueOf(date.substring(6, 8)).intValue();
+        if (a>25) {
+            Calendar cld = Calendar.getInstance();
+            cld.set(Calendar.MONTH,cld.get(Calendar.MONTH));
+            cld.set(Calendar.DATE,25);
+            userApply.setStarttime(cld.getTime());
+        } else {
+            Calendar cld = Calendar.getInstance();
+            cld.set(Calendar.MONTH,cld.get(Calendar.MONTH)-1);
+            cld.set(Calendar.DATE,25);
+            userApply.setStarttime(cld.getTime());
+        }
         userApply.setApplyType("5");
         return userApplyMapper.selectFrequency(userApply).size();
     }

@@ -776,7 +776,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="userId != null "> and a.user_id = #{userId}</if>
 			<if test="applyType != null  and applyType != '' "> and a.apply_type = #{applyType}</if>
 			<if test="leaveType != null  and leaveType != '' "> and a.leave_type = #{leaveType}</if>
-			and a.starttime >'2020-06-07' and a.apply_state not in (2,4)
+			and a.starttime > #{starttime} and a.apply_state not in (2,4)
 		</where>
 	</select>
     

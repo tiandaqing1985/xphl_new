@@ -58,7 +58,7 @@ public class FacLoanApplyController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacLoanApply facLoanApply) {
         startPage();
-        if (ShiroUtils.getUserId() == 1L || ShiroUtils.getUserId() == 154L || ShiroUtils.getUserId() == 110L) {
+        if (ShiroUtils.getUserId() == 1L || ShiroUtils.getUserId() == 149L || ShiroUtils.getUserId() == 110L||ShiroUtils.getUserId()==824L) {
             List<FacLoanApply> lists = facLoanApplyService
                     .selectFacLoanApplyList(facLoanApply);
             for (FacLoanApply v : lists) {

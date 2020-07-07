@@ -154,6 +154,17 @@ public class AnnualLeaveTask {
                 cycleNum = selfAnnualLeave - hList.size();
                 if (cycleNum <= 0) continue;
 
+                if(cycleNum >=2){
+                    Holiday holiday = new Holiday();
+                    holiday.setUserId(user.getUserId());
+                    holiday.setHolidayType("1");
+                    holiday.setAvailability("0");// 无效
+                    holiday.setCreatedate(today);
+                    holiday.setOverdate(lastDay);
+                    holiday.setValue(0.0);
+                    holidayMapper.insertHoliday(holiday);
+                    cycleNum--;
+                }
                 /**
                  *  员工连续休假时间超过15天（含），则所在月份当月没有年假。
                  *  产假期间不生成年假

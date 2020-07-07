@@ -75,7 +75,7 @@ public class FacCollectApplyController extends BaseController {
         startPage();
         facCollectApply.setApplicant(ShiroUtils.getUserId());
 
-        if(ShiroUtils.getUserId()==1L||ShiroUtils.getUserId()==154L||ShiroUtils.getUserId()==110L){
+        if(ShiroUtils.getUserId()==1L||ShiroUtils.getUserId()==149L||ShiroUtils.getUserId()==110L||ShiroUtils.getUserId()==824L){
             FacCollectApply fac = new FacCollectApply();
             List<FacCollectApply> lists = facCollectApplyService.selectFacCollectApplyList(fac);
             for (FacCollectApply v : lists) {
