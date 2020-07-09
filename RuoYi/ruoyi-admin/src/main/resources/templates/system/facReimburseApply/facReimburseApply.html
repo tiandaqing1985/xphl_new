@@ -14,6 +14,10 @@
         display: inline-block;
         padding: 0;
     }
+    #unit {
+        display: inline-block;
+        padding: 0;
+    }
 </style>
 <head>
     <th:block th:include="include :: header('报销列表')"/>
@@ -53,15 +57,22 @@
                                 <option value="差旅报销">差旅报销</option>
                             </select>
                         </li>
-
+                        <li>
+                            公司名称：
+                            <select id="unit" name="unit" class="form-control">
+                                <option value="">-- 请选择 --</option>
+                                <option value="新普互联（北京）科技有限公司">新普互联（北京）科技有限公司</option>
+                                <option value="普菲特（海南）科技有限公司">普菲特（海南）科技有限公司</option>
+                                <option value="新疆普菲特网络科技有限公司">新疆普菲特网络科技有限公司</option>
+                                <option value="上海优寰网络科技有限公司">上海优寰网络科技有限公司</option>
+                                <option value="云为智合网络技术（深圳）有限公司">云为智合网络技术（深圳）有限公司</option>
+                            </select>
+                        </li>
                         <li>
                             <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
                                     class="fa fa-search"></i>&nbsp;搜索</a>
                             <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
                                     class="fa fa-refresh"></i>&nbsp;重置</a>
-<!--                            <a class="btn btn-danger btn-rounded btn-sm" onclick="zAdd()">-->
-<!--                                <i class="fa fa-check"></i>冲抵借款-->
-<!--                            </a>-->
                         </li>
                     </ul>
                 </div>
@@ -111,6 +122,11 @@
                 {
                     field: 'num',
                     title: '报销编号',
+                    sortable: true
+                },
+                {
+                    field: 'unit',
+                    title: '公司名称',
                     sortable: true
                 },
                 {
