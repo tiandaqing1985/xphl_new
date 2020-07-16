@@ -218,16 +218,18 @@
                         if (row.submitStatus == "submit") {
                             if (row.status == 1) {
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\',\''+row.type+'\',\''+row.jknum+'\')"><i class="fa fa-detail"></i>打印</a>');
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="weather(\'' + row.num + '\')"><i class="fa fa-detail"></i>附件上传</a>');
                                if(row.userId == 1){
-                                   actions.push('<a class="btn btn-success btn-xs " href="facFileUpload/xaizai?num='+row.num+'"><i class="fa fa-detail"></i>图片下载</a>');
-
-                               }
+                                   actions.push('<a class="btn btn-success btn-xs " href="facFileUpload/xaizai?num='+row.num+'"><i class="fa fa-detail"></i>附件下载</a>');
+                            }
 
                             }else if (row.status == 2) {
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\',\''+row.type+'\',\''+row.jknum+'\')"><i class="fa fa-detail"></i>打印</a>');
                                 actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                             }  else if(row.status == 4){
                                 actions.push('<a class="btn btn-danger btn-xs " href="javascript:void(0)" onclick="$.operate.remove(\'' + row.id + '\')"><i class="fa fa-remove"></i>删除</a>');
+                              actions.push('<a class="btn btn-success btn-xs " href="facFileUpload/xaizai?num='+row.num+'"><i class="fa fa-detail"></i>附件上传</a>');
+
                             }
                         }
                         return actions.join('');
@@ -249,6 +251,9 @@
 
     }
 
+    function weather(num){
+        $.modal.open("上传附件", "/system/facReimburseApply/shangchuanfujian?num="+ num);
+    }
 
 
 
@@ -258,6 +263,11 @@
     }
 
 
+
+    function shangchuan(num){
+
+        mSave("/system/facFileUpload/xaizai?num="+num);
+    }
 
 
     function zAdd() {

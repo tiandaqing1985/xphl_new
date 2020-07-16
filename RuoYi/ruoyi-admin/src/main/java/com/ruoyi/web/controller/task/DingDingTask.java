@@ -167,8 +167,8 @@ public class DingDingTask {
         dingding4.setUserName("李扬01");
         dingdingService.updateOaDingding(dingding4);
         OaDingding dingding5 = new OaDingding();
-        dingding4.setUserId(chenchao01);
-        dingding4.setUserName("陈超01");
+        dingding5.setUserId(chenchao01);
+        dingding5.setUserName("陈超01");
         dingdingService.updateOaDingding(dingding5);
     }
 

@@ -1,19 +1,5 @@
 package com.ruoyi.web.controller.system;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -30,6 +16,14 @@ import com.ruoyi.system.service.finance.IFacCommonlyApplyService;
 import com.ruoyi.system.service.finance.IFacNumberTableService;
 import com.ruoyi.system.service.finance.IFacPayPublicApplyService;
 import com.ruoyi.system.service.finance.IFacUserApprovalService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * 对公申请 信息操作处理
@@ -66,17 +60,19 @@ public class FacPayPublicApplyController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacPayPublicApply facPayPublicApply) {
         startPage();
-        if(ShiroUtils.getUserId()==1L||ShiroUtils.getUserId()==149L||ShiroUtils.getUserId()==110L||ShiroUtils.getUserId()==824L){
+        if (ShiroUtils.getUserId() == 1L || ShiroUtils.getUserId() == 149L || ShiroUtils.getUserId() == 110L || ShiroUtils.getUserId() == 824L || ShiroUtils.getUserId() == 141L|| ShiroUtils.getUserId() == 106L) {
             List<FacPayPublicApply> lists = facPayPublicApplyService
                     .selectFacPayPublicApplyList(facPayPublicApply);
             for (FacPayPublicApply v : lists) {
                 v.setUserName(
                         sysUserService.selectUserById(v.getUser()).getUserName());
-
+                if (v.getWeatherInvoice().equals("暂无发票")) {
+                        v.setWeatherNum("1");
+                }
                 FacUserApproval name = facUserApprovalService
                         .selectApproval(v.getNum(), v.getUser());
                 if (name != null) {
-                    if(facUserApprovalService.approverName(v.getNum())!=null){
+                    if (facUserApprovalService.approverName(v.getNum()) != null) {
                         v.setAllName(facUserApprovalService.approverName(v.getNum()));
                     }
                     if (name.getApproverId() != null) {
@@ -112,7 +108,7 @@ public class FacPayPublicApplyController extends BaseController {
             FacUserApproval name = facUserApprovalService
                     .selectApproval(v.getNum(), v.getUser());
             if (name != null) {
-                if(facUserApprovalService.approverName(v.getNum())!=null){
+                if (facUserApprovalService.approverName(v.getNum()) != null) {
                     v.setAllName(facUserApprovalService.approverName(v.getNum()));
                 }
                 if (name.getApproverId() != null) {
@@ -125,7 +121,7 @@ public class FacPayPublicApplyController extends BaseController {
                 } else {
                     v.setApprovalStatus(name.getApprovalState());
                 }
-              //  v.setApprovalStatus(name.getApprovalState());
+                //  v.setApprovalStatus(name.getApprovalState());
                 if (ShiroUtils.getUserId() == 103
                         && ShiroUtils.getUserId() == 101) {
                     v.setApprovalStatus("1");
@@ -225,12 +221,12 @@ public class FacPayPublicApplyController extends BaseController {
             // 更新
             facPayPublicApplyService.deleteFacPayPublicApplyByIds(facPayPublicApply.getId() + "");
         }
-        facUserApprovalService.createPublicPayApprovalProcess(facPayPublicApply.getNum(),facPayPublicApply.getAmount(),facPayPublicApply.getName(),ShiroUtils.getUserId());
+        facUserApprovalService.createPublicPayApprovalProcess(facPayPublicApply.getNum(), facPayPublicApply.getAmount(), facPayPublicApply.getName(), ShiroUtils.getUserId());
         facPayPublicApply.setStatus("1");
-        if(facPayPublicApply.getIsKeep()!=null){
-            if(facPayPublicApply.getIsKeep().equals("1")){
-                FacCommonlyApply facCommonlyApply=new FacCommonlyApply();
-                facCommonlyApply.setNum(ShiroUtils.getUserId()+"");
+        if (facPayPublicApply.getIsKeep() != null) {
+            if (facPayPublicApply.getIsKeep().equals("1")) {
+                FacCommonlyApply facCommonlyApply = new FacCommonlyApply();
+                facCommonlyApply.setNum(ShiroUtils.getUserId() + "");
                 facCommonlyApply.setName(facPayPublicApply.getPayee());
                 facCommonlyApply.setNumber(facPayPublicApply.getPayeeAccount());
                 facCommonlyApply.setUserName(facPayPublicApply.getPayeeBank());
@@ -253,6 +249,25 @@ public class FacPayPublicApplyController extends BaseController {
         return prefix + "/add";
     }
 
+
+    /**
+     * 修改对公申请
+     */
+
+    @GetMapping("/editWeather")
+    public String editWeather(String id, ModelMap map) {
+        map.put("id", id);
+        return prefix + "/editWeather";
+    }
+
+    @Log(title = "对公申请", businessType = BusinessType.UPDATE)
+    @PostMapping("/editWeather")
+    @ResponseBody
+    public AjaxResult editWeat(FacPayPublicApply facPayPublicApply) {
+        facPayPublicApply.setWeatherInvoice("有发票");
+        return toAjax(facPayPublicApplyService
+                .updateFacPayPublicApply(facPayPublicApply));
+    }
     /**
      * 修改保存对公申请
      */
@@ -283,18 +298,18 @@ public class FacPayPublicApplyController extends BaseController {
     @ResponseBody
     public TableDataInfo detail1(String num) {
 
-		startPage();
-		FacPayPublicApply facCostApply = facPayPublicApplyService.deatil(num);
-		if (facCostApply != null) {
-			FacPayPublicApply facCostApplys = facPayPublicApplyService.selectFacPayPublicApplyById(facCostApply.getId());
-			List<FacPayPublicApply> facReimburseApplies = new ArrayList<>();
-			facCostApplys.setUserName(sysUserService.selectUserById(facCostApplys.getUser()).getUserName());
-			facReimburseApplies.add(facCostApplys);
-			return getDataTable(facReimburseApplies);
-		} else {
-			List<String> a = new ArrayList<>();
-			return getDataTable(a);
-		}
+        startPage();
+        FacPayPublicApply facCostApply = facPayPublicApplyService.deatil(num);
+        if (facCostApply != null) {
+            FacPayPublicApply facCostApplys = facPayPublicApplyService.selectFacPayPublicApplyById(facCostApply.getId());
+            List<FacPayPublicApply> facReimburseApplies = new ArrayList<>();
+            facCostApplys.setUserName(sysUserService.selectUserById(facCostApplys.getUser()).getUserName());
+            facReimburseApplies.add(facCostApplys);
+            return getDataTable(facReimburseApplies);
+        } else {
+            List<String> a = new ArrayList<>();
+            return getDataTable(a);
+        }
 
     }
 
@@ -373,16 +388,16 @@ public class FacPayPublicApplyController extends BaseController {
     @PostMapping("/addSove")
     @ResponseBody
     public AjaxResult addSove(FacPayPublicApply facPayPublicApply) throws Exception {
-		facPayPublicApply.setUser(ShiroUtils.getUserId());
-		facPayPublicApply.setCreateTime(new Date());
-		if (facPayPublicApply.getId() == null) {
-		} else {
-			facPayPublicApplyService.deleteFacPayPublicApplyByIds(facPayPublicApply.getId().toString());
-		}
-        if(facPayPublicApply.getIsKeep()!=null){
-            if(facPayPublicApply.getIsKeep().equals("1")){
-                FacCommonlyApply facCommonlyApply=new FacCommonlyApply();
-                facCommonlyApply.setNum(ShiroUtils.getUserId()+"");
+        facPayPublicApply.setUser(ShiroUtils.getUserId());
+        facPayPublicApply.setCreateTime(new Date());
+        if (facPayPublicApply.getId() == null) {
+        } else {
+            facPayPublicApplyService.deleteFacPayPublicApplyByIds(facPayPublicApply.getId().toString());
+        }
+        if (facPayPublicApply.getIsKeep() != null) {
+            if (facPayPublicApply.getIsKeep().equals("1")) {
+                FacCommonlyApply facCommonlyApply = new FacCommonlyApply();
+                facCommonlyApply.setNum(ShiroUtils.getUserId() + "");
                 facCommonlyApply.setName(facPayPublicApply.getPayee());
                 facCommonlyApply.setNumber(facPayPublicApply.getPayeeAccount());
                 facCommonlyApply.setUserName(facPayPublicApply.getPayeeBank());
@@ -390,8 +405,8 @@ public class FacPayPublicApplyController extends BaseController {
             }
         }
 
-		facPayPublicApplyService.insertApply(facPayPublicApply);
-		return AjaxResult.success("操作成功");
+        facPayPublicApplyService.insertApply(facPayPublicApply);
+        return AjaxResult.success("操作成功");
 
     }
 

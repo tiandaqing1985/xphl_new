@@ -119,9 +119,9 @@ public class FacReimburseApplyController extends BaseController {
 
         FacReimburseApply facReimburseApply = new FacReimburseApply();
         //center 是直接审批成功的
-        FacCostApply facCostApply2 =new FacCostApply();
+        FacCostApply facCostApply2 = new FacCostApply();
         facCostApply2.setNum(num);
-        FacCostApply facCost1 =facCostApplyService.selectFacCostApplyList(facCostApply2).get(0);
+        FacCostApply facCost1 = facCostApplyService.selectFacCostApplyList(facCostApply2).get(0);
         FacSysUserApproval center = new FacSysUserApproval();//审批流
         center.setApplicantId(ShiroUtils.getUserId());
         center.setApplyId(facNumberTableService.getNum("BX", ShiroUtils.getDateId()));
@@ -130,7 +130,7 @@ public class FacReimburseApplyController extends BaseController {
         center.setApprovalTime(new Date());
         center.setApprovalLevel(1);
         center.setApprovalSight("1");
-        if(facCost1!=null){
+        if (facCost1 != null) {
             center.setAmount(facCost1.getMoneyEs());
         }
 //        approvalProcessService.insert(center);
@@ -161,8 +161,8 @@ public class FacReimburseApplyController extends BaseController {
                     facReimburseApplyService.insertFacReimburseApply(facReimburseApply);
                 }
 
-                if(facFileUploadService.ifPicUpload(facReimburseApply.getJKnum())){
-                    facFileUploadService.updateNum(facReimburseApply.getJKnum(),facReimburseApply.getNum());
+                if (facFileUploadService.ifPicUpload(facReimburseApply.getJKnum())) {
+                    facFileUploadService.updateNum(facReimburseApply.getJKnum(), facReimburseApply.getNum());
                 }
                 FacCostApply facCostApply = new FacCostApply();
                 facCostApply.setNum(facCostReimburse.getNum());
@@ -345,6 +345,15 @@ public class FacReimburseApplyController extends BaseController {
     }
 
     /**
+     * 上传附件
+     */
+    @GetMapping("/shangchuanfujian")
+    public String shangchuanfujian(String num, ModelMap map) {
+        map.put("num", num);
+        return prefix + "/shangchuanfujian";
+    }
+
+    /**
      * 新增报销
      *
      * @throws Exception
@@ -440,7 +449,8 @@ public class FacReimburseApplyController extends BaseController {
 
     }
 
-    /**return
+    /**
+     * return
      * 新增提交报销
      */
     @Log(title = "报销", businessType = BusinessType.INSERT)
@@ -530,8 +540,8 @@ public class FacReimburseApplyController extends BaseController {
         FacUserApproval facUserApproval = new FacUserApproval();
         facUserApproval.setApplyId(facReimburseApply.getNum());
         List<FacUserApproval> list = facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
-        if (list != null&&list.size()>0) {
-            for (FacUserApproval f:list) {
+        if (list != null && list.size() > 0) {
+            for (FacUserApproval f : list) {
                 f.setAmount(facReimburseApplyService.selectDouble(facReimburseApply.getNum()));
                 facUserApprovalMapper.deleteFacUserApprovalById(f.getApprovalId());
             }
@@ -649,7 +659,7 @@ public class FacReimburseApplyController extends BaseController {
 
         reiHospitalityApply.setUser(ShiroUtils.getUserId());
 
-        if(sysDeptService.selectDeptById(ShiroUtils.getDeptId())!=null){
+        if (sysDeptService.selectDeptById(ShiroUtils.getDeptId()) != null) {
             reiHospitalityApply.setDeptName(sysDeptService.selectDeptById(ShiroUtils.getDeptId()).getDeptName());
         }
         facReimburseApplyService.insertFacreiHospitalityApply(reiHospitalityApply);
@@ -734,7 +744,7 @@ public class FacReimburseApplyController extends BaseController {
     @PostMapping("/Arbitrarily")
     @ResponseBody
     public AjaxResult Save(FacReiAdiApply reiAdiApply) {
-        if(sysDeptService.selectDeptById(ShiroUtils.getDeptId())!=null){
+        if (sysDeptService.selectDeptById(ShiroUtils.getDeptId()) != null) {
             reiAdiApply.setDeptName(sysDeptService.selectDeptById(ShiroUtils.getDeptId()).getDeptName());
         }
         return toAjax(facReimburseApplyService.insertFacreiAdiApply(reiAdiApply));
@@ -749,10 +759,10 @@ public class FacReimburseApplyController extends BaseController {
     public AjaxResult tranDetailSave(ReiTrafficApply reiTrafficApply) {
 
 
-        if(sysDeptService.selectDeptById(ShiroUtils.getDeptId())!=null){
+        if (sysDeptService.selectDeptById(ShiroUtils.getDeptId()) != null) {
             reiTrafficApply.setDeptName(sysDeptService.selectDeptById(ShiroUtils.getDeptId()).getDeptName());
         }
-       // 此处需要改写代码
+        // 此处需要改写代码
         if (reiTrafficApply.getType().equals("加班")) {
             String a = userApplyService.Satisfied(ShiroUtils.getUserId(), reiTrafficApply.getDdDate());
             if (!a.equals("true")) {
@@ -957,9 +967,9 @@ public class FacReimburseApplyController extends BaseController {
         FacUserApproval facUserApproval = new FacUserApproval();
         facUserApproval.setApplyId(facReimburseApply.getNum());
         List<FacUserApproval> list = facUserApprovalMapper.selectFacUserApprovalList(facUserApproval);
-        if (list != null&&list.size()>0) {
-            for (FacUserApproval f:list) {
-            f.setAmount(facReimburseApplyService.selectDouble(facReimburseApply.getNum()));
+        if (list != null && list.size() > 0) {
+            for (FacUserApproval f : list) {
+                f.setAmount(facReimburseApplyService.selectDouble(facReimburseApply.getNum()));
                 facUserApprovalMapper.deleteFacUserApprovalById(f.getApprovalId());
             }
         }
@@ -1132,8 +1142,8 @@ public class FacReimburseApplyController extends BaseController {
      */
     @PostMapping("/uploadList")
     @ResponseBody
-    public AjaxResult uploadList(MultipartFile file_data, String fileId,String num) throws Exception {
-        userApplyService.facuploadMateria(file_data, fileId,num);
+    public AjaxResult uploadList(MultipartFile file_data, String fileId, String num) throws Exception {
+        userApplyService.facuploadMateria(file_data, fileId, num);
         return AjaxResult.error();
     }
 

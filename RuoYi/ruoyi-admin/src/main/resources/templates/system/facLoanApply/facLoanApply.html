@@ -1,9 +1,20 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <style>
-    .select-list li .time-input {
+
+    .select-list ul li div {
+        float: none;
         display: inline;
     }
+
+    .select-list li .time-input {
+           display: inline;
+       }
+    #loanUser{
+        display: inline-block;
+        padding: 0;
+    }
+
 </style>
 <head>
     <th:block th:include="include :: header('借款申请列表')"/>
@@ -15,31 +26,44 @@
             <form id="formId">
                 <div class="select-list">
 
-                        <li>
-                            借款编号：<input type="text" name="num"/>
-                        </li>
-                        <li>
-                            借款名称：<input type="text" name="loanName"/>
-                        </li>
-                        <li>
-                            借款时间：<input class="time-input" name="loanTime"  readonly style="background-color: white"/>
-                        </li>
-                        <li>
-                            公司名称：<select id="unit" name="unit">
-                            <option value="">--------------</option>
-                            <option value="新普互联（北京）科技有限公司">新普互联（北京）科技有限公司</option>
-                            <option value="普菲特（海南）科技有限公司">普菲特（海南）科技有限公司</option>
-                            <option value="新疆普菲特网络科技有限公司">新疆普菲特网络科技有限公司</option>
-                            <option value="上海优寰网络科技有限公司">上海优寰网络科技有限公司</option>
-                            <option value="云为智合网络技术（深圳）有限公司">云为智合网络技术（深圳）有限公司</option>
-                        </select>
-                        </li>
-                        <li>
-                            <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
-                                    class="fa fa-search"></i>&nbsp;搜索</a>
-                            <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
-                                    class="fa fa-refresh"></i>&nbsp;重置</a>
-                        </li>
+                    <li>
+                        借款编号：<input type="text" name="num"/>
+                    </li>
+                    <li>
+                        借款名称：<input type="text" name="loanName"/>
+                    </li>
+                    <li>
+                        <div>
+                        借款人 ：
+                            <input id="loanUser" type="text" name="loanUser"/>
+                            <div class="input-group-btn" style="float: right">
+                                <button type="button" class="btn btn-white dropdown-toggle" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                                </ul>
+                            </div>
+                        </div>
+                    </li>
+                    <li>
+                        借款时间：<input class="time-input" name="loanTime" readonly style="background-color: white"/>
+                    </li>
+                    <li>
+                        公司名称：<select id="unit" name="unit">
+                        <option value="">--------------</option>
+                        <option value="新普互联（北京）科技有限公司">新普互联（北京）科技有限公司</option>
+                        <option value="普菲特（海南）科技有限公司">普菲特（海南）科技有限公司</option>
+                        <option value="新疆普菲特网络科技有限公司">新疆普菲特网络科技有限公司</option>
+                        <option value="上海优寰网络科技有限公司">上海优寰网络科技有限公司</option>
+                        <option value="云为智合网络技术（深圳）有限公司">云为智合网络技术（深圳）有限公司</option>
+                    </select>
+                    </li>
+                    <li>
+                        <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i
+                                class="fa fa-search"></i>&nbsp;搜索</a>
+                        <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i
+                                class="fa fa-refresh"></i>&nbsp;重置</a>
+                    </li>
                     </ul>
                 </div>
             </form>
@@ -137,7 +161,7 @@
                     field: 'reason',
                     title: '借款事由',
                     sortable: true,
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         return $.table.tooltip(value);
                     }
                 },
@@ -145,7 +169,7 @@
                     field: 'allName',
                     title: '所有审批人',
                     sortable: false,
-                    formatter: function(value, row, index) {
+                    formatter: function (value, row, index) {
                         return $.table.tooltip(value);
                     }
                 },
@@ -224,8 +248,8 @@
 
     }
 
-    function onDblClickRow(row, $element){
-        var url = $.table._option.facLoanApplyDetailUrl.replace("{id}",row.id);
+    function onDblClickRow(row, $element) {
+        var url = $.table._option.facLoanApplyDetailUrl.replace("{id}", row.id);
         $.modal.open("详情", url);
     }
 
@@ -243,10 +267,6 @@
         };
         $.modal.openOptions(options);
     }
-
-
-
-
 
 
     function sub(id) {
@@ -301,16 +321,16 @@
             maxmin: true,
             shade: 0.3,
             title: "提交预览",
-            content: prefix + "/edit/"+id,
+            content: prefix + "/edit/" + id,
             btn: ['提交', '保存', '关闭'],
             // 弹层外区域关闭
             shadeClose: false,
             yes: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 var res = iframeWin.submitHandler();
-                if(res==true){
+                if (res == true) {
                     layer.close(index);
-                }else{
+                } else {
                     return false;
                 }
             },
@@ -349,9 +369,9 @@
             yes: function (index, layero) {
                 var iframeWin = window[layero.find('iframe')[0]['name']];
                 var res = iframeWin.submitHandler();
-                if(res==true){
+                if (res == true) {
                     layer.close(index);
-                }else{
+                } else {
                     return false;
                 }
             },
@@ -383,11 +403,11 @@
         $.modal.openOptions(options);
     }
 
-    var testBsSuggest = $("#user").bsSuggest({
+    var testBsSuggest = $("#loanUser").bsSuggest({
         url: ctx + "system/user/userModel",
         showBtn: false,
         idField: "userName",
-        keyField: "userName",
+        keyField: "userId",
         effectiveFields: ["deptName", "userName"],
         multiWord: true,
         hideOnSelect: true
@@ -453,6 +473,22 @@
         });
         layer.full(index);
     }
+
+    // var testBsSuggest = $("#loanUser").bsSuggest({
+    //     url: ctx + "system/user/userModel",
+    //     showBtn: false,
+    //     idField: "userName",
+    //     keyField: "userName",
+    //     effectiveFields: ["deptName", "userName"],
+    //     multiWord: true,
+    //     hideOnSelect: true
+    // }).on('onDataRequestSuccess', function (e, result) {
+    //     console.log('onDataRequestSuccess: ', result);
+    // }).on('onSetSelectValue', function (e, keyword) {
+    //     console.log('onSetSelectValue: ', keyword);
+    // }).on('onUnsetSelectValue', function (e) {
+    //     console.log("onUnsetSelectValue");
+    // });
 </script>
 </body>
 </html>

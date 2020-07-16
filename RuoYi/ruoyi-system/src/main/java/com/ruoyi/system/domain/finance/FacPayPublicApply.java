@@ -100,6 +100,16 @@ public class FacPayPublicApply extends BaseEntity {
     private String allName;
     /**是否保存*/
     private String isKeep;
+    /**是否有票*/
+    private String weatherNum;
+
+    public String getWeatherNum() {
+        return weatherNum;
+    }
+
+    public void setWeatherNum(String weatherNum) {
+        this.weatherNum = weatherNum;
+    }
 
     public String getIsKeep() {
         return isKeep;

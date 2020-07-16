@@ -145,6 +145,16 @@
                     sortable: true
                 } ,
                 {
+                    field: 'weatherInvoice',
+                    title: '发票状态',
+                    sortable: true
+                } ,
+                {
+                    field: 'weatherNum',
+                    title: '是否有发票',
+                    visible: false
+                },
+                {
                     field: 'allName',
                     title: '所有审批人',
                     sortable: false,
@@ -195,12 +205,18 @@
                         var actions = [];
                         if(row.approvalStatus==1){
                             actions.push('<a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-remove"></i>打印</a>');
+                            if(row.weatherNum==1) {
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="weather(\'' + row.id + '\')"><i class="fa fa-edit"></i>确认</a> ');
+                            }
                         }else if(row.approvalStatus==2){
                             //审批失败
                             actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="mEdit(\'' + row.id + '\')"><i class="fa fa-edit"></i>编辑</a> ');
                          }else if(row.status==2){
                             //审批失败
 
+                        }else if(row.weatherNum==1){
+                            //财务修改
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="weather(\'' + row.id + '\')"><i class="fa fa-edit"></i>确认</a> ');
                         }else if(row.status==3){
                             //待审批
 
@@ -228,6 +244,10 @@
     function onDblClickRow(row, $element){
         var url = $.table._option.facPayPublicApplyDetailUrl.replace("{id}",row.id);
         $.modal.open("详情", url);
+    }
+
+    function weather(id){
+        $.modal.open("保存发票", "/system/facPayPublicApply/editWeather?id="+ id, '500', '320');
     }
 
     function print(num) {

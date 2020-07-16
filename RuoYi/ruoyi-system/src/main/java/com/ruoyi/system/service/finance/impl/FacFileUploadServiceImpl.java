@@ -157,7 +157,7 @@ public class FacFileUploadServiceImpl implements IFacFileUploadService {
 
                 FacFileUploadServiceImpl aaa = new FacFileUploadServiceImpl();
                 try {
-                    aaa.transferFile(filePaths + list.get(i).getFilePath().substring(list.get(i).getFilePath().indexOf("202")), "/opt/tomcat_prod/webapps/upload/upload/" + num + File.separator + num + i + ".jpg");
+                    aaa.transferFile(filePaths + list.get(i).getFilePath().substring(list.get(i).getFilePath().indexOf("202")), "/opt/tomcat_prod/webapps/upload/upload/" + num + File.separator +i+list.get(i).getFileName());// num + i + ".jpg"
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -131,7 +131,12 @@ public class FacFileUploadController extends BaseController {
     }
 
 
-
+    @Log(title = "财务文件上传记录", businessType = BusinessType.INSERT)
+    @PostMapping("/shangchuan")
+    @ResponseBody
+    public AjaxResult shangchuan(FacFileUpload facFileUpload) {
+                return toAjax(facFileUploadService.insertFacFileUpload(facFileUpload));
+    }
 
 
 

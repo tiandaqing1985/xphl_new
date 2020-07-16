@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增招待费申请')"/>
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-facReimburseApply-add">
+ <input id="num" name="num" class="form-control-static" type="hidden" th:value="${num}">
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="ibox float-e-margins">
+                <div class="form-group" >
+                    <label class="font-noraml"><span style="color: red; "></span>上传图片</label>
+                    <div class="file-loading">
+                        <input id="fileinput-demo-1" type="file" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: datetimepicker-js" />
+<script type="text/javascript">
+    var prefix = ctx + "system/facReimburseApply";
+    var num =$("#num").val();
+    $("#form-facReimburseApply-add").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    $(document).ready(function () {
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': prefix + "/uploadList?num=" + num,
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            previewFileIcon:'图片预览'
+        });
+    });
+
+    function submitHandler() {
+
+        $.modal.close();
+
+    }
+</script>
+</body>
+</html>
