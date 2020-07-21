@@ -33,8 +33,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<sql id="selectOaDingdingVo">
         select user_id, user_name, workDate, checkType, userCheckTime, timeResult, status, apply_state from oa_dingding
     </sql>
-	
-    <select id="selectOaDingdingList" parameterType="OaDingding" resultMap="OaDingdingResult">
+
+
+	<select id="selectDingdingList" parameterType="OaDingding" resultMap="DingdingResult">
+		<include refid="selectOaDingdingVo"/>
+		<where>
+			<if test="userId != null"> and user_id = #{userId}</if>
+			<if test="userName != null  and userName != '' "> and user_name = #{userName}</if>
+			<if test="workDate != null "> and workDate = #{workDate}</if>
+			<if test="checkType != null  and checkType != '' "> and checkType = #{checkType}</if>
+			<if test="userCheckTime != null "> and userCheckTime = #{userCheckTime}</if>
+			<if test="timeResult != null  and timeResult != '' "> and timeResult = #{timeResult}</if>
+			<if test="status != null and status != ''"> and status = #{status}</if>
+			<if test="applyState != null and applyState != ''"> and apply_state = #{applyState}</if>
+		</where>
+	</select>
+    <select id="selectOaDingdingList" parameterType="Dingding" resultMap="OaDingdingResult">
         <include refid="selectOaDingdingVo"/>
         <where>  
             <if test="userId != null"> and user_id = #{userId}</if>
@@ -205,6 +219,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="checkType != null and checkType != ''">and checkType = #{checkType}</if>
 			<if test="time != null">and workDate = #{time}</if>
 		</where>
+	</update>
+
+	<update id="updateDingdingOnDuty" parameterType="Dingding">
+		update oa_dingding
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="timeResult != null  and timeResult != ''  ">timeResult = #{timeResult},</if>
+			<if test="status != ''">status = #{status},</if>
+		</trim>
+		where user_id = #{userId} and  workDate = #{workDate} and checkType = #{checkType}
 	</update>
 
 	<delete id="deleteOaDingdingById" parameterType="Long">

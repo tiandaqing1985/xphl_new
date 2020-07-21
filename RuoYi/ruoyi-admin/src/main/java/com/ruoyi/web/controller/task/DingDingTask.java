@@ -8,6 +8,7 @@ import com.dingtalk.api.request.*;
 import com.dingtalk.api.response.*;
 import com.dingtalk.api.response.OapiDepartmentListResponse.Department;
 import com.dingtalk.api.response.OapiUserSimplelistResponse.Userlist;
+import com.ruoyi.system.domain.Dingding;
 import com.ruoyi.system.domain.OaDingding;
 import com.ruoyi.system.domain.OaDingdingUser;
 import com.ruoyi.system.mapper.OaDingdingUserMapper;
@@ -104,7 +105,7 @@ public class DingDingTask {
                 dingUserList.add(dingUser);
             }
         }
-         dingdingUserService.insertForeach(dingUserList);//用户总数172
+        dingdingUserService.insertForeach(dingUserList);//用户总数172
 
 
         //设置查询时间
@@ -148,8 +149,8 @@ public class DingDingTask {
         Long wangzhenzhen = 12333319631237216L;//王震震
         Long weiyuanhao = 1248012138879414L;//隗元昊
         Long quyilin1 = 135416124323359665L;//屈伊琳1
-        Long liyang01=1765181417846298L;//李扬01
-        Long chenchao01=4162903061228861L;//陈超01
+        Long liyang01 = 1765181417846298L;//李扬01
+        Long chenchao01 = 4162903061228861L;//陈超01
         OaDingding dingding = new OaDingding();
         dingding.setUserId(wangzhenzhen);
         dingding.setUserName("王震震");
@@ -170,6 +171,60 @@ public class DingDingTask {
         dingding5.setUserId(chenchao01);
         dingding5.setUserName("陈超01");
         dingdingService.updateOaDingding(dingding5);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = sdf.format(date);
+        String yesterday = getPreDayOrAfterDay(currentDate, Integer.parseInt("-1"));//-1是前一天， +1是后一天
+        Date work = sdf.parse(yesterday);
+        //   Date work = sdf.parse("2020-07-15");
+        Long yanghuiting = 184061524626231551L;//杨惠婷
+        xiugaishijian(yanghuiting, work);
+        Long tanpeiyu = 672951194935145472L;//  谭佩瑜
+        xiugaishijian(tanpeiyu, work);
+    }
+
+    /**
+     * 修改上下班时间 9:00   18:00
+     *
+     * @return 修改上下班时间1
+     */
+    public String xiugaishijian(Long id, Date work) throws Exception {
+        Dingding dingding = new Dingding();
+        dingding.setUserId(id);
+        dingding.setWorkDate(work);
+        List<Dingding> a = dingdingService.selectOaDingList(dingding);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdfs = new SimpleDateFormat("yyyy-MM-dd");
+        String workOn = sdfs.format(work) + " " + "09:00:00";
+        String workoff = sdfs.format(work) + " " + "18:00:00";//下班时间
+        Date dateTime1 = sdf.parse(workOn);
+        Date dateTime2 = sdf.parse(workoff);
+        for (Dingding v : a) {
+            if (v.getCheckType().equals("OnDuty")) {  //上班时间
+                int i = dateTime1.compareTo(v.getUserCheckTime());
+                if (i < 0) {
+                    //如果小于证明时间大于9点上班正常
+                    v.setTimeResult("Late");
+                    v.setStatus("1");
+                    v.setCheckType("OnDuty");
+                    dingdingService.updateDingdingOnDuty(v);
+
+                }
+
+            } else {//下班时间
+                int i = v.getUserCheckTime().compareTo(dateTime2);
+                if (i > 0) {
+                    //如果大于证明时间大于18点上班正常
+                    v.setTimeResult("Normal");
+                    v.setStatus(null);
+                    v.setCheckType("OffDuty");
+                    dingdingService.updateDingdingOnDuty(v);
+
+                }
+            }
+
+        }
+        return "";
     }
 
 

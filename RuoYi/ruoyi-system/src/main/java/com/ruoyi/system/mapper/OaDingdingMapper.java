@@ -99,6 +99,8 @@ public interface OaDingdingMapper
 	 * @return
 	 */
 	public List<Dingding> selectDingData(Dingding ding);
+
+	public List<Dingding> selectDingdingList(Dingding ding);
 	
 	/**
 	 * 根据请假时间、外出报备时间修改钉钉考勤结果
@@ -106,7 +108,14 @@ public interface OaDingdingMapper
 	 * @return
 	 */
 	public int updateOaDingDingByTime(Dingding ding);
-	
+
+	/**
+	 * 修改数据
+	 * @param ding
+	 * @return
+	 */
+	public int updateDingdingOnDuty(Dingding ding);
+
 	/**
 	 * 根据user_name checkType startTime endTime查询
 	 * @param ding

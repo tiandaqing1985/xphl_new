@@ -29,6 +29,16 @@ public interface IOaDingdingService
      * @return 钉钉考勤数据集合
      */
 	public List<Dingding> selectOaDingdingList(Dingding ding);
+
+
+	/**
+	 * 查询钉钉考勤数据列表
+	 *
+	 * @param oaDingding 钉钉考勤数据信息
+	 * @return 钉钉考勤数据集合
+	 */
+	public List<Dingding> selectOaDingList(Dingding ding);
+
 	
 	/**
      * 新增钉钉考勤数据
@@ -100,5 +110,9 @@ public interface IOaDingdingService
 	 * 根据请假申请恢复考勤数据
 	 * */
 	public void restoreDingding(UserApply userApply);
+	/**
+	 * 修改上班审批
+	 * */
+	public void	updateDingdingOnDuty(Dingding dingding);
 
 }

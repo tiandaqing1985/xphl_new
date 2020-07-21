@@ -65,7 +65,17 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 	public OaDingding selectOaDingdingById(Long userId) {
 		return oaDingdingMapper.selectOaDingdingById(userId);
 	}
-
+	/**
+	 * 查询钉钉考勤数据列表
+	 *
+	 * @param    Dingding
+	 *            钉钉考勤数据信息
+	 * @return 钉钉考勤数据集合
+	 */
+	@Override
+	public List<Dingding> selectOaDingList(Dingding ding){
+		return oaDingdingMapper.selectDingdingList(ding);
+	}
 	/**
 	 * 查询钉钉考勤数据列表
 	 * 
@@ -1064,5 +1074,10 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 		}
 
 	}
+	@Override
+	public void updateDingdingOnDuty(Dingding dingding) {
 
+		oaDingdingMapper.updateDingdingOnDuty(dingding);
+
+	}
 }
