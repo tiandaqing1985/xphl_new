@@ -453,9 +453,9 @@
                             $.modal.alertWarning("您还未通过试用一期，暂不能申请年假!");
                             return;
                         } else {
-                            passFlag = false;
-                            $.modal.alertWarning("本月通过试用一期的员工请于下月1号以后提交年假申请，本月不能申请年假!");
-                            return;
+                            passFlag = true;
+                            // $.modal.alertWarning("本月通过试用一期的员工请于下月1号以后提交年假申请，本月不能申请年假!");
+                            // return;
                         }
                     },
                     error: function () {

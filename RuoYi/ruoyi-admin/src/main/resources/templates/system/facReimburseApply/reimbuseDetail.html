@@ -80,7 +80,15 @@
                         <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
                     </div>
                 </div>
-
+            <div class="row" id="div4">
+                <div class="col-sm-12 select-table table-striped">
+                    <a class="btn btn-success" onclick="mAdd(4)" th:style="${edit=='false'}?'display: none':''">
+                        <i class="fa fa-plus"></i> 加班餐报销信息
+                    </a>
+                    <h4 class="form-header h4" th:style="${edit!='false'}?'display: none':''">加班餐报销</h4>
+                    <table id="bootstrap-table-4" data-mobile-responsive="true"></table>
+                </div>
+            </div>
                 <div class="row" id="div2">
                     <div class="col-sm-12 select-table table-striped">
                         <a class="btn btn-success" id="zdf" onclick="mAdd(2)" th:style="${edit=='false'}?'display: none':''">
@@ -134,6 +142,10 @@
             $.table._option.id = "bootstrap-table-3";
             $.table._option.url = prefix + "/otherDetail";
             $.modal.open("其他添加", "/system/facReimburseApply/otherDetail?num=" + num);
+        }else if (id == 4) {
+            $.table._option.id = "bootstrap-table-4";
+            $.table._option.url = prefix + "/mealDetail";
+            $.modal.open("加班餐添加", "/system/facReimburseApply/mealDetail?num=" + num);
         }
     }
     function mEdit(index, id) {
@@ -147,7 +159,12 @@
             $.table._option.url = prefix + "/addAll";
             $.table._option.modalName = "招待报销信息";
             $.table._option.updateUrl = prefix + "/editZhao/{id}";
-        } else {
+        }  else  if (index == 4){
+            $.table._option.id = "bootstrap-table-4";
+            $.table._option.url = prefix + "/mealDetail";
+            $.table._option.modalName = "加班餐报销信息";
+            $.table._option.updateUrl = prefix + "/editJia/{id}";
+        }else {
             $.table._option.id = "bootstrap-table-3";
             $.table._option.url = prefix + "/otherDetail";
             $.table._option.modalName = "其他报销信息";
@@ -164,6 +181,10 @@
             $.table._option.id = "bootstrap-table-2";
             $.table._option.modalName = "招待报销信息";
             $.table._option.removeUrl = prefix + "/removeZhao?id=" + id;
+        }else if (index == 4) {
+            $.table._option.id = "bootstrap-table-4";
+            $.table._option.modalName = "加班餐报销信息";
+            $.table._option.removeUrl = prefix + "/removeJia?id=" + id;
         } else {
             $.table._option.id = "bootstrap-table-3";
             $.table._option.modalName = "其他报销信息";
@@ -284,7 +305,97 @@
             ]
         };
         $.table.init(options1);
+        var options4 = {
+            id: "bootstrap-table-4",
+            url: prefix + "/mealDetail",
+            showSearch: false,
+            showRefresh: false,
+            showToggle: false,
+            showColumns: false,
+            pagination: false,
+            responseHandler: function(data){
+                if(data.total==0){
+                    if(edit=="true") {
+                        $("#div4").attr("style", "display:none;");//隐藏
+                    }
+                }
+            },
+            modelName: "加班餐费用申请",
+            columns: [
 
+                {
+                    field: 'id',
+                    title: 'id',
+                    visible: false
+                },
+                {
+                    field: 'addDate',
+                    title: '加班日期',
+                    sortable: false,
+                    formatter: function (value, row, index) {
+                        var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                        return newDate;
+                    }
+                },
+                {
+                    field: 'amount',
+                    title: '餐费金额',
+                    sortable: false,
+                    formatter: function (value,row,index) {
+                        return value;
+                    }
+                },
+
+                {
+                    field : 'userName',
+                    title : '加班人员',
+                    sortable: false
+                } ,
+                {
+                    field : 'place',
+                    title : '加班地点',
+                    sortable: false
+                },
+                {
+                    field: 'reason',
+                    title: '事由',
+                    sortable: false
+                },
+                {
+                    field: 'documentNum',
+                    title: '单据数',
+                    sortable: false
+                },
+                {
+                    field: 'status',
+                    title: '用户状态',
+                    visible: false,
+                    align: 'center',
+                    sortable: false,
+                    formatter: function (value, row, index) {
+                        return $.table.selectDictLabel(datas, value);
+                    }
+                },
+
+                {
+                    title: '操作',
+                    align: 'center',
+                    sortable: false,
+                    formatter: function (value, row, index) {
+                        var flg = [[${edit}]];
+                        if(flg == "false"){
+                            return "";
+                        }else {
+                            var actions = [];
+                            actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="mEdit(4,\'' + row.id + '\')"><i class  = "fa fa-edit" > </i>修改</a> ');
+                            actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="mRemove(4,\'' + row.id + '\')"><i class  = "fa fa-remove" > </i>删除</a > ');
+                            return actions.join('');
+                        }
+                    }
+                }
+            ]
+        };
+       // $.table.init(options4);
         var options2 = {
             id: "bootstrap-table-2",
             url: prefix + "/addAll",
@@ -401,6 +512,7 @@
                         $("#div3").attr("style", "display:none;");//隐藏
                     }
                 }
+                $.table.init(options4);
             },
             modelName: "其他费用申请",
             columns: [

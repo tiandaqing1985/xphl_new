@@ -83,6 +83,8 @@ public class FacReimburseApplyController extends BaseController {
     private IUserApplyService userApplyService;
     @Autowired
     private IFacFileUploadService facFileUploadService;
+    @Autowired
+    private IFacReiMealApplyService facReiMealApplyService;
 
     @GetMapping()
     public String facReimburseApply() {
@@ -470,8 +472,12 @@ public class FacReimburseApplyController extends BaseController {
 
         //查询是否有其他费用报销
         List<FacReiAdiApply> facReiAdiApplies = facReimburseApplyService.selectFacReiAdiApply(facReimburseApply.getNum());
-        //以上三不能全为空
-        if (facTrafficReiApplies.size() == 0 && reiHospitalityApplies.size() == 0 && facReiAdiApplies.size() == 0) {
+        //查询是否有加班餐报销
+        FacReiMealApply ReiMealApply = new FacReiMealApply();
+        ReiMealApply.setNum(facReimburseApply.getNum());
+        List<FacReiMealApply> facReiMealApply = facReiMealApplyService.selectFacReiMealApplyList(ReiMealApply);
+        //以上四不能全为空
+        if (facTrafficReiApplies.size() == 0 && reiHospitalityApplies.size() == 0 && facReiAdiApplies.size() == 0 && facReiMealApply.size() == 0) {
 
             List<ReiHospitalityApply> hospitalityApplies = facReimburseApplyService.selectHospitalityApplyListByUser(ShiroUtils.getUserId());
             if (hospitalityApplies.size() == 0) {
@@ -514,7 +520,7 @@ public class FacReimburseApplyController extends BaseController {
             facReimburseApply.setCreateBy(ShiroUtils.getUserId().toString());
             //当存在其他类型的报销时一定要走审批
             if (!flg) {
-                if (facTrafficReiApplies.size() == 0 && facReiAdiApplies.size() == 0 && reiHospitalityApplies.size() == 0) {
+                if (facTrafficReiApplies.size() == 0 && facReiAdiApplies.size() == 0 && reiHospitalityApplies.size() == 0 && facReiMealApply.size() == 0) {
                     //此时不走审批
                     facReimburseApply.setLoanUser(ShiroUtils.getUserId());
                     facReimburseApply.setSubmitStatus("submit");
@@ -738,6 +744,17 @@ public class FacReimburseApplyController extends BaseController {
     }
 
     /**
+     * 加班餐报销申请
+     */
+    @GetMapping("/mealDetail")
+    public String mealDetail(@RequestParam String num, ModelMap map) {
+        map.put("num", num);
+        return prefix + "/mealDetail";
+
+    }
+
+
+    /**
      * 新增其他报销
      */
     @Log(title = "招待费报销", businessType = BusinessType.INSERT)
@@ -748,6 +765,35 @@ public class FacReimburseApplyController extends BaseController {
             reiAdiApply.setDeptName(sysDeptService.selectDeptById(ShiroUtils.getDeptId()).getDeptName());
         }
         return toAjax(facReimburseApplyService.insertFacreiAdiApply(reiAdiApply));
+    }
+
+    /**
+     * 新增其他报销
+     */
+    @Log(title = "加班餐报销", businessType = BusinessType.INSERT)
+    @PostMapping("/SaveMeal")
+    @ResponseBody
+    public AjaxResult SaveMeal(FacReiMealApply facReiMealApply) {
+
+        String str = facReiMealApply.getUserName();
+        String key = ",";
+        if (str == null || key == null || "".equals(str.trim()) || "".equals(key.trim())) {
+
+            return AjaxResult.warn("加班人员填写格式有误");
+
+        }
+        int count = 0;
+        int index = 0;
+        while ((index = str.indexOf(key, index)) != -1) {
+            index = index + key.length();
+            count++;
+        }
+        if (facReiMealApply.getAmount() <= (30.0 * count + 30)) {
+            return toAjax(facReiMealApplyService.insertFacReiMealApply(facReiMealApply));
+        } else {
+            return AjaxResult.warn("加班餐费超额");
+        }
+
     }
 
     /**
@@ -946,6 +992,27 @@ public class FacReimburseApplyController extends BaseController {
         }
     }
 
+    /**
+     * 查看加班餐报销费申请详情
+     */
+
+    @PostMapping("/mealDetail")
+    @ResponseBody
+    public TableDataInfo mealDetail(@RequestParam String num) {
+        startPage();
+        FacReiMealApply facReiMealApply = new FacReiMealApply();
+        facReiMealApply.setNum(num);
+        List<FacReiMealApply> meal = facReiMealApplyService.selectFacReiMealApplyList(facReiMealApply);
+        if (meal != null) {
+            return getDataTable(meal);
+        } else {
+            List<String> a = new ArrayList<>();
+            return getDataTable(a);
+        }
+
+    }
+
+
     @GetMapping("/addSave")
     public String addSave(String id, ModelMap map) {
         map.put("id", id);
@@ -1078,6 +1145,25 @@ public class FacReimburseApplyController extends BaseController {
     /**
      * 修改报销
      */
+    @GetMapping("/editJia/{id}")
+    public String editJia(@PathVariable("id") Long id, ModelMap mmap) {
+        FacReiMealApply facReiMealApply = facReiMealApplyService.selectFacReiMealApplyById(id);
+        mmap.put("facReiMealApply", facReiMealApply);
+        return prefix + "/editJia";
+    }
+
+    /**
+     * 修改报销
+     */
+    @PostMapping("/editJia")
+    @ResponseBody
+    public AjaxResult editJiaSave(FacReiMealApply facReiMealApply) {
+        return toAjax(facReiMealApplyService.updateFacReiMealApply(facReiMealApply));
+    }
+
+    /**
+     * 修改报销
+     */
     @PostMapping("/editQi")
     @ResponseBody
     public AjaxResult editQiSave(FacReiAdiApply facReiAdiApply) {
@@ -1109,6 +1195,15 @@ public class FacReimburseApplyController extends BaseController {
     @ResponseBody
     public AjaxResult removeQi(String id) {
         return toAjax(facReimburseApplyService.deleteFacReiAdiApplyByIds(Long.valueOf(id)));
+    }
+
+    /**
+     * 删除报销
+     */
+    @PostMapping("/removeJia")
+    @ResponseBody
+    public AjaxResult removeJia(String id) {
+        return toAjax(facReiMealApplyService.deleteFacReiMealApplyByIds(id));
     }
 
     /**

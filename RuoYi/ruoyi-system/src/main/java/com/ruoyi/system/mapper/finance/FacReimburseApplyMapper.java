@@ -123,6 +123,7 @@ public interface FacReimburseApplyMapper
 
 	public double selectHospAmount(String num);
 
+	public double selectMealAmount(String num);
 
 	public String  selectsysuser(Long id); 
 	

@@ -238,6 +238,13 @@ SELECT
 		=#{num}),0);
 	</select>
 
+
+    <select id="selectMealAmount" resultType="double">
+		select ifNull((select
+		sum(amount) from fac_rei_meal_apply where num
+		=#{num}),0);
+	</select>
+
     <insert id="insertFacReimburseApply" parameterType="FacReimburseApply" useGeneratedKeys="true" keyProperty="id">
         insert into fac_reimburse_apply
         <trim prefix="(" suffix=")" suffixOverrides=",">

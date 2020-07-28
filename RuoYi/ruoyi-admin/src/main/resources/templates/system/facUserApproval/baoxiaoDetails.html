@@ -63,6 +63,11 @@
                             <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
                         </div>
                     </div>
+                    <div class="row" id="jbc" >
+                        <div class="col-sm-12 select-table table-striped">
+                            <table id="bootstrap-table-4" data-mobile-responsive="true"></table>
+                        </div>
+                    </div>
                     <div class="row" id="zdf" >
                         <div class="col-sm-12 select-table table-striped" >
                             <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
@@ -380,6 +385,92 @@
 
                     ]
                 ]
+            };
+            $.table.init(options);
+            var options = {
+                id: "bootstrap-table-4",
+                url: prefix + "/mealDetail",
+                showSearch: false,
+                showRefresh: false,
+                showToggle: false,
+                showColumns: false,
+                modelName: "加班餐申请",
+                queryParams: function(params){
+                    var curParams = {
+                        // 传递参数查询参数
+                        pageSize:       params.limit,
+                        pageNum:        params.offset / params.limit + 1,
+                        searchValue:    params.search,
+                        orderByColumn:  params.sort,
+                        isAsc:          params.order
+                    };
+                    var currentId = $.common.isEmpty($.table._option.formId) ? $('form').attr('id') : $.table._option.formId;
+                    return $.extend(curParams, {"num":num});
+                },
+                columns: [
+                    [
+                        {
+                            title: '加班餐报销信息',
+                            align: 'center',
+                            colspan: 8,
+                        }
+
+                    ],
+                    [{
+                        checkbox: false
+                    },
+                        {
+                            field: 'id',
+                            title: 'id',
+                            visible: false
+                        },
+                        {
+                            field: 'addDate',
+                            title: '加班日期',
+                            sortable: false,
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                        },
+                        {
+                            field: 'amount',
+                            title: '餐费金额',
+                            sortable: false,
+                            formatter: function (value,row,index) {
+                                return value;
+                            }
+                        },
+
+                        {
+                            field : 'userName',
+                            title : '加班人员',
+                            sortable: false
+                        } ,
+                        {
+                            field : 'place',
+                            title : '加班地点',
+                            sortable: false
+                        },
+                        {
+                            field: 'reason',
+                            title: '事由',
+                            sortable: false
+                        },
+                        {
+                            field: 'documentNum',
+                            title: '单据数',
+                            sortable: false
+                        },
+                        {
+                            field: 'status',
+                            title: '用户状态',
+                            visible: false,
+                            align: 'center',
+                            formatter: function (value, row, index) {
+                                return $.table.selectDictLabel(datas, value);
+                            }
+                        }]]
             };
             $.table.init(options);
             var options = {

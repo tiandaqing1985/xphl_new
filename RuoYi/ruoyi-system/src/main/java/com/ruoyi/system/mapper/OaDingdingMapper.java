@@ -101,6 +101,8 @@ public interface OaDingdingMapper
 	public List<Dingding> selectDingData(Dingding ding);
 
 	public List<Dingding> selectDingdingList(Dingding ding);
+
+	public List<Dingding> selectDingdDateList(Dingding ding);
 	
 	/**
 	 * 根据请假时间、外出报备时间修改钉钉考勤结果

@@ -1316,7 +1316,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String date = sdf.format(time);
         date.substring(0, 10);
-        // 验证加班审批是否已通过且满足2.5小时 20191219注释
+        // 验证加班审批是否已通过且满足3小时 20191219注释
 
         SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         SysUser user = userMapper.selectUserById(userId);
@@ -1324,7 +1324,7 @@ public class UserApplyServiceImpl implements IUserApplyService {
         oaDingding.setTime(date);
         oaDingding.setUserName(user.getUserName());
 
-        String standardTime = date + " 21:30:00";
+        String standardTime = date + " 22:00:00";
         Date standardDate = null;
         try {
             standardDate = sdf2.parse(standardTime);
@@ -1338,12 +1338,12 @@ public class UserApplyServiceImpl implements IUserApplyService {
         if (maxCheckDate == null) {
             return "考勤日期有误";
         }
-        // 下班打卡时间是否满足晚于21:30
+        // 下班打卡时间是否满足晚于22:00
         if (maxCheckDate.after(standardDate) || maxCheckDate.equals(standardDate)) {
             return "true";
         }
 
-        return "加班时长不满足2.5小时保存失败";
+        return "加班时长不满足3小时保存失败";
     }
 
     /**
