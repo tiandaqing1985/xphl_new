@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <th:block th:include="include :: header('新增票据')"/>
+</head>
+<body class="white-bg">
+<div class="wrapper wrapper-content animated fadeInRight ibox-content">
+    <form class="form-horizontal m" id="form-facPayPublicApply-edit">
+        <input id="id" name="id" class="form-control-static" type="hidden" th:value="${id}">
+        是否确认发票提交
+    </form>
+</div>
+<div th:include="include::footer"></div>
+<th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-select-js"/>
+<script type="text/javascript">
+    var prefix = ctx + "system/facPayPublicApply"
+    var dept = $("#dept").val();
+    var id = $("#id").val();
+    $("#form-facPayPublicApply-edit").validate({
+        rules: {
+            xxxx: {
+                required: true,
+            },
+        },
+        focusCleanup: true
+    });
+
+    function submitHandler() {
+
+        $.operate.save(prefix + "/editFapiao", $('#form-facPayPublicApply-edit').serialize());
+    }
+
+    //
+    // function submitHandler() {
+    //     var res = false;
+    //     if ($.validate.form()) {
+    //         var config = {
+    //             url: prefix + "/editWeather",
+    //             type: "post",
+    //             dataType: "json",
+    //             data: $('#form-facPayPublicApply-edit').serialize(),
+    //             beforeSend: function () {
+    //                 $.modal.loading("正在处理中，请稍后...");
+    //                 $.modal.disable();
+    //             },
+    //             success: function(result) {
+    //                 if(result.code==0){
+    //                     res = false;
+    //                 }
+    //                 $.operate.successCallback(result);
+    //             }
+    //         };
+    //         $.ajax(config);
+    //     }
+    //     return res;
+    // }
+
+</script>
+</body>
+</html>

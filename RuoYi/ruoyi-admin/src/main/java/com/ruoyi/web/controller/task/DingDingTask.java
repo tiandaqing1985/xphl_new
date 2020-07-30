@@ -151,6 +151,7 @@ public class DingDingTask {
         Long quyilin1 = 135416124323359665L;//屈伊琳1
         Long liyang01 = 1765181417846298L;//李扬01
         Long chenchao01 = 4162903061228861L;//陈超01
+        Long chenyong02 =110320021501213823L;
         OaDingding dingding = new OaDingding();
         dingding.setUserId(wangzhenzhen);
         dingding.setUserName("王震震");
@@ -171,6 +172,10 @@ public class DingDingTask {
         dingding5.setUserId(chenchao01);
         dingding5.setUserName("陈超01");
         dingdingService.updateOaDingding(dingding5);
+        OaDingding dingding6 = new OaDingding();
+        dingding6.setUserId(chenyong02);
+        dingding6.setUserName("陈勇02");
+        dingdingService.updateOaDingding(dingding6);
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = sdf.format(date);

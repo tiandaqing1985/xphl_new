@@ -206,7 +206,10 @@
                         if(row.approvalStatus==1){
                             actions.push('<a class="btn btn-warning btn-xs " href="javascript:void(0)" onclick="print(\'' + row.num + '\')"><i class="fa fa-remove"></i>打印</a>');
                             if(row.weatherNum==1) {
-                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="weather(\'' + row.id + '\')"><i class="fa fa-edit"></i>确认</a> ');
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="weather(\'' + row.id + '\')"><i class="fa fa-edit"></i>确认收票</a> ');
+                            }
+                            if(row.weatherNum==2){
+                                actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="fapiao(\'' + row.id + '\')"><i class="fa fa-edit"></i>提交发票</a> ');
                             }
                         }else if(row.approvalStatus==2){
                             //审批失败
@@ -216,7 +219,7 @@
 
                         }else if(row.weatherNum==1){
                             //财务修改
-                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="weather(\'' + row.id + '\')"><i class="fa fa-edit"></i>确认</a> ');
+                            actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="weather(\'' + row.id + '\')"><i class="fa fa-edit"></i>确认收票</a> ');
                         }else if(row.status==3){
                             //待审批
 
@@ -248,6 +251,9 @@
 
     function weather(id){
         $.modal.open("保存发票", "/system/facPayPublicApply/editWeather?id="+ id, '500', '320');
+    }
+    function fapiao(id){
+        $.modal.open("提交发票", "/system/facPayPublicApply/editFapiao?id="+ id, '500', '320');
     }
 
     function print(num) {

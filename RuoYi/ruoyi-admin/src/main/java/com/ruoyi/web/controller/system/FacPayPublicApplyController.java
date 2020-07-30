@@ -66,8 +66,8 @@ public class FacPayPublicApplyController extends BaseController {
             for (FacPayPublicApply v : lists) {
                 v.setUserName(
                         sysUserService.selectUserById(v.getUser()).getUserName());
-                if (v.getWeatherInvoice().equals("暂无发票")) {
-                        v.setWeatherNum("1");
+               if(v.getWeatherInvoice().equals("提交发票中")){
+                    v.setWeatherNum("1");
                 }
                 FacUserApproval name = facUserApprovalService
                         .selectApproval(v.getNum(), v.getUser());
@@ -107,6 +107,9 @@ public class FacPayPublicApplyController extends BaseController {
 
             FacUserApproval name = facUserApprovalService
                     .selectApproval(v.getNum(), v.getUser());
+            if (v.getWeatherInvoice().equals("暂无发票")) {
+                v.setWeatherNum("2");
+            }
             if (name != null) {
                 if (facUserApprovalService.approverName(v.getNum()) != null) {
                     v.setAllName(facUserApprovalService.approverName(v.getNum()));
@@ -260,11 +263,30 @@ public class FacPayPublicApplyController extends BaseController {
         return prefix + "/editWeather";
     }
 
+    /**
+     * 修改对公申请
+     */
+
+    @GetMapping("/editFapiao")
+    public String editFapiao(String id, ModelMap map) {
+        map.put("id", id);
+        return prefix + "/editFapiao";
+    }
+
     @Log(title = "对公申请", businessType = BusinessType.UPDATE)
     @PostMapping("/editWeather")
     @ResponseBody
     public AjaxResult editWeat(FacPayPublicApply facPayPublicApply) {
         facPayPublicApply.setWeatherInvoice("有发票");
+        return toAjax(facPayPublicApplyService
+                .updateFacPayPublicApply(facPayPublicApply));
+    }
+
+    @Log(title = "对公申请", businessType = BusinessType.UPDATE)
+    @PostMapping("/editFapiao")
+    @ResponseBody
+    public AjaxResult editFa(FacPayPublicApply facPayPublicApply) {
+        facPayPublicApply.setWeatherInvoice("提交发票中");
         return toAjax(facPayPublicApplyService
                 .updateFacPayPublicApply(facPayPublicApply));
     }
