@@ -131,7 +131,7 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
         double b = facReimburseApplyMapper.selectHospAmount(num);
         double c = facReimburseApplyMapper.selectTraAmount(num);
         double d = facReimburseApplyMapper.selectMealAmount(num);
-        return a + b + c +d;
+        return a + b + c + d;
     }
 
     @Override
@@ -155,8 +155,8 @@ public class FacReimburseApplyServiceImpl implements IFacReimburseApplyService {
                 double b = facReimburseApplyMapper.selectHospAmount(facReimburseApply.getNum());
                 double c = facReimburseApplyMapper.selectTraAmount(facReimburseApply.getNum());
                 double d = facReimburseApplyMapper.selectMealAmount(facReimburseApply.getNum());
-                facReimburseApply.setAmount(a + b + c +d);
-                center.setAmount(a + b + c +d);
+                facReimburseApply.setAmount(a + b + c + d);
+                center.setAmount(a + b + c + d);
             } else {
                 center.setAmount(facReimburseApply.getAmount());
             }

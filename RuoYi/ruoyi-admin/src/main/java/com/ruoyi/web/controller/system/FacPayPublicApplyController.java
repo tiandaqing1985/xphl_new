@@ -60,13 +60,13 @@ public class FacPayPublicApplyController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacPayPublicApply facPayPublicApply) {
         startPage();
-        if (ShiroUtils.getUserId() == 1L || ShiroUtils.getUserId() == 149L || ShiroUtils.getUserId() == 110L || ShiroUtils.getUserId() == 824L || ShiroUtils.getUserId() == 141L|| ShiroUtils.getUserId() == 106L) {
+        if (ShiroUtils.getUserId() == 1L || ShiroUtils.getUserId() == 149L || ShiroUtils.getUserId() == 110L || ShiroUtils.getUserId() == 824L || ShiroUtils.getUserId() == 141L || ShiroUtils.getUserId() == 106L) {
             List<FacPayPublicApply> lists = facPayPublicApplyService
                     .selectFacPayPublicApplyList(facPayPublicApply);
             for (FacPayPublicApply v : lists) {
                 v.setUserName(
                         sysUserService.selectUserById(v.getUser()).getUserName());
-               if(v.getWeatherInvoice().equals("提交发票中")){
+                if (v.getWeatherInvoice().equals("提交发票中")) {
                     v.setWeatherNum("1");
                 }
                 FacUserApproval name = facUserApprovalService
@@ -290,6 +290,7 @@ public class FacPayPublicApplyController extends BaseController {
         return toAjax(facPayPublicApplyService
                 .updateFacPayPublicApply(facPayPublicApply));
     }
+
     /**
      * 修改保存对公申请
      */

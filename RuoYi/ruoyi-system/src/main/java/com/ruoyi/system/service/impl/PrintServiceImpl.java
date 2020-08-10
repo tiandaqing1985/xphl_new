@@ -48,7 +48,8 @@ public class PrintServiceImpl implements IPrintService {
     private IFacCostDetailReimburseService facCostDetailReimburseService;
     @Autowired
     private IFacCollectInformationService facCollectInformationService;
-
+    @Autowired
+    private IFacReiMealApplyService facReiMealApplyService;
 
     /**
      * 预览报销
@@ -100,6 +101,31 @@ public class PrintServiceImpl implements IPrintService {
             sum.setDocumentNum(sum.getDocumentNum() + reiTrafficApply.getDocumentNum());
             sum.setMoney(sum.getMoney() + reiTrafficApply.getAmount());
         }
+        FacReiMealApply facReiMealApply=new FacReiMealApply();
+        facReiMealApply.setNum(num);
+        List<FacReiMealApply>   facReiMealApplys = facReiMealApplyService.selectFacReiMealApplyList(facReiMealApply);
+
+        for (FacReiMealApply facReiMeal : facReiMealApplys) {
+            //金额保留两位小数
+            facReiMeal.setAmount(new BigDecimal(facReiMeal.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+                type = "加班餐费用";
+            if (typeMap.get(type) == null) {
+                PrintBaoXiaoVO printBaoXiaoVO = new PrintBaoXiaoVO();
+                printBaoXiaoVO.setType(type);
+                printBaoXiaoVO.setDetail("见明细");
+                printBaoXiaoVO.setMoney(new Double(0));
+                printBaoXiaoVO.setDocumentNum(new Double(0));
+                typeMap.put(type, printBaoXiaoVO);
+            }
+            PrintBaoXiaoVO printBaoXiaoVO = typeMap.get(type);
+            printBaoXiaoVO.setDocumentNum(printBaoXiaoVO.getDocumentNum() + facReiMeal.getDocumentNum());
+            printBaoXiaoVO.setMoney(printBaoXiaoVO.getMoney() + facReiMeal.getAmount());
+            //计算总共的
+            sum.setDocumentNum(sum.getDocumentNum() + facReiMeal.getDocumentNum());
+            sum.setMoney(sum.getMoney() + facReiMeal.getAmount());
+        }
+
+
         //招待费报销
         ReiHospitalityApply selectHospitalityVo = new ReiHospitalityApply();
         selectHospitalityVo.setNum(num);
@@ -243,6 +269,35 @@ public class PrintServiceImpl implements IPrintService {
             sumDocumentNum = sumDocumentNum + reiHospitalityApply.getDocumentNum();
         }
         data.put("zhaodaifei", list);
+
+
+//加班餐报销
+        FacReiMealApply facReiMealApply=new FacReiMealApply();
+        facReiMealApply.setNum(num);
+        List<FacReiMealApply>   facReiMealApplys = facReiMealApplyService.selectFacReiMealApplyList(facReiMealApply);
+
+
+        for (FacReiMealApply facReiMeal : facReiMealApplys) {
+//            SysUser applicant = sysUserService.selectUserById(facReiMeal.getUser());
+//            if (applicant != null) {
+//                reiHospitalityApply.setUserName(sysUserService.selectUserById(reiHospitalityApply.getUser()).getUserName());
+//            }
+            //金额保留两位小数
+            facReiMeal.setAmount(new BigDecimal(facReiMeal.getAmount()).setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue());
+            if (facReiMeal.getDocumentNum() == null) {
+                facReiMeal.setDocumentNum(0);
+            }
+            //计算总共的
+            sum = sum + facReiMeal.getAmount();
+            sumDocumentNum = sumDocumentNum + facReiMeal.getDocumentNum();
+        }
+        data.put("jiabancanfei", facReiMealApplys);
+
+
+
+
+
+
         //其他报销
         List<FacReiAdiApply> facReiAdiApplys = facReimburseApplyService.selectFacReiAdiApply(num);
         for (FacReiAdiApply facReiAdiApply : facReiAdiApplys) {
@@ -252,6 +307,9 @@ public class PrintServiceImpl implements IPrintService {
             sum = sum + facReiAdiApply.getAmount();
             sumDocumentNum = sumDocumentNum + facReiAdiApply.getDocumentNum();
         }
+
+
+
         data.put("qita", facReiAdiApplys);
         data.put("total", sum);
         data.put("invoices", sumDocumentNum);

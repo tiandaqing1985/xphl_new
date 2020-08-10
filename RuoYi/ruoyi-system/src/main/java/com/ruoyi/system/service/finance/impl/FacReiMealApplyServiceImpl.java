@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -60,7 +61,20 @@ public class FacReiMealApplyServiceImpl implements IFacReiMealApplyService {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String date = sdf.format(addDate);
-            String standardTime = date + " 21:00:00";
+            String[] weekDays = {"日", "一", "二", "三", "四", "五", "六"};
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(addDate);
+            int w = cal.get(Calendar.DAY_OF_WEEK) - 1;
+            if (w < 0){
+                w = 0;
+            }
+            String standardTime = date+ " 21:00:00";
+            if(weekDays[w].equals("六")||weekDays[w].equals("日")){
+                standardTime = date + " 15:00:00";
+            }   else{
+                 standardTime = date + " 21:00:00";
+            }
+
             Date standardDate = sdf2.parse(standardTime);
             ding.setUserCheckTime(standardDate);
             List<UserModel> list = facReiMealApplyMapper.selectAllUserModel(ding);
@@ -73,6 +87,7 @@ public class FacReiMealApplyServiceImpl implements IFacReiMealApplyService {
         return null;
 
     }
+
 
     /**
      * 新增加班餐报销

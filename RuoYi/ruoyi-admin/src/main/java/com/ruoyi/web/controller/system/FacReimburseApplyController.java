@@ -1053,15 +1053,16 @@ public class FacReimburseApplyController extends BaseController {
         if (edit == null) {
             edit = "";
         }
+        SysUser sysUser = sysUserService.selectUserById(facReimburseApply.getLoanUser());
         mmap.put("edit", edit);
         mmap.put("facReimburseApply", facReimburseApply);
         mmap.put("name", facReimburseApply.getName());
         mmap.put("num", facReimburseApply.getNum());
         mmap.put("msg", "1");
-        mmap.put("userName", ShiroUtils.getSysUser().getUserName());
+        mmap.put("userName", sysUser.getUserName());
         mmap.put("userId", ShiroUtils.getUserId());
         mmap.put("deptId", ShiroUtils.getDeptId());
-        mmap.put("deptName", ShiroUtils.getSysUser().getDept().getDeptName());
+        mmap.put("deptName", sysUser.getDept().getDeptName());
         mmap.put("id", id);
         List<Long> longs = facReimburseApplyService.selectRole(ShiroUtils.getUserId());
         Double limitDouble = 0.00;
