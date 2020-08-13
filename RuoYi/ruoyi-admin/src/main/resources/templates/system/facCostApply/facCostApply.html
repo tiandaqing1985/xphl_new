@@ -116,6 +116,10 @@
                         var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
                         return newDate;
                     }
+                }, {
+                    field: 'userName',
+                    title: '申请人',
+                    sortable: true
                 },
                 {
                     field: 'outMan',

@@ -96,6 +96,8 @@ public class FacCostApplyController extends BaseController {
                     v.setApprover("--");
                     v.setApprovalStatus("--");
                 }
+
+                v.setUserName(sysUserService.selectUserById(v.getUserId()).getUserName());
             }
             return getDataTable(lists);
         }
@@ -126,6 +128,7 @@ public class FacCostApplyController extends BaseController {
                 v.setApprover("--");
                 v.setApprovalStatus("--");
             }
+            v.setUserName(sysUserService.selectUserById(v.getUserId()).getUserName());
         }
 
         return getDataTable(list);

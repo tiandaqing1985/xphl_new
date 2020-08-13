@@ -60,6 +60,10 @@ public class FacCostApply extends BaseEntity {
      */
     private Long userId;
     /**
+     * 申请人姓名
+     */
+    private String userName;
+    /**
      * 申请时间
      */
     private Date applicationTime;
@@ -78,6 +82,14 @@ public class FacCostApply extends BaseEntity {
      * 公司名称
      */
     private String unit;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
     public String getUnit() {
         return unit;
