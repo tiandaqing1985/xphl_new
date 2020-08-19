@@ -2,11 +2,14 @@
 <html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
     <th:block th:include="include :: header('修改招待费报销申请')"/>
+    <th:block th:include="include :: datetimepicker-css" />
+    <th:block th:include="include :: bootstrap-fileinput-css" />
 </head>
 <body class="white-bg">
 <div class="wrapper wrapper-content animated fadeInRight ibox-content">
     <form class="form-horizontal m" id="form-facReiHospitalityApply-edit" th:object="${facReiHospitalityApply}">
         <input id="id" name="id" th:field="*{id}" type="hidden">
+        <input id="num" name="num" th:field="*{num}" type="hidden">
         <div class="form-group">
             <label class="col-sm-3 control-label">日期：</label>
             <div class="col-sm-8">
@@ -44,13 +47,26 @@
                 <input id="reason" name="reason" th:field="*{reason}" class="form-control" type="text">
             </div>
         </div>
+        <div class="wrapper wrapper-content animated fadeInRight">
+            <div class="ibox float-e-margins">
+                <div class="form-group" >
+                    <label class="font-noraml"><span style="color: red; "></span>上传图片</label>
+                    <div class="file-loading">
+                        <input id="fileinput-demo-1" type="file" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple>
+                    </div>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 <div th:include="include::footer"></div>
 <th:block th:include="include :: bootstrap-suggest-js"/>
+<th:block th:include="include :: bootstrap-fileinput-js"/>
 <th:block th:include="include :: bootstrap-select-js"/>
+<th:block th:include="include :: datetimepicker-js" />
 <script type="text/javascript">
     var prefix = ctx + "system/facReimburseApply";
+    var num =$("#num").val();
     $("#form-facReiHospitalityApply-edit").validate({
         rules: {
             xxxx: {
@@ -59,7 +75,15 @@
         },
         focusCleanup: true
     });
-
+    $(document).ready(function () {
+        $("#fileinput-demo-1").fileinput({
+            'theme': 'explorer-fas',
+            'uploadUrl': prefix + "/uploadList?num=" + num,
+            overwriteInitial: false,
+            initialPreviewAsData: true,
+            previewFileIcon:'图片预览'
+        });
+    });
     function submitHandler() {
         if ($.validate.form()) {
             $.operate.save(prefix + "/editZhao", $('#form-facReiHospitalityApply-edit').serialize());
