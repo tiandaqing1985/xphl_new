@@ -221,6 +221,12 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 	}
 
 	@Override
+	public int deleteDingding(Dingding dingding) {
+
+		return oaDingdingMapper.deleteDingding(dingding);
+
+	}
+	@Override
 	public int insertForeach(List<OaDingding> dingList) {
 
 		oaDingdingMapper.insertForeachCopy(dingList);
@@ -616,7 +622,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 	@Override
 	public void updateDingding(UserApply userApply) {
 		// 修改钉钉考勤数据
-		String username = userMapper.selectUserById(userApply.getUserId()).getUserName();
+ 		String username = userMapper.selectUserById(userApply.getUserId()).getUserName();
 
 		OaDingdingUser dingUser = new OaDingdingUser();
 		dingUser.setUserName(username);
@@ -719,7 +725,7 @@ public class OaDingdingServiceImpl implements IOaDingdingService {
 					ding.setTimeResult(leaveType);
 					ding.setApplyState(applyState);
 					ding.setStartTime(startDate);
-					ding.setEndTime(endDate);
+					ding.setEndTime(getWorkDate(endTime, 20));
 					ding.setStatus("1");
 					if (timeLength < 1)
 						ding.setCheckType("OffDuty");

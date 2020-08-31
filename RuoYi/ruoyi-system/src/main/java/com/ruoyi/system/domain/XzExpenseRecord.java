@@ -5,7 +5,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import java.util.Date;
 
 /**
- * 费用记录表 xz_expense_record
+ * 费用记录表 5
  * 
  * @author ruoyi
  * @date 2019-09-23

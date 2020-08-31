@@ -237,6 +237,10 @@
         delete from oa_dingding where user_id = #{userId}
     </delete>
 
+    <delete id="deleteDingding" parameterType="Dingding">
+        delete from oa_dingding where user_id = #{userId} and workDate = #{workDate}
+    </delete>
+
     <delete id="deleteOaDingdingByIds" parameterType="Long">
         delete from oa_dingding where user_id in
         <foreach item="userId" collection="array" open="(" separator="," close=")">

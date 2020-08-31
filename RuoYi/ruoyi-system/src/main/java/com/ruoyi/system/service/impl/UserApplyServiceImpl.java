@@ -332,6 +332,227 @@ public class UserApplyServiceImpl implements IUserApplyService {
     }
 
     /**
+     * 新增申请
+     *
+     * @param userApply 申请信息
+     * @return 结果
+     */
+    @Override
+    @Transactional
+    public int insertUserApplyadds(UserApply userApply, Long userId) {
+        try {
+            if (userId == null) {
+                userId = userApply.getUserId();
+            }
+            // 新增
+            if (userApply.getApplyId() == null) {
+                userApplyMapper.insertUserApply(userApply);
+                //修改钉钉考勤数据
+                userApply.setApplyState("1");
+                dingdingService.updateDingding(userApply);
+            } else {// 修改
+                userApplyMapper.updateUserApply(userApply);
+            }
+            // 如果存在审批记录先删除
+            if (userApply.getApplyId() != null) {
+                userApprovalMapper.deleteUserApprovalByApplyId(userApply.getApplyId());
+                // 先还原假期表，删除假期使用表
+                holidayService.restoreHoliday(userApply.getApplyId(), null);
+                holidayRecordMapper.deleteHolidayRecordByApplyId(userApply.getApplyId());
+            }
+
+            Double timeLength = userApply.getTimelength();
+            // 申请发出后锁定相应的年假或调休天数
+            // 更新假期表、生成假期记录
+            holidayService.createHolidayAndRecord(userApply);
+            // 审批记录
+            int level = 1;
+            UserApproval userApproval = new UserApproval();// 一级审批人 *必审
+            userApproval.setApplyId(userApply.getApplyId());
+            userApproval.setApprovalSight("1");
+            userApproval.setApprovalLevel(level);
+            Long leaderId = iSysUserService.selectApproverIdByApplyerId(userId);// 所在部门负责人id
+            Long upLeaderId = iSysUserService.selectUpApproverIdByApplyerId(userId);// 所在部门负责人的上级leader
+            Long approvalId = 0L;
+            if (leaderId.equals(userId)) { // 判断用户是否部门负责人 确定一、二级审批人id
+                userApproval.setApproverId(upLeaderId); // 一级审批人id
+                approvalId = upLeaderId;
+            } else {
+                userApproval.setApproverId(leaderId);
+                approvalId = leaderId;
+            }
+
+            userApprovalMapper.insertUserApproval(userApproval); // 插入一级审批记录
+            if (userApproval.getApproverId() != 151L) {
+                UserApproval userApprovalss = new UserApproval();//加李中会审批
+                userApprovalss.setApplyId(userApply.getApplyId());
+                userApprovalss.setApprovalSight("0");
+                userApprovalss.setApprovalLevel(++level);
+                userApprovalss.setApproverId(151L);
+                userApprovalMapper.insertUserApproval(userApprovalss);
+            }
+
+            //加班只需要一级审批人
+            if (userApply.getLeaveType() == null) {
+
+                return 1;
+            }
+
+            if (upLeaderId == null) {
+                return 1;
+            }
+
+            if (userApproval.getApproverId() != null && userApproval.getApproverId() == 103) { // 如果是审批人是
+                // coo
+                // 最后进行人事审批
+                int maxlevel = userApprovalMapper.selectMaxApprovalLevelById(userApply.getApplyId());
+                UserApproval personnel = new UserApproval();// 人事审批 *必审
+                personnel.setApplyId(userApply.getApplyId());
+                personnel.setApprovalLevel(maxlevel + 1);
+                SysUser user = userMapper.selectUserById(userApply.getUserId());
+                if (user.getArea().equals("3")) {
+                    user.setArea("2");
+                }
+
+                SysUser user2 = new SysUser();
+                user2.setRoleId(6L);// 人事总监
+                user2.setArea("1");
+                Long hrId = iSysRoleService.selectUserIdByRoleId(user2);// 人事总监id
+
+                if (userId.equals(hrId)) {//当前用户就是人事总监自己
+                    return 1;
+                }
+
+                SysUser user3 = new SysUser();
+                user3.setRoleId(3L);// 人事
+                user3.setArea(user.getArea());
+
+                // 当前用户的上级是人事leader，不进行人事总监审批
+                if (upLeaderId.longValue() != hrId.longValue() && approvalId.longValue() != hrId.longValue()) {// 审批人是否是人事总监
+                    // 人事总监审批
+                    // personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user3));
+                    personnel.setApproverId(hrId);
+                    return userApprovalMapper.insertUserApproval(personnel);
+                }
+            }
+
+            if (timeLength >= 3) {
+                // 二级审批记录
+                String leaveType = userApply.getLeaveType();
+                boolean flag = true;
+                UserApproval userApproval1 = new UserApproval();// 二级审批人
+                Long approverId2 = iSysUserService.selectUpApproverIdByApplyerId(userApproval.getApproverId());
+                if (approverId2 != null) {
+
+                    if (leaveType.equals("1") && timeLength < 3) { // 少于3天的年假不需隔级审批
+                        flag = false;
+                    } else if (leaveType.equals("2") && timeLength < 1) { // 少于一天的调休不需隔级审批
+                        flag = false;
+                    } else if (leaveType.equals("3") && timeLength < 3) { // 少于3天的事假不需隔级审批
+                        flag = false;
+                    } else if (leaveType.equals("4") && timeLength <= 1) { // 少于等于一天的病假不需隔级审批
+                        flag = false;
+                    } else if (leaveType.equals("10")) {
+                        flag = false;
+                    }
+                    if (flag) {
+                        if (approverId2 != userApproval.getApproverId()) {
+                            userApproval1.setApproverId(approverId2);
+                            userApproval1.setApplyId(userApply.getApplyId());
+                            userApproval1.setApprovalLevel(++level);
+                            userApprovalMapper.insertUserApproval(userApproval1);
+                        }
+                    }
+                }
+
+                if (approverId2 == 103) { // 如果是审批人是 coo 直接结束
+
+                    // 最后进行人事审批
+                    int maxlevel = userApprovalMapper.selectMaxApprovalLevelById(userApply.getApplyId());
+                    UserApproval personnel = new UserApproval();// 人事审批 *必审
+                    personnel.setApplyId(userApply.getApplyId());
+                    personnel.setApprovalLevel(maxlevel + 1);
+                    SysUser user = userMapper.selectUserById(userApply.getUserId());
+                    if (user.getArea().equals("3")) {
+                        user.setArea("2");
+                    }
+
+                    SysUser user2 = new SysUser();
+                    user2.setRoleId(6L);// 人事总监
+                    user2.setArea("1");
+                    Long hrId = iSysRoleService.selectUserIdByRoleId(user2);// 人事总监id
+
+                    SysUser user3 = new SysUser();
+                    user3.setRoleId(3L);// 人事
+                    user3.setArea(user.getArea());
+
+                    // 当前用户的上级是人事leader，不进行人事总监审批
+                    if (upLeaderId.longValue() != hrId.longValue() && approvalId.longValue() != hrId.longValue()) {// 审批人是否是人事总监
+                        // 人事总监审批
+                        // personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user3));
+                        personnel.setApproverId(hrId);
+                        return userApprovalMapper.insertUserApproval(personnel);
+                    }
+                }
+
+                // 中心负责人审批记录
+
+                LinkedList<Long> centerId = (LinkedList<Long>) iSysUserService.selectCenterIdByUserId(userId);
+                if (centerId != null && centerId.size() > 0) {
+                    centerId.remove(approverId2);
+
+                    for (int i = centerId.size() - 1; i >= 0; i--) {
+                        UserApproval center = new UserApproval();// 中心负责人
+                        center.setApproverId(centerId.get(i));
+                        center.setApprovalLevel(++level);
+                        center.setApplyId(userApply.getApplyId());
+                        userApprovalMapper.insertUserApproval(center);
+
+                        if (center.getApproverId() == 103) { // 如果是审批人是 coo 直接结束
+                            userApprovalMapper.deleteChongFuShenHe(userApply.getApplyId());
+                            return 1;
+                        }
+                    }
+
+                    userApprovalMapper.deleteChongFuShenHe(userApply.getApplyId());
+                }
+            }
+
+            // 最后进行人事审批
+            int maxlevel = userApprovalMapper.selectMaxApprovalLevelById(userApply.getApplyId());
+            UserApproval personnel = new UserApproval();// 人事审批 *必审
+            personnel.setApplyId(userApply.getApplyId());
+            personnel.setApprovalLevel(maxlevel + 1);
+            SysUser user = userMapper.selectUserById(userApply.getUserId());
+            if (user.getArea().equals("3")) {
+                user.setArea("2");
+            }
+
+            SysUser user2 = new SysUser();
+            user2.setRoleId(6L);// 人事总监
+            user2.setArea("1");
+            Long hrId = iSysRoleService.selectUserIdByRoleId(user2);// 人事总监id
+
+            SysUser user3 = new SysUser();
+            user3.setRoleId(3L);// 人事
+            user3.setArea(user.getArea());
+
+            // 当前用户的上级是人事leader，不进行人事总监审批
+            if (upLeaderId.longValue() != hrId.longValue() && approvalId.longValue() != hrId.longValue()) {// 审批人是否是人事总监
+                // 人事总监审批
+                // personnel.setApproverId(iSysRoleService.selectUserIdByRoleId(user3));
+                personnel.setApproverId(hrId);
+                userApprovalMapper.insertUserApproval(personnel);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return 0;
+        }
+        return 1;
+    }
+
+    /**
      * 删除申请对象
      *
      * @param ids 需要删除的数据ID
@@ -859,6 +1080,59 @@ public class UserApplyServiceImpl implements IUserApplyService {
         return 1;
     }
 
+    /**
+     * 临时修改
+     */
+    @Override
+    @Transactional
+    public int addOvertimeSaveadds(UserApply userApply, Long userId) {
+
+
+        System.out.println(userApply.getTimelength());
+
+        userApply.setUserId(userId);
+        userApply.setApplyState("1");
+        userApplyMapper.insertUserApply(userApply);
+
+        Long leaderId = iSysUserService.selectApproverIdByApplyerId(userId);
+        Long upLeaderId = iSysUserService.selectUpApproverIdByApplyerId(userId);
+        UserApproval userApproval = new UserApproval();
+        userApproval.setApplyId(userApply.getApplyId());
+        userApproval.setApprovalSight("1");// 可视
+        userApproval.setApprovalLevel(1);// 审批等级 —— 上级审批 1级
+        if (leaderId.equals(userId)) { // 判断用户是否部门负责人
+            userApproval.setApproverId(upLeaderId);
+        } else {
+            userApproval.setApproverId(leaderId);
+        }
+        userApprovalMapper.insertUserApproval(userApproval);
+        if (userApproval.getApproverId() != 151L) {
+            UserApproval userApprovalss = new UserApproval();//加李中会审批
+            userApprovalss.setApplyId(userApply.getApplyId());
+            userApprovalss.setApprovalSight("0");
+            userApprovalss.setApprovalLevel(2);
+            userApprovalss.setApproverId(151L);
+            userApprovalMapper.insertUserApproval(userApprovalss);
+        }
+
+        // 生成无效的调休记录
+        SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd");
+        Holiday holiday = new Holiday();
+        holiday.setUserId(userId);
+        holiday.setApplyId(userApply.getApplyId());
+        holiday.setHolidayType("2");
+        holiday.setAvailability("0");// 是否有效（0否 1是）
+        holiday.setCreatedate(s.format(userApply.getStarttime()));
+        try {
+            holiday.setOverdate(s.format(iSysUserService.getDate(s.format(userApply.getStarttime()), 3)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        holiday.setValue(Math.floor(userApply.getTimelength()));
+        holidayMapper.insertHoliday(holiday);
+        return 1;
+    }
+
     @Override
     public String selectUserApplyListByTime(UserApply userApply) {
 		/*Date nowDate = new Date();
@@ -1226,6 +1500,86 @@ public class UserApplyServiceImpl implements IUserApplyService {
         return 1;
     }
 
+    /**
+     * 临时
+     **/
+    @Override
+    public int addOutSaveadds(UserApply userApply, Long userId) {
+        userApply.setUserId(userId);
+        userApply.setApplyState("1");// 申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+        userApply.setApplyType("4");// 申请类型（1请假，2加班，3销假，4外出）
+        userApplyMapper.insertUserApply(userApply);
+
+        //修改钉钉考勤数据
+        dingdingService.updateDingding(userApply);
+
+        SysUser user = userMapper.selectUserById(userId);// 查出当前用户的area值
+
+        // 生成审批记录
+        Long approvalId = 0L;// 审批人id
+
+        // 直属上级审批
+        Long leaderId = userMapper.selectApproverIdByApplyerId(user.getUserId());// 所在部门负责人id(上级)
+        Long upLeaderId = userMapper.selectUpApproverIdByApplyerId(user.getUserId());// 所在部门负责人的上级（上上级）
+        if (leaderId.equals(user.getUserId())) { // 判断用户是否部门负责人
+            approvalId = upLeaderId; // 上上级作为一级审批人
+        } else {
+            approvalId = leaderId;// 上级作为一级审批人
+        }
+
+        // 生成一级审批记录
+        UserApproval userApproval = new UserApproval();
+        userApproval.setApproverId(approvalId);
+        userApproval.setApplyId(userApply.getApplyId());
+        userApproval.setApprovalSight("1");// 可视
+        userApproval.setApprovalLevel(1);// 审批等级 —— 上级审批 1级
+        userApproval.setApprovalState("3");// 审批意见（1同意，2驳回 ，3未操作）
+
+        if (userId == 103L) {// COO
+            userApproval.setApprovalId(101L);
+        }
+
+        userApprovalMapper.insertUserApproval(userApproval);
+        if(userApproval.getApproverId()!=151L){
+            UserApproval userApprovalss = new UserApproval();
+            userApprovalss.setApproverId(151L);
+            userApprovalss.setApplyId(userApply.getApplyId());
+            userApprovalss.setApprovalSight("0");// 可视
+            userApprovalss.setApprovalLevel(2);// 审批等级 —— 上级审批 1级
+            userApprovalss.setApprovalState("3");// 审批意见（1同意，2驳回 ，3未操作）
+            userApprovalMapper.insertUserApproval(userApprovalss);
+        }
+
+        if (upLeaderId == null) {
+            return 1;
+        }
+
+        // 如果是审批人是 coo 直接结束
+        if (approvalId != null && approvalId.longValue() == 103) {
+            return 1;
+        }
+
+        SysUser user2 = new SysUser();
+        user2.setRoleId(6L);// 人事总监
+        Long hrId = userRoleMapper.selectUserIdByRoleId(user2);// 人事总监id
+
+        if (upLeaderId.longValue() == hrId.longValue()) {
+            return 1;
+        }
+        // 人事部门审批是两级审批，其他部门员工只需要leader审批
+        if (upLeaderId.longValue() == hrId.longValue()) {
+            // 生成一级审批记录
+            UserApproval userApproval2 = new UserApproval();
+            userApproval2.setApproverId(hrId);
+            userApproval2.setApplyId(userApply.getApplyId());
+            userApproval2.setApprovalSight("0");// 1可见 0不可见
+            userApproval2.setApprovalLevel(2);// 审批等级 —— 上级审批 1级
+            userApproval2.setApprovalState("3");// 审批意见（1同意，2驳回 ，3未操作）
+            userApprovalMapper.insertUserApproval(userApproval2);
+        }
+        return 1;
+    }
+
     @Override
     public boolean ifSatisfied(Long userId, Date time) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -1295,16 +1649,16 @@ public class UserApplyServiceImpl implements IUserApplyService {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String date = sdf.format(new Date());
 
-        int a= Integer.valueOf(date.substring(6, 8)).intValue();
-        if (a>25) {
+        int a = Integer.valueOf(date.substring(6, 8)).intValue();
+        if (a > 25) {
             Calendar cld = Calendar.getInstance();
-            cld.set(Calendar.MONTH,cld.get(Calendar.MONTH));
-            cld.set(Calendar.DATE,25);
+            cld.set(Calendar.MONTH, cld.get(Calendar.MONTH));
+            cld.set(Calendar.DATE, 25);
             userApply.setStarttime(cld.getTime());
         } else {
             Calendar cld = Calendar.getInstance();
-            cld.set(Calendar.MONTH,cld.get(Calendar.MONTH)-1);
-            cld.set(Calendar.DATE,25);
+            cld.set(Calendar.MONTH, cld.get(Calendar.MONTH) - 1);
+            cld.set(Calendar.DATE, 25);
             userApply.setStarttime(cld.getTime());
         }
         userApply.setApplyType("5");
@@ -1382,6 +1736,73 @@ public class UserApplyServiceImpl implements IUserApplyService {
         }
 
         userApprovalMapper.insertUserApproval(userApproval);
+
+        if (upLeaderId == null) {
+            return 1L;
+        }
+
+        // 如果是审批人是 coo 直接结束
+        if (approvalId != null && approvalId.longValue() == 103) {
+            return 1L;
+        }
+
+        SysUser user2 = new SysUser();
+        user2.setRoleId(6L);// 人事总监
+        Long hrId = userRoleMapper.selectUserIdByRoleId(user2);// 人事总监id
+
+        if (upLeaderId.longValue() == hrId.longValue()) {
+            return 1L;
+        }
+
+        return userApply.getApplyId();
+    }
+
+    /**
+     * 临时 新增补卡申请
+     */
+    @Override
+    public Long addPicProSaveadds(UserApply userApply, Long userId) {
+        userApply.setUserId(userId);
+        userApply.setApplyState("1");// 申请状态（1 待审批，2已撤回，3申请成功，4申请失败）
+        userApply.setApplyType("5");// 申请类型（1请假，2加班，3销假，4外出，5补卡）
+        userApplyMapper.insertUserApply(userApply);
+        SysUser user = userMapper.selectUserById(userId);// 查出当前用户的area值
+
+        // 生成审批记录
+        Long approvalId = 0L;// 审批人id
+
+        // 直属上级审批
+        Long leaderId = userMapper.selectApproverIdByApplyerId(user.getUserId());// 所在部门负责人id(上级)
+        Long upLeaderId = userMapper.selectUpApproverIdByApplyerId(user.getUserId());// 所在部门负责人的上级（上上级）
+        if (leaderId.equals(user.getUserId())) { // 判断用户是否部门负责人
+            approvalId = upLeaderId; // 上上级作为一级审批人
+        } else {
+            approvalId = leaderId;// 上级作为一级审批人
+        }
+
+        // 生成一级审批记录
+        UserApproval userApproval = new UserApproval();
+        userApproval.setApproverId(approvalId);
+        userApproval.setApplyId(userApply.getApplyId());
+        userApproval.setApprovalSight("1");// 可视
+        userApproval.setApprovalLevel(1);// 审批等级 —— 上级审批 1级
+        userApproval.setApprovalState("3");// 审批意见（1同意，2驳回 ，3未操作）
+
+        if (userId == 103L) {// COO
+            userApproval.setApprovalId(101L);
+        }
+
+        userApprovalMapper.insertUserApproval(userApproval);
+        if (userApproval.getApproverId() != 151L) {
+            UserApproval userApprovalss = new UserApproval();
+            userApprovalss.setApproverId(151L);
+            userApprovalss.setApplyId(userApply.getApplyId());
+            userApprovalss.setApprovalSight("0");// 可视
+            userApprovalss.setApprovalLevel(2);// 审批等级 —— 上级审批 1级
+            userApprovalss.setApprovalState("3");// 审批意见（1同意，2驳回 ，3未操作）
+            userApprovalMapper.insertUserApproval(userApprovalss);
+        }
+
 
         if (upLeaderId == null) {
             return 1L;

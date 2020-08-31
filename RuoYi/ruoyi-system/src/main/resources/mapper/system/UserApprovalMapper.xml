@@ -182,7 +182,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
     
     <select id="selectQueryConditionsList" parameterType="QueryConditions" resultMap="QueryConditionsResult">
-       select a.list_num, a.timelength, (a.user_id)applyer_id, a.for_applyid,
+       select a.list_num,a.starttime,a.endtime, a.timelength, (a.user_id)applyer_id, a.for_applyid,
       		(CASE
 	         WHEN a.apply_type = 1 THEN
 	          CONCAT(TRUNCATE(a.timelength,1 ), '天')

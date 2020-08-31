@@ -151,7 +151,8 @@ public class DingDingTask {
         Long quyilin1 = 135416124323359665L;//屈伊琳1
         Long liyang01 = 1765181417846298L;//李扬01
         Long chenchao01 = 4162903061228861L;//陈超01
-        Long chenyong02 =110320021501213823L;
+        Long chenyong02 = 110320021501213823L;
+        Long caishuting = 1653545441055397L;//蔡舒婷
         OaDingding dingding = new OaDingding();
         dingding.setUserId(wangzhenzhen);
         dingding.setUserName("王震震");
@@ -176,16 +177,35 @@ public class DingDingTask {
         dingding6.setUserId(chenyong02);
         dingding6.setUserName("陈勇02");
         dingdingService.updateOaDingding(dingding6);
+        OaDingding dingding7 = new OaDingding();
+        dingding7.setUserId(caishuting);
+        dingding7.setUserName("蔡舒婷");
+        dingdingService.updateOaDingding(dingding7);
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = sdf.format(date);
         String yesterday = getPreDayOrAfterDay(currentDate, Integer.parseInt("-1"));//-1是前一天， +1是后一天
         Date work = sdf.parse(yesterday);
-        //   Date work = sdf.parse("2020-07-15");
+         // Date works = sdf.parse("2020-08-19");
         Long yanghuiting = 184061524626231551L;//杨惠婷
         xiugaishijian(yanghuiting, work);
         Long tanpeiyu = 672951194935145472L;//  谭佩瑜
         xiugaishijian(tanpeiyu, work);
+       // xiugaichongfu(120147336021032375L,works);
+
+    }
+
+    /**
+     * 修改打卡重复数据
+     */
+
+    public void xiugaichongfu(Long id, Date work) throws Exception {
+        Dingding dingding = new Dingding();
+        dingding.setUserId(id);
+        dingding.setWorkDate(work);
+        List<Dingding> list= dingdingService.selectOaDingList(dingding);
+
+
     }
 
     /**
