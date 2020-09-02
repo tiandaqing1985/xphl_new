@@ -52,6 +52,10 @@ public class FacCostDetailReimburseController extends BaseController
 	{
 		startPage();
 		facCostDetailReimburse.setReason(null);
+		if(facCostDetailReimburse.getNum()!=null){
+			facCostDetailReimburse.setNum(facCostDetailReimburse.getNum().replaceAll(",",""));
+			facCostDetailReimburse.setAmount(null);
+		}
         List<FacCostDetailReimburse> list = facCostDetailReimburseService.selectFacCostDetailReimburseList(facCostDetailReimburse);
 		return getDataTable(list);
 	}

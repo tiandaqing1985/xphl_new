@@ -192,8 +192,10 @@ public class FacUserApprovalController extends BaseController {
                 .selectFacReimburseApplyList(facReimburseApply);
         if (facReimburseApplies.size() > 0) {
             facUserApproval.setName(facReimburseApplies.get(0).getName());
+            if (facReimburseApplies.get(0).getJKnum() != null) {
+                map.put("JKnum", facReimburseApplies.get(0).getJKnum());
+            }
         }
-
         map.put("facUserApproval", facUserApproval);
         map.put("num", facUserApproval.getApplyId());
         map.put("msg", "1");

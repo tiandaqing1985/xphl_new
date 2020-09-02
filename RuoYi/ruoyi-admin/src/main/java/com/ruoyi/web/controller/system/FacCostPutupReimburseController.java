@@ -43,6 +43,9 @@ public class FacCostPutupReimburseController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacCostPutupReimburse facCostPutupReimburse) {
         startPage();
+        if(facCostPutupReimburse.getNum()!=null){
+            facCostPutupReimburse.setNum(facCostPutupReimburse.getNum().replaceAll(",",""));
+        }
         List<FacCostPutupReimburse> list = facCostPutupReimburseService.selectFacCostPutupReimburseList(facCostPutupReimburse);
         return getDataTable(list);
     }

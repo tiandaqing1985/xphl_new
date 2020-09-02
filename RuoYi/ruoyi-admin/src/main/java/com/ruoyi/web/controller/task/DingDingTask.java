@@ -186,12 +186,12 @@ public class DingDingTask {
         String currentDate = sdf.format(date);
         String yesterday = getPreDayOrAfterDay(currentDate, Integer.parseInt("-1"));//-1是前一天， +1是后一天
         Date work = sdf.parse(yesterday);
-         // Date works = sdf.parse("2020-08-19");
+       //  Date works = sdf.parse("2020-08-19");
         Long yanghuiting = 184061524626231551L;//杨惠婷
         xiugaishijian(yanghuiting, work);
         Long tanpeiyu = 672951194935145472L;//  谭佩瑜
         xiugaishijian(tanpeiyu, work);
-       // xiugaichongfu(120147336021032375L,works);
+      //  xiugaichongfu(120147336021032375L,works);
 
     }
 

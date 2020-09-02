@@ -42,7 +42,6 @@ public class FacCostReimburseController extends BaseController {
     @Autowired
     private FacCostDetailApplyMapper facCostDetailApplyMapper;
 
-    @RequiresPermissions("system:facCostReimburse:view")
     @GetMapping()
     public String facCostReimburse() {
         return prefix + "/facCostReimburse";
@@ -55,12 +54,17 @@ public class FacCostReimburseController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacCostReimburse facCostReimburse) {
         startPage();
+        facCostReimburse.setUserId(null);
+        if(facCostReimburse.getNum()!=null){
+            facCostReimburse.setNum(facCostReimburse.getNum().replaceAll(",",""));
+        }
+
         List<FacCostReimburse> list = facCostReimburseService.selectFacCostReimburseList(facCostReimburse);
         return getDataTable(list);
     }
 
     /**
-     * 差旅报销
+     * 差旅报销.
      *
      * @throws Exception
      */

@@ -14,6 +14,7 @@
                 <input id="msg" name="msg" class="form-control-static" type="hidden" th:value="${msg}"/>
                 <input id="userId" name="userId" class="form-control-static" type="hidden" th:value="${userId}"/>
                 <input id="dept" name="dept" class="form-control-static" type="hidden" th:value="${dept}"/>
+                <input id="JKnum" name="JKnum" class="form-control-static" type="hidden" th:value="${JKnum}"/>
                 <h4 class="form-header h4">报销申请</h4>
                 <div>
                     <div class="row">
@@ -31,7 +32,7 @@
                                 <label class="col-sm-3 control-label">&nbsp&nbsp部门：</label>
                                 <div class="col-sm-8">
                                     <input name="userName" autocomplete="off" placeholder="悦维联动" class="form-control"
-                                           type="text" maxlength="30" readonly="readonly" th:value="${deptName}" >
+                                           type="text" maxlength="30" readonly="readonly" th:value="${deptName}">
                                 </div>
                             </div>
                         </div>
@@ -50,7 +51,8 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"></span>报销人：</label>
                                 <div class="col-sm-8">
-                                    <input id="userIdName" name="userIdName" class="form-control" type="text" th:value="${userIdName}"
+                                    <input id="userIdName" name="userIdName" class="form-control" type="text"
+                                           th:value="${userIdName}"
                                            readonly="readonly">
                                 </div>
                             </div>
@@ -58,22 +60,22 @@
                     </div>
                 </div>
                 <div id="rcbx" style="display: none">
-                    <div class="row" id="jtf" >
-                        <div class="col-sm-12 select-table table-striped" >
+                    <div class="row" id="jtf">
+                        <div class="col-sm-12 select-table table-striped">
                             <table id="bootstrap-table-1" data-mobile-responsive="true"></table>
                         </div>
                     </div>
-                    <div class="row" id="jbc" >
+                    <div class="row" id="jbc">
                         <div class="col-sm-12 select-table table-striped">
-                            <table id="bootstrap-table-4" data-mobile-responsive="true"></table>
+                            <table id="bootstrap-table-10" data-mobile-responsive="true"></table>
                         </div>
                     </div>
-                    <div class="row" id="zdf" >
-                        <div class="col-sm-12 select-table table-striped" >
+                    <div class="row" id="zdf">
+                        <div class="col-sm-12 select-table table-striped">
                             <table id="bootstrap-table-2" data-mobile-responsive="true"></table>
                         </div>
                     </div>
-                    <div class="row" id="qtf" >
+                    <div class="row" id="qtf">
                         <div class="col-sm-12 select-table table-striped">
                             <table id="bootstrap-table-3" data-mobile-responsive="true"></table>
                         </div>
@@ -85,7 +87,8 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>团建费编号：</label>
                                 <div class="col-sm-8">
-                                    <input id="num" name="num" th:field="${facCollectApply.num}" class="form-control" type="text" readonly>
+                                    <input id="num" name="num" th:field="${facCollectApply.num}" class="form-control"
+                                           type="text" readonly>
                                 </div>
                             </div>
                         </div>
@@ -93,7 +96,8 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>所属部门：</label>
                                 <div class="col-sm-8">
-                                    <input id="deptName" name="deptName" th:field="${facCollectApply.deptName}" class="form-control" type="text" readonly>
+                                    <input id="deptName" name="deptName" th:field="${facCollectApply.deptName}"
+                                           class="form-control" type="text" readonly>
                                 </div>
                             </div>
                         </div>
@@ -103,7 +107,9 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>开始日期：</label>
                                 <div class="col-sm-8">
-                                    <input id="startDate" name="startDate" th:value="${#dates.format(facCollectApply.startDate,'yyyy-MM-dd')}" class="time-input form-control" type="text" required readonly>
+                                    <input id="startDate" name="startDate"
+                                           th:value="${#dates.format(facCollectApply.startDate,'yyyy-MM-dd')}"
+                                           class="time-input form-control" type="text" required readonly>
                                 </div>
                             </div>
                         </div>
@@ -111,7 +117,9 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>结束日期：</label>
                                 <div class="col-sm-8">
-                                    <input id="endDate" name="endDate" th:value="${#dates.format(facCollectApply.endDate,'yyyy-MM-dd')}" class="time-input form-control" type="text" required readonly>
+                                    <input id="endDate" name="endDate"
+                                           th:value="${#dates.format(facCollectApply.endDate,'yyyy-MM-dd')}"
+                                           class="time-input form-control" type="text" required readonly>
                                 </div>
                             </div>
                         </div>
@@ -121,7 +129,9 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>参与人：</label>
                                 <div class="col-sm-8">
-                                    <input id="participants" name="participants" th:field="${facCollectApply.participants}" class="form-control" type="text" required readonly>
+                                    <input id="participants" name="participants"
+                                           th:field="${facCollectApply.participants}" class="form-control" type="text"
+                                           required readonly>
                                 </div>
                             </div>
                         </div>
@@ -129,7 +139,8 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>参与人数：</label>
                                 <div class="col-sm-8">
-                                    <input id="parNumber" name="parNumber" th:field="${facCollectApply.parNumber}" class="form-control" type="text" required readonly>
+                                    <input id="parNumber" name="parNumber" th:field="${facCollectApply.parNumber}"
+                                           class="form-control" type="text" required readonly>
                                 </div>
                             </div>
                         </div>
@@ -139,7 +150,9 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>活动地点：</label>
                                 <div class="col-sm-8">
-                                    <input id="activityPlace" name="activityPlace" th:field="${facCollectApply.activityPlace}" class="form-control" type="text" required readonly>
+                                    <input id="activityPlace" name="activityPlace"
+                                           th:field="${facCollectApply.activityPlace}" class="form-control" type="text"
+                                           required readonly>
                                 </div>
                             </div>
                         </div>
@@ -147,7 +160,9 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>活动形式：</label>
                                 <div class="col-sm-8">
-                                    <input id="activityForm" name="activityForm" th:field="${facCollectApply.activityForm}" class="form-control" type="text" required readonly>
+                                    <input id="activityForm" name="activityForm"
+                                           th:field="${facCollectApply.activityForm}" class="form-control" type="text"
+                                           required readonly>
                                 </div>
                             </div>
                         </div>
@@ -157,7 +172,8 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label">备注：</label>
                                 <div class="col-sm-8">
-                                    <input id="remarks" name="remarks" th:field="${facCollectApply.remarks}" class="form-control" type="text" readonly>
+                                    <input id="remarks" name="remarks" th:field="${facCollectApply.remarks}"
+                                           class="form-control" type="text" readonly>
                                 </div>
                             </div>
                         </div>
@@ -165,7 +181,8 @@
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><span style="color: red; ">*</span>申请金额：</label>
                                 <div class="col-sm-8">
-                                    <input id="amount" name="amount"  th:field="${facUserApproval.amount}" class="form-control" type="text" readonly>
+                                    <input id="amount" name="amount" th:field="${facUserApproval.amount}"
+                                           class="form-control" type="text" readonly>
                                 </div>
                             </div>
                         </div>
@@ -195,7 +212,7 @@
 <form class="form-horizontal m" id="form-facUserApproval-edit" th:object="${facUserApproval}">
     <div class="col-sm-4  col-sm-offset-4" style="border:1px solid #f00">
         <h4 class="form-header h4">审批填写</h4>
-        <div  class="form-group"  >
+        <div class="form-group">
             <div class="col-sm-4 control-label" style="text-align:center;">
                 <label class="radio-box">
                     <input type="radio" checked value="1" name="approvalState" style="position: absolute; opacity: 0;">
@@ -205,17 +222,17 @@
                     驳回</label>
             </div>
         </div>
-            <div class="form-group" style="text-align:center;">
-                <label class="col-sm-4 control-label"></span>审批意见：</label>
-                <div class="col-sm-4">
-                    <textarea id="opi" name="opi" class="form-control" type="text"></textarea>
-                    <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
-                    <input id="approverId" name="approverId" class="form-control-static" type="hidden"
-                           th:value="${userId}">
-                </div>
+        <div class="form-group" style="text-align:center;">
+            <label class="col-sm-4 control-label"></span>审批意见：</label>
+            <div class="col-sm-4">
+                <textarea id="opi" name="opi" class="form-control" type="text"></textarea>
+                <input id="applyId" name="applyId" class="form-control-static" type="hidden" th:value="${num}">
+                <input id="approverId" name="approverId" class="form-control-static" type="hidden"
+                       th:value="${userId}">
             </div>
-        </form>
-    </div>
+        </div>
+</form>
+</div>
 <div th:include="include :: footer"></div>
 
 <script th:inline="javascript">
@@ -226,7 +243,7 @@
     var msg = $("#msg").val();
     var userId = $("#userId").val();
     var dept = $("#dept").val();
-
+    var JKnum = $("#JKnum").val();
     var edit1 = [[${edit1}]];
     var edit2 = [[${edit2}]];
     var edit3 = [[${edit3}]];
@@ -237,10 +254,10 @@
     var prefix3 = ctx + "system/facCostDetailReimburse";
     var isOverAmountLimit = [[${isOverAmountLimit}]];
     var isOverGongChuLimit = [[${isOverGongChuLimit}]];
-    if(isOverAmountLimit=="true"){
+    if (isOverAmountLimit == "true") {
         $.modal.alertWarning("本月招待费已超出额度上限");
     }
-    if(isOverGongChuLimit=="true"){
+    if (isOverGongChuLimit == "true") {
         $.modal.alertWarning("本月公出交通费已超出额度上限");
     }
     if (dept == 10) {
@@ -278,11 +295,10 @@
     }
 
 
-
     var type = [[${type}]];
     $(function () {
-        $("#"+type).attr("style","display: block")
-        if(type == "rcbx"){
+        $("#" + type).attr("style", "display: block")
+        if (type == "rcbx") {
 
             var options = {
                 id: "bootstrap-table-1",
@@ -291,17 +307,17 @@
                 showRefresh: false,
                 showToggle: false,
                 showColumns: false,
-                queryParams: function(params){
+                queryParams: function (params) {
                     var curParams = {
                         // 传递参数查询参数
-                        pageSize:       params.limit,
-                        pageNum:        params.offset / params.limit + 1,
-                        searchValue:    params.search,
-                        orderByColumn:  params.sort,
-                        isAsc:          params.order
+                        pageSize: params.limit,
+                        pageNum: params.offset / params.limit + 1,
+                        searchValue: params.search,
+                        orderByColumn: params.sort,
+                        isAsc: params.order
                     };
                     var currentId = $.common.isEmpty($.table._option.formId) ? $('form').attr('id') : $.table._option.formId;
-                    return $.extend(curParams, {"num":num});
+                    return $.extend(curParams, {"num": num});
                 },
                 modalName: "报销申请添加",
                 columns: [
@@ -366,19 +382,19 @@
                             sortable: true
                         },
                         {
-                        field: 'reason',
-                        title: '事由 ',
-                        sortable: false
-                         },{
+                            field: 'reason',
+                            title: '事由 ',
+                            sortable: false
+                        }, {
                         field: 'excess',
                         title: '是否超额 ',
                         visible: false,
                         formatter: function (value, row, index) {
-                            if(value==1){
+                            if (value == 1) {
                                 layer.msg("已超出额度");
-                                return  "超额";
-                            }else {
-                                return  "未超额";
+                                return "超额";
+                            } else {
+                                return "未超额";
                             }
                         }
                     }
@@ -388,24 +404,24 @@
             };
             $.table.init(options);
             var options = {
-                id: "bootstrap-table-4",
+                id: "bootstrap-table-10",
                 url: prefix + "/mealDetail",
                 showSearch: false,
                 showRefresh: false,
                 showToggle: false,
                 showColumns: false,
                 modelName: "加班餐申请",
-                queryParams: function(params){
+                queryParams: function (params) {
                     var curParams = {
                         // 传递参数查询参数
-                        pageSize:       params.limit,
-                        pageNum:        params.offset / params.limit + 1,
-                        searchValue:    params.search,
-                        orderByColumn:  params.sort,
-                        isAsc:          params.order
+                        pageSize: params.limit,
+                        pageNum: params.offset / params.limit + 1,
+                        searchValue: params.search,
+                        orderByColumn: params.sort,
+                        isAsc: params.order
                     };
                     var currentId = $.common.isEmpty($.table._option.formId) ? $('form').attr('id') : $.table._option.formId;
-                    return $.extend(curParams, {"num":num});
+                    return $.extend(curParams, {"num": num});
                 },
                 columns: [
                     [
@@ -437,19 +453,19 @@
                             field: 'amount',
                             title: '餐费金额',
                             sortable: false,
-                            formatter: function (value,row,index) {
+                            formatter: function (value, row, index) {
                                 return value;
                             }
                         },
 
                         {
-                            field : 'userName',
-                            title : '加班人员',
+                            field: 'userName',
+                            title: '加班人员',
                             sortable: false
-                        } ,
+                        },
                         {
-                            field : 'place',
-                            title : '加班地点',
+                            field: 'place',
+                            title: '加班地点',
                             sortable: false
                         },
                         {
@@ -481,96 +497,96 @@
                 showToggle: false,
                 showColumns: false,
                 modalName: "招待费报销申请",
-                queryParams: function(params){
+                queryParams: function (params) {
                     var curParams = {
                         // 传递参数查询参数
-                        pageSize:       params.limit,
-                        pageNum:        params.offset / params.limit + 1,
-                        searchValue:    params.search,
-                        orderByColumn:  params.sort,
-                        isAsc:          params.order
+                        pageSize: params.limit,
+                        pageNum: params.offset / params.limit + 1,
+                        searchValue: params.search,
+                        orderByColumn: params.sort,
+                        isAsc: params.order
                     };
                     var currentId = $.common.isEmpty($.table._option.formId) ? $('form').attr('id') : $.table._option.formId;
-                    return $.extend(curParams, {"num":num});
+                    return $.extend(curParams, {"num": num});
                 },
                 columns: [
-                        [
-                            {
-                                title: '招待费报销信息',
-                                align: 'center',
-                                colspan: 11,
-                            }
-                        ],
+                    [
+                        {
+                            title: '招待费报销信息',
+                            align: 'center',
+                            colspan: 11,
+                        }
+                    ],
                     [
 
-                    {
-                        field: 'id',
-                        title: 'ID',
-                        visible: false
-                    }
-                    ,
-                    {
-                        field: 'num',
-                        title: '报销编号',
-                        sortable: true
-                    },
-                    {
-                        field: 'ddDate',
-                        title: '日期',
-                        sortable: true,
-                        formatter: function (value, row, index) {
-                            var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
-                            return newDate;
+                        {
+                            field: 'id',
+                            title: 'ID',
+                            visible: false
                         }
-                    },
-                    {
-                        field: 'amount',
-                        title: '金额',
-                        sortable: true
-                    },
-                    {
-                        field: 'addUser',
-                        title: '参加人',
-                        sortable: true
-                    },
-                    {
-                        field: 'location',
-                        title: '地点',
-                        sortable: true
-                    },
-                    {
-                        field: 'targetUnit',
-                        title: '目标单位简称',
-                        sortable: true
-                    },
-                    {
-                        field: 'documentNum',
-                        title: '单据数',
-                        sortable: true
-                    },
-                    {
-                        field: 'reason',
-                        title: '事由',
-                        sortable: true
-                    },
-                    {
-                        field: 'userName',
-                        title: '申请人',
-                        sortable: true
-                    },{
+                        ,
+                        {
+                            field: 'num',
+                            title: '报销编号',
+                            sortable: true
+                        },
+                        {
+                            field: 'ddDate',
+                            title: '日期',
+                            sortable: true,
+                            formatter: function (value, row, index) {
+                                var newDate = /\d{4}-\d{1,2}-\d{1,2}/g.exec(value);
+                                return newDate;
+                            }
+                        },
+                        {
+                            field: 'amount',
+                            title: '金额',
+                            sortable: true
+                        },
+                        {
+                            field: 'addUser',
+                            title: '参加人',
+                            sortable: true
+                        },
+                        {
+                            field: 'location',
+                            title: '地点',
+                            sortable: true
+                        },
+                        {
+                            field: 'targetUnit',
+                            title: '目标单位简称',
+                            sortable: true
+                        },
+                        {
+                            field: 'documentNum',
+                            title: '单据数',
+                            sortable: true
+                        },
+                        {
+                            field: 'reason',
+                            title: '事由',
+                            sortable: true
+                        },
+                        {
+                            field: 'userName',
+                            title: '申请人',
+                            sortable: true
+                        }, {
                         field: 'excess',
                         title: '是否超额 ',
                         visible: false,
                         formatter: function (value, row, index) {
-                            if(value==1){
+                            if (value == 1) {
                                 layer.msg("已超出额度");
-                                return  "超额";
-                            }else {
-                                return  "未超额";
+                                return "超额";
+                            } else {
+                                return "未超额";
                             }
                         }
                     }
-                ]]
+                    ]]
             };
             $.table.init(options);
             var options = {
@@ -581,17 +597,17 @@
                 showToggle: false,
                 showColumns: false,
                 modelName: "其他费用申请",
-                queryParams: function(params){
+                queryParams: function (params) {
                     var curParams = {
                         // 传递参数查询参数
-                        pageSize:       params.limit,
-                        pageNum:        params.offset / params.limit + 1,
-                        searchValue:    params.search,
-                        orderByColumn:  params.sort,
-                        isAsc:          params.order
+                        pageSize: params.limit,
+                        pageNum: params.offset / params.limit + 1,
+                        searchValue: params.search,
+                        orderByColumn: params.sort,
+                        isAsc: params.order
                     };
                     var currentId = $.common.isEmpty($.table._option.formId) ? $('form').attr('id') : $.table._option.formId;
-                    return $.extend(curParams, {"num":num});
+                    return $.extend(curParams, {"num": num});
                 },
                 columns: [
                     [
@@ -646,7 +662,7 @@
             };
             $.table.init(options);
 
-        }else if(type == "tjbx"){
+        } else if (type == "tjbx") {
 
             var options = {
                 id: "bootstrap-table-4",
@@ -658,43 +674,42 @@
                 modalName: "团建费报销",
                 columns: [
                     {
-                        field : 'id',
-                        title : 'id',
+                        field: 'id',
+                        title: 'id',
                         visible: false
                     },
                     {
-                        field : 'num',
-                        title : '项目编号',
+                        field: 'num',
+                        title: '项目编号',
                         sortable: false
                     },
                     {
-                        field : 'name',
-                        title : '项目名称',
+                        field: 'name',
+                        title: '项目名称',
                         sortable: false
                     },
                     {
-                        field : 'amount',
-                        title : '申请金额',
+                        field: 'amount',
+                        title: '申请金额',
                         sortable: false
                     },
                     {
-                        field : 'money',
-                        title : '报销金额',
+                        field: 'money',
+                        title: '报销金额',
                         sortable: false
                     },
                     {
-                        field : 'number',
-                        title : '单据数',
+                        field: 'number',
+                        title: '单据数',
                         sortable: false
                     }]
             };
             $.table.init(options);
 
-        }else if(type == "clbx"){
-
+        } else if (type == "clbx") {
             var options = {
                 id: "bootstrap-table-5",
-                url: prefix1 + "/list?num=" + num,
+                url: prefix1 + "/list?num=" + JKnum,
                 showSearch: false,
                 showRefresh: false,
                 showToggle: false,
@@ -703,9 +718,9 @@
                 modalName: "差旅详细信息",
                 columns: [
                     [{
-                        title : '差旅详细信息',
-                        align : 'center',
-                        colspan : 8
+                        title: '差旅详细信息',
+                        align: 'center',
+                        colspan: 8
                     }],
                     [
                         {
@@ -754,8 +769,8 @@
             $.table.init(options);
             var options = {
                 id: "bootstrap-table-6",
-                url: prefix2 + "/list?num=" + num,
-                createUrl: prefix2 + "/tranDetail?id=" + num,
+                url: prefix2 + "/list?num=" + JKnum,
+                createUrl: prefix2 + "/tranDetail?id=" + JKnum,
                 showSearch: false,
                 showRefresh: false,
                 showToggle: false,
@@ -765,9 +780,9 @@
                 columns:
                     [
                         [{
-                            title : '住宿安排详细信息',
-                            align : 'center',
-                            colspan : 8
+                            title: '住宿安排详细信息',
+                            align: 'center',
+                            colspan: 8
                         }],
                         [
                             {
@@ -818,7 +833,7 @@
             $.table.init(options);
             var options = {
                 id: "bootstrap-table-7",
-                url: prefix3 + "/list?num=" + num,
+                url: prefix3 + "/list?num=" + JKnum,
                 showSearch: false,
                 showRefresh: false,
                 showToggle: false,
@@ -827,9 +842,9 @@
                 modalName: "行程安排详细信息",
                 columns: [
                     [{
-                        title : '行程安排详细信息',
-                        align : 'center',
-                        colspan : 7
+                        title: '行程安排详细信息',
+                        align: 'center',
+                        colspan: 7
                     }],
                     [
                         {
@@ -872,7 +887,6 @@
     });
 
 
-
     function mSave(url, data, callback) {
         debugger
         var config = {
@@ -910,12 +924,12 @@
 
         if ($.validate.form()) {
 
-                mSave(prefixs + "/edit", $('#form-facUserApproval-edit').serialize());
+            mSave(prefixs + "/edit", $('#form-facUserApproval-edit').serialize());
 
         }
     }
 
-    function sub(){
+    function sub() {
         mSave(prefixs + "/editnot", $('#form-facUserApproval-edit').serialize());
     }
 
