@@ -92,10 +92,10 @@ public class DingDingTask {
                     if ("3144041311-1058488227".equals(user.getUserid())) {
                         dingUser.setUserId(Long.parseLong("314404131110584882"));
                     } else {
-                        if (user.getUserid().length() > 19) {
-                            dingUser.setUserId(Long.parseLong(user.getUserid().substring(0, 19)));
+                        if (user.getUserid().replace("-","").length() > 19) {
+                            dingUser.setUserId(Long.parseLong(user.getUserid().replace("-","").substring(0, 19)));
                         } else {
-                            dingUser.setUserId(Long.parseLong(user.getUserid()));
+                            dingUser.setUserId(Long.parseLong(user.getUserid().replace("-","")));
                         }
                     }
                 } else {
@@ -303,9 +303,9 @@ public class DingDingTask {
                             dingding.setUserId(Long.parseLong("314404131110584882"));
                         } else {
                             if (record.getString("userId").length() > 19) {
-                                dingding.setUserId(Long.parseLong(record.getString("userId").substring(0, 19)));
+                                dingding.setUserId(Long.parseLong(record.getString("userId").replace("-","").substring(0, 19)));
                             } else {
-                                dingding.setUserId(Long.parseLong(record.getString("userId")));
+                                dingding.setUserId(Long.parseLong(record.getString("userId").replace("-","")));
                             }
                         }
 

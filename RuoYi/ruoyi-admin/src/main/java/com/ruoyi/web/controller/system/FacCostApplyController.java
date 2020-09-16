@@ -74,7 +74,7 @@ public class FacCostApplyController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacCostApply facCostApply) {
         startPage();
-        if(ShiroUtils.getUserId()==1L||ShiroUtils.getUserId()==149L||ShiroUtils.getUserId()==110L||ShiroUtils.getUserId()==824L|| ShiroUtils.getUserId() == 106L){
+        if(ShiroUtils.getUserId()==1L||ShiroUtils.getUserId()==149L||ShiroUtils.getUserId()==902L||ShiroUtils.getUserId()==110L||ShiroUtils.getUserId()==824L|| ShiroUtils.getUserId() == 106L){
             List<FacCostApply> lists = facCostApplyService.selectFacCostApplyList(facCostApply);
             for (FacCostApply v : lists) {
 

@@ -60,7 +60,7 @@ public class FacPayPublicApplyController extends BaseController {
     @ResponseBody
     public TableDataInfo list(FacPayPublicApply facPayPublicApply) {
         startPage();
-        if (ShiroUtils.getUserId() == 1L || ShiroUtils.getUserId() == 149L || ShiroUtils.getUserId() == 110L || ShiroUtils.getUserId() == 824L || ShiroUtils.getUserId() == 141L || ShiroUtils.getUserId() == 106L) {
+        if (ShiroUtils.getUserId() == 1L || ShiroUtils.getUserId() == 149L ||ShiroUtils.getUserId()==902L|| ShiroUtils.getUserId() == 110L || ShiroUtils.getUserId() == 824L || ShiroUtils.getUserId() == 141L || ShiroUtils.getUserId() == 106L) {
             List<FacPayPublicApply> lists = facPayPublicApplyService
                     .selectFacPayPublicApplyList(facPayPublicApply);
             for (FacPayPublicApply v : lists) {

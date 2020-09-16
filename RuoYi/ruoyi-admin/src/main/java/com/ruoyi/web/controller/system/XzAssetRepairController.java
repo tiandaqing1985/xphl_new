@@ -56,13 +56,11 @@ public class XzAssetRepairController extends BaseController {
     private ISysDeptService sysDeptService;
 
 
-    @RequiresPermissions("system:xzAssetRepair:view")
     @GetMapping()
     public String xzAssetRepair() {
         return prefix + "/xzAssetRepair";
     }
 
-    @RequiresPermissions("system:xzAssetRepairHistory:view")
     @GetMapping("/history")
     public String xzAssetRepairHistory() {
         return prefix + "/xzAssetRepairHistory";
@@ -76,7 +74,7 @@ public class XzAssetRepairController extends BaseController {
     public TableDataInfo list(XzAssetRepair xzAssetRepair) {
         SysDept dept = sysDeptService.selectDeptById(ShiroUtils.getSysUser().getDeptId());
 
-        if (ShiroUtils.getUserId() == 1 || ShiroUtils.getUserId() == 103 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())) { //超级管理员 和 任总 行政部门leader看所有数据
+        if (ShiroUtils.getUserId() == 1 || ShiroUtils.getUserId() == 103|| ShiroUtils.getUserId() == 167 || ShiroUtils.getSysUser().getUserName().equals(dept.getLeader())) { //超级管理员 和 任总 行政部门leader看所有数据
             xzAssetRepair.setRegion(xzAssetRepair.getRegion());
         } else {
             String region = ShiroUtils.getSysUser().getArea();

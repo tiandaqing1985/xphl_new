@@ -216,6 +216,7 @@
         h.`id` = r.`holiday_id`
         AND r.`use_state` IN ( 1, 2 )
         AND h.`holiday_type` = 1
+        AND h.`createdate` >'2020-01-01'
         GROUP BY
         h.`user_id`
         ) ny ON nu.user_id = ny.user_id

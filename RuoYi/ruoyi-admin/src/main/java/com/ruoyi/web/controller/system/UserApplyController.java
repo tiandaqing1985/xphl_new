@@ -210,10 +210,10 @@ public class UserApplyController extends BaseController {
     @ResponseBody
     public AjaxResult addSave(UserApply userApply) {
         userApply.setUserId(ShiroUtils.getUserId());
-        if(ShiroUtils.getDeptId()==350){
-            int i = userApplyService.insertUserApplyadds(userApply, ShiroUtils.getUserId());
-            return toAjax(i);
-        }
+//        if(ShiroUtils.getDeptId()==350){
+//            int i = userApplyService.insertUserApplyadds(userApply, ShiroUtils.getUserId());
+//            return toAjax(i);
+//        }
         int i = userApplyService.insertUserApply(userApply, ShiroUtils.getUserId());
         return toAjax(i);
     }
@@ -319,10 +319,10 @@ public class UserApplyController extends BaseController {
     @PostMapping("/addOther")
     @ResponseBody
     public AjaxResult addOvertimeSave(UserApply userApply) {
-        if(ShiroUtils.getDeptId()==350){
-            int i = userApplyService.addOvertimeSaveadds(userApply, ShiroUtils.getUserId());
-            return toAjax(i);
-        }
+//        if(ShiroUtils.getDeptId()==350){
+//            int i = userApplyService.addOvertimeSaveadds(userApply, ShiroUtils.getUserId());
+//            return toAjax(i);
+//        }
         int i = userApplyService.addOvertimeSave(userApply, ShiroUtils.getUserId());
         return toAjax(i);
     }
@@ -342,10 +342,10 @@ public class UserApplyController extends BaseController {
     @PostMapping("/addOut")
     @ResponseBody
     public AjaxResult addOutSave(UserApply userApply) {
-        if(ShiroUtils.getDeptId()==350){
-            int i = userApplyService.addOutSaveadds(userApply, ShiroUtils.getUserId());
-            return toAjax(i);
-        }
+//        if(ShiroUtils.getDeptId()==350){
+//            int i = userApplyService.addOutSaveadds(userApply, ShiroUtils.getUserId());
+//            return toAjax(i);
+//        }
         int i = userApplyService.addOutSave(userApply, ShiroUtils.getUserId());
         return toAjax(i);
     }
@@ -387,10 +387,10 @@ public class UserApplyController extends BaseController {
     @PostMapping("/addPicPro")
     @ResponseBody
     public AjaxResult addPicProSave(UserApply userApply) {
-        if(ShiroUtils.getDeptId()==350){
-            Long i = userApplyService.addPicProSaveadds(userApply, ShiroUtils.getUserId());
-            return toAjax(i.intValue());
-        }
+//        if(ShiroUtils.getDeptId()==350){
+//            Long i = userApplyService.addPicProSaveadds(userApply, ShiroUtils.getUserId());
+//            return toAjax(i.intValue());
+//        }
         Long i = userApplyService.addPicProSave(userApply, ShiroUtils.getUserId());
         return toAjax(i.intValue());
     }

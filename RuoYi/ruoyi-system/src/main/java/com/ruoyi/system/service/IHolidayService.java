@@ -30,7 +30,7 @@ public interface IHolidayService
      * @return 假期集合
      */
 	public List<Holiday> selectHolidayList(Holiday holiday);
-	
+
 	/**
      * 新增假期
      * 
